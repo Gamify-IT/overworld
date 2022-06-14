@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Trigger
   layers:
   - Default
   - TransparentFX
@@ -11,8 +12,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - Trigger
   - 
   - 
   - 
@@ -40,4 +41,58 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: layer_0_ground_0
+    uniqueID: 458239855
+    locked: 0
+  - name: layer_0_ground_1
+    uniqueID: 1367064313
+    locked: 0
+  - name: layer_0_wall_0
+    uniqueID: 2489911453
+    locked: 0
+  - name: layer_0_wall_1
+    uniqueID: 1486673271
+    locked: 0
+  - name: layer_0_top_0
+    uniqueID: 1266562679
+    locked: 0
+  - name: layer_0_top_1
+    uniqueID: 4000100773
+    locked: 0
+  - name: layer_1_ground_0
+    uniqueID: 667314261
+    locked: 0
+  - name: layer_1_ground_1
+    uniqueID: 3298261815
+    locked: 0
+  - name: layer_1_wall_0
+    uniqueID: 3059582569
+    locked: 0
+  - name: layer_1_wall_1
+    uniqueID: 1396660017
+    locked: 0
+  - name: layer_1_top_0
+    uniqueID: 314441587
+    locked: 0
+  - name: layer_1_top_1
+    uniqueID: 2772379491
+    locked: 0
+  - name: layer_2_ground_0
+    uniqueID: 3657935401
+    locked: 0
+  - name: layer_2_ground_1
+    uniqueID: 3517433495
+    locked: 0
+  - name: layer_2_wall_0
+    uniqueID: 3655136827
+    locked: 0
+  - name: layer_2_wall_1
+    uniqueID: 2894291775
+    locked: 0
+  - name: layer_2_top_0
+    uniqueID: 2914981239
+    locked: 0
+  - name: layer_2_top_1
+    uniqueID: 3807616515
     locked: 0
