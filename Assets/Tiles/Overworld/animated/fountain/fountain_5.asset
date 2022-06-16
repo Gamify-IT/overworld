@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13b75c95f34a00d4e8c04f76b73312e6, type: 3}
-  m_Name: fountain_3
+  m_Name: fountain_5
   m_EditorClassIdentifier: 
   m_AnimatedSprites:
-  - {fileID: -1896803489, guid: 31fd3600df95f4e7688602786195f888, type: 3}
-  - {fileID: 1895854815, guid: 31fd3600df95f4e7688602786195f888, type: 3}
-  - {fileID: -1614323242, guid: 31fd3600df95f4e7688602786195f888, type: 3}
+  - {fileID: -1753225628, guid: 31fd3600df95f4e7688602786195f888, type: 3}
+  - {fileID: -1887244466, guid: 31fd3600df95f4e7688602786195f888, type: 3}
+  - {fileID: 1031942390, guid: 31fd3600df95f4e7688602786195f888, type: 3}
   m_MinSpeed: 8
   m_MaxSpeed: 8
   m_AnimationStartTime: 0
   m_AnimationStartFrame: 0
-  m_TileColliderType: 0
+  m_TileColliderType: 1
