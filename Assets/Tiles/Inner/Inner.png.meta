@@ -715,7 +715,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -7, y: -4}
+        - {x: -7, y: -8}
+        - {x: 8, y: -8}
+        - {x: 8, y: -4}
       tessellationDetail: 0
       bones: []
       spriteID: 5cd10fead7a7542ecb7c58761edf52b1
@@ -736,7 +740,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -8, y: -4}
+        - {x: -8, y: -8}
+        - {x: 8, y: -8}
+        - {x: 8, y: -4}
       tessellationDetail: 0
       bones: []
       spriteID: fd9a0083795b747088c85a3a69093330
@@ -757,7 +765,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -8, y: -4}
+        - {x: -8, y: -8}
+        - {x: 7, y: -8}
+        - {x: 7, y: -4}
       tessellationDetail: 0
       bones: []
       spriteID: bba7e2eff485a49f09d62dbd631fa7f2
@@ -1177,7 +1189,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -7, y: 8}
+        - {x: -7, y: -8}
+        - {x: 8, y: -8}
+        - {x: 8, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: 93d5f4c5842ff4a7ba8734a0ab4ec2a5
@@ -1198,7 +1214,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -8, y: 8}
+        - {x: -8, y: -8}
+        - {x: 8, y: -8}
+        - {x: 8, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: 6943a1eeee3e5422da0df2a1fb3daafb
@@ -1219,7 +1239,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -8, y: 8}
+        - {x: -8, y: -8}
+        - {x: 7, y: -8}
+        - {x: 7, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: 23ad6de8600504fb0b4ce90dc1850c72
@@ -1639,7 +1663,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -7, y: 8}
+        - {x: -7, y: -6}
+        - {x: 8, y: -6}
+        - {x: 8, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: b9ab2e2637e1f4fc1b7de4e829a24adb
@@ -1660,7 +1688,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -8, y: 8}
+        - {x: -8, y: -6}
+        - {x: 8, y: -6}
+        - {x: 8, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: 8c7c1fbe79da0425aa80e207a79770e9
@@ -1681,7 +1713,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -8, y: 8}
+        - {x: -8, y: -6}
+        - {x: 7, y: -6}
+        - {x: 7, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: 6a0095097755648a8b2c6b727e194009
@@ -5685,15 +5721,15 @@ TextureImporter:
       solid_single_b: -1010993598
       Inner_101: 1008317520
       Inner_74: -1494362050
+      Inner_108: 1712733333
       Inner_36: -304522277
       Inner_216: -627228523
-      Inner_108: 1712733333
       Inner_155: 1605213796
       Inner_114: -91372440
       Inner_190: -773560083
-      Inner_226: 1010423534
       Inner_10: 1496381640
       Inner_211: 1973646292
+      Inner_226: 1010423534
       Inner_45: -318132546
       Inner_121: -1364119524
       Inner_237: -2079319156
@@ -5814,8 +5850,8 @@ TextureImporter:
       Inner_145: 1283579632
       Inner_112: -1240526633
       Inner_233: 1545147832
-      Inner_186: -855224536
       Inner_173: 1031371918
+      Inner_186: -855224536
       Inner_102: -1238488638
       solid_vertical_inner_tl: 232162468
       Inner_105: 202075558
