@@ -20,7 +20,7 @@ public class NPC : MonoBehaviour
         {
             if(dialoguePanel.activeInHierarchy)
             {
-                resetText();
+                ResetText();
             }
             else
             {
@@ -35,7 +35,7 @@ public class NPC : MonoBehaviour
         }
     }
 
-    public void resetText()
+    public void ResetText()
     {
         dialogueText.text = "";
         index = 0;
@@ -64,7 +64,7 @@ public class NPC : MonoBehaviour
         }
         else
         {
-            resetText();
+            ResetText();
         }
     }
 
@@ -81,7 +81,7 @@ public class NPC : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerIsClose = false;
-            resetText();
+            ResetText();
         }
     }
 }
