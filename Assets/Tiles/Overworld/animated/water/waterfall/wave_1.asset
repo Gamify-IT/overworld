@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13b75c95f34a00d4e8c04f76b73312e6, type: 3}
-  m_Name: fountain_8
+  m_Name: wave_1
   m_EditorClassIdentifier: 
   m_AnimatedSprites:
-  - {fileID: 829920488, guid: 31fd3600df95f4e7688602786195f888, type: 3}
-  - {fileID: -1506195510, guid: 31fd3600df95f4e7688602786195f888, type: 3}
-  - {fileID: 331273312, guid: 31fd3600df95f4e7688602786195f888, type: 3}
+  - {fileID: 1336776392, guid: 31fd3600df95f4e7688602786195f888, type: 3}
+  - {fileID: 1150126874, guid: 31fd3600df95f4e7688602786195f888, type: 3}
+  - {fileID: -1747803603, guid: 31fd3600df95f4e7688602786195f888, type: 3}
   m_MinSpeed: 8
   m_MaxSpeed: 8
   m_AnimationStartTime: 0
   m_AnimationStartFrame: 0
-  m_TileColliderType: 0
+  m_TileColliderType: 1
