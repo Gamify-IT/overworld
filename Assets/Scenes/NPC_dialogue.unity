@@ -3541,7 +3541,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 322982404}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3552,8 +3552,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 668.41, y: -105.59}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 668.41016, y: -116.52084}
+  m_SizeDelta: {x: 160, y: 51.8617}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &322982406
 MonoBehaviour:
@@ -3702,7 +3702,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -3817,17 +3817,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 380213801}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1668060506}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 127.5258, y: 0.85435}
+  m_AnchoredPosition: {x: 127.52576, y: 0.8543358}
   m_SizeDelta: {x: 1241.772, y: 242.89}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &406169472
@@ -3893,8 +3893,8 @@ MonoBehaviour:
     m_FontSize: 10
     m_FontStyle: 1
     m_BestFit: 1
-    m_MinSize: 0
-    m_MaxSize: 25
+    m_MinSize: 10
+    m_MaxSize: 30
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -4015,9 +4015,10 @@ MonoBehaviour:
   dialogueText: {fileID: 380213802}
   dialogue:
   - Hallo!
-  - Dies ist ein Beispiel Text!
+  - "Bitte gehe in das Haus, ich habe geh\xF6rt es gibt dort eine tolle Aufgabe f\xFCr
+    dich zu l\xF6sen!"
   nextButton: {fileID: 322982404}
-  wordSpeed: 0.03
+  wordSpeed: 0.02
   playerIsClose: 0
 --- !u!61 &961426385
 BoxCollider2D:
@@ -14181,18 +14182,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1192333247}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.4, y: 1.4, z: 1.4}
+  m_LocalScale: {x: 1.4000001, y: 1.4000001, z: 1.4000001}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1668060506}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -627.4, y: -102.1}
-  m_SizeDelta: {x: 147.1749, y: 36.978}
+  m_SizeDelta: {x: 169.6913, y: 36.978}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1192333249
 MonoBehaviour:
@@ -14857,17 +14858,17 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1923955067}
   - {fileID: 1192333248}
   - {fileID: 380213804}
+  - {fileID: 1923955067}
   - {fileID: 322982405}
   m_Father: {fileID: 366515777}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: -287.0717}
-  m_SizeDelta: {x: -390.4163, y: -612.2538}
+  m_AnchoredPosition: {x: -0.00012207031, y: -345.10934}
+  m_SizeDelta: {x: -390.4163, y: -728.3291}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1668060507
 MonoBehaviour:
@@ -16290,7 +16291,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1668060506}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -16317,7 +16318,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1471582995, guid: 3dea2e19f986c7c2ba944ff36bf47fa0, type: 3}
+  m_Sprite: {fileID: 1963531216, guid: 077ec99ca1da94e6786dc7a863b1cff3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
