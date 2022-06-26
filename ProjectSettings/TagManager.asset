@@ -38,12 +38,16 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: layer_0
+  - name: BackGround
     uniqueID: 458239855
+    locked: 0
+  - name: Player
+    uniqueID: 413055169
+    locked: 0
+  - name: Collition
+    uniqueID: 1001160471
     locked: 0

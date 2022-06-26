@@ -13,7 +13,6 @@ public class mymove : MonoBehaviour
     public float currentSpeedX;
     public float currentSpeedY;
     public float currentSpeedDeltaTime;
-    private bool isDead = false;
 
     public Rigidbody2D rb;
 
