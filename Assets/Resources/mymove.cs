@@ -41,7 +41,6 @@ public class mymove : MonoBehaviour
             SceneManager.LoadScene("MainMenu");
         }
 
-        
     }
 
     void FixedUpdate() {
