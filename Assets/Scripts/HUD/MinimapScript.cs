@@ -4,17 +4,24 @@ using UnityEngine;
 
 public class MinimapScript : MonoBehaviour
 {
+    public int zoomLevel;
     // Start is called before the first frame update
     void Start()
     {
+        //set the zoom level
+        zoomLevel = -32;
+        //get the player and attach the minimap to him
         GameObject player = GameObject.Find("player");
         GameObject miniMapCam = GameObject.Find("Minimap Camera");
         miniMapCam.transform.SetParent(player.transform);
+        //set the local transform of the minimap camera to be above the player, zoomed out by the specified zoomLevel
+        miniMapCam.transform.localPosition = new Vector3(0, 0, zoomLevel);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //if zoom during runtime is needed uncomment line below
+        //GameObject.Find("Minimap Camera").transform.localPosition = new Vector3(0, 0, zoomLevel);
     }
 }
