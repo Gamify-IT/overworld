@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class LoadFirstScene : MonoBehaviour
 {
+    public VectorValue startingPosition;
     // Start is called before the first frame update
     void Start()
     {
@@ -12,6 +13,8 @@ public class LoadFirstScene : MonoBehaviour
         SceneManager.LoadScene("Area 1");
         //Add HUD over it
         SceneManager.LoadScene("Player HUD", LoadSceneMode.Additive);
+        // Set the desired starting position
+        startingPosition.initialValue = new Vector2(-15f, 41f);
     }
 
     // Update is called once per frame
