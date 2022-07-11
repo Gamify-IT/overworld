@@ -13,10 +13,16 @@ public class mymove : MonoBehaviour
     public float currentSpeedX;
     public float currentSpeedY;
     public float currentSpeedDeltaTime;
+    public VectorValue startingPosition;
 
     public Rigidbody2D rb;
 
     public Vector2 movement;
+
+    private void Start()
+    {
+        transform.position = startingPosition.initialValue;
+    }
 
     // Update is called once per frame
     void Update()
