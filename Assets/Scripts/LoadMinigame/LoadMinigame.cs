@@ -29,7 +29,7 @@ public class LoadMinigame : MonoBehaviour
 
     public void ExecuteGetRequest(String staticWorldId)
     {
-        StartCoroutine(GetRequest("http://localhost:8081/get-configurationString-by-staticWorldId/"+ staticWorldId));
+        StartCoroutine(GetRequest("/api/overworld/get-configurationString-by-staticWorldId/"+ staticWorldId));
     }
 
     private IEnumerator GetRequest(String uri)
