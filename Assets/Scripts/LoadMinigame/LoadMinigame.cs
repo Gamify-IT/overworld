@@ -15,7 +15,7 @@ public class LoadMinigame : MonoBehaviour
 
     private void FixedUpdate()
     {
-        isOnPosition = GameObject.FindGameObjectWithTag("Player").transform.position.x > 2 && GameObject.FindGameObjectWithTag("Player").transform.position.x < 3 && GameObject.FindGameObjectWithTag("Player").transform.position.y < 13 && GameObject.FindGameObjectWithTag("Player").transform.position.y > 12;
+        isOnPosition = GameObject.FindGameObjectWithTag("Player").transform.position.x > 3 && GameObject.FindGameObjectWithTag("Player").transform.position.x < 4 && GameObject.FindGameObjectWithTag("Player").transform.position.y < 13 && GameObject.FindGameObjectWithTag("Player").transform.position.y > 12;
         if (isOnPosition && !isGameOpen)
         {
             isGameOpen = true;
