@@ -74,4 +74,6 @@ MonoBehaviour:
   sceneToLoad: 
   fadeInPanel: {fileID: 6110272119202198650, guid: 86da932f4e5db3a4da2f7f7f2ad05478, type: 3}
   fadeOutPanel: {fileID: 709404619931727533, guid: 06edc796117c0e847971e97fb0150c46, type: 3}
-  loadingTime: 0.33
+  loadingTime: 0.5
+  playerPosition: {x: 0, y: 0}
+  playerStorage: {fileID: 11400000, guid: 3eff63ae5dafcd542a14e2d099e52041, type: 2}
