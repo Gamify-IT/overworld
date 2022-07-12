@@ -5,13 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class LoadFirstScene : MonoBehaviour
 {
+    public VectorValue startingPosition;
     // Start is called before the first frame update
     void Start()
     {
         //Here you can specify the starting World/Scene
-        SceneManager.LoadScene("Area 1");
+        SceneManager.LoadScene("Savanna");
         //Add HUD over it
         SceneManager.LoadScene("Player HUD", LoadSceneMode.Additive);
+        // Set the desired starting position
+        startingPosition.initialValue = new Vector2(-15f, 41f);
     }
 
     // Update is called once per frame
