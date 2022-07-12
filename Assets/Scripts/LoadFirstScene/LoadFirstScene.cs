@@ -10,7 +10,7 @@ public class LoadFirstScene : MonoBehaviour
     void Start()
     {
         //Here you can specify the starting World/Scene
-        SceneManager.LoadScene("Area 1");
+        SceneManager.LoadScene("Savanna");
         //Add HUD over it
         SceneManager.LoadScene("Player HUD", LoadSceneMode.Additive);
         // Set the desired starting position
