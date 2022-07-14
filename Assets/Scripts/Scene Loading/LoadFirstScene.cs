@@ -9,8 +9,9 @@ public class LoadFirstScene : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SceneManager.LoadScene("Player");
         //Here you can specify the starting World/Scene
-        SceneManager.LoadScene("World 1");
+        SceneManager.LoadScene("World 1", LoadSceneMode.Additive);
         //Add HUD over it
         SceneManager.LoadScene("Player HUD", LoadSceneMode.Additive);
         // Set the desired starting position
