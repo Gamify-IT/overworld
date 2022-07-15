@@ -8,9 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/FirstScene/FirstScene.unity
     guid: fb96cd2587f5dd147a7b009269123f82
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Player HUD/Player HUD.unity
     guid: 23fc52fa00282ff41b6369d5e30d075c
@@ -32,7 +29,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Worlds/World 1/World 1.unity
     guid: 9dedbcb1df509c64fb34aa3fdd17a333
-  - enabled: 0
-    path: Assets/Scenes/Worlds/World 1/World 1.unity
-    guid: 1ba5eaa547db0924fbd5392fafd29162
   m_configObjects: {}
