@@ -51,7 +51,6 @@ public class loadmaps : MonoBehaviour
             (asyncOperationUnloadOne != null && !asyncOperationUnloadOne.isDone) && 
             (asyncOperationUnloadTwo != null && !asyncOperationUnloadTwo.isDone))
         {
-            Debug.Log("loading");
             yield return null;
         }
         loadingFinished = true;
