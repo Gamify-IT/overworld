@@ -29,10 +29,12 @@ public class PauseMenu : MonoBehaviour
     {
         SceneManager.UnloadScene("Menu");
         menuOpen = false;
+        Time.timeScale = 1f;
     }
     public void Pause()
     {
         menuOpen = true;
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
+        Time.timeScale = 0f;
     }
 }
