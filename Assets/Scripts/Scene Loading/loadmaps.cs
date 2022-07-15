@@ -54,7 +54,6 @@ public class loadmaps : MonoBehaviour
             Debug.Log("loading");
             yield return null;
         }
-        Debug.Log("finished loading");
         loadingFinished = true;
     }
 }
