@@ -19,12 +19,11 @@ public class mymove : MonoBehaviour
 
     public Vector2 movement;
 
-    public bool menuOpen;
+    public static bool menuOpen = false;
 
     private void Start()
     {
         transform.position = startingPosition.initialValue;
-        menuOpen = false;
     }
 
     // Update is called once per frame
@@ -47,16 +46,21 @@ public class mymove : MonoBehaviour
         {
             rb.transform.position = new Vector2(0, 0);
         }
-
-        //open menu when its not opened
-        if (Input.GetKeyDown(KeyCode.Escape) && !menuOpen) {
-            menuOpen = true;
-            SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
-        }
-        //close menu when its opened
-        if (Input.GetKeyDown(KeyCode.Escape) && menuOpen) {
-            SceneManager.UnloadSceneAsync("Menu");
-            menuOpen = false;
+        //esc handling
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            //close menu when its opened
+            if (menuOpen)
+            {
+                SceneManager.UnloadScene("Menu");
+                menuOpen = false;
+            }
+            //open menu when its not opened
+            else
+            {
+                menuOpen = true;
+                SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
+            }
         }
     }
 
