@@ -22,7 +22,6 @@ public class loadmaps : MonoBehaviour
 
     public IEnumerator LoadUnloadWorlds(string loadWorldOne, string loadWorldTwo, string unloadWorldOne, string unloadWorldTwo)
     {
-        Debug.Log("start loading");
         loadingFinished = false;
         AsyncOperation asyncOperationLoadOne = null;
         AsyncOperation asyncOperationLoadTwo = null;
