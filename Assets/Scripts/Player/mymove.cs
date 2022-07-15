@@ -19,8 +19,6 @@ public class mymove : MonoBehaviour
 
     public Vector2 movement;
 
-    public static bool menuOpen = false;
-
     private void Start()
     {
         transform.position = startingPosition.initialValue;
@@ -46,22 +44,7 @@ public class mymove : MonoBehaviour
         {
             rb.transform.position = new Vector2(0, 0);
         }
-        //esc handling
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            //close menu when its opened
-            if (menuOpen)
-            {
-                SceneManager.UnloadScene("Menu");
-                menuOpen = false;
-            }
-            //open menu when its not opened
-            else
-            {
-                menuOpen = true;
-                SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
-            }
-        }
+
     }
 
     void FixedUpdate()
