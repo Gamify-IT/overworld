@@ -13,8 +13,8 @@ public class Animation : MonoBehaviour
 
 
     public Animator playerAnimator;
-    public float hf = 0.0f;
-    public float vf = 0.0f;
+    public float horizontalAnimationFloat = 0.0f;
+    public float verticalAnimationFloat = 0.0f;
 
     void Start()
     {
@@ -48,16 +48,19 @@ public class Animation : MonoBehaviour
 
     }
 
+    //depending on horizontalAnimationFloat and verticalAnimationFloat it is defined whether a vertical or horizontal movement takes place
+    //then depending on movement.x and movement.y are looked to decide if movement is up/down or left/right and depending on this the correct 
+    //animation is executed
     void FixedUpdate()
     {
-        hf = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
-        vf = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
+        horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
+        verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
 
         rigidbody.MovePosition(rigidbody.position + movement * currentSpeed * Time.fixedDeltaTime);
 
         playerAnimator.SetFloat("Horizontal", movement.x);
         playerAnimator.SetFloat("Vertical", movement.y);
-        playerAnimator.SetFloat("VerticalSpeed", vf);
-        playerAnimator.SetFloat("HorizontalSpeed", hf);
+        playerAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
+        playerAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
     }
 }
