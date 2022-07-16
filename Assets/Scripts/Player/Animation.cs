@@ -13,8 +13,6 @@ public class Animation : MonoBehaviour
 
 
     public Animator playerAnimator;
-    public float horizontalAnimationFloat = 0.0f;
-    public float verticalAnimationFloat = 0.0f;
 
     void Start()
     {
@@ -53,6 +51,9 @@ public class Animation : MonoBehaviour
     //animation is executed
     void FixedUpdate()
     {
+        float horizontalAnimationFloat = 0.0f;
+        float verticalAnimationFloat = 0.0f;
+        
         horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
         verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
 
