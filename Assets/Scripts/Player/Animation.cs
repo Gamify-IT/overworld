@@ -7,7 +7,7 @@ public class Animation : MonoBehaviour
     public float movementSpeed = 3f;
     public float sprintingSpeed = 6f;
     public float superSpeed = 20f;
-    private float actuallSpeed;
+    private float currentSpeed;
     public Vector2 movement;
     public Rigidbody2D rigidbody;
 
@@ -19,7 +19,7 @@ public class Animation : MonoBehaviour
     void Start()
     {
         rigidbody = this.GetComponent<Rigidbody2D>();
-        actuallSpeed = movementSpeed;
+        currentSpeed = movementSpeed;
     }
 
     void Update()
@@ -28,22 +28,22 @@ public class Animation : MonoBehaviour
         movement.y = Input.GetAxisRaw("Vertical");
         movement = movement.normalized;
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && actuallSpeed == movementSpeed)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && currentSpeed == movementSpeed)
         {
-            actuallSpeed = actuallSpeed + sprintingSpeed;
+            currentSpeed = currentSpeed + sprintingSpeed;
         }
-        if (Input.GetKeyUp(KeyCode.LeftShift) && actuallSpeed == (movementSpeed + sprintingSpeed))
+        if (Input.GetKeyUp(KeyCode.LeftShift) && currentSpeed == (movementSpeed + sprintingSpeed))
         {
-            actuallSpeed = actuallSpeed - sprintingSpeed;
+            currentSpeed = currentSpeed - sprintingSpeed;
         }
 
-        if (Input.GetKeyDown("l") && actuallSpeed == movementSpeed)
+        if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
         {
-            actuallSpeed = actuallSpeed + superSpeed;
+            currentSpeed = currentSpeed + superSpeed;
         }
-        if (Input.GetKeyUp("l") && actuallSpeed == (movementSpeed + superSpeed))
+        if (Input.GetKeyUp("l") && currentSpeed == (movementSpeed + superSpeed))
         {
-            actuallSpeed = actuallSpeed - superSpeed;
+            currentSpeed = currentSpeed - superSpeed;
         }
 
     }
@@ -53,7 +53,7 @@ public class Animation : MonoBehaviour
         hf = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
         vf = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
 
-        rigidbody.MovePosition(rigidbody.position + movement * actuallSpeed * Time.fixedDeltaTime);
+        rigidbody.MovePosition(rigidbody.position + movement * currentSpeed * Time.fixedDeltaTime);
 
         playerAnimator.SetFloat("Horizontal", movement.x);
         playerAnimator.SetFloat("Vertical", movement.y);
