@@ -51,11 +51,8 @@ public class Animation : MonoBehaviour
     //animation is executed
     void FixedUpdate()
     {
-        float horizontalAnimationFloat = 0.0f;
-        float verticalAnimationFloat = 0.0f;
-        
-        horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
-        verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
+        float horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
+        float verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
 
         rigidbody.MovePosition(rigidbody.position + movement * currentSpeed * Time.fixedDeltaTime);
 
