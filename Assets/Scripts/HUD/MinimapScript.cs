@@ -11,7 +11,7 @@ public class MinimapScript : MonoBehaviour
         //set the zoom level
         zoomLevel = -32;
         //get the player and attach the minimap to him
-        GameObject player = GameObject.Find("player");
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
         GameObject miniMapCam = GameObject.Find("Minimap Camera");
         miniMapCam.transform.SetParent(player.transform);
         //set the local transform of the minimap camera to be above the player, zoomed out by the specified zoomLevel
