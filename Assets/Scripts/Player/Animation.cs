@@ -40,7 +40,7 @@ public class Animation : MonoBehaviour
         if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
         {
             currentSpeed = currentSpeed + superSpeed;
-            playerAnimator.speed = 3;
+            playerAnimator.speed = 20;
         }
         if (Input.GetKeyUp("l") && currentSpeed == (movementSpeed + superSpeed))
         {
