@@ -9,9 +9,9 @@ public class MinimapScript : MonoBehaviour
     void Start()
     {
         //set the zoom level
-        zoomLevel = -32;
+        zoomLevel = -30;
         //get the player and attach the minimap to him
-        GameObject player = GameObject.Find("player");
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
         GameObject miniMapCam = GameObject.Find("Minimap Camera");
         miniMapCam.transform.SetParent(player.transform);
         //set the local transform of the minimap camera to be above the player, zoomed out by the specified zoomLevel
@@ -21,7 +21,39 @@ public class MinimapScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if zoom during runtime is needed uncomment line below
-        //GameObject.Find("Minimap Camera").transform.localPosition = new Vector3(0, 0, zoomLevel);
+        //zoom in
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            ZoomIn();
+        }
+        //zoom out
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            ZoomOut();
+        }
+    }
+    //zoom In handling
+    public void ZoomIn()
+    {
+        //restrict zoom level
+        if (zoomLevel < -20)
+        {
+            //zoom in
+            zoomLevel += 10;
+            GameObject.Find("Minimap Camera").transform.localPosition = new Vector3(0, 0, zoomLevel);
+        }
+        
+    }
+    //zoom Out handling
+    public void ZoomOut()
+    {
+        //restrict zoom level
+        if (zoomLevel > -50)
+        {
+            //zoom out
+            zoomLevel -= 10;
+            GameObject.Find("Minimap Camera").transform.localPosition = new Vector3(0, 0, zoomLevel);
+        }
+
     }
 }
