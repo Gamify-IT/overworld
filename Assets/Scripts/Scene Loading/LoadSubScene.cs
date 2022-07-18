@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class LoadSubScene : MonoBehaviour
 {
     public string sceneToLoad;
-    public string sceneToUnload;
     public GameObject fadeInPanel;
     public GameObject fadeOutPanel;
     public float loadingTime;
@@ -32,11 +31,19 @@ public class LoadSubScene : MonoBehaviour
         GameObject fadeOutPanelCopy = Instantiate(fadeOutPanel, Vector3.zero, Quaternion.identity);
         yield return new WaitForSeconds(loadingTime);
         AsyncOperation asyncOperationLoad = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
-        AsyncOperation asyncOperationUnload = SceneManager.UnloadSceneAsync(sceneToUnload);
-        while (!asyncOperationLoad.isDone && !asyncOperationUnload.isDone)
+        while (!asyncOperationLoad.isDone)
         {
             yield return null;
         }
+
+        foreach (Scene scene in SceneManager.GetAllScenes())
+        {
+            if (scene.name != "Player" && scene.name != "Player HUD" && scene.name != sceneToLoad)
+            {
+                SceneManager.UnloadSceneAsync(scene.name);
+            }
+        }
+
         GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
         GameObject panel = Instantiate(fadeInPanel, Vector3.zero, Quaternion.identity) as GameObject;
         DestroyImmediate(fadeOutPanelCopy, true);
