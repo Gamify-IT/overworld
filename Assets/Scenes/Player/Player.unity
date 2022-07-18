@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.35872743, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -248,12 +248,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 3
   sprintingSpeed: 6
-  superSpeed: 10
+  superSpeed: 50
   movement: {x: 0, y: 0}
   rigidbody: {fileID: 298057352}
   playerAnimator: {fileID: 298057348}
-  hf: 0
-  vf: 0
 --- !u!50 &298057352
 Rigidbody2D:
   serializedVersion: 4
@@ -273,7 +271,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &298057353
 MonoBehaviour:
