@@ -29,19 +29,23 @@ public class Animation : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift) && currentSpeed == movementSpeed)
         {
             currentSpeed = currentSpeed + sprintingSpeed;
+            playerAnimator.speed = 2;
         }
         if (Input.GetKeyUp(KeyCode.LeftShift) && currentSpeed == (movementSpeed + sprintingSpeed))
         {
             currentSpeed = currentSpeed - sprintingSpeed;
+            playerAnimator.speed = 1;
         }
 
         if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
         {
             currentSpeed = currentSpeed + superSpeed;
+            playerAnimator.speed = 3;
         }
         if (Input.GetKeyUp("l") && currentSpeed == (movementSpeed + superSpeed))
         {
             currentSpeed = currentSpeed - superSpeed;
+            playerAnimator.speed = 1;
         }
 
     }
