@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class MinimapScript : MonoBehaviour
 {
     public int zoomLevel;
+
+    public static string areaName = "Loading...";
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +34,8 @@ public class MinimapScript : MonoBehaviour
         {
             ZoomOut();
         }
+
+        GameObject.FindGameObjectWithTag("AreaName").GetComponent<TextMeshProUGUI>().text = areaName;
     }
     //zoom In handling
     public void ZoomIn()
