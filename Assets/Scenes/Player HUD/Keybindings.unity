@@ -3430,6 +3430,7 @@ GameObject:
   - component: {fileID: 1108062196}
   - component: {fileID: 1108062195}
   - component: {fileID: 1108062194}
+  - component: {fileID: 1108062198}
   m_Layer: 5
   m_Name: Keybindings Canvas
   m_TagString: Untagged
@@ -3521,6 +3522,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1108062198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108062193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdfdbb4fa184c3c478cf632db506b501, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1154740814
 GameObject:
   m_ObjectHideFlags: 0
@@ -4937,7 +4950,7 @@ MonoBehaviour:
     m_Left: 50
     m_Right: 0
     m_Top: 0
-    m_Bottom: 0
+    m_Bottom: 10
   m_ChildAlignment: 1
   m_Spacing: 10
   m_ChildForceExpandWidth: 1
@@ -5920,8 +5933,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1386258754}
   m_HandleRect: {fileID: 1386258753}
   m_Direction: 2
-  m_Value: 1.0000005
-  m_Size: 0.8505157
+  m_Value: 0.9999996
+  m_Size: 0.8318783
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6324,7 +6337,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2117065954}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1108062198}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: CloseSubMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2117065954
 MonoBehaviour:
   m_ObjectHideFlags: 0
