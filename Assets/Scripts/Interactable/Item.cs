@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    public GameObject gameObject;
+    public GameObject gameObjectToDestroy;
     // Update is called once per frame
     private void Test()
     {
@@ -15,6 +15,6 @@ public class Item : MonoBehaviour
 
     public void Interact()
     {
-        Destroy(gameObject);
+        Destroy(gameObjectToDestroy);
     }
 }

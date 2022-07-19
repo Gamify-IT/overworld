@@ -20,7 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Worlds/World 2/World 2.unity
     guid: 1ad3e70ef7b48da2f8d11c1c4a3b5e51
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Prototypes/Npc Dialogue/Npc Dialogue.unity
     guid: 3f31e10434d918a4baca7140b5b10ce2
   - enabled: 1
@@ -29,9 +29,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Worlds/World 1/World 1.unity
     guid: 9dedbcb1df509c64fb34aa3fdd17a333
-  - enabled: 0
-    path: 
-    guid: 1ba5eaa547db0924fbd5392fafd29162
   - enabled: 1
     path: Assets/Scenes/Player/Player.unity
     guid: eed317463032b2743b7c49df13f76ca6
@@ -41,4 +38,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Worlds/World 4/World 4.unity
     guid: c11b0d6faef0c5640a61ca11468baf88
+  - enabled: 1
+    path: Assets/Scenes/Player HUD/Keybindings.unity
+    guid: ad986a455c7658b43b3c0df642bb32b0
   m_configObjects: {}
