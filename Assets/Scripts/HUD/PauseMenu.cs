@@ -36,7 +36,7 @@ public class PauseMenu : MonoBehaviour
     //handles everyting when pause menu is closed
     public void Resume()
     {
-        SceneManager.UnloadScene("Menu");
+        SceneManager.UnloadSceneAsync("Menu");
         menuOpen = false;
         Time.timeScale = 1f;
     }
@@ -60,7 +60,7 @@ public class PauseMenu : MonoBehaviour
     {
         subMenuOpen = true;
         menuOpen = false;
-        SceneManager.UnloadScene("Menu");
+        SceneManager.UnloadSceneAsync("Menu");
         //load the scene which was set with SubMenuSelection()
         SceneManager.LoadScene(buttonName, LoadSceneMode.Additive);
     }
@@ -69,7 +69,7 @@ public class PauseMenu : MonoBehaviour
         menuOpen = true;
         subMenuOpen = false;
         //unload the scene which was set with SubMenuSelection()
-        SceneManager.UnloadScene(buttonName);
+        SceneManager.UnloadSceneAsync(buttonName);
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
     }
 }
