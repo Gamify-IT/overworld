@@ -47,7 +47,7 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
         Time.timeScale = 0f;
     }
-    //This sets a string to the name of the button clicked. If we name the Menu Buttons consistently, this saves labor for future menu buttons. So in Unity the Button has to be named "Something Button"
+    //This sets a string to the name of the button clicked. If we name the Menu Buttons consistently, this saves labor for future menu buttons. So if the scene for a submenu is named "Something" the Button has to be named "Something Button"
     public void SubMenuSelection()
     {
         //get the name of the pressed button
