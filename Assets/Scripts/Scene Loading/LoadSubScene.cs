@@ -36,11 +36,12 @@ public class LoadSubScene : MonoBehaviour
             yield return null;
         }
 
-        foreach (Scene scene in SceneManager.GetAllScenes())
+        for(int sceneIndex = 0;sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
-            if (scene.name != "Player" && scene.name != "Player HUD" && scene.name != sceneToLoad)
+            string tempSceneName = SceneManager.GetSceneAt(sceneIndex).name;
+            if (!tempSceneName.Equals("Player")  && !tempSceneName.Equals("Player HUD") && !tempSceneName.Equals(sceneToLoad))
             {
-                SceneManager.UnloadSceneAsync(scene.name);
+                SceneManager.UnloadSceneAsync(tempSceneName);
             }
         }
 
