@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 901141394909980509}
   - component: {fileID: 901141394909980510}
   m_Layer: 0
-  m_Name: Minigame1
+  m_Name: Minigame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,8 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f882bd3596ad8e543aaeef48c21d34cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  world: 1
-  number: 1
+  world: 0
+  number: 0
   status: 0
 --- !u!61 &901141394909980510
 BoxCollider2D:
