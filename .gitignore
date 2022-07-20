@@ -44,6 +44,11 @@ ExportedObj/
 *.opendb
 *.VC.db
 
+# Rider
+.idea/
+.idea/.idea.overworld/.idea/workspace.xml
+**/.idea/**/workspace.xml
+
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
@@ -65,4 +70,3 @@ UserSettings/**
 
 # macos
 .DS_Store
-

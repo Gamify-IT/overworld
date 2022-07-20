@@ -8,25 +8,21 @@ public class loadmaps : MonoBehaviour
 {
     public string sceneLoadOne;
     public string sceneLoadTwo;
-    public string sceneUnloadOne;
-    public string sceneUnloadTwo;
     public bool loadingFinished;
 
     public void OnTriggerEnter2D(Collider2D playerCollision)
     {
         if (playerCollision.tag == "Player" && loadingFinished)
         {
-            StartCoroutine(LoadUnloadWorlds(sceneLoadOne, sceneLoadTwo, sceneUnloadOne, sceneUnloadTwo));
+            StartCoroutine(LoadUnloadWorlds(sceneLoadOne, sceneLoadTwo));
         }
     }
 
-    public IEnumerator LoadUnloadWorlds(string loadWorldOne, string loadWorldTwo, string unloadWorldOne, string unloadWorldTwo)
+    public IEnumerator LoadUnloadWorlds(string loadWorldOne, string loadWorldTwo)
     {
         loadingFinished = false;
         AsyncOperation asyncOperationLoadOne = null;
         AsyncOperation asyncOperationLoadTwo = null;
-        AsyncOperation asyncOperationUnloadOne = null;
-        AsyncOperation asyncOperationUnloadTwo = null;
 
         if (!SceneManager.GetSceneByName(loadWorldOne).isLoaded)
         {
@@ -36,20 +32,19 @@ public class loadmaps : MonoBehaviour
         {
             asyncOperationLoadTwo = SceneManager.LoadSceneAsync(loadWorldTwo, LoadSceneMode.Additive);
         }
-        if (SceneManager.GetSceneByName(unloadWorldOne).isLoaded)
+
+        for(int sceneIndex = 0;sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
-            asyncOperationUnloadOne = SceneManager.UnloadSceneAsync(unloadWorldOne);
-        }
-        if (SceneManager.GetSceneByName(unloadWorldTwo).isLoaded)
-        {
-            asyncOperationUnloadTwo = SceneManager.UnloadSceneAsync(unloadWorldTwo);
+            string tempSceneName = SceneManager.GetSceneAt(sceneIndex).name;
+            if (!tempSceneName.Equals("Player")  && !tempSceneName.Equals("Player HUD") && !tempSceneName.Equals(loadWorldOne) && !tempSceneName.Equals(loadWorldTwo))
+            {
+                SceneManager.UnloadSceneAsync(tempSceneName);
+            }
         }
 
         while (
             (asyncOperationLoadOne != null && !asyncOperationLoadOne.isDone) && 
-            (asyncOperationLoadTwo != null && !asyncOperationLoadTwo.isDone) && 
-            (asyncOperationUnloadOne != null && !asyncOperationUnloadOne.isDone) && 
-            (asyncOperationUnloadTwo != null && !asyncOperationUnloadTwo.isDone))
+            (asyncOperationLoadTwo != null && !asyncOperationLoadTwo.isDone))
         {
             yield return null;
         }
