@@ -15,22 +15,25 @@ public class PauseMenu : MonoBehaviour
         //esc handling
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            //open menu when its not opened
-            if (!menuOpen && !subMenuOpen)
-            {
-                Pause();
-            }
-            //close menu when its opened
-            else if (menuOpen  && !subMenuOpen)
-            {
-                Resume();
-            }
-            //add option to go back out of a submenu into the normal pause menu again (instead of clicking the back button)
-            else
-            {
-                CloseSubMenu();
-            }
-            
+            PauseOrResume();
+        }
+    }
+    public void PauseOrResume()
+    {
+        //open menu when its not opened
+        if (!menuOpen && !subMenuOpen)
+        {
+            Pause();
+        }
+        //close menu when its opened
+        else if (menuOpen && !subMenuOpen)
+        {
+            Resume();
+        }
+        //add option to go back out of a submenu into the normal pause menu again (instead of clicking the back button)
+        else
+        {
+            CloseSubMenu();
         }
     }
     //handles everyting when pause menu is closed
