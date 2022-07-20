@@ -19,6 +19,11 @@ public class MinimapScript : MonoBehaviour
         miniMapCam.transform.SetParent(player.transform);
         //set the local transform of the minimap camera to be above the player, zoomed out by the specified zoomLevel
         miniMapCam.transform.localPosition = new Vector3(0, 0, zoomLevel);
+        
+        foreach(GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
+        {
+            minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/5, -1*zoomLevel/5, 0);
+        }
     }
 
     // Update is called once per frame
@@ -46,6 +51,12 @@ public class MinimapScript : MonoBehaviour
             //zoom in
             zoomLevel += 10;
             GameObject.Find("Minimap Camera").transform.localPosition = new Vector3(0, 0, zoomLevel);
+
+            foreach(GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
+            {
+                minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/5, -1*zoomLevel/5, 0);
+            }
+
         }
         
     }
@@ -58,6 +69,11 @@ public class MinimapScript : MonoBehaviour
             //zoom out
             zoomLevel -= 10;
             GameObject.Find("Minimap Camera").transform.localPosition = new Vector3(0, 0, zoomLevel);
+            
+            foreach(GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
+            {
+                minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/5, -1*zoomLevel/5, 0);
+            }
         }
 
     }
