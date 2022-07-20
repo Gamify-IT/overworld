@@ -7423,6 +7423,174 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: minigamespot_8
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5947439592f7274a80c8f9aa12387b0
+      internalID: 609153927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minigamespot_7
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b28e898e11130304a8777a7992fd35b1
+      internalID: 1250373909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minigamespot_6
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c838edb1b7f37b4bbb6775decd7ef75
+      internalID: -1774013683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minigamespot_5
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 811a87669b0756a49bd977c467a9b33a
+      internalID: -1793511342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minigamespot_4
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 189abe11e88c31e429cde3437252332e
+      internalID: 1010285974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minigamespot_3
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c240bb708ec6824f8eb1c3cbfa96e26
+      internalID: -278556168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minigamespot_2
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b73b33920e1745e44ab2d7dd8ffccc52
+      internalID: 1717277939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minigamespot_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b6bdaa2a822fe347a5419e02ed5c2ec
+      internalID: 1900931670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -7463,6 +7631,7 @@ TextureImporter:
       objects_1: 1980825743
       objects_242: 1187541119
       objects_179: -1488151704
+      minigamespot_7: 609153927
       objects_39: -1169708310
       objects_129: -181814621
       objects_184: -295149769
@@ -7494,6 +7663,7 @@ TextureImporter:
       objects_211: 709039280
       magic_tree_8: -1657752306
       objects_66: -1465974465
+      minigamespot_6: 1250373909
       objects_31: 1264228573
       objects_274: 637508063
       objects_136: -319344983
@@ -7629,6 +7799,7 @@ TextureImporter:
       objects_190: 1265509353
       objects_175: -913743754
       objects_152: 1946837394
+      minigamespot_2: -278556168
       objects_137: 1375791124
       objects_224: -166003601
       objects_12: 539793278
@@ -7642,6 +7813,7 @@ TextureImporter:
       objects_299: 776066872
       objects_96: -12580642
       objects_165: -1779440321
+      minigamespot_3: 1010285974
       objects_247: -694678305
       objects_182: -530709061
       objects_237: -1002807284
@@ -7668,9 +7840,11 @@ TextureImporter:
       objects_238: -1874907246
       objects_293: -594227088
       objects_318: 505873857
+      minigamespot_1: 1717277939
       objects_328: 2117916109
       objects_6: 789583754
       objects_121: 1693674751
+      minigamespot_8: 609153927
       objects_236: 2110970347
       objects_210: 1494197905
       objects_177: 787372669
@@ -7735,6 +7909,7 @@ TextureImporter:
       objects_255: 295793193
       magic_tree_3: -737388492
       objects_28: 704014382
+      minigamespot_4: -1793511342
       objects_157: 1790164516
       objects_261: -1934142152
       objects_223: 156754589
@@ -7747,6 +7922,7 @@ TextureImporter:
       objects_153: -1208109035
       objects_199: -1183054086
       objects_63: -502046846
+      minigamespot_5: -1774013683
       objects_74: -2082243526
       objects_158: -1024432160
       objects_90: 956542016
