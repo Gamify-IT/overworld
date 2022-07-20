@@ -2131,6 +2131,132 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_96
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1536
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8eebab32b5290fe4798ddf72c0e05b6c
+      internalID: -438868756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_97
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 1536
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8aad1de97751b646bd87288ee163341
+      internalID: -1174935808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_98
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1520
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c99c9f727a2cd7c45bf76a959f6df605
+      internalID: -980002741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_99
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 1520
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 246692c89a6b4644b81f87644306b6e1
+      internalID: -1369926248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_100
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1504
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86f61449f61f7ed4c8ccca5446345fa5
+      internalID: 1303015279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_101
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 1504
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03f3865ddd7e3054a878d1a38f27ad04
+      internalID: 1442169247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -2152,6 +2278,7 @@ TextureImporter:
       snowToOverworld_40: -617521075
       snowToOverworld_75: -531684544
       snowToOverworld_72: -808121320
+      snowToOverworld_101: 1442169247
       snowToOverworld_41: -1472587639
       snowToOverworld_31: -166951036
       snowToOverworld_50: 300156450
@@ -2169,6 +2296,7 @@ TextureImporter:
       snowToOverworld_16: -1102668433
       snowToOverworld_90: 1923758465
       snowToOverworld_37: 5294368
+      snowToOverworld_96: -438868756
       snowToOverworld_8: 1762301653
       snowToOverworld_47: 1893259953
       snowToOverworld_70: -1232321659
@@ -2208,9 +2336,12 @@ TextureImporter:
       snowToOverworld_60: -1826768848
       snowToOverworld_85: 1418974350
       snowToOverworld_9: 1435348410
+      snowToOverworld_99: -1369926248
       snowToOverworld_92: 49970776
       snowToOverworld_82: 1730672476
       snowToOverworld_3: -960515816
+      snowToOverworld_100: 1303015279
+      snowToOverworld_98: -980002741
       snowToOverworld_39: 147689380
       snowToOverworld_34: 1008757996
       snowToOverworld_0: -1095816582
@@ -2225,6 +2356,7 @@ TextureImporter:
       snowToOverworld_11: 2092923804
       snowToOverworld_56: -1061436406
       snowToOverworld_83: -1756004375
+      snowToOverworld_97: -1174935808
       snowToOverworld_94: -1033812730
       snowToOverworld_52: -1505314297
       snowToOverworld_45: -173787025
