@@ -32,9 +32,9 @@ public class Minigame : MonoBehaviour
     }
 
     //setup minigame
-    public void setup(MinigameStatus status)
+    public void setup(MinigameData data)
     {
-        this.status = status;
+        this.status = data.getStatus();
         updateStatus();
     }
 

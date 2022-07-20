@@ -9,40 +9,26 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("Start Gamemanager init");
         if (instance == null)
         {
+            Debug.Log("End Gamemanager init");
             setupGameManager();
         }
         else
         {
             Destroy(gameObject);
         }
-        Debug.Log("End Gamemanager init");
     }
     #endregion
 
+    #region Attributes
     private static int maxWorld = 5;
     private static int maxMinigames = 12;
-    [SerializeField] private MinigameStatus[,] minigameData = new MinigameStatus[maxWorld,maxMinigames];
-    [SerializeField] private GameObject[,] minigameObjects = new GameObject[maxWorld,maxMinigames];
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private MinigameData[,] minigameData = new MinigameData[maxWorld,maxMinigames];
+    private GameObject[,] minigameObjects = new GameObject[maxWorld,maxMinigames];
+    #endregion
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            getStatus(1);
-            //wait for answer
-            setStatus(1);
-        }
-    }
-
+    #region Setup
     private void setupGameManager()
     {
         instance = this;
@@ -51,7 +37,7 @@ public class GameManager : MonoBehaviour
             for(int j=0; j<maxMinigames; j++)
             {
                 minigameObjects[i,j] = null;
-                minigameData[i,j] = MinigameStatus.notConfigurated;
+                minigameData[i,j] = new MinigameData(MinigameStatus.notConfigurated);
             }
         }
     }
@@ -61,33 +47,42 @@ public class GameManager : MonoBehaviour
     {
         if(minigame != null)
         {
-            minigameObjects[world,number] = minigame;
+            minigameObjects[world-1,number-1] = minigame;
         }
+    }
+    #endregion
+
+    #region Loading
+    public void loadWorld(int world)
+    {
+        Debug.Log("Update " + world);
+        getStatus(world);
+        setStatus(world);
     }
 
     //get world status
     private void getStatus(int world)
     {
-        minigameData[0,0] = MinigameStatus.active;
-        minigameData[0,1] = MinigameStatus.notConfigurated;
+        minigameData[0,0] = new MinigameData(MinigameStatus.active);
+        minigameData[0,1] = new MinigameData(MinigameStatus.notConfigurated);
+        minigameData[2,0] = new MinigameData(MinigameStatus.active);
     }
 
     //set world status
     private void setStatus(int world)
     {
-        for(int worldIndex = 0; worldIndex < maxWorld; worldIndex++)
-        {
+
             for(int minigameIndex = 0; minigameIndex < maxMinigames; minigameIndex++)
             {
-                if(minigameObjects[worldIndex,minigameIndex] != null)
+                if(minigameObjects[world-1,minigameIndex] != null)
                 {
-                    Minigame minigame = minigameObjects[worldIndex,minigameIndex].GetComponent<Minigame>();
+                    Minigame minigame = minigameObjects[world-1,minigameIndex].GetComponent<Minigame>();
                     if(minigame != null)
                     {
-                        minigame.setup(minigameData[worldIndex,minigameIndex]);
+                        minigame.setup(minigameData[world-1,minigameIndex]);
                     }
                 }
             }
-        }
     }
+    #endregion
 }
