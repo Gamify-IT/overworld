@@ -19,13 +19,7 @@ public class MinimapIconsUnloading : MonoBehaviour
                     minimapIcon.GetComponent<SpriteRenderer>().enabled = true;;
                 }
             }
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D player)
-    {
-        if (player.tag.Equals("Player"))
-        {
+            
             if (nameOfCurrentScene.Equals(""))
             {
                 this.transform.GetComponent<SpriteRenderer>().enabled = false;
@@ -45,6 +39,11 @@ public class MinimapIconsUnloading : MonoBehaviour
                 {
                     minimapIcon.GetComponent<SpriteRenderer>().enabled = false;
                 }
+            }
+            
+            if (nameOfCurrentScene.Equals(""))
+            {
+                this.transform.GetComponent<SpriteRenderer>().enabled = false;
             }
         }
     }
