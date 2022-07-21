@@ -6,7 +6,7 @@ using UnityEngine;
 public class MinimapScript : MonoBehaviour
 {
     public int zoomLevel;
-    private float minimapIconResizeValue = (float) 6.0;
+    private float minimapIconResizeValue = (float) 6.3;
 
     public static string areaName = "Loading...";
     // Start is called before the first frame update
