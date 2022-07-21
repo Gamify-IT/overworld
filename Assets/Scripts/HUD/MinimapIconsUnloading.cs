@@ -12,14 +12,11 @@ public class MinimapIconsUnloading : MonoBehaviour
         {
             GameObject[] minimapIcons = GameObject.FindGameObjectsWithTag("MinimapIcon");
 
-            Debug.Log("Enter: " + minimapIcons.Length);
-
             foreach (GameObject minimapIcon in minimapIcons)
             {
                 if (!minimapIcon.name.Contains(nameOfCurrentScene) && !nameOfCurrentScene.Equals(""))
                 {
                     minimapIcon.GetComponent<SpriteRenderer>().enabled = true;;
-                    Debug.Log("SetActive: true for: " + minimapIcon.name);
                 }
                 
                 if (nameOfCurrentScene.Equals(""))
@@ -36,14 +33,11 @@ public class MinimapIconsUnloading : MonoBehaviour
         {
             GameObject[] minimapIcons = GameObject.FindGameObjectsWithTag("MinimapIcon");
 
-            Debug.Log("Exit: " + minimapIcons.Length);
-
             foreach (GameObject minimapIcon in minimapIcons)
             {
                 if (minimapIcon.name.Contains(nameOfCurrentScene) && !nameOfCurrentScene.Equals(""))
                 {
                     minimapIcon.GetComponent<SpriteRenderer>().enabled = false;
-                    Debug.Log("SetActive: false for: " + minimapIcon.name);
                 }
             }
         }
