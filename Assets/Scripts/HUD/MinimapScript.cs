@@ -6,6 +6,7 @@ using UnityEngine;
 public class MinimapScript : MonoBehaviour
 {
     public int zoomLevel;
+    private float minimapIconResizeValue = (float) 6.0;
 
     public static string areaName = "Loading...";
     // Start is called before the first frame update
@@ -39,7 +40,7 @@ public class MinimapScript : MonoBehaviour
         
         foreach(GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
         {
-            minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/5, -1*zoomLevel/5, 0);
+            minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/minimapIconResizeValue, -1*zoomLevel/minimapIconResizeValue, 0);
         }
     }
     //zoom In handling
@@ -54,7 +55,7 @@ public class MinimapScript : MonoBehaviour
 
             foreach(GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
             {
-                minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/5, -1*zoomLevel/5, 0);
+                minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/minimapIconResizeValue, -1*zoomLevel/minimapIconResizeValue, 0);
             }
 
         }
@@ -72,7 +73,7 @@ public class MinimapScript : MonoBehaviour
             
             foreach(GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
             {
-                minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/5, -1*zoomLevel/5, 0);
+                minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/minimapIconResizeValue, -1*zoomLevel/minimapIconResizeValue, 0);
             }
         }
 
