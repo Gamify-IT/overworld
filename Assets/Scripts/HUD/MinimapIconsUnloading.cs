@@ -18,11 +18,17 @@ public class MinimapIconsUnloading : MonoBehaviour
                 {
                     minimapIcon.GetComponent<SpriteRenderer>().enabled = true;;
                 }
-                
-                if (nameOfCurrentScene.Equals(""))
-                {
-                    this.transform.GetComponent<SpriteRenderer>().enabled = false;
-                }
+            }
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D player)
+    {
+        if (player.tag.Equals("Player"))
+        {
+            if (nameOfCurrentScene.Equals(""))
+            {
+                this.transform.GetComponent<SpriteRenderer>().enabled = false;
             }
         }
     }
