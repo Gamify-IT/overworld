@@ -1692,7 +1692,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -8, y: 8}
+        - {x: -8, y: -8}
+        - {x: 8, y: -8}
+        - {x: 8, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: 0c8a15b94d4017f41ad9e7db9a51b062
@@ -1713,7 +1717,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -8, y: 8}
+        - {x: -8, y: -8}
+        - {x: 8, y: -8}
+        - {x: 8, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: e2a175602955a1a449b4bd1b70e4fffd
@@ -23654,10 +23662,10 @@ TextureImporter:
       Overworld-Savanna_619: -1161090432
       Overworld-Savanna_605: 674721142
       Overworld-Savanna_1011: -1273286871
-      Overworld-Savanna_155: -1081850894
-      Overworld-Savanna_219: -1497855851
-      Overworld-Savanna_543: -402382518
       Overworld-Savanna_760: 2118579212
+      Overworld-Savanna_543: -402382518
+      Overworld-Savanna_219: -1497855851
+      Overworld-Savanna_155: -1081850894
       Overworld-Savanna_154: 1494039382
       Overworld-Savanna_99: -1820344552
       Overworld-Savanna_489: 202642716
