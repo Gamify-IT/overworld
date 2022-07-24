@@ -3,26 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
+
+/*
+ * This script manages animated trees. 
+ * If the player is too far away, they are just roots.
+ * If the player gets close enough, they grow really fast. 
+ */
 public class MagicTree : MonoBehaviour
 {
     public float animationSpeed = 0.02f;
-
     public List<Sprite> sprites;
-
     private float animationFrame = 0;
-
     private float targetAnimationFrame = 0;
-
     private SpriteRenderer spriteRenderer;
-
     private Transform player;
 
+    /*
+     * The Start function is called when the object is initialized and sets up the starting values and state of the object. 
+     */
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         player = FindObjectOfType<Animation>().transform;
     }
 
+    /*
+     * The Update function is called every frame. It updates all values according to the changes happened since the last frame. 
+     * If the player is close enough, the growing animation is triggered and the shown sprite gets updated. 
+     */
     void FixedUpdate()
     {
         if (Vector3.Distance(player.position, transform.position) < 6)

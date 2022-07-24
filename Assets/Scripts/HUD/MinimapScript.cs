@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/*
+ * This scripts manages the minimap. It manages the zoom level as well as the size of icons displayed in the minimap.
+ */
 public class MinimapScript : MonoBehaviour
 {
     public int zoomLevel;
     private float minimapIconResizeValue = (float) 6.3;
 
     public static string areaName = "Loading...";
-    // Start is called before the first frame update
+
+    /*
+     * The Start function is called when the object is initialized and sets up the starting values and state of the object. 
+     */
     void Start()
     {
         //set the zoom level
@@ -22,7 +28,10 @@ public class MinimapScript : MonoBehaviour
         miniMapCam.transform.localPosition = new Vector3(0, 0, zoomLevel);
     }
 
-    // Update is called once per frame
+    /*
+     * The Update function is called every frame. It updates all values according to the changes happened since the last frame. 
+     * It increases or decreases the size of the minimap if a input happened and adjusts the icon size. 
+     */
     void Update()
     {
         //zoom in
@@ -43,7 +52,10 @@ public class MinimapScript : MonoBehaviour
             minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/minimapIconResizeValue, -1*zoomLevel/minimapIconResizeValue, 0);
         }
     }
-    //zoom In handling
+
+    /*
+     * This function zooms in the minimap by one step.
+     */
     public void ZoomIn()
     {
         //restrict zoom level
@@ -57,11 +69,12 @@ public class MinimapScript : MonoBehaviour
             {
                 minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/minimapIconResizeValue, -1*zoomLevel/minimapIconResizeValue, 0);
             }
-
         }
-        
     }
-    //zoom Out handling
+    
+    /*
+     * This function zooms out the minimap by one step.
+     */
     public void ZoomOut()
     {
         //restrict zoom level
@@ -76,6 +89,5 @@ public class MinimapScript : MonoBehaviour
                 minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/minimapIconResizeValue, -1*zoomLevel/minimapIconResizeValue, 0);
             }
         }
-
     }
 }
