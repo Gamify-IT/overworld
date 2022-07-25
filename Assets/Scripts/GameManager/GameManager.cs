@@ -2,11 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script defines the game manager. 
+ * If the player enteres a world or a dungeon, all data needed gets loaded from the backend and 
+ * all minigames, barriers and NPCs get configurated accordingly. 
+ */
 public class GameManager : MonoBehaviour
 {
     #region Singleton
     public static GameManager instance { get; private set; }
 
+    /*
+     * The Awake function is called after an object is initialized and before the Start function.
+     * It sets up the Singleton. 
+     */
     private void Awake()
     {
         if (instance == null)
@@ -24,11 +33,17 @@ public class GameManager : MonoBehaviour
     #region Attributes
     private static int maxWorld = 5;
     private static int maxMinigames = 12;
-    private MinigameData[,] minigameData = new MinigameData[maxWorld,maxMinigames];
-    private GameObject[,] minigameObjects = new GameObject[maxWorld,maxMinigames];
+    private MinigameData[,] minigameData = new MinigameData[maxWorld+1,maxMinigames+1];
+    private GameObject[,] minigameObjects = new GameObject[maxWorld+1,maxMinigames+1];
+    private BarrierData[,] barrierData = new BarrierData[maxWorld+1, maxWorld+1];
+    private GameObject[,] barrierObjects = new GameObject[maxWorld+1, maxWorld+1];
     #endregion
 
     #region Setup
+
+    /*
+     * This function sets up the game manager. 
+     */
     private void setupGameManager()
     {
         instance = this;
@@ -37,17 +52,35 @@ public class GameManager : MonoBehaviour
             for(int j=0; j<maxMinigames; j++)
             {
                 minigameObjects[i,j] = null;
-                minigameData[i,j] = new MinigameData(MinigameStatus.notConfigurated);
+                minigameData[i,j] = new MinigameData("", "", MinigameStatus.notConfigurated);
+            }
+            for(int j=0; j<maxWorld; j++)
+            {
+                barrierObjects[i, j] = null;
+                barrierData[i, j] = new BarrierData(true); 
             }
         }
     }
 
-    //called by minigame to register
+    /*
+     * This function registers a minigame at the game manager
+     */
     public void addMinigame(GameObject minigame, int world, int number)
     {
         if(minigame != null)
         {
-            minigameObjects[world-1,number-1] = minigame;
+            minigameObjects[world,number] = minigame;
+        }
+    }
+
+    /*
+     * This function registers a barrier at the game manager
+     */
+    public void addBarrier(GameObject barrier, int worldIndexOrigin, int worldIndexDestination)
+    {
+        if(barrier != null)
+        {
+            barrierObjects[worldIndexOrigin, worldIndexDestination] = barrier;
         }
     }
     #endregion
@@ -56,33 +89,54 @@ public class GameManager : MonoBehaviour
     public void loadWorld(int world)
     {
         Debug.Log("Update " + world);
-        getStatus(world);
-        setStatus(world);
+        getData(world);
+        setData(world);
     }
 
-    //get world status
-    private void getStatus(int world)
+    public void Update()
     {
-        minigameData[0,0] = new MinigameData(MinigameStatus.active);
-        minigameData[0,1] = new MinigameData(MinigameStatus.notConfigurated);
-        minigameData[2,0] = new MinigameData(MinigameStatus.active);
+        if(Input.GetKeyDown(KeyCode.H))
+        {
+            getData(1);
+            setData(1);
+        }
     }
 
-    //set world status
-    private void setStatus(int world)
+    //get world data
+    private void getData(int world)
     {
+        minigameData[1,1] = new MinigameData("Moorhuhn", "config" ,MinigameStatus.active);
+        minigameData[1,2] = new MinigameData("", "", MinigameStatus.notConfigurated);
+        minigameData[3,1] = new MinigameData("Moorhuhn", "config", MinigameStatus.active);
+        barrierData[1,2] = new BarrierData(false);
+    }
 
-            for(int minigameIndex = 0; minigameIndex < maxMinigames; minigameIndex++)
+    //set world data
+    private void setData(int world)
+    {
+        for(int minigameIndex = 1; minigameIndex < maxMinigames; minigameIndex++)
+        {
+            if(minigameObjects[world,minigameIndex] != null)
             {
-                if(minigameObjects[world-1,minigameIndex] != null)
+                Minigame minigame = minigameObjects[world,minigameIndex].GetComponent<Minigame>();
+                if(minigame != null)
                 {
-                    Minigame minigame = minigameObjects[world-1,minigameIndex].GetComponent<Minigame>();
-                    if(minigame != null)
-                    {
-                        minigame.setup(minigameData[world-1,minigameIndex]);
-                    }
+                    minigame.setup(minigameData[world,minigameIndex]);
                 }
             }
+        }
+
+        for(int barrierIndex = 1; barrierIndex < maxWorld; barrierIndex++)
+        {
+            if(barrierObjects[world, barrierIndex] != null)
+            {
+                Barrier barrier = barrierObjects[world,barrierIndex].GetComponent<Barrier>();
+                if(barrier != null)
+                {
+                    barrier.setup(barrierData[world,barrierIndex]);
+                }
+            }
+        }
     }
     #endregion
 }
