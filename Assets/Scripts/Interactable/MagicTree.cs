@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-
 /*
  * This script manages animated trees. 
  * If the player is too far away, they are just roots.
@@ -28,7 +26,7 @@ public class MagicTree : MonoBehaviour
     }
 
     /*
-     * The Update function is called every frame. It updates all values according to the changes happened since the last frame. 
+     * The FixedUpdate function is called every physics step. It updates all values according to the changes happened since the last physics engine update. 
      * If the player is close enough, the growing animation is triggered and the shown sprite gets updated. 
      */
     void FixedUpdate()
@@ -63,5 +61,4 @@ public class MagicTree : MonoBehaviour
 
         spriteRenderer.sprite = sprites[currentAnimationFrame];
     }
-
 }

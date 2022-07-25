@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +6,7 @@ using UnityEngine.UI;
  * This script manages NPCs which you can talk to. 
  * If the player is close enough and interacts with the NPC by pressing the 'E' button, a dialogue is started. 
  */
-public class NPC : MonoBehaviour
+public class Npc : MonoBehaviour
 {
     public GameObject dialoguePanel;
     public Text dialogueText;
@@ -26,9 +25,9 @@ public class NPC : MonoBehaviour
      */
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E) && playerIsClose)
+        if (Input.GetKeyDown(KeyCode.E) && playerIsClose)
         {
-            if(dialoguePanel.activeInHierarchy)
+            if (dialoguePanel.activeInHierarchy)
             {
                 ResetText();
             }
@@ -39,7 +38,7 @@ public class NPC : MonoBehaviour
             }
         }
 
-        if(dialogueText.text == dialogue[index])
+        if (dialogueText.text == dialogue[index])
         {
             nextButton.SetActive(true);
         }
@@ -48,7 +47,7 @@ public class NPC : MonoBehaviour
     /*
      * This function resets and closes the dialogue panel. 
      */
-    public void ResetText()
+    private void ResetText()
     {
         dialogueText.text = "";
         index = 0;
@@ -60,7 +59,7 @@ public class NPC : MonoBehaviour
      */
     IEnumerator Typing()
     {
-        foreach(char letter in dialogue[index].ToCharArray())
+        foreach (char letter in dialogue[index].ToCharArray())
         {
             dialogueText.text += letter;
             yield return new WaitForSeconds(wordSpeed);
@@ -72,10 +71,9 @@ public class NPC : MonoBehaviour
      */
     public void NextLine()
     {
-
         nextButton.SetActive(false);
 
-        if(index < dialogue.Length - 1)
+        if (index < dialogue.Length - 1)
         {
             index++;
             dialogueText.text = "";
@@ -92,7 +90,7 @@ public class NPC : MonoBehaviour
      */
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             playerIsClose = true;
         }

@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Networking;
 
+/*
+ * this script manages the loading of minigames from the overworld
+ */
 public class LoadMinigame : MonoBehaviour
 {
     [DllImport("__Internal")]
@@ -15,12 +17,16 @@ public class LoadMinigame : MonoBehaviour
 
     private void FixedUpdate()
     {
-        isOnPosition = GameObject.FindGameObjectWithTag("Player").transform.position.x > 3 && GameObject.FindGameObjectWithTag("Player").transform.position.x < 4 && GameObject.FindGameObjectWithTag("Player").transform.position.y < 13 && GameObject.FindGameObjectWithTag("Player").transform.position.y > 12;
+        isOnPosition = GameObject.FindGameObjectWithTag("Player").transform.position.x > 3 &&
+                       GameObject.FindGameObjectWithTag("Player").transform.position.x < 4 &&
+                       GameObject.FindGameObjectWithTag("Player").transform.position.y < 13 &&
+                       GameObject.FindGameObjectWithTag("Player").transform.position.y > 12;
         if (isOnPosition && !isGameOpen)
         {
             isGameOpen = true;
             ExecuteGetRequest("w1g1");
         }
+
         if (!isOnPosition)
         {
             isGameOpen = false;
@@ -29,7 +35,7 @@ public class LoadMinigame : MonoBehaviour
 
     public void ExecuteGetRequest(String staticWorldId)
     {
-        StartCoroutine(GetRequest("/api/overworld/get-configurationString-by-staticWorldId/"+ staticWorldId));
+        StartCoroutine(GetRequest("/api/overworld/get-configurationString-by-staticWorldId/" + staticWorldId));
     }
 
     private IEnumerator GetRequest(String uri)

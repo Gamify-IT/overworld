@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * this script manages the player animations
+ */
 public class Animation : MonoBehaviour
 {
     public float movementSpeed = 3f;
@@ -28,35 +29,40 @@ public class Animation : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && currentSpeed == movementSpeed)
         {
-            currentSpeed = currentSpeed + sprintingSpeed;
+            currentSpeed += sprintingSpeed;
             playerAnimator.speed = 2;
         }
+
         if (Input.GetKeyUp(KeyCode.LeftShift) && currentSpeed == (movementSpeed + sprintingSpeed))
         {
-            currentSpeed = currentSpeed - sprintingSpeed;
+            currentSpeed -= sprintingSpeed;
             playerAnimator.speed = 1;
         }
 
         if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
         {
-            currentSpeed = currentSpeed + superSpeed;
+            currentSpeed += superSpeed;
             playerAnimator.speed = 20;
         }
+
         if (Input.GetKeyUp("l") && currentSpeed == (movementSpeed + superSpeed))
         {
-            currentSpeed = currentSpeed - superSpeed;
+            currentSpeed -= superSpeed;
             playerAnimator.speed = 1;
         }
 
         if (Input.GetKeyDown("k"))
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger = !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
+            GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =
+                !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
         }
     }
 
-    //depending on horizontalAnimationFloat and verticalAnimationFloat it is defined whether a vertical or horizontal movement takes place
-    //then depending on movement.x and movement.y are looked to decide if movement is up/down or left/right and depending on this the correct 
-    //animation is executed
+    /*
+     * depending on horizontalAnimationFloat and verticalAnimationFloat it is defined whether a vertical or horizontal movement takes place
+     * then depending on movement.x and movement.y are looked to decide if movement is up/down or left/right and depending on this the correct 
+     * animation is executed
+     */
     void FixedUpdate()
     {
         float horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;

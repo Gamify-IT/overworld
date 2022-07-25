@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /*
@@ -20,9 +18,9 @@ public class Interaction : MonoBehaviour
      */
     void Update()
     {
-        if(DetectObject())
+        if (DetectObject())
         {
-            if(InteractInput())
+            if (InteractInput())
             {
                 detectedObject.GetComponent<Item>().Interact();
             }
@@ -45,7 +43,7 @@ public class Interaction : MonoBehaviour
      */
     bool DetectObject()
     {
-        Collider2D obj =  Physics2D.OverlapCircle(detectionPoint.position, detectionRadius, detectionLayer);
+        Collider2D obj = Physics2D.OverlapCircle(detectionPoint.position, detectionRadius, detectionLayer);
         if (obj == null)
         {
             detectedObject = null;

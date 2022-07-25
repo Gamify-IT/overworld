@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /*
@@ -14,5 +12,5 @@ public class InteractionOfObject : MonoBehaviour
     void Update()
     {
         GetComponent<BoxCollider2D>().isTrigger = true;
-	}
+    }
 }

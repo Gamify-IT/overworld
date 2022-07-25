@@ -1,10 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class loadmaps : MonoBehaviour
+/*
+ * This script manages the loading of the different Worlds (eg. Winterwonderland, Magic Forest, etc.)
+ */
+public class WorldLoading : MonoBehaviour
 {
     public string sceneLoadOne;
     public string sceneLoadTwo;
@@ -28,26 +29,29 @@ public class loadmaps : MonoBehaviour
         {
             asyncOperationLoadOne = SceneManager.LoadSceneAsync(loadWorldOne, LoadSceneMode.Additive);
         }
+
         if (!SceneManager.GetSceneByName(loadWorldTwo).isLoaded)
         {
             asyncOperationLoadTwo = SceneManager.LoadSceneAsync(loadWorldTwo, LoadSceneMode.Additive);
         }
 
-        for(int sceneIndex = 0;sceneIndex < SceneManager.sceneCount; sceneIndex++)
+        for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
             string tempSceneName = SceneManager.GetSceneAt(sceneIndex).name;
-            if (!tempSceneName.Equals("Player")  && !tempSceneName.Equals("Player HUD") && !tempSceneName.Equals(loadWorldOne) && !tempSceneName.Equals(loadWorldTwo))
+            if (!tempSceneName.Equals("Player") && !tempSceneName.Equals("Player HUD") &&
+                !tempSceneName.Equals(loadWorldOne) && !tempSceneName.Equals(loadWorldTwo))
             {
                 SceneManager.UnloadSceneAsync(tempSceneName);
             }
         }
 
         while (
-            (asyncOperationLoadOne != null && !asyncOperationLoadOne.isDone) && 
+            (asyncOperationLoadOne != null && !asyncOperationLoadOne.isDone) &&
             (asyncOperationLoadTwo != null && !asyncOperationLoadTwo.isDone))
         {
             yield return null;
         }
+
         loadingFinished = true;
     }
 }

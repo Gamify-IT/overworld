@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -20,7 +18,6 @@ public class Configuration
 
     public Configuration()
     {
-
     }
 
     public static Configuration CreateFromJSON(string jsonString)
@@ -28,4 +25,3 @@ public class Configuration
         return JsonUtility.FromJson<Configuration>(jsonString);
     }
 }
-

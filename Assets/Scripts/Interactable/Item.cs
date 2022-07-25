@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
-
 /*
  * This scripts manages a destroyable item. 
  * If an interaction with the item is triggered, it gets destroyed. 
@@ -11,7 +8,7 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public GameObject gameObjectToDestroy;
-    
+
     /* 
      * This function manages to status of collider script on the same object. 
      * It sets the collider to be a trigger. 

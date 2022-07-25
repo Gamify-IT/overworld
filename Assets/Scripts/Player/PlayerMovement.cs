@@ -1,13 +1,7 @@
-using System;
-using System.Runtime.InteropServices;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class mymove : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
-
     public float moveSpeed = 4f;
     public float moveSpeedSprint;
     public float currentSpeedX;
@@ -17,11 +11,6 @@ public class mymove : MonoBehaviour
     public Rigidbody2D rb;
 
     public Vector2 movement;
-
-    private void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
@@ -43,7 +32,7 @@ public class mymove : MonoBehaviour
         {
             rb.transform.position = new Vector2(0, 0);
         }
-
+        
     }
 
     void FixedUpdate()
@@ -61,5 +50,4 @@ public class mymove : MonoBehaviour
         currentSpeedY = movement.y;
         currentSpeedDeltaTime = Time.fixedDeltaTime;
     }
-
 }
