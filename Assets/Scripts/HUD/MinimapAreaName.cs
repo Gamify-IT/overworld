@@ -11,7 +11,7 @@ using UnityEngine;
 public class MinimapAreaName : MonoBehaviour
 {
     public string areaName;
-    
+
     /*
      * This function updates the static string representing the name of the area the player is currently in
      */

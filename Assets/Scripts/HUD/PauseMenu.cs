@@ -11,10 +11,10 @@ using UnityEngine.EventSystems;
  */
 public class PauseMenu : MonoBehaviour
 {
-    public static bool menuOpen = false;
-    public static bool subMenuOpen = false;
-    public static string buttonName;
-    
+    private static bool menuOpen = false;
+    private static bool subMenuOpen = false;
+    private static string buttonName;
+
     /*
      * The Update function is called every frame. It updates all values according to the changes happened since the last frame. 
      * It toggles the state of the pause menu if an input happened.
@@ -55,17 +55,17 @@ public class PauseMenu : MonoBehaviour
     /*
      * This function closes the pause menu.
      */
-    public void Resume()
+    private static void Resume()
     {
         SceneManager.UnloadScene("Menu");
         menuOpen = false;
         Time.timeScale = 1f;
     }
-    
+
     /*
-     * This function openes the pause menu.
+     * This function opens the pause menu.
      */
-    public void Pause()
+    private static void Pause()
     {
         menuOpen = true;
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
@@ -82,7 +82,7 @@ public class PauseMenu : MonoBehaviour
         //remove appendix " Button" = length 7
         buttonName = buttonName.Remove(buttonName.Length - 7);
     }
-    
+
     /*
      * This function opens a sub menu.
      */

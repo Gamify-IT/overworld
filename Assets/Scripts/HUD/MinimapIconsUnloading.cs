@@ -28,10 +28,11 @@ public class MinimapIconsUnloading : MonoBehaviour
             {
                 if (!minimapIcon.name.Contains(nameOfCurrentScene) && !nameOfCurrentScene.Equals(""))
                 {
-                    minimapIcon.GetComponent<SpriteRenderer>().enabled = true;;
+                    minimapIcon.GetComponent<SpriteRenderer>().enabled = true;
+                    ;
                 }
             }
-            
+
             if (nameOfCurrentScene.Equals(""))
             {
                 this.transform.GetComponent<SpriteRenderer>().enabled = false;
@@ -57,7 +58,7 @@ public class MinimapIconsUnloading : MonoBehaviour
                     minimapIcon.GetComponent<SpriteRenderer>().enabled = false;
                 }
             }
-            
+
             if (nameOfCurrentScene.Equals(""))
             {
                 this.transform.GetComponent<SpriteRenderer>().enabled = false;

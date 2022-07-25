@@ -9,7 +9,7 @@ using UnityEngine;
 public class MinimapScript : MonoBehaviour
 {
     public int zoomLevel;
-    private float minimapIconResizeValue = (float) 6.3;
+    private float minimapIconResizeValue = (float)6.3;
 
     public static string areaName = "Loading...";
 
@@ -39,17 +39,20 @@ public class MinimapScript : MonoBehaviour
         {
             ZoomIn();
         }
+
         //zoom out
         if (Input.GetKeyDown(KeyCode.O))
         {
             ZoomOut();
         }
 
+        //display the current AreaName under the minimap
         GameObject.FindGameObjectWithTag("AreaName").GetComponent<TextMeshProUGUI>().text = areaName;
-        
-        foreach(GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
+
+        foreach (GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
         {
-            minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/minimapIconResizeValue, -1*zoomLevel/minimapIconResizeValue, 0);
+            minimapIcon.transform.localScale = new Vector3(-1 * zoomLevel / minimapIconResizeValue,
+                -1 * zoomLevel / minimapIconResizeValue, 0);
         }
     }
 
@@ -65,13 +68,14 @@ public class MinimapScript : MonoBehaviour
             zoomLevel += 10;
             GameObject.Find("Minimap Camera").transform.localPosition = new Vector3(0, 0, zoomLevel);
 
-            foreach(GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
+            foreach (GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
             {
-                minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/minimapIconResizeValue, -1*zoomLevel/minimapIconResizeValue, 0);
+                minimapIcon.transform.localScale = new Vector3(-1 * zoomLevel / minimapIconResizeValue,
+                    -1 * zoomLevel / minimapIconResizeValue, 0);
             }
         }
     }
-    
+
     /*
      * This function zooms out the minimap by one step.
      */
@@ -83,10 +87,11 @@ public class MinimapScript : MonoBehaviour
             //zoom out
             zoomLevel -= 10;
             GameObject.Find("Minimap Camera").transform.localPosition = new Vector3(0, 0, zoomLevel);
-            
-            foreach(GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
+
+            foreach (GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
             {
-                minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/minimapIconResizeValue, -1*zoomLevel/minimapIconResizeValue, 0);
+                minimapIcon.transform.localScale = new Vector3(-1 * zoomLevel / minimapIconResizeValue,
+                    -1 * zoomLevel / minimapIconResizeValue, 0);
             }
         }
     }
