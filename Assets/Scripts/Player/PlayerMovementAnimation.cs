@@ -3,7 +3,7 @@ using UnityEngine;
 /*
  * this script manages the player animations
  */
-public class Animation : MonoBehaviour
+public class PlayerMovementAnimation : MonoBehaviour
 {
     public float movementSpeed = 3f;
     public float sprintingSpeed = 6f;
@@ -21,24 +21,30 @@ public class Animation : MonoBehaviour
         currentSpeed = movementSpeed;
     }
 
+    /*
+     * The Update function is called every frame. It updates all values according to the changes happened since the last frame. 
+     * It manages the walking animations of the player
+     */
     void Update()
     {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
         movement = movement.normalized;
-
+        //when holding Shift Key the player sprints. Animations are faster
         if (Input.GetKeyDown(KeyCode.LeftShift) && currentSpeed == movementSpeed)
         {
             currentSpeed += sprintingSpeed;
             playerAnimator.speed = 2;
         }
 
+        //if no longer holding the shift key, revert animation speed and walking speed
         if (Input.GetKeyUp(KeyCode.LeftShift) && currentSpeed == (movementSpeed + sprintingSpeed))
         {
             currentSpeed -= sprintingSpeed;
             playerAnimator.speed = 1;
         }
 
+        //super fast sprinting, only used for debug purpose
         if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
         {
             currentSpeed += superSpeed;
@@ -51,6 +57,7 @@ public class Animation : MonoBehaviour
             playerAnimator.speed = 1;
         }
 
+        //for debug purpose it is possible to deactivate the Colliders with a keypress
         if (Input.GetKeyDown("k"))
         {
             GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =

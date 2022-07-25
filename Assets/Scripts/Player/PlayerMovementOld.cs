@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovementOld : MonoBehaviour
 {
     public float moveSpeed = 4f;
     public float moveSpeedSprint;
@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            moveSpeed = moveSpeed * 1.5f;
+            moveSpeed *= 1.5f;
         }
 
         if (Input.GetKeyUp(KeyCode.LeftShift))

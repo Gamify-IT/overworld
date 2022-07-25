@@ -2,6 +2,9 @@ using System;
 using UnityEngine;
 
 [System.Serializable]
+/*
+ * this script manages the Configuration of the Overworld
+ */
 public class Configuration
 {
     public long id;

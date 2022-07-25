@@ -15,6 +15,9 @@ public class LoadMinigame : MonoBehaviour
     public bool isOnPosition = false;
     public bool isGameOpen = false;
 
+    /*
+     * checks if the player is on a minigame spot and starts the minigame assigned to that spot.
+     */
     private void FixedUpdate()
     {
         isOnPosition = GameObject.FindGameObjectWithTag("Player").transform.position.x > 3 &&
@@ -38,13 +41,16 @@ public class LoadMinigame : MonoBehaviour
         StartCoroutine(GetRequest("/api/overworld/get-configurationString-by-staticWorldId/" + staticWorldId));
     }
 
+    /*
+     * this manages the Requests needed for starting a minigame in an IFrame
+     */
     private IEnumerator GetRequest(String uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             // Request and wait for the desired page.
             yield return webRequest.SendWebRequest();
-
+            //load the minigame if webrequest succesful
             switch (webRequest.result)
             {
                 case UnityWebRequest.Result.ConnectionError:
