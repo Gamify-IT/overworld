@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     private GameObject[,] minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
     private BarrierData[,] barrierData = new BarrierData[maxWorld + 1, maxWorld + 1];
     private GameObject[,] barrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
+    private bool somethingToUpdate;
     #endregion
 
     #region Setup
@@ -98,9 +99,13 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
+        if (somethingToUpdate)
         {
-            setData(1);
+            somethingToUpdate = false;
+            for (int i=1; i<=maxWorld; i++)
+            {
+                setData(i);
+            }
         }
     }
 
@@ -117,7 +122,8 @@ public class GameManager : MonoBehaviour
     private void fetchData(int worldIndex)
     {
         //path to get world from (../world/)
-        string path = "https://localhost:8443/overworld/api/v1/lectures/1/worlds/";
+        int lectureID = 1;
+        string path = "/overworld/api/v1/lectures/" + lectureID + "/worlds/";
 
         //get world data        
         StartCoroutine(GetWorldDTO(path, worldIndex));
@@ -164,6 +170,7 @@ public class GameManager : MonoBehaviour
                     break;
             }
         }
+        somethingToUpdate = true;
     }
 
     //get barrier data
@@ -193,6 +200,7 @@ public class GameManager : MonoBehaviour
                     break;
             }
         }
+        somethingToUpdate = true;
     }
     #endregion
 

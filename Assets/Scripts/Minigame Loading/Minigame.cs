@@ -94,7 +94,7 @@ public class Minigame : MonoBehaviour
         switch(status)
         {
             case MinigameStatus.notConfigurated:
-                Debug.Log("Minigame color: yellow");
+                Debug.Log("Minigame color: none");
                 sprites.color = new Color(1f, 1f, 1f, 1f);
                 gameObject.SetActive(false);
                 break;
