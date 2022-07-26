@@ -1,15 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class MinimapScript : MonoBehaviour
 {
     public int zoomLevel;
+    private float minimapIconResizeValue = (float) 6.3;
+
+    public static string areaName = "Loading...";
     // Start is called before the first frame update
     void Start()
     {
         //set the zoom level
-        zoomLevel = -32;
+        zoomLevel = -30;
         //get the player and attach the minimap to him
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         GameObject miniMapCam = GameObject.Find("Minimap Camera");
@@ -21,7 +25,57 @@ public class MinimapScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if zoom during runtime is needed uncomment line below
-        //GameObject.Find("Minimap Camera").transform.localPosition = new Vector3(0, 0, zoomLevel);
+        //zoom in
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            ZoomIn();
+        }
+        //zoom out
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            ZoomOut();
+        }
+
+        GameObject.FindGameObjectWithTag("AreaName").GetComponent<TextMeshProUGUI>().text = areaName;
+        
+        foreach(GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
+        {
+            minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/minimapIconResizeValue, -1*zoomLevel/minimapIconResizeValue, 0);
+        }
+    }
+    //zoom In handling
+    public void ZoomIn()
+    {
+        //restrict zoom level
+        if (zoomLevel < -20)
+        {
+            //zoom in
+            zoomLevel += 10;
+            GameObject.Find("Minimap Camera").transform.localPosition = new Vector3(0, 0, zoomLevel);
+
+            foreach(GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
+            {
+                minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/minimapIconResizeValue, -1*zoomLevel/minimapIconResizeValue, 0);
+            }
+
+        }
+        
+    }
+    //zoom Out handling
+    public void ZoomOut()
+    {
+        //restrict zoom level
+        if (zoomLevel > -50)
+        {
+            //zoom out
+            zoomLevel -= 10;
+            GameObject.Find("Minimap Camera").transform.localPosition = new Vector3(0, 0, zoomLevel);
+            
+            foreach(GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
+            {
+                minimapIcon.transform.localScale = new Vector3(-1*zoomLevel/minimapIconResizeValue, -1*zoomLevel/minimapIconResizeValue, 0);
+            }
+        }
+
     }
 }

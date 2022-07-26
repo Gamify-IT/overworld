@@ -20,7 +20,7 @@ public class MagicTree : MonoBehaviour
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        player = FindObjectOfType<mymove>().transform;
+        player = FindObjectOfType<Animation>().transform;
     }
 
     void FixedUpdate()

@@ -9,14 +9,14 @@ public class Animation : MonoBehaviour
     public float superSpeed = 20f;
     private float currentSpeed;
     public Vector2 movement;
-    public Rigidbody2D rigidbody;
+    public Rigidbody2D playerRigidBody;
 
 
     public Animator playerAnimator;
 
     void Start()
     {
-        rigidbody = this.GetComponent<Rigidbody2D>();
+        playerRigidBody = this.GetComponent<Rigidbody2D>();
         currentSpeed = movementSpeed;
     }
 
@@ -29,21 +29,29 @@ public class Animation : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift) && currentSpeed == movementSpeed)
         {
             currentSpeed = currentSpeed + sprintingSpeed;
+            playerAnimator.speed = 2;
         }
         if (Input.GetKeyUp(KeyCode.LeftShift) && currentSpeed == (movementSpeed + sprintingSpeed))
         {
             currentSpeed = currentSpeed - sprintingSpeed;
+            playerAnimator.speed = 1;
         }
 
         if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
         {
             currentSpeed = currentSpeed + superSpeed;
+            playerAnimator.speed = 20;
         }
         if (Input.GetKeyUp("l") && currentSpeed == (movementSpeed + superSpeed))
         {
             currentSpeed = currentSpeed - superSpeed;
+            playerAnimator.speed = 1;
         }
 
+        if (Input.GetKeyDown("k"))
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger = !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
+        }
     }
 
     //depending on horizontalAnimationFloat and verticalAnimationFloat it is defined whether a vertical or horizontal movement takes place
@@ -54,7 +62,7 @@ public class Animation : MonoBehaviour
         float horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
         float verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
 
-        rigidbody.MovePosition(rigidbody.position + movement * currentSpeed * Time.fixedDeltaTime);
+        playerRigidBody.MovePosition(playerRigidBody.position + movement * currentSpeed * Time.fixedDeltaTime);
 
         playerAnimator.SetFloat("Horizontal", movement.x);
         playerAnimator.SetFloat("Vertical", movement.y);
