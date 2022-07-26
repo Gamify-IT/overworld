@@ -75,6 +75,7 @@ public class Minigame : MonoBehaviour
     {
         if(collision.CompareTag("Player"))
         {
+            Debug.Log("Player completes minigame");
             status = MinigameStatus.done;
             updateStatus();
         }
@@ -88,14 +89,17 @@ public class Minigame : MonoBehaviour
         switch(status)
         {
             case MinigameStatus.notConfigurated:
+                Debug.Log("Minigame color: yellow");
                 sprites.color = new Color(1f, 1f, 1f, 1f);
                 gameObject.SetActive(false);
                 break;
             case MinigameStatus.active:
+                Debug.Log("Minigame color: red");
                 sprites.color = new Color(1f, 0f, 0f, 1f);
                 gameObject.SetActive(true);
                 break;
             case MinigameStatus.done:
+                Debug.Log("Minigame color: blue");
                 sprites.color = new Color(0f, 0f, 1f, 1f);
                 gameObject.SetActive(true);
                 break;

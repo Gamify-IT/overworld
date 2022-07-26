@@ -41,6 +41,7 @@ public class Barrier : MonoBehaviour
      */
     public void setup(BarrierData data)
     {
+        Debug.Log("Barrier new status: " + data.getIsActive());
         isActive = data.getIsActive();
         updateStatus();
     }
@@ -52,10 +53,12 @@ public class Barrier : MonoBehaviour
     {
         if(isActive)
         {
+            Debug.Log("Barrier now visible");
             gameObject.SetActive(true);
         }
         else
         {
+            Debug.Log("Barrier now invisible");
             gameObject.SetActive(false);
         }
     }

@@ -127,11 +127,11 @@ public class GameManager : MonoBehaviour
         //-> für jede angelegte Barrier zu world x (barrierObjects[world,x] != null):
         //   get world x, falls active -> barriere ausschalten
         //              , sonst -> barriere anschalten
-        for(int worldIndexDestination=0; worldIndexDestination<=maxWorld; worldIndexDestination++)
+        for(int worldIndexDestination=1; worldIndexDestination<=maxWorld; worldIndexDestination++)
         {
             if(barrierObjects[worldIndex, worldIndexDestination] != null)
             {
-                StartCoroutine(GetBarrierData(path, worldIndexDestination));
+                StartCoroutine(GetBarrierData(path, worldIndexDestination, worldIndex));
             }
         }
     }
@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviour
     }
 
     //get barrier data
-    private IEnumerator GetBarrierData(String uri, int worldIndexDestination)
+    private IEnumerator GetBarrierData(String uri, int worldIndexDestination, int worldIndexOrigin)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndexDestination))
         {
@@ -190,7 +190,7 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + worldIndexDestination + ":\nReceived: " + webRequest.downloadHandler.text);
                     WorldDTO worldDTODestination = JsonUtility.FromJson<WorldDTO>(webRequest.downloadHandler.text);
-                    setupBarrier(worldIndexDestination, worldDTODestination);
+                    setupBarrier(worldIndexOrigin, worldDTODestination);
                     break;
             }
         }
@@ -206,15 +206,20 @@ public class GameManager : MonoBehaviour
         List<MinigameTaskDTO> minigames = worldDTO.getMinigameTasks();
         foreach(MinigameTaskDTO minigameTask in minigames)
         {
-            if(minigameTask.getConfigurationId() != null)
+            if(minigameTask.getConfigurationId() == null)
             {
-                minigameData[worldIndex, minigameTask.getIndex()].setStatus(MinigameStatus.active);
-                Debug.Log("Minigame " + minigameTask.getIndex() + ", status: active");
+                Debug.Log("Minigame " + minigameTask.getIndex() + " is null");
             }
-            else
+
+            if(minigameTask.getConfigurationId() == "" || minigameTask.getConfigurationId() == null)
             {
                 minigameData[worldIndex, minigameTask.getIndex()].setStatus(MinigameStatus.notConfigurated);
                 Debug.Log("Minigame " + minigameTask.getIndex() + ", status: not configurated");
+            }
+            else
+            {
+                minigameData[worldIndex, minigameTask.getIndex()].setStatus(MinigameStatus.active);
+                Debug.Log("Minigame " + minigameTask.getIndex() + ", status: active");
             }
             minigameData[worldIndex, minigameTask.getIndex()].setGame(minigameTask.getGame());
             Debug.Log("Minigame " + minigameTask.getIndex() + ", game: " + minigameTask.getGame());
