@@ -307,13 +307,8 @@ public class GameManager : MonoBehaviour
                 NPC npc = npcObjects[world, npcIndex].GetComponent<NPC>();
                 if(npc != null)
                 {
-                    Debug.Log("NPC " + world + "-" + npcIndex + " gets updated.");
                     npc.setup(npcData[world, npcIndex]);
                 }
-            }
-            else
-            {
-                Debug.Log("NPC " + world + "-" + npcIndex + " was not set.");
             }
         }
     }

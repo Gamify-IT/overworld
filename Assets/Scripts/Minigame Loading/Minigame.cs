@@ -81,8 +81,8 @@ public class Minigame : MonoBehaviour
         {
             Debug.Log("Player completes minigame");
             status = MinigameStatus.done;
-            updateStatus();
             LoadMinigameInIframe(game, configurationID);
+            updateStatus();
         }
     }
 
