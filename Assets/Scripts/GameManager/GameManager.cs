@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
     public void loadWorld(int world)
     {
         Debug.Log("Update " + world);
-        getDataStatic(world);
+        getData(world);
         setData(world);
     }
 
@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.H))
         {
-            getDataStatic(1);
+            getData(1);
             setData(1);
         }
     }
@@ -116,8 +116,10 @@ public class GameManager : MonoBehaviour
     //get all needed data for a given world
     private void getData(int worldIndex)
     {
-        //get world data
+        //path to get world from (../world/)
         string path = "";
+
+        //get world data        
         StartCoroutine(GetWorldDTO(path, worldIndex));
 
         //get barrier data
@@ -128,18 +130,17 @@ public class GameManager : MonoBehaviour
         {
             if(barrierObjects[worldIndex, worldIndexDestination] != null)
             {
-                //WorldDTO worldDTODestination = getRequest(worldIndexDestination);
-                //setupBarrier(worldIndex, worldDTODestination);
+                StartCoroutine(GetBarrierData(path, worldIndexDestination));
             }
         }
     }
     #endregion
 
     #region GetRequest
-    //get worldDTO
+    //get world data
     private IEnumerator GetWorldDTO(String uri, int worldIndex)
     {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndex))
         {
             // Request and wait for the desired page.
             yield return webRequest.SendWebRequest();
@@ -157,6 +158,32 @@ public class GameManager : MonoBehaviour
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
                     WorldDTO worldDTO = JsonUtility.FromJson<WorldDTO>(webRequest.downloadHandler.text);
                     processWorldDTO(worldIndex, worldDTO);
+                    break;
+            }
+        }
+    }
+
+    //get barrier data
+    private IEnumerator GetBarrierData(String uri, int worldIndexDestination)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndexDestination))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(uri + ": Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
+                    WorldDTO worldDTODestination = JsonUtility.FromJson<WorldDTO>(webRequest.downloadHandler.text);
+                    setupBarrier(worldIndexDestination, worldDTODestination);
                     break;
             }
         }
