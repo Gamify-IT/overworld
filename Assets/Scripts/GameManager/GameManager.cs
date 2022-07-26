@@ -45,6 +45,8 @@ public class GameManager : MonoBehaviour
     private NPCData[,] npcData = new NPCData[maxWorld + 1, maxNPCs+1];
     private GameObject[,] npcObjects = new GameObject[maxWorld + 1, maxNPCs+1];
     private bool somethingToUpdate;
+    private int currentWorld;
+    private int currentDungeon;
     #endregion
 
     #region Setup
@@ -78,11 +80,18 @@ public class GameManager : MonoBehaviour
     /*
      * This function registers a minigame at the game manager
      */
-    public void addMinigame(GameObject minigame, int world, int number)
+    public void addMinigame(GameObject minigame, int world, int dungeon, int number)
     {
         if (minigame != null)
         {
-            minigameObjects[world, number] = minigame;
+            if(dungeon == 0)
+            {
+                minigameObjects[world, number] = minigame;
+            }
+            else
+            {
+                minigameObjects[0, number] = minigame;
+            }
         }
     }
 
@@ -100,20 +109,37 @@ public class GameManager : MonoBehaviour
     /*
      * This function registers a npc at the game manager
      */
-    public void addNPC(GameObject npc, int world, int number)
+    public void addNPC(GameObject npc, int world, int dungeon, int number)
     {
         if(npc != null)
         {
-            npcObjects[world, number] = npc;
+            if(dungeon == 0)
+            {
+                npcObjects[world, number] = npc;
+            }
+            else
+            {
+                npcObjects[0, number] = npc;
+            }
         }
     }
     #endregion
 
     #region Loading
-    public void loadWorld(int world)
+    //world: worldIndex,0
+    //dungeon: worldIndex,dungeonIndex
+    public void loadWorld(int world, int dungeon)
     {
-        Debug.Log("Update " + world);
-        fetchData(world);
+        if(dungeon == 0)
+        {
+            Debug.Log("Update world: " + world);
+            fetchWorldData(world);
+        }
+        else
+        {
+            Debug.Log("Update dungeon: " + world + "-" + dungeon);
+            fetchDungeonData(world, dungeon);
+        }
     }
 
     public void Update()
@@ -121,7 +147,7 @@ public class GameManager : MonoBehaviour
         if (somethingToUpdate)
         {
             somethingToUpdate = false;
-            for (int i=1; i<=maxWorld; i++)
+            for (int i=0; i<=maxWorld; i++)
             {
                 setData(i);
             }
@@ -129,7 +155,7 @@ public class GameManager : MonoBehaviour
     }
 
     //get all needed data for a given world
-    private void fetchData(int worldIndex)
+    private void fetchWorldData(int worldIndex)
     {
         //path to get world from (../world/)
         int lectureID = 1;
@@ -149,6 +175,16 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(GetBarrierData(path, worldIndexDestination, worldIndex));
             }
         }
+    }
+
+    private void fetchDungeonData(int worldIndex, int dungeonIndex)
+    {
+        //path to get world from (../world/)
+        int lectureID = 1;
+        string path = "/overworld/api/v1/lectures/" + lectureID + "/worlds/" + worldIndex + "/dungeons/";
+
+        //get world data        
+        StartCoroutine(GetWorldDTO(path, dungeonIndex));
     }
     #endregion
 

@@ -26,6 +26,7 @@ public class Minigame : MonoBehaviour
 
     #region Attributes
     [SerializeField] private int world;
+    [SerializeField] private int dungeon;
     [SerializeField] private int number;
     [SerializeField] private string game;
     [SerializeField] private string configurationID;
@@ -52,7 +53,7 @@ public class Minigame : MonoBehaviour
     private void registerToGameManager()
     {
         Debug.Log("register Minigame " + world + " - " + number);
-        GameManager.instance.addMinigame(this.gameObject, world, number);
+        GameManager.instance.addMinigame(this.gameObject, world, dungeon, number);
     }
     #endregion
 

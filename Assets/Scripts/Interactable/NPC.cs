@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class NPC : MonoBehaviour
 {
     [SerializeField] private int world;
+    [SerializeField] private int dungeon;
     [SerializeField] private int number;
     public Sprite imageOfNPC;
     public string nameOfNPC;
@@ -70,7 +71,7 @@ public class NPC : MonoBehaviour
     private void registerToGameManager()
     {
         Debug.Log("register NPC " + world + " - " + number);
-        GameManager.instance.addNPC(this.gameObject, world, number);
+        GameManager.instance.addNPC(this.gameObject, world, dungeon, number);
     }
     
     //setup called by game manager
