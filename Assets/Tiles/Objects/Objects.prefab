@@ -4085,6 +4085,14 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: c19018a5d94f84d5eab231c1122f01bf, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 8e1fc7dba6d95474192684fc96acffd7, type: 2}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 3ffd867ab6da1dd44bdae295608489c8, type: 2}
   m_TileSpriteArray:
@@ -4750,6 +4758,14 @@ Tilemap:
     m_Data: {fileID: 1216422586, guid: eb4b4d6c620c946c2aec968f281e9ec1, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 32000546, guid: eb4b4d6c620c946c2aec968f281e9ec1, type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: 609153927, guid: eb4b4d6c620c946c2aec968f281e9ec1, type: 3}
   m_TileMatrixArray:
@@ -4847,6 +4863,21 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
+--- !u!114 &6311772552594210282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12395, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: Palette Settings
+  m_EditorClassIdentifier: 
+  cellSizing: 0
+  m_TransparencySortMode: 0
+  m_TransparencySortAxis: {x: 0, y: 0, z: 1}
 --- !u!114 &6187066910438859326
 MonoBehaviour:
   m_ObjectHideFlags: 0

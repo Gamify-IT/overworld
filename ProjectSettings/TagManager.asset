@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Trigger
   - AreaName
+  - MinimapIcon
+  - MinimapIconsParent
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - Player
   - Trigger
   - Item
-  - 
+  - Minimap
   - 
   - 
   - 
