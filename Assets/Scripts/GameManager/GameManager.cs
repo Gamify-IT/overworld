@@ -142,16 +142,20 @@ public class GameManager : MonoBehaviour
         List<MinigameTaskDTO> minigames = worldDTO.getMinigameTasks();
         foreach(MinigameTaskDTO minigameTask in minigames)
         {
-            minigameData[worldIndex, minigameTask.getIndex()].setGame(minigameTask.getGame());
-            minigameData[worldIndex, minigameTask.getIndex()].setConfigurationID(minigameTask.getConfigurationId());
             if(minigameTask.getConfigurationId() != null)
             {
                 minigameData[worldIndex, minigameTask.getIndex()].setStatus(MinigameStatus.active);
+                Debug.Log("Minigame " + minigameTask.getIndex() + ", status: active");
             }
             else
             {
                 minigameData[worldIndex, minigameTask.getIndex()].setStatus(MinigameStatus.notConfigurated);
+                Debug.Log("Minigame " + minigameTask.getIndex() + ", status: not configurated");
             }
+            minigameData[worldIndex, minigameTask.getIndex()].setGame(minigameTask.getGame());
+            Debug.Log("Minigame " + minigameTask.getIndex() + ", game: " + minigameTask.getGame());
+            minigameData[worldIndex, minigameTask.getIndex()].setConfigurationID(minigameTask.getConfigurationId());
+            Debug.Log("Minigame " + minigameTask.getIndex() + ", config: " + minigameTask.getConfigurationId());
         }
     }
 
@@ -162,10 +166,12 @@ public class GameManager : MonoBehaviour
         if(worldDestination.getActive())
         {
             barrierData[worldIndexOrigion, worldIndexDestination].setIsActive(true);
+            Debug.Log("Barrier " + worldIndexOrigion + "->" + worldIndexDestination + ": active");
         }
         else
         {
             barrierData[worldIndexOrigion, worldIndexDestination].setIsActive(false);
+            Debug.Log("Barrier " + worldIndexOrigion + "->" + worldIndexDestination + ": inactive");
         }
     }
 
