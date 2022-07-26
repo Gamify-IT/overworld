@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     #region Attributes
     private static int maxWorld = 5;
     private static int maxMinigames = 12;
-    private static int maxNPCs;
+    private static int maxNPCs = 10;
     private MinigameData[,] minigameData = new MinigameData[maxWorld + 1, maxMinigames + 1];
     private GameObject[,] minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
     private BarrierData[,] barrierData = new BarrierData[maxWorld + 1, maxWorld + 1];
