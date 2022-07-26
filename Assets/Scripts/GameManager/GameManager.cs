@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 /*
  * This script defines the game manager. 
@@ -115,8 +117,8 @@ public class GameManager : MonoBehaviour
     private void getData(int worldIndex)
     {
         //get world data
-        //WorldDTO worldDTO = getRequest(worldIndex);
-        //processWorld(worldIndex, worldDTO);
+        string path = "";
+        StartCoroutine(GetWorldDTO(path, worldIndex));
 
         //get barrier data
         //-> für jede angelegte Barrier zu world x (barrierObjects[world,x] != null):
@@ -128,6 +130,34 @@ public class GameManager : MonoBehaviour
             {
                 //WorldDTO worldDTODestination = getRequest(worldIndexDestination);
                 //setupBarrier(worldIndex, worldDTODestination);
+            }
+        }
+    }
+    #endregion
+
+    #region GetRequest
+    //get worldDTO
+    private IEnumerator GetWorldDTO(String uri, int worldIndex)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(uri + ": Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
+                    WorldDTO worldDTO = JsonUtility.FromJson<WorldDTO>(webRequest.downloadHandler.text);
+                    processWorldDTO(worldIndex, worldDTO);
+                    break;
             }
         }
     }
