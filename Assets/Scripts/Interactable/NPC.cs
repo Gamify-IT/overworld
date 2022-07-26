@@ -16,6 +16,7 @@ public class NPC : MonoBehaviour
     public float wordSpeed;
     private bool playerIsClose;
     private bool typingIsFinished;
+    private bool hasBeenTalkedTo;
 
     void Start()
     {

@@ -128,15 +128,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //get world data
-    private void getDataStatic(int world)
-    {
-        minigameData[1, 1] = new MinigameData("Moorhuhn", "config", MinigameStatus.active, 40);
-        minigameData[1, 2] = new MinigameData("bla", "blub", MinigameStatus.done, 80);
-        minigameData[3, 1] = new MinigameData("Minigame", "config2", MinigameStatus.active, 100);
-        barrierData[1, 2] = new BarrierData(false);
-    }
-
     //get all needed data for a given world
     private void fetchData(int worldIndex)
     {
@@ -257,7 +248,7 @@ public class GameManager : MonoBehaviour
         {
             string[] dialogue = new string[1];
             dialogue[0] = npc.getText();
-            Debug.Log("NPC " + npc.getIndex() + ", text: " + dialogue);
+            Debug.Log("NPC " + npc.getIndex() + ", text: " + dialogue.ToString());
             npcData[worldIndex, npc.getIndex()].setDialogue(dialogue);
         }
     }
