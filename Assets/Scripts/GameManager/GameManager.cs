@@ -33,10 +33,10 @@ public class GameManager : MonoBehaviour
     #region Attributes
     private static int maxWorld = 5;
     private static int maxMinigames = 12;
-    private MinigameData[,] minigameData = new MinigameData[maxWorld+1,maxMinigames+1];
-    private GameObject[,] minigameObjects = new GameObject[maxWorld+1,maxMinigames+1];
-    private BarrierData[,] barrierData = new BarrierData[maxWorld+1, maxWorld+1];
-    private GameObject[,] barrierObjects = new GameObject[maxWorld+1, maxWorld+1];
+    private MinigameData[,] minigameData = new MinigameData[maxWorld + 1, maxMinigames + 1];
+    private GameObject[,] minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
+    private BarrierData[,] barrierData = new BarrierData[maxWorld + 1, maxWorld + 1];
+    private GameObject[,] barrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
     #endregion
 
     #region Setup
@@ -47,17 +47,17 @@ public class GameManager : MonoBehaviour
     private void setupGameManager()
     {
         instance = this;
-        for(int i=0; i<maxWorld; i++)
+        for (int i = 0; i < maxWorld; i++)
         {
-            for(int j=0; j<maxMinigames; j++)
+            for (int j = 0; j < maxMinigames; j++)
             {
-                minigameObjects[i,j] = null;
-                minigameData[i,j] = new MinigameData("", "", MinigameStatus.notConfigurated);
+                minigameObjects[i, j] = null;
+                minigameData[i, j] = new MinigameData("", "", MinigameStatus.notConfigurated, 0);
             }
-            for(int j=0; j<maxWorld; j++)
+            for (int j = 0; j < maxWorld; j++)
             {
                 barrierObjects[i, j] = null;
-                barrierData[i, j] = new BarrierData(true); 
+                barrierData[i, j] = new BarrierData(true);
             }
         }
     }
@@ -67,9 +67,9 @@ public class GameManager : MonoBehaviour
      */
     public void addMinigame(GameObject minigame, int world, int number)
     {
-        if(minigame != null)
+        if (minigame != null)
         {
-            minigameObjects[world,number] = minigame;
+            minigameObjects[world, number] = minigame;
         }
     }
 
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
      */
     public void addBarrier(GameObject barrier, int worldIndexOrigin, int worldIndexDestination)
     {
-        if(barrier != null)
+        if (barrier != null)
         {
             barrierObjects[worldIndexOrigin, worldIndexDestination] = barrier;
         }
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        if(Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.H))
         {
             getDataStatic(1);
             setData(1);
@@ -105,23 +105,73 @@ public class GameManager : MonoBehaviour
     //get world data
     private void getDataStatic(int world)
     {
-        minigameData[1,1] = new MinigameData("Moorhuhn", "config" ,MinigameStatus.active);
-        minigameData[1,2] = new MinigameData("", "", MinigameStatus.notConfigurated);
-        minigameData[3,1] = new MinigameData("Moorhuhn", "config", MinigameStatus.active);
-        barrierData[1,2] = new BarrierData(false);
+        minigameData[1, 1] = new MinigameData("Moorhuhn", "config", MinigameStatus.active, 40);
+        minigameData[1, 2] = new MinigameData("bla", "blub", MinigameStatus.done, 80);
+        minigameData[3, 1] = new MinigameData("Minigame", "config2", MinigameStatus.active, 100);
+        barrierData[1, 2] = new BarrierData(false);
     }
 
-    private void getData(int world)
+    //get all needed data for a given world
+    private void getData(int worldIndex)
     {
         //get world data
-
+        //WorldDTO worldDTO = getRequest(worldIndex);
+        //processWorld(worldIndex, worldDTO);
 
         //get barrier data
         //-> für jede angelegte Barrier zu world x (barrierObjects[world,x] != null):
         //   get world x, falls active -> barriere ausschalten
         //              , sonst -> barriere anschalten
+        for(int worldIndexDestination=0; worldIndexDestination<=maxWorld; worldIndexDestination++)
+        {
+            if(barrierObjects[worldIndex, worldIndexDestination] != null)
+            {
+                //WorldDTO worldDTODestination = getRequest(worldIndexDestination);
+                //setupBarrier(worldIndex, worldDTODestination);
+            }
+        }
+    }
+    #endregion
+
+    #region ProcessingData
+    //process a worldDTO to the minigame data 
+    private void processWorldDTO(int worldIndex, WorldDTO worldDTO)
+    {
+        Debug.Log("static name: " + worldDTO.getStaticName());
+        Debug.Log("topci name: " + worldDTO.getTopicName());
+        List<MinigameTaskDTO> minigames = worldDTO.getMinigameTasks();
+        foreach(MinigameTaskDTO minigameTask in minigames)
+        {
+            minigameData[worldIndex, minigameTask.getIndex()].setGame(minigameTask.getGame());
+            minigameData[worldIndex, minigameTask.getIndex()].setConfigurationID(minigameTask.getConfigurationId());
+            if(minigameTask.getConfigurationId() != null)
+            {
+                minigameData[worldIndex, minigameTask.getIndex()].setStatus(MinigameStatus.active);
+            }
+            else
+            {
+                minigameData[worldIndex, minigameTask.getIndex()].setStatus(MinigameStatus.notConfigurated);
+            }
+        }
     }
 
+    //setup a barrier from world origion to world destination
+    private void setupBarrier(int worldIndexOrigion, WorldDTO worldDestination)
+    {
+        int worldIndexDestination = worldDestination.getIndex();
+        if(worldDestination.getActive())
+        {
+            barrierData[worldIndexOrigion, worldIndexDestination].setIsActive(true);
+        }
+        else
+        {
+            barrierData[worldIndexOrigion, worldIndexDestination].setIsActive(false);
+        }
+    }
+
+    #endregion
+
+    #region SettingData
     //set world data
     private void setData(int world)
     {

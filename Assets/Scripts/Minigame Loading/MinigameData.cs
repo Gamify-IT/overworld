@@ -11,13 +11,15 @@ public class MinigameData
     private string game;
     private string configurationID;
     private MinigameStatus status;
+    private int highscore;
     #endregion
 
-    public MinigameData(string game, string configurationID, MinigameStatus status)
+    public MinigameData(string game, string configurationID, MinigameStatus status, int highscore)
     {
         this.game = game;
         this.configurationID = configurationID;
         this.status = status;
+        this.highscore = highscore;
     }
 
     #region GetterAndSetter
@@ -49,6 +51,16 @@ public class MinigameData
     public void setStatus(MinigameStatus status)
     {
         this.status = status;
+    }
+
+    public int getHighscore()
+    {
+        return highscore;
+    }
+
+    public void setHighscore(int highscore)
+    {
+        this.highscore = highscore;
     }
     #endregion
 }

@@ -26,6 +26,8 @@ public class Minigame : MonoBehaviour
     [SerializeField] private string game;
     [SerializeField] private string configurationID;
     [SerializeField] private MinigameStatus status;
+    [SerializeField] private int highscore;
+    public SpriteRenderer sprites;
     #endregion
 
     #region Setup
@@ -35,6 +37,7 @@ public class Minigame : MonoBehaviour
      */
     void Start()
     {
+        sprites = transform.GetComponent<SpriteRenderer>();
         registerToGameManager();
         updateStatus();
     }
@@ -59,6 +62,8 @@ public class Minigame : MonoBehaviour
         status = data.getStatus();
         game = data.getGame();
         configurationID = data.getConfigurationID();
+        highscore = data.getHighscore();
+        
         updateStatus();
     }
 
@@ -82,16 +87,17 @@ public class Minigame : MonoBehaviour
     {
         switch(status)
         {
-            case MinigameStatus.notConfigurated: 
+            case MinigameStatus.notConfigurated:
+                sprites.color = new Color(1f, 1f, 1f, 1f);
                 gameObject.SetActive(false);
                 break;
-            case MinigameStatus.active: 
+            case MinigameStatus.active:
+                sprites.color = new Color(1f, 0f, 0f, 1f);
                 gameObject.SetActive(true);
-                //right animation
                 break;
-            case MinigameStatus.done: 
+            case MinigameStatus.done:
+                sprites.color = new Color(0f, 0f, 1f, 1f);
                 gameObject.SetActive(true);
-                //right animation
                 break;
         }
     }
