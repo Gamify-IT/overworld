@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -11,6 +12,7 @@ using UnityEngine.Networking;
  */
 public class GameManager : MonoBehaviour
 {
+
     #region Singleton
     public static GameManager instance { get; private set; }
 
@@ -117,7 +119,7 @@ public class GameManager : MonoBehaviour
     private void getData(int worldIndex)
     {
         //path to get world from (../world/)
-        string path = "";
+        string path = "https://localhost:8443/overworld/api/v1/lectures/3/worlds";
 
         //get world data        
         StartCoroutine(GetWorldDTO(path, worldIndex));
@@ -142,6 +144,8 @@ public class GameManager : MonoBehaviour
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndex))
         {
+            Debug.Log("Get Request for world: " + worldIndex);
+
             // Request and wait for the desired page.
             yield return webRequest.SendWebRequest();
 
@@ -168,6 +172,8 @@ public class GameManager : MonoBehaviour
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndexDestination))
         {
+            Debug.Log("Get Barrier data to world: " + worldIndexDestination);
+
             // Request and wait for the desired page.
             yield return webRequest.SendWebRequest();
 
