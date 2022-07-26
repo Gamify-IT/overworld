@@ -100,9 +100,8 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.H))
         {
-            fetchData(1);
+            setData(1);
         }
-        setData(1);
     }
 
     //get world data
