@@ -93,17 +93,16 @@ public class GameManager : MonoBehaviour
     public void loadWorld(int world)
     {
         Debug.Log("Update " + world);
-        getData(world);
-        setData(world);
+        fetchData(world);
     }
 
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.H))
         {
-            getData(1);
-            setData(1);
+            fetchData(1);
         }
+        setData(1);
     }
 
     //get world data
@@ -116,7 +115,7 @@ public class GameManager : MonoBehaviour
     }
 
     //get all needed data for a given world
-    private void getData(int worldIndex)
+    private void fetchData(int worldIndex)
     {
         //path to get world from (../world/)
         string path = "https://localhost:8443/overworld/api/v1/lectures/3/worlds/";
@@ -145,6 +144,7 @@ public class GameManager : MonoBehaviour
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndex))
         {
             Debug.Log("Get Request for world: " + worldIndex);
+            Debug.Log("Path: " + uri + worldIndex);
 
             // Request and wait for the desired page.
             yield return webRequest.SendWebRequest();
@@ -173,6 +173,7 @@ public class GameManager : MonoBehaviour
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndexDestination))
         {
             Debug.Log("Get Barrier data to world: " + worldIndexDestination);
+            Debug.Log("Path: " + uri + worldIndexDestination);
 
             // Request and wait for the desired page.
             yield return webRequest.SendWebRequest();
@@ -201,7 +202,7 @@ public class GameManager : MonoBehaviour
     private void processWorldDTO(int worldIndex, WorldDTO worldDTO)
     {
         Debug.Log("static name: " + worldDTO.getStaticName());
-        Debug.Log("topci name: " + worldDTO.getTopicName());
+        Debug.Log("topic name: " + worldDTO.getTopicName());
         List<MinigameTaskDTO> minigames = worldDTO.getMinigameTasks();
         foreach(MinigameTaskDTO minigameTask in minigames)
         {
