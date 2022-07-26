@@ -17,6 +17,16 @@ public class NPC : MonoBehaviour
     private bool playerIsClose;
     private bool typingIsFinished;
     private bool hasBeenTalkedTo;
+    public GameObject speechIndicator;
+
+    private void Awake()
+    {
+        GameObject child = transform.GetChild(0).gameObject;
+        if(child != null)
+        {
+            speechIndicator = child;
+        }
+    }
 
     void Start()
     {
@@ -31,6 +41,7 @@ public class NPC : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded)
         {
+            markAsRead();
             StartCoroutine(LoadDialogueScene());
         } else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded && typingIsFinished)
         {
@@ -48,6 +59,13 @@ public class NPC : MonoBehaviour
         }
     }
 
+    //mark
+    private void markAsRead()
+    {
+        hasBeenTalkedTo = true;
+        speechIndicator.SetActive(false);
+    }
+
     // register to game manager
     private void registerToGameManager()
     {
@@ -58,7 +76,7 @@ public class NPC : MonoBehaviour
     //setup called by game manager
     public void setup(NPCData data)
     {
-        this.dialogue = data.getDialogue();
+        dialogue = data.getDialogue();
     }
 
     /// <summary>
