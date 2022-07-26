@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.InteropServices;
 
 /*
  * This enum is used to store the state of a minigame as follows:
@@ -20,6 +21,9 @@ public enum MinigameStatus
  */
 public class Minigame : MonoBehaviour
 {
+    [DllImport("__Internal")]
+    private static extern string LoadMinigameInIframe(string minigameName, string minigameConfiguration);
+
     #region Attributes
     [SerializeField] private int world;
     [SerializeField] private int number;
@@ -78,6 +82,7 @@ public class Minigame : MonoBehaviour
             Debug.Log("Player completes minigame");
             status = MinigameStatus.done;
             updateStatus();
+            LoadMinigameInIframe(game, configurationID);
         }
     }
 
