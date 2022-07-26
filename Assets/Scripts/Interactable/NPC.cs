@@ -160,6 +160,6 @@ public class NPC : MonoBehaviour
         GameObject.Find("ImageOfNPC").GetComponent<Image>().sprite = imageOfNPC;
         GameObject.Find("NPC_Name").GetComponent<TextMeshProUGUI>().text = nameOfNPC;
         dialogueText = GameObject.Find("Dialogue").GetComponent<TextMeshProUGUI>();
-        StartCoroutine(Typing());
+        StartCoroutine("Typing");
     }
 }
