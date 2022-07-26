@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
     private void getData(int worldIndex)
     {
         //path to get world from (../world/)
-        string path = "https://localhost:8443/overworld/api/v1/lectures/3/worlds";
+        string path = "https://localhost:8443/overworld/api/v1/lectures/3/worlds/";
 
         //get world data        
         StartCoroutine(GetWorldDTO(path, worldIndex));
