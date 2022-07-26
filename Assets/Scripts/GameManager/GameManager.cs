@@ -37,10 +37,13 @@ public class GameManager : MonoBehaviour
     #region Attributes
     private static int maxWorld = 5;
     private static int maxMinigames = 12;
+    private static int maxNPCs;
     private MinigameData[,] minigameData = new MinigameData[maxWorld + 1, maxMinigames + 1];
     private GameObject[,] minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
     private BarrierData[,] barrierData = new BarrierData[maxWorld + 1, maxWorld + 1];
     private GameObject[,] barrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
+    private NPCData[,] npcData = new NPCData[maxWorld + 1, maxNPCs];
+    private GameObject[,] npcObjects = new GameObject[maxWorld + 1, maxNPCs];
     private bool somethingToUpdate;
     #endregion
 
@@ -64,6 +67,11 @@ public class GameManager : MonoBehaviour
                 barrierObjects[i, j] = null;
                 barrierData[i, j] = new BarrierData(true);
             }
+            for(int j = 0; j < maxNPCs; j++)
+            {
+                npcObjects[i, j] = null;
+                npcData[i, j] = new NPCData(null);
+            }
         }
     }
 
@@ -86,6 +94,17 @@ public class GameManager : MonoBehaviour
         if (barrier != null)
         {
             barrierObjects[worldIndexOrigin, worldIndexDestination] = barrier;
+        }
+    }
+
+    /*
+     * This function registers a npc at the game manager
+     */
+    public void addNPC(GameObject npc, int world, int number)
+    {
+        if(npc != null)
+        {
+            npcObjects[world, number] = npc;
         }
     }
     #endregion
@@ -233,6 +252,14 @@ public class GameManager : MonoBehaviour
             minigameData[worldIndex, minigameTask.getIndex()].setConfigurationID(minigameTask.getConfigurationId());
             Debug.Log("Minigame " + minigameTask.getIndex() + ", config: " + minigameTask.getConfigurationId());
         }
+        List<NPCDTO> npcs = worldDTO.getNPCs();
+        foreach(NPCDTO npc in npcs)
+        {
+            string[] dialogue = new string[1];
+            dialogue[0] = npc.getText();
+            Debug.Log("NPC " + npc.getIndex() + ", text: " + dialogue);
+            npcData[worldIndex, npc.getIndex()].setDialogue(dialogue);
+        }
     }
 
     //setup a barrier from world origion to world destination
@@ -277,6 +304,18 @@ public class GameManager : MonoBehaviour
                 if(barrier != null)
                 {
                     barrier.setup(barrierData[world,barrierIndex]);
+                }
+            }
+        }
+
+        for(int npcIndex = 1; npcIndex < maxNPCs; npcIndex++)
+        {
+            if(npcObjects[world, npcIndex] != null)
+            {
+                NPC npc = npcObjects[world, npcIndex].GetComponent<NPC>();
+                if(npc != null)
+                {
+                    npc.setup(npcData[world, npcIndex]);
                 }
             }
         }

@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class NPC : MonoBehaviour
 {
+    [SerializeField] private int world;
+    [SerializeField] private int number;
     public Sprite imageOfNPC;
     public string nameOfNPC;
     private TextMeshProUGUI dialogueText;
@@ -14,6 +16,11 @@ public class NPC : MonoBehaviour
     public float wordSpeed;
     private bool playerIsClose;
     private bool typingIsFinished;
+
+    void Start()
+    {
+        registerToGameManager();
+    }
 
     /// <summary>
     /// This method opens the NPC dialogue if the player is close to the NPC and presses "E".
@@ -38,6 +45,19 @@ public class NPC : MonoBehaviour
             dialogueText.text = dialogue[index];
             typingIsFinished = true;
         }
+    }
+
+    // register to game manager
+    private void registerToGameManager()
+    {
+        Debug.Log("register NPC " + world + " - " + number);
+        GameManager.instance.addNPC(this.gameObject, world, number);
+    }
+    
+    //setup called by game manager
+    public void setup(NPCData data)
+    {
+        this.dialogue = data.getDialogue();
     }
 
     /// <summary>
