@@ -256,21 +256,20 @@ public class GameManager : MonoBehaviour
     }
 
     //setup a barrier from world origion to world destination
-    private void setupBarrier(int worldIndexOrigion, WorldDTO worldDestination)
+    private void setupBarrier(int worldIndexOrigion, WorldDTO worldDTODestination)
     {
-        int worldIndexDestination = worldDestination.getIndex();
-        if(worldDestination.getActive())
-        {
-            barrierData[worldIndexOrigion, worldIndexDestination].setIsActive(true);
-            Debug.Log("Barrier " + worldIndexOrigion + "->" + worldIndexDestination + ": active");
-        }
-        else
+        int worldIndexDestination = worldDTODestination.getIndex();
+        if(worldDTODestination.getActive())
         {
             barrierData[worldIndexOrigion, worldIndexDestination].setIsActive(false);
             Debug.Log("Barrier " + worldIndexOrigion + "->" + worldIndexDestination + ": inactive");
         }
+        else
+        {
+            barrierData[worldIndexOrigion, worldIndexDestination].setIsActive(true);
+            Debug.Log("Barrier " + worldIndexOrigion + "->" + worldIndexDestination + ": active");
+        }
     }
-
     #endregion
 
     #region SettingData
