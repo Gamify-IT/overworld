@@ -27,6 +27,8 @@ public class WorldDTO
         this.dungeons = dungeons;
     }
 
+    public WorldDTO() { }
+
     public static WorldDTO CreateFromJSON(string jsonString)
     {
         return JsonUtility.FromJson<WorldDTO>(jsonString);

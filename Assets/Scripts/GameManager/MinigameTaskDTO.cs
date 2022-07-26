@@ -6,10 +6,10 @@ using UnityEngine;
 [System.Serializable]
 public class MinigameTaskDTO
 {
-    private string id;
-    private int index;
-    private string game;
-    private string configurationId;
+    public string id;
+    public int index;
+    public string game;
+    public string configurationId;
 
     public MinigameTaskDTO(string id, int index, string game, string configurationId)
     {
@@ -17,6 +17,13 @@ public class MinigameTaskDTO
         this.index = index;
         this.game = game;
         this.configurationId = configurationId;
+    }
+
+    public MinigameTaskDTO() { }
+
+    public static MinigameTaskDTO CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<MinigameTaskDTO>(jsonString);
     }
 
     #region GetterAndSetter

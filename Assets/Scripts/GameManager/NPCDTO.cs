@@ -6,15 +6,22 @@ using UnityEngine;
 [System.Serializable]
 public class NPCDTO
 {
-    private string id;
-    private int index;
-    private string text;
+    public string id;
+    public int index;
+    public string text;
 
     public NPCDTO(string id, int index, string text)
     {
         this.id = id;
         this.index = index;
         this.text = text;
+    }
+
+    public NPCDTO() { }
+
+    public static NPCDTO CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<NPCDTO>(jsonString);
     }
 
     #region GetterAndSetter

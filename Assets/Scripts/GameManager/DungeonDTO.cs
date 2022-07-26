@@ -6,13 +6,13 @@ using UnityEngine;
 [System.Serializable]
 public class DungeonDTO
 {
-    private string id;
-    private int index;
-    private string staticName;
-    private string topicName;
-    private bool active;
-    private List<MinigameTaskDTO> minigameTasks;
-    private List<NPCDTO> npcs;
+    public string id;
+    public int index;
+    public string staticName;
+    public string topicName;
+    public bool active;
+    public List<MinigameTaskDTO> minigameTasks;
+    public List<NPCDTO> npcs;
 
     public DungeonDTO(string id, int index, string staticName, string topicName, bool active, List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs)
     {
@@ -23,6 +23,13 @@ public class DungeonDTO
         this.active = active;
         this.minigameTasks = minigameTasks;
         this.npcs = npcs;
+    }
+
+    public DungeonDTO() { }
+
+    public static DungeonDTO CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<DungeonDTO>(jsonString);
     }
 
     #region GetterAndSetter
