@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class InteractionOfObject : MonoBehaviour
 {
-    public GameObject gameObject;
     // Update is called once per frame
     void Update()
     {
