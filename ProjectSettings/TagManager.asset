@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Trigger
   - AreaName
+  - MinimapIcon
+  - MinimapIconsParent
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - Player
   - Trigger
   - Item
-  - 
+  - Minimap
   - 
   - 
   - 
@@ -54,4 +56,7 @@ TagManager:
     locked: 0
   - name: Minigames
     uniqueID: 1368908887
+    locked: 0
+  - name: MinimapIcons
+    uniqueID: 1304180243
     locked: 0
