@@ -42,8 +42,8 @@ public class GameManager : MonoBehaviour
     private GameObject[,] minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
     private BarrierData[,] barrierData = new BarrierData[maxWorld + 1, maxWorld + 1];
     private GameObject[,] barrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
-    private NPCData[,] npcData = new NPCData[maxWorld + 1, maxNPCs];
-    private GameObject[,] npcObjects = new GameObject[maxWorld + 1, maxNPCs];
+    private NPCData[,] npcData = new NPCData[maxWorld + 1, maxNPCs+1];
+    private GameObject[,] npcObjects = new GameObject[maxWorld + 1, maxNPCs+1];
     private bool somethingToUpdate;
     #endregion
 
@@ -250,6 +250,7 @@ public class GameManager : MonoBehaviour
             dialogue[0] = npc.getText();
             Debug.Log("NPC " + npc.getIndex() + ", text: " + dialogue[0]);
             npcData[worldIndex, npc.getIndex()].setDialogue(dialogue);
+            Debug.Log("NPC " + npc.getIndex() + ", npcData text: " + npcData[worldIndex,npc.getIndex()].getDialogue().ToString());
         }
     }
 
@@ -275,7 +276,7 @@ public class GameManager : MonoBehaviour
     //set world data
     private void setData(int world)
     {
-        for(int minigameIndex = 1; minigameIndex < maxMinigames; minigameIndex++)
+        for(int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
         {
             if(minigameObjects[world,minigameIndex] != null)
             {
@@ -287,7 +288,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        for(int barrierIndex = 1; barrierIndex < maxWorld; barrierIndex++)
+        for(int barrierIndex = 1; barrierIndex <= maxWorld; barrierIndex++)
         {
             if(barrierObjects[world, barrierIndex] != null)
             {
@@ -299,7 +300,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        for(int npcIndex = 1; npcIndex < maxNPCs; npcIndex++)
+        for(int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
         {
             if(npcObjects[world, npcIndex] != null)
             {
