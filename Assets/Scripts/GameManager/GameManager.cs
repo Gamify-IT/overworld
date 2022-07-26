@@ -153,13 +153,13 @@ public class GameManager : MonoBehaviour
             {
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
-                    Debug.LogError(uri + ": Error: " + webRequest.error);
+                    Debug.LogError(uri + worldIndex + ": Error: " + webRequest.error);
                     break;
                 case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    Debug.LogError(uri + worldIndex + ": HTTP Error: " + webRequest.error);
                     break;
                 case UnityWebRequest.Result.Success:
-                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
+                    Debug.Log(uri + worldIndex + ":\nReceived: " + webRequest.downloadHandler.text);
                     WorldDTO worldDTO = JsonUtility.FromJson<WorldDTO>(webRequest.downloadHandler.text);
                     processWorldDTO(worldIndex, worldDTO);
                     break;
@@ -182,13 +182,13 @@ public class GameManager : MonoBehaviour
             {
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
-                    Debug.LogError(uri + ": Error: " + webRequest.error);
+                    Debug.LogError(uri + worldIndexDestination + ": Error: " + webRequest.error);
                     break;
                 case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    Debug.LogError(uri + worldIndexDestination + ": HTTP Error: " + webRequest.error);
                     break;
                 case UnityWebRequest.Result.Success:
-                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
+                    Debug.Log(uri + worldIndexDestination + ":\nReceived: " + webRequest.downloadHandler.text);
                     WorldDTO worldDTODestination = JsonUtility.FromJson<WorldDTO>(webRequest.downloadHandler.text);
                     setupBarrier(worldIndexDestination, worldDTODestination);
                     break;
