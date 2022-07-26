@@ -250,7 +250,8 @@ public class GameManager : MonoBehaviour
             dialogue[0] = npc.getText();
             Debug.Log("NPC " + npc.getIndex() + ", text: " + dialogue[0]);
             npcData[worldIndex, npc.getIndex()].setDialogue(dialogue);
-            Debug.Log("NPC " + npc.getIndex() + ", npcData text: " + npcData[worldIndex,npc.getIndex()].getDialogue().ToString());
+            string[] newDialogue = npcData[worldIndex, npc.getIndex()].getDialogue();
+            Debug.Log("NPC " + npc.getIndex() + ", npcData text: " + newDialogue[0]);
         }
     }
 
