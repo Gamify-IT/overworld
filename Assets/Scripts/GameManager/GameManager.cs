@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
     public void loadWorld(int world)
     {
         Debug.Log("Update " + world);
-        getData(world);
+        getDataStatic(world);
         setData(world);
     }
 
@@ -97,18 +97,29 @@ public class GameManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.H))
         {
-            getData(1);
+            getDataStatic(1);
             setData(1);
         }
     }
 
     //get world data
-    private void getData(int world)
+    private void getDataStatic(int world)
     {
         minigameData[1,1] = new MinigameData("Moorhuhn", "config" ,MinigameStatus.active);
         minigameData[1,2] = new MinigameData("", "", MinigameStatus.notConfigurated);
         minigameData[3,1] = new MinigameData("Moorhuhn", "config", MinigameStatus.active);
         barrierData[1,2] = new BarrierData(false);
+    }
+
+    private void getData(int world)
+    {
+        //get world data
+
+
+        //get barrier data
+        //-> für jede angelegte Barrier zu world x (barrierObjects[world,x] != null):
+        //   get world x, falls active -> barriere ausschalten
+        //              , sonst -> barriere anschalten
     }
 
     //set world data
