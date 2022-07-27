@@ -6,6 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class NPC : MonoBehaviour
 {
+    [SerializeField] private int world;
+    [SerializeField] private int dungeon;
+    [SerializeField] private int number;
+    private string uuid;
     public Sprite imageOfNPC;
     public string nameOfNPC;
     private TextMeshProUGUI dialogueText;
@@ -14,6 +18,23 @@ public class NPC : MonoBehaviour
     public float wordSpeed;
     private bool playerIsClose;
     private bool typingIsFinished;
+    private bool hasBeenTalkedTo;
+    public GameObject speechIndicator;
+
+    private void Awake()
+    {
+        GameObject child = transform.GetChild(0).gameObject;
+        if(child != null)
+        {
+            speechIndicator = child;
+        }
+    }
+
+    void Start()
+    {
+        registerToGameManager();
+        initNewStuffSprite();
+    }
 
     /// <summary>
     /// This method opens the NPC dialogue if the player is close to the NPC and presses "E".
@@ -23,6 +44,7 @@ public class NPC : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded)
         {
+            markAsRead();
             StartCoroutine(LoadDialogueScene());
         } else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded && typingIsFinished)
         {
@@ -37,6 +59,43 @@ public class NPC : MonoBehaviour
             dialogueText.text = "";
             dialogueText.text = dialogue[index];
             typingIsFinished = true;
+        }
+    }
+
+    //mark
+    private void markAsRead()
+    {
+        hasBeenTalkedTo = true;
+        speechIndicator.SetActive(false);
+        GameManager.instance.markNPCasRead(uuid,hasBeenTalkedTo);
+    }
+
+    // register to game manager
+    private void registerToGameManager()
+    {
+        Debug.Log("register NPC " + world + " - " + dungeon + "-" + number);
+        GameManager.instance.addNPC(this.gameObject, world, dungeon, number);
+    }
+    
+    //setup called by game manager
+    public void setup(NPCData data)
+    {
+        uuid = data.getUUID();
+        dialogue = data.getDialogue();
+        hasBeenTalkedTo = data.getHasBeenTalkedTo();
+        initNewStuffSprite();
+        Debug.Log("setup npc " + world + "-" + number + "with new dialogue: " + dialogue.ToString() + ", new info: " + !hasBeenTalkedTo);
+    }
+
+    private void initNewStuffSprite()
+    {
+        if (hasBeenTalkedTo)
+        {
+            speechIndicator.SetActive(false);
+        }
+        else
+        {
+            speechIndicator.SetActive(true);
         }
     }
 
@@ -105,6 +164,10 @@ public class NPC : MonoBehaviour
             playerIsClose = false;
             ResetText();
         }
+        else if (other.CompareTag("Player") && !SceneManager.GetSceneByBuildIndex(12).isLoaded)
+        {
+            playerIsClose = false;
+        }
     }
 
     /// <summary>
@@ -120,6 +183,6 @@ public class NPC : MonoBehaviour
         GameObject.Find("ImageOfNPC").GetComponent<Image>().sprite = imageOfNPC;
         GameObject.Find("NPC_Name").GetComponent<TextMeshProUGUI>().text = nameOfNPC;
         dialogueText = GameObject.Find("Dialogue").GetComponent<TextMeshProUGUI>();
-        StartCoroutine(Typing());
+        StartCoroutine("Typing");
     }
 }
