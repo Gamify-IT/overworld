@@ -53,7 +53,7 @@ public class Minigame : MonoBehaviour
      */
     private void registerToGameManager()
     {
-        Debug.Log("register Minigame " + world + " - " + number);
+        Debug.Log("register Minigame " + world + " - " + dungeon + "-" + number);
         GameManager.instance.addMinigame(this.gameObject, world, dungeon, number);
     }
     #endregion

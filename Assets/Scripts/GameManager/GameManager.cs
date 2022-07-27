@@ -343,6 +343,7 @@ public class GameManager : MonoBehaviour
                 Minigame minigame = minigameObjects[world,minigameIndex].GetComponent<Minigame>();
                 if(minigame != null)
                 {
+                    Debug.Log("Setup Minigmame in " + world + "," + minigameIndex);
                     minigame.setup(minigameData[world,minigameIndex]);
                 }
             }
@@ -367,6 +368,7 @@ public class GameManager : MonoBehaviour
                 NPC npc = npcObjects[world, npcIndex].GetComponent<NPC>();
                 if(npc != null)
                 {
+                    Debug.Log("Setup NPC in " + world + "," + npcIndex);
                     npc.setup(npcData[world, npcIndex]);
                 }
             }
