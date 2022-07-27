@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
+using UnityEngine.SceneManagement;
 
 /*
  * This enum is used to store the state of a minigame as follows:
@@ -80,11 +81,24 @@ public class Minigame : MonoBehaviour
     {
         if(collision.CompareTag("Player"))
         {
-            Debug.Log("Player completes minigame");
+            Debug.Log("Player enters minigame " + game + ", config: " + configurationID);
             status = MinigameStatus.done;
-            LoadMinigameInIframe(game, configurationID);
+            //LoadMinigameInIframe(game, configurationID);
+            //load minigame starting scene
+            StartCoroutine(loadMinigameStarting());
             updateStatus();
         }
+    }
+
+    //load minigame starting scene
+    private IEnumerator loadMinigameStarting()
+    {
+        var asyncLoadScene = SceneManager.LoadSceneAsync("MinigameStarting Overlay", LoadSceneMode.Additive);
+        while (!asyncLoadScene.isDone)
+        {
+            yield return null;
+        }
+        MinigameStarting.instance.setupMinigame(game, configurationID, highscore);
     }
 
     /*
