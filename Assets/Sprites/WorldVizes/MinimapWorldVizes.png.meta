@@ -220,6 +220,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: MinimapWorldVizes_5
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 1537
+        width: 63
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 201088c8e2cf3f14499b951c43cd7f91
+      internalID: -1558026428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -231,6 +252,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      MinimapWorldVizes_5: -1558026428
       MinimapWorldVizes_3: -1900965796
       MinimapWorldVizes_2: 77235769
       MinimapWorldVizes_4: -1133208779

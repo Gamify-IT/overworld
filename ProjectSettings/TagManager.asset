@@ -54,6 +54,9 @@ TagManager:
   - name: Collition
     uniqueID: 1001160471
     locked: 0
-  - name: Minimap
-    uniqueID: 3315473867
+  - name: Minigames
+    uniqueID: 1368908887
+    locked: 0
+  - name: MinimapIcons
+    uniqueID: 1304180243
     locked: 0
