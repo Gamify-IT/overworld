@@ -204,6 +204,10 @@ public class GameManager : MonoBehaviour
         int playerId = 1;
         path = "/overworld/api/v1/lectures/" + lectureID + "/playerstatistics/" + playerId + "/player-task-statistics";
         StartCoroutine(GetPlayerMinigameStatistics(path));
+
+        //get player data
+        path = "/overworld/api/v1/lectures/" + lectureID + "/playerstatistics/" + playerId;
+        StartCoroutine(GetPlayerStatistics(path));
     }
 
     private void fetchDungeonData(int worldIndex, int dungeonIndex)
@@ -306,6 +310,34 @@ public class GameManager : MonoBehaviour
             }
         }
         somethingToUpdate = true;
+    }
+    
+    private IEnumerator GetPlayerStatistics(string uri)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            Debug.Log("Get Player minigame statistics: ");
+            Debug.Log("Path: " + uri);
+
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(uri + ": Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
+                    PlayerstatisticDTO playerStatistic = JsonUtility.FromJson<PlayerstatisticDTO>(webRequest.downloadHandler.text);
+                    Debug.Log("Player knowledge: " + playerStatistic.knowledge);
+                    break;
+            }
+        }
     }
     #endregion
 
