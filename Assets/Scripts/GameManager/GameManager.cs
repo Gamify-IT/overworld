@@ -130,9 +130,12 @@ public class GameManager : MonoBehaviour
     //dungeon: worldIndex,dungeonIndex
     public void loadWorld(int world, int dungeon)
     {
+        currentWorld = world;
+        currentDungeon = dungeon;
         if(dungeon == 0)
         {
             Debug.Log("Update world: " + world);
+            resetDungeonSlot();
             fetchWorldData(world);
         }
         else
@@ -142,14 +145,35 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //reset dungeon entries 
+    private void resetDungeonSlot()
+    {
+        for(int minigameIndex = 0; minigameIndex <= maxMinigames; minigameIndex++)
+        {
+            minigameObjects[0,minigameIndex] = null;
+            minigameData[0,minigameIndex] = new MinigameData("", "", MinigameStatus.notConfigurated, 0);
+        }
+        for(int npcIndex = 0; npcIndex <= maxNPCs; npcIndex++)
+        {
+            npcObjects[0, npcIndex] = null;
+            npcData[0, npcIndex] = new NPCData(null);
+        }
+    }
+
     public void Update()
     {
         if (somethingToUpdate)
         {
             somethingToUpdate = false;
-            for (int i=0; i<=maxWorld; i++)
+            if(currentDungeon == 0)
             {
-                setData(i);
+                Debug.Log("Setting Data for World " + currentWorld);
+                setData(currentWorld);
+            }
+            else
+            {
+                Debug.Log("Setting Data for Dungeon " + currentWorld + "-" + currentDungeon);
+                setData(0);
             }
         }
     }
