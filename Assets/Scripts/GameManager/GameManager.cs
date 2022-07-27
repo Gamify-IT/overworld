@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
             for(int j = 0; j < maxNPCs; j++)
             {
                 npcObjects[i, j] = null;
-                npcData[i, j] = new NPCData(null);
+                npcData[i, j] = new NPCData(null, true);
             }
         }
     }
@@ -156,7 +156,7 @@ public class GameManager : MonoBehaviour
         for(int npcIndex = 0; npcIndex <= maxNPCs; npcIndex++)
         {
             npcObjects[0, npcIndex] = null;
-            npcData[0, npcIndex] = new NPCData(null);
+            npcData[0, npcIndex] = new NPCData(null, true);
         }
     }
 
@@ -199,6 +199,11 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(GetBarrierData(path, worldIndexDestination, worldIndex));
             }
         }
+
+        //get player minigame data
+        int playerId = 1;
+        path = "/overworld/api/v1/lectures/" + lectureID + "/playerstatistics/" + playerId + "/player-task-statistics";
+        StartCoroutine(GetPlayerMinigameStatistics(path));
     }
 
     private void fetchDungeonData(int worldIndex, int dungeonIndex)
@@ -272,6 +277,37 @@ public class GameManager : MonoBehaviour
         }
         somethingToUpdate = true;
     }
+    
+    //get player minigame data
+    private IEnumerator GetPlayerMinigameStatistics(string uri)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            Debug.Log("Get Player minigame statistics: ");
+            Debug.Log("Path: " + uri);
+
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(uri + ": Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
+                    PlayerTaskStatisticDTOArray playerTaskStatisticArray = JsonUtility.FromJson<PlayerTaskStatisticDTOArray>(webRequest.downloadHandler.text);
+                    PlayerTaskStatisticDTO[] playerTaskStatistics = playerTaskStatisticArray.playerTaskStatisticDTOs;
+                    processPlayerTaskStatisitcs(playerTaskStatistics);
+                    break;
+            }
+        }
+        somethingToUpdate = true;
+    }
     #endregion
 
     #region ProcessingData
@@ -328,6 +364,34 @@ public class GameManager : MonoBehaviour
         {
             barrierData[worldIndexOrigion, worldIndexDestination].setIsActive(true);
             Debug.Log("Barrier " + worldIndexOrigion + "->" + worldIndexDestination + ": active");
+        }
+    }
+    
+    private void processPlayerTaskStatisitcs(PlayerTaskStatisticDTO[] playerTaskStatistics)
+    {
+        foreach(PlayerTaskStatisticDTO statistic in playerTaskStatistics)
+        {
+            int worldIndex = statistic.minigameTask.areaLocation.worldIndex;
+            int dungeonIndex = statistic.minigameTask.areaLocation.dungeonIndex;
+            int index = statistic.minigameTask.index;
+            int highscore = statistic.highscore;
+            bool completed = statistic.completed;
+            MinigameStatus status = MinigameStatus.active;
+            if(completed)
+            {
+                status = MinigameStatus.done;
+            }
+            if(dungeonIndex == 0)
+            {
+                minigameData[worldIndex, index].setHighscore(highscore);
+                minigameData[worldIndex, index].setStatus(status);
+            }
+            else
+            {
+                minigameData[0, index].setHighscore(highscore);
+                minigameData[0, index].setStatus(status);
+            }
+            Debug.Log("Update minigame " + worldIndex + "-" + dungeonIndex + "-" + index + ": Highscore: " + highscore + ", Status: " + status.ToString());
         }
     }
     #endregion

@@ -78,6 +78,7 @@ public class NPC : MonoBehaviour
     public void setup(NPCData data)
     {
         dialogue = data.getDialogue();
+        hasBeenTalkedTo = data.getHasBeenTalkedTo();
         Debug.Log("setup npc " + world + "-" + number + "with new dialogue: " + dialogue.ToString());
     }
 
