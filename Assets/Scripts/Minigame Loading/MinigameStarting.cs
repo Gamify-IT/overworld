@@ -36,6 +36,8 @@ public class MinigameStarting : MonoBehaviour
     //called by minigame to load canvas
     public void setupMinigame(string game, string configurationId, int highscore)
     {
+        Time.timeScale = 0f;
+
         this.game = game;
         this.configurationId = configurationId;
         this.highscore = highscore;
@@ -54,6 +56,7 @@ public class MinigameStarting : MonoBehaviour
     public void startButtonPressed()
     {
         LoadMinigameInIframe(game, configurationId);
+        Time.timeScale = 1f;
         SceneManager.UnloadSceneAsync("MinigameStarting Overlay");
 
     }
@@ -62,6 +65,7 @@ public class MinigameStarting : MonoBehaviour
     public void quitButtonPressed()
     {
         Reset();
+        Time.timeScale = 1f;
         SceneManager.UnloadSceneAsync("MinigameStarting Overlay");
     }
 
