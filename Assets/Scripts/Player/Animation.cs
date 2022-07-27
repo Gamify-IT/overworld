@@ -4,6 +4,26 @@ using UnityEngine;
 
 public class Animation : MonoBehaviour
 {
+    #region Singleton
+    public static Animation instance { get; private set; }
+
+    /*
+     * The Awake function is called after an object is initialized and before the Start function.
+     * It sets up the Singleton. 
+     */
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+
     public float movementSpeed = 3f;
     public float sprintingSpeed = 6f;
     public float superSpeed = 20f;
@@ -11,11 +31,13 @@ public class Animation : MonoBehaviour
     public Vector2 movement;
     public Rigidbody2D playerRigidBody;
     private bool canMove;
+    private bool busy;
     public Animator playerAnimator;
 
     void Start()
     {
         canMove = true;
+        busy = false;
         playerRigidBody = this.GetComponent<Rigidbody2D>();
         currentSpeed = movementSpeed;
     }
@@ -81,8 +103,18 @@ public class Animation : MonoBehaviour
         canMove = false;
     }
 
-    public void allowMovement()
+    public void enableMovement()
     {
         canMove = true;
+    }
+
+    public bool isBusy()
+    {
+        return busy;
+    }
+
+    public void setBusy(bool busy)
+    {
+        this.busy = busy;
     }
 }

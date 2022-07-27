@@ -46,7 +46,8 @@ public class MinigameStarting : MonoBehaviour
     //called by minigame to load canvas
     public void setupMinigame(string game, string configurationId, int highscore)
     {
-        Time.timeScale = 0f;
+        Animation.instance.setBusy(true);
+        Animation.instance.disableMovement();
 
         this.game = game;
         this.configurationId = configurationId;
@@ -79,7 +80,8 @@ public class MinigameStarting : MonoBehaviour
     private void quitMinigame()
     {
         Reset();
-        Time.timeScale = 1f;
+        Animation.instance.setBusy(false);
+        Animation.instance.enableMovement();
         SceneManager.UnloadSceneAsync("MinigameStarting Overlay");
     }
 
