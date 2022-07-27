@@ -381,7 +381,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator PostNPCCompleted(string uri, string uuid, bool completed)
     {
         NPCTalkEvent npcData = new NPCTalkEvent(uuid, completed, playerId.ToString());
-        string json = JsonUtility.ToJson(npcData);
+        string json = JsonUtility.ToJson(npcData, true);
 
         UnityWebRequest www = UnityWebRequest.Post(uri, json);
         www.SetRequestHeader("Content-Type", "application/json");
