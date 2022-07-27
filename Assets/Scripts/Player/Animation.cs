@@ -10,47 +10,50 @@ public class Animation : MonoBehaviour
     private float currentSpeed;
     public Vector2 movement;
     public Rigidbody2D playerRigidBody;
-
-
+    private bool canMove;
     public Animator playerAnimator;
 
     void Start()
     {
+        canMove = true;
         playerRigidBody = this.GetComponent<Rigidbody2D>();
         currentSpeed = movementSpeed;
     }
 
     void Update()
     {
-        movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
-        movement = movement.normalized;
+        if(canMove)
+        {
+            movement.x = Input.GetAxisRaw("Horizontal");
+            movement.y = Input.GetAxisRaw("Vertical");
+            movement = movement.normalized;
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && currentSpeed == movementSpeed)
-        {
-            currentSpeed = currentSpeed + sprintingSpeed;
-            playerAnimator.speed = 2;
-        }
-        if (Input.GetKeyUp(KeyCode.LeftShift) && currentSpeed == (movementSpeed + sprintingSpeed))
-        {
-            currentSpeed = currentSpeed - sprintingSpeed;
-            playerAnimator.speed = 1;
-        }
+            if (Input.GetKeyDown(KeyCode.LeftShift) && currentSpeed == movementSpeed)
+            {
+                currentSpeed = currentSpeed + sprintingSpeed;
+                playerAnimator.speed = 2;
+            }
+            if (Input.GetKeyUp(KeyCode.LeftShift) && currentSpeed == (movementSpeed + sprintingSpeed))
+            {
+                currentSpeed = currentSpeed - sprintingSpeed;
+                playerAnimator.speed = 1;
+            }
 
-        if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
-        {
-            currentSpeed = currentSpeed + superSpeed;
-            playerAnimator.speed = 20;
-        }
-        if (Input.GetKeyUp("l") && currentSpeed == (movementSpeed + superSpeed))
-        {
-            currentSpeed = currentSpeed - superSpeed;
-            playerAnimator.speed = 1;
-        }
+            if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
+            {
+                currentSpeed = currentSpeed + superSpeed;
+                playerAnimator.speed = 20;
+            }
+            if (Input.GetKeyUp("l") && currentSpeed == (movementSpeed + superSpeed))
+            {
+                currentSpeed = currentSpeed - superSpeed;
+                playerAnimator.speed = 1;
+            }
 
-        if (Input.GetKeyDown("k"))
-        {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger = !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
+            if (Input.GetKeyDown("k"))
+            {
+                GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger = !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
+            }
         }
     }
 
@@ -59,14 +62,27 @@ public class Animation : MonoBehaviour
     //animation is executed
     void FixedUpdate()
     {
-        float horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
-        float verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
+        if(canMove)
+        {
+            float horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
+            float verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
 
-        playerRigidBody.MovePosition(playerRigidBody.position + movement * currentSpeed * Time.fixedDeltaTime);
+            playerRigidBody.MovePosition(playerRigidBody.position + movement * currentSpeed * Time.fixedDeltaTime);
 
-        playerAnimator.SetFloat("Horizontal", movement.x);
-        playerAnimator.SetFloat("Vertical", movement.y);
-        playerAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
-        playerAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
+            playerAnimator.SetFloat("Horizontal", movement.x);
+            playerAnimator.SetFloat("Vertical", movement.y);
+            playerAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
+            playerAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
+        }
+    }
+
+    public void disableMovement()
+    {
+        canMove = false;
+    }
+
+    public void allowMovement()
+    {
+        canMove = true;
     }
 }
