@@ -33,6 +33,16 @@ public class MinigameStarting : MonoBehaviour
     private int highscore;
     #endregion
 
+    // Update is called once per frame
+    void Update()
+    {
+        //esc handling
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            quitMinigame();
+        }
+    }
+
     //called by minigame to load canvas
     public void setupMinigame(string game, string configurationId, int highscore)
     {
@@ -58,11 +68,15 @@ public class MinigameStarting : MonoBehaviour
         LoadMinigameInIframe(game, configurationId);
         Time.timeScale = 1f;
         SceneManager.UnloadSceneAsync("MinigameStarting Overlay");
-
     }
 
     //quit minigame
     public void quitButtonPressed()
+    {
+        quitMinigame();
+    }
+
+    private void quitMinigame()
     {
         Reset();
         Time.timeScale = 1f;
