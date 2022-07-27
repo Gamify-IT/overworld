@@ -1,66 +1,82 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class NPC : MonoBehaviour
 {
-    public GameObject dialoguePanel;
-    public Text dialogueText;
+    public Sprite imageOfNPC;
+    public string nameOfNPC;
+    private TextMeshProUGUI dialogueText;
     public string[] dialogue;
     private int index;
-
-    public GameObject nextButton;
     public float wordSpeed;
-    public bool playerIsClose;
+    private bool playerIsClose;
+    private bool typingIsFinished;
 
+    /// <summary>
+    /// This method opens the NPC dialogue if the player is close to the NPC and presses "E".
+    /// If the player wants to skip the typing out of the dialogue they can press "E" again.
+    /// </summary>
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E) && playerIsClose)
+        if (Input.GetKeyDown(KeyCode.E) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded)
         {
-            if(dialoguePanel.activeInHierarchy)
-            {
-                ResetText();
-            }
-            else
-            {
-                dialoguePanel.SetActive(true);
-                StartCoroutine(Typing());
-            }
+            StartCoroutine(LoadDialogueScene());
+        } else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded && typingIsFinished)
+        {
+            Debug.Log(dialogue.Length - 1);
+            Debug.Log("index before next" +  index);
+            NextLine();
+            Debug.Log("index after next" + index);
         }
-
-        if(dialogueText.text == dialogue[index])
+        else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded && !typingIsFinished)
         {
-            nextButton.SetActive(true);
+            StopCoroutine("Typing");
+            dialogueText.text = "";
+            dialogueText.text = dialogue[index];
+            typingIsFinished = true;
         }
     }
 
+    /// <summary>
+    /// This method resets the text of the NPC and closes the dialogue overlay
+    /// </summary>
     public void ResetText()
     {
         dialogueText.text = "";
         index = 0;
-        dialoguePanel.SetActive(false);
+        SceneManager.UnloadSceneAsync("Dialogue Overlay");
     }
 
+    /// <summary>
+    /// This method types out the text of the NPC dialogue with a given wordSpeed.
+    /// </summary>
     IEnumerator Typing()
     {
-        foreach(char letter in dialogue[index].ToCharArray())
+        typingIsFinished = false;
+        Debug.Log(typingIsFinished);
+        foreach (char letter in dialogue[index].ToCharArray())
         {
             dialogueText.text += letter;
             yield return new WaitForSeconds(wordSpeed);
         }
+        typingIsFinished = true;
+        Debug.Log(typingIsFinished);
     }
 
+    /// <summary>
+    /// This method will show the next line of the NPC dialogue and deletes the old line.
+    /// If the current line is the last line of the Dialogue ResetText() will be executed.
+    /// </summary>
     public void NextLine()
     {
-
-        nextButton.SetActive(false);
-
         if(index < dialogue.Length - 1)
         {
             index++;
             dialogueText.text = "";
-            StartCoroutine(Typing());
+            StartCoroutine("Typing");
         }
         else
         {
@@ -68,6 +84,9 @@ public class NPC : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// If the player is in range of the NPC the playerIsClose check will be set to true.
+    /// </summary>
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.CompareTag("Player"))
@@ -76,12 +95,31 @@ public class NPC : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// If the player leaves the range of the NPC while the dialogue window is open, the window will be closed, text will be reset and playerIsClose check will be set to false.
+    /// </summary>
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && SceneManager.GetSceneByBuildIndex(12).isLoaded)
         {
             playerIsClose = false;
             ResetText();
         }
+    }
+
+    /// <summary>
+    /// This method loads the dialogue window and will change the text and name of the NPC to the text and name set in the NPC.
+    /// </summary>
+    IEnumerator LoadDialogueScene()
+    {
+        var asyncLoadScene = SceneManager.LoadSceneAsync("Dialogue Overlay", LoadSceneMode.Additive);
+        while (!asyncLoadScene.isDone)
+        {
+            yield return null;
+        }
+        GameObject.Find("ImageOfNPC").GetComponent<Image>().sprite = imageOfNPC;
+        GameObject.Find("NPC_Name").GetComponent<TextMeshProUGUI>().text = nameOfNPC;
+        dialogueText = GameObject.Find("Dialogue").GetComponent<TextMeshProUGUI>();
+        StartCoroutine(Typing());
     }
 }
