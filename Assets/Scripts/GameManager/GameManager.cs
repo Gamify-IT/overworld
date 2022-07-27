@@ -5,21 +5,20 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Networking;
 
-/*
- * This script defines the game manager. 
- * If the player enteres a world or a dungeon, all data needed gets loaded from the backend and 
- * all minigames, barriers and NPCs get configurated accordingly. 
- */
+/// <summary>
+/// The <c>GameManager</c> manages the communication between the overworld backend and frontend. 
+/// Every minigame/barrier/npc registers itself in their <c>Start</c> function, so that the <c>GameManager</c> knows about them.
+/// If the Player enters an area, the <c>GameManager</c> gets all needed data from the backend and configurates the objects accordingly.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
 
     #region Singleton
     public static GameManager instance { get; private set; }
 
-    /*
-     * The Awake function is called after an object is initialized and before the Start function.
-     * It sets up the Singleton. 
-     */
+    /// <summary>
+    /// This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or deletes the object otherwise
+    /// </summary>
     private void Awake()
     {
         if (instance == null)
@@ -52,10 +51,9 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Setup
-
-    /*
-     * This function sets up the game manager. 
-     */
+    /// <summary>
+    /// This function initializes the <c>GameManager</c>. All arrays are initialized with empty objects.
+    /// </summary>
     private void setupGameManager()
     {
         instance = this;
@@ -79,9 +77,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /*
-     * This function registers a minigame at the game manager
-     */
+    /// <summary>
+    /// This function registers a new minigame at the <c>GameManager</c>
+    /// </summary>
+    /// <param name="minigame">The minigame gameObject</param>
+    /// <param name="world">The index of the world the minigame is in</param>
+    /// <param name="dungeon">The index of the dungeon the minigame is in (0 if in no dungeon)</param>
+    /// <param name="number">The index of the minigame in its area</param>
     public void addMinigame(GameObject minigame, int world, int dungeon, int number)
     {
         if (minigame != null)
@@ -97,9 +99,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /*
-     * This function registers a barrier at the game manager
-     */
+    /// <summary>
+    /// This function registers a new barrier at the <c>GameManager</c>
+    /// </summary>
+    /// <param name="barrier">The barrier gameObject</param>
+    /// <param name="worldIndexOrigin">The index of the world which exit the barrier is blocking</param>
+    /// <param name="worldIndexDestination">The index of the world which entry the barrier is blocking</param>
     public void addBarrier(GameObject barrier, int worldIndexOrigin, int worldIndexDestination)
     {
         if (barrier != null)
@@ -108,9 +113,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /*
-     * This function registers a npc at the game manager
-     */
+    /// <summary>
+    /// This function registers a new npc at the <c>GameManager</c>
+    /// </summary>
+    /// <param name="npc">The npc gameObject</param>
+    /// <param name="world">The index of the world the npc is in</param>
+    /// <param name="dungeon">The index of the dungeon the npc is in (0 if in no dungeon)</param>
+    /// <param name="number">The index of the npc in its area</param>
     public void addNPC(GameObject npc, int world, int dungeon, int number)
     {
         if(npc != null)
@@ -128,8 +137,11 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Loading
-    //world: worldIndex,0
-    //dungeon: worldIndex,dungeonIndex
+    /// <summary>
+    /// This function loads all needed data for a given area
+    /// </summary>
+    /// <param name="world">The index of the world to load</param>
+    /// <param name="dungeon">The index of the dungeon to load (0, if a world should be loaded)</param>
     public void loadWorld(int world, int dungeon)
     {
         currentWorld = world;
@@ -147,7 +159,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //reset dungeon entries 
+    /// <summary>
+    /// This function resets saved dungeon objects after exit to reuse the variables for another dungeon
+    /// </summary>
     private void resetDungeonSlot()
     {
         for(int minigameIndex = 0; minigameIndex <= maxMinigames; minigameIndex++)
@@ -162,6 +176,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This function checks, if there is new data and if so, it configurates the registers objects accordingly
+    /// </summary>
     public void Update()
     {
         if (somethingToUpdate)
@@ -180,20 +197,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //get all needed data for a given world
+    /// <summary>
+    /// This function loads all needed data for a given world
+    /// </summary>
+    /// <param name="worldIndex">The index of the world to load</param>
     private void fetchWorldData(int worldIndex)
     {
-        //path to get world from (../world/)
-        //int lectureID = 1;
+        //path to get world data from
         string path = "/overworld/api/v1/lectures/" + lectureID + "/worlds/";
 
         //get world data        
         StartCoroutine(GetWorldDTO(path, worldIndex));
 
         //get barrier data
-        //-> für jede angelegte Barrier zu world x (barrierObjects[world,x] != null):
-        //   get world x, falls active -> barriere ausschalten
-        //              , sonst -> barriere anschalten
         for(int worldIndexDestination=1; worldIndexDestination<=maxWorld; worldIndexDestination++)
         {
             if(barrierObjects[worldIndex, worldIndexDestination] != null)
@@ -203,7 +219,6 @@ public class GameManager : MonoBehaviour
         }
 
         //get player minigame data
-        //int playerId = 1;
         path = "/overworld/api/v1/lectures/" + lectureID + "/playerstatistics/" + playerId + "/player-task-statistics";
         StartCoroutine(GetPlayerMinigameStatistics(path));
 
@@ -214,9 +229,13 @@ public class GameManager : MonoBehaviour
         //get player npc data
         path = "/overworld/api/v1/lectures/" + lectureID + "/playerstatistics/" + playerId + "/player-npc-statistics";
         StartCoroutine(GetPlayerNPCStatistics(path));
-        
     }
 
+    /// <summary>
+    /// This function loads all needed data for a given dungeon
+    /// </summary>
+    /// <param name="worldIndex">The index of the world the dungeon is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon to load</param>
     private void fetchDungeonData(int worldIndex, int dungeonIndex)
     {
         //path to get world from (../world/)
@@ -229,7 +248,12 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region GetRequests
-    //get world data
+    /// <summary>
+    /// This function sends a GET request to the backend to get general data and stores the results in the <c>GameManager</c>
+    /// </summary>
+    /// <param name="uri">The path to send the GET request to</param>
+    /// <param name="worldIndex">The world index to be requested at the backend</param>
+    /// <returns></returns>
     private IEnumerator GetWorldDTO(String uri, int worldIndex)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndex))
@@ -259,7 +283,13 @@ public class GameManager : MonoBehaviour
         somethingToUpdate = true;
     }
 
-    //get barrier data
+    /// <summary>
+    /// This function sends a GET request to the backend to get barrier data and stores the results in the <c>GameManager</c>
+    /// </summary>
+    /// <param name="uri">The path to send the GET request to</param>
+    /// <param name="worldIndexDestination">The index of the world which entry the barrier is blocking</param>
+    /// <param name="worldIndexOrigin">The index of the world which exit the barrier is blocking</param>
+    /// <returns></returns>
     private IEnumerator GetBarrierData(String uri, int worldIndexDestination, int worldIndexOrigin)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndexDestination))
@@ -289,7 +319,11 @@ public class GameManager : MonoBehaviour
         somethingToUpdate = true;
     }
     
-    //get player minigame data
+    /// <summary>
+    /// This function sends a GET request to the backend to get player data for minigames and stores the results in the <c>GameManager</c>
+    /// </summary>
+    /// <param name="uri">The path to send the GET request to</param>
+    /// <returns></returns>
     private IEnumerator GetPlayerMinigameStatistics(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
@@ -318,7 +352,12 @@ public class GameManager : MonoBehaviour
         }
         somethingToUpdate = true;
     }
-    
+
+    /// <summary>
+    /// This function sends a GET request to the backend to get gerneral player data and logs the knowledge to the console
+    /// </summary>
+    /// <param name="uri">The path to send the GET request to</param>
+    /// <returns></returns>
     private IEnumerator GetPlayerStatistics(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
@@ -346,7 +385,12 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    
+
+    /// <summary>
+    /// This function sends a GET request to the backend to get player data for npcs and stores the results in the <c>GameManager</c>
+    /// </summary>
+    /// <param name="uri">The path to send the GET request to</param>
+    /// <returns></returns>
     private IEnumerator GetPlayerNPCStatistics(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
@@ -378,6 +422,13 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region PostRequests
+    /// <summary>
+    /// This function sends a POST request to the backend set, if a npc has been talked to or not
+    /// </summary>
+    /// <param name="uri">The path to send the POST request to</param>
+    /// <param name="uuid">The uuid of the npc</param>
+    /// <param name="completed">if the npc has been talked to or not</param>
+    /// <returns></returns>
     private IEnumerator PostNPCCompleted(string uri, string uuid, bool completed)
     {
         NPCTalkEvent npcData = new NPCTalkEvent(uuid, completed, playerId.ToString());
@@ -402,7 +453,11 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region ProcessingData
-    //process a worldDTO to the minigame data 
+    /// <summary>
+    /// This function processes the world data returned from the backend and stores the needed data in the <c>GameManager</c>
+    /// </summary>
+    /// <param name="worldIndex">The index of the world the data refers to</param>
+    /// <param name="worldDTO">The world data returned from the backend</param>
     private void processWorldDTO(int worldIndex, WorldDTO worldDTO)
     {
         Debug.Log("static name: " + worldDTO.getStaticName());
@@ -443,7 +498,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //setup a barrier from world origion to world destination
+    /// <summary>
+    /// This function processes the world data returned from the backend and stores the needed data in the <c>GameManager</c>
+    /// </summary>
+    /// <param name="worldIndexOrigion">The world index which exit the barrier is blocking</param>
+    /// <param name="worldDTODestination">The world data returned from the backend for the world which entry the barrier is blocking</param>
     private void setupBarrier(int worldIndexOrigion, WorldDTO worldDTODestination)
     {
         int worldIndexDestination = worldDTODestination.getIndex();
@@ -459,6 +518,10 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// This function processes the player minigame statistics data returned form backend and stores the needed data in the <c>GameManager</c>
+    /// </summary>
+    /// <param name="playerTaskStatistics">The player minigame statistics data returned from the backend</param>
     private void processPlayerTaskStatisitcs(PlayerTaskStatisticDTO[] playerTaskStatistics)
     {
         Debug.Log("processing minigame player data");
@@ -488,6 +551,10 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// This function processes the player npc statistcs data returned from the backend and stores the needed data in the <c>GameManager</c>
+    /// </summary>
+    /// <param name="playerNPCStatistics">The player npc statistics data returned from the backend</param>
     private void processPlayerNPCStatistics(PlayerNPCStatisticDTO[] playerNPCStatistics)
     {
         Debug.Log("processing npc player data");
@@ -511,7 +578,10 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region SettingData
-    //set world data
+    /// <summary>
+    /// This function sends all stores data for a given world form the <c>GameManager</c> to the corresponding objects
+    /// </summary>
+    /// <param name="world">The world index which data should be send</param>
     private void setData(int world)
     {
         for(int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
@@ -552,7 +622,12 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    
+
+    /// <summary>
+    /// This function sends a POST request to the backend to set, if a npc has been talked to or not
+    /// </summary>
+    /// <param name="uuid">The uuid of the npc</param>
+    /// <param name="completed">if the npc has been talked to or not</param>
     public void markNPCasRead(string uuid, bool completed)
     {
         string path = "/overworld/api/v1/internal/submit-npc-pass";
