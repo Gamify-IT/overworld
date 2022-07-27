@@ -65,6 +65,7 @@ public class NPC : MonoBehaviour
     {
         hasBeenTalkedTo = true;
         speechIndicator.SetActive(false);
+        //GameManager.instance.markNPCasRead();
     }
 
     // register to game manager
@@ -79,7 +80,15 @@ public class NPC : MonoBehaviour
     {
         dialogue = data.getDialogue();
         hasBeenTalkedTo = data.getHasBeenTalkedTo();
-        Debug.Log("setup npc " + world + "-" + number + "with new dialogue: " + dialogue.ToString());
+        if(hasBeenTalkedTo)
+        {
+            speechIndicator.SetActive(false);
+        }
+        else
+        {
+            speechIndicator.SetActive(true);
+        }
+        Debug.Log("setup npc " + world + "-" + number + "with new dialogue: " + dialogue.ToString() + ", new info: " + !hasBeenTalkedTo);
     }
 
     /// <summary>

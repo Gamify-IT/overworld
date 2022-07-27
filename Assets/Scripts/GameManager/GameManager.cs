@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
     private static int maxWorld = 5;
     private static int maxMinigames = 12;
     private static int maxNPCs = 10;
+    private static int lectureID = 1;
+    private static int playerId = 1;
     private MinigameData[,] minigameData = new MinigameData[maxWorld + 1, maxMinigames + 1];
     private GameObject[,] minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
     private BarrierData[,] barrierData = new BarrierData[maxWorld + 1, maxWorld + 1];
@@ -182,7 +184,7 @@ public class GameManager : MonoBehaviour
     private void fetchWorldData(int worldIndex)
     {
         //path to get world from (../world/)
-        int lectureID = 1;
+        //int lectureID = 1;
         string path = "/overworld/api/v1/lectures/" + lectureID + "/worlds/";
 
         //get world data        
@@ -201,7 +203,7 @@ public class GameManager : MonoBehaviour
         }
 
         //get player minigame data
-        int playerId = 1;
+        //int playerId = 1;
         path = "/overworld/api/v1/lectures/" + lectureID + "/playerstatistics/" + playerId + "/player-task-statistics";
         StartCoroutine(GetPlayerMinigameStatistics(path));
 
@@ -218,7 +220,7 @@ public class GameManager : MonoBehaviour
     private void fetchDungeonData(int worldIndex, int dungeonIndex)
     {
         //path to get world from (../world/)
-        int lectureID = 1;
+        //int lectureID = 1;
         string path = "/overworld/api/v1/lectures/" + lectureID + "/worlds/" + worldIndex + "/dungeons/";
 
         //get world data        
