@@ -13,7 +13,7 @@ public class PauseMenu : MonoBehaviour
     void Update()
     {
         //esc handling
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !Animation.instance.isBusy())
         {
             PauseOrResume();
         }
@@ -40,7 +40,7 @@ public class PauseMenu : MonoBehaviour
     //handles everyting when pause menu is closed
     public void Resume()
     {
-        SceneManager.UnloadSceneAsync("Menu");
+        SceneManager.UnloadScene("Menu");
         menuOpen = false;
         Time.timeScale = 1f;
     }
@@ -64,7 +64,7 @@ public class PauseMenu : MonoBehaviour
     {
         subMenuOpen = true;
         menuOpen = false;
-        SceneManager.UnloadSceneAsync("Menu");
+        SceneManager.UnloadScene("Menu");
         //load the scene which was set with SubMenuSelection()
         SceneManager.LoadScene(buttonName, LoadSceneMode.Additive);
     }
@@ -73,7 +73,7 @@ public class PauseMenu : MonoBehaviour
         menuOpen = true;
         subMenuOpen = false;
         //unload the scene which was set with SubMenuSelection()
-        SceneManager.UnloadSceneAsync(buttonName);
+        SceneManager.UnloadScene(buttonName);
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
     }
 }

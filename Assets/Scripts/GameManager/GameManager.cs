@@ -343,7 +343,7 @@ public class GameManager : MonoBehaviour
                 Minigame minigame = minigameObjects[world,minigameIndex].GetComponent<Minigame>();
                 if(minigame != null)
                 {
-                    Debug.Log("Setup Minigmame in " + world + "," + minigameIndex);
+                    Debug.Log("Setup Minigame in " + world + "," + minigameIndex);
                     minigame.setup(minigameData[world,minigameIndex]);
                 }
             }
