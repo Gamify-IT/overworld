@@ -380,12 +380,12 @@ public class GameManager : MonoBehaviour
     #region PostRequests
     private IEnumerator PostNPCCompleted(string uri, string uuid, bool completed)
     {
-        WWWForm form = new WWWForm();
-        form.AddField("npcId", uuid);
-        form.AddField("completed", completed.ToString());
-        form.AddField("userId", playerId);
+        NPCTalkEvent npcData = new NPCTalkEvent(uuid, completed, playerId.ToString());
+        string json = JsonUtility.ToJson(npcData);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(uri, form))
+        UnityWebRequest www = UnityWebRequest.Post(uri, json);
+        www.SetRequestHeader("Content-Type", "application/json");
+        using (www)
         {
             yield return www.SendWebRequest();
 
