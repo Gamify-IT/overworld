@@ -146,6 +146,10 @@ public class NPC : MonoBehaviour
             playerIsClose = false;
             ResetText();
         }
+        else if (other.CompareTag("Player") && !SceneManager.GetSceneByBuildIndex(12).isLoaded)
+        {
+            playerIsClose = false;
+        }
     }
 
     /// <summary>
