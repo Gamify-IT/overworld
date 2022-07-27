@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
             for(int j = 0; j < maxNPCs; j++)
             {
                 npcObjects[i, j] = null;
-                npcData[i, j] = new NPCData(null, true);
+                npcData[i, j] = new NPCData("", null, true);
             }
         }
     }
@@ -158,7 +158,7 @@ public class GameManager : MonoBehaviour
         for(int npcIndex = 0; npcIndex <= maxNPCs; npcIndex++)
         {
             npcObjects[0, npcIndex] = null;
-            npcData[0, npcIndex] = new NPCData(null, true);
+            npcData[0, npcIndex] = new NPCData("", null, true);
         }
     }
 
@@ -228,7 +228,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    #region GetRequest
+    #region GetRequests
     //get world data
     private IEnumerator GetWorldDTO(String uri, int worldIndex)
     {
@@ -377,6 +377,30 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    #region PostRequests
+    private IEnumerator PostNPCCompleted(string uri, string uuid, bool completed)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("npcId", uuid);
+        form.AddField("completed", completed.ToString());
+        form.AddField("userId", playerId);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(uri, form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("NPC mit uuid: " + uuid +  " updated to new status: " + completed);
+            }
+        }
+    }
+    #endregion
+
     #region ProcessingData
     //process a worldDTO to the minigame data 
     private void processWorldDTO(int worldIndex, WorldDTO worldDTO)
@@ -413,6 +437,7 @@ public class GameManager : MonoBehaviour
             dialogue[0] = npc.getText();
             Debug.Log("NPC " + npc.getIndex() + ", text: " + dialogue[0]);
             npcData[worldIndex, npc.getIndex()].setDialogue(dialogue);
+            npcData[worldIndex, npc.getIndex()].setUUID(npc.getId());
             string[] newDialogue = npcData[worldIndex, npc.getIndex()].getDialogue();
             Debug.Log("NPC " + npc.getIndex() + ", npcData text: " + newDialogue[0]);
         }
@@ -526,6 +551,12 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
+    
+    public void markNPCasRead(string uuid, bool completed)
+    {
+        string path = "/overworld/api/v1/internal/submit-npc-pass";
+        StartCoroutine(PostNPCCompleted(path, uuid, completed));
     }
     #endregion
 }

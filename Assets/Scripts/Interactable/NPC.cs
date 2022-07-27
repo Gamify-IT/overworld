@@ -9,6 +9,7 @@ public class NPC : MonoBehaviour
     [SerializeField] private int world;
     [SerializeField] private int dungeon;
     [SerializeField] private int number;
+    private string uuid;
     public Sprite imageOfNPC;
     public string nameOfNPC;
     private TextMeshProUGUI dialogueText;
@@ -32,6 +33,7 @@ public class NPC : MonoBehaviour
     void Start()
     {
         registerToGameManager();
+        initNewStuffSprite();
     }
 
     /// <summary>
@@ -65,7 +67,7 @@ public class NPC : MonoBehaviour
     {
         hasBeenTalkedTo = true;
         speechIndicator.SetActive(false);
-        //GameManager.instance.markNPCasRead();
+        GameManager.instance.markNPCasRead(uuid,hasBeenTalkedTo);
     }
 
     // register to game manager
@@ -78,9 +80,16 @@ public class NPC : MonoBehaviour
     //setup called by game manager
     public void setup(NPCData data)
     {
+        uuid = data.getUUID();
         dialogue = data.getDialogue();
         hasBeenTalkedTo = data.getHasBeenTalkedTo();
-        if(hasBeenTalkedTo)
+        initNewStuffSprite();
+        Debug.Log("setup npc " + world + "-" + number + "with new dialogue: " + dialogue.ToString() + ", new info: " + !hasBeenTalkedTo);
+    }
+
+    private void initNewStuffSprite()
+    {
+        if (hasBeenTalkedTo)
         {
             speechIndicator.SetActive(false);
         }
@@ -88,7 +97,6 @@ public class NPC : MonoBehaviour
         {
             speechIndicator.SetActive(true);
         }
-        Debug.Log("setup npc " + world + "-" + number + "with new dialogue: " + dialogue.ToString() + ", new info: " + !hasBeenTalkedTo);
     }
 
     /// <summary>

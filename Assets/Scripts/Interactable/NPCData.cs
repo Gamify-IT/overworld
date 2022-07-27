@@ -6,17 +6,29 @@ using UnityEngine;
 public class NPCData
 {
     #region Attributes
+    private string uuid;
     private string[] dialogue;
     private bool hasBeenTalkedTo;
     #endregion
 
-    public NPCData(string[] dialogue, bool hasBeenTalkedTo)
+    public NPCData(string uuid,  string[] dialogue, bool hasBeenTalkedTo)
     {
+        this.uuid = uuid;
         this.dialogue = dialogue;
         this.hasBeenTalkedTo = hasBeenTalkedTo;
     }
 
     #region GetterAndSetter
+    public string getUUID()
+    {
+        return uuid;
+    }
+
+    public void setUUID(string uuid)
+    {
+        this.uuid = uuid;
+    }
+    
     public string[] getDialogue()
     {
         return dialogue;
