@@ -208,6 +208,11 @@ public class GameManager : MonoBehaviour
         //get player data
         path = "/overworld/api/v1/lectures/" + lectureID + "/playerstatistics/" + playerId;
         StartCoroutine(GetPlayerStatistics(path));
+
+        //get player npc data
+        path = "/overworld/api/v1/lectures/" + lectureID + "/playerstatistics/" + playerId + "/player-npc-statistics";
+        StartCoroutine(GetPlayerNPCStatistics(path));
+        
     }
 
     private void fetchDungeonData(int worldIndex, int dungeonIndex)
@@ -339,6 +344,35 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    
+    private IEnumerator GetPlayerNPCStatistics(string uri)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            Debug.Log("Get Player minigame statistics: ");
+            Debug.Log("Path: " + uri);
+
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(uri + ": Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
+                    PlayerNPCStatisticDTO[] playerNPCStatistics = JsonHelper.getJsonArray<PlayerNPCStatisticDTO>(webRequest.downloadHandler.text);
+                    processPlayerNPCStatistics(playerNPCStatistics);
+                    break;
+            }
+        }
+        somethingToUpdate = true;
+    }
     #endregion
 
     #region ProcessingData
@@ -424,6 +458,27 @@ public class GameManager : MonoBehaviour
                 minigameData[0, index].setStatus(status);
             }
             Debug.Log("Update minigame " + worldIndex + "-" + dungeonIndex + "-" + index + ": Highscore: " + highscore + ", Status: " + status.ToString());
+        }
+    }
+    
+    private void processPlayerNPCStatistics(PlayerNPCStatisticDTO[] playerNPCStatistics)
+    {
+        Debug.Log("processing npc player data");
+        foreach(PlayerNPCStatisticDTO statistic in playerNPCStatistics)
+        {
+            int worldIndex = statistic.npc.areaLocation.worldIndex;
+            int dungeonIndex = statistic.npc.areaLocation.dungeonIndex;
+            int index = statistic.npc.index;
+            bool hasBeenTalkedTo = statistic.completed;
+            if(dungeonIndex == 0)
+            {
+                npcData[worldIndex, index].setHasBeenTalkedTo(hasBeenTalkedTo);
+            }
+            else
+            {
+                npcData[0, index].setHasBeenTalkedTo(hasBeenTalkedTo);
+            }
+            Debug.Log("Update npc " + "-" + worldIndex + "-" + dungeonIndex + "-" + index + ": hasBeenTalkedTo: " + hasBeenTalkedTo);
         }
     }
     #endregion
