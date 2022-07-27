@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Trigger
+  - AreaName
+  - MinimapIcon
+  - MinimapIconsParent
   layers:
   - Default
   - TransparentFX
@@ -15,7 +18,7 @@ TagManager:
   - Player
   - Trigger
   - Item
-  - 
+  - Minimap
   - 
   - 
   - 
@@ -50,4 +53,7 @@ TagManager:
     locked: 0
   - name: Collition
     uniqueID: 1001160471
+    locked: 0
+  - name: Minimap
+    uniqueID: 3315473867
     locked: 0

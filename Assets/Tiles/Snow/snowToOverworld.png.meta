@@ -1,0 +1,2402 @@
+fileFormatVersion: 2
+guid: db54e5ff38067454eb3ae4808df5c097
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: snowToOverworld_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: 8}
+        - {x: -8, y: 8}
+        - {x: -8, y: 8}
+        - {x: -8, y: 8}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6717432d8c117894bab48699be4ce32e
+      internalID: -1095816582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80baf91cea4ec0b48b75735f15c5abb6
+      internalID: -1143936145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b37ddb4c9da3c64a8f97cd8fac561ab
+      internalID: -1264330676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_3
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b1e9bbc1ac6c6749b18c6d49016697c
+      internalID: -960515816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa3656937d66fda479454de866555f9d
+      internalID: 733850824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_5
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d3a5cab8f174a94cbc2f9051675b1a8
+      internalID: -1182688257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_6
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cdb50327cbd9ae438e461be8155c117
+      internalID: 2035538598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_7
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4d1d1e63a85fdf49a90998d62cbb375
+      internalID: -1123834188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_8
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7759d754934ad2943a614aee0c3873fb
+      internalID: 1762301653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_9
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71587af9313e31347a594ff29c9bcc36
+      internalID: 1435348410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_10
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da646bf56a02e0a488e20e0a21c8d279
+      internalID: 480118973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_11
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83093cf07e9abe14fb4893ce009c981f
+      internalID: 2092923804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_12
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb1bdc64598db5746be636be3bf47293
+      internalID: -931295772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_13
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2970aa50bcb9bf84db684623ce4fd384
+      internalID: -1680707268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_14
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c837622430a75c46b700d5f7f5acc3e
+      internalID: -1141373467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_15
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb166816ebcbdc647945855e6d186204
+      internalID: -1920114960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_16
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: 8}
+        - {x: -8, y: 8}
+        - {x: -8, y: 8}
+        - {x: -8, y: 8}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b4521cbce6a2a54dbb9c8fc277c6bc0
+      internalID: -1102668433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_17
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1127bf39adc7dc49aa58fd12920c86d
+      internalID: -1906401012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_18
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3113c395bab29e24cb370ba13dead9b4
+      internalID: 251372163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_19
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c88e76ada562c854d9d6d49470946d0a
+      internalID: -142936464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_20
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 446d0cf0faaf207499603482421863a5
+      internalID: 1140976234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_21
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb24b8ef4285fd5419f97e52f2e824a8
+      internalID: -730179296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_22
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cd7f010bd480c443bc132f3d912f1e1
+      internalID: 1571927437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_23
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0721a1742e8f204ca66c1109813515e
+      internalID: -1687956909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_24
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 510175d6ac6554f479d37c48af512994
+      internalID: 759821586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_25
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3052f443077f5a44be87831ddcabba0
+      internalID: -1496230487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_26
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1643420b9027c84b8001e444bcbfecc
+      internalID: -1702294126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_27
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f2a2188b14e20542bc1c1fbbf01e5fd
+      internalID: -1370086953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_28
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e524aa9db9e2c14409b2375aa862bd4c
+      internalID: -545202529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_29
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a890b4c3de0780b4eaa85d44d4e3f725
+      internalID: -1915916956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_30
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c5ddd5feb07ff2c4d84d420282ed4dbf
+      internalID: -103843114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_31
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 1584
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9815a71131ed77c46accb876c6c32d06
+      internalID: -166951036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: 8}
+        - {x: -8, y: 8}
+        - {x: -8, y: 8}
+        - {x: -8, y: 8}
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7a12785e2ae83a439c274069adee28d
+      internalID: 1503569020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_33
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba3889a0285713447a66a91ea8c789f7
+      internalID: -1684398948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_34
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7513aa75606ce954088fd7ae9199f12b
+      internalID: 1008757996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_35
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56b2677a828a50e40b5dab64a7a9b02f
+      internalID: -1465418245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_36
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57720ffdc3c97b146966f2d3d7b7e0a0
+      internalID: 805381902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_37
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe1f781b6e5e386479281b91eb204520
+      internalID: 5294368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_38
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a1298185d31f9a4b8f9499d29de82f1
+      internalID: -1515110435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_39
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e171b16441d6b5f4aac8b481464a8f4b
+      internalID: 147689380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_40
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 657c49ddfe4694e4ab96513c6d7b702d
+      internalID: -617521075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_41
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2c00cd5bd193924d9bb1d3820077ef7
+      internalID: -1472587639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_42
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6dfa4029bf430ca439ec5d27f8639291
+      internalID: -954609979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_43
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 268bc371091ff5341b658cfa8cbc74bd
+      internalID: -1700439809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_44
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da51cb87248e48c4e8d470a43082e625
+      internalID: -674962674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_45
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7af36dbda1c04dd4c9b39d95259d23e1
+      internalID: -173787025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_46
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5174ef475d011fc4bb8058d8ea50a068
+      internalID: -1026747219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_47
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18afa43ae34c1ea4cbe0b060e92907d2
+      internalID: 1893259953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_48
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: 8}
+        - {x: -8, y: 8}
+        - {x: -8, y: 8}
+        - {x: -8, y: 8}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9af2a204c139f7a4ab83f12580ce858c
+      internalID: 738834827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_49
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 501c22f24ceaca041b04099471d4326d
+      internalID: -794189913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_50
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9879ad92200d98449258a52dab4e009
+      internalID: 300156450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_51
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fcdb0dd58c1cc1a46bdfe43d869e4259
+      internalID: 2104501965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_52
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee5b35e5e75f59e45aca0474e8535d4a
+      internalID: -1505314297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_53
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f727a4ccdeb4c0748965218c85c362c8
+      internalID: 258371550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_54
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35d981a40b9f8f442a4e4643a00a4057
+      internalID: -1205046865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_55
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 583ed3a8a7e70f0408565f85b4b13b89
+      internalID: 19936568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_56
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e39f117758e1e04f9c9ec8a69e51e00
+      internalID: -1061436406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_57
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f79143bc6918b57459894d303a4ebba3
+      internalID: 601675783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_58
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3aa0be09b2aa71e418f4de7df516d157
+      internalID: 833242758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_59
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1314b8eb760bc3544b1bc817b6836c01
+      internalID: 1881407813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_60
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d85cd52d5a79b943b546a72f75d5c34
+      internalID: -1826768848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_61
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d005d4e7eae4054d821bb916966dbac
+      internalID: -756034011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_62
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45167fa69a7843949a6a66fa643248ac
+      internalID: -1058034202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_63
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 1568
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 020915865b2ee7b45a41aeb12895f03a
+      internalID: -183124442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_64
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: 8}
+        - {x: -8, y: 8}
+        - {x: -8, y: 8}
+        - {x: -8, y: 8}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f7441b76290eae48b620bd5cb0213d4
+      internalID: -1851432250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_65
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adb28b635ee016942b1025a81d91245a
+      internalID: -365650892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_66
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 560e94986b0a4274599cad072458e32b
+      internalID: 242166628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_67
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c649621a399140d4b898a9ab7e7ec523
+      internalID: -1653258001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_68
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f8945328ff25644d84250f8960d0c0a
+      internalID: 1654649992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_69
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d189f1f1119b184d977d896cdfc96c7
+      internalID: 259418981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_70
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe0acd79222222f4596542b2d32461f6
+      internalID: -1232321659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_71
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7bb8bf2151dee8e4181ad3f2c90b352f
+      internalID: 333999623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_72
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c158178f9fcabf84098d1364517b1627
+      internalID: -808121320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_73
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40d928fd26455484b8299a596869d8e5
+      internalID: 1230057175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_74
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd2415ac332de2b47857f365d8979544
+      internalID: 1502755570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_75
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e4869bdf65816f4b812b8bfe475228d
+      internalID: -531684544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_76
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d66012ac6cc5d854a85c2882171de90a
+      internalID: 2000049156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_77
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f2e8aec54f1e584ea043a3eb7ebcfa5
+      internalID: 443008754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_78
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdf98f5ab92f42c4884cd9281e762648
+      internalID: -2062156179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_79
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b1dd51c7e3b5cf4897021a8444d3861
+      internalID: -1300361365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_80
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: 8}
+        - {x: -8, y: 8}
+        - {x: -8, y: 8}
+        - {x: -8, y: 8}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0369bb21330fe874cafdbd98d7b125ed
+      internalID: -1782403278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_81
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46b495f89fd3ead47b65206974a06279
+      internalID: -1912703391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_82
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a9589e79cc52984d8ac06b978f84640
+      internalID: 1730672476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_83
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88717cbd5affb7a42bcd59236734bb9c
+      internalID: -1756004375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_84
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fff23b467d4a60a4b801d68c494baa91
+      internalID: 169860423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_85
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b02b8f8e71210147b4b170864667fc3
+      internalID: 1418974350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_86
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb9b243ee8ff46d4096cc37dbe0c24a7
+      internalID: 132464467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_87
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 30b341330e0060848bb3a30bdfe627b1
+      internalID: -1333609414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_88
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46346772927a9154f864b9acf6d8b0b1
+      internalID: -196687247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_89
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e408d93b322d4c42b225521720be692
+      internalID: -1427704275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_90
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05348c8a836920f45a92664e8c360284
+      internalID: 1923758465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_91
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81ffa34b9b2559c43a79861208e7dc6e
+      internalID: -1264846762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_92
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77d3493543f9bef4e8d2cb36142c0e99
+      internalID: 49970776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_93
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a084cb7c0623d0b499cad137e24e9bd4
+      internalID: -1512467671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_94
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad70af6c3fa20fc42a7432a658f6ab96
+      internalID: -1033812730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_95
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 1552
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38100b33169d7fc4dbf12085416e11ce
+      internalID: -683894013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_96
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1536
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8eebab32b5290fe4798ddf72c0e05b6c
+      internalID: -438868756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_97
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 1536
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8aad1de97751b646bd87288ee163341
+      internalID: -1174935808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_98
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1520
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c99c9f727a2cd7c45bf76a959f6df605
+      internalID: -980002741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_99
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 1520
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 246692c89a6b4644b81f87644306b6e1
+      internalID: -1369926248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_100
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1504
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86f61449f61f7ed4c8ccca5446345fa5
+      internalID: 1303015279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snowToOverworld_101
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 1504
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03f3865ddd7e3054a878d1a38f27ad04
+      internalID: 1442169247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      snowToOverworld_73: 1230057175
+      snowToOverworld_12: -931295772
+      snowToOverworld_93: -1512467671
+      snowToOverworld_54: -1205046865
+      snowToOverworld_89: -1427704275
+      snowToOverworld_57: 601675783
+      snowToOverworld_65: -365650892
+      snowToOverworld_40: -617521075
+      snowToOverworld_75: -531684544
+      snowToOverworld_72: -808121320
+      snowToOverworld_101: 1442169247
+      snowToOverworld_41: -1472587639
+      snowToOverworld_31: -166951036
+      snowToOverworld_50: 300156450
+      snowToOverworld_18: 251372163
+      snowToOverworld_23: -1687956909
+      snowToOverworld_42: -954609979
+      snowToOverworld_58: 833242758
+      snowToOverworld_88: -196687247
+      snowToOverworld_51: 2104501965
+      snowToOverworld_32: 1503569020
+      snowToOverworld_67: -1653258001
+      snowToOverworld_62: -1058034202
+      snowToOverworld_81: -1912703391
+      snowToOverworld_86: 132464467
+      snowToOverworld_16: -1102668433
+      snowToOverworld_90: 1923758465
+      snowToOverworld_37: 5294368
+      snowToOverworld_96: -438868756
+      snowToOverworld_8: 1762301653
+      snowToOverworld_47: 1893259953
+      snowToOverworld_70: -1232321659
+      snowToOverworld_78: -2062156179
+      snowToOverworld_24: 759821586
+      snowToOverworld_10: 480118973
+      snowToOverworld_80: -1782403278
+      snowToOverworld_35: -1465418245
+      snowToOverworld_53: 258371550
+      snowToOverworld_29: -1915916956
+      snowToOverworld_2: -1264330676
+      snowToOverworld_91: -1264846762
+      snowToOverworld_17: -1906401012
+      snowToOverworld_26: -1702294126
+      snowToOverworld_48: 738834827
+      snowToOverworld_63: -183124442
+      snowToOverworld_6: 2035538598
+      snowToOverworld_30: -103843114
+      snowToOverworld_95: -683894013
+      snowToOverworld_21: -730179296
+      snowToOverworld_49: -794189913
+      snowToOverworld_4: 733850824
+      snowToOverworld_46: -1026747219
+      snowToOverworld_44: -674962674
+      snowToOverworld_59: 1881407813
+      snowToOverworld_38: -1515110435
+      snowToOverworld_28: -545202529
+      snowToOverworld_55: 19936568
+      snowToOverworld_68: 1654649992
+      snowToOverworld_15: -1920114960
+      snowToOverworld_79: -1300361365
+      snowToOverworld_25: -1496230487
+      snowToOverworld_43: -1700439809
+      snowToOverworld_27: -1370086953
+      snowToOverworld_69: 259418981
+      snowToOverworld_76: 2000049156
+      snowToOverworld_60: -1826768848
+      snowToOverworld_85: 1418974350
+      snowToOverworld_9: 1435348410
+      snowToOverworld_99: -1369926248
+      snowToOverworld_92: 49970776
+      snowToOverworld_82: 1730672476
+      snowToOverworld_3: -960515816
+      snowToOverworld_100: 1303015279
+      snowToOverworld_98: -980002741
+      snowToOverworld_39: 147689380
+      snowToOverworld_34: 1008757996
+      snowToOverworld_0: -1095816582
+      snowToOverworld_19: -142936464
+      snowToOverworld_84: 169860423
+      snowToOverworld_5: -1182688257
+      snowToOverworld_36: 805381902
+      snowToOverworld_87: -1333609414
+      snowToOverworld_66: 242166628
+      snowToOverworld_61: -756034011
+      snowToOverworld_1: -1143936145
+      snowToOverworld_11: 2092923804
+      snowToOverworld_56: -1061436406
+      snowToOverworld_83: -1756004375
+      snowToOverworld_97: -1174935808
+      snowToOverworld_94: -1033812730
+      snowToOverworld_52: -1505314297
+      snowToOverworld_45: -173787025
+      snowToOverworld_74: 1502755570
+      snowToOverworld_22: 1571927437
+      snowToOverworld_71: 333999623
+      snowToOverworld_33: -1684398948
+      snowToOverworld_13: -1680707268
+      snowToOverworld_64: -1851432250
+      snowToOverworld_7: -1123834188
+      snowToOverworld_77: 443008754
+      snowToOverworld_14: -1141373467
+      snowToOverworld_20: 1140976234
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
