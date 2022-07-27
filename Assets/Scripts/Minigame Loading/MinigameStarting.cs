@@ -67,8 +67,7 @@ public class MinigameStarting : MonoBehaviour
     public void startButtonPressed()
     {
         LoadMinigameInIframe(game, configurationId);
-        Time.timeScale = 1f;
-        SceneManager.UnloadSceneAsync("MinigameStarting Overlay");
+        quitMinigame();
     }
 
     //quit minigame
