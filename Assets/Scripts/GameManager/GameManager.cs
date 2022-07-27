@@ -300,8 +300,7 @@ public class GameManager : MonoBehaviour
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
-                    PlayerTaskStatisticDTOArray playerTaskStatisticArray = JsonUtility.FromJson<PlayerTaskStatisticDTOArray>(webRequest.downloadHandler.text);
-                    PlayerTaskStatisticDTO[] playerTaskStatistics = playerTaskStatisticArray.playerTaskStatisticDTOs;
+                    PlayerTaskStatisticDTO[] playerTaskStatistics = JsonHelper.getJsonArray<PlayerTaskStatisticDTO>(webRequest.downloadHandler.text);
                     processPlayerTaskStatisitcs(playerTaskStatistics);
                     break;
             }
@@ -369,6 +368,7 @@ public class GameManager : MonoBehaviour
     
     private void processPlayerTaskStatisitcs(PlayerTaskStatisticDTO[] playerTaskStatistics)
     {
+        Debug.Log("processing minigame player data");
         foreach(PlayerTaskStatisticDTO statistic in playerTaskStatistics)
         {
             int worldIndex = statistic.minigameTask.areaLocation.worldIndex;
