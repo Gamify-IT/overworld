@@ -13,15 +13,16 @@ public class PauseMenu : MonoBehaviour
     void Update()
     {
         //esc handling
-        if (Input.GetKeyDown(KeyCode.Escape) && !Animation.instance.isBusy())
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             PauseOrResume();
         }
     }
+
     public void PauseOrResume()
     {
         //open menu when its not opened
-        if (!menuOpen && !subMenuOpen)
+        if (!menuOpen && !subMenuOpen && !Animation.instance.isBusy())
         {
             Pause();
         }
