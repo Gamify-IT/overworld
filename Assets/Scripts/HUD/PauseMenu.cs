@@ -22,7 +22,7 @@ public class PauseMenu : MonoBehaviour
     public void PauseOrResume()
     {
         //open menu when its not opened
-        if (!menuOpen && !subMenuOpen && !Animation.instance.isBusy())
+        if (!menuOpen && !subMenuOpen)
         {
             Pause();
         }
