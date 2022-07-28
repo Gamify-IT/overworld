@@ -195,6 +195,11 @@ public class GameManager : MonoBehaviour
                 setData(0);
             }
         }
+
+        if (Input.GetKeyDown("h"))
+        {
+            loadWorld(currentWorld, currentDungeon);
+        }
     }
 
     /// <summary>
