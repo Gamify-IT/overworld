@@ -532,8 +532,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("processing minigame player data");
         foreach(PlayerTaskStatisticDTO statistic in playerTaskStatistics)
         {
-            int worldIndex = statistic.minigameTask.areaLocation.worldIndex;
-            int dungeonIndex = statistic.minigameTask.areaLocation.dungeonIndex;
+            int worldIndex = statistic.minigameTask.area.worldIndex;
+            int dungeonIndex = statistic.minigameTask.area.dungeonIndex;
             int index = statistic.minigameTask.index;
             int highscore = statistic.highscore;
             bool completed = statistic.completed;
@@ -565,8 +565,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("processing npc player data");
         foreach(PlayerNPCStatisticDTO statistic in playerNPCStatistics)
         {
-            int worldIndex = statistic.npc.areaLocation.worldIndex;
-            int dungeonIndex = statistic.npc.areaLocation.dungeonIndex;
+            int worldIndex = statistic.npc.area.worldIndex;
+            int dungeonIndex = statistic.npc.area.dungeonIndex;
             int index = statistic.npc.index;
             bool hasBeenTalkedTo = statistic.completed;
             if(dungeonIndex == 0)
