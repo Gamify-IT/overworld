@@ -593,7 +593,7 @@ public class GameManager : MonoBehaviour
         {
             MinigameData mingameDataToProceed = minigameData[world,minigameIndex];
 
-            if(mingameDataToProceed != null)
+            if(minigameObjects[world,minigameIndex] != null)
             {
                 Minigame minigame = minigameObjects[world,minigameIndex].GetComponent<Minigame>();
                 if(minigame != null && mingameDataToProceed.getGame() != null && mingameDataToProceed.getConfigurationID() != null && mingameDataToProceed.getStatus() != null)
@@ -635,6 +635,9 @@ public class GameManager : MonoBehaviour
                 {
                     Debug.Log("NPC " + npcIndex + " data is not completely loaded");
                 }
+            }else
+            {
+                Debug.Log("NpcObject is null");
             }
         }
     }
