@@ -594,10 +594,13 @@ public class GameManager : MonoBehaviour
             if(minigameObjects[world,minigameIndex] != null)
             {
                 Minigame minigame = minigameObjects[world,minigameIndex].GetComponent<Minigame>();
-                if(minigame != null)
+                if(minigame != null && minigame.game != null && minigame.configurationID != null && minigame.status != null)
                 {
                     Debug.Log("Setup Minigame in " + world + "," + minigameIndex);
                     minigame.setup(minigameData[world,minigameIndex]);
+                }else
+                {
+                    Debug.Log("Minigame " + minigameIndex + " data is not completely loaded");
                 }
             }
         }
@@ -607,9 +610,12 @@ public class GameManager : MonoBehaviour
             if(barrierObjects[world, barrierIndex] != null)
             {
                 Barrier barrier = barrierObjects[world,barrierIndex].GetComponent<Barrier>();
-                if(barrier != null)
+                if(barrier != null && barrier.isActive != null)
                 {
                     barrier.setup(barrierData[world,barrierIndex]);
+                }else
+                {
+                    Debug.Log("Barrier " + barrierIndex + " data is not completely loaded");
                 }
             }
         }
@@ -619,10 +625,13 @@ public class GameManager : MonoBehaviour
             if(npcObjects[world, npcIndex] != null)
             {
                 NPC npc = npcObjects[world, npcIndex].GetComponent<NPC>();
-                if(npc != null)
+                if(npc != null && npc.dialogue != null && npc.uuid != null)
                 {
                     Debug.Log("Setup NPC in " + world + "," + npcIndex);
                     npc.setup(npcData[world, npcIndex]);
+                }else
+                {
+                    Debug.Log("NPC " + npcIndex + " data is not completely loaded");
                 }
             }
         }
