@@ -627,7 +627,7 @@ public class GameManager : MonoBehaviour
             if(npcObjects[world, npcIndex] != null)
             {
                 NPC npc = npcObjects[world, npcIndex].GetComponent<NPC>();
-                if(npc != null && npcData[world, npcIndex].getDialogue() != null && npcData[world, npcIndex].getUUID() != null)
+                if(npc != null && npcData[world, npcIndex].getDialogue() != null)
                 {
                     Debug.Log("Setup NPC in " + world + "," + npcIndex);
                     npc.setup(npcData[world, npcIndex]);
