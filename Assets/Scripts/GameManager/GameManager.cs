@@ -594,7 +594,7 @@ public class GameManager : MonoBehaviour
             if(minigameObjects[world,minigameIndex] != null)
             {
                 Minigame minigame = minigameObjects[world,minigameIndex].GetComponent<Minigame>();
-                if(minigame != null && minigame.game != null && minigame.configurationID != null && minigame.status != null)
+                if(minigame != null && minigameData[world,minigameIndex].game != null && minigameData[world,minigameIndex].configurationID != null && minigameData[world,minigameIndex].status != null)
                 {
                     Debug.Log("Setup Minigame in " + world + "," + minigameIndex);
                     minigame.setup(minigameData[world,minigameIndex]);
@@ -610,7 +610,7 @@ public class GameManager : MonoBehaviour
             if(barrierObjects[world, barrierIndex] != null)
             {
                 Barrier barrier = barrierObjects[world,barrierIndex].GetComponent<Barrier>();
-                if(barrier != null && barrier.isActive != null)
+                if(barrier != null && barrierData[world,barrierIndex].isActive != null)
                 {
                     barrier.setup(barrierData[world,barrierIndex]);
                 }else
@@ -625,7 +625,7 @@ public class GameManager : MonoBehaviour
             if(npcObjects[world, npcIndex] != null)
             {
                 NPC npc = npcObjects[world, npcIndex].GetComponent<NPC>();
-                if(npc != null && npc.dialogue != null && npc.uuid != null)
+                if(npc != null && npcData[world, npcIndex].dialogue != null && npcData[world, npcIndex].uuid != null)
                 {
                     Debug.Log("Setup NPC in " + world + "," + npcIndex);
                     npc.setup(npcData[world, npcIndex]);
