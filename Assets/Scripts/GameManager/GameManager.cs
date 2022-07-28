@@ -590,13 +590,12 @@ public class GameManager : MonoBehaviour
     private void setData(int world)
     {
         for(int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
-
-        MinigameData mingameDataToProceed = minigameData[world,minigameIndex];
-
         {
+            MinigameData mingameDataToProceed = minigameData[world,minigameIndex];
+
             if(mingameDataToProceed != null)
             {
-                Minigame minigame = mingameDataToProceed.GetComponent<Minigame>();
+                Minigame minigame = minigameObjects[world,minigameIndex].GetComponent<Minigame>();
                 if(minigame != null && mingameDataToProceed.getGame() != null && mingameDataToProceed.getConfigurationID() != null && mingameDataToProceed.getStatus() != null)
                 {
                     Debug.Log("Setup Minigame in " + world + "," + minigameIndex);
