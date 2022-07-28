@@ -9,17 +9,17 @@ public class PlayerstatisticDTO
     public string id;
     public AreaLocationDTO[] unlockedAreas;
     public AreaLocationDTO[] unlockedDungeons;
-    public AreaLocationDTO currentAreaLocation;
+    public AreaLocationDTO currentArea;
     public string userId;
     public string username;
     public int knowledge;
 
-    public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, AreaLocationDTO currentAreaLocation, string userId, string username, int knowledge)
+    public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, AreaLocationDTO currentArea, string userId, string username, int knowledge)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
         this.unlockedDungeons = unlockedDungeons;
-        this.currentAreaLocation = currentAreaLocation;
+        this.currentArea = currentArea;
         this.userId = userId;
         this.username = username;
         this.knowledge = knowledge;

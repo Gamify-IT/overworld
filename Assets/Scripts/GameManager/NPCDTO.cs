@@ -7,14 +7,14 @@ using UnityEngine;
 public class NPCDTO
 {
     public string id;
-    public AreaLocationDTO areaLocation;
+    public AreaLocationDTO area;
     public int index;
     public string text;
 
-    public NPCDTO(string id, AreaLocationDTO areaLocation, int index, string text)
+    public NPCDTO(string id, AreaLocationDTO area, int index, string text)
     {
         this.id = id;
-        this.areaLocation = areaLocation;
+        this.area = area;
         this.index = index;
         this.text = text;
     }
