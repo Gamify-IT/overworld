@@ -72,7 +72,8 @@ public class GameManager : MonoBehaviour
             for(int j = 0; j < maxNPCs; j++)
             {
                 npcObjects[i, j] = null;
-                npcData[i, j] = new NPCData("", null, true);
+                string[] emptyArray = {""};
+                npcData[i, j] = new NPCData("", emptyArray, true);
             }
         }
     }
