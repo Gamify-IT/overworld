@@ -7,15 +7,15 @@ using UnityEngine;
 public class MinigameTaskDTO
 {
     public string id;
-    public AreaLocationDTO areaLocation;
+    public AreaLocationDTO area;
     public int index;
     public string game;
     public string configurationId;
 
-    public MinigameTaskDTO(string id, AreaLocationDTO areaLocation, int index, string game, string configurationId)
+    public MinigameTaskDTO(string id, AreaLocationDTO area, int index, string game, string configurationId)
     {
         this.id = id;
-        this.areaLocation = areaLocation;
+        this.area = area;
         this.index = index;
         this.game = game;
         this.configurationId = configurationId;
