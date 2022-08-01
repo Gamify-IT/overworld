@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.Tilemaps;
 
+#if UNITY_EDITOR
 public class MoveTilesEditor : EditorWindow
 {
     [MenuItem("Window/Custom/MoveTiles")]
@@ -38,3 +39,4 @@ public class MoveTilesEditor : EditorWindow
         }
     }
 }
+#endif
