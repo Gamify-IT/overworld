@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     private static int maxWorld = 5;
     private static int maxMinigames = 12;
     private static int maxNPCs = 10;
-    private static int lectureID = 13;
+    private static int courseId = 13;
     private static int playerId = 1;
     private MinigameData[,] minigameData = new MinigameData[maxWorld + 1, maxMinigames + 1];
     private GameObject[,] minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
@@ -210,7 +210,7 @@ public class GameManager : MonoBehaviour
     private void fetchWorldData(int worldIndex)
     {
         //path to get world data from
-        string path = "/overworld/api/v1/lectures/" + lectureID + "/worlds/";
+        string path = "/overworld/api/v1/courses/" + courseId + "/worlds/";
 
         //get world data        
         StartCoroutine(GetWorldDTO(path, worldIndex));
@@ -225,15 +225,15 @@ public class GameManager : MonoBehaviour
         }
 
         //get player minigame data
-        path = "/overworld/api/v1/lectures/" + lectureID + "/playerstatistics/" + playerId + "/player-task-statistics";
+        path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId + "/player-task-statistics";
         StartCoroutine(GetPlayerMinigameStatistics(path));
 
         //get player data
-        path = "/overworld/api/v1/lectures/" + lectureID + "/playerstatistics/" + playerId;
+        path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId;
         StartCoroutine(GetPlayerStatistics(path));
 
         //get player npc data
-        path = "/overworld/api/v1/lectures/" + lectureID + "/playerstatistics/" + playerId + "/player-npc-statistics";
+        path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId + "/player-npc-statistics";
         StartCoroutine(GetPlayerNPCStatistics(path));
     }
 
@@ -245,8 +245,8 @@ public class GameManager : MonoBehaviour
     private void fetchDungeonData(int worldIndex, int dungeonIndex)
     {
         //path to get world from (../world/)
-        //int lectureID = 1;
-        string path = "/overworld/api/v1/lectures/" + lectureID + "/worlds/" + worldIndex + "/dungeons/";
+        //int courseId = 1;
+        string path = "/overworld/api/v1/courses/" + courseId + "/worlds/" + worldIndex + "/dungeons/";
 
         //get world data        
         StartCoroutine(GetWorldDTO(path, dungeonIndex));
