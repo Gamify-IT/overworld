@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Animation : MonoBehaviour
 {
     #region Singleton
+
     public static Animation instance { get; private set; }
 
     /*
@@ -22,6 +21,7 @@ public class Animation : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     #endregion
 
     public float movementSpeed = 3f;
@@ -44,7 +44,7 @@ public class Animation : MonoBehaviour
 
     void Update()
     {
-        if(canMove)
+        if (canMove)
         {
             movement.x = Input.GetAxisRaw("Horizontal");
             movement.y = Input.GetAxisRaw("Vertical");
@@ -55,6 +55,7 @@ public class Animation : MonoBehaviour
                 currentSpeed = currentSpeed + sprintingSpeed;
                 playerAnimator.speed = 2;
             }
+
             if (Input.GetKeyUp(KeyCode.LeftShift) && currentSpeed == (movementSpeed + sprintingSpeed))
             {
                 currentSpeed = currentSpeed - sprintingSpeed;
@@ -66,6 +67,7 @@ public class Animation : MonoBehaviour
                 currentSpeed = currentSpeed + superSpeed;
                 playerAnimator.speed = 20;
             }
+
             if (Input.GetKeyUp("l") && currentSpeed == (movementSpeed + superSpeed))
             {
                 currentSpeed = currentSpeed - superSpeed;
@@ -74,7 +76,8 @@ public class Animation : MonoBehaviour
 
             if (Input.GetKeyDown("k"))
             {
-                GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger = !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
+                GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =
+                    !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
             }
         }
     }
@@ -84,12 +87,39 @@ public class Animation : MonoBehaviour
     //animation is executed
     void FixedUpdate()
     {
-        if(canMove)
+        if (canMove)
         {
             float horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
             float verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
 
             playerRigidBody.MovePosition(playerRigidBody.position + movement * currentSpeed * Time.fixedDeltaTime);
+            
+            // the following 4 if statements set the looking direction of the player, which we need for the animation
+            if (movement.y > 0.01f)
+            {
+                playerAnimator.SetBool("LookUp", true);
+                playerAnimator.SetBool("LookRight", false);
+            }
+
+            if
+                (movement.y < 0f)
+            {
+                playerAnimator.SetBool("LookUp", false);
+                playerAnimator.SetBool("LookRight", false);
+            }
+
+            if (movement.x > 0.01f)
+            {
+                playerAnimator.SetBool("LookRight", true);
+                playerAnimator.SetBool("LookUp", false);
+            }
+
+            if
+                (movement.x < 0f)
+            {
+                playerAnimator.SetBool("LookRight", false);
+                playerAnimator.SetBool("LookUp", false);
+            }
 
             playerAnimator.SetFloat("Horizontal", movement.x);
             playerAnimator.SetFloat("Vertical", movement.y);
