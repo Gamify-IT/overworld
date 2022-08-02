@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 /*
  * This enum is used to store the state of a minigame as follows:
- * notConfigurated -> the minigame was not set by the lectures and therefor is not part of the game
+ * notConfigurated -> the minigame was not set by the courses and therefor is not part of the game
  * active -> the minigame can be played but was not completed yet
  * done -> the minigame was completed
  */
