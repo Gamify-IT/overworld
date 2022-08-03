@@ -494,8 +494,7 @@ public class GameManager : MonoBehaviour
         List<NPCDTO> npcs = worldDTO.getNPCs();
         foreach(NPCDTO npc in npcs)
         {
-            string[] dialogue = new string[1];
-            dialogue[0] = npc.getText();
+            string[] dialogue = npc.getText().ToArray();
             Debug.Log("NPC " + npc.getIndex() + ", text: " + dialogue[0]);
             npcData[worldIndex, npc.getIndex()].setDialogue(dialogue);
             npcData[worldIndex, npc.getIndex()].setUUID(npc.getId());

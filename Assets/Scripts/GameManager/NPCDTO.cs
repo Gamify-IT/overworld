@@ -9,9 +9,9 @@ public class NPCDTO
     public string id;
     public AreaLocationDTO area;
     public int index;
-    public string text;
+    public List<string> text;
 
-    public NPCDTO(string id, AreaLocationDTO area, int index, string text)
+    public NPCDTO(string id, AreaLocationDTO area, int index, List<string> text)
     {
         this.id = id;
         this.area = area;
@@ -47,12 +47,12 @@ public class NPCDTO
         this.index = index;
     }
 
-    public string getText()
+    public List<string> getText()
     {
         return text;
     }
 
-    public void setText(string text)
+    public void setText(List<string> text)
     {
         this.text = text;
     }
