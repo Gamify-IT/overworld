@@ -23,8 +23,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-  moorhuhn-db:
-    container_name: moorhuhn-db
+  chickenshock-db:
+    container_name: chickenshock-db
     image: postgres:14-alpine
     restart: always
     expose:
@@ -46,19 +46,19 @@ services:
       - JWT_VALIDITY_DURATION=720h
       - POSTGRES_URL=postgresql://postgres:postgres@login-db:5432/
 
-  moorhuhn-backend:
-    container_name: moorhuhn-backend
-    image: ghcr.io/gamify-it/moorhuhn-backend:main
+  chickenshock-backend:
+    container_name: chickenshock-backend
+    image: ghcr.io/gamify-it/chickenshock-backend:main
     restart: always
     pull_policy: always
     expose:
       - "80"
     depends_on:
-      - moorhuhn-db
+      - chickenshock-db
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_URL=postgresql://moorhuhn-db:5432/postgres
+      - POSTGRES_URL=postgresql://chickenshock-db:5432/postgres
 
   #frontends
   login-frontend:
@@ -69,9 +69,9 @@ services:
     expose:
       - "80"
 
-  moorhuhn-frontend:
-    container_name: moorhuhn-frontend
-    image: ghcr.io/gamify-it/moorhuhn:main
+  chickenshock-frontend:
+    container_name: chickenshock-frontend
+    image: ghcr.io/gamify-it/chickenshock:main
     restart: always
     pull_policy: always
     expose:
