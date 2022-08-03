@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - "main"
-      - "bugfix/wait-with-frontend-until-data-of-backend-is-loaded"
+      - "maintenance/react-to-npc-text-change-on-backend-site"
     tags:
       - "v*"
   pull_request:
