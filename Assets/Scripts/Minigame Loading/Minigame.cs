@@ -123,4 +123,21 @@ public class Minigame : MonoBehaviour
         }
     }
     #endregion
+
+    #region Getter
+    public int getWorldIndex()
+    {
+        return world;
+    }
+
+    public int getDungeonIndex()
+    {
+        return dungeon;
+    }
+
+    public int getIndex()
+    {
+        return number;
+    }
+    #endregion
 }

@@ -63,4 +63,16 @@ public class Barrier : MonoBehaviour
         }
     }
     #endregion
+
+    #region Getter
+    public int getWorldOriginIndex()
+    {
+        return worldIndexOrigin;
+    }
+
+    public int getWorldDestinationIndex()
+    {
+        return worldIndexDestination;
+    }
+    #endregion
 }
