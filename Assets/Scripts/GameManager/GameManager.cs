@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
     private bool somethingToUpdate;
     private int currentWorld;
     private int currentDungeon;
+    public bool active;
     #endregion
 
     #region Setup
@@ -145,18 +146,21 @@ public class GameManager : MonoBehaviour
     /// <param name="dungeon">The index of the dungeon to load (0, if a world should be loaded)</param>
     public void loadWorld(int world, int dungeon)
     {
-        currentWorld = world;
-        currentDungeon = dungeon;
-        if(dungeon == 0)
+        if(active)
         {
-            Debug.Log("Update world: " + world);
-            resetDungeonSlot();
-            fetchWorldData(world);
-        }
-        else
-        {
-            Debug.Log("Update dungeon: " + world + "-" + dungeon);
-            fetchDungeonData(world, dungeon);
+            currentWorld = world;
+            currentDungeon = dungeon;
+            if (dungeon == 0)
+            {
+                Debug.Log("Update world: " + world);
+                resetDungeonSlot();
+                fetchWorldData(world);
+            }
+            else
+            {
+                Debug.Log("Update dungeon: " + world + "-" + dungeon);
+                fetchDungeonData(world, dungeon);
+            }
         }
     }
 
@@ -182,7 +186,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void Update()
     {
-        if (somethingToUpdate)
+        if (somethingToUpdate && active)
         {
             somethingToUpdate = false;
             if(currentDungeon == 0)
@@ -199,6 +203,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown("h"))
         {
+            active = true;
             loadWorld(currentWorld, currentDungeon);
         }
     }
@@ -649,8 +654,11 @@ public class GameManager : MonoBehaviour
     /// <param name="completed">if the npc has been talked to or not</param>
     public void markNPCasRead(string uuid, bool completed)
     {
-        string path = "/overworld/api/v1/internal/submit-npc-pass";
-        StartCoroutine(PostNPCCompleted(path, uuid, completed));
+        if(active)
+        {
+            string path = "/overworld/api/v1/internal/submit-npc-pass";
+            StartCoroutine(PostNPCCompleted(path, uuid, completed));
+        }
     }
     #endregion
 }

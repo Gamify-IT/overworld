@@ -53,7 +53,7 @@ public class Minigame : MonoBehaviour
      */
     private void registerToGameManager()
     {
-        Debug.Log("register Minigame " + world + " - " + dungeon + "-" + number);
+        Debug.Log("register Minigame " + world + "-" + dungeon + "-" + number);
         GameManager.instance.addMinigame(this.gameObject, world, dungeon, number);
     }
     #endregion
@@ -82,9 +82,6 @@ public class Minigame : MonoBehaviour
         if(collision.CompareTag("Player"))
         {
             Debug.Log("Player enters minigame " + game + ", config: " + configurationID);
-            status = MinigameStatus.done;
-            //LoadMinigameInIframe(game, configurationID);
-            //load minigame starting scene
             StartCoroutine(loadMinigameStarting());
             updateStatus();
         }
@@ -109,17 +106,17 @@ public class Minigame : MonoBehaviour
         switch(status)
         {
             case MinigameStatus.notConfigurated:
-                Debug.Log("Minigame color: none");
+                Debug.Log("Minigame " + world + "-" + dungeon + "-" + number + ": color: none");
                 sprites.color = new Color(1f, 1f, 1f, 1f);
                 gameObject.SetActive(false);
                 break;
             case MinigameStatus.active:
-                Debug.Log("Minigame color: red");
+                Debug.Log("Minigame " + world + "-" + dungeon + "-" + number + ": color: red");
                 sprites.color = new Color(1f, 0f, 0f, 1f);
                 gameObject.SetActive(true);
                 break;
             case MinigameStatus.done:
-                Debug.Log("Minigame color: blue");
+                Debug.Log("Minigame " + world + "-" + dungeon + "-" + number + ": color: blue");
                 sprites.color = new Color(0f, 0f, 1f, 1f);
                 gameObject.SetActive(true);
                 break;
