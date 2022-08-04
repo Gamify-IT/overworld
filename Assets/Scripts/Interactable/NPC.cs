@@ -73,7 +73,7 @@ public class NPC : MonoBehaviour
     // register to game manager
     private void registerToGameManager()
     {
-        Debug.Log("register NPC " + world + " - " + dungeon + "-" + number);
+        Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
         GameManager.instance.addNPC(this.gameObject, world, dungeon, number);
     }
     

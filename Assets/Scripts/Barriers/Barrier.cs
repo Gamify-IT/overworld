@@ -29,7 +29,7 @@ public class Barrier : MonoBehaviour
      */
     private void registerToGameManager()
     {
-        Debug.Log("register Barrier " + worldIndexOrigin + " -> " + worldIndexDestination);
+        Debug.Log("register Barrier " + worldIndexOrigin + "->" + worldIndexDestination);
         GameManager.instance.addBarrier(this.gameObject, worldIndexOrigin, worldIndexDestination);
     }
     #endregion
@@ -41,7 +41,7 @@ public class Barrier : MonoBehaviour
      */
     public void setup(BarrierData data)
     {
-        Debug.Log("Barrier new status: " + data.getIsActive());
+        Debug.Log("Barrier " + worldIndexOrigin + "->" + worldIndexDestination + ": new status: " + data.getIsActive());
         isActive = data.getIsActive();
         updateStatus();
     }
@@ -53,12 +53,12 @@ public class Barrier : MonoBehaviour
     {
         if(isActive)
         {
-            Debug.Log("Barrier now visible");
+            Debug.Log("Barrier " + worldIndexOrigin + "->" + worldIndexDestination + ": now visible");
             gameObject.SetActive(true);
         }
         else
         {
-            Debug.Log("Barrier now invisible");
+            Debug.Log("Barrier " + worldIndexOrigin + "->" + worldIndexDestination + ": now invisible");
             gameObject.SetActive(false);
         }
     }
