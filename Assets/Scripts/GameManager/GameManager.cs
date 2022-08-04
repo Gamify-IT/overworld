@@ -201,10 +201,45 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        //manuell load
         if (Input.GetKeyDown("h"))
         {
             active = true;
             loadWorld(currentWorld, currentDungeon);
+        }
+
+        //print all stored objects
+        if(Input.GetKeyDown("j"))
+        {
+            for(int worldIndex=0; worldIndex <= maxWorld; worldIndex++)
+            {
+                for(int minigameIndex=0; minigameIndex <= maxMinigames; minigameIndex++)
+                {
+                    if(minigameObjects[worldIndex,minigameIndex] != null)
+                    {
+                        Minigame minigame = minigameObjects[worldIndex, minigameIndex].GetComponent<Minigame>();
+                        Debug.Log("Minigame slot " + worldIndex + "-" + minigameIndex + " contains minigame: " + minigame.getWorldIndex() + "-" + minigame.getDungeonIndex() + "-" + minigame.getIndex());
+                    }
+                }
+
+                for(int barrierIndex=0; barrierIndex <= maxWorld; barrierIndex++)
+                {
+                    if(barrierObjects[worldIndex,barrierIndex] != null)
+                    {
+                        Barrier barrier = barrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>();
+                        Debug.Log("Barrier slot " + worldIndex + "-" + barrierIndex + " contains barrier: " + barrier.getWorldOriginIndex() + "->" + barrier.getWorldDestinationIndex());
+                    }
+                }
+
+                for(int npcIndex=0; npcIndex<= maxNPCs; npcIndex++)
+                {
+                    if(npcObjects[worldIndex,npcIndex] != null)
+                    {
+                        NPC npc = npcObjects[worldIndex, npcIndex].GetComponent<NPC>();
+                        Debug.Log("NPC slot " + worldIndex + "-" + npcIndex + " contains NPC: " + npc.getWorldIndex() + "-" + npc.getDungeonIndex() + "-" + npc.getIndex());
+                    }
+                }
+            }
         }
     }
 
