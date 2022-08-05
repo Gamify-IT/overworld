@@ -36,6 +36,12 @@ public class NPC : MonoBehaviour
         initNewStuffSprite();
     }
 
+    private void OnDestroy()
+    {
+        Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
+        GameManager.instance.removeNPC(world, dungeon, number);
+    }
+
     /// <summary>
     /// This method opens the NPC dialogue if the player is close to the NPC and presses "E".
     /// If the player wants to skip the typing out of the dialogue they can press "E" again.

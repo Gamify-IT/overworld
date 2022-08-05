@@ -102,6 +102,26 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    /// This function removes a minigame from the <c>GameManager</c>
+    /// </summary>
+    /// <param name="world">The index of the world the minigame is in</param>
+    /// <param name="dungeon">The index of the dungeon the minigame is in (0 if in no dungeon)</param>
+    /// <param name="number">The index of the minigame in its area</param>
+    public void removeMinigame(int world, int dungeon, int number)
+    {
+        if (dungeon == 0)
+        {
+            minigameObjects[world, number] = null;
+            minigameData[world, number] = new MinigameData("", "", MinigameStatus.notConfigurated, 0);
+        }
+        else
+        {
+            minigameObjects[0, number] = null;
+            minigameData[0, number] = new MinigameData("", "", MinigameStatus.notConfigurated, 0);
+        }
+    }
+
+    /// <summary>
     /// This function registers a new barrier at the <c>GameManager</c>
     /// </summary>
     /// <param name="barrier">The barrier gameObject</param>
@@ -113,6 +133,17 @@ public class GameManager : MonoBehaviour
         {
             barrierObjects[worldIndexOrigin, worldIndexDestination] = barrier;
         }
+    }
+
+    /// <summary>
+    /// This function removes a barrier from the <c>GameManager</c>
+    /// </summary>
+    /// <param name="worldIndexOrigin">The index of the world which exit the barrier is blocking</param>
+    /// <param name="worldIndexDestination">The index of the world which entry the barrier is blocking</param>
+    public void removeBarrier(int worldIndexOrigin, int worldIndexDestination)
+    {
+        barrierObjects[worldIndexOrigin, worldIndexDestination] = null;
+        barrierData[worldIndexOrigin,worldIndexDestination] = new BarrierData(true);
     }
 
     /// <summary>
@@ -134,6 +165,28 @@ public class GameManager : MonoBehaviour
             {
                 npcObjects[0, number] = npc;
             }
+        }
+    }
+
+    /// <summary>
+    /// This function removes a npc from the <c>GameManager</c>
+    /// </summary>
+    /// <param name="world">The index of the world the npc is in</param>
+    /// <param name="dungeon">The index of the dungeon the npc is in (0 if in no dungeon)</param>
+    /// <param name="number">The index of the npc in its area</param>
+    public void removeNPC(int world, int dungeon, int number)
+    {
+        if (dungeon == 0)
+        {
+            npcObjects[world, number] = null;
+            string[] emptyArray = { "" };
+            npcData[world, number] = new NPCData("", emptyArray, true);
+        }
+        else
+        {
+            npcObjects[0, number] = null;
+            string[] emptyArray = { "" };
+            npcData[0, number] = new NPCData("", emptyArray, true);
         }
     }
     #endregion

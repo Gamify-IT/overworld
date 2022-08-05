@@ -48,6 +48,12 @@ public class Minigame : MonoBehaviour
         updateStatus();
     }
 
+    private void OnDestroy()
+    {
+        Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
+        GameManager.instance.removeMinigame(world, dungeon, number);
+    }
+
     /*
      * This function registers the minigame at the game manager
      */

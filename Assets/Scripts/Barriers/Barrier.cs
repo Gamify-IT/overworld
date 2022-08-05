@@ -24,6 +24,12 @@ public class Barrier : MonoBehaviour
         updateStatus();
     }
 
+    private void OnDestroy()
+    {
+        Debug.Log("remove Barrier " + worldIndexOrigin + "->" + worldIndexDestination);
+        GameManager.instance.removeBarrier(worldIndexOrigin, worldIndexDestination);
+    }
+
     /*
      * This function registers the barrier at the game manager
      */
