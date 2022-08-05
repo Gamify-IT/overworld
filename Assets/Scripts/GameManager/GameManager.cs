@@ -12,7 +12,6 @@ using UnityEngine.Networking;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-
     #region Singleton
     public static GameManager instance { get; private set; }
 
