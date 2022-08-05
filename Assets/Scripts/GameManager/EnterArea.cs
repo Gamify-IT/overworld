@@ -14,7 +14,7 @@ public class EnterArea : MonoBehaviour
     {
         if (player.tag.Equals("Player"))
         {
-            Invoke("triggerLoading", 3);
+            Invoke("triggerLoading", 1);
         }
     }
 
