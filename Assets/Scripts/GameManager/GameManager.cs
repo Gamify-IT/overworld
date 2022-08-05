@@ -341,7 +341,7 @@ public class GameManager : MonoBehaviour
         string path = "/overworld/api/v1/courses/" + courseId + "/worlds/" + worldIndex + "/dungeons/";
 
         //get world data        
-        StartCoroutine(GetWorldDTO(path, dungeonIndex));
+        StartCoroutine(GetDungeonDTO(path, dungeonIndex));
     }
     #endregion
 
@@ -375,6 +375,35 @@ public class GameManager : MonoBehaviour
                     Debug.Log(uri + worldIndex + ":\nReceived: " + webRequest.downloadHandler.text);
                     WorldDTO worldDTO = JsonUtility.FromJson<WorldDTO>(webRequest.downloadHandler.text);
                     processWorldDTO(worldIndex, worldDTO);
+                    break;
+            }
+        }
+        somethingToUpdate = true;
+    }
+
+    private IEnumerator GetDungeonDTO(String uri, int dungeonIndex)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + dungeonIndex))
+        {
+            Debug.Log("Get Request for dungeon: " + dungeonIndex);
+            Debug.Log("Path: " + uri + dungeonIndex);
+
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(uri + dungeonIndex + ": Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + dungeonIndex + ": HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + dungeonIndex + ":\nReceived: " + webRequest.downloadHandler.text);
+                    DungeonDTO dungeonDTO = JsonUtility.FromJson<DungeonDTO>(webRequest.downloadHandler.text);
+                    processDungeonDTO(dungeonIndex, dungeonDTO);
                     break;
             }
         }
@@ -558,6 +587,7 @@ public class GameManager : MonoBehaviour
     /// <param name="worldDTO">The world data returned from the backend</param>
     private void processWorldDTO(int worldIndex, WorldDTO worldDTO)
     {
+        Debug.Log("Process world " + worldIndex + " data");
         Debug.Log("static name: " + worldDTO.getStaticName());
         Debug.Log("topic name: " + worldDTO.getTopicName());
         List<MinigameTaskDTO> minigames = worldDTO.getMinigameTasks();
@@ -591,6 +621,46 @@ public class GameManager : MonoBehaviour
             npcData[worldIndex, npc.getIndex()].setDialogue(dialogue);
             npcData[worldIndex, npc.getIndex()].setUUID(npc.getId());
             string[] newDialogue = npcData[worldIndex, npc.getIndex()].getDialogue();
+            Debug.Log("NPC " + npc.getIndex() + ", npcData text: " + newDialogue[0]);
+        }
+    }
+
+    private void processDungeonDTO(int dungeonIndex, DungeonDTO dungeonDTO)
+    {
+        Debug.Log("Process dungeon " + dungeonIndex + " data");
+        Debug.Log("static name: " + dungeonDTO.getStaticName());
+        Debug.Log("topic name: " + dungeonDTO.getTopicName());
+        List<MinigameTaskDTO> minigames = dungeonDTO.getMinigameTasks();
+        foreach (MinigameTaskDTO minigameTask in minigames)
+        {
+            if (minigameTask.getConfigurationId() == null)
+            {
+                Debug.Log("Minigame " + minigameTask.getIndex() + " is null");
+            }
+
+            if (minigameTask.getConfigurationId() == "" || minigameTask.getConfigurationId() == null)
+            {
+                minigameData[0, minigameTask.getIndex()].setStatus(MinigameStatus.notConfigurated);
+                Debug.Log("Minigame " + minigameTask.getIndex() + ", status: not configurated");
+            }
+            else
+            {
+                minigameData[0, minigameTask.getIndex()].setStatus(MinigameStatus.active);
+                Debug.Log("Minigame " + minigameTask.getIndex() + ", status: active");
+            }
+            minigameData[0, minigameTask.getIndex()].setGame(minigameTask.getGame());
+            Debug.Log("Minigame " + minigameTask.getIndex() + ", game: " + minigameTask.getGame());
+            minigameData[0, minigameTask.getIndex()].setConfigurationID(minigameTask.getConfigurationId());
+            Debug.Log("Minigame " + minigameTask.getIndex() + ", config: " + minigameTask.getConfigurationId());
+        }
+        List<NPCDTO> npcs = dungeonDTO.getNPCs();
+        foreach (NPCDTO npc in npcs)
+        {
+            string[] dialogue = npc.getText().ToArray();
+            Debug.Log("NPC " + npc.getIndex() + ", text: " + dialogue[0]);
+            npcData[0, npc.getIndex()].setDialogue(dialogue);
+            npcData[0, npc.getIndex()].setUUID(npc.getId());
+            string[] newDialogue = npcData[0, npc.getIndex()].getDialogue();
             Debug.Log("NPC " + npc.getIndex() + ", npcData text: " + newDialogue[0]);
         }
     }
