@@ -264,11 +264,18 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown("h"))
         {
             Debug.Log("world: " + currentWorld + ", dungeon: " + currentDungeon);
+            loadWorld(currentWorld, currentDungeon);
+        }
+
+        //manuell load dungeon 
+        if (Input.GetKeyDown("n"))
+        {
+            Debug.Log("world: 1, dungeon: 1");
             loadWorld(1, 1);
         }
 
         //print all stored objects
-        if(Input.GetKeyDown("j"))
+        if (Input.GetKeyDown("j"))
         {
             for(int worldIndex=0; worldIndex <= maxWorld; worldIndex++)
             {
@@ -349,6 +356,18 @@ public class GameManager : MonoBehaviour
 
         //get world data        
         StartCoroutine(GetDungeonDTO(path, dungeonIndex));
+
+        //get player minigame data
+        path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId + "/player-task-statistics";
+        StartCoroutine(GetPlayerMinigameStatistics(path));
+
+        //get player data
+        path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId;
+        StartCoroutine(GetPlayerStatistics(path));
+
+        //get player npc data
+        path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId + "/player-npc-statistics";
+        StartCoroutine(GetPlayerNPCStatistics(path));
     }
     #endregion
 
