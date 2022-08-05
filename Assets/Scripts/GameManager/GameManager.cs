@@ -45,9 +45,9 @@ public class GameManager : MonoBehaviour
     private NPCData[,] npcData = new NPCData[maxWorld + 1, maxNPCs+1];
     private GameObject[,] npcObjects = new GameObject[maxWorld + 1, maxNPCs+1];
     private bool somethingToUpdate;
-    private int currentWorld;
-    private int currentDungeon;
-    public bool active;
+    private int currentWorld = 1;
+    private int currentDungeon = 0;
+    public bool active = true;
     #endregion
 
     #region Setup
