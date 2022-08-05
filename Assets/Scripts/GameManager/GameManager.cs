@@ -253,11 +253,18 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        //toggle game manager
+        if (Input.GetKeyDown("b"))
+        {
+            active = !active;
+            Debug.Log("game manager now " + active);
+        }
+
         //manuell load
         if (Input.GetKeyDown("h"))
         {
-            active = true;
-            loadWorld(currentWorld, currentDungeon);
+            Debug.Log("world: " + currentWorld + ", dungeon: " + currentDungeon);
+            loadWorld(1, 1);
         }
 
         //print all stored objects
