@@ -5,15 +5,14 @@ using UnityEngine.U2D;
 public class ZoomScript : MonoBehaviour
 {
     //minigame Zoomlevels
-    public int zoomLevel;
-    private int maxZoomLevel = -20;
-
-    private int minZoomLevel = -50;
+    public int zoomLevel = -40;
+    private int maxZoomLevel = -30;
+    private int minZoomLevel = -60;
 
     //normal camera zoom levels
     private int[] gameZoomLevelX = new int[] { 320, 355, 425 };
     private int[] gameZoomLevelY = new int[] { 180, 200, 240 };
-    private int gameZoomLevel = 0;
+    private int gameZoomLevel = 1;
 
     private float minimapIconResizeValue = (float)9;
     private PixelPerfectCamera pixelCam;
@@ -23,8 +22,6 @@ public class ZoomScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //set the zoom level
-        zoomLevel = -30;
         //get the player and attach the minimap to him
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         GameObject miniMapCam = GameObject.Find("Minimap Camera");
