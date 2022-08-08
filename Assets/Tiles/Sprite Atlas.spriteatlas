@@ -2237,6 +2237,8 @@ SpriteAtlas:
   - {fileID: -1079987642, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
   - {fileID: 1034662733, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
   - {fileID: 853485237, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
+  - {fileID: 431423369, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
+  - {fileID: -1219279394, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
   - {fileID: 2075259625, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
   - {fileID: 574806633, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
   - {fileID: 1859037256, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
@@ -7505,6 +7507,8 @@ SpriteAtlas:
   - HUD_objects_12
   - HUD_objects_15
   - HUD_objects_14
+  - HUD_objects_17
+  - HUD_objects_16
   - HUD_objects_2
   - HUD_objects_3
   - HUD_objects_0
