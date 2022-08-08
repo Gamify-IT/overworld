@@ -4,15 +4,19 @@ using UnityEngine.U2D;
 
 public class ZoomScript : MonoBehaviour
 {
+    //minigame Zoomlevels
     public int zoomLevel;
     private int maxZoomLevel = -20;
+
     private int minZoomLevel = -50;
+
+    //normal camera zoom levels
     private int[] gameZoomLevelX = new int[] { 320, 355, 425 };
     private int[] gameZoomLevelY = new int[] { 180, 200, 240 };
     private int gameZoomLevel = 0;
+
     private float minimapIconResizeValue = (float)9;
     private PixelPerfectCamera pixelCam;
-
 
     public static string areaName = "Loading...";
 
@@ -111,6 +115,9 @@ public class ZoomScript : MonoBehaviour
             gameZoomLevel += 1;
             pixelCam.refResolutionX = gameZoomLevelX[gameZoomLevel];
             pixelCam.refResolutionY = gameZoomLevelY[gameZoomLevel];
+            maxZoomLevel -= 10;
+            minZoomLevel -= 10;
+            MinimapZoomOut();
         }
 
         //cam.GetComponent("PixelPerfectCamera");
@@ -125,6 +132,9 @@ public class ZoomScript : MonoBehaviour
             gameZoomLevel -= 1;
             pixelCam.refResolutionX = gameZoomLevelX[gameZoomLevel];
             pixelCam.refResolutionY = gameZoomLevelY[gameZoomLevel];
+            maxZoomLevel += 10;
+            minZoomLevel += 10;
+            MinimapZoomIn();
         }
     }
 }
