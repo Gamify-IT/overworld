@@ -1160,7 +1160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15354b5f662db284c86220fff5a0dbb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoomLevel: -30
+  zoomLevel: -40
 --- !u!1 &1286146691
 GameObject:
   m_ObjectHideFlags: 0
@@ -1247,7 +1247,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1240258766}
         m_TargetAssemblyTypeName: MinimapScript, Assembly-CSharp
-        m_MethodName: ZoomOut
+        m_MethodName: MinimapZoomOut
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1825,7 +1825,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1240258766}
         m_TargetAssemblyTypeName: MinimapScript, Assembly-CSharp
-        m_MethodName: ZoomIn
+        m_MethodName: MinimapZoomIn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
