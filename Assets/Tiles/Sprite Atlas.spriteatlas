@@ -5305,6 +5305,9 @@ SpriteAtlas:
   - {fileID: 493657495, guid: 077ec99ca1da94e6786dc7a863b1cff3, type: 3}
   - {fileID: 1510149102, guid: 077ec99ca1da94e6786dc7a863b1cff3, type: 3}
   - {fileID: -2018769201, guid: 077ec99ca1da94e6786dc7a863b1cff3, type: 3}
+  - {fileID: -378518129, guid: 571074cd13bc9f746aabc0244df0b18a, type: 3}
+  - {fileID: -1382939622, guid: 571074cd13bc9f746aabc0244df0b18a, type: 3}
+  - {fileID: 1864662301, guid: 571074cd13bc9f746aabc0244df0b18a, type: 3}
   - {fileID: 1529922537, guid: 8f29b69e8728c99429c435ac38a854fb, type: 3}
   - {fileID: 1674851622, guid: 8f29b69e8728c99429c435ac38a854fb, type: 3}
   - {fileID: 334848477, guid: 8f29b69e8728c99429c435ac38a854fb, type: 3}
@@ -10573,6 +10576,9 @@ SpriteAtlas:
   - Inner_40
   - Inner_39
   - Inner_38
+  - caveAdditional_2
+  - caveAdditional_0
+  - caveAdditional_1
   - npc_9
   - npc_8
   - npc_5
