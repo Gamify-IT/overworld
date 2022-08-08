@@ -110,28 +110,31 @@ public class ZoomScript : MonoBehaviour
     //zoom game in handling
     public void GameZoomOut()
     {
+        //restrict to 3 possible zoomLevels
         if (gameZoomLevel < 2)
         {
             gameZoomLevel += 1;
+            //change the reference resolution, which effectively changes the zoom level
             pixelCam.refResolutionX = gameZoomLevelX[gameZoomLevel];
             pixelCam.refResolutionY = gameZoomLevelY[gameZoomLevel];
+            //also zoom out the minimap at the same time and change the max and min zoom levels
             maxZoomLevel -= 10;
             minZoomLevel -= 10;
             MinimapZoomOut();
         }
-
-        //cam.GetComponent("PixelPerfectCamera");
-        //PixelPerfectCamera.refResolutionX = 345;
     }
 
     //zoom game out handling
     public void GameZoomIn()
     {
+        //restrict to 3 possible zoomLevels
         if (gameZoomLevel > 0)
         {
             gameZoomLevel -= 1;
+            //change the reference resolution, which effectively changes the zoom level
             pixelCam.refResolutionX = gameZoomLevelX[gameZoomLevel];
             pixelCam.refResolutionY = gameZoomLevelY[gameZoomLevel];
+            //also zoom in the minimap at the same time and change the max and min zoom levels
             maxZoomLevel += 10;
             minZoomLevel += 10;
             MinimapZoomIn();
