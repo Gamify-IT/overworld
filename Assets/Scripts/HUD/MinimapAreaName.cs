@@ -11,7 +11,7 @@ public class MinimapAreaName : MonoBehaviour
     {
         if (player.tag.Equals("Player"))
         {
-            MinimapScript.areaName = areaName;
+            ZoomScript.areaName = areaName;
         }
     }
 }
