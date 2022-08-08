@@ -1247,7 +1247,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1240258766}
         m_TargetAssemblyTypeName: MinimapScript, Assembly-CSharp
-        m_MethodName: ZoomOut
+        m_MethodName: MinimapZoomOut
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1825,7 +1825,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1240258766}
         m_TargetAssemblyTypeName: MinimapScript, Assembly-CSharp
-        m_MethodName: ZoomIn
+        m_MethodName: MinimapZoomIn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

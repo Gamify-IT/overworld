@@ -1,0 +1,130 @@
+using TMPro;
+using UnityEngine;
+using UnityEngine.U2D;
+
+public class ZoomScript : MonoBehaviour
+{
+    public int zoomLevel;
+    private int maxZoomLevel = -20;
+    private int minZoomLevel = -50;
+    private int[] gameZoomLevelX = new int[] { 320, 355, 425 };
+    private int[] gameZoomLevelY = new int[] { 180, 200, 240 };
+    private int gameZoomLevel = 0;
+    private float minimapIconResizeValue = (float)9;
+    private PixelPerfectCamera pixelCam;
+
+
+    public static string areaName = "Loading...";
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        //set the zoom level
+        zoomLevel = -30;
+        //get the player and attach the minimap to him
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject miniMapCam = GameObject.Find("Minimap Camera");
+        //get the pixel perfect camera component
+        pixelCam = GameObject.Find("Main Camera").GetComponent<PixelPerfectCamera>();
+        miniMapCam.transform.SetParent(player.transform);
+        //set the local transform of the minimap camera to be above the player, zoomed out by the specified zoomLevel
+        miniMapCam.transform.localPosition = new Vector3(0, 0, zoomLevel);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //zoom in
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            MinimapZoomIn();
+        }
+
+        //zoom out
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            MinimapZoomOut();
+        }
+
+        //zoom game in
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            GameZoomIn();
+        }
+
+        //zoom game out
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            GameZoomOut();
+        }
+
+        GameObject.FindGameObjectWithTag("AreaName").GetComponent<TextMeshProUGUI>().text = areaName;
+
+        foreach (GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
+        {
+            minimapIcon.transform.localScale = new Vector3(-1 * zoomLevel / minimapIconResizeValue,
+                -1 * zoomLevel / minimapIconResizeValue, 0);
+        }
+    }
+
+    //zoom In handling
+    public void MinimapZoomIn()
+    {
+        //restrict zoom level
+        if (zoomLevel < maxZoomLevel)
+        {
+            //zoom in
+            zoomLevel += 10;
+            GameObject.Find("Minimap Camera").transform.localPosition = new Vector3(0, 0, zoomLevel);
+
+            foreach (GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
+            {
+                minimapIcon.transform.localScale = new Vector3(-1 * zoomLevel / minimapIconResizeValue,
+                    -1 * zoomLevel / minimapIconResizeValue, 0);
+            }
+        }
+    }
+
+    //zoom Out handling
+    public void MinimapZoomOut()
+    {
+        //restrict zoom level
+        if (zoomLevel > minZoomLevel)
+        {
+            //zoom out
+            zoomLevel -= 10;
+            GameObject.Find("Minimap Camera").transform.localPosition = new Vector3(0, 0, zoomLevel);
+
+            foreach (GameObject minimapIcon in GameObject.FindGameObjectsWithTag("MinimapIcon"))
+            {
+                minimapIcon.transform.localScale = new Vector3(-1 * zoomLevel / minimapIconResizeValue,
+                    -1 * zoomLevel / minimapIconResizeValue, 0);
+            }
+        }
+    }
+
+    //zoom game in handling
+    public void GameZoomOut()
+    {
+        if (gameZoomLevel < 2)
+        {
+            gameZoomLevel += 1;
+            pixelCam.refResolutionX = gameZoomLevelX[gameZoomLevel];
+            pixelCam.refResolutionY = gameZoomLevelY[gameZoomLevel];
+        }
+
+        //cam.GetComponent("PixelPerfectCamera");
+        //PixelPerfectCamera.refResolutionX = 345;
+    }
+
+    //zoom game out handling
+    public void GameZoomIn()
+    {
+        if (gameZoomLevel > 0)
+        {
+            gameZoomLevel -= 1;
+            pixelCam.refResolutionX = gameZoomLevelX[gameZoomLevel];
+            pixelCam.refResolutionY = gameZoomLevelY[gameZoomLevel];
+        }
+    }
+}
