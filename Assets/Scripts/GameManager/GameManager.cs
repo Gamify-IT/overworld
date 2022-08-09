@@ -587,19 +587,28 @@ public class GameManager : MonoBehaviour
         NPCTalkEvent npcData = new NPCTalkEvent(uuid, completed, playerId.ToString());
         string json = JsonUtility.ToJson(npcData, true);
 
-        UnityWebRequest www = UnityWebRequest.Post(uri, json);
-        www.SetRequestHeader("Content-Type", "application/json");
-        using (www)
-        {
-            yield return www.SendWebRequest();
+        Debug.Log("Json test: " + json);
 
-            if (www.result != UnityWebRequest.Result.Success)
+        //UnityWebRequest webRequest = UnityWebRequest.Post(uri, json);
+        UnityWebRequest webRequest = new UnityWebRequest(uri, UnityWebRequest.kHttpVerbPOST);
+        byte[] bytes = new System.Text.UTF8Encoding().GetBytes(json);
+        webRequest.uploadHandler = (UploadHandler)new UploadHandlerRaw(bytes);
+        webRequest.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        webRequest.SetRequestHeader("Content-Type", "application/json");
+
+        using (webRequest)
+        {
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log(www.error);
+                Debug.Log(webRequest.error);
             }
             else
             {
                 Debug.Log("NPC mit uuid: " + uuid +  " updated to new status: " + completed);
+                Debug.Log("Post request response code: " + webRequest.responseCode);
+                Debug.Log("Post request response text: " + webRequest.downloadHandler.text);
             }
         }
     }
