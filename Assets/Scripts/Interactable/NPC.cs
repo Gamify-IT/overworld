@@ -50,7 +50,10 @@ public class NPC : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded)
         {
-            markAsRead();
+            if(!hasBeenTalkedTo)
+            {
+                markAsRead();
+            }
             StartCoroutine(LoadDialogueScene());
         } else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded && typingIsFinished)
         {
