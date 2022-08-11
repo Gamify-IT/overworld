@@ -47,4 +47,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameManager/MinigameStarting Overlay.unity
     guid: 002b3ee28df3c2647bcb60ad3617395e
+  - enabled: 1
+    path: Assets/Scenes/Player HUD/Character Selection.unity
+    guid: 2652ba8dcd6947d4f86f45dd551ef105
   m_configObjects: {}
