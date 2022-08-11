@@ -14,7 +14,12 @@ public class EnterArea : MonoBehaviour
     {
         if (player.tag.Equals("Player"))
         {
-            GameManager.instance.loadWorld(worldNumber, dungeonNumber);
+            Invoke("triggerLoading", 3f);
         }
+    }
+
+    private void triggerLoading()
+    {
+        GameManager.instance.loadWorld(worldNumber, dungeonNumber);
     }
 }
