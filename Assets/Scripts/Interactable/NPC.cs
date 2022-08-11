@@ -36,6 +36,12 @@ public class NPC : MonoBehaviour
         initNewStuffSprite();
     }
 
+    private void OnDestroy()
+    {
+        Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
+        GameManager.instance.removeNPC(world, dungeon, number);
+    }
+
     /// <summary>
     /// This method opens the NPC dialogue if the player is close to the NPC and presses "E".
     /// If the player wants to skip the typing out of the dialogue they can press "E" again.
@@ -44,7 +50,10 @@ public class NPC : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded)
         {
-            markAsRead();
+            if(!hasBeenTalkedTo)
+            {
+                markAsRead();
+            }
             StartCoroutine(LoadDialogueScene());
         } else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded && typingIsFinished)
         {
@@ -73,7 +82,7 @@ public class NPC : MonoBehaviour
     // register to game manager
     private void registerToGameManager()
     {
-        Debug.Log("register NPC " + world + " - " + dungeon + "-" + number);
+        Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
         GameManager.instance.addNPC(this.gameObject, world, dungeon, number);
     }
     
@@ -185,4 +194,21 @@ public class NPC : MonoBehaviour
         dialogueText = GameObject.Find("Dialogue").GetComponent<TextMeshProUGUI>();
         StartCoroutine("Typing");
     }
+
+    #region Getter
+    public int getWorldIndex()
+    {
+        return world;
+    }
+
+    public int getDungeonIndex()
+    {
+        return dungeon;
+    }
+
+    public int getIndex()
+    {
+        return number;
+    }
+    #endregion
 }

@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - "main"
-      - "maintenance/react-to-npc-text-change-on-backend-site"
+      - "bugfix/game-manager"
     tags:
       - "v*"
   pull_request:
