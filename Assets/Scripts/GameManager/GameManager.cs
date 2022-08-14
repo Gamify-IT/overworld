@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     private static int maxWorld = 5;
     private static int maxMinigames = 12;
     private static int maxNPCs = 10;
-    private static int courseId = 15;
+    private static int courseId = 1;
     private static int playerId = 1;
     private MinigameData[,] minigameData = new MinigameData[maxWorld + 1, maxMinigames + 1];
     private GameObject[,] minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
