@@ -13,17 +13,10 @@ public class Interaction : MonoBehaviour
 
     void Update()
     {
-        if (DetectObject())
+        if (DetectObject() && !PauseMenu.menuOpen && InteractInput())
         {
-            //check if pause menu is currently closed
-            if (!PauseMenu.menuOpen)
-            {
-                if (InteractInput())
-                {
-                    Debug.Log("Interact");
-                    detectedObject.GetComponent<Item>().Interact();
-                }
-            }
+            Debug.Log("Interact");
+            detectedObject.GetComponent<Item>().Interact();
         }
     }
 
