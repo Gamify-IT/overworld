@@ -399,10 +399,14 @@ public class GameManager : MonoBehaviour
             // Request and wait for the desired page.
             var request = webRequest.SendWebRequest();
 
+            Debug.Log("Waiting for result");
+
             while(!request.isDone)
             {
                 await Task.Yield();
             }
+
+            Debug.Log("Got a result");
 
             switch (webRequest.result)
             {
