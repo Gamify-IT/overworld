@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
-using System.Threading.Tasks;
 
 /// <summary>
 /// The <c>GameManager</c> manages the communication between the overworld backend and frontend. 
@@ -321,16 +320,8 @@ public class GameManager : MonoBehaviour
         string path = "/overworld/api/v1/courses/" + courseId + "/worlds/";
 
         //get world data        
-        Task<WorldDTO> worldDataTask = GetWorldDTO(path, worldIndex).AsTask<WorldDTO>();
-        WorldDTO worldData = worldDataTask.Result;
-        if(worldData != null)
-        {
-            Debug.Log("got something");
-        }
-        else
-        {
-            Debug.Log("mission failed");
-        }
+        UniTask<WorldDTO> worldData = GetWorldDTO(path, worldIndex);
+        Debug.Log("Survived.");
 
         //get barrier data
         /*
