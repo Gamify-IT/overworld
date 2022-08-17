@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Networking;
+using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 
 /// <summary>
@@ -320,7 +321,8 @@ public class GameManager : MonoBehaviour
         string path = "/overworld/api/v1/courses/" + courseId + "/worlds/";
 
         //get world data        
-        WorldDTO worldData = GetWorldDTO(path, worldIndex).Result;
+        Task<WorldDTO> worldDataTask = GetWorldDTO(path, worldIndex).AsTask<WorldDTO>();
+        WorldDTO worldData = worldDataTask.Result;
         if(worldData != null)
         {
             Debug.Log("got something");
@@ -389,7 +391,7 @@ public class GameManager : MonoBehaviour
     /// <param name="uri">The path to send the GET request to</param>
     /// <param name="worldIndex">The world index to be requested at the backend</param>
     /// <returns></returns>
-    private async Task<WorldDTO> GetWorldDTO(String uri, int worldIndex)
+    private async UniTask<WorldDTO> GetWorldDTO(String uri, int worldIndex)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndex))
         {
@@ -403,7 +405,7 @@ public class GameManager : MonoBehaviour
 
             while(!request.isDone)
             {
-                await Task.Yield();
+                await UniTask.Yield();
             }
 
             Debug.Log("Got a result");
