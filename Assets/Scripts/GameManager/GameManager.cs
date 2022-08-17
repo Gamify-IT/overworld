@@ -327,6 +327,7 @@ public class GameManager : MonoBehaviour
         //reset variables
         worldData = null;
         playerMinigameStatistics = null;
+        playerNPCStatistics = null;
 
         //get data
         await UniTask.WhenAll(
@@ -336,12 +337,24 @@ public class GameManager : MonoBehaviour
             GetPlayerNPCStatistics(path + "/playerstatistics/" + playerId + "/player-npc-statistics")
         );
 
+        Debug.Log("Got all data.");
+
+        if(worldData[worldIndex] == null || playerMinigameStatistics == null || playerNPCStatistics == null)
+        {
+            Debug.Log("Some requests failed");
+            return;
+        }
+
         //process Data
         processWorldDTO(worldIndex, worldData[worldIndex]);
         processPlayerTaskStatisitcs(playerMinigameStatistics);
         processPlayerNPCStatistics(playerNPCStatistics);
 
+        Debug.Log("Everything set up");
+
         setData(worldIndex);
+
+        Debug.Log("Data set.");
 
         //get barrier data
         /*
@@ -418,6 +431,7 @@ public class GameManager : MonoBehaviour
                     Debug.Log(uri + worldIndex + ":\nReceived: " + webRequest.downloadHandler.text);
                     WorldDTO worldDTO = JsonUtility.FromJson<WorldDTO>(webRequest.downloadHandler.text);
                     worldData[worldIndex] = worldDTO;
+                    Debug.Log("Got world data.");
                     break;
             }
             return null;
@@ -522,7 +536,7 @@ public class GameManager : MonoBehaviour
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
                     PlayerTaskStatisticDTO[] playerTaskStatistics = JsonHelper.getJsonArray<PlayerTaskStatisticDTO>(webRequest.downloadHandler.text);
                     playerMinigameStatistics = playerTaskStatistics;
-                    //processPlayerTaskStatisitcs(playerTaskStatistics);
+                    Debug.Log("Got player minigame data.");
                     break;
             }
             return null;
@@ -601,7 +615,7 @@ public class GameManager : MonoBehaviour
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
                     PlayerNPCStatisticDTO[] result = JsonHelper.getJsonArray<PlayerNPCStatisticDTO>(webRequest.downloadHandler.text);
                     playerNPCStatistics = result;
-                    //processPlayerNPCStatistics(playerNPCStatistics);
+                    Debug.Log("Got player npc data.");
                     break;
             }
             return null;
