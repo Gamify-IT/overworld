@@ -339,9 +339,26 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Got all data.");
 
-        if(worldData[worldIndex] == null || playerMinigameStatistics == null || playerNPCStatistics == null)
+        bool somethingFailed = false;
+
+        if(worldData[worldIndex] == null)
         {
-            Debug.Log("Some requests failed");
+            Debug.Log("world data failed");
+            somethingFailed = true;
+        }
+        if (playerMinigameStatistics == null)
+        {
+            Debug.Log("minigame data failed");
+            somethingFailed = true;
+        }
+        if (playerNPCStatistics == null)
+        {
+            Debug.Log("npc data failed");
+            somethingFailed = true;
+        }
+
+        if(somethingFailed)
+        {
             return;
         }
 
