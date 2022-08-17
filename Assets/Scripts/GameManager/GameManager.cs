@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Threading.Tasks;
 
 /// <summary>
 /// The <c>GameManager</c> manages the communication between the overworld backend and frontend. 
@@ -319,9 +320,18 @@ public class GameManager : MonoBehaviour
         string path = "/overworld/api/v1/courses/" + courseId + "/worlds/";
 
         //get world data        
-        StartCoroutine(GetWorldDTO(path, worldIndex));
+        WorldDTO worldData = GetWorldDTO(path, worldIndex).Result;
+        if(worldData != null)
+        {
+            Debug.Log("got something");
+        }
+        else
+        {
+            Debug.Log("mission failed");
+        }
 
         //get barrier data
+        /*
         for(int worldIndexDestination=1; worldIndexDestination<=maxWorld; worldIndexDestination++)
         {
             if(barrierObjects[worldIndex, worldIndexDestination] != null)
@@ -341,6 +351,7 @@ public class GameManager : MonoBehaviour
         //get player npc data
         path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId + "/player-npc-statistics";
         StartCoroutine(GetPlayerNPCStatistics(path));
+        */
     }
 
     /// <summary>
@@ -378,7 +389,7 @@ public class GameManager : MonoBehaviour
     /// <param name="uri">The path to send the GET request to</param>
     /// <param name="worldIndex">The world index to be requested at the backend</param>
     /// <returns></returns>
-    private IEnumerator GetWorldDTO(String uri, int worldIndex)
+    private async Task<WorldDTO> GetWorldDTO(String uri, int worldIndex)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndex))
         {
@@ -386,7 +397,12 @@ public class GameManager : MonoBehaviour
             Debug.Log("Path: " + uri + worldIndex);
 
             // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
+            var request = webRequest.SendWebRequest();
+
+            while(!request.isDone)
+            {
+                await Task.Yield();
+            }
 
             switch (webRequest.result)
             {
@@ -400,11 +416,10 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + worldIndex + ":\nReceived: " + webRequest.downloadHandler.text);
                     WorldDTO worldDTO = JsonUtility.FromJson<WorldDTO>(webRequest.downloadHandler.text);
-                    processWorldDTO(worldIndex, worldDTO);
-                    break;
+                    return worldDTO;
             }
+            return null;
         }
-        somethingToUpdate = true;
     }
 
     private IEnumerator GetDungeonDTO(String uri, int dungeonIndex)
