@@ -325,7 +325,7 @@ public class GameManager : MonoBehaviour
         string path = "/overworld/api/v1/courses/" + courseId;
 
         //reset variables
-        worldData = null;
+        worldData = new WorldDTO[maxWorld+1];
         playerMinigameStatistics = null;
         playerNPCStatistics = null;
 
