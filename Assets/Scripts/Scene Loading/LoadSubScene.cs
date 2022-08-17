@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class LoadSubScene : MonoBehaviour
 {
@@ -10,7 +12,6 @@ public class LoadSubScene : MonoBehaviour
     public GameObject fadeOutPanel;
     public float loadingTime;
     public Vector2 playerPosition;
-
 
     private void OnTriggerEnter2D(Collider2D player)
     {
@@ -28,11 +29,27 @@ public class LoadSubScene : MonoBehaviour
     /// <returns></returns>
     public IEnumerator FadeCoroutine()
     {
+        SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Additive);
         GameObject fadeOutPanelCopy = Instantiate(fadeOutPanel, Vector3.zero, Quaternion.identity);
         yield return new WaitForSeconds(loadingTime);
         AsyncOperation asyncOperationLoad = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+
+        if (LoadingManager.instance != null)
+        {
+            LoadingManager.instance.loadingScreen.SetActive(true);
+        }
+        
         while (!asyncOperationLoad.isDone)
         {
+            float progress = Mathf.Clamp01(asyncOperationLoad.progress / .9f);
+            
+            if(LoadingManager.instance != null)
+            {
+                LoadingManager.instance.slider.value = progress;
+                LoadingManager.instance.progressText.text = progress * 100f + "%";
+                Debug.Log("Progress: " + progress);
+            }
+
             yield return null;
         }
 
