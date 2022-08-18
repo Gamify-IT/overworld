@@ -60,6 +60,8 @@ SpriteAtlas:
     - {fileID: 2800000, guid: a745fc5994ed84f49b1855d70e28c0d7, type: 3}
     - {fileID: 2800000, guid: 20da17b2d591d5e4f9588db4dade1fb5, type: 3}
     - {fileID: 2800000, guid: 571074cd13bc9f746aabc0244df0b18a, type: 3}
+    - {fileID: 2800000, guid: 293ac3850071e8b438607154a1a88eeb, type: 3}
+    - {fileID: 2800000, guid: c21de73d7824de8479bcbc3fe269856d, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -2247,6 +2249,7 @@ SpriteAtlas:
   - {fileID: -1509454071, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
   - {fileID: -1383968937, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
   - {fileID: -1891441975, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
+  - {fileID: 1398645228, guid: 293ac3850071e8b438607154a1a88eeb, type: 3}
   - {fileID: -1133208779, guid: 816c3e1783cd4184c97879a6305f0c25, type: 3}
   - {fileID: -1558026428, guid: 816c3e1783cd4184c97879a6305f0c25, type: 3}
   - {fileID: 77235769, guid: 816c3e1783cd4184c97879a6305f0c25, type: 3}
@@ -5307,6 +5310,7 @@ SpriteAtlas:
   - {fileID: 493657495, guid: 077ec99ca1da94e6786dc7a863b1cff3, type: 3}
   - {fileID: 1510149102, guid: 077ec99ca1da94e6786dc7a863b1cff3, type: 3}
   - {fileID: -2018769201, guid: 077ec99ca1da94e6786dc7a863b1cff3, type: 3}
+  - {fileID: 21300000, guid: c21de73d7824de8479bcbc3fe269856d, type: 3}
   - {fileID: -378518129, guid: 571074cd13bc9f746aabc0244df0b18a, type: 3}
   - {fileID: -1382939622, guid: 571074cd13bc9f746aabc0244df0b18a, type: 3}
   - {fileID: 1864662301, guid: 571074cd13bc9f746aabc0244df0b18a, type: 3}
@@ -7520,6 +7524,7 @@ SpriteAtlas:
   - HUD_objects_6
   - HUD_objects_7
   - HUD_objects_4
+  - raccoon-32-32_0
   - MinimapWorldVizes_4
   - MinimapWorldVizes_5
   - MinimapWorldVizes_2
@@ -10580,6 +10585,7 @@ SpriteAtlas:
   - Inner_40
   - Inner_39
   - Inner_38
+  - tower-bars
   - caveAdditional_2
   - caveAdditional_0
   - caveAdditional_1
