@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Interaction : MonoBehaviour
 
-    {
-    
+{
     public Transform detectionPoint;
 
     private const float detectionRadius = 0.5f;
@@ -13,15 +10,13 @@ public class Interaction : MonoBehaviour
     public LayerMask detectionLayer;
 
     public GameObject detectedObject;
+
     void Update()
     {
-        if(DetectObject())
+        if (DetectObject() && !PauseMenu.menuOpen && InteractInput())
         {
-            if(InteractInput())
-            {
-                Debug.Log("Interact");
-                detectedObject.GetComponent<Item>().Interact();
-            }
+            Debug.Log("Interact");
+            detectedObject.GetComponent<Item>().Interact();
         }
     }
 
@@ -32,7 +27,7 @@ public class Interaction : MonoBehaviour
 
     bool DetectObject()
     {
-        Collider2D obj =  Physics2D.OverlapCircle(detectionPoint.position, detectionRadius, detectionLayer);
+        Collider2D obj = Physics2D.OverlapCircle(detectionPoint.position, detectionRadius, detectionLayer);
         if (obj == null)
         {
             detectedObject = null;
