@@ -23,6 +23,7 @@ public class MinigameData
     }
 
     #region GetterAndSetter
+    
     public string getGame()
     {
         return game;
