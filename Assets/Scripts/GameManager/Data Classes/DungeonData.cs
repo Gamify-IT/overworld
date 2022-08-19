@@ -39,6 +39,30 @@ public class DungeonData
     #endregion
 
     #region GetterAndSetter
+    public void setMinigameStatus(int index, MinigameStatus status)
+    {
+        if (index < minigames.Length)
+        {
+            minigames[index].setStatus(status);
+        }
+    }
+
+    public void setMinigameHighscore(int index, int highscore)
+    {
+        if (index < minigames.Length)
+        {
+            minigames[index].setHighscore(highscore);
+        }
+    }
+
+    public void setNPCStatus(int index, bool completed)
+    {
+        if (index < npcs.Length)
+        {
+            npcs[index].setHasBeenTalkedTo(completed);
+        }
+    }
+
     public MinigameStatus getMinigameStatus(int index)
     {
         if (index < minigames.Length)
@@ -46,6 +70,30 @@ public class DungeonData
             return minigames[index].getStatus();
         }
         return MinigameStatus.notConfigurated;
+    }
+
+    public MinigameData getMinigameData(int index)
+    {
+        if (index > 0 && index < minigames.Length)
+        {
+            return minigames[index];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public NPCData getNPCData(int index)
+    {
+        if (index > 0 && index < npcs.Length)
+        {
+            return npcs[index];
+        }
+        else
+        {
+            return null;
+        }
     }
     #endregion
 }
