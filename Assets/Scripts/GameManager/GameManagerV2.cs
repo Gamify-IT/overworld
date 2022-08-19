@@ -181,13 +181,12 @@ public class GameManagerV2 : MonoBehaviour
     #region Loading
     //läd alle daten vom backend und verarbeitet und setzt in worldData
     //wird von gameStart oder minigameEnde aufgerufen
-    public async void fetchData()
+    public async UniTask fetchData()
     {
         if(!active)
         {
             return;
         }
-        //TODO
 
         //path to get world data from
         string path = "/overworld/api/v1/courses/" + courseId;
@@ -231,39 +230,55 @@ public class GameManagerV2 : MonoBehaviour
         if (Input.GetKeyDown("h"))
         {
             Debug.Log("world: " + currentWorld + ", dungeon: " + currentDungeon);
-            setData(currentWorld, currentDungeon);
+            manualLoad();
         }
 
         //print all stored objects
         if (Input.GetKeyDown("j"))
         {
-            for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
+            printInfo();
+        }
+    }
+
+    //load data and set current area
+    private async void manualLoad()
+    {
+        Debug.Log("Loading Data");
+        await fetchData();
+        Debug.Log("Finished Loading");
+        setData(currentWorld, currentDungeon);
+        Debug.Log("Finished relaod");
+    }
+
+    //print stored objects info
+    private void printInfo()
+    {
+        for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
+        {
+            for (int minigameIndex = 0; minigameIndex <= maxMinigames; minigameIndex++)
             {
-                for (int minigameIndex = 0; minigameIndex <= maxMinigames; minigameIndex++)
+                if (minigameObjects[worldIndex, minigameIndex] != null)
                 {
-                    if (minigameObjects[worldIndex, minigameIndex] != null)
-                    {
-                        Minigame minigame = minigameObjects[worldIndex, minigameIndex].GetComponent<Minigame>();
-                        Debug.Log("Minigame slot " + worldIndex + "-" + minigameIndex + " contains minigame: " + minigame.getWorldIndex() + "-" + minigame.getDungeonIndex() + "-" + minigame.getIndex());
-                    }
+                    Minigame minigame = minigameObjects[worldIndex, minigameIndex].GetComponent<Minigame>();
+                    Debug.Log("Minigame slot " + worldIndex + "-" + minigameIndex + " contains minigame: " + minigame.getWorldIndex() + "-" + minigame.getDungeonIndex() + "-" + minigame.getIndex());
                 }
+            }
 
-                for (int barrierIndex = 0; barrierIndex <= maxWorld; barrierIndex++)
+            for (int barrierIndex = 0; barrierIndex <= maxWorld; barrierIndex++)
+            {
+                if (barrierObjects[worldIndex, barrierIndex] != null)
                 {
-                    if (barrierObjects[worldIndex, barrierIndex] != null)
-                    {
-                        Barrier barrier = barrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>();
-                        Debug.Log("Barrier slot " + worldIndex + "-" + barrierIndex + " contains barrier: " + barrier.getWorldOriginIndex() + "->" + barrier.getWorldDestinationIndex());
-                    }
+                    Barrier barrier = barrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>();
+                    Debug.Log("Barrier slot " + worldIndex + "-" + barrierIndex + " contains barrier: " + barrier.getWorldOriginIndex() + "->" + barrier.getWorldDestinationIndex());
                 }
+            }
 
-                for (int npcIndex = 0; npcIndex <= maxNPCs; npcIndex++)
+            for (int npcIndex = 0; npcIndex <= maxNPCs; npcIndex++)
+            {
+                if (npcObjects[worldIndex, npcIndex] != null)
                 {
-                    if (npcObjects[worldIndex, npcIndex] != null)
-                    {
-                        NPC npc = npcObjects[worldIndex, npcIndex].GetComponent<NPC>();
-                        Debug.Log("NPC slot " + worldIndex + "-" + npcIndex + " contains NPC: " + npc.getWorldIndex() + "-" + npc.getDungeonIndex() + "-" + npc.getIndex());
-                    }
+                    NPC npc = npcObjects[worldIndex, npcIndex].GetComponent<NPC>();
+                    Debug.Log("NPC slot " + worldIndex + "-" + npcIndex + " contains NPC: " + npc.getWorldIndex() + "-" + npc.getDungeonIndex() + "-" + npc.getIndex());
                 }
             }
         }
@@ -612,12 +627,16 @@ public class GameManagerV2 : MonoBehaviour
     //sets data to objects, called by AreaEnter objects
     public void setData(int worldIndex, int dungeonIndex)
     {
+        currentWorld = worldIndex;
+        currentDungeon = dungeonIndex;
         if(dungeonIndex != 0)
         {
+            Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
             setDungeonData(worldIndex, dungeonIndex);
         }
         else
         {
+            Debug.Log("Setting data for world " + worldIndex);
             setWorldData(worldIndex);
         }
     }
