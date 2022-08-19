@@ -43,6 +43,7 @@ public class GameManagerV2 : MonoBehaviour
 
     //Data
     private WorldData[] worldData = new WorldData[maxWorld + 1];
+    private PlayerstatisticDTO playerData;
 
     //State
     public bool active = true;
@@ -423,6 +424,7 @@ public class GameManagerV2 : MonoBehaviour
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
                     PlayerstatisticDTO playerStatistic = JsonUtility.FromJson<PlayerstatisticDTO>(webRequest.downloadHandler.text);
+                    playerData = playerStatistic;
                     Debug.Log("Player knowledge: " + playerStatistic.knowledge);
                     break;
             }
@@ -607,7 +609,6 @@ public class GameManagerV2 : MonoBehaviour
     #endregion
 
     #region SettingData
-
     //sets data to objects, called by AreaEnter objects
     public void setData(int worldIndex, int dungeonIndex)
     {
@@ -661,8 +662,42 @@ public class GameManagerV2 : MonoBehaviour
             }
             npc.setup(npcData);
         }
+
+        for(int barrierDestinationIndex = 1; barrierDestinationIndex <= maxWorld; barrierDestinationIndex++)
+        {
+            GameObject barrierObject = barrierObjects[worldIndex, barrierDestinationIndex];
+            if(barrierObject == null)
+            {
+                break;
+            }
+            Barrier barrier = barrierObject.GetComponent<Barrier>();
+            if(barrier == null)
+            {
+                break;
+            }
+            bool activedByLecturer = worldData[barrierDestinationIndex].isActive();
+            bool unlockedByPlayer = playerHasWorldUnlocked(barrierDestinationIndex);
+            bool worldExplorable = activedByLecturer & unlockedByPlayer;
+            BarrierData barrierData = new BarrierData(!worldExplorable);
+            barrier.setup(barrierData);
+        }
     }
 
+    //has player unlocked the world
+    private bool playerHasWorldUnlocked(int worldIndex)
+    {
+        for (int i = 0; i < playerData.unlockedAreas.Length; i++)
+        {
+            if (playerData.unlockedAreas[i].worldIndex == worldIndex &&
+                playerData.unlockedAreas[i].dungeonIndex == 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //setup dungeon data
     private void setDungeonData(int worldIndex, int dungeonIndex)
     {
         if (worldIndex < 1 || worldIndex >= worldData.Length)

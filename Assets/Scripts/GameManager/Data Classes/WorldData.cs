@@ -140,5 +140,10 @@ public class WorldData
             return null;
         }
     }
+    
+    public bool isActive()
+    {
+        return active;
+    }
     #endregion
 }
