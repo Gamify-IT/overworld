@@ -540,14 +540,20 @@ public class GameManagerV2 : MonoBehaviour
         foreach(PlayerTaskStatisticDTO statistic in playerTaskStatistics)
         {
             int worldIndex = statistic.minigameTask.area.worldIndex;
+            
+            if(worldIndex < 0 || worldIndex >= worldData.Length)
+            {
+                break;
+            }
+
             int dungeonIndex = statistic.minigameTask.area.dungeonIndex;
             int index = statistic.minigameTask.index;
             int highscore = statistic.highscore;
             bool completed = statistic.completed;
             MinigameStatus status = MinigameStatus.notConfigurated;
-            if(gameIsConfigured(worldIndex, dungeonIndex, index))
+            if(minigameStatus(worldIndex, dungeonIndex, index) != MinigameStatus.notConfigurated)
             {
-                if(highscore >= scoreToCompleteMinigames)
+                if(completed)
                 {
                     status = MinigameStatus.done;
                 }
@@ -556,39 +562,27 @@ public class GameManagerV2 : MonoBehaviour
                     status = MinigameStatus.active;
                 }
             }
-            worldData[worldIndex].setMinigameStatus(index, status);
+            worldData[worldIndex].setMinigameStatus(dungeonIndex, index, status);
+            worldData[worldIndex].setMinigameHighscore(dungeonIndex, index, highscore);
         }
     }
 
-    //checks if the game references is still configured (could have been deleted by lecturer)
-    private bool gameIsConfigured(int worldIndex, int dungeonIndex, int index)
+    //returns the status of a minigame
+    private MinigameStatus minigameStatus(int worldIndex, int dungeonIndex, int index)
     {
-        bool result = true;
+        if(worldIndex < 0 || worldIndex >= worldData.Length)
+        {
+            return MinigameStatus.notConfigurated;
+        }
+
         if(dungeonIndex != 0)
         {
-            if (worldData[worldIndex].getMinigameStatus(dungeonIndex, index) != MinigameStatus.notConfigurated)
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
+            return worldData[worldIndex].getMinigameStatus(dungeonIndex, index);
         }
         else
         {
-            if(worldData[worldIndex].getMinigameStatus(index) != MinigameStatus.notConfigurated)
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
+            return worldData[worldIndex].getMinigameStatus(index);
         }
-
-
-        return result;
     }
 
     /// <summary>
@@ -597,7 +591,18 @@ public class GameManagerV2 : MonoBehaviour
     /// <param name="playerNPCStatistics">The player npc statistics data returned from the backend</param>
     private void processPlayerNPCStatistics(PlayerNPCStatisticDTO[] playerNPCStatistics)
     {
-        //TODO
+        foreach(PlayerNPCStatisticDTO statistic in playerNPCStatistics)
+        {
+            int worldIndex = statistic.npc.area.worldIndex;
+            int dungeonIndex = statistic.npc.area.dungeonIndex;
+            int index = statistic.npc.index;
+            bool completed = statistic.completed;
+
+            if(worldIndex < worldData.Length)
+            {
+                worldData[worldIndex].setNPCStatus(dungeonIndex, index, completed);
+            }
+        }
     }
     #endregion
 
@@ -606,7 +611,102 @@ public class GameManagerV2 : MonoBehaviour
     //sets data to objects, called by AreaEnter objects
     public void setData(int worldIndex, int dungeonIndex)
     {
-        //TODO
+        if(dungeonIndex != 0)
+        {
+            setDungeonData(worldIndex, dungeonIndex);
+        }
+        else
+        {
+            setWorldData(worldIndex);
+        }
+    }
+
+    //sets world data
+    private void setWorldData(int worldIndex)
+    {
+        if(worldIndex < 1 || worldIndex >= worldData.Length)
+        {
+            return;
+        }
+        WorldData data = worldData[worldIndex];
+
+        for(int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
+        {
+            MinigameData minigameData = data.getMinigameData(minigameIndex);
+            GameObject minigameObject = minigameObjects[worldIndex, minigameIndex];
+            if (minigameObject == null)
+            {
+                break;
+            }
+            Minigame minigame = minigameObject.GetComponent<Minigame>();
+            if (minigame == null)
+            {
+                break;
+            }
+            minigame.setup(minigameData);
+        }
+
+        for(int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
+        {
+            NPCData npcData = data.getNPCData(npcIndex);
+            GameObject npcObject = npcObjects[worldIndex, npcIndex];
+            if (npcObject == null)
+            {
+                break;
+            }
+            NPC npc = npcObject.GetComponent<NPC>();
+            if(npc == null)
+            {
+                break;
+            }
+            npc.setup(npcData);
+        }
+    }
+
+    private void setDungeonData(int worldIndex, int dungeonIndex)
+    {
+        if (worldIndex < 1 || worldIndex >= worldData.Length)
+        {
+            return;
+        }
+
+        DungeonData data = worldData[worldIndex].getDungeonData(dungeonIndex);
+        if(data == null)
+        {
+            return;
+        }
+
+        for (int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
+        {
+            MinigameData minigameData = data.getMinigameData(minigameIndex);
+            GameObject minigameObject = minigameObjects[0, minigameIndex];
+            if (minigameObject == null)
+            {
+                break;
+            }
+            Minigame minigame = minigameObject.GetComponent<Minigame>();
+            if (minigame == null)
+            {
+                break;
+            }
+            minigame.setup(minigameData);
+        }
+
+        for (int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
+        {
+            NPCData npcData = data.getNPCData(npcIndex);
+            GameObject npcObject = npcObjects[0, npcIndex];
+            if (npcObject == null)
+            {
+                break;
+            }
+            NPC npc = npcObject.GetComponent<NPC>();
+            if (npc == null)
+            {
+                break;
+            }
+            npc.setup(npcData);
+        }
     }
     #endregion
 }

@@ -42,11 +42,48 @@ public class WorldData
     #endregion
 
     #region GetterAndSetter
-    public void setMinigameStatus(int index, MinigameStatus status)
+    public void setMinigameStatus(int dungeonIndex, int index, MinigameStatus status)
     {
-        if(index < minigames.Length)
+        if(dungeonIndex != 0)
+        {
+            if(dungeonIndex < dungeons.Length)
+            {
+                dungeons[dungeonIndex].setMinigameStatus(index, status);
+            }
+        }
+        else if(index < minigames.Length)
         {
             minigames[index].setStatus(status);
+        }
+    }
+
+    public void setMinigameHighscore(int dungeonIndex, int index, int highscore)
+    {
+        if (dungeonIndex != 0)
+        {
+            if (dungeonIndex < dungeons.Length)
+            {
+                dungeons[dungeonIndex].setMinigameHighscore(index, highscore);
+            }
+        }
+        else if (index < minigames.Length)
+        {
+            minigames[index].setHighscore(highscore);
+        }
+    }
+
+    public void setNPCStatus(int dungeonIndex, int index, bool completed)
+    {
+        if(dungeonIndex != 0)
+        {
+            if(dungeonIndex < dungeons.Length)
+            {
+                dungeons[dungeonIndex].setNPCStatus(index, completed);
+            }
+        }
+        else if(index < npcs.Length)
+        {
+            npcs[index].setHasBeenTalkedTo(completed);
         }
     }
 
@@ -66,6 +103,42 @@ public class WorldData
             return dungeons[dungeonIndex].getMinigameStatus(index);
         }
         return MinigameStatus.notConfigurated;
+    }
+
+    public MinigameData getMinigameData(int index)
+    {
+        if(index > 0 && index < minigames.Length)
+        {
+            return minigames[index];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public NPCData getNPCData(int index)
+    {
+        if (index > 0 && index < npcs.Length)
+        {
+            return npcs[index];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public DungeonData getDungeonData(int index)
+    {
+        if (index > 0 && index < dungeons.Length)
+        {
+            return dungeons[index];
+        }
+        else
+        {
+            return null;
+        }
     }
     #endregion
 }
