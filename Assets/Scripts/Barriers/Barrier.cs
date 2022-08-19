@@ -27,7 +27,7 @@ public class Barrier : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove Barrier " + worldIndexOrigin + "->" + worldIndexDestination);
-        GameManager.instance.removeBarrier(worldIndexOrigin, worldIndexDestination);
+        GameManagerV2.instance.removeBarrier(worldIndexOrigin, worldIndexDestination);
     }
 
     /*
@@ -36,7 +36,7 @@ public class Barrier : MonoBehaviour
     private void registerToGameManager()
     {
         Debug.Log("register Barrier " + worldIndexOrigin + "->" + worldIndexDestination);
-        GameManager.instance.addBarrier(this.gameObject, worldIndexOrigin, worldIndexDestination);
+        GameManagerV2.instance.addBarrier(this.gameObject, worldIndexOrigin, worldIndexDestination);
     }
     #endregion
 

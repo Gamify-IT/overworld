@@ -20,6 +20,6 @@ public class EnterArea : MonoBehaviour
 
     private void triggerLoading()
     {
-        GameManager.instance.loadWorld(worldNumber, dungeonNumber);
+        GameManagerV2.instance.setData(worldNumber, dungeonNumber);
     }
 }
