@@ -634,6 +634,10 @@ public class GameManagerV2 : MonoBehaviour
         for(int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
         {
             MinigameData minigameData = data.getMinigameData(minigameIndex);
+            if(minigameData == null)
+            {
+                minigameData = new MinigameData("", "", MinigameStatus.notConfigurated, 0);
+            }
             GameObject minigameObject = minigameObjects[worldIndex, minigameIndex];
             if (minigameObject == null)
             {
@@ -650,6 +654,11 @@ public class GameManagerV2 : MonoBehaviour
         for(int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
         {
             NPCData npcData = data.getNPCData(npcIndex);
+            if(npcData == null)
+            {
+                string[] dialogue = { "" };
+                npcData = new NPCData("", dialogue, true);
+            }
             GameObject npcObject = npcObjects[worldIndex, npcIndex];
             if (npcObject == null)
             {
@@ -714,6 +723,10 @@ public class GameManagerV2 : MonoBehaviour
         for (int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
         {
             MinigameData minigameData = data.getMinigameData(minigameIndex);
+            if (minigameData == null)
+            {
+                minigameData = new MinigameData("", "", MinigameStatus.notConfigurated, 0);
+            }
             GameObject minigameObject = minigameObjects[0, minigameIndex];
             if (minigameObject == null)
             {
@@ -730,6 +743,11 @@ public class GameManagerV2 : MonoBehaviour
         for (int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
         {
             NPCData npcData = data.getNPCData(npcIndex);
+            if (npcData == null)
+            {
+                string[] dialogue = { "" };
+                npcData = new NPCData("", dialogue, true);
+            }
             GameObject npcObject = npcObjects[0, npcIndex];
             if (npcObject == null)
             {
