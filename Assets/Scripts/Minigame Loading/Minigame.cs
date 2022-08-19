@@ -51,7 +51,7 @@ public class Minigame : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
-        GameManager.instance.removeMinigame(world, dungeon, number);
+        GameManagerV2.instance.removeMinigame(world, dungeon, number);
     }
 
     /*
@@ -60,7 +60,7 @@ public class Minigame : MonoBehaviour
     private void registerToGameManager()
     {
         Debug.Log("register Minigame " + world + "-" + dungeon + "-" + number);
-        GameManager.instance.addMinigame(this.gameObject, world, dungeon, number);
+        GameManagerV2.instance.addMinigame(this.gameObject, world, dungeon, number);
     }
     #endregion
 
