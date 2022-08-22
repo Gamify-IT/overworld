@@ -28,28 +28,27 @@ public class GameManagerV2 : MonoBehaviour
 
     #region Attributes
     //werden ausgelagert
-    private static int maxWorld = 5;
-    private static int maxMinigames = 12;
-    private static int maxNPCs = 10;
-    private static int maxDungeons = 4;
-    private static int courseId = 1;
-    private static int playerId = 1;
-    private static int scoreToCompleteMinigames = 50;
+    private int maxWorld;
+    private int maxMinigames;
+    private int maxNPCs;
+    private int maxDungeons;
+    private int courseId = 1;
+    private int playerId = 1;
 
     //GameObjects
-    private GameObject[,] minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
-    private GameObject[,] barrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
-    private GameObject[,] npcObjects = new GameObject[maxWorld + 1, maxNPCs + 1];
+    private GameObject[,] minigameObjects;
+    private GameObject[,] barrierObjects;
+    private GameObject[,] npcObjects;
 
     //Data
-    private WorldData[] worldData = new WorldData[maxWorld + 1];
+    private WorldData[] worldData;
     private PlayerstatisticDTO playerData;
 
     //State
-    public bool active = true;
+    public bool active;
 
     //kann eigentlich weg, wenn wir den return value vom uni task haben
-    private WorldDTO[] worldDTOs = new WorldDTO[maxWorld + 1];
+    private WorldDTO[] worldDTOs;
     private PlayerTaskStatisticDTO[] playerMinigameStatistics;
     private PlayerNPCStatisticDTO[] playerNPCStatistics;
 
@@ -65,6 +64,22 @@ public class GameManagerV2 : MonoBehaviour
     private void setupGameManager()
     {
         instance = this;
+
+        maxWorld = GameSettings.getMaxWorlds();
+        maxMinigames = GameSettings.getMaxMinigames();
+        maxNPCs = GameSettings.getMaxNPCs();
+        maxDungeons = GameSettings.getMaxDungeons();
+
+        minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
+        barrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
+        npcObjects = new GameObject[maxWorld + 1, maxNPCs + 1];
+
+        worldData = new WorldData[maxWorld + 1];
+
+        active = false;
+
+        worldDTOs = new WorldDTO[maxWorld + 1];
+
         for (int worldIndex = 0; worldIndex < maxWorld; worldIndex++)
         {
             worldData[worldIndex] = new WorldData();
@@ -255,31 +270,50 @@ public class GameManagerV2 : MonoBehaviour
     {
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
         {
-            for (int minigameIndex = 0; minigameIndex <= maxMinigames; minigameIndex++)
+            Debug.Log("World: " + worldIndex);
+            Debug.Log("  Minigames:");
+            for (int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
             {
+                string status = "";
                 if (minigameObjects[worldIndex, minigameIndex] != null)
                 {
-                    Minigame minigame = minigameObjects[worldIndex, minigameIndex].GetComponent<Minigame>();
-                    Debug.Log("Minigame slot " + worldIndex + "-" + minigameIndex + " contains minigame: " + minigame.getWorldIndex() + "-" + minigame.getDungeonIndex() + "-" + minigame.getIndex());
+                    status = minigameObjects[worldIndex, minigameIndex].GetComponent<Minigame>().getInfo();
                 }
+                else
+                {
+                    status = "none";
+                }
+                Debug.Log("    Minigame slot " + worldIndex + "-" + minigameIndex + " contains minigame: " + status);
             }
 
-            for (int barrierIndex = 0; barrierIndex <= maxWorld; barrierIndex++)
+            Debug.Log("  Barriers:");
+            for (int barrierIndex = 1; barrierIndex <= maxWorld; barrierIndex++)
             {
+                string status = "";
                 if (barrierObjects[worldIndex, barrierIndex] != null)
                 {
-                    Barrier barrier = barrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>();
-                    Debug.Log("Barrier slot " + worldIndex + "-" + barrierIndex + " contains barrier: " + barrier.getWorldOriginIndex() + "->" + barrier.getWorldDestinationIndex());
+                    status = barrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>().getInfo();
                 }
+                else
+                {
+                    status = "none";
+                }
+                Debug.Log("    Barrier slot " + worldIndex + "-" + barrierIndex + " contains barrier: " + status);
             }
 
-            for (int npcIndex = 0; npcIndex <= maxNPCs; npcIndex++)
+            Debug.Log("  NPCs:");
+            for (int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
             {
+                string status = "";
                 if (npcObjects[worldIndex, npcIndex] != null)
                 {
-                    NPC npc = npcObjects[worldIndex, npcIndex].GetComponent<NPC>();
-                    Debug.Log("NPC slot " + worldIndex + "-" + npcIndex + " contains NPC: " + npc.getWorldIndex() + "-" + npc.getDungeonIndex() + "-" + npc.getIndex());
+                    status = npcObjects[worldIndex, npcIndex].GetComponent<NPC>().getInfo();
                 }
+                else
+                {
+                    status = "none";
+                }
+                Debug.Log("    NPC slot " + worldIndex + "-" + npcIndex + " contains NPC: " + status);
             }
         }
     }

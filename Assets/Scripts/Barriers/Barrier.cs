@@ -68,6 +68,13 @@ public class Barrier : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
+    
+    //returns barrier object info
+    public string getInfo()
+    {
+        string info = worldIndexOrigin + "->" + worldIndexDestination + ": active: " + isActive;
+        return info;
+    }
     #endregion
 
     #region Getter

@@ -128,6 +128,13 @@ public class Minigame : MonoBehaviour
                 break;
         }
     }
+
+    //returns minigame object info
+    public string getInfo()
+    {
+        string info = world + "-" + dungeon + "-" + number + ": Game: " + game + ", Config: " + configurationID + ", Status: " + status.ToString() + ", Highscore: " + highscore;
+        return info;
+    }
     #endregion
 
     #region Getter
