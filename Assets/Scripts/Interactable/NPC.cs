@@ -24,7 +24,7 @@ public class NPC : MonoBehaviour
     private void Awake()
     {
         GameObject child = transform.GetChild(0).gameObject;
-        if(child != null)
+        if (child != null)
         {
             speechIndicator = child;
         }
@@ -48,21 +48,28 @@ public class NPC : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded)
+        if (Input.GetKeyDown(KeyCode.E) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+            !PauseMenu.menuOpen)
         {
-            if(!hasBeenTalkedTo)
+            if (!hasBeenTalkedTo)
             {
                 markAsRead();
             }
+
             StartCoroutine(LoadDialogueScene());
-        } else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded && typingIsFinished)
+        }
+        else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+                 typingIsFinished &&
+                 !PauseMenu.menuOpen)
         {
             Debug.Log(dialogue.Length - 1);
-            Debug.Log("index before next" +  index);
+            Debug.Log("index before next" + index);
             NextLine();
             Debug.Log("index after next" + index);
         }
-        else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded && !typingIsFinished)
+        else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+                 !typingIsFinished &&
+                 !PauseMenu.menuOpen)
         {
             StopCoroutine("Typing");
             dialogueText.text = "";
@@ -76,7 +83,7 @@ public class NPC : MonoBehaviour
     {
         hasBeenTalkedTo = true;
         speechIndicator.SetActive(false);
-        GameManager.instance.markNPCasRead(uuid,hasBeenTalkedTo);
+        GameManager.instance.markNPCasRead(uuid, hasBeenTalkedTo);
     }
 
     // register to game manager
@@ -85,7 +92,7 @@ public class NPC : MonoBehaviour
         Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
         GameManagerV2.instance.addNPC(this.gameObject, world, dungeon, number);
     }
-    
+
     //setup called by game manager
     public void setup(NPCData data)
     {
@@ -136,6 +143,7 @@ public class NPC : MonoBehaviour
             dialogueText.text += letter;
             yield return new WaitForSeconds(wordSpeed);
         }
+
         typingIsFinished = true;
         Debug.Log(typingIsFinished);
     }
@@ -146,7 +154,7 @@ public class NPC : MonoBehaviour
     /// </summary>
     public void NextLine()
     {
-        if(index < dialogue.Length - 1)
+        if (index < dialogue.Length - 1)
         {
             index++;
             dialogueText.text = "";
@@ -163,7 +171,7 @@ public class NPC : MonoBehaviour
     /// </summary>
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             playerIsClose = true;
         }
@@ -195,6 +203,7 @@ public class NPC : MonoBehaviour
         {
             yield return null;
         }
+
         GameObject.Find("ImageOfNPC").GetComponent<Image>().sprite = imageOfNPC;
         GameObject.Find("NPC_Name").GetComponent<TextMeshProUGUI>().text = nameOfNPC;
         dialogueText = GameObject.Find("Dialogue").GetComponent<TextMeshProUGUI>();
@@ -216,6 +225,7 @@ public class NPC : MonoBehaviour
     }
 
     #region Getter
+
     public int getWorldIndex()
     {
         return world;
@@ -230,5 +240,6 @@ public class NPC : MonoBehaviour
     {
         return number;
     }
+
     #endregion
 }
