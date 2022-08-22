@@ -195,6 +195,20 @@ public class NPC : MonoBehaviour
         StartCoroutine("Typing");
     }
 
+    //returns NPC object info
+    public string getInfo()
+    {
+        string info = "";
+        string text = "";
+        for(int index = 0; index < dialogue.Length; index++)
+        {
+            text += dialogue[index];
+            text += "; ";
+        }
+        info = world + "-" + dungeon + "-" + number + ": Text: " + text + ", completed: " + hasBeenTalkedTo;
+        return info;
+    }
+
     #region Getter
     public int getWorldIndex()
     {
