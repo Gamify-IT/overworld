@@ -93,7 +93,13 @@ public class NPC : MonoBehaviour
         dialogue = data.getDialogue();
         hasBeenTalkedTo = data.getHasBeenTalkedTo();
         initNewStuffSprite();
-        Debug.Log("setup npc " + world + "-" + number + "with new dialogue: " + dialogue.ToString() + ", new info: " + !hasBeenTalkedTo);
+        string text = "";
+        for(int index = 0; index < dialogue.Length; index++)
+        {
+            text += dialogue[index];
+            text += " ; ";
+        }
+        Debug.Log("setup npc " + world + "-" + number + " with new dialogue: " + text + ", new info: " + !hasBeenTalkedTo);
     }
 
     private void initNewStuffSprite()

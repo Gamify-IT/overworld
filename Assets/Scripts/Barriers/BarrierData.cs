@@ -16,6 +16,11 @@ public class BarrierData
         this.isActive = isActive;
     }
 
+    public BarrierData()
+    {
+        isActive = true;
+    }
+
     #region GetterAndSetter
     public bool getIsActive()
     {
