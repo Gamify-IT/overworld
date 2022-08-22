@@ -689,17 +689,17 @@ public class GameManagerV2 : MonoBehaviour
             MinigameData minigameData = data.getMinigameData(minigameIndex);
             if(minigameData == null)
             {
-                minigameData = new MinigameData("", "", MinigameStatus.notConfigurated, 0);
+                minigameData = new MinigameData();
             }
             GameObject minigameObject = minigameObjects[worldIndex, minigameIndex];
             if (minigameObject == null)
             {
-                break;
+                continue;
             }
             Minigame minigame = minigameObject.GetComponent<Minigame>();
             if (minigame == null)
             {
-                break;
+                continue;
             }
             minigame.setup(minigameData);
         }
@@ -709,18 +709,17 @@ public class GameManagerV2 : MonoBehaviour
             NPCData npcData = data.getNPCData(npcIndex);
             if(npcData == null)
             {
-                string[] dialogue = { "" };
-                npcData = new NPCData("", dialogue, true);
+                npcData = new NPCData();
             }
             GameObject npcObject = npcObjects[worldIndex, npcIndex];
             if (npcObject == null)
             {
-                break;
+                continue;
             }
             NPC npc = npcObject.GetComponent<NPC>();
             if(npc == null)
             {
-                break;
+                continue;
             }
             npc.setup(npcData);
         }
@@ -730,12 +729,12 @@ public class GameManagerV2 : MonoBehaviour
             GameObject barrierObject = barrierObjects[worldIndex, barrierDestinationIndex];
             if(barrierObject == null)
             {
-                break;
+                continue;
             }
             Barrier barrier = barrierObject.GetComponent<Barrier>();
             if(barrier == null)
             {
-                break;
+                continue;
             }
             bool activedByLecturer = worldData[barrierDestinationIndex].isActive();
             bool unlockedByPlayer = playerHasWorldUnlocked(barrierDestinationIndex);
@@ -778,17 +777,17 @@ public class GameManagerV2 : MonoBehaviour
             MinigameData minigameData = data.getMinigameData(minigameIndex);
             if (minigameData == null)
             {
-                minigameData = new MinigameData("", "", MinigameStatus.notConfigurated, 0);
+                minigameData = new MinigameData();
             }
             GameObject minigameObject = minigameObjects[0, minigameIndex];
             if (minigameObject == null)
             {
-                break;
+                continue;
             }
             Minigame minigame = minigameObject.GetComponent<Minigame>();
             if (minigame == null)
             {
-                break;
+                continue;
             }
             minigame.setup(minigameData);
         }
@@ -798,18 +797,17 @@ public class GameManagerV2 : MonoBehaviour
             NPCData npcData = data.getNPCData(npcIndex);
             if (npcData == null)
             {
-                string[] dialogue = { "" };
-                npcData = new NPCData("", dialogue, true);
+                npcData = new NPCData();
             }
             GameObject npcObject = npcObjects[0, npcIndex];
             if (npcObject == null)
             {
-                break;
+                continue;
             }
             NPC npc = npcObject.GetComponent<NPC>();
             if (npc == null)
             {
-                break;
+                continue;
             }
             npc.setup(npcData);
         }
