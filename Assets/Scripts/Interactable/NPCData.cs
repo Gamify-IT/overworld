@@ -18,6 +18,14 @@ public class NPCData
         this.hasBeenTalkedTo = hasBeenTalkedTo;
     }
 
+    public NPCData()
+    {
+        uuid = "";
+        string[] text = { "Hi.", "I have nothing to say."};
+        dialogue = text;
+        hasBeenTalkedTo = true;
+    }
+
     #region GetterAndSetter
     public string getUUID()
     {
