@@ -8917,9 +8917,9 @@ TextureImporter:
         - {x: -1, y: 3}
         - {x: 0, y: 4}
         - {x: 2, y: 5}
-        - {x: 4, y: 6}
-        - {x: 7, y: 7}
-        - {x: 8, y: 7}
+        - {x: 8, y: 5}
+        - {x: 8, y: 5}
+        - {x: 8, y: 5}
         - {x: 8, y: -8}
       - - {x: 0, y: 4}
         - {x: 0, y: 4}
@@ -8947,11 +8947,15 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -8, y: -8}
-        - {x: -8, y: 7}
-        - {x: -5, y: 8}
-        - {x: 5, y: 8}
-        - {x: 8, y: 7}
+        - {x: -8, y: 5}
+        - {x: -8, y: 5}
+        - {x: 8, y: 5}
+        - {x: 8, y: 5}
         - {x: 8, y: -8}
+      - - {x: -8, y: 5}
+        - {x: -8, y: 5}
+        - {x: -8, y: 5}
+        - {x: 8, y: 5}
       tessellationDetail: 0
       bones: []
       spriteID: b4de0e5030f55a245a47a4eac9715384
@@ -8974,9 +8978,9 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -8, y: -8}
-        - {x: -8, y: 7}
-        - {x: -7.0279846, y: 7}
-        - {x: -4, y: 6}
+        - {x: -8, y: 5}
+        - {x: -6, y: 5}
+        - {x: -4, y: 5}
         - {x: -2, y: 5}
         - {x: 0, y: 4}
         - {x: 1, y: 3}
@@ -9019,9 +9023,9 @@ TextureImporter:
         - {x: -1, y: 3}
         - {x: 0, y: 4}
         - {x: 2, y: 5}
-        - {x: 4, y: 6}
-        - {x: 7, y: 7}
-        - {x: 8, y: 7}
+        - {x: 8, y: 5}
+        - {x: 8, y: 5}
+        - {x: 8, y: 5}
         - {x: 8, y: -8}
       - - {x: 0, y: 4}
         - {x: 0, y: 4}
@@ -9049,11 +9053,15 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -8, y: -8}
-        - {x: -8, y: 7}
-        - {x: -5, y: 8}
-        - {x: 5, y: 8}
-        - {x: 8, y: 7}
+        - {x: -8, y: 5}
+        - {x: -8, y: 5}
+        - {x: 8, y: 5}
+        - {x: 8, y: 5}
         - {x: 8, y: -8}
+      - - {x: -8, y: 5}
+        - {x: -8, y: 5}
+        - {x: -8, y: 5}
+        - {x: 8, y: 5}
       tessellationDetail: 0
       bones: []
       spriteID: 54d175c05a1c1304389f0224790f5fdb
@@ -9076,9 +9084,9 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -8, y: -8}
-        - {x: -8, y: 7}
-        - {x: -7.0279846, y: 7}
-        - {x: -4, y: 6}
+        - {x: -8, y: 5}
+        - {x: -6, y: 5}
+        - {x: -4, y: 5}
         - {x: -2, y: 5}
         - {x: 0, y: 4}
         - {x: 1, y: 3}
@@ -9121,9 +9129,9 @@ TextureImporter:
         - {x: -1, y: 3}
         - {x: 0, y: 4}
         - {x: 2, y: 5}
-        - {x: 4, y: 6}
-        - {x: 7, y: 7}
-        - {x: 8, y: 7}
+        - {x: 8, y: 5}
+        - {x: 8, y: 5}
+        - {x: 8, y: 5}
         - {x: 8, y: -8}
       - - {x: 0, y: 4}
         - {x: 0, y: 4}
@@ -9151,11 +9159,15 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -8, y: -8}
-        - {x: -8, y: 7}
-        - {x: -5, y: 8}
-        - {x: 5, y: 8}
-        - {x: 8, y: 7}
+        - {x: -8, y: 5}
+        - {x: -8, y: 5}
+        - {x: 8, y: 5}
+        - {x: 8, y: 5}
         - {x: 8, y: -8}
+      - - {x: -8, y: 5}
+        - {x: -8, y: 5}
+        - {x: -8, y: 5}
+        - {x: 8, y: 5}
       tessellationDetail: 0
       bones: []
       spriteID: d23fdc60d04a67648b868e223b1b7852
@@ -9178,9 +9190,9 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -8, y: -8}
-        - {x: -8, y: 7}
-        - {x: -7.0279846, y: 7}
-        - {x: -4, y: 6}
+        - {x: -8, y: 5}
+        - {x: -6, y: 5}
+        - {x: -4, y: 5}
         - {x: -2, y: 5}
         - {x: 0, y: 4}
         - {x: 1, y: 3}
@@ -24536,10 +24548,10 @@ TextureImporter:
       Overworld-Savanna_619: -1161090432
       Overworld-Savanna_605: 674721142
       Overworld-Savanna_1011: -1273286871
-      Overworld-Savanna_155: -1081850894
-      Overworld-Savanna_219: -1497855851
-      Overworld-Savanna_543: -402382518
       Overworld-Savanna_760: 2118579212
+      Overworld-Savanna_543: -402382518
+      Overworld-Savanna_219: -1497855851
+      Overworld-Savanna_155: -1081850894
       Overworld-Savanna_154: 1494039382
       Overworld-Savanna_99: -1820344552
       Overworld-Savanna_489: 202642716
