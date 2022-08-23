@@ -8,6 +8,8 @@ using TMPro;
 public class LoadSubScene : MonoBehaviour
 {
     public string sceneToLoad;
+    public int worldIndex;
+    public int dungeonIndex;
     public GameObject fadeInPanel;
     public GameObject fadeOutPanel;
     public float loadingTime;
@@ -29,18 +31,21 @@ public class LoadSubScene : MonoBehaviour
     /// <returns></returns>
     public IEnumerator FadeCoroutine()
     {
-        SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Additive);
+        //SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Additive);
         GameObject fadeOutPanelCopy = Instantiate(fadeOutPanel, Vector3.zero, Quaternion.identity);
         yield return new WaitForSeconds(loadingTime);
         AsyncOperation asyncOperationLoad = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
 
+        /*
         if (LoadingManager.instance != null)
         {
             LoadingManager.instance.loadingScreen.SetActive(true);
         }
+        */
         
         while (!asyncOperationLoad.isDone)
         {
+            /*
             float progress = Mathf.Clamp01(asyncOperationLoad.progress / .9f);
             
             if(LoadingManager.instance != null)
@@ -49,9 +54,12 @@ public class LoadSubScene : MonoBehaviour
                 LoadingManager.instance.progressText.text = progress * 100f + "%";
                 Debug.Log("Progress: " + progress);
             }
+            */
 
             yield return null;
         }
+
+        GameManagerV2.instance.setData(worldIndex, dungeonIndex);
 
         for(int sceneIndex = 0;sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
