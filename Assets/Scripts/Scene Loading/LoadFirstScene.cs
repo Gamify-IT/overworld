@@ -17,13 +17,25 @@ public class LoadFirstScene : MonoBehaviour
         int worldIndex = 1;
         int dungeonIndex = 0;
 
+        Debug.Log("Start loading Player");
+
         SceneManager.LoadScene("Player");
 
-        AsyncOperation asyncOperationLoad = SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
-        while (!asyncOperationLoad.isDone) { }
+        Debug.Log("Finish loading Player");
+        Debug.Log("Start loading LoadingScreen");
+
+        await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+
+        Debug.Log("Finish loading LoadingScreen");
+        Debug.Log("Start loading World 1");
 
         await LoadingManager.instance.loadScene("World 1", worldIndex, dungeonIndex, playerPosition);
 
+        Debug.Log("Finish loading World 1");
+        Debug.Log("Start loading HUD");
+
         SceneManager.LoadScene("Player HUD", LoadSceneMode.Additive);
+
+        Debug.Log("Finish loading HUD");
     }
 }
