@@ -4,10 +4,10 @@ using UnityEngine;
 
 public static class GameSettings
 {
-    private static int maxWorld = 5;
-    private static int maxMinigames = 13;
-    private static int maxNPCs = 11;
-    private static int maxDungeons = 5;
+    private static int maxWorld = 4;
+    private static int maxMinigames = 12;
+    private static int maxNPCs = 10;
+    private static int maxDungeons = 4;
 
     public static int getMaxWorlds()
     {
