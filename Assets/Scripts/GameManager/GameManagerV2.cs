@@ -499,7 +499,7 @@ public class GameManagerV2 : MonoBehaviour
         bool active = worldDTO.active;
 
         List<MinigameTaskDTO> minigameDTOs = worldDTO.getMinigameTasks();
-        MinigameData[]  minigames = getMinigameData(minigameDTOs);
+        MinigameData[] minigames = getMinigameData(minigameDTOs);
 
         List<NPCDTO> npcDTOs = worldDTO.getNPCs();
         NPCData[] npcs = getNPCData(npcDTOs);
@@ -513,7 +513,7 @@ public class GameManagerV2 : MonoBehaviour
     //converts MinigameTaskDTOs in minigameData
     private MinigameData[] getMinigameData(List<MinigameTaskDTO> minigameDTOs)
     {
-        MinigameData[] minigameData = new MinigameData[maxMinigames];
+        MinigameData[] minigameData = new MinigameData[maxMinigames+1];
 
         foreach (MinigameTaskDTO minigameDTO in minigameDTOs)
         {
@@ -538,7 +538,7 @@ public class GameManagerV2 : MonoBehaviour
     //converts NPCDTOs in npcData
     private NPCData[] getNPCData(List<NPCDTO> npcDTOs)
     {
-        NPCData[] npcData = new NPCData[maxNPCs];
+        NPCData[] npcData = new NPCData[maxNPCs+1];
 
         foreach (NPCDTO npcDTO in npcDTOs)
         {
