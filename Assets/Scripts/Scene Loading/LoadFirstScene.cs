@@ -8,16 +8,22 @@ public class LoadFirstScene : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SceneManager.LoadScene("Player");
-        //Here you can specify the starting World/Scene
-        SceneManager.LoadScene("World 1", LoadSceneMode.Additive);
-        //Add HUD over it
-        SceneManager.LoadScene("Player HUD", LoadSceneMode.Additive);
+        startGame();
     }
 
-    // Update is called once per frame
-    void Update()
+    private async void startGame()
     {
-        
+        Vector2 playerPosition = new Vector2(21.5f, 2.5f);
+        int worldIndex = 1;
+        int dungeonIndex = 0;
+
+        SceneManager.LoadScene("Player");
+
+        AsyncOperation asyncOperationLoad = SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+        while (!asyncOperationLoad.isDone) { }
+
+        await LoadingManager.instance.loadScene("World 1", worldIndex, dungeonIndex, playerPosition);
+
+        SceneManager.LoadScene("Player HUD", LoadSceneMode.Additive);
     }
 }

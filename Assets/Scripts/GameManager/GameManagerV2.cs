@@ -61,7 +61,7 @@ public class GameManagerV2 : MonoBehaviour
     /// <summary>
     /// This function initializes the <c>GameManager</c>. All arrays are initialized with empty objects.
     /// </summary>
-    private async void setupGameManager()
+    private void setupGameManager()
     {
         instance = this;
 
