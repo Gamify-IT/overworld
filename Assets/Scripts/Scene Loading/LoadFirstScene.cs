@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
 
 public class LoadFirstScene : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class LoadFirstScene : MonoBehaviour
         startGame();
     }
 
-    private async void startGame()
+    private async UniTask startGame()
     {
         Vector2 playerPosition = new Vector2(21.5f, 2.5f);
         int worldIndex = 1;
@@ -24,7 +25,7 @@ public class LoadFirstScene : MonoBehaviour
         Debug.Log("Finish loading Player");
         Debug.Log("Start loading LoadingScreen");
 
-        AsyncOperation operation = SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+        await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
 
         Debug.Log("Finish loading LoadingScreen");
         Debug.Log("Start loading World 1");
