@@ -50,18 +50,29 @@ public class LoadingManager : MonoBehaviour
             return;
         }
 
+        Debug.Log("Start fetching data");
+
         await GameManagerV2.instance.fetchData();
+
+        Debug.Log("Finish fetching data");
 
         slider.value = 0.5f;
 
-        AsyncOperation asyncOperationLoad = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
-        while (!asyncOperationLoad.isDone){}
+        Debug.Log("Start loading scene");
+
+        await SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+
+        Debug.Log("Finish loading scene");
 
         slider.value = 0.75f;
+
+        Debug.Log("Setting data");
 
         GameManagerV2.instance.setData(worldIndex, dungeonIndex);
 
         slider.value = 0.85f;
+
+        Debug.Log("Start unloading other scenes");
 
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
@@ -72,13 +83,21 @@ public class LoadingManager : MonoBehaviour
             }
         }
 
+        Debug.Log("Finish unloading other scenes");
+
         slider.value = 0.95f;
+
+        Debug.Log("Set player position");
 
         GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
 
         slider.value = 1;
 
+        Debug.Log("Start unloading loading Manager");
+
         await SceneManager.UnloadSceneAsync("LoadingScreen");
+
+        Debug.Log("Finish unloading loading Manager");
     }
     #endregion
 }
