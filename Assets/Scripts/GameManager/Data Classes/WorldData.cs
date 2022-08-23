@@ -35,17 +35,17 @@ public class WorldData
         staticName = "";
         topicName = "";
         active = false;
-        minigames = new MinigameData[GameSettings.getMaxMinigames()];
+        minigames = new MinigameData[GameSettings.getMaxMinigames()+1];
         for(int minigameIndex = 1; minigameIndex < minigames.Length; minigameIndex++)
         {
             minigames[minigameIndex] = new MinigameData();
         }
-        npcs = new NPCData[GameSettings.getMaxNPCs()];
+        npcs = new NPCData[GameSettings.getMaxNPCs()+1];
         for(int npcIndex = 1; npcIndex < npcs.Length; npcIndex++)
         {
             npcs[npcIndex] = new NPCData();
         }
-        dungeons = new DungeonData[GameSettings.getMaxDungeons()];
+        dungeons = new DungeonData[GameSettings.getMaxDungeons()+1];
         for(int dungeonIndex = 1; dungeonIndex < dungeons.Length; dungeonIndex++)
         {
             dungeons[dungeonIndex] = new DungeonData();
