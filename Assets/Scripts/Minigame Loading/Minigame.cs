@@ -41,7 +41,7 @@ public class Minigame : MonoBehaviour
      * The Start function is called when the object is initialized and sets up the starting values and state of the object. 
      * The function registers the minigame at the game manager and sets the default status to be notConfigurated.
      */
-    void Start()
+    void Awake()
     {
         sprites = transform.GetComponent<SpriteRenderer>();
         registerToGameManager();

@@ -43,6 +43,7 @@ public class LoadingManager : MonoBehaviour
     public async UniTask loadScene(string sceneToLoad, int worldIndex, int dungeonIndex, Vector2 playerPosition)
     {
         slider.value = 0;
+        progressText.text = "0%";
 
         if(GameManagerV2.instance == null)
         {
@@ -57,6 +58,7 @@ public class LoadingManager : MonoBehaviour
         Debug.Log("Finish fetching data");
 
         slider.value = 0.5f;
+        progressText.text = "50%";
 
         Debug.Log("Start loading scene");
 
@@ -65,12 +67,14 @@ public class LoadingManager : MonoBehaviour
         Debug.Log("Finish loading scene");
 
         slider.value = 0.75f;
+        progressText.text = "75%";
 
         Debug.Log("Setting data");
 
         GameManagerV2.instance.setData(worldIndex, dungeonIndex);
 
         slider.value = 0.85f;
+        progressText.text = "85%";
 
         Debug.Log("Start unloading other scenes");
 
@@ -86,12 +90,14 @@ public class LoadingManager : MonoBehaviour
         Debug.Log("Finish unloading other scenes");
 
         slider.value = 0.95f;
+        progressText.text = "95%";
 
         Debug.Log("Set player position");
 
         GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
 
         slider.value = 1;
+        progressText.text = "100%";
 
         Debug.Log("Start unloading loading Manager");
 
