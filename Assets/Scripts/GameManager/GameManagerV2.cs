@@ -61,7 +61,7 @@ public class GameManagerV2 : MonoBehaviour
     /// <summary>
     /// This function initializes the <c>GameManager</c>. All arrays are initialized with empty objects.
     /// </summary>
-    private void setupGameManager()
+    private async void setupGameManager()
     {
         instance = this;
 
@@ -76,7 +76,7 @@ public class GameManagerV2 : MonoBehaviour
 
         worldData = new WorldData[maxWorld + 1];
 
-        active = false;
+        active = true;
 
         worldDTOs = new WorldDTO[maxWorld + 1];
 
@@ -261,6 +261,8 @@ public class GameManagerV2 : MonoBehaviour
         Debug.Log("Loading Data");
         await fetchData();
         Debug.Log("Finished Loading");
+        currentWorld = 1;
+        currentDungeon = 0;
         setData(currentWorld, currentDungeon);
         Debug.Log("Finished relaod");
     }
@@ -658,7 +660,7 @@ public class GameManagerV2 : MonoBehaviour
     #endregion
 
     #region SettingData
-    //sets data to objects, called by AreaEnter objects
+    //sets data to objects, called by Scene transition or loading screen
     public void setData(int worldIndex, int dungeonIndex)
     {
         currentWorld = worldIndex;
