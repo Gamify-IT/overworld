@@ -37,6 +37,7 @@ public class LoadingManager : MonoBehaviour
     public GameObject loadingScreen;
     public Slider slider;
     public TextMeshProUGUI progressText;
+    public TextMeshProUGUI loadingText;
     #endregion
 
     #region Functionality
@@ -44,6 +45,7 @@ public class LoadingManager : MonoBehaviour
     {
         slider.value = 0;
         progressText.text = "0%";
+        loadingText.text = "LOADING DATA";
 
         if(GameManagerV2.instance == null)
         {
@@ -59,6 +61,7 @@ public class LoadingManager : MonoBehaviour
 
         slider.value = 0.5f;
         progressText.text = "50%";
+        loadingText.text = "LOADING WORLD";
 
         Debug.Log("Start loading scene");
 
@@ -68,6 +71,7 @@ public class LoadingManager : MonoBehaviour
 
         slider.value = 0.75f;
         progressText.text = "75%";
+        loadingText.text = "PROCESSING DATA";
 
         Debug.Log("Setting data");
 
@@ -75,6 +79,7 @@ public class LoadingManager : MonoBehaviour
 
         slider.value = 0.85f;
         progressText.text = "85%";
+        loadingText.text = "PREPARING GAME START";
 
         Debug.Log("Start unloading other scenes");
 
@@ -91,6 +96,7 @@ public class LoadingManager : MonoBehaviour
 
         slider.value = 0.95f;
         progressText.text = "95%";
+        loadingText.text = "SETTING UP PLAYER";
 
         Debug.Log("Set player position");
 
@@ -98,6 +104,7 @@ public class LoadingManager : MonoBehaviour
 
         slider.value = 1;
         progressText.text = "100%";
+        loadingText.text = "DONE";
 
         Debug.Log("Start unloading loading Manager");
 
