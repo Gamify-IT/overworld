@@ -24,7 +24,7 @@ public class LoadFirstScene : MonoBehaviour
         Debug.Log("Finish loading Player");
         Debug.Log("Start loading LoadingScreen");
 
-        await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+        AsyncOperation operation = SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
 
         Debug.Log("Finish loading LoadingScreen");
         Debug.Log("Start loading World 1");
