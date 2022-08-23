@@ -18,7 +18,7 @@ public class Barrier : MonoBehaviour
      * The Start function is called when the object is initialized and sets up the starting values and state of the object. 
      * The function registers the barrier at the game manager and sets the barrier to be active on default.
      */
-    void Start()
+    void Awake()
     {
         registerToGameManager();
         updateStatus();

@@ -28,10 +28,6 @@ public class NPC : MonoBehaviour
         {
             speechIndicator = child;
         }
-    }
-
-    void Start()
-    {
         registerToGameManager();
         initNewStuffSprite();
     }
