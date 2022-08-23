@@ -559,7 +559,7 @@ public class GameManagerV2 : MonoBehaviour
     //converts dungeonDTO in dungeonData
     private DungeonData[] getDungeonData(List<DungeonDTO> dungeonDTOs)
     {
-        DungeonData[] dungeonData = new DungeonData[maxDungeons];
+        DungeonData[] dungeonData = new DungeonData[maxDungeons+1];
 
         foreach(DungeonDTO dungeonDTO in dungeonDTOs)
         {
