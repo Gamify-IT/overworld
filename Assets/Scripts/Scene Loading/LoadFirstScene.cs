@@ -40,11 +40,5 @@ public class LoadFirstScene : MonoBehaviour
         await LoadingManager.instance.loadScene("World 1", worldIndex, dungeonIndex, playerPosition);
 
         Debug.Log("Finish loading World 1");
-
-        Debug.Log("Start unloading loading Manager");
-
-        await SceneManager.UnloadSceneAsync("LoadingScreen");
-
-        Debug.Log("Finish unloading loading Manager");
     }
 }
