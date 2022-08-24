@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Player HUD/Menu.unity
     guid: 2a383f233de52f24d8851c554d4ecf5c
   - enabled: 1
-    path: Assets/Scenes/Worlds/World 2/World 2.unity
+    path: Assets/Scenes/Worlds/World 3/World 3.unity
     guid: 1ad3e70ef7b48da2f8d11c1c4a3b5e51
   - enabled: 1
     path: Assets/Scenes/Prototypes/Npc Dialogue/Npc Dialogue.unity
@@ -33,7 +33,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Player/Player.unity
     guid: eed317463032b2743b7c49df13f76ca6
   - enabled: 1
-    path: Assets/Scenes/Worlds/World 3/World 3.unity
+    path: Assets/Scenes/Worlds/World 2/World 2.unity
     guid: 7778786d1642d2a4490adbe092f0a80b
   - enabled: 1
     path: Assets/Scenes/Worlds/World 4/World 4.unity
