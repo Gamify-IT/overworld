@@ -107,12 +107,6 @@ public class LoadingManager : MonoBehaviour
         loadingText.text = "DONE...";
 
         Debug.Log("Loading manager done");
-
-        Debug.Log("Start unloading loading Manager");
-
-        await SceneManager.UnloadSceneAsync("LoadingScreen");
-
-        Debug.Log("Finish unloading loading Manager");
     }
     #endregion
 }
