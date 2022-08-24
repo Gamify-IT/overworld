@@ -23,6 +23,13 @@ public class LoadFirstScene : MonoBehaviour
         SceneManager.LoadScene("Player");
 
         Debug.Log("Finish loading Player");
+
+        Debug.Log("Start loading HUD");
+
+        SceneManager.LoadScene("Player HUD", LoadSceneMode.Additive);
+
+        Debug.Log("Finish loading HUD");
+
         Debug.Log("Start loading LoadingScreen");
 
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
@@ -33,10 +40,11 @@ public class LoadFirstScene : MonoBehaviour
         await LoadingManager.instance.loadScene("World 1", worldIndex, dungeonIndex, playerPosition);
 
         Debug.Log("Finish loading World 1");
-        Debug.Log("Start loading HUD");
 
-        SceneManager.LoadScene("Player HUD", LoadSceneMode.Additive);
+        Debug.Log("Start unloading loading Manager");
 
-        Debug.Log("Finish loading HUD");
+        await SceneManager.UnloadSceneAsync("LoadingScreen");
+
+        Debug.Log("Finish unloading loading Manager");
     }
 }
