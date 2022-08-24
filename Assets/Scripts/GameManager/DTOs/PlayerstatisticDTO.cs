@@ -25,7 +25,18 @@ public class PlayerstatisticDTO
         this.knowledge = knowledge;
     }
 
-    public PlayerstatisticDTO() { }
+    public PlayerstatisticDTO() 
+    {
+        id = "";
+        AreaLocationDTO unlockedArea = new AreaLocationDTO();
+        unlockedAreas = new AreaLocationDTO[1];
+        unlockedAreas[0] = unlockedArea;
+        currentArea = unlockedArea;
+        unlockedDungeons = null;
+        userId = "";
+        username = "";
+        knowledge = 0;
+    }
 
     public static PlayerstatisticDTO CreateFromJSON(string jsonString)
     {

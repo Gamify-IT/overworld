@@ -86,7 +86,7 @@ public class LoadingManager : MonoBehaviour
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
             string tempSceneName = SceneManager.GetSceneAt(sceneIndex).name;
-            if (!tempSceneName.Equals("Player") && !tempSceneName.Equals("Player HUD") && !tempSceneName.Equals(sceneToLoad))
+            if (!tempSceneName.Equals("Player") && !tempSceneName.Equals("Player HUD") && !tempSceneName.Equals(sceneToLoad) && !tempSceneName.Equals("LoadingScreen"))
             {
                 await SceneManager.UnloadSceneAsync(tempSceneName);
             }
@@ -105,6 +105,8 @@ public class LoadingManager : MonoBehaviour
         slider.value = 1;
         progressText.text = "100%";
         loadingText.text = "DONE...";
+
+        Debug.Log("Loading manager done");
 
         Debug.Log("Start unloading loading Manager");
 

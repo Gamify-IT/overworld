@@ -75,6 +75,7 @@ public class GameManagerV2 : MonoBehaviour
         npcObjects = new GameObject[maxWorld + 1, maxNPCs + 1];
 
         worldData = new WorldData[maxWorld + 1];
+        playerData = new PlayerstatisticDTO();
 
         active = true;
 
@@ -225,6 +226,7 @@ public class GameManagerV2 : MonoBehaviour
         {
             processWorldDTO(worldIndex);
         }
+
         processPlayerTaskStatisitcs(playerMinigameStatistics);
         processPlayerNPCStatistics(playerNPCStatistics);
 
@@ -492,7 +494,16 @@ public class GameManagerV2 : MonoBehaviour
     /// <param name="worldDTO">The world data returned from the backend</param>
     private void processWorldDTO(int worldIndex)
     {
+        if(worldIndex < 1 || worldIndex >= worldDTOs.Length)
+        {
+            return;
+        }
+
         WorldDTO worldDTO = worldDTOs[worldIndex];
+        if(worldDTO == null)
+        {
+            return;
+        }
 
         string id = worldDTO.id;
         int index = worldDTO.index;
@@ -590,6 +601,10 @@ public class GameManagerV2 : MonoBehaviour
     /// <param name="playerTaskStatistics">The player minigame statistics data returned from the backend</param>
     private void processPlayerTaskStatisitcs(PlayerTaskStatisticDTO[] playerTaskStatistics)
     {
+        if(playerTaskStatistics == null)
+        {
+            return;
+        }
         foreach(PlayerTaskStatisticDTO statistic in playerTaskStatistics)
         {
             int worldIndex = statistic.minigameTask.area.worldIndex;
@@ -644,6 +659,10 @@ public class GameManagerV2 : MonoBehaviour
     /// <param name="playerNPCStatistics">The player npc statistics data returned from the backend</param>
     private void processPlayerNPCStatistics(PlayerNPCStatisticDTO[] playerNPCStatistics)
     {
+        if(playerNPCStatistics == null)
+        {
+            return;
+        }
         foreach(PlayerNPCStatisticDTO statistic in playerNPCStatistics)
         {
             int worldIndex = statistic.npc.area.worldIndex;
