@@ -9,6 +9,7 @@ public class loadmaps : MonoBehaviour
     public string sceneLoadOne;
     public string sceneLoadTwo;
     public bool loadingFinished;
+    public int sceneToLoadIndex;
 
     public void OnTriggerEnter2D(Collider2D playerCollision)
     {
@@ -49,5 +50,6 @@ public class loadmaps : MonoBehaviour
             yield return null;
         }
         loadingFinished = true;
+        GameManagerV2.instance.setData(sceneToLoadIndex, 0);
     }
 }
