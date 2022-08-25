@@ -38,11 +38,21 @@ public class LoadingManager : MonoBehaviour
     public Slider slider;
     public TextMeshProUGUI progressText;
     public TextMeshProUGUI loadingText;
+
+    string sceneToLoad;
+    int worldIndex;
+    int dungeonIndex;
+    Vector2 playerPosition;
     #endregion
 
     #region Functionality
-    public async UniTask loadScene(string sceneToLoad, int worldIndex, int dungeonIndex, Vector2 playerPosition)
+    public async UniTask loadData(string sceneToLoad, int worldIndex, int dungeonIndex, Vector2 playerPosition)
     {
+        this.sceneToLoad = sceneToLoad;
+        this.worldIndex = worldIndex;
+        this.dungeonIndex = dungeonIndex;
+        this.playerPosition = playerPosition;
+
         slider.value = 0;
         progressText.text = "0%";
         loadingText.text = "LOADING DATA...";
@@ -59,6 +69,19 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("Finish fetching data");
 
+        Debug.Log("Validate data");
+        if(GameManagerV2.instance.loadingError)
+        {
+            SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+        }
+        else
+        {
+            await loadScene();
+        }
+    }
+
+    public async UniTask loadScene()
+    {
         slider.value = 0.5f;
         progressText.text = "50%";
         loadingText.text = "LOADING WORLD...";
@@ -86,7 +109,7 @@ public class LoadingManager : MonoBehaviour
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
             string tempSceneName = SceneManager.GetSceneAt(sceneIndex).name;
-            if (!tempSceneName.Equals("Player") && !tempSceneName.Equals("Player HUD") && !tempSceneName.Equals(sceneToLoad) && !tempSceneName.Equals("LoadingScreen"))
+            if (!tempSceneName.Equals("Player") && !tempSceneName.Equals("Player HUD") && !tempSceneName.Equals(sceneToLoad) && !tempSceneName.Equals("LoadingScreen") && !tempSceneName.Equals("OfflineMode"))
             {
                 await SceneManager.UnloadSceneAsync(tempSceneName);
             }
