@@ -486,6 +486,45 @@ public class GameManagerV2 : MonoBehaviour
     }
     #endregion
 
+    #region PostRequest
+    private async UniTask postNPCCompleted(string uri, string uuid)
+    {
+        NPCTalkEvent npcData = new NPCTalkEvent(uuid, true, playerId.ToString());
+        string json = JsonUtility.ToJson(npcData, true);
+
+        Debug.Log("Json test: " + json);
+
+        //UnityWebRequest webRequest = UnityWebRequest.Post(uri, json);
+        UnityWebRequest webRequest = new UnityWebRequest(uri, UnityWebRequest.kHttpVerbPOST);
+        byte[] bytes = new System.Text.UTF8Encoding().GetBytes(json);
+        webRequest.uploadHandler = (UploadHandler)new UploadHandlerRaw(bytes);
+        webRequest.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        webRequest.SetRequestHeader("Content-Type", "application/json");
+
+        using (webRequest)
+        {
+            // Request and wait for the desired page.
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
+
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(webRequest.error);
+            }
+            else
+            {
+                Debug.Log("NPC mit uuid " + uuid + " has been talked to.");
+                Debug.Log("Post request response code: " + webRequest.responseCode);
+                Debug.Log("Post request response text: " + webRequest.downloadHandler.text);
+            }
+        }
+    }
+    #endregion
+
     #region ProcessingData
     /// <summary>
     /// This function processes the world data returned from the backend and stores the needed data in the <c>GameManager</c>
@@ -831,6 +870,16 @@ public class GameManagerV2 : MonoBehaviour
                 continue;
             }
             npc.setup(npcData);
+        }
+    }
+    
+    //mark npc as read
+    public async void markNPCasRead(string uuid)
+    {
+        if (active)
+        {
+            string path = "/overworld/api/v1/internal/submit-npc-pass";
+            await postNPCCompleted(path, uuid);
         }
     }
     #endregion
