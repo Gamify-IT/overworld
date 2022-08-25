@@ -51,6 +51,7 @@ public class GameManagerV2 : MonoBehaviour
     private WorldDTO[] worldDTOs;
     private PlayerTaskStatisticDTO[] playerMinigameStatistics;
     private PlayerNPCStatisticDTO[] playerNPCStatistics;
+    public bool loadingError;
 
     //kann eigentlich weg, nur für manuell laden
     int currentWorld;
@@ -204,6 +205,8 @@ public class GameManagerV2 : MonoBehaviour
             return;
         }
 
+        loadingError = false;
+
         //path to get world data from
         string path = "/overworld/api/v1/courses/" + courseId;
 
@@ -350,9 +353,11 @@ public class GameManagerV2 : MonoBehaviour
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                     Debug.LogError(uri + worldIndex + ": Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError(uri + worldIndex + ": HTTP Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + worldIndex + ":\nReceived: " + webRequest.downloadHandler.text);
@@ -390,9 +395,11 @@ public class GameManagerV2 : MonoBehaviour
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                     Debug.LogError(uri + ": Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
@@ -430,9 +437,11 @@ public class GameManagerV2 : MonoBehaviour
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                     Debug.LogError(uri + ": Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
@@ -470,9 +479,11 @@ public class GameManagerV2 : MonoBehaviour
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                     Debug.LogError(uri + ": Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
