@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Networking;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// The <c>GameManager</c> manages the communication between the overworld backend and frontend. 
@@ -48,6 +48,10 @@ public class GameManager : MonoBehaviour
     private int currentWorld = 1;
     private int currentDungeon = 0;
     public bool active = true;
+
+    private WorldDTO[] worldData = new WorldDTO[maxWorld+1];
+    private PlayerTaskStatisticDTO[] playerMinigameStatistics;
+    private PlayerNPCStatisticDTO[] playerNPCStatistics;
     #endregion
 
     #region Setup
@@ -313,34 +317,70 @@ public class GameManager : MonoBehaviour
     /// This function loads all needed data for a given world
     /// </summary>
     /// <param name="worldIndex">The index of the world to load</param>
-    private void fetchWorldData(int worldIndex)
+    private async void fetchWorldData(int worldIndex)
     {
         //path to get world data from
-        string path = "/overworld/api/v1/courses/" + courseId + "/worlds/";
+        string path = "/overworld/api/v1/courses/" + courseId;
 
-        //get world data        
-        StartCoroutine(GetWorldDTO(path, worldIndex));
+        //reset variables
+        worldData = new WorldDTO[maxWorld+1];
+        playerMinigameStatistics = null;
+        playerNPCStatistics = null;
+
+        //get data
+        await UniTask.WhenAll(
+            GetWorldDTO(path + "/worlds/", worldIndex),
+            GetPlayerMinigameStatistics(path + "/playerstatistics/" + playerId),
+            GetPlayerStatistics(path + "/playerstatistics/" + playerId),
+            GetPlayerNPCStatistics(path + "/playerstatistics/" + playerId + "/player-npc-statistics")
+        );
+
+        Debug.Log("Got all data.");
+
+        bool somethingFailed = false;
+
+        if(worldData[worldIndex] == null)
+        {
+            Debug.Log("world data failed");
+            somethingFailed = true;
+        }
+        if (playerMinigameStatistics == null)
+        {
+            Debug.Log("minigame data failed");
+            somethingFailed = true;
+        }
+        if (playerNPCStatistics == null)
+        {
+            Debug.Log("npc data failed");
+            somethingFailed = true;
+        }
+
+        if(somethingFailed)
+        {
+            return;
+        }
+
+        //process Data
+        processWorldDTO(worldIndex, worldData[worldIndex]);
+        processPlayerTaskStatisitcs(playerMinigameStatistics);
+        processPlayerNPCStatistics(playerNPCStatistics);
+
+        Debug.Log("Everything set up");
+
+        setData(worldIndex);
+
+        Debug.Log("Data set.");
 
         //get barrier data
-        for(int worldIndexDestination=1; worldIndexDestination<=maxWorld; worldIndexDestination++)
+        /*
+        for (int worldIndexDestination=1; worldIndexDestination<=maxWorld; worldIndexDestination++)
         {
             if(barrierObjects[worldIndex, worldIndexDestination] != null)
             {
                 StartCoroutine(GetBarrierData(path, worldIndexDestination, worldIndex));
             }
         }
-
-        //get player minigame data
-        path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId + "/player-task-statistics";
-        StartCoroutine(GetPlayerMinigameStatistics(path));
-
-        //get player data
-        path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId;
-        StartCoroutine(GetPlayerStatistics(path));
-
-        //get player npc data
-        path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId + "/player-npc-statistics";
-        StartCoroutine(GetPlayerNPCStatistics(path));
+        */
     }
 
     /// <summary>
@@ -359,15 +399,15 @@ public class GameManager : MonoBehaviour
 
         //get player minigame data
         path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId + "/player-task-statistics";
-        StartCoroutine(GetPlayerMinigameStatistics(path));
+        //StartCoroutine(GetPlayerMinigameStatistics(path));
 
         //get player data
         path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId;
-        StartCoroutine(GetPlayerStatistics(path));
+        //StartCoroutine(GetPlayerStatistics(path));
 
         //get player npc data
         path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId + "/player-npc-statistics";
-        StartCoroutine(GetPlayerNPCStatistics(path));
+        //StartCoroutine(GetPlayerNPCStatistics(path));
     }
     #endregion
 
@@ -378,7 +418,7 @@ public class GameManager : MonoBehaviour
     /// <param name="uri">The path to send the GET request to</param>
     /// <param name="worldIndex">The world index to be requested at the backend</param>
     /// <returns></returns>
-    private IEnumerator GetWorldDTO(String uri, int worldIndex)
+    private async UniTask<WorldDTO> GetWorldDTO(String uri, int worldIndex)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndex))
         {
@@ -386,7 +426,12 @@ public class GameManager : MonoBehaviour
             Debug.Log("Path: " + uri + worldIndex);
 
             // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
+            var request = webRequest.SendWebRequest();
+
+            while(!request.isDone)
+            {
+                await UniTask.Yield();
+            }
 
             switch (webRequest.result)
             {
@@ -400,11 +445,12 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + worldIndex + ":\nReceived: " + webRequest.downloadHandler.text);
                     WorldDTO worldDTO = JsonUtility.FromJson<WorldDTO>(webRequest.downloadHandler.text);
-                    processWorldDTO(worldIndex, worldDTO);
+                    worldData[worldIndex] = worldDTO;
+                    Debug.Log("Got world data.");
                     break;
             }
+            return null;
         }
-        somethingToUpdate = true;
     }
 
     private IEnumerator GetDungeonDTO(String uri, int dungeonIndex)
@@ -477,7 +523,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="uri">The path to send the GET request to</param>
     /// <returns></returns>
-    private IEnumerator GetPlayerMinigameStatistics(string uri)
+    private async UniTask<PlayerTaskStatisticDTO[]> GetPlayerMinigameStatistics(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -485,7 +531,12 @@ public class GameManager : MonoBehaviour
             Debug.Log("Path: " + uri);
 
             // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
 
             switch (webRequest.result)
             {
@@ -499,11 +550,12 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
                     PlayerTaskStatisticDTO[] playerTaskStatistics = JsonHelper.getJsonArray<PlayerTaskStatisticDTO>(webRequest.downloadHandler.text);
-                    processPlayerTaskStatisitcs(playerTaskStatistics);
+                    playerMinigameStatistics = playerTaskStatistics;
+                    Debug.Log("Got player minigame data.");
                     break;
             }
+            return null;
         }
-        somethingToUpdate = true;
     }
 
     /// <summary>
@@ -511,7 +563,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="uri">The path to send the GET request to</param>
     /// <returns></returns>
-    private IEnumerator GetPlayerStatistics(string uri)
+    private async UniTask<PlayerstatisticDTO> GetPlayerStatistics(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -519,7 +571,12 @@ public class GameManager : MonoBehaviour
             Debug.Log("Path: " + uri);
 
             // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
 
             switch (webRequest.result)
             {
@@ -536,6 +593,7 @@ public class GameManager : MonoBehaviour
                     Debug.Log("Player knowledge: " + playerStatistic.knowledge);
                     break;
             }
+            return null;
         }
     }
 
@@ -544,7 +602,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="uri">The path to send the GET request to</param>
     /// <returns></returns>
-    private IEnumerator GetPlayerNPCStatistics(string uri)
+    private async UniTask<PlayerNPCStatisticDTO[]> GetPlayerNPCStatistics(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -552,7 +610,12 @@ public class GameManager : MonoBehaviour
             Debug.Log("Path: " + uri);
 
             // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
 
             switch (webRequest.result)
             {
@@ -565,12 +628,13 @@ public class GameManager : MonoBehaviour
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
-                    PlayerNPCStatisticDTO[] playerNPCStatistics = JsonHelper.getJsonArray<PlayerNPCStatisticDTO>(webRequest.downloadHandler.text);
-                    processPlayerNPCStatistics(playerNPCStatistics);
+                    PlayerNPCStatisticDTO[] result = JsonHelper.getJsonArray<PlayerNPCStatisticDTO>(webRequest.downloadHandler.text);
+                    playerNPCStatistics = result;
+                    Debug.Log("Got player npc data.");
                     break;
             }
+            return null;
         }
-        somethingToUpdate = true;
     }
     #endregion
 

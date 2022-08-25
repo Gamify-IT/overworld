@@ -41,7 +41,7 @@ public class Minigame : MonoBehaviour
      * The Start function is called when the object is initialized and sets up the starting values and state of the object. 
      * The function registers the minigame at the game manager and sets the default status to be notConfigurated.
      */
-    void Start()
+    void Awake()
     {
         sprites = transform.GetComponent<SpriteRenderer>();
         registerToGameManager();
@@ -51,7 +51,7 @@ public class Minigame : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
-        GameManager.instance.removeMinigame(world, dungeon, number);
+        GameManagerV2.instance.removeMinigame(world, dungeon, number);
     }
 
     /*
@@ -60,7 +60,7 @@ public class Minigame : MonoBehaviour
     private void registerToGameManager()
     {
         Debug.Log("register Minigame " + world + "-" + dungeon + "-" + number);
-        GameManager.instance.addMinigame(this.gameObject, world, dungeon, number);
+        GameManagerV2.instance.addMinigame(this.gameObject, world, dungeon, number);
     }
     #endregion
 
@@ -127,6 +127,13 @@ public class Minigame : MonoBehaviour
                 gameObject.SetActive(true);
                 break;
         }
+    }
+
+    //returns minigame object info
+    public string getInfo()
+    {
+        string info = world + "-" + dungeon + "-" + number + ": Game: " + game + ", Config: " + configurationID + ", Status: " + status.ToString() + ", Highscore: " + highscore;
+        return info;
     }
     #endregion
 

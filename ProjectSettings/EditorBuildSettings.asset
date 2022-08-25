@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Player HUD/Menu.unity
     guid: 2a383f233de52f24d8851c554d4ecf5c
   - enabled: 1
-    path: Assets/Scenes/Worlds/World 2/World 2.unity
+    path: Assets/Scenes/Worlds/World 3/World 3.unity
     guid: 1ad3e70ef7b48da2f8d11c1c4a3b5e51
   - enabled: 1
     path: Assets/Scenes/Prototypes/Npc Dialogue/Npc Dialogue.unity
@@ -33,7 +33,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Player/Player.unity
     guid: eed317463032b2743b7c49df13f76ca6
   - enabled: 1
-    path: Assets/Scenes/Worlds/World 3/World 3.unity
+    path: Assets/Scenes/Worlds/World 2/World 2.unity
     guid: 7778786d1642d2a4490adbe092f0a80b
   - enabled: 1
     path: Assets/Scenes/Worlds/World 4/World 4.unity
@@ -95,4 +95,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Worlds/World 4/Dungeons/Dungeon 4-4.unity
     guid: e6644e4a6765a2749bb5a2d06fa4166d
+  - enabled: 1
+    path: Assets/Scenes/GameManager/LoadingScreen.unity
+    guid: ed62600d1d4a15546a7553e920c3de05
+  - enabled: 1
+    path: Assets/Scenes/GameManager/OfflineMode.unity
+    guid: 2fa79c2f491d1d44694e6d868b65b547
   m_configObjects: {}

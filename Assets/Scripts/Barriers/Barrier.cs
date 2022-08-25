@@ -18,7 +18,7 @@ public class Barrier : MonoBehaviour
      * The Start function is called when the object is initialized and sets up the starting values and state of the object. 
      * The function registers the barrier at the game manager and sets the barrier to be active on default.
      */
-    void Start()
+    void Awake()
     {
         registerToGameManager();
         updateStatus();
@@ -27,7 +27,7 @@ public class Barrier : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove Barrier " + worldIndexOrigin + "->" + worldIndexDestination);
-        GameManager.instance.removeBarrier(worldIndexOrigin, worldIndexDestination);
+        GameManagerV2.instance.removeBarrier(worldIndexOrigin, worldIndexDestination);
     }
 
     /*
@@ -36,7 +36,7 @@ public class Barrier : MonoBehaviour
     private void registerToGameManager()
     {
         Debug.Log("register Barrier " + worldIndexOrigin + "->" + worldIndexDestination);
-        GameManager.instance.addBarrier(this.gameObject, worldIndexOrigin, worldIndexDestination);
+        GameManagerV2.instance.addBarrier(this.gameObject, worldIndexOrigin, worldIndexDestination);
     }
     #endregion
 
@@ -67,6 +67,13 @@ public class Barrier : MonoBehaviour
             Debug.Log("Barrier " + worldIndexOrigin + "->" + worldIndexDestination + ": now invisible");
             gameObject.SetActive(false);
         }
+    }
+    
+    //returns barrier object info
+    public string getInfo()
+    {
+        string info = worldIndexOrigin + "->" + worldIndexDestination + ": active: " + isActive;
+        return info;
     }
     #endregion
 
