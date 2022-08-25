@@ -1,7 +1,7 @@
 mergeInto(LibraryManager.library, {
 	LoadMinigameInIframe: function(minigameName, configurationString) {
         	var iframe = document.createElement("iframe");
-        	iframe.src = location.origin + "/minigames/"+ UTF8ToString(minigameName) +"#"+UTF8ToString(configurationString);
+        	iframe.src = location.origin + "/minigames/"+ UTF8ToString(minigameName).toLowerCase() +"#"+ UTF8ToString(configurationString);
  		iframe.style.position = "fixed";
         	iframe.style.top = "0";
         	iframe.style.left = "0";
