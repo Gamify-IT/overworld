@@ -22,7 +22,16 @@ public class MinigameData
         this.highscore = highscore;
     }
 
+    public MinigameData()
+    {
+        game = "";
+        configurationID = "";
+        status = MinigameStatus.notConfigurated;
+        highscore = 0;
+    }
+
     #region GetterAndSetter
+    
     public string getGame()
     {
         return game;

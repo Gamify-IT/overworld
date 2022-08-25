@@ -28,10 +28,6 @@ public class NPC : MonoBehaviour
         {
             speechIndicator = child;
         }
-    }
-
-    void Start()
-    {
         registerToGameManager();
         initNewStuffSprite();
     }
@@ -39,7 +35,7 @@ public class NPC : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
-        GameManager.instance.removeNPC(world, dungeon, number);
+        GameManagerV2.instance.removeNPC(world, dungeon, number);
     }
 
     /// <summary>
@@ -83,14 +79,14 @@ public class NPC : MonoBehaviour
     {
         hasBeenTalkedTo = true;
         speechIndicator.SetActive(false);
-        GameManager.instance.markNPCasRead(uuid, hasBeenTalkedTo);
+        GameManagerV2.instance.markNPCasRead(uuid);
     }
 
     // register to game manager
     private void registerToGameManager()
     {
         Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
-        GameManager.instance.addNPC(this.gameObject, world, dungeon, number);
+        GameManagerV2.instance.addNPC(this.gameObject, world, dungeon, number);
     }
 
     //setup called by game manager
@@ -100,8 +96,13 @@ public class NPC : MonoBehaviour
         dialogue = data.getDialogue();
         hasBeenTalkedTo = data.getHasBeenTalkedTo();
         initNewStuffSprite();
-        Debug.Log("setup npc " + world + "-" + number + "with new dialogue: " + dialogue.ToString() + ", new info: " +
-                  !hasBeenTalkedTo);
+        string text = "";
+        for(int index = 0; index < dialogue.Length; index++)
+        {
+            text += dialogue[index];
+            text += " ; ";
+        }
+        Debug.Log("setup npc " + world + "-" + number + " with new dialogue: " + text + ", new info: " + !hasBeenTalkedTo);
     }
 
     private void initNewStuffSprite()
@@ -203,6 +204,20 @@ public class NPC : MonoBehaviour
         GameObject.Find("NPC_Name").GetComponent<TextMeshProUGUI>().text = nameOfNPC;
         dialogueText = GameObject.Find("Dialogue").GetComponent<TextMeshProUGUI>();
         StartCoroutine("Typing");
+    }
+
+    //returns NPC object info
+    public string getInfo()
+    {
+        string info = "";
+        string text = "";
+        for(int index = 0; index < dialogue.Length; index++)
+        {
+            text += dialogue[index];
+            text += "; ";
+        }
+        info = world + "-" + dungeon + "-" + number + ": Text: " + text + ", completed: " + hasBeenTalkedTo;
+        return info;
     }
 
     #region Getter
