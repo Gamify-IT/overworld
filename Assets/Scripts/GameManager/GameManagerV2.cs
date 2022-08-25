@@ -81,7 +81,7 @@ public class GameManagerV2 : MonoBehaviour
 
         worldDTOs = new WorldDTO[maxWorld + 1];
 
-        for (int worldIndex = 0; worldIndex < maxWorld; worldIndex++)
+        for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
         {
             worldData[worldIndex] = new WorldData();
         }
