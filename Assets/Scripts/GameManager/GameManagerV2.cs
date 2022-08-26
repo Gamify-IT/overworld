@@ -611,6 +611,11 @@ public class GameManagerV2 : MonoBehaviour
 
             uuid = npcDTO.id;
             dialogue = npcDTO.text.ToArray();
+            if(dialogue.Length == 0)
+            {
+                string[] dummyText = {"I could tell you something useful...", "...But i don't remember."};
+                dialogue = dummyText;
+            }
 
             NPCData npc = new NPCData(uuid, dialogue, hasBeenTalkedTo);
             npcData[npcDTO.index] = npc;
