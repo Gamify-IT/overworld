@@ -101,4 +101,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameManager/OfflineMode.unity
     guid: 2fa79c2f491d1d44694e6d868b65b547
+  - enabled: 1
+    path: Assets/Scenes/Worlds/RaccoonDen/RaccoonDen.unity
+    guid: ca734559f8e71474eba5a51521a9f617
   m_configObjects: {}
