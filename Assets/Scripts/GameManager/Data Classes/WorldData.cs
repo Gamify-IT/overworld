@@ -157,5 +157,10 @@ public class WorldData
     {
         return active;
     }
+
+    public bool dungeonIsActive(int dungeonIndex)
+    {
+        return dungeons[dungeonIndex].isActive();
+    }
     #endregion
 }

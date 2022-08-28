@@ -103,5 +103,10 @@ public class DungeonData
             return null;
         }
     }
+
+    public bool isActive()
+    {
+        return active;
+    }
     #endregion
 }
