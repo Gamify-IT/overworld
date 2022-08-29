@@ -6,7 +6,7 @@ public class URLOpener : MonoBehaviour
 
     public void Open()
     {
-        string Url = Application.absoluteURL.Replace("/app", "/") + Path;
+        string Url = Application.absoluteURL.Replace("/app", "/").replace("/overworld", "") + Path;
         
         Application.OpenURL(Url);
     }
