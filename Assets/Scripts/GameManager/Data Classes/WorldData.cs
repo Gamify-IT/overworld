@@ -162,5 +162,21 @@ public class WorldData
     {
         return dungeons[dungeonIndex].isActive();
     }
+
+    public void npcCompleted(int dungeonIndex, int number)
+    {
+        if(dungeonIndex < dungeons.Length)
+        {
+            dungeons[dungeonIndex].npcCompleted(number);
+        }
+    }
+
+    public void npcCompleted(int number)
+    {
+        if(number < npcs.Length)
+        {
+            npcs[number].setHasBeenTalkedTo(true);
+        }
+    }
     #endregion
 }

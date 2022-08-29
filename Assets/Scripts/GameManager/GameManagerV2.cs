@@ -956,12 +956,24 @@ public class GameManagerV2 : MonoBehaviour
     }
     
     //mark npc as read
-    public async void markNPCasRead(string uuid)
+    public async void markNPCasRead(int worldIndex, int dungeonIndex, int number, string uuid)
     {
         if (active)
         {
             string path = "/overworld/api/v1/internal/submit-npc-pass";
             await postNPCCompleted(path, uuid);
+
+            if(worldIndex <= maxWorld)
+            {
+                if(dungeonIndex != 0)
+                {
+                    worldData[worldIndex].npcCompleted(dungeonIndex, number);
+                }
+                else
+                {
+                    worldData[worldIndex].npcCompleted(number);
+                }
+            }
         }
     }
     #endregion

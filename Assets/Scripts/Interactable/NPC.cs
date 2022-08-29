@@ -79,7 +79,7 @@ public class NPC : MonoBehaviour
     {
         hasBeenTalkedTo = true;
         speechIndicator.SetActive(false);
-        GameManagerV2.instance.markNPCasRead(uuid);
+        GameManagerV2.instance.markNPCasRead(world, dungeon, number, uuid);
     }
 
     // register to game manager
