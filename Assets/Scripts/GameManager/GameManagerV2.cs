@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
+using UnityEngine.SceneManagement;
 
 public class GameManagerV2 : MonoBehaviour
 {
@@ -46,6 +47,12 @@ public class GameManagerV2 : MonoBehaviour
 
     //State
     public bool active;
+
+    //Minigame reload
+    private Vector2 minigameRespawnPosition;
+    private string sceneToReload;
+    private int minigameWorldIndex;
+    private int minigameDungeonIndex;
 
     //kann eigentlich weg, wenn wir den return value vom uni task haben
     private WorldDTO[] worldDTOs;
@@ -196,6 +203,30 @@ public class GameManagerV2 : MonoBehaviour
     #endregion
 
     #region Loading
+    //sets respawn location after minigame is done
+    public void setMinigameRespawn(Vector2 respawnLocation, string sceneName, int worldIndex, int dungeonIndex)
+    {
+        minigameRespawnPosition = respawnLocation;
+        sceneToReload = sceneName;
+        minigameWorldIndex = worldIndex;
+        minigameDungeonIndex = dungeonIndex;
+        Debug.Log("Setup minigame respawn: " + sceneToReload + " at " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
+    }
+
+    //called from java script
+    public void minigameDone()
+    {
+        Debug.Log("Start minigame respawn: " + sceneToReload + " at " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
+        reload();
+    }
+
+    //reloads game 
+    private async void reload()
+    {
+        await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+        await LoadingManager.instance.loadData(sceneToReload, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
+    }
+
     //läd alle daten vom backend und verarbeitet und setzt in worldData
     //wird von gameStart oder minigameEnde aufgerufen
     public async UniTask fetchData()
