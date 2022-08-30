@@ -103,5 +103,18 @@ public class DungeonData
             return null;
         }
     }
+
+    public bool isActive()
+    {
+        return active;
+    }
+
+    public void npcCompleted(int number)
+    {
+        if (number < npcs.Length)
+        {
+            npcs[number].setHasBeenTalkedTo(true);
+        }
+    }
     #endregion
 }
