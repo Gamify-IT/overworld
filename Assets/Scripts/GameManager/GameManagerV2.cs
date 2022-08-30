@@ -649,7 +649,7 @@ public class GameManagerV2 : MonoBehaviour
 
             game = minigameDTO.game;
             configurationId = minigameDTO.configurationId;
-            if(configurationId != "" || configurationId != null || configurationId != "NONE")
+            if(configurationId != "" && configurationId != null && configurationId != "NONE")
             {
                 status = MinigameStatus.active;
             }
