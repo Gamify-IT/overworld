@@ -13,7 +13,8 @@ mergeInto(LibraryManager.library, {
             	// FIXME: validate event origin
 
             		if (event.data === "CLOSE ME") {
-                		iframe.remove();
+                		SendMessage("Animated Player", "minigameDone");
+				iframe.remove();
             		}
         	})
     	}
