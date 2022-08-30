@@ -101,8 +101,7 @@ public class Minigame : MonoBehaviour
             yield return null;
         }
         Vector2 respawnPosition = this.transform.position;
-        string sceneName = this.gameObject.scene.name;
-        GameManagerV2.instance.setMinigameRespawn(respawnPosition, sceneName, world, dungeon);
+        GameManagerV2.instance.setMinigameRespawn(respawnPosition, world, dungeon);
         MinigameStarting.instance.setupMinigame(game, configurationID, highscore);
     }
 

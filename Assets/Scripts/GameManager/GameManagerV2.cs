@@ -50,7 +50,6 @@ public class GameManagerV2 : MonoBehaviour
 
     //Minigame reload
     private Vector2 minigameRespawnPosition;
-    private string sceneToReload;
     private int minigameWorldIndex;
     private int minigameDungeonIndex;
 
@@ -204,19 +203,18 @@ public class GameManagerV2 : MonoBehaviour
 
     #region Loading
     //sets respawn location after minigame is done
-    public void setMinigameRespawn(Vector2 respawnLocation, string sceneName, int worldIndex, int dungeonIndex)
+    public void setMinigameRespawn(Vector2 respawnLocation, int worldIndex, int dungeonIndex)
     {
         minigameRespawnPosition = respawnLocation;
-        sceneToReload = sceneName;
         minigameWorldIndex = worldIndex;
         minigameDungeonIndex = dungeonIndex;
-        Debug.Log("Setup minigame respawn: " + sceneToReload + " at " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
+        Debug.Log("Setup minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
     }
 
     //called from java script
     public void minigameDone()
     {
-        Debug.Log("Start minigame respawn: " + sceneToReload + " at " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
+        Debug.Log("Start minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
         reload();
     }
 
@@ -224,7 +222,7 @@ public class GameManagerV2 : MonoBehaviour
     private async void reload()
     {
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
-        await LoadingManager.instance.loadData(sceneToReload, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
+        await LoadingManager.instance.reloadData(minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
     }
 
     //läd alle daten vom backend und verarbeitet und setzt in worldData
