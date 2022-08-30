@@ -89,7 +89,6 @@ public class Minigame : MonoBehaviour
         {
             Debug.Log("Player enters minigame " + game + ", config: " + configurationID);
             StartCoroutine(loadMinigameStarting());
-            updateStatus();
         }
     }
 
@@ -101,6 +100,8 @@ public class Minigame : MonoBehaviour
         {
             yield return null;
         }
+        Vector2 respawnPosition = this.transform.position;
+        GameManagerV2.instance.setMinigameRespawn(respawnPosition, world, dungeon);
         MinigameStarting.instance.setupMinigame(game, configurationID, highscore);
     }
 
