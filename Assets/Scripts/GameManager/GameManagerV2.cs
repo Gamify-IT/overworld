@@ -1006,4 +1006,20 @@ public class GameManagerV2 : MonoBehaviour
         }
     }
     #endregion
+
+    #region InfoScreen
+    public string getBarrierInfoText(BarrierType type, int originWorldIndex, int destinationAreaIndex)
+    {
+        string info = "NOT UNLOCKED YET";
+        return info;
+    }
+
+    #endregion
+
+    #region GetterAndSetter
+    public AreaLocationDTO[] getUnlockedAreas()
+    {
+        return playerData.unlockedAreas;
+    }
+    #endregion
 }

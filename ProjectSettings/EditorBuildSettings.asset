@@ -104,4 +104,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Worlds/RaccoonDen/RaccoonDen.unity
     guid: ca734559f8e71474eba5a51521a9f617
+  - enabled: 1
+    path: Assets/Scenes/GameManager/InfoScreen.unity
+    guid: 432e5bce190e755438c1ac881de805cf
   m_configObjects: {}
