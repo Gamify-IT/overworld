@@ -154,6 +154,8 @@ public class LoadingManager : MonoBehaviour
             return;
         }
 
+        AreaLocationDTO[] unlockedAreasOld = GameManagerV2.instance.getUnlockedAreas();
+
         Debug.Log("Start fetching data");
 
         await GameManagerV2.instance.fetchData();
@@ -183,7 +185,55 @@ public class LoadingManager : MonoBehaviour
         progressText.text = "100%";
         loadingText.text = "DONE...";
 
+        AreaLocationDTO[] unlockedAreasNew = GameManagerV2.instance.getUnlockedAreas();
+        string infoText = checkForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
+
+        if(infoText != "")
+        {
+            await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
+            InfoManager.instance.displayInfo(infoText);
+        }
+
         await SceneManager.UnloadSceneAsync("LoadingScreen");
+    }
+
+    /// <summary>
+    /// This function checks, if a new area has been unlocked since the last reload
+    /// </summary>
+    /// <param name="unlockedAreasOld">Set of unlocked areas before the reload</param>
+    /// <param name="unlockedAreasNew">Set of unlocked areas after the reload</param>
+    /// <returns>A info text to display, if a newly unlocked area was found, "" otherwise</returns>
+    public string checkForNewUnlockedArea(AreaLocationDTO[] unlockedAreasOld, AreaLocationDTO[] unlockedAreasNew)
+    {
+        string infoText = "";
+        foreach (AreaLocationDTO newLocation in unlockedAreasNew)
+        {
+            bool newArea = true;
+            for(int index = 0; index < unlockedAreasOld.Length; index++)
+            {
+                AreaLocationDTO oldLocation = unlockedAreasOld[index];
+                if (newLocation.worldIndex == oldLocation.worldIndex &&
+                    newLocation.dungeonIndex == oldLocation.dungeonIndex)
+                {
+                    newArea = false;
+                    break;
+                }
+            }
+            if(newArea)
+            {
+                if(newLocation.dungeonIndex != 0)
+                {
+                    infoText = "New Area unlocked: Dungeon " + newLocation.worldIndex + "-" + newLocation.dungeonIndex;
+                }
+                else
+                {
+                    infoText = "New Area unlocked: World " + newLocation.worldIndex;
+                }
+                
+                return infoText;
+            }
+        }
+        return infoText;
     }
     #endregion
 }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// This enum defines, whether a barrier blocks access towards a dungeon or a world
@@ -93,6 +95,47 @@ public class Barrier : MonoBehaviour
                 break;
         }
         return info;
+    }
+
+    /// <summary>
+    /// If the player is in range of the barrier, the info screen appears
+    /// </summary>
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            string infoText = GameManagerV2.instance.getBarrierInfoText(type, originWorldIndex, destinationAreaIndex);
+            openInfoPanel(infoText);
+        }
+    }
+
+    /// <summary>
+    /// If the player is no longer in range of the barrier, the info screen disappears
+    /// </summary>
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            closeInfoPanel();
+        }
+    }
+
+    private async UniTask openInfoPanel(string infoText)
+    {
+        await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
+        if(InfoManager.instance == null)
+        {
+            return;
+        }
+        InfoManager.instance.displayInfo(infoText);
+    }
+
+    private async UniTask closeInfoPanel()
+    {
+        if(InfoManager.instance != null)
+        {
+            InfoManager.instance.closeButtonPressed();
+        }
     }
     #endregion
 
