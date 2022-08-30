@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - "main"
-      - "feature/add-third-party-license-notice-link"
     tags:
       - "v*"
   pull_request:
