@@ -649,7 +649,7 @@ public class GameManagerV2 : MonoBehaviour
 
             game = minigameDTO.game;
             configurationId = minigameDTO.configurationId;
-            if(configurationId != "" || configurationId != null || configurationId != "NONE")
+            if(configurationId != "" && configurationId != null && configurationId != "NONE")
             {
                 status = MinigameStatus.active;
             }
@@ -1004,6 +1004,22 @@ public class GameManagerV2 : MonoBehaviour
                 }
             }
         }
+    }
+    #endregion
+
+    #region InfoScreen
+    public string getBarrierInfoText(BarrierType type, int originWorldIndex, int destinationAreaIndex)
+    {
+        string info = "NOT UNLOCKED YET";
+        return info;
+    }
+
+    #endregion
+
+    #region GetterAndSetter
+    public AreaLocationDTO[] getUnlockedAreas()
+    {
+        return playerData.unlockedAreas;
     }
     #endregion
 }
