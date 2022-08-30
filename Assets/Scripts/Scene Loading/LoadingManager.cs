@@ -72,7 +72,7 @@ public class LoadingManager : MonoBehaviour
         Debug.Log("Validate data");
         if(GameManagerV2.instance.loadingError)
         {
-            SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+            await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
         }
         else
         {
@@ -136,6 +136,54 @@ public class LoadingManager : MonoBehaviour
         await SceneManager.UnloadSceneAsync("LoadingScreen");
 
         Debug.Log("Finish unloading loading Manager");
+    }
+
+    public async UniTask reloadData(int worldIndex, int dungeonIndex, Vector2 playerPosition)
+    {
+        this.worldIndex = worldIndex;
+        this.dungeonIndex = dungeonIndex;
+        this.playerPosition = playerPosition;
+
+        slider.value = 0;
+        progressText.text = "0%";
+        loadingText.text = "LOADING DATA...";
+
+        if (GameManagerV2.instance == null)
+        {
+            Debug.Log("Game Manager not online yet.");
+            return;
+        }
+
+        Debug.Log("Start fetching data");
+
+        await GameManagerV2.instance.fetchData();
+
+        Debug.Log("Finish fetching data");
+
+        Debug.Log("Validate data");
+        if (GameManagerV2.instance.loadingError)
+        {
+            await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+            return;
+        }
+
+        slider.value = 0.5f;
+        progressText.text = "50%";
+        loadingText.text = "PROCESSING DATA...";
+
+        GameManagerV2.instance.setData(worldIndex, dungeonIndex);
+
+        slider.value = 0.85f;
+        progressText.text = "85%";
+        loadingText.text = "SETTING UP PLAYER...";
+
+        GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+
+        slider.value = 1;
+        progressText.text = "100%";
+        loadingText.text = "DONE...";
+
+        await SceneManager.UnloadSceneAsync("LoadingScreen");
     }
     #endregion
 }
