@@ -38,7 +38,8 @@ public class GameManagerV2 : MonoBehaviour
 
     //GameObjects
     private GameObject[,] minigameObjects;
-    private GameObject[,] barrierObjects;
+    private GameObject[,] worldBarrierObjects;
+    private GameObject[,] dungeonBarrierObjects;
     private GameObject[,] npcObjects;
 
     //Data
@@ -78,7 +79,8 @@ public class GameManagerV2 : MonoBehaviour
         maxDungeons = GameSettings.getMaxDungeons();
 
         minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
-        barrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
+        worldBarrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
+        dungeonBarrierObjects = new GameObject[maxWorld + 1, maxDungeons + 1];
         npcObjects = new GameObject[maxWorld + 1, maxNPCs + 1];
 
         worldData = new WorldData[maxWorld + 1];
@@ -138,13 +140,21 @@ public class GameManagerV2 : MonoBehaviour
     /// This function registers a new barrier at the <c>GameManager</c>
     /// </summary>
     /// <param name="barrier">The barrier gameObject</param>
-    /// <param name="worldIndexOrigin">The index of the world which exit the barrier is blocking</param>
-    /// <param name="worldIndexDestination">The index of the world which entry the barrier is blocking</param>
-    public void addBarrier(GameObject barrier, int worldIndexOrigin, int worldIndexDestination)
+    /// <param name="originWorldIndex">The index of the world which exit the barrier is blocking</param>
+    /// <param name="destinationAreaIndex">The index of the world which entry the barrier is blocking</param>
+    public void addBarrier(GameObject barrier, BarrierType type, int originWorldIndex, int destinationAreaIndex)
     {
         if (barrier != null)
         {
-            barrierObjects[worldIndexOrigin, worldIndexDestination] = barrier;
+            switch(type)
+            {
+                case BarrierType.worldBarrier:
+                    worldBarrierObjects[originWorldIndex, destinationAreaIndex] = barrier;
+                    break;
+                case BarrierType.dungeonBarrier:
+                    dungeonBarrierObjects[originWorldIndex, destinationAreaIndex] = barrier;
+                    break;
+            }
         }
     }
 
@@ -153,9 +163,17 @@ public class GameManagerV2 : MonoBehaviour
     /// </summary>
     /// <param name="worldIndexOrigin">The index of the world which exit the barrier is blocking</param>
     /// <param name="worldIndexDestination">The index of the world which entry the barrier is blocking</param>
-    public void removeBarrier(int worldIndexOrigin, int worldIndexDestination)
+    public void removeBarrier(BarrierType type, int originWorldIndex, int destinationAreaIndex)
     {
-        barrierObjects[worldIndexOrigin, worldIndexDestination] = null;
+        switch (type)
+        {
+            case BarrierType.worldBarrier:
+                worldBarrierObjects[originWorldIndex, destinationAreaIndex] = null;
+                break;
+            case BarrierType.dungeonBarrier:
+                dungeonBarrierObjects[originWorldIndex, destinationAreaIndex] = null;
+                break;
+        }
     }
 
     /// <summary>
@@ -322,13 +340,13 @@ public class GameManagerV2 : MonoBehaviour
                 Debug.Log("    Minigame slot " + worldIndex + "-" + minigameIndex + " contains minigame: " + status);
             }
 
-            Debug.Log("  Barriers:");
+            Debug.Log("  World Barriers:");
             for (int barrierIndex = 1; barrierIndex <= maxWorld; barrierIndex++)
             {
                 string status = "";
-                if (barrierObjects[worldIndex, barrierIndex] != null)
+                if (worldBarrierObjects[worldIndex, barrierIndex] != null)
                 {
-                    status = barrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>().getInfo();
+                    status = worldBarrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>().getInfo();
                 }
                 else
                 {
@@ -337,7 +355,22 @@ public class GameManagerV2 : MonoBehaviour
                 Debug.Log("    Barrier slot " + worldIndex + "-" + barrierIndex + " contains barrier: " + status);
             }
 
-            Debug.Log("  NPCs:");
+            Debug.Log("  Dungeon Barriers:");
+            for (int barrierIndex = 1; barrierIndex <= maxDungeons; barrierIndex++)
+            {
+                string status = "";
+                if (dungeonBarrierObjects[worldIndex, barrierIndex] != null)
+                {
+                    status = dungeonBarrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>().getInfo();
+                }
+                else
+                {
+                    status = "none";
+                }
+                Debug.Log("    Barrier slot " + worldIndex + "-" + barrierIndex + " contains barrier: " + status);
+            }
+
+                Debug.Log("  NPCs:");
             for (int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
             {
                 string status = "";
@@ -831,7 +864,7 @@ public class GameManagerV2 : MonoBehaviour
 
         for(int barrierDestinationIndex = 1; barrierDestinationIndex <= maxWorld; barrierDestinationIndex++)
         {
-            GameObject barrierObject = barrierObjects[worldIndex, barrierDestinationIndex];
+            GameObject barrierObject = worldBarrierObjects[worldIndex, barrierDestinationIndex];
             if(barrierObject == null)
             {
                 continue;
@@ -847,6 +880,25 @@ public class GameManagerV2 : MonoBehaviour
             BarrierData barrierData = new BarrierData(!worldExplorable);
             barrier.setup(barrierData);
         }
+
+        for(int barrierDestinationIndex = 1; barrierDestinationIndex <= maxDungeons; barrierDestinationIndex++)
+        {
+            GameObject barrierObject = dungeonBarrierObjects[worldIndex, barrierDestinationIndex];
+            if (barrierObject == null)
+            {
+                continue;
+            }
+            Barrier barrier = barrierObject.GetComponent<Barrier>();
+            if (barrier == null)
+            {
+                continue;
+            }
+            bool activedByLecturer = worldData[worldIndex].dungeonIsActive(barrierDestinationIndex);
+            bool unlockedByPlayer = playerHasDungeonUnlocked(worldIndex, barrierDestinationIndex);
+            bool dungeonExplorable = activedByLecturer & unlockedByPlayer;
+            BarrierData barrierData = new BarrierData(!dungeonExplorable);
+            barrier.setup(barrierData);
+        }
     }
 
     //has player unlocked the world
@@ -856,6 +908,20 @@ public class GameManagerV2 : MonoBehaviour
         {
             if (playerData.unlockedAreas[i].worldIndex == worldIndex &&
                 playerData.unlockedAreas[i].dungeonIndex == 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //has player unlocked dungeon
+    private bool playerHasDungeonUnlocked(int worldIndex, int dungeonIndex)
+    {
+        for (int i = 0; i < playerData.unlockedAreas.Length; i++)
+        {
+            if (playerData.unlockedAreas[i].worldIndex == worldIndex &&
+                playerData.unlockedAreas[i].dungeonIndex == dungeonIndex)
             {
                 return true;
             }
@@ -919,12 +985,24 @@ public class GameManagerV2 : MonoBehaviour
     }
     
     //mark npc as read
-    public async void markNPCasRead(string uuid)
+    public async void markNPCasRead(int worldIndex, int dungeonIndex, int number, string uuid)
     {
         if (active)
         {
             string path = "/overworld/api/v1/internal/submit-npc-pass";
             await postNPCCompleted(path, uuid);
+
+            if(worldIndex <= maxWorld)
+            {
+                if(dungeonIndex != 0)
+                {
+                    worldData[worldIndex].npcCompleted(dungeonIndex, number);
+                }
+                else
+                {
+                    worldData[worldIndex].npcCompleted(number);
+                }
+            }
         }
     }
     #endregion

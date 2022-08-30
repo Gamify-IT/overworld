@@ -2,15 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This enum defines, whether a barrier blocks access towards a dungeon or a world
+/// </summary>
+public enum BarrierType
+{
+    worldBarrier,
+    dungeonBarrier
+}
+
 /*
  * This script defines a barrier to block access to other worlds.  
  */
 public class Barrier : MonoBehaviour
 {
     #region Attributes
+    [SerializeField] private BarrierType type;
     [SerializeField] private bool isActive;
-    [SerializeField] private int worldIndexOrigin;
-    [SerializeField] private int worldIndexDestination;
+    [SerializeField] private int originWorldIndex;
+    [SerializeField] private int destinationAreaIndex;
     #endregion
 
     #region Setup
@@ -26,8 +36,8 @@ public class Barrier : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.Log("remove Barrier " + worldIndexOrigin + "->" + worldIndexDestination);
-        GameManagerV2.instance.removeBarrier(worldIndexOrigin, worldIndexDestination);
+        Debug.Log("remove " + type + ": " + originWorldIndex + "->" + destinationAreaIndex);
+        GameManagerV2.instance.removeBarrier(type, originWorldIndex, destinationAreaIndex);
     }
 
     /*
@@ -35,8 +45,8 @@ public class Barrier : MonoBehaviour
      */
     private void registerToGameManager()
     {
-        Debug.Log("register Barrier " + worldIndexOrigin + "->" + worldIndexDestination);
-        GameManagerV2.instance.addBarrier(this.gameObject, worldIndexOrigin, worldIndexDestination);
+        Debug.Log("register " + type + ": " + originWorldIndex + "->" + destinationAreaIndex);
+        GameManagerV2.instance.addBarrier(this.gameObject, type, originWorldIndex, destinationAreaIndex);
     }
     #endregion
 
@@ -47,7 +57,7 @@ public class Barrier : MonoBehaviour
      */
     public void setup(BarrierData data)
     {
-        Debug.Log("Barrier " + worldIndexOrigin + "->" + worldIndexDestination + ": new status: " + data.getIsActive());
+        Debug.Log(type + ": " + originWorldIndex + "->" + destinationAreaIndex + ": new status: " + data.getIsActive());
         isActive = data.getIsActive();
         updateStatus();
     }
@@ -59,12 +69,12 @@ public class Barrier : MonoBehaviour
     {
         if(isActive)
         {
-            Debug.Log("Barrier " + worldIndexOrigin + "->" + worldIndexDestination + ": now visible");
+            Debug.Log(type + ": " + originWorldIndex + "->" + destinationAreaIndex + ": now visible");
             gameObject.SetActive(true);
         }
         else
         {
-            Debug.Log("Barrier " + worldIndexOrigin + "->" + worldIndexDestination + ": now invisible");
+            Debug.Log(type + ": " + originWorldIndex + "->" + destinationAreaIndex + ": now invisible");
             gameObject.SetActive(false);
         }
     }
@@ -72,7 +82,16 @@ public class Barrier : MonoBehaviour
     //returns barrier object info
     public string getInfo()
     {
-        string info = worldIndexOrigin + "->" + worldIndexDestination + ": active: " + isActive;
+        string info = "";
+        switch(type)
+        {
+            case BarrierType.worldBarrier:
+                info = "world " + originWorldIndex + "-> world " + destinationAreaIndex + ": active: " + isActive;
+                break;
+            case BarrierType.dungeonBarrier:
+                info = "world " + originWorldIndex + "-> dungeon " + destinationAreaIndex + ": active: " + isActive;
+                break;
+        }
         return info;
     }
     #endregion
@@ -80,12 +99,12 @@ public class Barrier : MonoBehaviour
     #region Getter
     public int getWorldOriginIndex()
     {
-        return worldIndexOrigin;
+        return originWorldIndex;
     }
 
     public int getWorldDestinationIndex()
     {
-        return worldIndexDestination;
+        return destinationAreaIndex;
     }
     #endregion
 }
