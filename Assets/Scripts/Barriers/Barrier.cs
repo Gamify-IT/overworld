@@ -13,9 +13,9 @@ public enum BarrierType
     dungeonBarrier
 }
 
-/*
- * This script defines a barrier to block access to other worlds.  
- */
+/// <summary>
+/// A <c>Barrier</c> is used to block of access to worlds and dungeons.
+/// </summary>
 public class Barrier : MonoBehaviour
 {
     #region Attributes
@@ -26,25 +26,29 @@ public class Barrier : MonoBehaviour
     #endregion
 
     #region Setup
-    /*
-     * The Start function is called when the object is initialized and sets up the starting values and state of the object. 
-     * The function registers the barrier at the game manager and sets the barrier to be active on default.
-     */
+    /// <summary>
+    /// The Awake function is called when the object is initialized and sets up the starting values and state of the object.
+    /// The function registers the barrier at the game manager and sets the barrier to be active on default.
+    /// </summary>
     void Awake()
     {
         registerToGameManager();
         updateStatus();
     }
 
+    /// <summary>
+    /// The OnDestroy function is called when the object is deleted.
+    /// The function removes the barrier from the game manager.
+    /// </summary>
     private void OnDestroy()
     {
         Debug.Log("remove " + type + ": " + originWorldIndex + "->" + destinationAreaIndex);
         GameManager.instance.removeBarrier(type, originWorldIndex, destinationAreaIndex);
     }
 
-    /*
-     * This function registers the barrier at the game manager
-     */
+    /// <summary>
+    /// This function registers the barrier at the game manager.
+    /// </summary>
     private void registerToGameManager()
     {
         Debug.Log("register " + type + ": " + originWorldIndex + "->" + destinationAreaIndex);
@@ -53,10 +57,10 @@ public class Barrier : MonoBehaviour
     #endregion
 
     #region Functionality
-    /*
-     * This functions configurates the barrier with the given data and updates the object.
-     * @param data: the data to be set
-     */
+    /// <summary>
+    /// This function sets up the barrier object with the provided data
+    /// </summary>
+    /// <param name="data">The data to be set</param>
     public void setup(BarrierData data)
     {
         Debug.Log(type + ": " + originWorldIndex + "->" + destinationAreaIndex + ": new status: " + data.getIsActive());
@@ -64,9 +68,9 @@ public class Barrier : MonoBehaviour
         updateStatus();
     }
 
-    /*
-     * This function updates the object status.
-     */
+    /// <summary>
+    /// This function updates whether the barrier is active or not, based on the stored data
+    /// </summary>
     private void updateStatus()
     {
         if(isActive)
@@ -80,8 +84,11 @@ public class Barrier : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-    
-    //returns barrier object info
+
+    /// <summary>
+    /// This function returns information about the barrier object
+    /// </summary>
+    /// <returns>A string containing all necessary information</returns>
     public string getInfo()
     {
         string info = "";
@@ -98,7 +105,8 @@ public class Barrier : MonoBehaviour
     }
 
     /// <summary>
-    /// If the player is in range of the barrier, the info screen appears
+    /// This function is called when the player gets near the barrier object.
+    /// The function opens the info screen and showcases information about the barrier.
     /// </summary>
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -110,7 +118,8 @@ public class Barrier : MonoBehaviour
     }
 
     /// <summary>
-    /// If the player is no longer in range of the barrier, the info screen disappears
+    /// This function is called when the player moves away from the barrier object.
+    /// The function closes the info screen.
     /// </summary>
     private void OnTriggerExit2D(Collider2D other)
     {
@@ -120,6 +129,11 @@ public class Barrier : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This function opens the info screen and displays the given text.
+    /// </summary>
+    /// <param name="infoText">The text to display</param>
+    /// <returns></returns>
     private async UniTask openInfoPanel(string infoText)
     {
         await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
@@ -130,6 +144,10 @@ public class Barrier : MonoBehaviour
         InfoManager.instance.displayInfo(infoText);
     }
 
+    /// <summary>
+    /// This function closes the info screen.
+    /// </summary>
+    /// <returns></returns>
     private async UniTask closeInfoPanel()
     {
         if(InfoManager.instance != null)
