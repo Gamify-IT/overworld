@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - "main"
-      - "maintenance/code-review"
     tags:
       - "v*"
   pull_request:
