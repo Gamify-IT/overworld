@@ -1,9 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// 
-/// </summary>
 public class CharacterSelection : MonoBehaviour
 {
     private Image characterImage;

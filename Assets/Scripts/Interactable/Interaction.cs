@@ -1,8 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// 
-/// </summary>
 public class Interaction : MonoBehaviour
 
 {

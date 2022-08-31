@@ -14,7 +14,7 @@ public class PlayerTaskStatisticDTOArray
     #endregion
 
     /// <summary>
-    ///     This function converts a json string to a array of<c>PlayerTaskStatisticDTO</c> objects.
+    ///     This function converts a json string to a array of <c>PlayerTaskStatisticDTO</c> objects.
     /// </summary>
     /// <param name="jsonString">The json string to convert</param>
     /// <returns>A array of <c>PlayerTaskStatisticDTO</c> objects containing the data</returns>
