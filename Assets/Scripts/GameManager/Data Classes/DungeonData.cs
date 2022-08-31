@@ -1,3 +1,6 @@
+/// <summary>
+/// This class defines all needed data for a <c>Dungeon</c>.
+/// </summary>
 public class DungeonData
 {
     #region Attributes
