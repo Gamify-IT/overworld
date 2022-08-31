@@ -3,9 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/// <summary>
+/// This class converts json strings to objects.
+/// </summary>
 public class JsonHelper
 {
+    /// <summary>
+    /// This function converts a json string to a object of type <c>T</c>.
+    /// </summary>
+    /// <typeparam name="T">The type to convert the json in</typeparam>
+    /// <param name="json">The json string to be converted</param>
+    /// <returns></returns>
     public static T[] getJsonArray<T>(string json)
     {
         string newJson = "{ \"array\": " + json + "}";
@@ -13,6 +21,10 @@ public class JsonHelper
         return wrapper.array;
     }
 
+    /// <summary>
+    /// This class is a wrapper to help to convert a json string to a object.
+    /// </summary>
+    /// <typeparam name="T">The type to convert the json in</typeparam>
     [Serializable]
     private class Wrapper<T>
     {

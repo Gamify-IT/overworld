@@ -3,9 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class is used to retrieve data from Get Requests.
+/// </summary>
 [System.Serializable]
 public class DungeonDTO
 {
+    #region Attributes
     public string id;
     public int index;
     public string staticName;
@@ -13,7 +17,9 @@ public class DungeonDTO
     public bool active;
     public List<MinigameTaskDTO> minigameTasks;
     public List<NPCDTO> npcs;
+    #endregion
 
+    #region Constructors
     public DungeonDTO(string id, int index, string staticName, string topicName, bool active, List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs)
     {
         this.id = id;
@@ -26,81 +32,15 @@ public class DungeonDTO
     }
 
     public DungeonDTO() { }
+    #endregion
 
+    /// <summary>
+    /// This function converts a json string to a <c>DungeonDTO</c> object.
+    /// </summary>
+    /// <param name="jsonString">The json string to convert</param>
+    /// <returns>A <c>DungeonDTO</c> object containing the data</returns>
     public static DungeonDTO CreateFromJSON(string jsonString)
     {
         return JsonUtility.FromJson<DungeonDTO>(jsonString);
     }
-
-    #region GetterAndSetter
-    public string getId()
-    {
-        return id;
-    }
-
-    public void setId(string id)
-    {
-        this.id = id;
-    }
-
-    public int getIndex()
-    {
-        return index;
-    }
-
-    public void setIndex(int index)
-    {
-        this.index = index;
-    }
-
-    public string getStaticName()
-    {
-        return staticName;
-    }
-
-    public void setStaticName(string staticName)
-    {
-        this.staticName = staticName;
-    }
-
-    public string getTopicName()
-    {
-        return topicName;
-    }
-
-    public void setTopicName(string topicName)
-    {
-        this.topicName = topicName;
-    }
-
-    public bool getActive()
-    {
-        return active;
-    }
-
-    public void setActive(bool active)
-    {
-        this.active = active;
-    }
-
-    public List<MinigameTaskDTO> getMinigameTasks()
-    {
-        return minigameTasks;
-    }
-
-    public void setMinigameTasks(List<MinigameTaskDTO> minigameTasks)
-    {
-        this.minigameTasks = minigameTasks;
-    }
-
-    public List<NPCDTO> getNPCs()
-    {
-        return npcs;
-    }
-
-    public void setNPCs(List<NPCDTO> npcs)
-    {
-        this.npcs = npcs;
-    }
-    #endregion
 }
