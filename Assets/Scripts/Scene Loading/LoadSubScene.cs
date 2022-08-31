@@ -46,7 +46,7 @@ public class LoadSubScene : MonoBehaviour
             yield return null;
         }
 
-        GameManager.instance.setData(worldIndex, dungeonIndex);
+        GameManager.Instance.SetData(worldIndex, dungeonIndex);
 
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {

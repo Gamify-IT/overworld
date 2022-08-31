@@ -1,29 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
-/// The <c>InfoManager</c> 
+///     The <c>InfoManager</c>
 /// </summary>
 public class InfoManager : MonoBehaviour
 {
+    #region Attributes
+
+    public TextMeshProUGUI infoText;
+
+    #endregion
+
     #region Singleton
-    public static InfoManager instance { get; private set; }
+
+    public static InfoManager Instance { get; private set; }
 
     /// <summary>
-    /// The Awake function is called when the object is initialized and sets up the starting values and state of the object.
-    /// This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or deletes the object otherwise
+    ///     The Awake function is called when the object is initialized and sets up the starting values and state of the
+    ///     object.
+    ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
+    ///     deletes the object otherwise
     /// </summary>
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
-            instance.infoText.text = "";
+            Instance = this;
+            Instance.infoText.text = "";
         }
         else
         {
@@ -32,45 +38,43 @@ public class InfoManager : MonoBehaviour
     }
 
     /// <summary>
-    /// The OnDestroy function is called when the object is deleted.
-    /// This function clears the singleton instance.
+    ///     The OnDestroy function is called when the object is deleted.
+    ///     This function clears the singleton instance.
     /// </summary>
     private void OnDestroy()
     {
-        instance = null;
+        Instance = null;
     }
 
     #endregion
 
-    #region Attributes
-    public TextMeshProUGUI infoText;
-    #endregion
-
     #region Functionality
+
     /// <summary>
-    /// This function displays the given text on the panel.
+    ///     This function displays the given text on the panel.
     /// </summary>
     /// <param name="info">The text to display</param>
-    public void displayInfo(string info)
+    public void DisplayInfo(string info)
     {
         infoText.text = info;
     }
 
     /// <summary>
-    /// This function is to be called by the close button of the panel.
+    ///     This function is to be called by the close button of the panel.
     /// </summary>
-    public void closeButtonPressed()
+    public void CloseButtonPressed()
     {
-        closeInfoPanel();
+        CloseInfoPanel();
     }
 
     /// <summary>
-    /// This function closes the info panel.
+    ///     This function closes the info panel.
     /// </summary>
     /// <returns></returns>
-    private async UniTask closeInfoPanel()
+    private async UniTask CloseInfoPanel()
     {
         await SceneManager.UnloadSceneAsync("InfoScreen");
     }
+
     #endregion
 }

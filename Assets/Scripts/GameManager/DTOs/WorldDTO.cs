@@ -1,15 +1,25 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// This class is used to retrieve data from Get Requests.
+///     This class is used to retrieve data from Get Requests.
 /// </summary>
-[System.Serializable]
+[Serializable]
 public class WorldDTO
 {
+    /// <summary>
+    ///     This function converts a json string to a <c>WorldDTO</c> object.
+    /// </summary>
+    /// <param name="jsonString">The json string to convert</param>
+    /// <returns>A <c>WorldDTO</c> object containing the data</returns>
+    public static WorldDTO CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<WorldDTO>(jsonString);
+    }
+
     #region Attributes
+
     public string id;
     public int index;
     public string staticName;
@@ -18,10 +28,13 @@ public class WorldDTO
     public List<MinigameTaskDTO> minigameTasks;
     public List<NPCDTO> npcs;
     public List<DungeonDTO> dungeons;
+
     #endregion
 
     #region Constructors
-    public WorldDTO(string id, int index, string staticName, string topicName, bool active, List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs, List<DungeonDTO> dungeons)
+
+    public WorldDTO(string id, int index, string staticName, string topicName, bool active,
+        List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs, List<DungeonDTO> dungeons)
     {
         this.id = id;
         this.index = index;
@@ -33,16 +46,9 @@ public class WorldDTO
         this.dungeons = dungeons;
     }
 
-    public WorldDTO() { }
-    #endregion
-
-    /// <summary>
-    /// This function converts a json string to a <c>WorldDTO</c> object.
-    /// </summary>
-    /// <param name="jsonString">The json string to convert</param>
-    /// <returns>A <c>WorldDTO</c> object containing the data</returns>
-    public static WorldDTO CreateFromJSON(string jsonString)
+    public WorldDTO()
     {
-        return JsonUtility.FromJson<WorldDTO>(jsonString);
     }
+
+    #endregion
 }

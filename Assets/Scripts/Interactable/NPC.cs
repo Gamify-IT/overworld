@@ -36,8 +36,8 @@ public class NPC : MonoBehaviour
             speechIndicator = child;
         }
 
-        registerToGameManager();
-        initNewStuffSprite();
+        RegisterToGameManager();
+        InitNewStuffSprite();
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public class NPC : MonoBehaviour
         {
             if (!hasBeenTalkedTo)
             {
-                markAsRead();
+                MarkAsRead();
             }
 
             StartCoroutine(LoadDialogueScene());
@@ -82,7 +82,7 @@ public class NPC : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
-        GameManager.instance.removeNPC(world, dungeon, number);
+        GameManager.Instance.RemoveNpc(world, dungeon, number);
     }
 
     /// <summary>
@@ -116,32 +116,32 @@ public class NPC : MonoBehaviour
     /// <summary>
     ///     This method sets the NPC as talked to.
     /// </summary>
-    private void markAsRead()
+    private void MarkAsRead()
     {
         hasBeenTalkedTo = true;
         speechIndicator.SetActive(false);
-        GameManager.instance.markNPCasRead(world, dungeon, number, uuid);
+        GameManager.Instance.MarkNpCasRead(world, dungeon, number, uuid);
     }
 
     /// <summary>
     ///     This function registers the NPC to the GameManager.
     /// </summary>
-    private void registerToGameManager()
+    private void RegisterToGameManager()
     {
         Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
-        GameManager.instance.addNPC(gameObject, world, dungeon, number);
+        GameManager.Instance.AddNpc(gameObject, world, dungeon, number);
     }
 
     /// <summary>
     ///     setup called by game manager
     /// </summary>
     /// <param name="data"></param>
-    public void setup(NPCData data)
+    public void Setup(NPCData data)
     {
-        uuid = data.getUUID();
-        dialogue = data.getDialogue();
-        hasBeenTalkedTo = data.getHasBeenTalkedTo();
-        initNewStuffSprite();
+        uuid = data.GetUuid();
+        dialogue = data.GetDialogue();
+        hasBeenTalkedTo = data.GetHasBeenTalkedTo();
+        InitNewStuffSprite();
         string text = "";
         for (int index = 0; index < dialogue.Length; index++)
         {
@@ -156,7 +156,7 @@ public class NPC : MonoBehaviour
     /// <summary>
     ///     This method initializes the new stuff sprite if the NPC has not been talked to yet.
     /// </summary>
-    private void initNewStuffSprite()
+    private void InitNewStuffSprite()
     {
         if (hasBeenTalkedTo)
         {
@@ -235,7 +235,7 @@ public class NPC : MonoBehaviour
     ///     This function returns the NPC object info
     /// </summary>
     /// <returns>NPC object info</returns>
-    public string getInfo()
+    public string GetInfo()
     {
         string info = "";
         string text = "";
@@ -255,7 +255,7 @@ public class NPC : MonoBehaviour
     ///     This method returns the world index of the NPC.
     /// </summary>
     /// <returns>world</returns>
-    public int getWorldIndex()
+    public int GetWorldIndex()
     {
         return world;
     }
@@ -264,7 +264,7 @@ public class NPC : MonoBehaviour
     ///     This method returns the dungeon index of the NPC.
     /// </summary>
     /// <returns>dungeon</returns>
-    public int getDungeonIndex()
+    public int GetDungeonIndex()
     {
         return dungeon;
     }

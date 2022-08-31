@@ -1,23 +1,34 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// This class is used to retrieve data from Get Requests.
+///     This class is used to retrieve data from Get Requests.
 /// </summary>
-[System.Serializable]
+[Serializable]
 public class MinigameTaskDTO
 {
+    /// <summary>
+    ///     This function converts a json string to a <c>MinigameTaskDTO</c> object.
+    /// </summary>
+    /// <param name="jsonString">The json string to convert</param>
+    /// <returns>A <c>MinigameTaskDTO</c> object containing the data</returns>
+    public static MinigameTaskDTO CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<MinigameTaskDTO>(jsonString);
+    }
+
     #region Attributes
+
     public string id;
     public AreaLocationDTO area;
     public int index;
     public string game;
     public string configurationId;
+
     #endregion
 
     #region Constructors
+
     public MinigameTaskDTO(string id, AreaLocationDTO area, int index, string game, string configurationId)
     {
         this.id = id;
@@ -27,16 +38,9 @@ public class MinigameTaskDTO
         this.configurationId = configurationId;
     }
 
-    public MinigameTaskDTO() { }
-    #endregion
-
-    /// <summary>
-    /// This function converts a json string to a <c>MinigameTaskDTO</c> object.
-    /// </summary>
-    /// <param name="jsonString">The json string to convert</param>
-    /// <returns>A <c>MinigameTaskDTO</c> object containing the data</returns>
-    public static MinigameTaskDTO CreateFromJSON(string jsonString)
+    public MinigameTaskDTO()
     {
-        return JsonUtility.FromJson<MinigameTaskDTO>(jsonString);
     }
+
+    #endregion
 }

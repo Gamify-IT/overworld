@@ -32,7 +32,7 @@ public class NPCData
     ///     This method returns the UUID of the NPC.
     /// </summary>
     /// <returns>uuid</returns>
-    public string getUUID()
+    public string GetUuid()
     {
         return uuid;
     }
@@ -41,7 +41,7 @@ public class NPCData
     ///     This method sets the UUID of the NPC.
     /// </summary>
     /// <param name="uuid">uuid of the NPC</param>
-    public void setUUID(string uuid)
+    public void SetUuid(string uuid)
     {
         this.uuid = uuid;
     }
@@ -50,7 +50,7 @@ public class NPCData
     ///     This method returns the dialogue of the NPC.
     /// </summary>
     /// <returns>dialogue</returns>
-    public string[] getDialogue()
+    public string[] GetDialogue()
     {
         return dialogue;
     }
@@ -59,7 +59,7 @@ public class NPCData
     ///     This method is used to set the dialogue of the NPC.
     /// </summary>
     /// <param name="dialogue">the dialogue of the NPC</param>
-    public void setDialogue(string[] dialogue)
+    public void SetDialogue(string[] dialogue)
     {
         this.dialogue = dialogue;
     }
@@ -68,7 +68,7 @@ public class NPCData
     ///     This function returns the value if a NPC has been talked to.
     /// </summary>
     /// <returns>hasBeenTalkedTo</returns>
-    public bool getHasBeenTalkedTo()
+    public bool GetHasBeenTalkedTo()
     {
         return hasBeenTalkedTo;
     }
@@ -77,7 +77,7 @@ public class NPCData
     ///     This function sets the hasBeenTalkedTo attribute to the value of 'hasBeenTalkedTo'.
     /// </summary>
     /// <param name="hasBeenTalkedTo">boolean if the NPC has been talk to</param>
-    public void setHasBeenTalkedTo(bool hasBeenTalkedTo)
+    public void SetHasBeenTalkedTo(bool hasBeenTalkedTo)
     {
         this.hasBeenTalkedTo = hasBeenTalkedTo;
     }

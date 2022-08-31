@@ -36,7 +36,7 @@ public class LoadMaps : MonoBehaviour
         }
 
         await LoadWorld();
-        GameManager.instance.setData(sceneDestinationIndex, 0);
+        GameManager.Instance.SetData(sceneDestinationIndex, 0);
     }
 
     /// <summary>

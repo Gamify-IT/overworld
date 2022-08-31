@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Cysharp.Threading.Tasks;
 
 /// <summary>
-/// This enum defines, whether a barrier blocks access towards a dungeon or a world
+///     This enum defines, whether a barrier blocks access towards a dungeon or a world
 /// </summary>
 public enum BarrierType
 {
@@ -14,66 +12,72 @@ public enum BarrierType
 }
 
 /// <summary>
-/// A <c>Barrier</c> is used to block of access to worlds and dungeons.
+///     A <c>Barrier</c> is used to block of access to worlds and dungeons.
 /// </summary>
 public class Barrier : MonoBehaviour
 {
     #region Attributes
+
     [SerializeField] private BarrierType type;
     [SerializeField] private bool isActive;
     [SerializeField] private int originWorldIndex;
     [SerializeField] private int destinationAreaIndex;
+
     #endregion
 
     #region Setup
+
     /// <summary>
-    /// The Awake function is called when the object is initialized and sets up the starting values and state of the object.
-    /// The function registers the barrier at the game manager and sets the barrier to be active on default.
+    ///     The Awake function is called when the object is initialized and sets up the starting values and state of the
+    ///     object.
+    ///     The function registers the barrier at the game manager and sets the barrier to be active on default.
     /// </summary>
-    void Awake()
+    private void Awake()
     {
-        registerToGameManager();
-        updateStatus();
+        RegisterToGameManager();
+        UpdateStatus();
     }
 
     /// <summary>
-    /// The OnDestroy function is called when the object is deleted.
-    /// The function removes the barrier from the game manager.
+    ///     The OnDestroy function is called when the object is deleted.
+    ///     The function removes the barrier from the game manager.
     /// </summary>
     private void OnDestroy()
     {
         Debug.Log("remove " + type + ": " + originWorldIndex + "->" + destinationAreaIndex);
-        GameManager.instance.removeBarrier(type, originWorldIndex, destinationAreaIndex);
+        GameManager.Instance.RemoveBarrier(type, originWorldIndex, destinationAreaIndex);
     }
 
     /// <summary>
-    /// This function registers the barrier at the game manager.
+    ///     This function registers the barrier at the game manager.
     /// </summary>
-    private void registerToGameManager()
+    private void RegisterToGameManager()
     {
         Debug.Log("register " + type + ": " + originWorldIndex + "->" + destinationAreaIndex);
-        GameManager.instance.addBarrier(this.gameObject, type, originWorldIndex, destinationAreaIndex);
+        GameManager.Instance.AddBarrier(gameObject, type, originWorldIndex, destinationAreaIndex);
     }
+
     #endregion
 
     #region Functionality
+
     /// <summary>
-    /// This function sets up the barrier object with the provided data
+    ///     This function sets up the barrier object with the provided data
     /// </summary>
     /// <param name="data">The data to be set</param>
-    public void setup(BarrierData data)
+    public void Setup(BarrierData data)
     {
-        Debug.Log(type + ": " + originWorldIndex + "->" + destinationAreaIndex + ": new status: " + data.getIsActive());
-        isActive = data.getIsActive();
-        updateStatus();
+        Debug.Log(type + ": " + originWorldIndex + "->" + destinationAreaIndex + ": new status: " + data.IsActive());
+        isActive = data.IsActive();
+        UpdateStatus();
     }
 
     /// <summary>
-    /// This function updates whether the barrier is active or not, based on the stored data
+    ///     This function updates whether the barrier is active or not, based on the stored data
     /// </summary>
-    private void updateStatus()
+    private void UpdateStatus()
     {
-        if(isActive)
+        if (isActive)
         {
             Debug.Log(type + ": " + originWorldIndex + "->" + destinationAreaIndex + ": now visible");
             gameObject.SetActive(true);
@@ -86,13 +90,13 @@ public class Barrier : MonoBehaviour
     }
 
     /// <summary>
-    /// This function returns information about the barrier object
+    ///     This function returns information about the barrier object
     /// </summary>
     /// <returns>A string containing all necessary information</returns>
-    public string getInfo()
+    public string GetInfo()
     {
         string info = "";
-        switch(type)
+        switch (type)
         {
             case BarrierType.worldBarrier:
                 info = "world " + originWorldIndex + "-> world " + destinationAreaIndex + ": active: " + isActive;
@@ -101,71 +105,76 @@ public class Barrier : MonoBehaviour
                 info = "world " + originWorldIndex + "-> dungeon " + destinationAreaIndex + ": active: " + isActive;
                 break;
         }
+
         return info;
     }
 
     /// <summary>
-    /// This function is called when the player gets near the barrier object.
-    /// The function opens the info screen and showcases information about the barrier.
+    ///     This function is called when the player gets near the barrier object.
+    ///     The function opens the info screen and showcases information about the barrier.
     /// </summary>
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            string infoText = GameManager.instance.getBarrierInfoText(type, originWorldIndex, destinationAreaIndex);
-            openInfoPanel(infoText);
+            string infoText = GameManager.Instance.GetBarrierInfoText(type, originWorldIndex, destinationAreaIndex);
+            OpenInfoPanel(infoText);
         }
     }
 
     /// <summary>
-    /// This function is called when the player moves away from the barrier object.
-    /// The function closes the info screen.
+    ///     This function is called when the player moves away from the barrier object.
+    ///     The function closes the info screen.
     /// </summary>
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            closeInfoPanel();
+            CloseInfoPanel();
         }
     }
 
     /// <summary>
-    /// This function opens the info screen and displays the given text.
+    ///     This function opens the info screen and displays the given text.
     /// </summary>
     /// <param name="infoText">The text to display</param>
     /// <returns></returns>
-    private async UniTask openInfoPanel(string infoText)
+    private static async UniTask OpenInfoPanel(string infoText)
     {
         await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
-        if(InfoManager.instance == null)
+        if (InfoManager.Instance == null)
         {
             return;
         }
-        InfoManager.instance.displayInfo(infoText);
+
+        InfoManager.Instance.DisplayInfo(infoText);
     }
 
     /// <summary>
-    /// This function closes the info screen.
+    ///     This function closes the info screen.
     /// </summary>
     /// <returns></returns>
-    private async UniTask closeInfoPanel()
+    private async UniTask CloseInfoPanel()
     {
-        if(InfoManager.instance != null)
+        if (InfoManager.Instance != null)
         {
-            InfoManager.instance.closeButtonPressed();
+            InfoManager.Instance.CloseButtonPressed();
         }
     }
+
     #endregion
 
     #region Getter
-    public int getWorldOriginIndex()
+
+    public int GetWorldOriginIndex()
     {
         return originWorldIndex;
     }
 
-    public int getWorldDestinationIndex()
+    public int GetWorldDestinationIndex()
     {
         return destinationAreaIndex;
     }
+
     #endregion
 }

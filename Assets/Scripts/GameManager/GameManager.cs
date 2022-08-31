@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 {
     #region PostRequest
 
-    private async UniTask postNPCCompleted(string uri, string uuid)
+    private async UniTask PostNpcCompleted(string uri, string uuid)
     {
         NPCTalkEvent npcData = new NPCTalkEvent(uuid, true, playerId.ToString());
         string json = JsonUtility.ToJson(npcData, true);
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
 
     #region InfoScreen
 
-    public string getBarrierInfoText(BarrierType type, int originWorldIndex, int destinationAreaIndex)
+    public string GetBarrierInfoText(BarrierType type, int originWorldIndex, int destinationAreaIndex)
     {
         string info = "NOT UNLOCKED YET";
         return info;
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
 
     #region GetterAndSetter
 
-    public AreaLocationDTO[] getUnlockedAreas()
+    public AreaLocationDTO[] GetUnlockedAreas()
     {
         return playerData.unlockedAreas;
     }
@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
 
     #region Singleton
 
-    public static GameManager instance { get; private set; }
+    public static GameManager Instance { get; private set; }
 
     /// <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
@@ -77,9 +77,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            setupGameManager();
+            SetupGameManager();
         }
         else
         {
@@ -134,14 +134,14 @@ public class GameManager : MonoBehaviour
     /// <summary>
     ///     This function initializes the <c>GameManager</c>. All arrays are initialized with empty objects.
     /// </summary>
-    private void setupGameManager()
+    private void SetupGameManager()
     {
-        instance = this;
+        Instance = this;
 
-        maxWorld = GameSettings.getMaxWorlds();
-        maxMinigames = GameSettings.getMaxMinigames();
-        maxNPCs = GameSettings.getMaxNPCs();
-        maxDungeons = GameSettings.getMaxDungeons();
+        maxWorld = GameSettings.GetMaxWorlds();
+        maxMinigames = GameSettings.GetMaxMinigames();
+        maxNPCs = GameSettings.GetMaxNpCs();
+        maxDungeons = GameSettings.GetMaxDungeons();
 
         minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
         worldBarrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviour
     /// <param name="world">The index of the world the minigame is in</param>
     /// <param name="dungeon">The index of the dungeon the minigame is in (0 if in no dungeon)</param>
     /// <param name="number">The index of the minigame in its area</param>
-    public void addMinigame(GameObject minigame, int world, int dungeon, int number)
+    public void AddMinigame(GameObject minigame, int world, int dungeon, int number)
     {
         if (minigame != null)
         {
@@ -189,7 +189,7 @@ public class GameManager : MonoBehaviour
     /// <param name="world">The index of the world the minigame is in</param>
     /// <param name="dungeon">The index of the dungeon the minigame is in (0 if in no dungeon)</param>
     /// <param name="number">The index of the minigame in its area</param>
-    public void removeMinigame(int world, int dungeon, int number)
+    public void RemoveMinigame(int world, int dungeon, int number)
     {
         if (dungeon == 0)
         {
@@ -207,7 +207,7 @@ public class GameManager : MonoBehaviour
     /// <param name="barrier">The barrier gameObject</param>
     /// <param name="originWorldIndex">The index of the world which exit the barrier is blocking</param>
     /// <param name="destinationAreaIndex">The index of the world which entry the barrier is blocking</param>
-    public void addBarrier(GameObject barrier, BarrierType type, int originWorldIndex, int destinationAreaIndex)
+    public void AddBarrier(GameObject barrier, BarrierType type, int originWorldIndex, int destinationAreaIndex)
     {
         if (barrier != null)
         {
@@ -228,7 +228,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="worldIndexOrigin">The index of the world which exit the barrier is blocking</param>
     /// <param name="worldIndexDestination">The index of the world which entry the barrier is blocking</param>
-    public void removeBarrier(BarrierType type, int originWorldIndex, int destinationAreaIndex)
+    public void RemoveBarrier(BarrierType type, int originWorldIndex, int destinationAreaIndex)
     {
         switch (type)
         {
@@ -248,7 +248,7 @@ public class GameManager : MonoBehaviour
     /// <param name="world">The index of the world the npc is in</param>
     /// <param name="dungeon">The index of the dungeon the npc is in (0 if in no dungeon)</param>
     /// <param name="number">The index of the npc in its area</param>
-    public void addNPC(GameObject npc, int world, int dungeon, int number)
+    public void AddNpc(GameObject npc, int world, int dungeon, int number)
     {
         if (npc != null)
         {
@@ -269,7 +269,7 @@ public class GameManager : MonoBehaviour
     /// <param name="world">The index of the world the npc is in</param>
     /// <param name="dungeon">The index of the dungeon the npc is in (0 if in no dungeon)</param>
     /// <param name="number">The index of the npc in its area</param>
-    public void removeNPC(int world, int dungeon, int number)
+    public void RemoveNpc(int world, int dungeon, int number)
     {
         if (dungeon == 0)
         {
@@ -288,7 +288,7 @@ public class GameManager : MonoBehaviour
     #region Loading
 
     //sets respawn location after minigame is done
-    public void setMinigameRespawn(Vector2 respawnLocation, int worldIndex, int dungeonIndex)
+    public void SetMinigameRespawn(Vector2 respawnLocation, int worldIndex, int dungeonIndex)
     {
         minigameRespawnPosition = respawnLocation;
         minigameWorldIndex = worldIndex;
@@ -297,14 +297,14 @@ public class GameManager : MonoBehaviour
     }
 
     //called from java script
-    public void minigameDone()
+    public void MinigameDone()
     {
         Debug.Log("Start minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
-        reload();
+        Reload();
     }
 
     //reloads game 
-    private async void reload()
+    private async void Reload()
     {
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
         await LoadingManager.Instance.ReloadData(minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
@@ -312,7 +312,7 @@ public class GameManager : MonoBehaviour
 
     //l�d alle daten vom backend und verarbeitet und setzt in worldData
     //wird von gameStart oder minigameEnde aufgerufen
-    public async UniTask fetchData()
+    public async UniTask FetchData()
     {
         if (!active)
         {
@@ -327,7 +327,7 @@ public class GameManager : MonoBehaviour
         //get data
         for (int worldIndex = 1; worldIndex <= maxWorld; worldIndex++)
         {
-            await GetWorldDTO(path + "/worlds/", worldIndex);
+            await GetWorldDto(path + "/worlds/", worldIndex);
         }
 
         await UniTask.WhenAll(
@@ -341,11 +341,11 @@ public class GameManager : MonoBehaviour
         //process Data
         for (int worldIndex = 1; worldIndex <= maxWorld; worldIndex++)
         {
-            processWorldDTO(worldIndex);
+            ProcessWorldDto(worldIndex);
         }
 
-        processPlayerTaskStatisitcs(playerMinigameStatistics);
-        processPlayerNPCStatistics(playerNPCStatistics);
+        ProcessPlayerTaskStatisitcs(playerMinigameStatistics);
+        ProcessPlayerNpcStatistics(playerNPCStatistics);
 
         Debug.Log("Everything set up");
     }
@@ -364,30 +364,30 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown("h"))
         {
             Debug.Log("world: " + currentWorld + ", dungeon: " + currentDungeon);
-            manualLoad();
+            ManualLoad();
         }
 
         //print all stored objects
         if (Input.GetKeyDown("j"))
         {
-            printInfo();
+            PrintInfo();
         }
     }
 
     //load data and set current area
-    private async void manualLoad()
+    private async void ManualLoad()
     {
         Debug.Log("Loading Data");
-        await fetchData();
+        await FetchData();
         Debug.Log("Finished Loading");
         currentWorld = 1;
         currentDungeon = 0;
-        setData(currentWorld, currentDungeon);
+        SetData(currentWorld, currentDungeon);
         Debug.Log("Finished relaod");
     }
 
     //print stored objects info
-    private void printInfo()
+    private void PrintInfo()
     {
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
         {
@@ -414,7 +414,7 @@ public class GameManager : MonoBehaviour
                 string status = "";
                 if (worldBarrierObjects[worldIndex, barrierIndex] != null)
                 {
-                    status = worldBarrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>().getInfo();
+                    status = worldBarrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>().GetInfo();
                 }
                 else
                 {
@@ -430,7 +430,7 @@ public class GameManager : MonoBehaviour
                 string status = "";
                 if (dungeonBarrierObjects[worldIndex, barrierIndex] != null)
                 {
-                    status = dungeonBarrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>().getInfo();
+                    status = dungeonBarrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>().GetInfo();
                 }
                 else
                 {
@@ -446,7 +446,7 @@ public class GameManager : MonoBehaviour
                 string status = "";
                 if (npcObjects[worldIndex, npcIndex] != null)
                 {
-                    status = npcObjects[worldIndex, npcIndex].GetComponent<NPC>().getInfo();
+                    status = npcObjects[worldIndex, npcIndex].GetComponent<NPC>().GetInfo();
                 }
                 else
                 {
@@ -469,7 +469,7 @@ public class GameManager : MonoBehaviour
     /// <param name="uri">The path to send the GET request to</param>
     /// <param name="worldIndex">The world index to be requested at the backend</param>
     /// <returns></returns>
-    private async UniTask<WorldDTO> GetWorldDTO(string uri, int worldIndex)
+    private async UniTask<WorldDTO> GetWorldDto(string uri, int worldIndex)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndex))
         {
@@ -542,7 +542,7 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
                     PlayerTaskStatisticDTO[] playerTaskStatistics =
-                        JsonHelper.getJsonArray<PlayerTaskStatisticDTO>(webRequest.downloadHandler.text);
+                        JsonHelper.GetJsonArray<PlayerTaskStatisticDTO>(webRequest.downloadHandler.text);
                     playerMinigameStatistics = playerTaskStatistics;
                     Debug.Log("Got player minigame data.");
                     break;
@@ -587,7 +587,7 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
                     PlayerNPCStatisticDTO[] result =
-                        JsonHelper.getJsonArray<PlayerNPCStatisticDTO>(webRequest.downloadHandler.text);
+                        JsonHelper.GetJsonArray<PlayerNPCStatisticDTO>(webRequest.downloadHandler.text);
                     playerNPCStatistics = result;
                     Debug.Log("Got player npc data.");
                     break;
@@ -651,7 +651,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="worldIndex">The index of the world the data refers to</param>
     /// <param name="worldDTO">The world data returned from the backend</param>
-    private void processWorldDTO(int worldIndex)
+    private void ProcessWorldDto(int worldIndex)
     {
         if (worldIndex < 1 || worldIndex >= worldDTOs.Length)
         {
@@ -671,19 +671,19 @@ public class GameManager : MonoBehaviour
         bool active = worldDTO.active;
 
         List<MinigameTaskDTO> minigameDTOs = worldDTO.minigameTasks;
-        MinigameData[] minigames = getMinigameData(minigameDTOs);
+        MinigameData[] minigames = GetMinigameData(minigameDTOs);
 
         List<NPCDTO> npcDTOs = worldDTO.npcs;
-        NPCData[] npcs = getNPCData(npcDTOs);
+        NPCData[] npcs = GetNpcData(npcDTOs);
 
         List<DungeonDTO> dungeonDTOs = worldDTO.dungeons;
-        DungeonData[] dungeons = getDungeonData(dungeonDTOs);
+        DungeonData[] dungeons = GetDungeonData(dungeonDTOs);
 
         worldData[worldIndex] = new WorldData(id, index, staticName, topicName, active, minigames, npcs, dungeons);
     }
 
     //converts MinigameTaskDTOs in minigameData
-    private MinigameData[] getMinigameData(List<MinigameTaskDTO> minigameDTOs)
+    private MinigameData[] GetMinigameData(List<MinigameTaskDTO> minigameDTOs)
     {
         MinigameData[] minigameData = new MinigameData[maxMinigames + 1];
 
@@ -691,14 +691,14 @@ public class GameManager : MonoBehaviour
         {
             string game;
             string configurationId;
-            MinigameStatus status = MinigameStatus.notConfigurated;
+            MinigameStatus status = global::MinigameStatus.notConfigurated;
             int highscore = 0;
 
             game = minigameDTO.game;
             configurationId = minigameDTO.configurationId;
             if (configurationId != "" && configurationId != null && configurationId != "NONE")
             {
-                status = MinigameStatus.active;
+                status = global::MinigameStatus.active;
             }
 
             MinigameData minigame = new MinigameData(game, configurationId, status, highscore);
@@ -709,7 +709,7 @@ public class GameManager : MonoBehaviour
     }
 
     //converts NPCDTOs in npcData
-    private NPCData[] getNPCData(List<NPCDTO> npcDTOs)
+    private NPCData[] GetNpcData(List<NPCDTO> npcDTOs)
     {
         NPCData[] npcData = new NPCData[maxNPCs + 1];
 
@@ -735,7 +735,7 @@ public class GameManager : MonoBehaviour
     }
 
     //converts dungeonDTO in dungeonData
-    private DungeonData[] getDungeonData(List<DungeonDTO> dungeonDTOs)
+    private DungeonData[] GetDungeonData(List<DungeonDTO> dungeonDTOs)
     {
         DungeonData[] dungeonData = new DungeonData[maxDungeons + 1];
 
@@ -748,10 +748,10 @@ public class GameManager : MonoBehaviour
             bool active = dungeonDTO.active;
 
             List<MinigameTaskDTO> minigameDTOs = dungeonDTO.minigameTasks;
-            MinigameData[] minigames = getMinigameData(minigameDTOs);
+            MinigameData[] minigames = GetMinigameData(minigameDTOs);
 
             List<NPCDTO> npcDTOs = dungeonDTO.npcs;
-            NPCData[] npcs = getNPCData(npcDTOs);
+            NPCData[] npcs = GetNpcData(npcDTOs);
 
             DungeonData dungeon = new DungeonData(id, index, staticName, topicName, active, minigames, npcs);
             dungeonData[index] = dungeon;
@@ -765,7 +765,7 @@ public class GameManager : MonoBehaviour
     ///     <c>GameManager</c>
     /// </summary>
     /// <param name="playerTaskStatistics">The player minigame statistics data returned from the backend</param>
-    private void processPlayerTaskStatisitcs(PlayerTaskStatisticDTO[] playerTaskStatistics)
+    private void ProcessPlayerTaskStatisitcs(PlayerTaskStatisticDTO[] playerTaskStatistics)
     {
         if (playerTaskStatistics == null)
         {
@@ -785,16 +785,16 @@ public class GameManager : MonoBehaviour
             int index = statistic.minigameTask.index;
             int highscore = statistic.highscore;
             bool completed = statistic.completed;
-            MinigameStatus status = MinigameStatus.notConfigurated;
-            if (minigameStatus(worldIndex, dungeonIndex, index) != MinigameStatus.notConfigurated)
+            MinigameStatus status = global::MinigameStatus.notConfigurated;
+            if (MinigameStatus(worldIndex, dungeonIndex, index) != global::MinigameStatus.notConfigurated)
             {
                 if (completed)
                 {
-                    status = MinigameStatus.done;
+                    status = global::MinigameStatus.done;
                 }
                 else
                 {
-                    status = MinigameStatus.active;
+                    status = global::MinigameStatus.active;
                 }
             }
 
@@ -804,11 +804,11 @@ public class GameManager : MonoBehaviour
     }
 
     //returns the status of a minigame
-    private MinigameStatus minigameStatus(int worldIndex, int dungeonIndex, int index)
+    private MinigameStatus MinigameStatus(int worldIndex, int dungeonIndex, int index)
     {
         if (worldIndex < 0 || worldIndex >= worldData.Length)
         {
-            return MinigameStatus.notConfigurated;
+            return global::MinigameStatus.notConfigurated;
         }
 
         if (dungeonIndex != 0)
@@ -824,7 +824,7 @@ public class GameManager : MonoBehaviour
     ///     <c>GameManager</c>
     /// </summary>
     /// <param name="playerNPCStatistics">The player npc statistics data returned from the backend</param>
-    private void processPlayerNPCStatistics(PlayerNPCStatisticDTO[] playerNPCStatistics)
+    private void ProcessPlayerNpcStatistics(PlayerNPCStatisticDTO[] playerNPCStatistics)
     {
         if (playerNPCStatistics == null)
         {
@@ -850,24 +850,24 @@ public class GameManager : MonoBehaviour
     #region SettingData
 
     //sets data to objects, called by Scene transition or loading screen
-    public void setData(int worldIndex, int dungeonIndex)
+    public void SetData(int worldIndex, int dungeonIndex)
     {
         currentWorld = worldIndex;
         currentDungeon = dungeonIndex;
         if (dungeonIndex != 0)
         {
             Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
-            setDungeonData(worldIndex, dungeonIndex);
+            SetDungeonData(worldIndex, dungeonIndex);
         }
         else
         {
             Debug.Log("Setting data for world " + worldIndex);
-            setWorldData(worldIndex);
+            SetWorldData(worldIndex);
         }
     }
 
     //sets world data
-    private void setWorldData(int worldIndex)
+    private void SetWorldData(int worldIndex)
     {
         if (worldIndex < 1 || worldIndex >= worldData.Length)
         {
@@ -919,7 +919,7 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            npc.setup(npcData);
+            npc.Setup(npcData);
         }
 
         for (int barrierDestinationIndex = 1; barrierDestinationIndex <= maxWorld; barrierDestinationIndex++)
@@ -937,10 +937,10 @@ public class GameManager : MonoBehaviour
             }
 
             bool activedByLecturer = worldData[barrierDestinationIndex].isActive();
-            bool unlockedByPlayer = playerHasWorldUnlocked(barrierDestinationIndex);
+            bool unlockedByPlayer = PlayerHasWorldUnlocked(barrierDestinationIndex);
             bool worldExplorable = activedByLecturer & unlockedByPlayer;
             BarrierData barrierData = new BarrierData(!worldExplorable);
-            barrier.setup(barrierData);
+            barrier.Setup(barrierData);
         }
 
         for (int barrierDestinationIndex = 1; barrierDestinationIndex <= maxDungeons; barrierDestinationIndex++)
@@ -958,15 +958,15 @@ public class GameManager : MonoBehaviour
             }
 
             bool activedByLecturer = worldData[worldIndex].dungeonIsActive(barrierDestinationIndex);
-            bool unlockedByPlayer = playerHasDungeonUnlocked(worldIndex, barrierDestinationIndex);
+            bool unlockedByPlayer = PlayerHasDungeonUnlocked(worldIndex, barrierDestinationIndex);
             bool dungeonExplorable = activedByLecturer & unlockedByPlayer;
             BarrierData barrierData = new BarrierData(!dungeonExplorable);
-            barrier.setup(barrierData);
+            barrier.Setup(barrierData);
         }
     }
 
     //has player unlocked the world
-    private bool playerHasWorldUnlocked(int worldIndex)
+    private bool PlayerHasWorldUnlocked(int worldIndex)
     {
         for (int i = 0; i < playerData.unlockedAreas.Length; i++)
         {
@@ -981,7 +981,7 @@ public class GameManager : MonoBehaviour
     }
 
     //has player unlocked dungeon
-    private bool playerHasDungeonUnlocked(int worldIndex, int dungeonIndex)
+    private bool PlayerHasDungeonUnlocked(int worldIndex, int dungeonIndex)
     {
         for (int i = 0; i < playerData.unlockedAreas.Length; i++)
         {
@@ -996,7 +996,7 @@ public class GameManager : MonoBehaviour
     }
 
     //setup dungeon data
-    private void setDungeonData(int worldIndex, int dungeonIndex)
+    private void SetDungeonData(int worldIndex, int dungeonIndex)
     {
         if (worldIndex < 1 || worldIndex >= worldData.Length)
         {
@@ -1011,7 +1011,7 @@ public class GameManager : MonoBehaviour
 
         for (int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
         {
-            MinigameData minigameData = data.getMinigameData(minigameIndex);
+            MinigameData minigameData = data.GetMinigameData(minigameIndex);
             if (minigameData == null)
             {
                 minigameData = new MinigameData();
@@ -1034,7 +1034,7 @@ public class GameManager : MonoBehaviour
 
         for (int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
         {
-            NPCData npcData = data.getNPCData(npcIndex);
+            NPCData npcData = data.GetNpcData(npcIndex);
             if (npcData == null)
             {
                 npcData = new NPCData();
@@ -1052,17 +1052,17 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            npc.setup(npcData);
+            npc.Setup(npcData);
         }
     }
 
     //mark npc as read
-    public async void markNPCasRead(int worldIndex, int dungeonIndex, int number, string uuid)
+    public async void MarkNpCasRead(int worldIndex, int dungeonIndex, int number, string uuid)
     {
         if (active)
         {
             string path = "/overworld/api/v1/internal/submit-npc-pass";
-            await postNPCCompleted(path, uuid);
+            await PostNpcCompleted(path, uuid);
 
             if (worldIndex <= maxWorld)
             {

@@ -1,17 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 /// <summary>
-/// This class defines all needed data for a <c><Barrier/c>.
+///     This class defines all needed data for a
+///     <c>
+///         <Barrier/ c>.
 /// </summary>
 public class BarrierData
 {
     #region Attributes
+
     private bool isActive;
+
     #endregion
 
     #region Constructors
+
     public BarrierData(bool isActive)
     {
         this.isActive = isActive;
@@ -21,25 +22,28 @@ public class BarrierData
     {
         isActive = true;
     }
+
     #endregion
 
     #region GetterAndSetter
+
     /// <summary>
-    /// This function returns the "isActive" attribute.
+    ///     This function returns the "isActive" attribute.
     /// </summary>
     /// <returns>The "isActive" attribute</returns>
-    public bool getIsActive()
+    public bool IsActive()
     {
         return isActive;
     }
 
     /// <summary>
-    /// This function sets the "isActive" attribute.
+    ///     This function sets the "isActive" attribute.
     /// </summary>
     /// <param name="isActive">the new "isActive" attribute</param>
-    public void setIsActive(bool isActive)
+    public void SetActive(bool isActive)
     {
         this.isActive = isActive;
     }
+
     #endregion
 }

@@ -38,19 +38,19 @@ public class WorldData
         staticName = "";
         topicName = "";
         active = false;
-        minigames = new MinigameData[GameSettings.getMaxMinigames() + 1];
+        minigames = new MinigameData[GameSettings.GetMaxMinigames() + 1];
         for (int minigameIndex = 1; minigameIndex < minigames.Length; minigameIndex++)
         {
             minigames[minigameIndex] = new MinigameData();
         }
 
-        npcs = new NPCData[GameSettings.getMaxNPCs() + 1];
+        npcs = new NPCData[GameSettings.GetMaxNpCs() + 1];
         for (int npcIndex = 1; npcIndex < npcs.Length; npcIndex++)
         {
             npcs[npcIndex] = new NPCData();
         }
 
-        dungeons = new DungeonData[GameSettings.getMaxDungeons() + 1];
+        dungeons = new DungeonData[GameSettings.GetMaxDungeons() + 1];
         for (int dungeonIndex = 1; dungeonIndex < dungeons.Length; dungeonIndex++)
         {
             dungeons[dungeonIndex] = new DungeonData();
@@ -73,7 +73,7 @@ public class WorldData
         {
             if (dungeonIndex < dungeons.Length)
             {
-                dungeons[dungeonIndex].setMinigameStatus(index, status);
+                dungeons[dungeonIndex].SetMinigameStatus(index, status);
             }
         }
         else if (index < minigames.Length)
@@ -94,7 +94,7 @@ public class WorldData
         {
             if (dungeonIndex < dungeons.Length)
             {
-                dungeons[dungeonIndex].setMinigameHighscore(index, highscore);
+                dungeons[dungeonIndex].SetMinigameHighscore(index, highscore);
             }
         }
         else if (index < minigames.Length)
@@ -115,12 +115,12 @@ public class WorldData
         {
             if (dungeonIndex < dungeons.Length)
             {
-                dungeons[dungeonIndex].setNPCStatus(index, completed);
+                dungeons[dungeonIndex].SetNpcStatus(index, completed);
             }
         }
         else if (index < npcs.Length)
         {
-            npcs[index].setHasBeenTalkedTo(completed);
+            npcs[index].SetHasBeenTalkedTo(completed);
         }
     }
 
@@ -149,7 +149,7 @@ public class WorldData
     {
         if (dungeonIndex < dungeons.Length)
         {
-            return dungeons[dungeonIndex].getMinigameStatus(index);
+            return dungeons[dungeonIndex].GetMinigameStatus(index);
         }
 
         return MinigameStatus.notConfigurated;
@@ -216,7 +216,7 @@ public class WorldData
     /// <returns>The active status of the dungeon</returns>
     public bool dungeonIsActive(int dungeonIndex)
     {
-        return dungeons[dungeonIndex].isActive();
+        return dungeons[dungeonIndex].IsActive();
     }
 
     /// <summary>
@@ -228,7 +228,7 @@ public class WorldData
     {
         if (dungeonIndex < dungeons.Length)
         {
-            dungeons[dungeonIndex].npcCompleted(number);
+            dungeons[dungeonIndex].NpcCompleted(number);
         }
     }
 
@@ -240,7 +240,7 @@ public class WorldData
     {
         if (number < npcs.Length)
         {
-            npcs[number].setHasBeenTalkedTo(true);
+            npcs[number].SetHasBeenTalkedTo(true);
         }
     }
 

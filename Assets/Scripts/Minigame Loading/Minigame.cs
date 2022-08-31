@@ -57,7 +57,7 @@ public class Minigame : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
-        GameManager.instance.removeMinigame(world, dungeon, number);
+        GameManager.Instance.RemoveMinigame(world, dungeon, number);
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class Minigame : MonoBehaviour
     private void RegisterToGameManager()
     {
         Debug.Log("register Minigame " + world + "-" + dungeon + "-" + number);
-        GameManager.instance.addMinigame(gameObject, world, dungeon, number);
+        GameManager.Instance.AddMinigame(gameObject, world, dungeon, number);
     }
 
     #endregion
@@ -116,7 +116,7 @@ public class Minigame : MonoBehaviour
         }
 
         Vector2 respawnPosition = transform.position;
-        GameManager.instance.setMinigameRespawn(respawnPosition, world, dungeon);
+        GameManager.Instance.SetMinigameRespawn(respawnPosition, world, dungeon);
         MinigameStarting.Instance.SetupMinigame(game, configurationID, highscore);
     }
 
