@@ -1,15 +1,33 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
+/// <summary>
+///     This class is used to retrieve data from Get Requests.
+/// </summary>
+[Serializable]
 public class NPCDTO
 {
+    /// <summary>
+    ///     This function converts a json string to a <c>NPCDTO</c> object.
+    /// </summary>
+    /// <param name="jsonString">The json string to convert</param>
+    /// <returns>A <c>NPCDTO</c> object containing the data</returns>
+    public static NPCDTO CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<NPCDTO>(jsonString);
+    }
+
+    #region Attributes
+
     public string id;
     public AreaLocationDTO area;
     public int index;
     public List<string> text;
+
+    #endregion
+
+    #region Constructors
 
     public NPCDTO(string id, AreaLocationDTO area, int index, List<string> text)
     {
@@ -19,42 +37,9 @@ public class NPCDTO
         this.text = text;
     }
 
-    public NPCDTO() { }
-
-    public static NPCDTO CreateFromJSON(string jsonString)
+    public NPCDTO()
     {
-        return JsonUtility.FromJson<NPCDTO>(jsonString);
     }
 
-    #region GetterAndSetter
-    public string getId()
-    {
-        return id;
-    }
-
-    public void setId(string id)
-    {
-        this.id = id;
-    }
-
-    public int getIndex()
-    {
-        return index;
-    }
-
-    public void setIndex(int index)
-    {
-        this.index = index;
-    }
-
-    public List<string> getText()
-    {
-        return text;
-    }
-
-    public void setText(List<string> text)
-    {
-        this.text = text;
-    }
     #endregion
 }

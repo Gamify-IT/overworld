@@ -1,26 +1,33 @@
 using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
+/// <summary>
+///     This class is responsible for the NPC logic.
+/// </summary>
 public class NPC : MonoBehaviour
 {
     [SerializeField] private int world;
     [SerializeField] private int dungeon;
     [SerializeField] private int number;
-    private string uuid;
     public Sprite imageOfNPC;
     public string nameOfNPC;
-    private TextMeshProUGUI dialogueText;
     public string[] dialogue;
-    private int index;
     public float wordSpeed;
+    public GameObject speechIndicator;
+    private TextMeshProUGUI dialogueText;
+    private bool hasBeenTalkedTo;
+    private int index;
     private bool playerIsClose;
     private bool typingIsFinished;
-    private bool hasBeenTalkedTo;
-    public GameObject speechIndicator;
+    private string uuid;
 
+    /// <summary>
+    ///     This function is called when the object becomes enabled and active.
+    ///     It is used to initialize the NPCs.
+    /// </summary>
     private void Awake()
     {
         GameObject child = transform.GetChild(0).gameObject;
@@ -28,28 +35,23 @@ public class NPC : MonoBehaviour
         {
             speechIndicator = child;
         }
-        registerToGameManager();
-        initNewStuffSprite();
-    }
 
-    private void OnDestroy()
-    {
-        Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
-        GameManagerV2.instance.removeNPC(world, dungeon, number);
+        RegisterToGameManager();
+        InitNewStuffSprite();
     }
 
     /// <summary>
-    /// This method opens the NPC dialogue if the player is close to the NPC and presses "E".
-    /// If the player wants to skip the typing out of the dialogue they can press "E" again.
+    ///     This method opens the NPC dialogue if the player is close to the NPC and presses "E".
+    ///     If the player wants to skip the typing out of the dialogue they can press "E" again.
     /// </summary>
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
             !PauseMenu.menuOpen)
         {
             if (!hasBeenTalkedTo)
             {
-                markAsRead();
+                MarkAsRead();
             }
 
             StartCoroutine(LoadDialogueScene());
@@ -74,38 +76,87 @@ public class NPC : MonoBehaviour
         }
     }
 
-    //mark
-    private void markAsRead()
+    /// <summary>
+    ///     This method removes the NPC from the GameManager.
+    /// </summary>
+    private void OnDestroy()
+    {
+        Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
+        GameManager.Instance.RemoveNpc(world, dungeon, number);
+    }
+
+    /// <summary>
+    ///     If the player is in range of the NPC the playerIsClose check will be set to true.
+    /// </summary>
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerIsClose = true;
+        }
+    }
+
+    /// <summary>
+    ///     If the player leaves the range of the NPC while the dialogue window is open, the window will be closed, text will
+    ///     be reset and playerIsClose check will be set to false.
+    /// </summary>
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player") && SceneManager.GetSceneByBuildIndex(12).isLoaded)
+        {
+            playerIsClose = false;
+            ResetText();
+        }
+        else if (other.CompareTag("Player") && !SceneManager.GetSceneByBuildIndex(12).isLoaded)
+        {
+            playerIsClose = false;
+        }
+    }
+
+    /// <summary>
+    ///     This method sets the NPC as talked to.
+    /// </summary>
+    private void MarkAsRead()
     {
         hasBeenTalkedTo = true;
         speechIndicator.SetActive(false);
-        GameManagerV2.instance.markNPCasRead(world, dungeon, number, uuid);
+        GameManager.Instance.MarkNpCasRead(world, dungeon, number, uuid);
     }
 
-    // register to game manager
-    private void registerToGameManager()
+    /// <summary>
+    ///     This function registers the NPC to the GameManager.
+    /// </summary>
+    private void RegisterToGameManager()
     {
         Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
-        GameManagerV2.instance.addNPC(this.gameObject, world, dungeon, number);
+        GameManager.Instance.AddNpc(gameObject, world, dungeon, number);
     }
 
-    //setup called by game manager
-    public void setup(NPCData data)
+    /// <summary>
+    ///     setup called by game manager
+    /// </summary>
+    /// <param name="data"></param>
+    public void Setup(NPCData data)
     {
-        uuid = data.getUUID();
-        dialogue = data.getDialogue();
-        hasBeenTalkedTo = data.getHasBeenTalkedTo();
-        initNewStuffSprite();
+        uuid = data.GetUuid();
+        dialogue = data.GetDialogue();
+        hasBeenTalkedTo = data.GetHasBeenTalkedTo();
+        InitNewStuffSprite();
         string text = "";
-        for(int index = 0; index < dialogue.Length; index++)
+        for (int index = 0; index < dialogue.Length; index++)
         {
             text += dialogue[index];
             text += " ; ";
         }
-        Debug.Log("setup npc " + world + "-" + number + " with new dialogue: " + text + ", new info: " + !hasBeenTalkedTo);
+
+        Debug.Log("setup npc " + world + "-" + number + " with new dialogue: " + text + ", new info: " +
+                  !hasBeenTalkedTo);
     }
 
-    private void initNewStuffSprite()
+    /// <summary>
+    ///     This method initializes the new stuff sprite if the NPC has not been talked to yet.
+    /// </summary>
+    private void InitNewStuffSprite()
     {
         if (hasBeenTalkedTo)
         {
@@ -118,7 +169,7 @@ public class NPC : MonoBehaviour
     }
 
     /// <summary>
-    /// This method resets the text of the NPC and closes the dialogue overlay
+    ///     This method resets the text of the NPC and closes the dialogue overlay
     /// </summary>
     public void ResetText()
     {
@@ -128,13 +179,13 @@ public class NPC : MonoBehaviour
     }
 
     /// <summary>
-    /// This method types out the text of the NPC dialogue with a given wordSpeed.
+    ///     This method types out the text of the NPC dialogue with a given wordSpeed.
     /// </summary>
-    IEnumerator Typing()
+    private IEnumerator Typing()
     {
         typingIsFinished = false;
         Debug.Log(typingIsFinished);
-        foreach (char letter in dialogue[index].ToCharArray())
+        foreach (char letter in dialogue[index])
         {
             dialogueText.text += letter;
             yield return new WaitForSeconds(wordSpeed);
@@ -145,8 +196,8 @@ public class NPC : MonoBehaviour
     }
 
     /// <summary>
-    /// This method will show the next line of the NPC dialogue and deletes the old line.
-    /// If the current line is the last line of the Dialogue ResetText() will be executed.
+    ///     This method will show the next line of the NPC dialogue and deletes the old line.
+    ///     If the current line is the last line of the Dialogue ResetText() will be executed.
     /// </summary>
     public void NextLine()
     {
@@ -163,36 +214,10 @@ public class NPC : MonoBehaviour
     }
 
     /// <summary>
-    /// If the player is in range of the NPC the playerIsClose check will be set to true.
+    ///     This method loads the dialogue window and will change the text and name of the NPC to the text and name set in the
+    ///     NPC.
     /// </summary>
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerIsClose = true;
-        }
-    }
-
-    /// <summary>
-    /// If the player leaves the range of the NPC while the dialogue window is open, the window will be closed, text will be reset and playerIsClose check will be set to false.
-    /// </summary>
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Player") && SceneManager.GetSceneByBuildIndex(12).isLoaded)
-        {
-            playerIsClose = false;
-            ResetText();
-        }
-        else if (other.CompareTag("Player") && !SceneManager.GetSceneByBuildIndex(12).isLoaded)
-        {
-            playerIsClose = false;
-        }
-    }
-
-    /// <summary>
-    /// This method loads the dialogue window and will change the text and name of the NPC to the text and name set in the NPC.
-    /// </summary>
-    IEnumerator LoadDialogueScene()
+    private IEnumerator LoadDialogueScene()
     {
         var asyncLoadScene = SceneManager.LoadSceneAsync("Dialogue Overlay", LoadSceneMode.Additive);
         while (!asyncLoadScene.isDone)
@@ -206,32 +231,48 @@ public class NPC : MonoBehaviour
         StartCoroutine("Typing");
     }
 
-    //returns NPC object info
-    public string getInfo()
+    /// <summary>
+    ///     This function returns the NPC object info
+    /// </summary>
+    /// <returns>NPC object info</returns>
+    public string GetInfo()
     {
         string info = "";
         string text = "";
-        for(int index = 0; index < dialogue.Length; index++)
+        for (int index = 0; index < dialogue.Length; index++)
         {
             text += dialogue[index];
             text += "; ";
         }
+
         info = world + "-" + dungeon + "-" + number + ": Text: " + text + ", completed: " + hasBeenTalkedTo;
         return info;
     }
 
     #region Getter
 
-    public int getWorldIndex()
+    /// <summary>
+    ///     This method returns the world index of the NPC.
+    /// </summary>
+    /// <returns>world</returns>
+    public int GetWorldIndex()
     {
         return world;
     }
 
-    public int getDungeonIndex()
+    /// <summary>
+    ///     This method returns the dungeon index of the NPC.
+    /// </summary>
+    /// <returns>dungeon</returns>
+    public int GetDungeonIndex()
     {
         return dungeon;
     }
 
+    /// <summary>
+    ///     This method returns the number of the NPC.
+    /// </summary>
+    /// <returns>number</returns>
     public int getIndex()
     {
         return number;

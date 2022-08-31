@@ -1,11 +1,24 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
+/// <summary>
+///     This class is used to retrieve data from Get Requests.
+/// </summary>
+[Serializable]
 public class PlayerstatisticDTO
 {
+    /// <summary>
+    ///     This function converts a json string to a <c>PlayerstatisticDTO</c> object.
+    /// </summary>
+    /// <param name="jsonString">The json string to convert</param>
+    /// <returns>A <c>PlayerstatisticDTO</c> object containing the data</returns>
+    public static PlayerstatisticDTO CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<PlayerstatisticDTO>(jsonString);
+    }
+
+    #region Attributes
+
     public string id;
     public AreaLocationDTO[] unlockedAreas;
     public AreaLocationDTO[] unlockedDungeons;
@@ -14,7 +27,12 @@ public class PlayerstatisticDTO
     public string username;
     public int knowledge;
 
-    public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, AreaLocationDTO currentArea, string userId, string username, int knowledge)
+    #endregion
+
+    #region Constructors
+
+    public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons,
+        AreaLocationDTO currentArea, string userId, string username, int knowledge)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -25,7 +43,7 @@ public class PlayerstatisticDTO
         this.knowledge = knowledge;
     }
 
-    public PlayerstatisticDTO() 
+    public PlayerstatisticDTO()
     {
         id = "";
         AreaLocationDTO unlockedArea = new AreaLocationDTO();
@@ -38,8 +56,5 @@ public class PlayerstatisticDTO
         knowledge = 0;
     }
 
-    public static PlayerstatisticDTO CreateFromJSON(string jsonString)
-    {
-        return JsonUtility.FromJson<PlayerstatisticDTO>(jsonString);
-    }
+    #endregion
 }

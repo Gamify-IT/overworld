@@ -1,16 +1,33 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
+/// <summary>
+///     This class is used to retrieve data from Get Requests.
+/// </summary>
+[Serializable]
 public class MinigameTaskDTO
 {
+    /// <summary>
+    ///     This function converts a json string to a <c>MinigameTaskDTO</c> object.
+    /// </summary>
+    /// <param name="jsonString">The json string to convert</param>
+    /// <returns>A <c>MinigameTaskDTO</c> object containing the data</returns>
+    public static MinigameTaskDTO CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<MinigameTaskDTO>(jsonString);
+    }
+
+    #region Attributes
+
     public string id;
     public AreaLocationDTO area;
     public int index;
     public string game;
     public string configurationId;
+
+    #endregion
+
+    #region Constructors
 
     public MinigameTaskDTO(string id, AreaLocationDTO area, int index, string game, string configurationId)
     {
@@ -21,52 +38,9 @@ public class MinigameTaskDTO
         this.configurationId = configurationId;
     }
 
-    public MinigameTaskDTO() { }
-
-    public static MinigameTaskDTO CreateFromJSON(string jsonString)
+    public MinigameTaskDTO()
     {
-        return JsonUtility.FromJson<MinigameTaskDTO>(jsonString);
     }
 
-    #region GetterAndSetter
-    public string getId()
-    {
-        return id;
-    }
-
-    public void setId(string id)
-    {
-        this.id = id;
-    }
-
-    public int getIndex()
-    {
-        return index;
-    }
-
-    public void setIndex(int index)
-    {
-        this.index = index;
-    }
-
-    public string getGame()
-    {
-        return game;
-    }
-
-    public void setGame(string game)
-    {
-        this.game = game;
-    }
-
-    public string getConfigurationId()
-    {
-        return configurationId;
-    }
-
-    public void setConfigurationId(string configurationId)
-    {
-        this.configurationId = configurationId;
-    }
     #endregion
 }

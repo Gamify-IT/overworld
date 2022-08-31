@@ -1,15 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-/*
- * This scripts defines the barrier data that needs to be transfered from the game manager to a barrier object.
- */
+/// <summary>
+///     This class defines all needed data for a <c>Barrier</c>.
+/// </summary>
 public class BarrierData
 {
     #region Attributes
+
     private bool isActive;
+
     #endregion
+
+    #region Constructors
 
     public BarrierData(bool isActive)
     {
@@ -21,15 +21,27 @@ public class BarrierData
         isActive = true;
     }
 
+    #endregion
+
     #region GetterAndSetter
-    public bool getIsActive()
+
+    /// <summary>
+    ///     This function returns the "isActive" attribute.
+    /// </summary>
+    /// <returns>The "isActive" attribute</returns>
+    public bool IsActive()
     {
         return isActive;
     }
 
-    public void setIsActive(bool isActive)
+    /// <summary>
+    ///     This function sets the "isActive" attribute.
+    /// </summary>
+    /// <param name="isActive">the new "isActive" attribute</param>
+    public void SetActive(bool isActive)
     {
         this.isActive = isActive;
     }
+
     #endregion
 }

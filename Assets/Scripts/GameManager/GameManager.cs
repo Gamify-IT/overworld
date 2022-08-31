@@ -1,99 +1,118 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
-using Cysharp.Threading.Tasks;
+using UnityEngine.SceneManagement;
 
 /// <summary>
-/// The <c>GameManager</c> manages the communication between the overworld backend and frontend. 
-/// Every minigame/barrier/npc registers itself in their <c>Start</c> function, so that the <c>GameManager</c> knows about them.
-/// If the Player enters an area, the <c>GameManager</c> gets all needed data from the backend and configurates the objects accordingly.
+/// The <c>GameManager</c> retrievs all needed data from the backend and sets up the objects depending on those data.
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+
     #region Singleton
-    public static GameManager instance { get; private set; }
+
+    public static GameManager Instance { get; private set; }
 
     /// <summary>
-    /// This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or deletes the object otherwise
+    ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
+    ///     deletes the object otherwise
     /// </summary>
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            Debug.Log("End Gamemanager init");
-            setupGameManager();
+            SetupGameManager();
         }
         else
         {
             Destroy(gameObject);
         }
     }
+
     #endregion
 
     #region Attributes
-    private static int maxWorld = 5;
-    private static int maxMinigames = 12;
-    private static int maxNPCs = 10;
-    private static int courseId = 1;
-    private static int playerId = 1;
-    private MinigameData[,] minigameData = new MinigameData[maxWorld + 1, maxMinigames + 1];
-    private GameObject[,] minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
-    private BarrierData[,] barrierData = new BarrierData[maxWorld + 1, maxWorld + 1];
-    private GameObject[,] barrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
-    private NPCData[,] npcData = new NPCData[maxWorld + 1, maxNPCs+1];
-    private GameObject[,] npcObjects = new GameObject[maxWorld + 1, maxNPCs+1];
-    private bool somethingToUpdate;
-    private int currentWorld = 1;
-    private int currentDungeon = 0;
-    public bool active = true;
 
-    private WorldDTO[] worldData = new WorldDTO[maxWorld+1];
+    //Game settigs
+    private int maxWorld;
+    private int maxMinigames;
+    private int maxNPCs;
+    private int maxDungeons;
+    private readonly int courseId = 1;
+    private readonly int playerId = 1;
+
+    //GameObjects
+    private GameObject[,] minigameObjects;
+    private GameObject[,] worldBarrierObjects;
+    private GameObject[,] dungeonBarrierObjects;
+    private GameObject[,] npcObjects;
+
+    //Data
+    private WorldData[] worldData;
+    private PlayerstatisticDTO playerData;
+
+    //State
+    public bool active;
+
+    //Minigame reload
+    private Vector2 minigameRespawnPosition;
+    private int minigameWorldIndex;
+    private int minigameDungeonIndex;
+
+    //can be refactored
+    private WorldDTO[] worldDTOs;
     private PlayerTaskStatisticDTO[] playerMinigameStatistics;
     private PlayerNPCStatisticDTO[] playerNPCStatistics;
+    public bool loadingError;
+
     #endregion
 
     #region Setup
+
     /// <summary>
-    /// This function initializes the <c>GameManager</c>. All arrays are initialized with empty objects.
+    ///     This function initializes the <c>GameManager</c>. All arrays are initialized with empty objects.
     /// </summary>
-    private void setupGameManager()
+    private void SetupGameManager()
     {
-        instance = this;
-        for (int i = 0; i < maxWorld; i++)
+        Instance = this;
+
+        maxWorld = GameSettings.GetMaxWorlds();
+        maxMinigames = GameSettings.GetMaxMinigames();
+        maxNPCs = GameSettings.GetMaxNpCs();
+        maxDungeons = GameSettings.GetMaxDungeons();
+
+        minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
+        worldBarrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
+        dungeonBarrierObjects = new GameObject[maxWorld + 1, maxDungeons + 1];
+        npcObjects = new GameObject[maxWorld + 1, maxNPCs + 1];
+
+        worldData = new WorldData[maxWorld + 1];
+        playerData = new PlayerstatisticDTO();
+
+        active = true;
+
+        worldDTOs = new WorldDTO[maxWorld + 1];
+
+        for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
         {
-            for (int j = 0; j < maxMinigames; j++)
-            {
-                minigameObjects[i, j] = null;
-                minigameData[i, j] = new MinigameData("", "", MinigameStatus.notConfigurated, 0);
-            }
-            for (int j = 0; j < maxWorld; j++)
-            {
-                barrierObjects[i, j] = null;
-                barrierData[i, j] = new BarrierData(true);
-            }
-            for(int j = 0; j < maxNPCs; j++)
-            {
-                npcObjects[i, j] = null;
-                string[] emptyArray = {""};
-                npcData[i, j] = new NPCData("", emptyArray, true);
-            }
+            worldData[worldIndex] = new WorldData();
         }
     }
 
     /// <summary>
-    /// This function registers a new minigame at the <c>GameManager</c>
+    ///     This function registers a new minigame at the <c>GameManager</c>
     /// </summary>
     /// <param name="minigame">The minigame gameObject</param>
     /// <param name="world">The index of the world the minigame is in</param>
     /// <param name="dungeon">The index of the dungeon the minigame is in (0 if in no dungeon)</param>
     /// <param name="number">The index of the minigame in its area</param>
-    public void addMinigame(GameObject minigame, int world, int dungeon, int number)
+    public void AddMinigame(GameObject minigame, int world, int dungeon, int number)
     {
         if (minigame != null)
         {
-            if(dungeon == 0)
+            if (dungeon == 0)
             {
                 minigameObjects[world, number] = minigame;
             }
@@ -105,62 +124,75 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function removes a minigame from the <c>GameManager</c>
+    ///     This function removes a minigame from the <c>GameManager</c>
     /// </summary>
     /// <param name="world">The index of the world the minigame is in</param>
     /// <param name="dungeon">The index of the dungeon the minigame is in (0 if in no dungeon)</param>
     /// <param name="number">The index of the minigame in its area</param>
-    public void removeMinigame(int world, int dungeon, int number)
+    public void RemoveMinigame(int world, int dungeon, int number)
     {
         if (dungeon == 0)
         {
             minigameObjects[world, number] = null;
-            minigameData[world, number] = new MinigameData("", "", MinigameStatus.notConfigurated, 0);
         }
         else
         {
             minigameObjects[0, number] = null;
-            minigameData[0, number] = new MinigameData("", "", MinigameStatus.notConfigurated, 0);
         }
     }
 
     /// <summary>
-    /// This function registers a new barrier at the <c>GameManager</c>
+    ///     This function registers a new barrier at the <c>GameManager</c>
     /// </summary>
     /// <param name="barrier">The barrier gameObject</param>
-    /// <param name="worldIndexOrigin">The index of the world which exit the barrier is blocking</param>
-    /// <param name="worldIndexDestination">The index of the world which entry the barrier is blocking</param>
-    public void addBarrier(GameObject barrier, int worldIndexOrigin, int worldIndexDestination)
+    /// <param name="originWorldIndex">The index of the world which exit the barrier is blocking</param>
+    /// <param name="destinationAreaIndex">The index of the world which entry the barrier is blocking</param>
+    public void AddBarrier(GameObject barrier, BarrierType type, int originWorldIndex, int destinationAreaIndex)
     {
         if (barrier != null)
         {
-            barrierObjects[worldIndexOrigin, worldIndexDestination] = barrier;
+            switch (type)
+            {
+                case BarrierType.worldBarrier:
+                    worldBarrierObjects[originWorldIndex, destinationAreaIndex] = barrier;
+                    break;
+                case BarrierType.dungeonBarrier:
+                    dungeonBarrierObjects[originWorldIndex, destinationAreaIndex] = barrier;
+                    break;
+            }
         }
     }
 
     /// <summary>
-    /// This function removes a barrier from the <c>GameManager</c>
+    ///     This function removes a barrier from the <c>GameManager</c>
     /// </summary>
     /// <param name="worldIndexOrigin">The index of the world which exit the barrier is blocking</param>
     /// <param name="worldIndexDestination">The index of the world which entry the barrier is blocking</param>
-    public void removeBarrier(int worldIndexOrigin, int worldIndexDestination)
+    public void RemoveBarrier(BarrierType type, int originWorldIndex, int destinationAreaIndex)
     {
-        barrierObjects[worldIndexOrigin, worldIndexDestination] = null;
-        barrierData[worldIndexOrigin,worldIndexDestination] = new BarrierData(true);
+        switch (type)
+        {
+            case BarrierType.worldBarrier:
+                worldBarrierObjects[originWorldIndex, destinationAreaIndex] = null;
+                break;
+            case BarrierType.dungeonBarrier:
+                dungeonBarrierObjects[originWorldIndex, destinationAreaIndex] = null;
+                break;
+        }
     }
 
     /// <summary>
-    /// This function registers a new npc at the <c>GameManager</c>
+    ///     This function registers a new npc at the <c>GameManager</c>
     /// </summary>
     /// <param name="npc">The npc gameObject</param>
     /// <param name="world">The index of the world the npc is in</param>
     /// <param name="dungeon">The index of the dungeon the npc is in (0 if in no dungeon)</param>
     /// <param name="number">The index of the npc in its area</param>
-    public void addNPC(GameObject npc, int world, int dungeon, int number)
+    public void AddNpc(GameObject npc, int world, int dungeon, int number)
     {
-        if(npc != null)
+        if (npc != null)
         {
-            if(dungeon == 0)
+            if (dungeon == 0)
             {
                 npcObjects[world, number] = npc;
             }
@@ -172,91 +204,111 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function removes a npc from the <c>GameManager</c>
+    ///     This function removes a npc from the <c>GameManager</c>
     /// </summary>
     /// <param name="world">The index of the world the npc is in</param>
     /// <param name="dungeon">The index of the dungeon the npc is in (0 if in no dungeon)</param>
     /// <param name="number">The index of the npc in its area</param>
-    public void removeNPC(int world, int dungeon, int number)
+    public void RemoveNpc(int world, int dungeon, int number)
     {
         if (dungeon == 0)
         {
             npcObjects[world, number] = null;
             string[] emptyArray = { "" };
-            npcData[world, number] = new NPCData("", emptyArray, true);
         }
         else
         {
             npcObjects[0, number] = null;
             string[] emptyArray = { "" };
-            npcData[0, number] = new NPCData("", emptyArray, true);
         }
     }
+
     #endregion
 
     #region Loading
+
     /// <summary>
-    /// This function loads all needed data for a given area
+    /// This function stores the data needed after a reload.
     /// </summary>
-    /// <param name="world">The index of the world to load</param>
-    /// <param name="dungeon">The index of the dungeon to load (0, if a world should be loaded)</param>
-    public void loadWorld(int world, int dungeon)
+    /// <param name="respawnLocation">The position the player has to be in</param>
+    /// <param name="worldIndex">The index of the world the minigame is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon the minigame is in (0 if in world)</param>
+    public void SetMinigameRespawn(Vector2 respawnLocation, int worldIndex, int dungeonIndex)
     {
-        if(active)
-        {
-            currentWorld = world;
-            currentDungeon = dungeon;
-            if (dungeon == 0)
-            {
-                Debug.Log("Update world: " + world);
-                resetDungeonSlot();
-                fetchWorldData(world);
-            }
-            else
-            {
-                Debug.Log("Update dungeon: " + world + "-" + dungeon);
-                fetchDungeonData(world, dungeon);
-            }
-        }
+        minigameRespawnPosition = respawnLocation;
+        minigameWorldIndex = worldIndex;
+        minigameDungeonIndex = dungeonIndex;
+        Debug.Log("Setup minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
     }
 
     /// <summary>
-    /// This function resets saved dungeon objects after exit to reuse the variables for another dungeon
+    /// This function is called from JS.
+    /// This functions reloads the game after a minigame is completed.
     /// </summary>
-    private void resetDungeonSlot()
+    public void MinigameDone()
     {
-        for(int minigameIndex = 0; minigameIndex <= maxMinigames; minigameIndex++)
-        {
-            minigameObjects[0,minigameIndex] = null;
-            minigameData[0,minigameIndex] = new MinigameData("", "", MinigameStatus.notConfigurated, 0);
-        }
-        for(int npcIndex = 0; npcIndex <= maxNPCs; npcIndex++)
-        {
-            npcObjects[0, npcIndex] = null;
-            npcData[0, npcIndex] = new NPCData("", null, true);
-        }
+        Debug.Log("Start minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
+        Reload();
     }
 
     /// <summary>
-    /// This function checks, if there is new data and if so, it configurates the registers objects accordingly
+    /// This function reloads the game.
+    /// </summary>
+    private async void Reload()
+    {
+        await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+        await LoadingManager.Instance.ReloadData(minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
+    }
+
+    /// <summary>
+    /// This function loads all needed data from the backend an converts the data into usable formats.
+    /// If an error accours while loading, the <c>loadingError</c> flag is set.
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask FetchData()
+    {
+        if (!active)
+        {
+            return;
+        }
+
+        loadingError = false;
+
+        //path to get world data from
+        string path = "/overworld/api/v1/courses/" + courseId;
+
+        //get data
+        for (int worldIndex = 1; worldIndex <= maxWorld; worldIndex++)
+        {
+            await GetWorldDto(path + "/worlds/", worldIndex);
+        }
+
+        await UniTask.WhenAll(
+            GetPlayerMinigameStatistics(path + "/playerstatistics/" + playerId + "/player-task-statistics"),
+            GetPlayerStatistics(path + "/playerstatistics/" + playerId),
+            GetPlayerNPCStatistics(path + "/playerstatistics/" + playerId + "/player-npc-statistics")
+        );
+
+        Debug.Log("Got all data.");
+
+        //process Data
+        for (int worldIndex = 1; worldIndex <= maxWorld; worldIndex++)
+        {
+            ProcessWorldDto(worldIndex);
+        }
+
+        ProcessPlayerTaskStatisitcs(playerMinigameStatistics);
+        ProcessPlayerNpcStatistics(playerNPCStatistics);
+
+        Debug.Log("Everything set up");
+    }
+
+    /// <summary>
+    /// The <c>Update</c> function is called once every frame.
+    /// This function provides developer shortcuts.
     /// </summary>
     public void Update()
     {
-        if (somethingToUpdate && active)
-        {
-            somethingToUpdate = false;
-            if(currentDungeon == 0)
-            {
-                Debug.Log("Setting Data for World " + currentWorld);
-                setData(currentWorld);
-            }
-            else
-            {
-                Debug.Log("Setting Data for Dungeon " + currentWorld + "-" + currentDungeon);
-                setData(0);
-            }
-        }
-
         //toggle game manager
         if (Input.GetKeyDown("b"))
         {
@@ -264,161 +316,99 @@ public class GameManager : MonoBehaviour
             Debug.Log("game manager now " + active);
         }
 
-        //manuell load
-        if (Input.GetKeyDown("h"))
-        {
-            Debug.Log("world: " + currentWorld + ", dungeon: " + currentDungeon);
-            loadWorld(currentWorld, currentDungeon);
-        }
-
-        //manuell load dungeon 
-        if (Input.GetKeyDown("n"))
-        {
-            Debug.Log("world: 1, dungeon: 1");
-            loadWorld(1, 1);
-        }
-
         //print all stored objects
         if (Input.GetKeyDown("j"))
         {
-            for(int worldIndex=0; worldIndex <= maxWorld; worldIndex++)
-            {
-                for(int minigameIndex=0; minigameIndex <= maxMinigames; minigameIndex++)
-                {
-                    if(minigameObjects[worldIndex,minigameIndex] != null)
-                    {
-                        Minigame minigame = minigameObjects[worldIndex, minigameIndex].GetComponent<Minigame>();
-                        Debug.Log("Minigame slot " + worldIndex + "-" + minigameIndex + " contains minigame: " + minigame.getWorldIndex() + "-" + minigame.getDungeonIndex() + "-" + minigame.getIndex());
-                    }
-                }
-
-                for(int barrierIndex=0; barrierIndex <= maxWorld; barrierIndex++)
-                {
-                    if(barrierObjects[worldIndex,barrierIndex] != null)
-                    {
-                        Barrier barrier = barrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>();
-                        Debug.Log("Barrier slot " + worldIndex + "-" + barrierIndex + " contains barrier: " + barrier.getWorldOriginIndex() + "->" + barrier.getWorldDestinationIndex());
-                    }
-                }
-
-                for(int npcIndex=0; npcIndex<= maxNPCs; npcIndex++)
-                {
-                    if(npcObjects[worldIndex,npcIndex] != null)
-                    {
-                        NPC npc = npcObjects[worldIndex, npcIndex].GetComponent<NPC>();
-                        Debug.Log("NPC slot " + worldIndex + "-" + npcIndex + " contains NPC: " + npc.getWorldIndex() + "-" + npc.getDungeonIndex() + "-" + npc.getIndex());
-                    }
-                }
-            }
+            PrintInfo();
         }
     }
 
     /// <summary>
-    /// This function loads all needed data for a given world
+    /// This function prints a detailed log about all stores objects and their status.
     /// </summary>
-    /// <param name="worldIndex">The index of the world to load</param>
-    private async void fetchWorldData(int worldIndex)
+    private void PrintInfo()
     {
-        //path to get world data from
-        string path = "/overworld/api/v1/courses/" + courseId;
-
-        //reset variables
-        worldData = new WorldDTO[maxWorld+1];
-        playerMinigameStatistics = null;
-        playerNPCStatistics = null;
-
-        //get data
-        await UniTask.WhenAll(
-            GetWorldDTO(path + "/worlds/", worldIndex),
-            GetPlayerMinigameStatistics(path + "/playerstatistics/" + playerId),
-            GetPlayerStatistics(path + "/playerstatistics/" + playerId),
-            GetPlayerNPCStatistics(path + "/playerstatistics/" + playerId + "/player-npc-statistics")
-        );
-
-        Debug.Log("Got all data.");
-
-        bool somethingFailed = false;
-
-        if(worldData[worldIndex] == null)
+        for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
         {
-            Debug.Log("world data failed");
-            somethingFailed = true;
-        }
-        if (playerMinigameStatistics == null)
-        {
-            Debug.Log("minigame data failed");
-            somethingFailed = true;
-        }
-        if (playerNPCStatistics == null)
-        {
-            Debug.Log("npc data failed");
-            somethingFailed = true;
-        }
-
-        if(somethingFailed)
-        {
-            return;
-        }
-
-        //process Data
-        processWorldDTO(worldIndex, worldData[worldIndex]);
-        processPlayerTaskStatisitcs(playerMinigameStatistics);
-        processPlayerNPCStatistics(playerNPCStatistics);
-
-        Debug.Log("Everything set up");
-
-        setData(worldIndex);
-
-        Debug.Log("Data set.");
-
-        //get barrier data
-        /*
-        for (int worldIndexDestination=1; worldIndexDestination<=maxWorld; worldIndexDestination++)
-        {
-            if(barrierObjects[worldIndex, worldIndexDestination] != null)
+            Debug.Log("World: " + worldIndex);
+            Debug.Log("  Minigames:");
+            for (int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
             {
-                StartCoroutine(GetBarrierData(path, worldIndexDestination, worldIndex));
+                string status = "";
+                if (minigameObjects[worldIndex, minigameIndex] != null)
+                {
+                    status = minigameObjects[worldIndex, minigameIndex].GetComponent<Minigame>().GetInfo();
+                }
+                else
+                {
+                    status = "none";
+                }
+
+                Debug.Log("    Minigame slot " + worldIndex + "-" + minigameIndex + " contains minigame: " + status);
+            }
+
+            Debug.Log("  World Barriers:");
+            for (int barrierIndex = 1; barrierIndex <= maxWorld; barrierIndex++)
+            {
+                string status = "";
+                if (worldBarrierObjects[worldIndex, barrierIndex] != null)
+                {
+                    status = worldBarrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>().GetInfo();
+                }
+                else
+                {
+                    status = "none";
+                }
+
+                Debug.Log("    Barrier slot " + worldIndex + "-" + barrierIndex + " contains barrier: " + status);
+            }
+
+            Debug.Log("  Dungeon Barriers:");
+            for (int barrierIndex = 1; barrierIndex <= maxDungeons; barrierIndex++)
+            {
+                string status = "";
+                if (dungeonBarrierObjects[worldIndex, barrierIndex] != null)
+                {
+                    status = dungeonBarrierObjects[worldIndex, barrierIndex].GetComponent<Barrier>().GetInfo();
+                }
+                else
+                {
+                    status = "none";
+                }
+
+                Debug.Log("    Barrier slot " + worldIndex + "-" + barrierIndex + " contains barrier: " + status);
+            }
+
+            Debug.Log("  NPCs:");
+            for (int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
+            {
+                string status = "";
+                if (npcObjects[worldIndex, npcIndex] != null)
+                {
+                    status = npcObjects[worldIndex, npcIndex].GetComponent<NPC>().GetInfo();
+                }
+                else
+                {
+                    status = "none";
+                }
+
+                Debug.Log("    NPC slot " + worldIndex + "-" + npcIndex + " contains NPC: " + status);
             }
         }
-        */
     }
 
-    /// <summary>
-    /// This function loads all needed data for a given dungeon
-    /// </summary>
-    /// <param name="worldIndex">The index of the world the dungeon is in</param>
-    /// <param name="dungeonIndex">The index of the dungeon to load</param>
-    private void fetchDungeonData(int worldIndex, int dungeonIndex)
-    {
-        //path to get world from (../world/)
-        //int courseId = 1;
-        string path = "/overworld/api/v1/courses/" + courseId + "/worlds/" + worldIndex + "/dungeons/";
-
-        //get world data        
-        StartCoroutine(GetDungeonDTO(path, dungeonIndex));
-
-        //get player minigame data
-        path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId + "/player-task-statistics";
-        //StartCoroutine(GetPlayerMinigameStatistics(path));
-
-        //get player data
-        path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId;
-        //StartCoroutine(GetPlayerStatistics(path));
-
-        //get player npc data
-        path = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/" + playerId + "/player-npc-statistics";
-        //StartCoroutine(GetPlayerNPCStatistics(path));
-    }
     #endregion
 
-    #region GetRequests
+    #region GetRequest
+
     /// <summary>
-    /// This function sends a GET request to the backend to get general data and stores the results in the <c>GameManager</c>
+    ///     This function sends a GET request to the backend to get general data and stores the results in the
+    ///     <c>GameManager</c>
     /// </summary>
     /// <param name="uri">The path to send the GET request to</param>
     /// <param name="worldIndex">The world index to be requested at the backend</param>
     /// <returns></returns>
-    private async UniTask<WorldDTO> GetWorldDTO(String uri, int worldIndex)
+    private async UniTask<WorldDTO> GetWorldDto(string uri, int worldIndex)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndex))
         {
@@ -428,7 +418,7 @@ public class GameManager : MonoBehaviour
             // Request and wait for the desired page.
             var request = webRequest.SendWebRequest();
 
-            while(!request.isDone)
+            while (!request.isDone)
             {
                 await UniTask.Yield();
             }
@@ -438,88 +428,27 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                     Debug.LogError(uri + worldIndex + ": Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError(uri + worldIndex + ": HTTP Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + worldIndex + ":\nReceived: " + webRequest.downloadHandler.text);
                     WorldDTO worldDTO = JsonUtility.FromJson<WorldDTO>(webRequest.downloadHandler.text);
-                    worldData[worldIndex] = worldDTO;
+                    worldDTOs[worldIndex] = worldDTO;
                     Debug.Log("Got world data.");
                     break;
             }
+
             return null;
         }
     }
 
-    private IEnumerator GetDungeonDTO(String uri, int dungeonIndex)
-    {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + dungeonIndex))
-        {
-            Debug.Log("Get Request for dungeon: " + dungeonIndex);
-            Debug.Log("Path: " + uri + dungeonIndex);
-
-            // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
-
-            switch (webRequest.result)
-            {
-                case UnityWebRequest.Result.ConnectionError:
-                case UnityWebRequest.Result.DataProcessingError:
-                    Debug.LogError(uri + dungeonIndex + ": Error: " + webRequest.error);
-                    break;
-                case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError(uri + dungeonIndex + ": HTTP Error: " + webRequest.error);
-                    break;
-                case UnityWebRequest.Result.Success:
-                    Debug.Log(uri + dungeonIndex + ":\nReceived: " + webRequest.downloadHandler.text);
-                    DungeonDTO dungeonDTO = JsonUtility.FromJson<DungeonDTO>(webRequest.downloadHandler.text);
-                    processDungeonDTO(dungeonIndex, dungeonDTO);
-                    break;
-            }
-        }
-        somethingToUpdate = true;
-    }
-
     /// <summary>
-    /// This function sends a GET request to the backend to get barrier data and stores the results in the <c>GameManager</c>
-    /// </summary>
-    /// <param name="uri">The path to send the GET request to</param>
-    /// <param name="worldIndexDestination">The index of the world which entry the barrier is blocking</param>
-    /// <param name="worldIndexOrigin">The index of the world which exit the barrier is blocking</param>
-    /// <returns></returns>
-    private IEnumerator GetBarrierData(String uri, int worldIndexDestination, int worldIndexOrigin)
-    {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + worldIndexDestination))
-        {
-            Debug.Log("Get Barrier data to world: " + worldIndexDestination);
-            Debug.Log("Path: " + uri + worldIndexDestination);
-
-            // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
-
-            switch (webRequest.result)
-            {
-                case UnityWebRequest.Result.ConnectionError:
-                case UnityWebRequest.Result.DataProcessingError:
-                    Debug.LogError(uri + worldIndexDestination + ": Error: " + webRequest.error);
-                    break;
-                case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError(uri + worldIndexDestination + ": HTTP Error: " + webRequest.error);
-                    break;
-                case UnityWebRequest.Result.Success:
-                    Debug.Log(uri + worldIndexDestination + ":\nReceived: " + webRequest.downloadHandler.text);
-                    WorldDTO worldDTODestination = JsonUtility.FromJson<WorldDTO>(webRequest.downloadHandler.text);
-                    setupBarrier(worldIndexOrigin, worldDTODestination);
-                    break;
-            }
-        }
-        somethingToUpdate = true;
-    }
-    
-    /// <summary>
-    /// This function sends a GET request to the backend to get player data for minigames and stores the results in the <c>GameManager</c>
+    ///     This function sends a GET request to the backend to get player data for minigames and stores the results in the
+    ///     <c>GameManager</c>
     /// </summary>
     /// <param name="uri">The path to send the GET request to</param>
     /// <returns></returns>
@@ -543,62 +472,28 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                     Debug.LogError(uri + ": Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
-                    PlayerTaskStatisticDTO[] playerTaskStatistics = JsonHelper.getJsonArray<PlayerTaskStatisticDTO>(webRequest.downloadHandler.text);
+                    PlayerTaskStatisticDTO[] playerTaskStatistics =
+                        JsonHelper.GetJsonArray<PlayerTaskStatisticDTO>(webRequest.downloadHandler.text);
                     playerMinigameStatistics = playerTaskStatistics;
                     Debug.Log("Got player minigame data.");
                     break;
             }
+
             return null;
         }
     }
 
     /// <summary>
-    /// This function sends a GET request to the backend to get gerneral player data and logs the knowledge to the console
-    /// </summary>
-    /// <param name="uri">The path to send the GET request to</param>
-    /// <returns></returns>
-    private async UniTask<PlayerstatisticDTO> GetPlayerStatistics(string uri)
-    {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
-        {
-            Debug.Log("Get Player minigame statistics: ");
-            Debug.Log("Path: " + uri);
-
-            // Request and wait for the desired page.
-            var request = webRequest.SendWebRequest();
-
-            while (!request.isDone)
-            {
-                await UniTask.Yield();
-            }
-
-            switch (webRequest.result)
-            {
-                case UnityWebRequest.Result.ConnectionError:
-                case UnityWebRequest.Result.DataProcessingError:
-                    Debug.LogError(uri + ": Error: " + webRequest.error);
-                    break;
-                case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
-                    break;
-                case UnityWebRequest.Result.Success:
-                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
-                    PlayerstatisticDTO playerStatistic = JsonUtility.FromJson<PlayerstatisticDTO>(webRequest.downloadHandler.text);
-                    Debug.Log("Player knowledge: " + playerStatistic.knowledge);
-                    break;
-            }
-            return null;
-        }
-    }
-
-    /// <summary>
-    /// This function sends a GET request to the backend to get player data for npcs and stores the results in the <c>GameManager</c>
+    ///     This function sends a GET request to the backend to get player data for npcs and stores the results in the
+    ///     <c>GameManager</c>
     /// </summary>
     /// <param name="uri">The path to send the GET request to</param>
     /// <returns></returns>
@@ -622,47 +517,102 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                     Debug.LogError(uri + ": Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
-                    PlayerNPCStatisticDTO[] result = JsonHelper.getJsonArray<PlayerNPCStatisticDTO>(webRequest.downloadHandler.text);
+                    PlayerNPCStatisticDTO[] result =
+                        JsonHelper.GetJsonArray<PlayerNPCStatisticDTO>(webRequest.downloadHandler.text);
                     playerNPCStatistics = result;
                     Debug.Log("Got player npc data.");
                     break;
             }
+
             return null;
         }
     }
+
+    /// <summary>
+    ///     This function sends a GET request to the backend to get gerneral player data and logs the knowledge to the console
+    /// </summary>
+    /// <param name="uri">The path to send the GET request to</param>
+    /// <returns></returns>
+    private async UniTask<PlayerstatisticDTO> GetPlayerStatistics(string uri)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            Debug.Log("Get Player minigame statistics: ");
+            Debug.Log("Path: " + uri);
+
+            // Request and wait for the desired page.
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(uri + ": Error: " + webRequest.error);
+                    loadingError = true;
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    loadingError = true;
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
+                    PlayerstatisticDTO playerStatistic =
+                        JsonUtility.FromJson<PlayerstatisticDTO>(webRequest.downloadHandler.text);
+                    playerData = playerStatistic;
+                    Debug.Log("Player knowledge: " + playerStatistic.knowledge);
+                    break;
+            }
+
+            return null;
+        }
+    }
+
     #endregion
 
-    #region PostRequests
+    #region PostRequest
+
     /// <summary>
-    /// This function sends a POST request to the backend set, if a npc has been talked to or not
+    /// This function sends a POST request to the backend to mark an NPC as completed.
     /// </summary>
     /// <param name="uri">The path to send the POST request to</param>
-    /// <param name="uuid">The uuid of the npc</param>
-    /// <param name="completed">if the npc has been talked to or not</param>
+    /// <param name="uuid">The uuid of the NPC</param>
     /// <returns></returns>
-    private IEnumerator PostNPCCompleted(string uri, string uuid, bool completed)
+    private async UniTask PostNpcCompleted(string uri, string uuid)
     {
-        NPCTalkEvent npcData = new NPCTalkEvent(uuid, completed, playerId.ToString());
+        NPCTalkEvent npcData = new NPCTalkEvent(uuid, true, playerId.ToString());
         string json = JsonUtility.ToJson(npcData, true);
 
         Debug.Log("Json test: " + json);
 
         //UnityWebRequest webRequest = UnityWebRequest.Post(uri, json);
         UnityWebRequest webRequest = new UnityWebRequest(uri, UnityWebRequest.kHttpVerbPOST);
-        byte[] bytes = new System.Text.UTF8Encoding().GetBytes(json);
-        webRequest.uploadHandler = (UploadHandler)new UploadHandlerRaw(bytes);
-        webRequest.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        byte[] bytes = new UTF8Encoding().GetBytes(json);
+        webRequest.uploadHandler = new UploadHandlerRaw(bytes);
+        webRequest.downloadHandler = new DownloadHandlerBuffer();
         webRequest.SetRequestHeader("Content-Type", "application/json");
 
         using (webRequest)
         {
-            yield return webRequest.SendWebRequest();
+            // Request and wait for the desired page.
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
 
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
@@ -670,251 +620,522 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("NPC mit uuid: " + uuid +  " updated to new status: " + completed);
+                Debug.Log("NPC mit uuid " + uuid + " has been talked to.");
                 Debug.Log("Post request response code: " + webRequest.responseCode);
                 Debug.Log("Post request response text: " + webRequest.downloadHandler.text);
             }
         }
     }
+
     #endregion
 
     #region ProcessingData
+
     /// <summary>
-    /// This function processes the world data returned from the backend and stores the needed data in the <c>GameManager</c>
+    ///     This function processes the world data returned from the backend and stores the needed data in the
+    ///     <c>GameManager</c>
     /// </summary>
     /// <param name="worldIndex">The index of the world the data refers to</param>
     /// <param name="worldDTO">The world data returned from the backend</param>
-    private void processWorldDTO(int worldIndex, WorldDTO worldDTO)
+    private void ProcessWorldDto(int worldIndex)
     {
-        Debug.Log("Process world " + worldIndex + " data");
-        Debug.Log("static name: " + worldDTO.getStaticName());
-        Debug.Log("topic name: " + worldDTO.getTopicName());
-        List<MinigameTaskDTO> minigames = worldDTO.getMinigameTasks();
-        foreach(MinigameTaskDTO minigameTask in minigames)
+        if (worldIndex < 1 || worldIndex >= worldDTOs.Length)
         {
-            if(minigameTask.getConfigurationId() == null)
-            {
-                Debug.Log("Minigame " + minigameTask.getIndex() + " is null");
-            }
+            return;
+        }
 
-            if(minigameTask.getConfigurationId() == "" || minigameTask.getConfigurationId() == null)
-            {
-                minigameData[worldIndex, minigameTask.getIndex()].setStatus(MinigameStatus.notConfigurated);
-                Debug.Log("Minigame " + minigameTask.getIndex() + ", status: not configurated");
-            }
-            else
-            {
-                minigameData[worldIndex, minigameTask.getIndex()].setStatus(MinigameStatus.active);
-                Debug.Log("Minigame " + minigameTask.getIndex() + ", status: active");
-            }
-            minigameData[worldIndex, minigameTask.getIndex()].setGame(minigameTask.getGame());
-            Debug.Log("Minigame " + minigameTask.getIndex() + ", game: " + minigameTask.getGame());
-            minigameData[worldIndex, minigameTask.getIndex()].setConfigurationID(minigameTask.getConfigurationId());
-            Debug.Log("Minigame " + minigameTask.getIndex() + ", config: " + minigameTask.getConfigurationId());
-        }
-        List<NPCDTO> npcs = worldDTO.getNPCs();
-        foreach(NPCDTO npc in npcs)
+        WorldDTO worldDTO = worldDTOs[worldIndex];
+        if (worldDTO == null)
         {
-            string[] dialogue = npc.getText().ToArray();
-            Debug.Log("NPC " + npc.getIndex() + ", text: " + dialogue[0]);
-            npcData[worldIndex, npc.getIndex()].setDialogue(dialogue);
-            npcData[worldIndex, npc.getIndex()].setUUID(npc.getId());
-            string[] newDialogue = npcData[worldIndex, npc.getIndex()].getDialogue();
-            Debug.Log("NPC " + npc.getIndex() + ", npcData text: " + newDialogue[0]);
+            return;
         }
-    }
 
-    private void processDungeonDTO(int dungeonIndex, DungeonDTO dungeonDTO)
-    {
-        Debug.Log("Process dungeon " + dungeonIndex + " data");
-        Debug.Log("static name: " + dungeonDTO.getStaticName());
-        Debug.Log("topic name: " + dungeonDTO.getTopicName());
-        List<MinigameTaskDTO> minigames = dungeonDTO.getMinigameTasks();
-        foreach (MinigameTaskDTO minigameTask in minigames)
-        {
-            if (minigameTask.getConfigurationId() == null)
-            {
-                Debug.Log("Minigame " + minigameTask.getIndex() + " is null");
-            }
+        string id = worldDTO.id;
+        int index = worldDTO.index;
+        string staticName = worldDTO.staticName;
+        string topicName = worldDTO.topicName;
+        bool active = worldDTO.active;
 
-            if (minigameTask.getConfigurationId() == "" || minigameTask.getConfigurationId() == null)
-            {
-                minigameData[0, minigameTask.getIndex()].setStatus(MinigameStatus.notConfigurated);
-                Debug.Log("Minigame " + minigameTask.getIndex() + ", status: not configurated");
-            }
-            else
-            {
-                minigameData[0, minigameTask.getIndex()].setStatus(MinigameStatus.active);
-                Debug.Log("Minigame " + minigameTask.getIndex() + ", status: active");
-            }
-            minigameData[0, minigameTask.getIndex()].setGame(minigameTask.getGame());
-            Debug.Log("Minigame " + minigameTask.getIndex() + ", game: " + minigameTask.getGame());
-            minigameData[0, minigameTask.getIndex()].setConfigurationID(minigameTask.getConfigurationId());
-            Debug.Log("Minigame " + minigameTask.getIndex() + ", config: " + minigameTask.getConfigurationId());
-        }
-        List<NPCDTO> npcs = dungeonDTO.getNPCs();
-        foreach (NPCDTO npc in npcs)
-        {
-            string[] dialogue = npc.getText().ToArray();
-            Debug.Log("NPC " + npc.getIndex() + ", text: " + dialogue[0]);
-            npcData[0, npc.getIndex()].setDialogue(dialogue);
-            npcData[0, npc.getIndex()].setUUID(npc.getId());
-            string[] newDialogue = npcData[0, npc.getIndex()].getDialogue();
-            Debug.Log("NPC " + npc.getIndex() + ", npcData text: " + newDialogue[0]);
-        }
+        List<MinigameTaskDTO> minigameDTOs = worldDTO.minigameTasks;
+        MinigameData[] minigames = GetMinigameData(minigameDTOs);
+
+        List<NPCDTO> npcDTOs = worldDTO.npcs;
+        NPCData[] npcs = GetNpcData(npcDTOs);
+
+        List<DungeonDTO> dungeonDTOs = worldDTO.dungeons;
+        DungeonData[] dungeons = GetDungeonData(dungeonDTOs);
+
+        worldData[worldIndex] = new WorldData(id, index, staticName, topicName, active, minigames, npcs, dungeons);
     }
 
     /// <summary>
-    /// This function processes the world data returned from the backend and stores the needed data in the <c>GameManager</c>
+    /// This function converts and list of <c>MinigameTaskDTO</c> into a array of <c>MinigameData</c>
     /// </summary>
-    /// <param name="worldIndexOrigion">The world index which exit the barrier is blocking</param>
-    /// <param name="worldDTODestination">The world data returned from the backend for the world which entry the barrier is blocking</param>
-    private void setupBarrier(int worldIndexOrigion, WorldDTO worldDTODestination)
+    /// <param name="minigameDTOs">The list of <c>minigameDTO</c> to convert</param>
+    /// <returns>The converted <c>MinigameData</c> array</returns>
+    private MinigameData[] GetMinigameData(List<MinigameTaskDTO> minigameDTOs)
     {
-        int worldIndexDestination = worldDTODestination.getIndex();
-        if(worldDTODestination.getActive())
+        MinigameData[] minigameData = new MinigameData[maxMinigames + 1];
+
+        foreach (MinigameTaskDTO minigameDTO in minigameDTOs)
         {
-            barrierData[worldIndexOrigion, worldIndexDestination].setIsActive(false);
-            Debug.Log("Barrier " + worldIndexOrigion + "->" + worldIndexDestination + ": inactive");
+            string game;
+            string configurationId;
+            MinigameStatus status = global::MinigameStatus.notConfigurated;
+            int highscore = 0;
+
+            game = minigameDTO.game;
+            configurationId = minigameDTO.configurationId;
+            if (configurationId != "" && configurationId != null && configurationId != "NONE")
+            {
+                status = global::MinigameStatus.active;
+            }
+
+            MinigameData minigame = new MinigameData(game, configurationId, status, highscore);
+            minigameData[minigameDTO.index] = minigame;
         }
-        else
-        {
-            barrierData[worldIndexOrigion, worldIndexDestination].setIsActive(true);
-            Debug.Log("Barrier " + worldIndexOrigion + "->" + worldIndexDestination + ": active");
-        }
+
+        return minigameData;
     }
-    
+
     /// <summary>
-    /// This function processes the player minigame statistics data returned form backend and stores the needed data in the <c>GameManager</c>
+    /// This function converts and list of <c>NPCDTO</c> into a array of <c>NPCData</c>
+    /// </summary>
+    /// <param name="npcDTOs">The list of <c>NPCDTO</c> to convert</param>
+    /// <returns>The converted <c>NPCData</c> array</returns>
+    private NPCData[] GetNpcData(List<NPCDTO> npcDTOs)
+    {
+        NPCData[] npcData = new NPCData[maxNPCs + 1];
+
+        foreach (NPCDTO npcDTO in npcDTOs)
+        {
+            string uuid;
+            string[] dialogue;
+            bool hasBeenTalkedTo = false;
+
+            uuid = npcDTO.id;
+            dialogue = npcDTO.text.ToArray();
+            if (dialogue.Length == 0)
+            {
+                string[] dummyText = { "I could tell you something useful...", "...But i don't remember." };
+                dialogue = dummyText;
+            }
+
+            NPCData npc = new NPCData(uuid, dialogue, hasBeenTalkedTo);
+            npcData[npcDTO.index] = npc;
+        }
+
+        return npcData;
+    }
+
+    /// <summary>
+    /// This function converts and list of <c>DungeonDTO</c> into a array of <c>DungeonData</c>
+    /// </summary>
+    /// <param name="dungeonDTOs">The list of <c>DungeonDTO</c> to convert</param>
+    /// <returns>The converted <c>DungeonData</c> array</returns>
+    private DungeonData[] GetDungeonData(List<DungeonDTO> dungeonDTOs)
+    {
+        DungeonData[] dungeonData = new DungeonData[maxDungeons + 1];
+
+        foreach (DungeonDTO dungeonDTO in dungeonDTOs)
+        {
+            string id = dungeonDTO.id;
+            int index = dungeonDTO.index;
+            string staticName = dungeonDTO.staticName;
+            string topicName = dungeonDTO.topicName;
+            bool active = dungeonDTO.active;
+
+            List<MinigameTaskDTO> minigameDTOs = dungeonDTO.minigameTasks;
+            MinigameData[] minigames = GetMinigameData(minigameDTOs);
+
+            List<NPCDTO> npcDTOs = dungeonDTO.npcs;
+            NPCData[] npcs = GetNpcData(npcDTOs);
+
+            DungeonData dungeon = new DungeonData(id, index, staticName, topicName, active, minigames, npcs);
+            dungeonData[index] = dungeon;
+        }
+
+        return dungeonData;
+    }
+
+    /// <summary>
+    ///     This function processes the player minigame statistics data returned form backend and stores the needed data in the
+    ///     <c>GameManager</c>
     /// </summary>
     /// <param name="playerTaskStatistics">The player minigame statistics data returned from the backend</param>
-    private void processPlayerTaskStatisitcs(PlayerTaskStatisticDTO[] playerTaskStatistics)
+    private void ProcessPlayerTaskStatisitcs(PlayerTaskStatisticDTO[] playerTaskStatistics)
     {
-        Debug.Log("processing minigame player data");
-        foreach(PlayerTaskStatisticDTO statistic in playerTaskStatistics)
+        if (playerTaskStatistics == null)
+        {
+            return;
+        }
+
+        foreach (PlayerTaskStatisticDTO statistic in playerTaskStatistics)
         {
             int worldIndex = statistic.minigameTask.area.worldIndex;
+
+            if (worldIndex < 0 || worldIndex >= worldData.Length)
+            {
+                break;
+            }
+
             int dungeonIndex = statistic.minigameTask.area.dungeonIndex;
             int index = statistic.minigameTask.index;
             int highscore = statistic.highscore;
             bool completed = statistic.completed;
-            MinigameStatus status = MinigameStatus.active;
-            if(completed)
+            MinigameStatus status = global::MinigameStatus.notConfigurated;
+            if (MinigameStatus(worldIndex, dungeonIndex, index) != global::MinigameStatus.notConfigurated)
             {
-                status = MinigameStatus.done;
+                if (completed)
+                {
+                    status = global::MinigameStatus.done;
+                }
+                else
+                {
+                    status = global::MinigameStatus.active;
+                }
             }
-            if(dungeonIndex == 0)
-            {
-                minigameData[worldIndex, index].setHighscore(highscore);
-                minigameData[worldIndex, index].setStatus(status);
-            }
-            else
-            {
-                minigameData[0, index].setHighscore(highscore);
-                minigameData[0, index].setStatus(status);
-            }
-            Debug.Log("Update minigame " + worldIndex + "-" + dungeonIndex + "-" + index + ": Highscore: " + highscore + ", Status: " + status.ToString());
+
+            worldData[worldIndex].setMinigameStatus(dungeonIndex, index, status);
+            worldData[worldIndex].setMinigameHighscore(dungeonIndex, index, highscore);
         }
     }
-    
+
     /// <summary>
-    /// This function processes the player npc statistcs data returned from the backend and stores the needed data in the <c>GameManager</c>
+    /// This function returns the status of a minigame in a world or dungeon.
+    /// </summary>
+    /// <param name="worldIndex">The index of the world the minigame is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon the minigame is in (0 if in world)</param>
+    /// <param name="index">The index of the minigame in its area</param>
+    /// <returns>The status of the minigame, <c>notConfigurated if not found</c></returns>
+    private MinigameStatus MinigameStatus(int worldIndex, int dungeonIndex, int index)
+    {
+        if (worldIndex < 0 || worldIndex >= worldData.Length)
+        {
+            return global::MinigameStatus.notConfigurated;
+        }
+
+        if (dungeonIndex != 0)
+        {
+            return worldData[worldIndex].getMinigameStatus(dungeonIndex, index);
+        }
+
+        return worldData[worldIndex].getMinigameStatus(index);
+    }
+
+    /// <summary>
+    ///     This function processes the player npc statistcs data returned from the backend and stores the needed data in the
+    ///     <c>GameManager</c>
     /// </summary>
     /// <param name="playerNPCStatistics">The player npc statistics data returned from the backend</param>
-    private void processPlayerNPCStatistics(PlayerNPCStatisticDTO[] playerNPCStatistics)
+    private void ProcessPlayerNpcStatistics(PlayerNPCStatisticDTO[] playerNPCStatistics)
     {
-        Debug.Log("processing npc player data");
-        foreach(PlayerNPCStatisticDTO statistic in playerNPCStatistics)
+        if (playerNPCStatistics == null)
+        {
+            return;
+        }
+
+        foreach (PlayerNPCStatisticDTO statistic in playerNPCStatistics)
         {
             int worldIndex = statistic.npc.area.worldIndex;
             int dungeonIndex = statistic.npc.area.dungeonIndex;
             int index = statistic.npc.index;
-            bool hasBeenTalkedTo = statistic.completed;
-            if(dungeonIndex == 0)
+            bool completed = statistic.completed;
+
+            if (worldIndex < worldData.Length)
             {
-                npcData[worldIndex, index].setHasBeenTalkedTo(hasBeenTalkedTo);
+                worldData[worldIndex].setNPCStatus(dungeonIndex, index, completed);
             }
-            else
-            {
-                npcData[0, index].setHasBeenTalkedTo(hasBeenTalkedTo);
-            }
-            Debug.Log("Update npc " + "-" + worldIndex + "-" + dungeonIndex + "-" + index + ": hasBeenTalkedTo: " + hasBeenTalkedTo);
         }
     }
+
     #endregion
 
     #region SettingData
+
     /// <summary>
-    /// This function sends all stores data for a given world form the <c>GameManager</c> to the corresponding objects
+    /// This function sets the data for the given area.
     /// </summary>
-    /// <param name="world">The world index which data should be send</param>
-    private void setData(int world)
+    /// <param name="worldIndex">The index of the world</param>
+    /// <param name="dungeonIndex">The index of the dungeon (0 if world)</param>
+    public void SetData(int worldIndex, int dungeonIndex)
     {
-        for(int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
+        if (dungeonIndex != 0)
         {
-            MinigameData mingameDataToProceed = minigameData[world,minigameIndex];
-
-            if(minigameObjects[world,minigameIndex] != null)
-            {
-                Minigame minigame = minigameObjects[world,minigameIndex].GetComponent<Minigame>();
-                if(minigame != null && mingameDataToProceed.getGame() != null && mingameDataToProceed.getConfigurationID() != null && mingameDataToProceed.getStatus() != null)
-                {
-                    Debug.Log("Setup Minigame in " + world + "," + minigameIndex);
-                    minigame.setup(mingameDataToProceed);
-                }else
-                {
-                    Debug.Log("Minigame " + minigameIndex + " data is not completely loaded");
-                }
-            }
+            Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
+            SetDungeonData(worldIndex, dungeonIndex);
         }
-
-        for(int barrierIndex = 1; barrierIndex <= maxWorld; barrierIndex++)
+        else
         {
-            if(barrierObjects[world, barrierIndex] != null)
-            {
-                Barrier barrier = barrierObjects[world,barrierIndex].GetComponent<Barrier>();
-                if(barrier != null && barrierData[world,barrierIndex].getIsActive() != null)
-                {
-                    barrier.setup(barrierData[world,barrierIndex]);
-                }else
-                {
-                    Debug.Log("Barrier " + barrierIndex + " data is not completely loaded");
-                }
-            }
-        }
-
-        for(int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
-        {
-            if(npcObjects[world, npcIndex] != null)
-            {
-                NPC npc = npcObjects[world, npcIndex].GetComponent<NPC>();
-                if(npc != null)
-                {
-                    Debug.Log("Setup NPC in " + world + "," + npcIndex);
-                    npc.setup(npcData[world, npcIndex]);
-                }else
-                {
-                    Debug.Log("NPC " + npcIndex + " data is not completely loaded");
-                }
-            }else
-            {
-                Debug.Log("NpcObject is null");
-            }
+            Debug.Log("Setting data for world " + worldIndex);
+            SetWorldData(worldIndex);
         }
     }
 
     /// <summary>
-    /// This function sends a POST request to the backend to set, if a npc has been talked to or not
+    /// This functions sets the data for a given world.
     /// </summary>
-    /// <param name="uuid">The uuid of the npc</param>
-    /// <param name="completed">if the npc has been talked to or not</param>
-    public void markNPCasRead(string uuid, bool completed)
+    /// <param name="worldIndex">The index of the world</param>
+    private void SetWorldData(int worldIndex)
     {
-        if(active)
+        if (worldIndex < 1 || worldIndex >= worldData.Length)
+        {
+            return;
+        }
+
+        WorldData data = worldData[worldIndex];
+
+        for (int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
+        {
+            MinigameData minigameData = data.getMinigameData(minigameIndex);
+            if (minigameData == null)
+            {
+                minigameData = new MinigameData();
+            }
+
+            GameObject minigameObject = minigameObjects[worldIndex, minigameIndex];
+            if (minigameObject == null)
+            {
+                continue;
+            }
+
+            Minigame minigame = minigameObject.GetComponent<Minigame>();
+            if (minigame == null)
+            {
+                continue;
+            }
+
+            minigame.Setup(minigameData);
+        }
+
+        for (int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
+        {
+            NPCData npcData = data.getNPCData(npcIndex);
+            if (npcData == null)
+            {
+                npcData = new NPCData();
+            }
+
+            GameObject npcObject = npcObjects[worldIndex, npcIndex];
+            if (npcObject == null)
+            {
+                continue;
+            }
+
+            NPC npc = npcObject.GetComponent<NPC>();
+            if (npc == null)
+            {
+                continue;
+            }
+
+            npc.Setup(npcData);
+        }
+
+        for (int barrierDestinationIndex = 1; barrierDestinationIndex <= maxWorld; barrierDestinationIndex++)
+        {
+            GameObject barrierObject = worldBarrierObjects[worldIndex, barrierDestinationIndex];
+            if (barrierObject == null)
+            {
+                continue;
+            }
+
+            Barrier barrier = barrierObject.GetComponent<Barrier>();
+            if (barrier == null)
+            {
+                continue;
+            }
+
+            bool activedByLecturer = worldData[barrierDestinationIndex].isActive();
+            bool unlockedByPlayer = PlayerHasWorldUnlocked(barrierDestinationIndex);
+            bool worldExplorable = activedByLecturer & unlockedByPlayer;
+            BarrierData barrierData = new BarrierData(!worldExplorable);
+            barrier.Setup(barrierData);
+        }
+
+        for (int barrierDestinationIndex = 1; barrierDestinationIndex <= maxDungeons; barrierDestinationIndex++)
+        {
+            GameObject barrierObject = dungeonBarrierObjects[worldIndex, barrierDestinationIndex];
+            if (barrierObject == null)
+            {
+                continue;
+            }
+
+            Barrier barrier = barrierObject.GetComponent<Barrier>();
+            if (barrier == null)
+            {
+                continue;
+            }
+
+            bool activedByLecturer = worldData[worldIndex].dungeonIsActive(barrierDestinationIndex);
+            bool unlockedByPlayer = PlayerHasDungeonUnlocked(worldIndex, barrierDestinationIndex);
+            bool dungeonExplorable = activedByLecturer & unlockedByPlayer;
+            BarrierData barrierData = new BarrierData(!dungeonExplorable);
+            barrier.Setup(barrierData);
+        }
+    }
+
+    /// <summary>
+    /// This function checks if a player has unlocked a world.
+    /// </summary>
+    /// <param name="worldIndex">The index of the world to check</param>
+    /// <returns>True, if the player has unlocked the world, false otherwise</returns>
+    private bool PlayerHasWorldUnlocked(int worldIndex)
+    {
+        for (int i = 0; i < playerData.unlockedAreas.Length; i++)
+        {
+            if (playerData.unlockedAreas[i].worldIndex == worldIndex &&
+                playerData.unlockedAreas[i].dungeonIndex == 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// This function checks if a player has unlocked a dungeon.
+    /// </summary>
+    /// <param name="worldIndex">The index of the world the dungeon is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon to check</param>
+    /// <returns>True, if the player has unlocked the dungeon, false otherwise</returns>
+    private bool PlayerHasDungeonUnlocked(int worldIndex, int dungeonIndex)
+    {
+        for (int i = 0; i < playerData.unlockedAreas.Length; i++)
+        {
+            if (playerData.unlockedAreas[i].worldIndex == worldIndex &&
+                playerData.unlockedAreas[i].dungeonIndex == dungeonIndex)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// This functions sets the data for a given dungeon.
+    /// </summary>
+    /// <param name="worldIndex">The index of the world</param>
+    /// <param name="dungeonIndex">The index of the dungeon</param>
+    private void SetDungeonData(int worldIndex, int dungeonIndex)
+    {
+        if (worldIndex < 1 || worldIndex >= worldData.Length)
+        {
+            return;
+        }
+
+        DungeonData data = worldData[worldIndex].getDungeonData(dungeonIndex);
+        if (data == null)
+        {
+            return;
+        }
+
+        for (int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
+        {
+            MinigameData minigameData = data.GetMinigameData(minigameIndex);
+            if (minigameData == null)
+            {
+                minigameData = new MinigameData();
+            }
+
+            GameObject minigameObject = minigameObjects[0, minigameIndex];
+            if (minigameObject == null)
+            {
+                continue;
+            }
+
+            Minigame minigame = minigameObject.GetComponent<Minigame>();
+            if (minigame == null)
+            {
+                continue;
+            }
+
+            minigame.Setup(minigameData);
+        }
+
+        for (int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
+        {
+            NPCData npcData = data.GetNpcData(npcIndex);
+            if (npcData == null)
+            {
+                npcData = new NPCData();
+            }
+
+            GameObject npcObject = npcObjects[0, npcIndex];
+            if (npcObject == null)
+            {
+                continue;
+            }
+
+            NPC npc = npcObject.GetComponent<NPC>();
+            if (npc == null)
+            {
+                continue;
+            }
+
+            npc.Setup(npcData);
+        }
+    }
+
+    /// <summary>
+    /// This function marks an NPC as completed.
+    /// </summary>
+    /// <param name="worldIndex">The index of the world the NPC is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon the NPC is in (0 if in world)</param>
+    /// <param name="number">The index of the NPC in its area</param>
+    /// <param name="uuid">The uuid of the NPC</param>
+    public async void MarkNpCasRead(int worldIndex, int dungeonIndex, int number, string uuid)
+    {
+        if (active)
         {
             string path = "/overworld/api/v1/internal/submit-npc-pass";
-            StartCoroutine(PostNPCCompleted(path, uuid, completed));
+            await PostNpcCompleted(path, uuid);
+
+            if (worldIndex <= maxWorld)
+            {
+                if (dungeonIndex != 0)
+                {
+                    worldData[worldIndex].npcCompleted(dungeonIndex, number);
+                }
+                else
+                {
+                    worldData[worldIndex].npcCompleted(number);
+                }
+            }
         }
     }
+
     #endregion
+
+    #region InfoScreen
+
+    /// <summary>
+    /// This functions returns an information text about the barrier.
+    /// </summary>
+    /// <param name="type">The type of the barrier</param>
+    /// <param name="originWorldIndex">The index of the world the barrier is in</param>
+    /// <param name="destinationAreaIndex">The index of the area the barrier is blocking access to</param>
+    /// <returns></returns>
+    public string GetBarrierInfoText(BarrierType type, int originWorldIndex, int destinationAreaIndex)
+    {
+        string info = "NOT UNLOCKED YET";
+        return info;
+    }
+
+    #endregion
+
+    #region GetterAndSetter
+
+    /// <summary>
+    /// This function provides an array of all areas, that the player has unlocked.
+    /// </summary>
+    /// <returns>A list of unlocked areas</returns>
+    public AreaLocationDTO[] GetUnlockedAreas()
+    {
+        return playerData.unlockedAreas;
+    }
+
+    #endregion
+ 
 }

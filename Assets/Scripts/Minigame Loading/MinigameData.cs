@@ -1,19 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-/*
- * This scripts defines the minigame data that needs to be transfered from the game manager to a minigame object.
- */
+/// <summary>
+///     This class defines all needed data for a <c>Minigame</c>.
+/// </summary>
 public class MinigameData
 {
-    #region Attributes
-    private string game;
-    private string configurationID;
-    private MinigameStatus status;
-    private int highscore;
-    #endregion
-
     public MinigameData(string game, string configurationID, MinigameStatus status, int highscore)
     {
         this.game = game;
@@ -30,46 +19,88 @@ public class MinigameData
         highscore = 0;
     }
 
+    #region Attributes
+
+    private string game;
+    private string configurationID;
+    private MinigameStatus status;
+    private int highscore;
+
+    #endregion
+
     #region GetterAndSetter
-    
-    public string getGame()
+
+    /// <summary>
+    ///     This function returns the name of the minigame.
+    /// </summary>
+    /// <returns>game</returns>
+    public string GetGame()
     {
         return game;
     }
 
-    public void setGame(string game)
+    /// <summary>
+    ///     This function sets the name of the minigame.
+    /// </summary>
+    /// <param name="game">The name for the minigame</param>
+    public void SetGame(string game)
     {
         this.game = game;
     }
 
-    public string getConfigurationID()
+    /// <summary>
+    ///     This function returns the configuration ID of the minigame.
+    /// </summary>
+    /// <returns>configurationID</returns>
+    public string GetConfigurationID()
     {
         return configurationID;
     }
 
-    public void setConfigurationID(string configurationID)
+    /// <summary>
+    ///     This function sets the configuration ID of the minigame.
+    /// </summary>
+    /// <param name="configurationID">The configurationID for the minigame</param>
+    public void SetConfigurationID(string configurationID)
     {
         this.configurationID = configurationID;
     }
 
-    public MinigameStatus getStatus()
+    /// <summary>
+    ///     This function returns the status of the minigame.
+    /// </summary>
+    /// <returns>status</returns>
+    public MinigameStatus GetStatus()
     {
         return status;
     }
 
-    public void setStatus(MinigameStatus status)
+    /// <summary>
+    ///     This function sets the status of the minigame.
+    /// </summary>
+    /// <param name="status">Status for the minigame</param>
+    public void SetStatus(MinigameStatus status)
     {
         this.status = status;
     }
 
-    public int getHighscore()
+    /// <summary>
+    ///     This function returns the highscore of the minigame.
+    /// </summary>
+    /// <returns>highscore</returns>
+    public int GetHighscore()
     {
         return highscore;
     }
 
-    public void setHighscore(int highscore)
+    /// <summary>
+    ///     This function sets the highscore of the minigame by configurationId.
+    /// </summary>
+    /// <param name="highscore">The highscore of the minigame by configurationId</param>
+    public void SetHighscore(int highscore)
     {
         this.highscore = highscore;
     }
+
     #endregion
 }

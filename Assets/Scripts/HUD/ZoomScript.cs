@@ -2,6 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.U2D;
 
+/// <summary>
+/// This script manages the zooming of the game and the minimap.
+/// </summary>
 public class ZoomScript : MonoBehaviour
 {
     //minigame Zoomlevels
@@ -19,20 +22,23 @@ public class ZoomScript : MonoBehaviour
 
     public static string areaName = "Loading...";
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// The <c>Start</c> function is called after the object is initialized.
+    /// This function sets up the references of the object.
+    /// </summary>
     void Start()
     {
-        //get the player and attach the minimap to him
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         GameObject miniMapCam = GameObject.Find("Minimap Camera");
-        //get the pixel perfect camera component
         pixelCam = GameObject.Find("Main Camera").GetComponent<PixelPerfectCamera>();
         miniMapCam.transform.SetParent(player.transform);
-        //set the local transform of the minimap camera to be above the player, zoomed out by the specified zoomLevel
         miniMapCam.transform.localPosition = new Vector3(0, 0, zoomLevel);
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// The <c>Update</c> function is called once every frame.
+    /// This function checks if the game or minimap needs to be zoomed out or in.
+    /// </summary>
     void Update()
     {
         //zoom in
@@ -68,7 +74,9 @@ public class ZoomScript : MonoBehaviour
         }
     }
 
-    //zoom In handling
+    /// <summary>
+    /// This function zooms in the minimap by one step
+    /// </summary>
     public void MinimapZoomIn()
     {
         //restrict zoom level
@@ -86,7 +94,9 @@ public class ZoomScript : MonoBehaviour
         }
     }
 
-    //zoom Out handling
+    /// <summary>
+    /// This function zooms out the minimap by one step
+    /// </summary>
     public void MinimapZoomOut()
     {
         //restrict zoom level
@@ -104,7 +114,9 @@ public class ZoomScript : MonoBehaviour
         }
     }
 
-    //zoom game in handling
+    /// <summary>
+    /// This function zooms out the game by one step
+    /// </summary>
     public void GameZoomOut()
     {
         //restrict to 3 possible zoomLevels
@@ -121,7 +133,9 @@ public class ZoomScript : MonoBehaviour
         }
     }
 
-    //zoom game out handling
+    /// <summary>
+    /// This function zooms in the game by one step
+    /// </summary>
     public void GameZoomIn()
     {
         //restrict to 3 possible zoomLevels

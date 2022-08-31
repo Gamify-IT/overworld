@@ -1,31 +1,54 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+/// <summary>
+///     This file stores the game settings.
+/// </summary>
 public static class GameSettings
 {
-    private static int maxWorld = 4;
-    private static int maxMinigames = 12;
-    private static int maxNPCs = 10;
-    private static int maxDungeons = 4;
+    #region Attributes
 
-    public static int getMaxWorlds()
+    private static readonly int maxWorld = 4;
+    private static readonly int maxMinigames = 12;
+    private static readonly int maxNPCs = 10;
+    private static readonly int maxDungeons = 4;
+
+    #endregion
+
+    #region GetterAndSetter
+
+    /// <summary>
+    ///     This function returns the maximum amount of worlds.
+    /// </summary>
+    /// <returns>The maximum amount of worlds</returns>
+    public static int GetMaxWorlds()
     {
         return maxWorld;
     }
 
-    public static int getMaxMinigames()
+    /// <summary>
+    ///     This function returns the maximum amount of minigames in an area.
+    /// </summary>
+    /// <returns>The maximum amount of minigames in an area</returns>
+    public static int GetMaxMinigames()
     {
         return maxMinigames;
     }
 
-    public static int getMaxNPCs()
+    /// <summary>
+    ///     This function returns the maximum amount of NPCs in an area.
+    /// </summary>
+    /// <returns>The maximum amount of NPCs in an area</returns>
+    public static int GetMaxNpCs()
     {
         return maxNPCs;
     }
 
-    public static int getMaxDungeons()
+    /// <summary>
+    ///     This function returns the maximum amount of dungeons in a world.
+    /// </summary>
+    /// <returns>The maximum amount of dungeons in a world</returns>
+    public static int GetMaxDungeons()
     {
         return maxDungeons;
     }
+
+    #endregion
 }

@@ -344,7 +344,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1323897709}
         m_TargetAssemblyTypeName: OfflineMode, Assembly-CSharp
-        m_MethodName: startOfflineMode
+        m_MethodName: StartOfflineMode
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

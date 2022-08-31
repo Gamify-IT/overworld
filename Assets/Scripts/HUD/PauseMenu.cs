@@ -1,22 +1,32 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
+/// <summary>
+/// This script manages the pause menu.
+/// </summary>
 public class PauseMenu : MonoBehaviour
 {
-    public static bool menuOpen = false;
-    public static bool subMenuOpen = false;
+    public static bool menuOpen;
+    public static bool subMenuOpen;
     public static string buttonName;
-    // Update is called once per frame
-    void Update()
+
+    /// <summary>
+    /// The <c>Update</c> function is called once every frame.
+    /// This function checks, if an input occured and if so, adapts the pause menu accordingly.
+    /// </summary>
+    private void Update()
     {
-        //esc handling
-        if (Input.GetKeyDown(KeyCode.Escape) && !Animation.instance.isBusy())
+        if (Input.GetKeyDown(KeyCode.Escape) && !Animation.Instance.IsBusy())
         {
             PauseOrResume();
         }
     }
 
+    /// <summary>
+    /// This function changes the state of the pause menu.
+    /// It opens or closes the menu or closes a submenu, based on the current state.
+    /// </summary>
     public void PauseOrResume()
     {
         //open menu when its not opened
@@ -35,21 +45,31 @@ public class PauseMenu : MonoBehaviour
             CloseSubMenu();
         }
     }
-    //handles everyting when pause menu is closed
+
+    /// <summary>
+    /// This function closes the pause menu.
+    /// </summary>
     public void Resume()
     {
         SceneManager.UnloadScene("Menu");
         menuOpen = false;
         Time.timeScale = 1f;
     }
-    //handles everyting when pause menu is opened
+
+    /// <summary>
+    /// This function opens the pause menu.
+    /// </summary>
     public void Pause()
     {
         menuOpen = true;
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
         Time.timeScale = 0f;
     }
-    //This sets a string to the name of the button clicked. If we name the Menu Buttons consistently, this saves labor for future menu buttons. So if the scene for a submenu is named "Something" the Button has to be named "Something Button"
+
+    /// <summary>
+    /// This function is called by a menu button.
+    /// This function stores which button was pressed.
+    /// </summary>
     public void SubMenuSelection()
     {
         //get the name of the pressed button
@@ -57,7 +77,11 @@ public class PauseMenu : MonoBehaviour
         //remove appendix " Button" = length 7
         buttonName = buttonName.Remove(buttonName.Length - 7);
     }
-    //handles everyting when submenu button is clicked
+
+    /// <summary>
+    /// This function is called by a menu button.
+    /// This function opens the submenu.
+    /// </summary>
     public void OpenSubMenu()
     {
         subMenuOpen = true;
@@ -66,11 +90,14 @@ public class PauseMenu : MonoBehaviour
         //load the scene which was set with SubMenuSelection()
         SceneManager.LoadScene(buttonName, LoadSceneMode.Additive);
     }
+
+    /// <summary>
+    /// This function closes a submenu.
+    /// </summary>
     public void CloseSubMenu()
     {
         menuOpen = true;
         subMenuOpen = false;
-        //unload the scene which was set with SubMenuSelection()
         SceneManager.UnloadScene(buttonName);
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
     }

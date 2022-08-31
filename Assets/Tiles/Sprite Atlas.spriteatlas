@@ -3937,6 +3937,7 @@ SpriteAtlas:
   - {fileID: -241400148, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 879474427, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 1909996708, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
+  - {fileID: -617983270, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: -200749279, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 743545880, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 341546796, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
@@ -4120,6 +4121,7 @@ SpriteAtlas:
   - {fileID: -2054814704, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: -1820344552, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 1555701662, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
+  - {fileID: -428554774, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: -1449777825, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 1293409123, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: -1791446416, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
@@ -4235,6 +4237,7 @@ SpriteAtlas:
   - {fileID: 1634986810, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 1772722357, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 404311883, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
+  - {fileID: -531442513, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 2116816965, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: -1934475259, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 884739397, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
@@ -9212,6 +9215,7 @@ SpriteAtlas:
   - Overworld-Savanna_984
   - Overworld-Savanna_830
   - Overworld-Savanna_826
+  - Overworld-Savanna_house-door
   - Overworld-Savanna_945
   - Overworld-Savanna_921
   - Overworld-Savanna_935
@@ -9395,6 +9399,7 @@ SpriteAtlas:
   - Overworld-Savanna_19
   - Overworld-Savanna_99
   - Overworld-Savanna_641
+  - Overworld-Savanna_tower-door
   - Overworld-Savanna_640
   - Overworld-Savanna_14
   - Overworld-Savanna_658
@@ -9510,6 +9515,7 @@ SpriteAtlas:
   - Overworld-Savanna_242
   - Overworld-Savanna_230
   - Overworld-Savanna_448
+  - Overworld-Savanna_portal-door
   - Overworld-Savanna_255
   - Overworld-Savanna_241
   - Overworld-Savanna_231
