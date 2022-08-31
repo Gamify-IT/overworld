@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class defines all needed data for a <c>Dungeon</c>.
+/// </summary>
 public class DungeonData
 {
     #region Attributes

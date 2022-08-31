@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 
+/// </summary>
 public class CharacterSelection : MonoBehaviour
 {
     private Image characterImage;
@@ -8,6 +11,10 @@ public class CharacterSelection : MonoBehaviour
     private GameObject confirmButton;
     private int counter = 1;
 
+    /// <summary>
+    /// The <c>Start</c> function is called after the object is initialized.
+    /// This function sets up the references of the object.
+    /// </summary>
     void Start()
     {
         //get image component
@@ -16,6 +23,10 @@ public class CharacterSelection : MonoBehaviour
         confirmButton = GameObject.Find("Confirm Button");
     }
 
+    /// <summary>
+    /// The <c>Update</c> function is called once every frame.
+    /// This function sets up the character selection menu.
+    /// </summary>
     void Update()
     {
         character = Resources.Load<Sprite>("characters/character" + counter);
@@ -32,6 +43,10 @@ public class CharacterSelection : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This function is called by the <c>Previous Character Button</c>.
+    /// This function switches to the previous character.
+    /// </summary>
     public void PreviousCharacter()
     {
         counter -= 1;
@@ -41,6 +56,10 @@ public class CharacterSelection : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This function is called by the <c>Next Character Button</c>.
+    /// This function switches to the next character.
+    /// </summary>
     public void NextCharacter()
     {
         counter += 1;
@@ -50,9 +69,13 @@ public class CharacterSelection : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This function is called by the <c>Select Character Button</c>.
+    /// This function switches to selected character.
+    /// </summary>
     public void ConfirmButton()
     {
-        //code that is executed when the Confirm button is pressed
-        //currently empty since there is no character selection functionality
+        //TODO: implement character selection
+        //  -> not part of this project
     }
 }

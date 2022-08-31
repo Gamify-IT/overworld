@@ -3,13 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class sets up the name of the area on the minimap
+/// </summary>
 public class MinimapAreaName : MonoBehaviour
 {
     public string areaName;
 
-    private void OnTriggerEnter2D(Collider2D player)
+    /// <summary>
+    /// This function sets the name of the area on the minimap
+    /// </summary>
+    /// <param name="other">The object entering the trigger</param>
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (player.tag.Equals("Player"))
+        if (other.CompareTag("Player"))
         {
             ZoomScript.areaName = areaName;
         }
