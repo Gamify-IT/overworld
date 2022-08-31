@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+///     This class manages the movement and the animations of the player.
+/// </summary>
 public class Animation : MonoBehaviour
 {
     public float movementSpeed = 3f;
@@ -12,6 +15,10 @@ public class Animation : MonoBehaviour
     private bool canMove;
     private float currentSpeed;
 
+    /// <summary>
+    ///     This method is called before the first frame update.
+    ///     It is used to initialize variables.
+    /// </summary>
     private void Start()
     {
         canMove = true;
@@ -20,6 +27,9 @@ public class Animation : MonoBehaviour
         currentSpeed = movementSpeed;
     }
 
+    /// <summary>
+    ///     If 'canMove' is true, this function allows the player to move.
+    /// </summary>
     private void Update()
     {
         if (canMove)
@@ -108,21 +118,35 @@ public class Animation : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///     This function sets 'canMove' to false, so that the player can't move.
+    /// </summary>
     public void DisableMovement()
     {
         canMove = false;
     }
 
+    /// <summary>
+    ///     This function sets 'canMove' to true, so that the player can move again.
+    /// </summary>
     public void EnableMovement()
     {
         canMove = true;
     }
 
+    /// <summary>
+    ///     This method returns the current value of 'busy'.
+    /// </summary>
+    /// <returns>busy</returns>
     public bool IsBusy()
     {
         return busy;
     }
 
+    /// <summary>
+    ///     This functions sets the busy variable to status of 'busy' parameter.
+    /// </summary>
+    /// <param name="busy">true if busy, else false</param>
     public void SetBusy(bool busy)
     {
         this.busy = busy;
@@ -130,7 +154,7 @@ public class Animation : MonoBehaviour
 
     #region Singleton
 
-    public static Animation instance { get; private set; }
+    public static Animation Instance { get; private set; }
 
     /// <summary>
     ///     The Awake function is called after an object is initialized and before the Start function.
@@ -138,9 +162,9 @@ public class Animation : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
         else
         {

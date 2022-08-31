@@ -441,7 +441,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 274941383}
         m_TargetAssemblyTypeName: MinigameStarting, Assembly-CSharp
-        m_MethodName: startButtonPressed
+        m_MethodName: StartButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1081,7 +1081,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 274941383}
         m_TargetAssemblyTypeName: MinigameStarting, Assembly-CSharp
-        m_MethodName: quitButtonPressed
+        m_MethodName: QuitButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

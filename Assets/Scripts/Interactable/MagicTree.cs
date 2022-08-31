@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class manages the MagicTrees used in World 3.
+/// </summary>
 [RequireComponent(typeof(SpriteRenderer))]
 public class MagicTree : MonoBehaviour
 {
@@ -9,21 +11,27 @@ public class MagicTree : MonoBehaviour
 
     public List<Sprite> sprites;
 
-    private float animationFrame = 0;
-
-    private float targetAnimationFrame = 0;
-
-    private SpriteRenderer spriteRenderer;
+    private float animationFrame;
 
     private Transform player;
 
+    private SpriteRenderer spriteRenderer;
+
+    private float targetAnimationFrame;
+
+    /// <summary>
+    ///     This function initializes the component.
+    /// </summary>
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         player = FindObjectOfType<Animation>().transform;
     }
 
-    void FixedUpdate()
+    /// <summary>
+    ///     This function manages the popup of the magic trees if a player is nearby.
+    /// </summary>
+    private void FixedUpdate()
     {
         if (Vector3.Distance(player.position, transform.position) < 6)
         {
@@ -55,5 +63,4 @@ public class MagicTree : MonoBehaviour
 
         spriteRenderer.sprite = sprites[currentAnimationFrame];
     }
-
 }

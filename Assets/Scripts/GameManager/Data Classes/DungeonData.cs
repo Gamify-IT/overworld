@@ -1,21 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class DungeonData
 {
     #region Attributes
+
     private string id;
     private int index;
     private string staticName;
     private string topicName;
-    private bool active;
-    private MinigameData[] minigames;
-    private NPCData[] npcs;
+    private readonly bool active;
+    private readonly MinigameData[] minigames;
+    private readonly NPCData[] npcs;
+
     #endregion
 
     #region Constructors
-    public DungeonData(string id, int index, string staticName, string topicName, bool active, MinigameData[] minigames, NPCData[] npcs)
+
+    public DungeonData(string id, int index, string staticName, string topicName, bool active, MinigameData[] minigames,
+        NPCData[] npcs)
     {
         this.id = id;
         this.index = index;
@@ -33,22 +33,25 @@ public class DungeonData
         staticName = "";
         topicName = "";
         active = false;
-        minigames = new MinigameData[GameSettings.getMaxMinigames()+1];
+        minigames = new MinigameData[GameSettings.getMaxMinigames() + 1];
         for (int minigameIndex = 1; minigameIndex < minigames.Length; minigameIndex++)
         {
             minigames[minigameIndex] = new MinigameData();
         }
-        npcs = new NPCData[GameSettings.getMaxNPCs()+1];
+
+        npcs = new NPCData[GameSettings.getMaxNPCs() + 1];
         for (int npcIndex = 1; npcIndex < npcs.Length; npcIndex++)
         {
             npcs[npcIndex] = new NPCData();
         }
     }
+
     #endregion
 
     #region GetterAndSetter
+
     /// <summary>
-    /// This function sets the status of a minigame in the dungeon.
+    ///     This function sets the status of a minigame in the dungeon.
     /// </summary>
     /// <param name="index">The index of the minigame in its area</param>
     /// <param name="status">The status to be set</param>
@@ -56,12 +59,12 @@ public class DungeonData
     {
         if (index < minigames.Length)
         {
-            minigames[index].setStatus(status);
+            minigames[index].SetStatus(status);
         }
     }
 
     /// <summary>
-    /// This function sets the highscore of a minigame in the dungeon.
+    ///     This function sets the highscore of a minigame in the dungeon.
     /// </summary>
     /// <param name="index">The index of the minigame in its area</param>
     /// <param name="highscore">The highscore to be set</param>
@@ -69,12 +72,12 @@ public class DungeonData
     {
         if (index < minigames.Length)
         {
-            minigames[index].setHighscore(highscore);
+            minigames[index].SetHighscore(highscore);
         }
     }
 
     /// <summary>
-    /// This function sets the status of a NPC in the dungeon.
+    ///     This function sets the status of a NPC in the dungeon.
     /// </summary>
     /// <param name="index">The index of the NPC in its area</param>
     /// <param name="completed">The status to be set</param>
@@ -87,7 +90,7 @@ public class DungeonData
     }
 
     /// <summary>
-    /// This function returns the status of a minigame in the dungeon.
+    ///     This function returns the status of a minigame in the dungeon.
     /// </summary>
     /// <param name="index">This index of the minigame</param>
     /// <returns>The status of the minigame, <c>notConfigurated</c> if invalid index</returns>
@@ -95,13 +98,14 @@ public class DungeonData
     {
         if (index < minigames.Length)
         {
-            return minigames[index].getStatus();
+            return minigames[index].GetStatus();
         }
+
         return MinigameStatus.notConfigurated;
     }
 
     /// <summary>
-    /// This function returns the data of a minigame in the dungeon.
+    ///     This function returns the data of a minigame in the dungeon.
     /// </summary>
     /// <param name="index">This index of the minigame</param>
     /// <returns>The data of the minigame, <c>null</c> if invalid index</returns>
@@ -111,14 +115,12 @@ public class DungeonData
         {
             return minigames[index];
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
     /// <summary>
-    /// This function returns the data of a NPC in the world.
+    ///     This function returns the data of a NPC in the world.
     /// </summary>
     /// <param name="index">This index of the NPC</param>
     /// <returns>The data of the NPC, <c>null</c> if invalid index</returns>
@@ -128,14 +130,12 @@ public class DungeonData
         {
             return npcs[index];
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
     /// <summary>
-    /// This function returns whether the dungeon is set as active or not.
+    ///     This function returns whether the dungeon is set as active or not.
     /// </summary>
     /// <returns>The active status of the dungeon</returns>
     public bool isActive()
@@ -144,7 +144,7 @@ public class DungeonData
     }
 
     /// <summary>
-    /// This function sets a NPC of the dungeon as completed.
+    ///     This function sets a NPC of the dungeon as completed.
     /// </summary>
     /// <param name="number">The index of NPC</param>
     public void npcCompleted(int number)
@@ -154,5 +154,6 @@ public class DungeonData
             npcs[number].setHasBeenTalkedTo(true);
         }
     }
+
     #endregion
 }

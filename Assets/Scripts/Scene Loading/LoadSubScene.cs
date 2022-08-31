@@ -23,7 +23,7 @@ public class LoadSubScene : MonoBehaviour
     /// <param name="playerCollision">2D Collider of current player</param>
     private void OnTriggerEnter2D(Collider2D playerCollision)
     {
-        if (playerCollision.tag == "Player")
+        if (playerCollision.CompareTag("Player"))
         {
             StartCoroutine(FadeCoroutine());
         }

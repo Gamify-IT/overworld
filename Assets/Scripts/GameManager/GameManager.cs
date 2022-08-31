@@ -398,7 +398,7 @@ public class GameManager : MonoBehaviour
                 string status = "";
                 if (minigameObjects[worldIndex, minigameIndex] != null)
                 {
-                    status = minigameObjects[worldIndex, minigameIndex].GetComponent<Minigame>().getInfo();
+                    status = minigameObjects[worldIndex, minigameIndex].GetComponent<Minigame>().GetInfo();
                 }
                 else
                 {
@@ -896,7 +896,7 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            minigame.setup(minigameData);
+            minigame.Setup(minigameData);
         }
 
         for (int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
@@ -1029,7 +1029,7 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            minigame.setup(minigameData);
+            minigame.Setup(minigameData);
         }
 
         for (int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)

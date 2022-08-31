@@ -13,7 +13,7 @@ public class PauseMenu : MonoBehaviour
     private void Update()
     {
         //esc handling
-        if (Input.GetKeyDown(KeyCode.Escape) && !Animation.instance.IsBusy())
+        if (Input.GetKeyDown(KeyCode.Escape) && !Animation.Instance.IsBusy())
         {
             PauseOrResume();
         }
