@@ -2,47 +2,25 @@ using UnityEngine;
 
 public class Animation : MonoBehaviour
 {
-    #region Singleton
-
-    public static Animation instance { get; private set; }
-
-    /*
-     * The Awake function is called after an object is initialized and before the Start function.
-     * It sets up the Singleton. 
-     */
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    #endregion
-
     public float movementSpeed = 3f;
     public float sprintingSpeed = 6f;
     public float superSpeed = 20f;
-    private float currentSpeed;
     public Vector2 movement;
     public Rigidbody2D playerRigidBody;
-    private bool canMove;
-    private bool busy;
     public Animator playerAnimator;
+    private bool busy;
+    private bool canMove;
+    private float currentSpeed;
 
-    void Start()
+    private void Start()
     {
         canMove = true;
         busy = false;
-        playerRigidBody = this.GetComponent<Rigidbody2D>();
+        playerRigidBody = GetComponent<Rigidbody2D>();
         currentSpeed = movementSpeed;
     }
 
-    void Update()
+    private void Update()
     {
         if (canMove)
         {
@@ -56,7 +34,7 @@ public class Animation : MonoBehaviour
                 playerAnimator.speed = 2;
             }
 
-            if (Input.GetKeyUp(KeyCode.LeftShift) && currentSpeed == (movementSpeed + sprintingSpeed))
+            if (Input.GetKeyUp(KeyCode.LeftShift) && currentSpeed == movementSpeed + sprintingSpeed)
             {
                 currentSpeed = currentSpeed - sprintingSpeed;
                 playerAnimator.speed = 1;
@@ -68,7 +46,7 @@ public class Animation : MonoBehaviour
                 playerAnimator.speed = 20;
             }
 
-            if (Input.GetKeyUp("l") && currentSpeed == (movementSpeed + superSpeed))
+            if (Input.GetKeyUp("l") && currentSpeed == movementSpeed + superSpeed)
             {
                 currentSpeed = currentSpeed - superSpeed;
                 playerAnimator.speed = 1;
@@ -82,10 +60,12 @@ public class Animation : MonoBehaviour
         }
     }
 
-    //depending on horizontalAnimationFloat and verticalAnimationFloat it is defined whether a vertical or horizontal movement takes place
-    //then depending on movement.x and movement.y are looked to decide if movement is up/down or left/right and depending on this the correct 
-    //animation is executed
-    void FixedUpdate()
+    /// <summary>
+    ///     depending on horizontalAnimationFloat and verticalAnimationFloat it is defined whether a vertical or horizontal
+    ///     movement takes place then depending on movement.x and movement.y are looked to decide if movement is up/down or
+    ///     left/right and depending on this the correct animation is executed
+    /// </summary>
+    private void FixedUpdate()
     {
         if (canMove)
         {
@@ -93,7 +73,7 @@ public class Animation : MonoBehaviour
             float verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
 
             playerRigidBody.MovePosition(playerRigidBody.position + movement * currentSpeed * Time.fixedDeltaTime);
-            
+
             // the following 4 if statements set the looking direction of the player, which we need for the animation
             if (movement.y > 0.01f)
             {
@@ -128,23 +108,45 @@ public class Animation : MonoBehaviour
         }
     }
 
-    public void disableMovement()
+    public void DisableMovement()
     {
         canMove = false;
     }
 
-    public void enableMovement()
+    public void EnableMovement()
     {
         canMove = true;
     }
 
-    public bool isBusy()
+    public bool IsBusy()
     {
         return busy;
     }
 
-    public void setBusy(bool busy)
+    public void SetBusy(bool busy)
     {
         this.busy = busy;
     }
+
+    #region Singleton
+
+    public static Animation instance { get; private set; }
+
+    /// <summary>
+    ///     The Awake function is called after an object is initialized and before the Start function.
+    ///     It sets up the Singleton.
+    /// </summary>
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    #endregion
 }

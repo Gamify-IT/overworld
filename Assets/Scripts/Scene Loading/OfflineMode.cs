@@ -1,13 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+///     This class provides the 'startOfflineMode()' function which loads the offline mode screen.
+/// </summary>
 public class OfflineMode : MonoBehaviour
 {
-    public void startOfflineMode()
+    /// <summary>
+    ///     This function loads the offline mode screen.
+    /// </summary>
+    public void StartOfflineMode()
     {
-        LoadingManager.instance.loadScene();
+        LoadingManager.Instance.LoadScene();
         SceneManager.UnloadSceneAsync("OfflineMode");
     }
 }

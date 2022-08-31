@@ -1,17 +1,19 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    public static bool menuOpen = false;
-    public static bool subMenuOpen = false;
+    public static bool menuOpen;
+    public static bool subMenuOpen;
+
     public static string buttonName;
+
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         //esc handling
-        if (Input.GetKeyDown(KeyCode.Escape) && !Animation.instance.isBusy())
+        if (Input.GetKeyDown(KeyCode.Escape) && !Animation.instance.IsBusy())
         {
             PauseOrResume();
         }
@@ -35,6 +37,7 @@ public class PauseMenu : MonoBehaviour
             CloseSubMenu();
         }
     }
+
     //handles everyting when pause menu is closed
     public void Resume()
     {
@@ -42,6 +45,7 @@ public class PauseMenu : MonoBehaviour
         menuOpen = false;
         Time.timeScale = 1f;
     }
+
     //handles everyting when pause menu is opened
     public void Pause()
     {
@@ -49,6 +53,7 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
         Time.timeScale = 0f;
     }
+
     //This sets a string to the name of the button clicked. If we name the Menu Buttons consistently, this saves labor for future menu buttons. So if the scene for a submenu is named "Something" the Button has to be named "Something Button"
     public void SubMenuSelection()
     {
@@ -57,6 +62,7 @@ public class PauseMenu : MonoBehaviour
         //remove appendix " Button" = length 7
         buttonName = buttonName.Remove(buttonName.Length - 7);
     }
+
     //handles everyting when submenu button is clicked
     public void OpenSubMenu()
     {
@@ -66,6 +72,7 @@ public class PauseMenu : MonoBehaviour
         //load the scene which was set with SubMenuSelection()
         SceneManager.LoadScene(buttonName, LoadSceneMode.Additive);
     }
+
     public void CloseSubMenu()
     {
         menuOpen = true;

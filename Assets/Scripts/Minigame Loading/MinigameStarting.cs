@@ -1,40 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
+using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
-using System.Runtime.InteropServices;
 using UnityEngine.SceneManagement;
-
 
 public class MinigameStarting : MonoBehaviour
 {
-    [DllImport("__Internal")]
-    private static extern string LoadMinigameInIframe(string minigameName, string minigameConfiguration);
-
-    #region Singleton
-    public static MinigameStarting instance { get; private set; }
-
-    /*
-     * The Awake function is called after an object is initialized and before the Start function.
-     * It sets up the Singleton. 
-     */
-    private void Awake()
+    //reset
+    private void Reset()
     {
-        instance = this;
+        gameText.text = "";
+        highscoreText.text = "";
     }
-    #endregion
-
-    #region Attributes
-    [SerializeField] private TextMeshProUGUI gameText;
-    [SerializeField] private TextMeshProUGUI highscoreText;
-    private string game;
-    private string configurationId;
-    private int highscore;
-    #endregion
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         //esc handling
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -43,11 +22,14 @@ public class MinigameStarting : MonoBehaviour
         }
     }
 
+    [DllImport("__Internal")]
+    private static extern string LoadMinigameInIframe(string minigameName, string minigameConfiguration);
+
     //called by minigame to load canvas
     public void setupMinigame(string game, string configurationId, int highscore)
     {
-        Animation.instance.setBusy(true);
-        Animation.instance.disableMovement();
+        Animation.instance.SetBusy(true);
+        Animation.instance.DisableMovement();
 
         this.game = game;
         this.configurationId = configurationId;
@@ -79,16 +61,33 @@ public class MinigameStarting : MonoBehaviour
     private void quitMinigame()
     {
         Reset();
-        Animation.instance.setBusy(false);
-        Animation.instance.enableMovement();
+        Animation.instance.SetBusy(false);
+        Animation.instance.EnableMovement();
         SceneManager.UnloadSceneAsync("MinigameStarting Overlay");
     }
 
-    //reset
-    private void Reset()
+    #region Singleton
+
+    public static MinigameStarting instance { get; private set; }
+
+    /*
+     * The Awake function is called after an object is initialized and before the Start function.
+     * It sets up the Singleton. 
+     */
+    private void Awake()
     {
-        gameText.text = "";
-        highscoreText.text = "";
+        instance = this;
     }
 
+    #endregion
+
+    #region Attributes
+
+    [SerializeField] private TextMeshProUGUI gameText;
+    [SerializeField] private TextMeshProUGUI highscoreText;
+    private string game;
+    private string configurationId;
+    private int highscore;
+
+    #endregion
 }

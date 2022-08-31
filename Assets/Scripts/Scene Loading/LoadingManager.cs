@@ -1,24 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LoadingManager : MonoBehaviour
 {
     #region Singleton
-    public static LoadingManager instance { get; private set; }
+
+    public static LoadingManager Instance { get; private set; }
 
     /// <summary>
-    /// This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or deletes the object otherwise
+    ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
+    ///     deletes the object otherwise
     /// </summary>
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
         else
         {
@@ -26,27 +26,41 @@ public class LoadingManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///     This function deletes the singleton instance, so it can be reinitialized.
+    /// </summary>
     private void OnDestroy()
     {
-        instance = null;
+        Instance = null;
     }
 
     #endregion
 
     #region Attributes
+
     public GameObject loadingScreen;
     public Slider slider;
     public TextMeshProUGUI progressText;
     public TextMeshProUGUI loadingText;
 
-    string sceneToLoad;
-    int worldIndex;
-    int dungeonIndex;
-    Vector2 playerPosition;
+    private string sceneToLoad;
+    private int worldIndex;
+    private int dungeonIndex;
+    private Vector2 playerPosition;
+
     #endregion
 
     #region Functionality
-    public async UniTask loadData(string sceneToLoad, int worldIndex, int dungeonIndex, Vector2 playerPosition)
+
+    /// <summary>
+    ///     This function triggers the loading of data from the backend and the loading of the scene.
+    ///     If a loading error occurs, the offline mode site is displayed.
+    /// </summary>
+    /// <param name="sceneToLoad">name of the scene to load</param>
+    /// <param name="worldIndex">index of the current world</param>
+    /// <param name="dungeonIndex">index of the current dungeon - null if the area is a world</param>
+    /// <param name="playerPosition">position where the player should start</param>
+    public async UniTask LoadData(string sceneToLoad, int worldIndex, int dungeonIndex, Vector2 playerPosition)
     {
         this.sceneToLoad = sceneToLoad;
         this.worldIndex = worldIndex;
@@ -57,7 +71,7 @@ public class LoadingManager : MonoBehaviour
         progressText.text = "0%";
         loadingText.text = "LOADING DATA...";
 
-        if(GameManager.instance == null)
+        if (GameManager.instance == null)
         {
             Debug.Log("Game Manager not online yet.");
             return;
@@ -70,17 +84,20 @@ public class LoadingManager : MonoBehaviour
         Debug.Log("Finish fetching data");
 
         Debug.Log("Validate data");
-        if(GameManager.instance.loadingError)
+        if (GameManager.instance.loadingError)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
         }
         else
         {
-            await loadScene();
+            await LoadScene();
         }
     }
 
-    public async UniTask loadScene()
+    /// <summary>
+    ///     This function loads the scene and unloads unneeded scenes.
+    /// </summary>
+    public async UniTask LoadScene()
     {
         slider.value = 0.5f;
         progressText.text = "50%";
@@ -109,7 +126,9 @@ public class LoadingManager : MonoBehaviour
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
             string tempSceneName = SceneManager.GetSceneAt(sceneIndex).name;
-            if (!tempSceneName.Equals("Player") && !tempSceneName.Equals("Player HUD") && !tempSceneName.Equals(sceneToLoad) && !tempSceneName.Equals("LoadingScreen") && !tempSceneName.Equals("OfflineMode"))
+            if (!tempSceneName.Equals("Player") && !tempSceneName.Equals("Player HUD") &&
+                !tempSceneName.Equals(sceneToLoad) && !tempSceneName.Equals("LoadingScreen") &&
+                !tempSceneName.Equals("OfflineMode"))
             {
                 await SceneManager.UnloadSceneAsync(tempSceneName);
             }
@@ -138,7 +157,13 @@ public class LoadingManager : MonoBehaviour
         Debug.Log("Finish unloading loading Manager");
     }
 
-    public async UniTask reloadData(int worldIndex, int dungeonIndex, Vector2 playerPosition)
+    /// <summary>
+    ///     This function sets all data but without reloading the scene.
+    /// </summary>
+    /// <param name="worldIndex">index of the current world</param>
+    /// <param name="dungeonIndex">index of the current dungeon - null if the area is a world</param>
+    /// <param name="playerPosition">position where the player should start</param>
+    public async UniTask ReloadData(int worldIndex, int dungeonIndex, Vector2 playerPosition)
     {
         this.worldIndex = worldIndex;
         this.dungeonIndex = dungeonIndex;
@@ -186,9 +211,9 @@ public class LoadingManager : MonoBehaviour
         loadingText.text = "DONE...";
 
         AreaLocationDTO[] unlockedAreasNew = GameManager.instance.getUnlockedAreas();
-        string infoText = checkForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
+        string infoText = CheckForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
 
-        if(infoText != "")
+        if (infoText != "")
         {
             await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
             InfoManager.instance.displayInfo(infoText);
@@ -198,18 +223,18 @@ public class LoadingManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function checks, if a new area has been unlocked since the last reload
+    ///     This function checks, if a new area has been unlocked since the last reload
     /// </summary>
     /// <param name="unlockedAreasOld">Set of unlocked areas before the reload</param>
     /// <param name="unlockedAreasNew">Set of unlocked areas after the reload</param>
     /// <returns>A info text to display, if a newly unlocked area was found, "" otherwise</returns>
-    public string checkForNewUnlockedArea(AreaLocationDTO[] unlockedAreasOld, AreaLocationDTO[] unlockedAreasNew)
+    public string CheckForNewUnlockedArea(AreaLocationDTO[] unlockedAreasOld, AreaLocationDTO[] unlockedAreasNew)
     {
         string infoText = "";
         foreach (AreaLocationDTO newLocation in unlockedAreasNew)
         {
             bool newArea = true;
-            for(int index = 0; index < unlockedAreasOld.Length; index++)
+            for (int index = 0; index < unlockedAreasOld.Length; index++)
             {
                 AreaLocationDTO oldLocation = unlockedAreasOld[index];
                 if (newLocation.worldIndex == oldLocation.worldIndex &&
@@ -219,9 +244,10 @@ public class LoadingManager : MonoBehaviour
                     break;
                 }
             }
-            if(newArea)
+
+            if (newArea)
             {
-                if(newLocation.dungeonIndex != 0)
+                if (newLocation.dungeonIndex != 0)
                 {
                     infoText = "New Area unlocked: Dungeon " + newLocation.worldIndex + "-" + newLocation.dungeonIndex;
                 }
@@ -229,11 +255,13 @@ public class LoadingManager : MonoBehaviour
                 {
                     infoText = "New Area unlocked: World " + newLocation.worldIndex;
                 }
-                
+
                 return infoText;
             }
         }
+
         return infoText;
     }
+
     #endregion
 }
