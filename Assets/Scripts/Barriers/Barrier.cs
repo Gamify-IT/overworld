@@ -43,7 +43,7 @@ public class Barrier : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove " + type + ": " + originWorldIndex + "->" + destinationAreaIndex);
-        GameManagerV2.instance.removeBarrier(type, originWorldIndex, destinationAreaIndex);
+        GameManager.instance.removeBarrier(type, originWorldIndex, destinationAreaIndex);
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ public class Barrier : MonoBehaviour
     private void registerToGameManager()
     {
         Debug.Log("register " + type + ": " + originWorldIndex + "->" + destinationAreaIndex);
-        GameManagerV2.instance.addBarrier(this.gameObject, type, originWorldIndex, destinationAreaIndex);
+        GameManager.instance.addBarrier(this.gameObject, type, originWorldIndex, destinationAreaIndex);
     }
     #endregion
 
@@ -112,7 +112,7 @@ public class Barrier : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            string infoText = GameManagerV2.instance.getBarrierInfoText(type, originWorldIndex, destinationAreaIndex);
+            string infoText = GameManager.instance.getBarrierInfoText(type, originWorldIndex, destinationAreaIndex);
             openInfoPanel(infoText);
         }
     }

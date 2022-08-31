@@ -35,7 +35,7 @@ public class NPC : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
-        GameManagerV2.instance.removeNPC(world, dungeon, number);
+        GameManager.instance.removeNPC(world, dungeon, number);
     }
 
     /// <summary>
@@ -79,14 +79,14 @@ public class NPC : MonoBehaviour
     {
         hasBeenTalkedTo = true;
         speechIndicator.SetActive(false);
-        GameManagerV2.instance.markNPCasRead(world, dungeon, number, uuid);
+        GameManager.instance.markNPCasRead(world, dungeon, number, uuid);
     }
 
     // register to game manager
     private void registerToGameManager()
     {
         Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
-        GameManagerV2.instance.addNPC(this.gameObject, world, dungeon, number);
+        GameManager.instance.addNPC(this.gameObject, world, dungeon, number);
     }
 
     //setup called by game manager
