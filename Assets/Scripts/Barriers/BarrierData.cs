@@ -1,7 +1,5 @@
 /// <summary>
-///     This class defines all needed data for a
-///     <c>
-///         <Barrier/ c>.
+///     This class defines all needed data for a <c>Barrier</c>.
 /// </summary>
 public class BarrierData
 {
