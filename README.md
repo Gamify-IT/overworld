@@ -1,5 +1,10 @@
 # overworld
 
+## Disclaimer
+
+This project is developed as part of a student project at Universität Stuttgart.
+It may contain bugs, and is not licensed for external use.
+
 ## Getting started
 
 ### Run with Docker-compose
