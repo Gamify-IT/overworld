@@ -29,7 +29,7 @@ public class loadmaps : MonoBehaviour
             return;
         }
         await loadWorld();
-        GameManagerV2.instance.setData(sceneDestinationIndex, 0);
+        GameManager.instance.setData(sceneDestinationIndex, 0);
     }
 
     //load needed world and unload not needed worlds, if present

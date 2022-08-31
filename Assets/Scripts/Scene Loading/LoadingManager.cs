@@ -57,7 +57,7 @@ public class LoadingManager : MonoBehaviour
         progressText.text = "0%";
         loadingText.text = "LOADING DATA...";
 
-        if(GameManagerV2.instance == null)
+        if(GameManager.instance == null)
         {
             Debug.Log("Game Manager not online yet.");
             return;
@@ -65,12 +65,12 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("Start fetching data");
 
-        await GameManagerV2.instance.fetchData();
+        await GameManager.instance.fetchData();
 
         Debug.Log("Finish fetching data");
 
         Debug.Log("Validate data");
-        if(GameManagerV2.instance.loadingError)
+        if(GameManager.instance.loadingError)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
         }
@@ -98,7 +98,7 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("Setting data");
 
-        GameManagerV2.instance.setData(worldIndex, dungeonIndex);
+        GameManager.instance.setData(worldIndex, dungeonIndex);
 
         slider.value = 0.85f;
         progressText.text = "85%";
@@ -148,22 +148,22 @@ public class LoadingManager : MonoBehaviour
         progressText.text = "0%";
         loadingText.text = "LOADING DATA...";
 
-        if (GameManagerV2.instance == null)
+        if (GameManager.instance == null)
         {
             Debug.Log("Game Manager not online yet.");
             return;
         }
 
-        AreaLocationDTO[] unlockedAreasOld = GameManagerV2.instance.getUnlockedAreas();
+        AreaLocationDTO[] unlockedAreasOld = GameManager.instance.getUnlockedAreas();
 
         Debug.Log("Start fetching data");
 
-        await GameManagerV2.instance.fetchData();
+        await GameManager.instance.fetchData();
 
         Debug.Log("Finish fetching data");
 
         Debug.Log("Validate data");
-        if (GameManagerV2.instance.loadingError)
+        if (GameManager.instance.loadingError)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
             return;
@@ -173,7 +173,7 @@ public class LoadingManager : MonoBehaviour
         progressText.text = "50%";
         loadingText.text = "PROCESSING DATA...";
 
-        GameManagerV2.instance.setData(worldIndex, dungeonIndex);
+        GameManager.instance.setData(worldIndex, dungeonIndex);
 
         slider.value = 0.85f;
         progressText.text = "85%";
@@ -185,7 +185,7 @@ public class LoadingManager : MonoBehaviour
         progressText.text = "100%";
         loadingText.text = "DONE...";
 
-        AreaLocationDTO[] unlockedAreasNew = GameManagerV2.instance.getUnlockedAreas();
+        AreaLocationDTO[] unlockedAreasNew = GameManager.instance.getUnlockedAreas();
         string infoText = checkForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
 
         if(infoText != "")
