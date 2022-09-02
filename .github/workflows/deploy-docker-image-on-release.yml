@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - "main"
-      - "fix/url-opener"
+      - "maintenance/review-suggestions"
     tags:
       - "v*"
   pull_request:
