@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 154831680}
   - component: {fileID: 154831679}
   m_Layer: 5
-  m_Name: LogOut Text
+  m_Name: BackToCourseSelection Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Log Out
+  m_text: Back To Course Selection
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0ad93bae8466be34a9bdef4732fe6a58, type: 2}
   m_sharedMaterial: {fileID: -8391701417571377768, guid: 0ad93bae8466be34a9bdef4732fe6a58, type: 2}
@@ -748,7 +748,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa193ff78967f134c97bb61c8fce01a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Path: third-party-license-notice
+  path: third-party-license-notice
 --- !u!1 &656127963
 GameObject:
   m_ObjectHideFlags: 0
@@ -1904,8 +1904,9 @@ GameObject:
   - component: {fileID: 1712877349}
   - component: {fileID: 1712877348}
   - component: {fileID: 1712877347}
+  - component: {fileID: 1712877350}
   m_Layer: 5
-  m_Name: LogOut Button
+  m_Name: BackToCourseSelection Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1975,7 +1976,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1712877348}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1712877350}
+        m_TargetAssemblyTypeName: URLOpenerInCurrentTab, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1712877348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2014,6 +2027,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1712877345}
   m_CullTransparentMesh: 1
+--- !u!114 &1712877350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1712877345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bb5be228dc04ec1b7965aa5e240b58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: start
 --- !u!1 &1888040105
 GameObject:
   m_ObjectHideFlags: 0
