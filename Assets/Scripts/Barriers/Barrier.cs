@@ -139,22 +139,32 @@ public class Barrier : MonoBehaviour
     /// </summary>
     /// <param name="infoText">The text to display</param>
     /// <returns></returns>
-    private static async UniTask OpenInfoPanel(string infoText)
+    private async UniTask OpenInfoPanel(string infoText)
     {
         await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
         if (InfoManager.Instance == null)
         {
             return;
         }
+        string headerText = "";
+        switch(type)
+        {
+            case BarrierType.worldBarrier:
+                headerText = "World " + destinationAreaIndex;
+                break;
 
-        InfoManager.Instance.DisplayInfo(infoText);
+            case BarrierType.dungeonBarrier:
+                headerText = "Dungeon " + originWorldIndex + "-" + destinationAreaIndex;
+                break;
+        }
+        InfoManager.Instance.DisplayInfo(headerText, infoText);
     }
 
     /// <summary>
     ///     This function closes the info screen.
     /// </summary>
     /// <returns></returns>
-    private async UniTask CloseInfoPanel()
+    private void CloseInfoPanel()
     {
         if (InfoManager.Instance != null)
         {

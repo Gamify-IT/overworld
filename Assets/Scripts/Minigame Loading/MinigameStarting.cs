@@ -57,7 +57,7 @@ public class MinigameStarting : MonoBehaviour
     private void SetupPanel()
     {
         gameText.text = game;
-        highscoreText.text = highscore.ToString();
+        highscoreText.text = highscore.ToString() + " %";
     }
 
     /// <summary>
