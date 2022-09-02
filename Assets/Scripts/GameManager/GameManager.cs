@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
 
         playerId = "1";
-        courseId = Application.absoluteURL.Split("#")[^1];
+        GetCourseId();
 
         maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
@@ -100,6 +100,45 @@ public class GameManager : MonoBehaviour
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
         {
             worldData[worldIndex] = new WorldData();
+        }
+    }
+
+    /// <summary>
+    /// This function checks whether or not a valid courseId was passed or not.
+    /// If a valid id was passed, it gets stored.
+    /// Otherwise, the user is redirected to course selection page.
+    /// </summary>
+    private async void GetCourseId()
+    {
+        courseId = Application.absoluteURL.Split("#")[^1];
+        string uri = "/overworld/api/v1/courses/";
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + courseId))
+        {
+            Debug.Log("Checking courseId: " + courseId);
+            Debug.Log("Path: " + uri + courseId);
+
+            // Request and wait for the desired page.
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + courseId + ": Error: " + webRequest.error);
+                    Debug.Log("CourseId " + courseId + " is invalid.");
+                    Application.ExternalEval("window.open('/start','_self')");
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + courseId + ":\nReceived: " + webRequest.downloadHandler.text);
+                    Debug.Log("CourseId " + courseId + " is valid.");
+                    break;
+            }
         }
     }
 
