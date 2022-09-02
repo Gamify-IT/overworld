@@ -77,6 +77,8 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
 
+        loadingError = false;
+
         playerId = "1";
         GetCourseId();
 
@@ -132,7 +134,7 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError(uri + courseId + ": Error: " + webRequest.error);
                     Debug.Log("CourseId " + courseId + " is invalid.");
-                    Application.ExternalEval("window.open('/start','_self')");
+                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + courseId + ":\nReceived: " + webRequest.downloadHandler.text);
