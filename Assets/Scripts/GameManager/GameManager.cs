@@ -134,6 +134,7 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError(uri + courseId + ": Error: " + webRequest.error);
                     Debug.Log("CourseId " + courseId + " is invalid.");
+                    courseId = "";
                     loadingError = true;
                     break;
                 case UnityWebRequest.Result.Success:

@@ -73,7 +73,7 @@ public class LoadingManager : MonoBehaviour
 
         if (GameManager.Instance == null)
         {
-            Debug.Log("Game Manager not online yet.");
+            Debug.Log("Game Manager not online.");
             return;
         }
 
