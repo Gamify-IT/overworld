@@ -216,7 +216,8 @@ public class LoadingManager : MonoBehaviour
         if (infoText != "")
         {
             await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
-            InfoManager.Instance.DisplayInfo(infoText);
+            string headerText = "";
+            InfoManager.Instance.DisplayInfo(headerText, infoText);
         }
 
         await SceneManager.UnloadSceneAsync("LoadingScreen");

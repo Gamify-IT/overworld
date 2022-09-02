@@ -11,6 +11,7 @@ public class InfoManager : MonoBehaviour
     #region Attributes
 
     public TextMeshProUGUI infoText;
+    public TextMeshProUGUI headerText;
 
     #endregion
 
@@ -29,6 +30,7 @@ public class InfoManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            Instance.headerText.text = "";
             Instance.infoText.text = "";
         }
         else
@@ -54,8 +56,9 @@ public class InfoManager : MonoBehaviour
     ///     This function displays the given text on the panel.
     /// </summary>
     /// <param name="info">The text to display</param>
-    public void DisplayInfo(string info)
+    public void DisplayInfo(string header, string info)
     {
+        headerText.text = header;
         infoText.text = info;
     }
 
