@@ -4,12 +4,16 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using System.Runtime.InteropServices;
 
 /// <summary>
 ///     The <c>GameManager</c> retrievs all needed data from the backend and sets up the objects depending on those data.
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    [DllImport("__Internal")]
+    private static extern string GetToken(string tokenName);
+
     #region Singleton
 
     public static GameManager Instance { get; private set; }
@@ -79,8 +83,9 @@ public class GameManager : MonoBehaviour
 
         loadingError = false;
 
-        playerId = "1";
         GetCourseId();
+        playerId = GetPlayerId();
+        CheckPlayerId();
 
         maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
@@ -140,6 +145,54 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + courseId + ":\nReceived: " + webRequest.downloadHandler.text);
                     Debug.Log("CourseId " + courseId + " is valid.");
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// This function reads the playerId from where it is stored and returns it.
+    /// </summary>
+    /// <returns>The playerId</returns>
+    private string GetPlayerId()
+    {
+        string id = GetToken("username");
+        Debug.Log("PlayerId from token: " + id);
+        //if empty than bad luck
+        return id;
+    }
+
+    /// <summary>
+    /// This function checks, if a user with the found id exists, and if not creates one.
+    /// </summary>
+    private async void CheckPlayerId()
+    {
+        string uri = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/";
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + playerId))
+        {
+            Debug.Log("Checking playerId: " + playerId);
+            Debug.Log("Path: " + uri + playerId);
+
+            // Request and wait for the desired page.
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + playerId + ": Error: " + webRequest.error);
+                    Debug.Log("PlayerId " + playerId + " does not exist yet.");
+                    await PostUser(uri, playerId);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + courseId + ":\nReceived: " + webRequest.downloadHandler.text);
+                    Debug.Log("PlayerId " + playerId + " is valid.");
                     break;
             }
         }
@@ -665,6 +718,49 @@ public class GameManager : MonoBehaviour
             else
             {
                 Debug.Log("NPC mit uuid " + uuid + " has been talked to.");
+                Debug.Log("Post request response code: " + webRequest.responseCode);
+                Debug.Log("Post request response text: " + webRequest.downloadHandler.text);
+            }
+        }
+    }
+
+    /// <summary>
+    /// This function creates a user with given id
+    /// </summary>
+    /// <param name="uri">The path to send the POST request to</param>
+    /// <param name="id">The playerId</param>
+    /// <returns></returns>
+    private async UniTask PostUser(string uri, string id)
+    {
+        UserData userData = new UserData(id);
+        string json = JsonUtility.ToJson(userData, true);
+
+        Debug.Log("Json test: " + json);
+
+        //UnityWebRequest webRequest = UnityWebRequest.Post(uri, json);
+        UnityWebRequest webRequest = new UnityWebRequest(uri, UnityWebRequest.kHttpVerbPOST);
+        byte[] bytes = new UTF8Encoding().GetBytes(json);
+        webRequest.uploadHandler = new UploadHandlerRaw(bytes);
+        webRequest.downloadHandler = new DownloadHandlerBuffer();
+        webRequest.SetRequestHeader("Content-Type", "application/json");
+
+        using (webRequest)
+        {
+            // Request and wait for the desired page.
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
+
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(webRequest.error);
+            }
+            else
+            {
+                Debug.Log("User with playerId " + playerId + " has been created.");
                 Debug.Log("Post request response code: " + webRequest.responseCode);
                 Debug.Log("Post request response text: " + webRequest.downloadHandler.text);
             }
