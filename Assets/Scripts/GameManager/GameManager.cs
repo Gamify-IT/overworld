@@ -168,6 +168,7 @@ public class GameManager : MonoBehaviour
     private async void CheckPlayerId()
     {
         string uri = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/";
+        string postUri = "/overworld/api/v1/courses/" + courseId + "/playerstatistics";
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + playerId))
         {
             Debug.Log("Checking playerId: " + playerId);
@@ -188,7 +189,7 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError(uri + playerId + ": Error: " + webRequest.error);
                     Debug.Log("PlayerId " + playerId + " does not exist yet.");
-                    await PostUser(uri, playerId);
+                    await PostUser(postUri, playerId);
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + courseId + ":\nReceived: " + webRequest.downloadHandler.text);
