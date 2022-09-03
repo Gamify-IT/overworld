@@ -4,12 +4,15 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using System.Runtime.InteropServices;
 
 /// <summary>
-/// The <c>GameManager</c> retrievs all needed data from the backend and sets up the objects depending on those data.
+///     The <c>GameManager</c> retrievs all needed data from the backend and sets up the objects depending on those data.
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    [DllImport("__Internal")]
+    private static extern string GetToken(string tokenName);
 
     #region Singleton
 
@@ -40,8 +43,8 @@ public class GameManager : MonoBehaviour
     private int maxMinigames;
     private int maxNPCs;
     private int maxDungeons;
-    private readonly int courseId = 1;
-    private readonly int playerId = 1;
+    private string courseId;
+    private string playerId;
 
     //GameObjects
     private GameObject[,] minigameObjects;
@@ -78,6 +81,12 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
 
+        loadingError = false;
+
+        GetCourseId();
+        playerId = GetPlayerId();
+        CheckPlayerId();
+
         maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
         maxNPCs = GameSettings.GetMaxNpCs();
@@ -98,6 +107,95 @@ public class GameManager : MonoBehaviour
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
         {
             worldData[worldIndex] = new WorldData();
+        }
+    }
+
+    /// <summary>
+    /// This function checks whether or not a valid courseId was passed or not.
+    /// If a valid id was passed, it gets stored.
+    /// Otherwise, the user is redirected to course selection page.
+    /// </summary>
+    private async void GetCourseId()
+    {
+        courseId = Application.absoluteURL.Split("#")[^1];
+        string uri = "/overworld/api/v1/courses/";
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + courseId))
+        {
+            Debug.Log("Checking courseId: " + courseId);
+            Debug.Log("Path: " + uri + courseId);
+
+            // Request and wait for the desired page.
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + courseId + ": Error: " + webRequest.error);
+                    Debug.Log("CourseId " + courseId + " is invalid.");
+                    courseId = "";
+                    loadingError = true;
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + courseId + ":\nReceived: " + webRequest.downloadHandler.text);
+                    Debug.Log("CourseId " + courseId + " is valid.");
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// This function reads the playerId from where it is stored and returns it.
+    /// </summary>
+    /// <returns>The playerId</returns>
+    private string GetPlayerId()
+    {
+        string id = GetToken("username");
+        Debug.Log("PlayerId from token: " + id);
+        //if empty than bad luck
+        return id;
+    }
+
+    /// <summary>
+    /// This function checks, if a user with the found id exists, and if not creates one.
+    /// </summary>
+    private async void CheckPlayerId()
+    {
+        string uri = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/";
+        string postUri = "/overworld/api/v1/courses/" + courseId + "/playerstatistics";
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + playerId))
+        {
+            Debug.Log("Checking playerId: " + playerId);
+            Debug.Log("Path: " + uri + playerId);
+
+            // Request and wait for the desired page.
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + playerId + ": Error: " + webRequest.error);
+                    Debug.Log("PlayerId " + playerId + " does not exist yet.");
+                    await PostUser(postUri, playerId);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + courseId + ":\nReceived: " + webRequest.downloadHandler.text);
+                    Debug.Log("PlayerId " + playerId + " is valid.");
+                    break;
+            }
         }
     }
 
@@ -228,7 +326,7 @@ public class GameManager : MonoBehaviour
     #region Loading
 
     /// <summary>
-    /// This function stores the data needed after a reload.
+    ///     This function stores the data needed after a reload.
     /// </summary>
     /// <param name="respawnLocation">The position the player has to be in</param>
     /// <param name="worldIndex">The index of the world the minigame is in</param>
@@ -242,8 +340,8 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function is called from JS.
-    /// This functions reloads the game after a minigame is completed.
+    ///     This function is called from JS.
+    ///     This functions reloads the game after a minigame is completed.
     /// </summary>
     public void MinigameDone()
     {
@@ -252,7 +350,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function reloads the game.
+    ///     This function reloads the game.
     /// </summary>
     private async void Reload()
     {
@@ -261,8 +359,8 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function loads all needed data from the backend an converts the data into usable formats.
-    /// If an error accours while loading, the <c>loadingError</c> flag is set.
+    ///     This function loads all needed data from the backend an converts the data into usable formats.
+    ///     If an error accours while loading, the <c>loadingError</c> flag is set.
     /// </summary>
     /// <returns></returns>
     public async UniTask FetchData()
@@ -304,8 +402,8 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// The <c>Update</c> function is called once every frame.
-    /// This function provides developer shortcuts.
+    ///     The <c>Update</c> function is called once every frame.
+    ///     This function provides developer shortcuts.
     /// </summary>
     public void Update()
     {
@@ -324,7 +422,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function prints a detailed log about all stores objects and their status.
+    ///     This function prints a detailed log about all stores objects and their status.
     /// </summary>
     private void PrintInfo()
     {
@@ -585,14 +683,14 @@ public class GameManager : MonoBehaviour
     #region PostRequest
 
     /// <summary>
-    /// This function sends a POST request to the backend to mark an NPC as completed.
+    ///     This function sends a POST request to the backend to mark an NPC as completed.
     /// </summary>
     /// <param name="uri">The path to send the POST request to</param>
     /// <param name="uuid">The uuid of the NPC</param>
     /// <returns></returns>
     private async UniTask PostNpcCompleted(string uri, string uuid)
     {
-        NPCTalkEvent npcData = new NPCTalkEvent(uuid, true, playerId.ToString());
+        NPCTalkEvent npcData = new NPCTalkEvent(uuid, true, playerId);
         string json = JsonUtility.ToJson(npcData, true);
 
         Debug.Log("Json test: " + json);
@@ -621,6 +719,49 @@ public class GameManager : MonoBehaviour
             else
             {
                 Debug.Log("NPC mit uuid " + uuid + " has been talked to.");
+                Debug.Log("Post request response code: " + webRequest.responseCode);
+                Debug.Log("Post request response text: " + webRequest.downloadHandler.text);
+            }
+        }
+    }
+
+    /// <summary>
+    /// This function creates a user with given id
+    /// </summary>
+    /// <param name="uri">The path to send the POST request to</param>
+    /// <param name="id">The playerId</param>
+    /// <returns></returns>
+    private async UniTask PostUser(string uri, string id)
+    {
+        UserData userData = new UserData(id);
+        string json = JsonUtility.ToJson(userData, true);
+
+        Debug.Log("Json test: " + json);
+
+        //UnityWebRequest webRequest = UnityWebRequest.Post(uri, json);
+        UnityWebRequest webRequest = new UnityWebRequest(uri, UnityWebRequest.kHttpVerbPOST);
+        byte[] bytes = new UTF8Encoding().GetBytes(json);
+        webRequest.uploadHandler = new UploadHandlerRaw(bytes);
+        webRequest.downloadHandler = new DownloadHandlerBuffer();
+        webRequest.SetRequestHeader("Content-Type", "application/json");
+
+        using (webRequest)
+        {
+            // Request and wait for the desired page.
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
+
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(webRequest.error);
+            }
+            else
+            {
+                Debug.Log("User with playerId " + playerId + " has been created.");
                 Debug.Log("Post request response code: " + webRequest.responseCode);
                 Debug.Log("Post request response text: " + webRequest.downloadHandler.text);
             }
@@ -669,7 +810,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function converts and list of <c>MinigameTaskDTO</c> into a array of <c>MinigameData</c>
+    ///     This function converts and list of <c>MinigameTaskDTO</c> into a array of <c>MinigameData</c>
     /// </summary>
     /// <param name="minigameDTOs">The list of <c>minigameDTO</c> to convert</param>
     /// <returns>The converted <c>MinigameData</c> array</returns>
@@ -699,7 +840,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function converts and list of <c>NPCDTO</c> into a array of <c>NPCData</c>
+    ///     This function converts and list of <c>NPCDTO</c> into a array of <c>NPCData</c>
     /// </summary>
     /// <param name="npcDTOs">The list of <c>NPCDTO</c> to convert</param>
     /// <returns>The converted <c>NPCData</c> array</returns>
@@ -729,7 +870,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function converts and list of <c>DungeonDTO</c> into a array of <c>DungeonData</c>
+    ///     This function converts and list of <c>DungeonDTO</c> into a array of <c>DungeonData</c>
     /// </summary>
     /// <param name="dungeonDTOs">The list of <c>DungeonDTO</c> to convert</param>
     /// <returns>The converted <c>DungeonData</c> array</returns>
@@ -802,7 +943,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function returns the status of a minigame in a world or dungeon.
+    ///     This function returns the status of a minigame in a world or dungeon.
     /// </summary>
     /// <param name="worldIndex">The index of the world the minigame is in</param>
     /// <param name="dungeonIndex">The index of the dungeon the minigame is in (0 if in world)</param>
@@ -854,7 +995,7 @@ public class GameManager : MonoBehaviour
     #region SettingData
 
     /// <summary>
-    /// This function sets the data for the given area.
+    ///     This function sets the data for the given area.
     /// </summary>
     /// <param name="worldIndex">The index of the world</param>
     /// <param name="dungeonIndex">The index of the dungeon (0 if world)</param>
@@ -873,7 +1014,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This functions sets the data for a given world.
+    ///     This functions sets the data for a given world.
     /// </summary>
     /// <param name="worldIndex">The index of the world</param>
     private void SetWorldData(int worldIndex)
@@ -975,7 +1116,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function checks if a player has unlocked a world.
+    ///     This function checks if a player has unlocked a world.
     /// </summary>
     /// <param name="worldIndex">The index of the world to check</param>
     /// <returns>True, if the player has unlocked the world, false otherwise</returns>
@@ -994,7 +1135,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function checks if a player has unlocked a dungeon.
+    ///     This function checks if a player has unlocked a dungeon.
     /// </summary>
     /// <param name="worldIndex">The index of the world the dungeon is in</param>
     /// <param name="dungeonIndex">The index of the dungeon to check</param>
@@ -1014,7 +1155,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This functions sets the data for a given dungeon.
+    ///     This functions sets the data for a given dungeon.
     /// </summary>
     /// <param name="worldIndex">The index of the world</param>
     /// <param name="dungeonIndex">The index of the dungeon</param>
@@ -1079,7 +1220,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function marks an NPC as completed.
+    ///     This function marks an NPC as completed.
     /// </summary>
     /// <param name="worldIndex">The index of the world the NPC is in</param>
     /// <param name="dungeonIndex">The index of the dungeon the NPC is in (0 if in world)</param>
@@ -1111,7 +1252,7 @@ public class GameManager : MonoBehaviour
     #region InfoScreen
 
     /// <summary>
-    /// This functions returns an information text about the barrier.
+    ///     This functions returns an information text about the barrier.
     /// </summary>
     /// <param name="type">The type of the barrier</param>
     /// <param name="originWorldIndex">The index of the world the barrier is in</param>
@@ -1128,7 +1269,7 @@ public class GameManager : MonoBehaviour
     #region GetterAndSetter
 
     /// <summary>
-    /// This function provides an array of all areas, that the player has unlocked.
+    ///     This function provides an array of all areas, that the player has unlocked.
     /// </summary>
     /// <returns>A list of unlocked areas</returns>
     public AreaLocationDTO[] GetUnlockedAreas()
@@ -1137,5 +1278,4 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
- 
 }
