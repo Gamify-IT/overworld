@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - "main"
-      - "maintenance/use-userId-instead-of-only-username-for-players"
+      - "feature/dynamic-courseId"
     tags:
       - "v*"
   pull_request:
