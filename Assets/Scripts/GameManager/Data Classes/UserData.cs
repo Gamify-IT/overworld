@@ -11,8 +11,8 @@ public class UserData
 
     public UserData(string userId, string username)
     {
-        userId = userId;
-        username = username;
+        this.userId = userId;
+        this.username = username;
     }
 
     #endregion
