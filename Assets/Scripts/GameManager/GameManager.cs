@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -5,8 +6,6 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using System.Runtime.InteropServices;
-using System;
 
 /// <summary>
 ///     The <c>GameManager</c> retrievs all needed data from the backend and sets up the objects depending on those data.
@@ -146,6 +145,7 @@ public class GameManager : MonoBehaviour
                     return true;
                     break;
             }
+
             return false;
         }
     }
@@ -154,10 +154,8 @@ public class GameManager : MonoBehaviour
     ///     This function reads the userId from where it is stored and returns it.
     /// </summary>
     /// <returns>true if userId is valid, false otherwise</returns>
-    public async UniTask<bool> GetPlayerId()
+    public async UniTask<bool> GetUserData()
     {
-        string userId = "";
-        string username = "";
         try
         {
             userId = GetToken("userId");
@@ -168,15 +166,17 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Function not found: " + e);
             return false;
         }
-        Debug.Log("PlayerId from token: " + userId);
-        bool validPlayerId = await CheckPlayerId();
-        return validPlayerId;
+
+        Debug.Log("UserId from token: " + userId);
+        Debug.Log("Username from token: " + username);
+        bool validUserId = await ValidateUserId();
+        return validUserId;
     }
 
     /// <summary>
     ///     This function checks, if a user with the found id exists, and if not creates one.
     /// </summary>
-    private async UniTask<bool> CheckPlayerId()
+    private async UniTask<bool> ValidateUserId()
     {
         string uri = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/";
         string postUri = "/overworld/api/v1/courses/" + courseId + "/playerstatistics";
@@ -200,7 +200,7 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError(uri + userId + ": Error: " + webRequest.error);
                     Debug.Log("UserId " + userId + " does not exist yet.");
-                    bool userCreated = await PostUser(postUri, userId, username);
+                    bool userCreated = await PostUser(postUri);
                     return userCreated;
                     break;
                 case UnityWebRequest.Result.Success:
@@ -209,6 +209,7 @@ public class GameManager : MonoBehaviour
                     return true;
                     break;
             }
+
             return false;
         }
     }
@@ -743,10 +744,8 @@ public class GameManager : MonoBehaviour
     ///     This function creates a user with given id
     /// </summary>
     /// <param name="uri">The path to send the POST request to</param>
-    /// <param name="userId">The userId</param>
-    /// <param name="username">The username</param>
     /// <returns></returns>
-    private async UniTask<bool> PostUser(string uri, string userId, string username)
+    private async UniTask<bool> PostUser(string uri)
     {
         UserData userData = new UserData(userId, username);
         string json = JsonUtility.ToJson(userData, true);
@@ -781,6 +780,7 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Post request response text: " + webRequest.downloadHandler.text);
                 return true;
             }
+
             return false;
         }
     }
