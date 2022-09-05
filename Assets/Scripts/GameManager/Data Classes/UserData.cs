@@ -1,19 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class UserData
 {
     #region Attributes
+
     public string userId;
     public string username;
+
     #endregion
 
     #region Constructor
-    public UserData(string id)
+
+    public UserData(string userId, string username)
     {
-        userId = id;
-        username = id;
+        userId = userId;
+        username = username;
     }
+
     #endregion
 }
