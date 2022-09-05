@@ -27,7 +27,7 @@ public class LoadFirstScene : MonoBehaviour
 
         Debug.Log("Start loading Player");
 
-        SceneManager.LoadScene("Player");
+        await SceneManager.LoadSceneAsync("Player");
 
         Debug.Log("Finish loading Player");
 
@@ -40,11 +40,34 @@ public class LoadFirstScene : MonoBehaviour
         Debug.Log("Start loading LoadingScreen");
 
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+        LoadingManager.Instance.setup("World 1", worldIndex, dungeonIndex, playerPosition);
 
         Debug.Log("Finish loading LoadingScreen");
+
+        Debug.Log("Start retrieving courseId");
+
+        bool validCourseId = await GameManager.Instance.GetCourseId();
+        if(!validCourseId)
+        {
+            await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+            return;
+        }
+
+        Debug.Log("Finish retrieving courseId");
+
+        Debug.Log("Start retrieving playerId");
+        bool validPlayerId = await GameManager.Instance.GetPlayerId();
+        if(!validPlayerId)
+        {
+            await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+            return;
+        }
+
+        Debug.Log("Finish retrieving playerId");
+
         Debug.Log("Start loading World 1");
 
-        await LoadingManager.Instance.LoadData("World 1", worldIndex, dungeonIndex, playerPosition);
+        await LoadingManager.Instance.LoadData();
 
         Debug.Log("Finish loading World 1");
     }
