@@ -53,20 +53,26 @@ public class LoadingManager : MonoBehaviour
     #region Functionality
 
     /// <summary>
-    ///     This function triggers the loading of data from the backend and the loading of the scene.
-    ///     If a loading error occurs, the offline mode site is displayed.
+    /// This function sets up what the <c>Loading Manager</c> should load.
     /// </summary>
     /// <param name="sceneToLoad">name of the scene to load</param>
     /// <param name="worldIndex">index of the current world</param>
     /// <param name="dungeonIndex">index of the current dungeon - null if the area is a world</param>
     /// <param name="playerPosition">position where the player should start</param>
-    public async UniTask LoadData(string sceneToLoad, int worldIndex, int dungeonIndex, Vector2 playerPosition)
+    public void setup(string sceneToLoad, int worldIndex, int dungeonIndex, Vector2 playerPosition)
     {
         this.sceneToLoad = sceneToLoad;
         this.worldIndex = worldIndex;
         this.dungeonIndex = dungeonIndex;
         this.playerPosition = playerPosition;
+    }
 
+    /// <summary>
+    ///     This function triggers the loading of data from the backend and the loading of the scene.
+    ///     If a loading error occurs, the offline mode site is displayed.
+    /// </summary>
+    public async UniTask LoadData()
+    {
         slider.value = 0;
         progressText.text = "0%";
         loadingText.text = "LOADING DATA...";

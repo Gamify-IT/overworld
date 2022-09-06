@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using System.Runtime.InteropServices;
 
 /// <summary>
 ///     The <c>GameManager</c> retrievs all needed data from the backend and sets up the objects depending on those data.
@@ -44,7 +45,8 @@ public class GameManager : MonoBehaviour
     private int maxNPCs;
     private int maxDungeons;
     private string courseId;
-    private string playerId;
+    private string userId;
+    private string username;
 
     //GameObjects
     private GameObject[,] minigameObjects;
@@ -83,10 +85,6 @@ public class GameManager : MonoBehaviour
 
         loadingError = false;
 
-        GetCourseId();
-        playerId = GetPlayerId();
-        CheckPlayerId();
-
         maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
         maxNPCs = GameSettings.GetMaxNpCs();
@@ -111,11 +109,11 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function checks whether or not a valid courseId was passed or not.
-    /// If a valid id was passed, it gets stored.
-    /// Otherwise, the user is redirected to course selection page.
+    ///     This function checks whether or not a valid courseId was passed or not.
+    ///     If a valid id was passed, it gets stored.
+    ///     Otherwise, the user is redirected to course selection page.
     /// </summary>
-    private async void GetCourseId()
+    public async UniTask<bool> GetCourseId()
     {
         courseId = Application.absoluteURL.Split("#")[^1];
         string uri = "/overworld/api/v1/courses/";
@@ -140,39 +138,52 @@ public class GameManager : MonoBehaviour
                     Debug.LogError(uri + courseId + ": Error: " + webRequest.error);
                     Debug.Log("CourseId " + courseId + " is invalid.");
                     courseId = "";
-                    loadingError = true;
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + courseId + ":\nReceived: " + webRequest.downloadHandler.text);
                     Debug.Log("CourseId " + courseId + " is valid.");
+                    return true;
                     break;
             }
+
+            return false;
         }
     }
 
     /// <summary>
-    /// This function reads the playerId from where it is stored and returns it.
+    ///     This function reads the userId from where it is stored and returns it.
     /// </summary>
-    /// <returns>The playerId</returns>
-    private string GetPlayerId()
+    /// <returns>true if userId is valid, false otherwise</returns>
+    public async UniTask<bool> GetUserData()
     {
-        string id = GetToken("username");
-        Debug.Log("PlayerId from token: " + id);
-        //if empty than bad luck
-        return id;
+        try
+        {
+            userId = GetToken("userId");
+            username = GetToken("username");
+        }
+        catch (EntryPointNotFoundException e)
+        {
+            Debug.LogError("Function not found: " + e);
+            return false;
+        }
+
+        Debug.Log("UserId from token: " + userId);
+        Debug.Log("Username from token: " + username);
+        bool validUserId = await ValidateUserId();
+        return validUserId;
     }
 
     /// <summary>
-    /// This function checks, if a user with the found id exists, and if not creates one.
+    ///     This function checks, if a user with the found id exists, and if not creates one.
     /// </summary>
-    private async void CheckPlayerId()
+    private async UniTask<bool> ValidateUserId()
     {
         string uri = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/";
         string postUri = "/overworld/api/v1/courses/" + courseId + "/playerstatistics";
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + playerId))
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + userId))
         {
-            Debug.Log("Checking playerId: " + playerId);
-            Debug.Log("Path: " + uri + playerId);
+            Debug.Log("Checking userId: " + userId);
+            Debug.Log("Path: " + uri + userId);
 
             // Request and wait for the desired page.
             var request = webRequest.SendWebRequest();
@@ -187,15 +198,19 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                 case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError(uri + playerId + ": Error: " + webRequest.error);
-                    Debug.Log("PlayerId " + playerId + " does not exist yet.");
-                    await PostUser(postUri, playerId);
+                    Debug.LogError(uri + userId + ": Error: " + webRequest.error);
+                    Debug.Log("UserId " + userId + " does not exist yet.");
+                    bool userCreated = await PostUser(postUri);
+                    return userCreated;
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + courseId + ":\nReceived: " + webRequest.downloadHandler.text);
-                    Debug.Log("PlayerId " + playerId + " is valid.");
+                    Debug.Log("UserId " + userId + " is valid.");
+                    return true;
                     break;
             }
+
+            return false;
         }
     }
 
@@ -382,9 +397,9 @@ public class GameManager : MonoBehaviour
         }
 
         await UniTask.WhenAll(
-            GetPlayerMinigameStatistics(path + "/playerstatistics/" + playerId + "/player-task-statistics"),
-            GetPlayerStatistics(path + "/playerstatistics/" + playerId),
-            GetPlayerNPCStatistics(path + "/playerstatistics/" + playerId + "/player-npc-statistics")
+            GetPlayerMinigameStatistics(path + "/playerstatistics/" + userId + "/player-task-statistics"),
+            GetPlayerStatistics(path + "/playerstatistics/" + userId),
+            GetPlayerNPCStatistics(path + "/playerstatistics/" + userId + "/player-npc-statistics")
         );
 
         Debug.Log("Got all data.");
@@ -690,7 +705,7 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     private async UniTask PostNpcCompleted(string uri, string uuid)
     {
-        NPCTalkEvent npcData = new NPCTalkEvent(uuid, true, playerId);
+        NPCTalkEvent npcData = new NPCTalkEvent(uuid, true, userId);
         string json = JsonUtility.ToJson(npcData, true);
 
         Debug.Log("Json test: " + json);
@@ -726,14 +741,13 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function creates a user with given id
+    ///     This function creates a user with given id
     /// </summary>
     /// <param name="uri">The path to send the POST request to</param>
-    /// <param name="id">The playerId</param>
     /// <returns></returns>
-    private async UniTask PostUser(string uri, string id)
+    private async UniTask<bool> PostUser(string uri)
     {
-        UserData userData = new UserData(id);
+        UserData userData = new UserData(userId, username);
         string json = JsonUtility.ToJson(userData, true);
 
         Debug.Log("Json test: " + json);
@@ -761,10 +775,13 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("User with playerId " + playerId + " has been created.");
+                Debug.Log("User with userId " + userId + " and username " + username + " has been created.");
                 Debug.Log("Post request response code: " + webRequest.responseCode);
                 Debug.Log("Post request response text: " + webRequest.downloadHandler.text);
+                return true;
             }
+
+            return false;
         }
     }
 
