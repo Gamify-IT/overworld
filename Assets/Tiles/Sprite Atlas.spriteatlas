@@ -2250,6 +2250,7 @@ SpriteAtlas:
   - {fileID: -1383968937, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
   - {fileID: -1891441975, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
   - {fileID: 1398645228, guid: 293ac3850071e8b438607154a1a88eeb, type: 3}
+  - {fileID: 1750837494, guid: 816c3e1783cd4184c97879a6305f0c25, type: 3}
   - {fileID: -1133208779, guid: 816c3e1783cd4184c97879a6305f0c25, type: 3}
   - {fileID: -1558026428, guid: 816c3e1783cd4184c97879a6305f0c25, type: 3}
   - {fileID: 77235769, guid: 816c3e1783cd4184c97879a6305f0c25, type: 3}
@@ -7528,6 +7529,7 @@ SpriteAtlas:
   - HUD_objects_7
   - HUD_objects_4
   - raccoon-32-32_0
+  - MinimapWorldVizes_6
   - MinimapWorldVizes_4
   - MinimapWorldVizes_5
   - MinimapWorldVizes_2
