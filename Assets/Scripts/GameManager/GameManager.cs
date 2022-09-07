@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public async UniTask<bool> GetCourseId()
     {
-        courseId = Application.absoluteURL.Split("#")[^1];
+        courseId = Application.absoluteURL.Split("/")[^1];
         string uri = "/overworld/api/v1/courses/";
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + courseId))
         {
