@@ -3,23 +3,23 @@
 /// </summary>
 public class BookData
 {
-    public BookData(string uuid, string[] dialogue, bool hasBeenTalkedTo)
+    public BookData(string uuid, string[] bookText)
     {
         this.uuid = uuid;
-        this.dialogue = dialogue;
+        this.bookText = bookText;
     }
 
     public BookData()
     {
         uuid = "";
-        string[] text = { "Hi.", "I have nothing to say." };
-        dialogue = text;
+        string[] text = { "This is just an empty Book. No one has written anything here." };
+        bookText = text;
     }
 
     #region Attributes
 
     private string uuid;
-    private string[] dialogue;
+    private string[] bookText;
 
     #endregion
 
@@ -49,7 +49,7 @@ public class BookData
     /// <returns>dialogue</returns>
     public string[] GetBookText()
     {
-        return dialogue;
+        return bookText;
     }
 
     /// <summary>
@@ -58,7 +58,7 @@ public class BookData
     /// <param name="dialogue">the dialogue of the NPC</param>
     public void SetBookText(string[] dialogue)
     {
-        this.dialogue = dialogue;
+        this.bookText = dialogue;
     }
 
     #endregion

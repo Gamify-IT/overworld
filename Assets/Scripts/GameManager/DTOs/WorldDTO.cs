@@ -27,6 +27,7 @@ public class WorldDTO
     public bool active;
     public List<MinigameTaskDTO> minigameTasks;
     public List<NPCDTO> npcs;
+    public List<BookDTO> books;
     public List<DungeonDTO> dungeons;
 
     #endregion
@@ -34,7 +35,7 @@ public class WorldDTO
     #region Constructors
 
     public WorldDTO(string id, int index, string staticName, string topicName, bool active,
-        List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs, List<DungeonDTO> dungeons)
+        List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs, List<DungeonDTO> dungeons, List<BookDTO> books)
     {
         this.id = id;
         this.index = index;
@@ -44,6 +45,7 @@ public class WorldDTO
         this.minigameTasks = minigameTasks;
         this.npcs = npcs;
         this.dungeons = dungeons;
+        this.books = books;
     }
 
     public WorldDTO()

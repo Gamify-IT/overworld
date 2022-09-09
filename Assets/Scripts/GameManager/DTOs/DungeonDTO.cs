@@ -27,6 +27,7 @@ public class DungeonDTO
     public bool active;
     public List<MinigameTaskDTO> minigameTasks;
     public List<NPCDTO> npcs;
+    public List<BookDTO> books;
 
     #endregion
 
@@ -42,6 +43,7 @@ public class DungeonDTO
         this.active = active;
         this.minigameTasks = minigameTasks;
         this.npcs = npcs;
+        this.books = books;
     }
 
     public DungeonDTO()

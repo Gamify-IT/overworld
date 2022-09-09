@@ -12,6 +12,7 @@ public class WorldData
     private readonly bool active;
     private readonly MinigameData[] minigames;
     private readonly NPCData[] npcs;
+    private readonly BookData[] books;
     private readonly DungeonData[] dungeons;
 
     #endregion
@@ -19,7 +20,7 @@ public class WorldData
     #region Constructors
 
     public WorldData(string id, int index, string staticName, string topicName, bool active, MinigameData[] minigames,
-        NPCData[] npcs, DungeonData[] dungeons)
+        NPCData[] npcs, DungeonData[] dungeons, BookData[] books)
     {
         this.id = id;
         this.index = index;
@@ -28,6 +29,7 @@ public class WorldData
         this.active = active;
         this.minigames = minigames;
         this.npcs = npcs;
+        this.books = books;
         this.dungeons = dungeons;
     }
 
@@ -48,6 +50,12 @@ public class WorldData
         for (int npcIndex = 1; npcIndex < npcs.Length; npcIndex++)
         {
             npcs[npcIndex] = new NPCData();
+        }
+        
+        books = new BookData[GameSettings.GetMaxBooks() + 1];
+        for (int bookIndex = 1; bookIndex < books.Length; bookIndex++)
+        {
+            books[bookIndex] = new BookData();
         }
 
         dungeons = new DungeonData[GameSettings.GetMaxDungeons() + 1];
@@ -180,6 +188,21 @@ public class WorldData
         if (index > 0 && index < npcs.Length)
         {
             return npcs[index];
+        }
+
+        return null;
+    }
+    
+    /// <summary>
+    ///     This function returns the data of a Book in the world.
+    /// </summary>
+    /// <param name="index">This index of the Book</param>
+    /// <returns>The data of the Book, <c>null</c> if invalid index</returns>
+    public BookData getBookData(int index)
+    {
+        if (index > 0 && index < books.Length)
+        {
+            return books[index];
         }
 
         return null;

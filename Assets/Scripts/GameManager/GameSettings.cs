@@ -8,6 +8,7 @@ public static class GameSettings
     private static readonly int maxWorld = 4;
     private static readonly int maxMinigames = 12;
     private static readonly int maxNPCs = 10;
+    private static readonly int maxBooks = 1;
     private static readonly int maxDungeons = 4;
 
     #endregion
@@ -40,7 +41,14 @@ public static class GameSettings
     {
         return maxNPCs;
     }
-
+    /// <summary>
+    ///     This function returns the maximum amount of NPCs in an area.
+    /// </summary>
+    /// <returns>The maximum amount of NPCs in an area</returns>
+    public static int GetMaxBooks()
+    {
+        return maxBooks;
+    }
     /// <summary>
     ///     This function returns the maximum amount of dungeons in a world.
     /// </summary>

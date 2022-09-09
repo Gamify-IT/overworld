@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1556537105403999558}
   - component: {fileID: 1556537105403999559}
   - component: {fileID: 1556537105403999552}
+  - component: {fileID: -8542897253286645159}
   m_Layer: 8
   m_Name: Book
   m_TagString: Untagged
@@ -111,3 +112,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.52497697, y: 0.65362906}
   m_EdgeRadius: 0
+--- !u!114 &-8542897253286645159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556537105403999553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fffd770988817042bc0805ef17de154, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  world: 1
+  dungeon: 0
+  number: 1
+  nameOfBook: Empty Book
+  bookContent: []
