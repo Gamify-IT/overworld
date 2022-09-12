@@ -14,7 +14,6 @@ public class Book : MonoBehaviour
     public string nameOfBook;
     public string bookContent;
     private TextMeshProUGUI bookText;
-    private int index;
     private bool playerIsClose;
     private string uuid;
 
@@ -36,6 +35,11 @@ public class Book : MonoBehaviour
             !PauseMenu.menuOpen)
         {
             StartCoroutine(LoadBookScene());
+        }
+        else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByName("Book").isLoaded &&
+                 !PauseMenu.menuOpen)
+        {
+            SceneManager.UnloadSceneAsync("Book");
         }
     }
 
@@ -66,6 +70,11 @@ public class Book : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Player") && SceneManager.GetSceneByName("Book").isLoaded)
+        {
+            playerIsClose = false;
+            SceneManager.UnloadSceneAsync("Book");
+        }
+        else if (other.CompareTag("Player") && !SceneManager.GetSceneByName("Book").isLoaded)
         {
             playerIsClose = false;
         }

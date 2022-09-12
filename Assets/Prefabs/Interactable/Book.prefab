@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 1556537105403999559}
   - component: {fileID: 1556537105403999552}
   - component: {fileID: -8542897253286645159}
-  m_Layer: 8
+  - component: {fileID: 2921638665662489538}
+  m_Layer: 0
   m_Name: Book
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +97,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.1781336, y: -0.06432605}
@@ -129,3 +130,19 @@ MonoBehaviour:
   number: 1
   nameOfBook: Mysterious Book
   bookContent: 
+--- !u!70 &2921638665662489538
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556537105403999553}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.15, y: -0.05}
+  m_Size: {x: 0.87, y: 1.92}
+  m_Direction: 1
