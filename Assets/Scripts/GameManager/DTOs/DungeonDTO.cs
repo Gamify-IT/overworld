@@ -34,7 +34,7 @@ public class DungeonDTO
     #region Constructors
 
     public DungeonDTO(string id, int index, string staticName, string topicName, bool active,
-        List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs)
+        List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs, List<BookDTO> books)
     {
         this.id = id;
         this.index = index;

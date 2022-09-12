@@ -127,5 +127,5 @@ MonoBehaviour:
   world: 1
   dungeon: 0
   number: 1
-  nameOfBook: Empty Book
-  bookContent: []
+  nameOfBook: Mysterious Book
+  bookContent: 

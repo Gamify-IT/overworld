@@ -3,7 +3,7 @@
 /// </summary>
 public class BookData
 {
-    public BookData(string uuid, string[] bookText)
+    public BookData(string uuid, string bookText)
     {
         this.uuid = uuid;
         this.bookText = bookText;
@@ -12,21 +12,21 @@ public class BookData
     public BookData()
     {
         uuid = "";
-        string[] text = { "This is just an empty Book. No one has written anything here." };
+        string text = "This is just an empty Book. No one has written anything here.";
         bookText = text;
     }
 
     #region Attributes
 
     private string uuid;
-    private string[] bookText;
+    private string bookText;
 
     #endregion
 
     #region GetterAndSetter
 
     /// <summary>
-    ///     This method returns the UUID of the NPC.
+    ///     This method returns the UUID of the Book.
     /// </summary>
     /// <returns>uuid</returns>
     public string GetUuid()
@@ -35,30 +35,30 @@ public class BookData
     }
 
     /// <summary>
-    ///     This method sets the UUID of the NPC.
+    ///     This method sets the UUID of the Book
     /// </summary>
-    /// <param name="uuid">uuid of the NPC</param>
+    /// <param name="uuid">uuid of the Book</param>
     public void SetUuid(string uuid)
     {
         this.uuid = uuid;
     }
 
     /// <summary>
-    ///     This method returns the dialogue of the NPC.
+    ///     This method returns the dialogue of the Book.
     /// </summary>
-    /// <returns>dialogue</returns>
-    public string[] GetBookText()
+    /// <returns>bookText</returns>
+    public string GetBookText()
     {
         return bookText;
     }
 
     /// <summary>
-    ///     This method is used to set the dialogue of the NPC.
+    ///     This method is used to set the dialogue of the Book.
     /// </summary>
-    /// <param name="dialogue">the dialogue of the NPC</param>
-    public void SetBookText(string[] dialogue)
+    /// <param name="bookText">the content of the Book</param>
+    public void SetBookText(string bookText)
     {
-        this.bookText = dialogue;
+        this.bookText = bookText;
     }
 
     #endregion

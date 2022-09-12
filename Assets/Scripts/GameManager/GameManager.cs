@@ -339,6 +339,7 @@ public class GameManager : MonoBehaviour
             string[] emptyArray = { "" };
         }
     }
+
     /// <summary>
     ///     This function registers a new book at the <c>GameManager</c>
     /// </summary>
@@ -380,6 +381,7 @@ public class GameManager : MonoBehaviour
             string[] emptyArray = { "" };
         }
     }
+
     #endregion
 
     #region Loading
@@ -551,9 +553,9 @@ public class GameManager : MonoBehaviour
 
                 Debug.Log("    NPC slot " + worldIndex + "-" + npcIndex + " contains NPC: " + status);
             }
-            
+
             Debug.Log("  Books:");
-            for (int bookIndex = 1; bookIndex <= maxNPCs; bookIndex++)
+            for (int bookIndex = 1; bookIndex <= maxBooks; bookIndex++)
             {
                 string status = "";
                 if (bookObjects[worldIndex, bookIndex] != null)
@@ -879,14 +881,15 @@ public class GameManager : MonoBehaviour
 
         List<NPCDTO> npcDTOs = worldDTO.npcs;
         NPCData[] npcs = GetNpcData(npcDTOs);
-        
+
         List<BookDTO> bookDTOs = worldDTO.books;
         BookData[] books = GetBookData(bookDTOs);
 
         List<DungeonDTO> dungeonDTOs = worldDTO.dungeons;
         DungeonData[] dungeons = GetDungeonData(dungeonDTOs);
 
-        worldData[worldIndex] = new WorldData(id, index, staticName, topicName, active, minigames, npcs, dungeons, books);
+        worldData[worldIndex] =
+            new WorldData(id, index, staticName, topicName, active, minigames, npcs, dungeons, books);
     }
 
     /// <summary>
@@ -961,13 +964,13 @@ public class GameManager : MonoBehaviour
         foreach (BookDTO bookDTO in bookDTOs)
         {
             string uuid;
-            string[] bookText;
+            string bookText;
 
             uuid = bookDTO.id;
-            bookText = bookDTO.text.ToArray();
+            bookText = bookDTO.text;
             if (bookText.Length == 0)
             {
-                string[] dummyText = { "This is just an empty Book. No one has written anything here." };
+                string dummyText = "This is just an empty Book. No one has written anything here.";
                 bookText = dummyText;
             }
 
@@ -977,6 +980,7 @@ public class GameManager : MonoBehaviour
 
         return bookData;
     }
+
     /// <summary>
     ///     This function converts and list of <c>DungeonDTO</c> into a array of <c>DungeonData</c>
     /// </summary>
@@ -999,7 +1003,7 @@ public class GameManager : MonoBehaviour
 
             List<NPCDTO> npcDTOs = dungeonDTO.npcs;
             NPCData[] npcs = GetNpcData(npcDTOs);
-            
+
             List<BookDTO> bookDTOs = dungeonDTO.books;
             BookData[] books = GetBookData(bookDTOs);
 
@@ -1182,8 +1186,8 @@ public class GameManager : MonoBehaviour
 
             npc.Setup(npcData);
         }
-        
-        for (int bookIndex = 1; bookIndex <= maxNPCs; bookIndex++)
+
+        for (int bookIndex = 1; bookIndex <= maxBooks; bookIndex++)
         {
             BookData bookData = data.getBookData(bookIndex);
             if (bookData == null)
@@ -1351,7 +1355,7 @@ public class GameManager : MonoBehaviour
 
             npc.Setup(npcData);
         }
-        
+
         for (int bookIndex = 1; bookIndex <= maxBooks; bookIndex++)
         {
             BookData bookData = data.GetBookData(bookIndex);

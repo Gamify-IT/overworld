@@ -2,7 +2,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 /// <summary>
 ///     This class is responsible for the Book logic.
@@ -13,7 +12,7 @@ public class Book : MonoBehaviour
     [SerializeField] private int dungeon;
     [SerializeField] private int number;
     public string nameOfBook;
-    public string[] bookContent;
+    public string bookContent;
     private TextMeshProUGUI bookText;
     private int index;
     private bool playerIsClose;
@@ -46,11 +45,11 @@ public class Book : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove Book " + world + "-" + dungeon + "-" + number);
-        GameManager.Instance.RemoveNpc(world, dungeon, number); /////////////////////////////////////////
+        GameManager.Instance.RemoveBook(world, dungeon, number);
     }
 
     /// <summary>
-    ///     If the player is in range of the NPC the playerIsClose check will be set to true.
+    ///     If the player is in range of the Book the playerIsClose check will be set to true.
     /// </summary>
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -74,12 +73,12 @@ public class Book : MonoBehaviour
 
 
     /// <summary>
-    ///     This function registers the NPC to the GameManager.
+    ///     This function registers the Book to the GameManager.
     /// </summary>
     private void RegisterToGameManager()
     {
         Debug.Log("register Book " + world + "-" + dungeon + "-" + number);
-        GameManager.Instance.AddNpc(gameObject, world, dungeon, number); //////////////////////////
+        GameManager.Instance.AddBook(gameObject, world, dungeon, number);
     }
 
     /// <summary>
@@ -90,14 +89,8 @@ public class Book : MonoBehaviour
     {
         uuid = data.GetUuid();
         bookContent = data.GetBookText();
-        string text = "";
-        for (int index = 0; index < bookContent.Length; index++)
-        {
-            text += bookContent[index];
-            text += " ; ";
-        }
-
-        Debug.Log("setup book " + world + "-" + number + " with new dialogue: " + text + ", new info: ");
+        string text = bookContent;
+        Debug.Log("setup book " + world + "-" + number + " with Text: " + text);
     }
 
 
@@ -115,21 +108,17 @@ public class Book : MonoBehaviour
 
         GameObject.Find("Book_Name").GetComponent<TextMeshProUGUI>().text = nameOfBook;
         bookText = GameObject.Find("Book_Text").GetComponent<TextMeshProUGUI>();
+        bookText.text = bookContent;
     }
 
     /// <summary>
     ///     This function returns the Book object info
     /// </summary>
-    /// <returns>NPC object info</returns>
+    /// <returns>Book object info</returns>
     public string GetInfo()
     {
         string info = "";
-        string text = "";
-        for (int index = 0; index < bookContent.Length; index++)
-        {
-            text += bookContent[index];
-            text += "; ";
-        }
+        string text = bookContent;
 
         info = world + "-" + dungeon + "-" + number + ": Text: " + text + ", completed: ";
         return info;
@@ -138,7 +127,7 @@ public class Book : MonoBehaviour
     #region Getter
 
     /// <summary>
-    ///     This method returns the world index of the NPC.
+    ///     This method returns the world index of the Book.
     /// </summary>
     /// <returns>world</returns>
     public int GetWorldIndex()
@@ -147,7 +136,7 @@ public class Book : MonoBehaviour
     }
 
     /// <summary>
-    ///     This method returns the dungeon index of the NPC.
+    ///     This method returns the dungeon index of the Book.
     /// </summary>
     /// <returns>dungeon</returns>
     public int GetDungeonIndex()
@@ -156,7 +145,7 @@ public class Book : MonoBehaviour
     }
 
     /// <summary>
-    ///     This method returns the number of the NPC.
+    ///     This method returns the number of the Book.
     /// </summary>
     /// <returns>number</returns>
     public int getIndex()

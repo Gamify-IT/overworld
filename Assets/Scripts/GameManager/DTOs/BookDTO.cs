@@ -23,13 +23,13 @@ public class BookDTO
     public string id;
     public AreaLocationDTO area;
     public int index;
-    public List<string> text;
+    public string text;
 
     #endregion
 
     #region Constructors
 
-    public BookDTO(string id, AreaLocationDTO area, int index, List<string> text)
+    public BookDTO(string id, AreaLocationDTO area, int index, string text)
     {
         this.id = id;
         this.area = area;

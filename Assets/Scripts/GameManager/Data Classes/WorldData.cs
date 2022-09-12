@@ -51,7 +51,7 @@ public class WorldData
         {
             npcs[npcIndex] = new NPCData();
         }
-        
+
         books = new BookData[GameSettings.GetMaxBooks() + 1];
         for (int bookIndex = 1; bookIndex < books.Length; bookIndex++)
         {
@@ -192,7 +192,7 @@ public class WorldData
 
         return null;
     }
-    
+
     /// <summary>
     ///     This function returns the data of a Book in the world.
     /// </summary>
