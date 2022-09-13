@@ -168,6 +168,8 @@ public class GameManager : MonoBehaviour
         catch (EntryPointNotFoundException e)
         {
             Debug.LogError("Function not found: " + e);
+            userId = "";
+            username = "";
             return false;
         }
 
@@ -451,6 +453,11 @@ public class GameManager : MonoBehaviour
         Debug.Log("Got all data.");
 
         //process Data
+        if(loadingError)
+        {
+            getDummyData();
+        }
+
         for (int worldIndex = 1; worldIndex <= maxWorld; worldIndex++)
         {
             ProcessWorldDto(worldIndex);
@@ -460,6 +467,27 @@ public class GameManager : MonoBehaviour
         ProcessPlayerNpcStatistics(playerNPCStatistics);
 
         Debug.Log("Everything set up");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void getDummyData()
+    {
+        //worldDTO dummy data
+        for(int worldIndex = 0; worldIndex<maxWorld; worldIndex++)
+        {
+            worldDTOs[worldIndex] = new WorldDTO();
+        }
+
+        //playerMinigameStatistics dummy data
+        playerMinigameStatistics = null;
+
+        //playerNPCStatistics dummy data
+        playerNPCStatistics = null;
+
+        //player dummy data
+        playerData = new PlayerstatisticDTO();
     }
 
     /// <summary>
@@ -765,7 +793,7 @@ public class GameManager : MonoBehaviour
     /// <param name="uri">The path to send the POST request to</param>
     /// <param name="uuid">The uuid of the NPC</param>
     /// <returns></returns>
-    private async UniTask PostNpcCompleted(string uri, string uuid)
+    private async UniTask<bool> PostNpcCompleted(string uri, string uuid)
     {
         NPCTalkEvent npcData = new NPCTalkEvent(uuid, true, userId);
         string json = JsonUtility.ToJson(npcData, true);
@@ -792,12 +820,14 @@ public class GameManager : MonoBehaviour
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
                 Debug.Log(webRequest.error);
+                return false;
             }
             else
             {
                 Debug.Log("NPC mit uuid " + uuid + " has been talked to.");
                 Debug.Log("Post request response code: " + webRequest.responseCode);
                 Debug.Log("Post request response text: " + webRequest.downloadHandler.text);
+                return true;
             }
         }
     }
@@ -1392,7 +1422,13 @@ public class GameManager : MonoBehaviour
         if (active)
         {
             string path = "/overworld/api/v1/internal/submit-npc-pass";
-            await PostNpcCompleted(path, uuid);
+            bool successful = await PostNpcCompleted(path, uuid);
+
+            if(!successful)
+            {
+                Debug.Log("NPC completion could not be saved.");
+                return;
+            }
 
             if (worldIndex <= maxWorld)
             {
