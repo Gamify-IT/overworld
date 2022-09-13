@@ -27,13 +27,14 @@ public class DungeonDTO
     public bool active;
     public List<MinigameTaskDTO> minigameTasks;
     public List<NPCDTO> npcs;
+    public List<BookDTO> books;
 
     #endregion
 
     #region Constructors
 
     public DungeonDTO(string id, int index, string staticName, string topicName, bool active,
-        List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs)
+        List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs, List<BookDTO> books)
     {
         this.id = id;
         this.index = index;
@@ -42,6 +43,7 @@ public class DungeonDTO
         this.active = active;
         this.minigameTasks = minigameTasks;
         this.npcs = npcs;
+        this.books = books;
     }
 
     public DungeonDTO()

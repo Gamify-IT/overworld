@@ -12,13 +12,14 @@ public class DungeonData
     private readonly bool active;
     private readonly MinigameData[] minigames;
     private readonly NPCData[] npcs;
+    private readonly BookData[] books;
 
     #endregion
 
     #region Constructors
 
     public DungeonData(string id, int index, string staticName, string topicName, bool active, MinigameData[] minigames,
-        NPCData[] npcs)
+        NPCData[] npcs, BookData[] books)
     {
         this.id = id;
         this.index = index;
@@ -27,6 +28,7 @@ public class DungeonData
         this.active = active;
         this.minigames = minigames;
         this.npcs = npcs;
+        this.books = books;
     }
 
     public DungeonData()
@@ -46,6 +48,12 @@ public class DungeonData
         for (int npcIndex = 1; npcIndex < npcs.Length; npcIndex++)
         {
             npcs[npcIndex] = new NPCData();
+        }
+        
+        books = new BookData[GameSettings.GetMaxBooks() + 1];
+        for (int bookIndex = 1; bookIndex < books.Length; bookIndex++)
+        {
+            books[bookIndex] = new BookData();
         }
     }
 
@@ -137,6 +145,21 @@ public class DungeonData
         return null;
     }
 
+    /// <summary>
+    ///     This function returns the data of a Book in the world.
+    /// </summary>
+    /// <param name="index">This index of the Book</param>
+    /// <returns>The data of the Book, <c>null</c> if invalid index</returns>
+    public BookData GetBookData(int index)
+    {
+        if (index > 0 && index < books.Length)
+        {
+            return books[index];
+        }
+
+        return null;
+    }
+    
     /// <summary>
     ///     This function returns whether the dungeon is set as active or not.
     /// </summary>

@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
     private int maxWorld;
     private int maxMinigames;
     private int maxNPCs;
+    private int maxBooks;
     private int maxDungeons;
     private string courseId;
     private string userId;
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour
     private GameObject[,] worldBarrierObjects;
     private GameObject[,] dungeonBarrierObjects;
     private GameObject[,] npcObjects;
+    private GameObject[,] bookObjects;
 
     //Data
     private WorldData[] worldData;
@@ -88,12 +90,14 @@ public class GameManager : MonoBehaviour
         maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
         maxNPCs = GameSettings.GetMaxNpCs();
+        maxBooks = GameSettings.GetMaxBooks();
         maxDungeons = GameSettings.GetMaxDungeons();
 
         minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
         worldBarrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
         dungeonBarrierObjects = new GameObject[maxWorld + 1, maxDungeons + 1];
         npcObjects = new GameObject[maxWorld + 1, maxNPCs + 1];
+        bookObjects = new GameObject[maxWorld + 1, maxBooks + 1];
 
         worldData = new WorldData[maxWorld + 1];
         playerData = new PlayerstatisticDTO();
@@ -336,6 +340,48 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///     This function registers a new book at the <c>GameManager</c>
+    /// </summary>
+    /// <param name="book">The npc gameObject</param>
+    /// <param name="world">The index of the world the book is in</param>
+    /// <param name="dungeon">The index of the dungeon the book is in (0 if in no dungeon)</param>
+    /// <param name="number">The index of the book in its area</param>
+    public void AddBook(GameObject book, int world, int dungeon, int number)
+    {
+        if (book != null)
+        {
+            if (dungeon == 0)
+            {
+                bookObjects[world, number] = book;
+            }
+            else
+            {
+                bookObjects[0, number] = book;
+            }
+        }
+    }
+
+    /// <summary>
+    ///     This function removes a book from the <c>GameManager</c>
+    /// </summary>
+    /// <param name="world">The index of the world the book is in</param>
+    /// <param name="dungeon">The index of the dungeon the book is in (0 if in no dungeon)</param>
+    /// <param name="number">The index of the book in its area</param>
+    public void RemoveBook(int world, int dungeon, int number)
+    {
+        if (dungeon == 0)
+        {
+            bookObjects[world, number] = null;
+            string[] emptyArray = { "" };
+        }
+        else
+        {
+            bookObjects[0, number] = null;
+            string[] emptyArray = { "" };
+        }
+    }
+
     #endregion
 
     #region Loading
@@ -507,6 +553,22 @@ public class GameManager : MonoBehaviour
 
                 Debug.Log("    NPC slot " + worldIndex + "-" + npcIndex + " contains NPC: " + status);
             }
+
+            Debug.Log("  Books:");
+            for (int bookIndex = 1; bookIndex <= maxBooks; bookIndex++)
+            {
+                string status = "";
+                if (bookObjects[worldIndex, bookIndex] != null)
+                {
+                    status = bookObjects[worldIndex, bookIndex].GetComponent<Book>().GetInfo();
+                }
+                else
+                {
+                    status = "none";
+                }
+
+                Debug.Log("    Book slot " + worldIndex + "-" + bookIndex + " contains book: " + status);
+            }
         }
     }
 
@@ -650,7 +712,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function sends a GET request to the backend to get gerneral player data and logs the knowledge to the console
+    ///     This function sends a GET request to the backend to get general player data and logs the knowledge to the console
     /// </summary>
     /// <param name="uri">The path to send the GET request to</param>
     /// <returns></returns>
@@ -820,10 +882,14 @@ public class GameManager : MonoBehaviour
         List<NPCDTO> npcDTOs = worldDTO.npcs;
         NPCData[] npcs = GetNpcData(npcDTOs);
 
+        List<BookDTO> bookDTOs = worldDTO.books;
+        BookData[] books = GetBookData(bookDTOs);
+
         List<DungeonDTO> dungeonDTOs = worldDTO.dungeons;
         DungeonData[] dungeons = GetDungeonData(dungeonDTOs);
 
-        worldData[worldIndex] = new WorldData(id, index, staticName, topicName, active, minigames, npcs, dungeons);
+        worldData[worldIndex] =
+            new WorldData(id, index, staticName, topicName, active, minigames, npcs, dungeons, books);
     }
 
     /// <summary>
@@ -887,6 +953,35 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function converts and list of <c>BookDTO</c> into a array of <c>BookData</c>
+    /// </summary>
+    /// <param name="bookDTOs">The list of <c>BookDTO</c> to convert</param>
+    /// <returns>The converted <c>BookData</c> array</returns>
+    private BookData[] GetBookData(List<BookDTO> bookDTOs)
+    {
+        BookData[] bookData = new BookData[maxBooks + 1];
+
+        foreach (BookDTO bookDTO in bookDTOs)
+        {
+            string uuid;
+            string bookText;
+
+            uuid = bookDTO.id;
+            bookText = bookDTO.text;
+            if (bookText.Length == 0)
+            {
+                string dummyText = "This is just an empty Book. No one has written anything here.";
+                bookText = dummyText;
+            }
+
+            BookData book = new BookData(uuid, bookText);
+            bookData[bookDTO.index] = book;
+        }
+
+        return bookData;
+    }
+
+    /// <summary>
     ///     This function converts and list of <c>DungeonDTO</c> into a array of <c>DungeonData</c>
     /// </summary>
     /// <param name="dungeonDTOs">The list of <c>DungeonDTO</c> to convert</param>
@@ -909,7 +1004,10 @@ public class GameManager : MonoBehaviour
             List<NPCDTO> npcDTOs = dungeonDTO.npcs;
             NPCData[] npcs = GetNpcData(npcDTOs);
 
-            DungeonData dungeon = new DungeonData(id, index, staticName, topicName, active, minigames, npcs);
+            List<BookDTO> bookDTOs = dungeonDTO.books;
+            BookData[] books = GetBookData(bookDTOs);
+
+            DungeonData dungeon = new DungeonData(id, index, staticName, topicName, active, minigames, npcs, books);
             dungeonData[index] = dungeon;
         }
 
@@ -1089,6 +1187,29 @@ public class GameManager : MonoBehaviour
             npc.Setup(npcData);
         }
 
+        for (int bookIndex = 1; bookIndex <= maxBooks; bookIndex++)
+        {
+            BookData bookData = data.getBookData(bookIndex);
+            if (bookData == null)
+            {
+                bookData = new BookData();
+            }
+
+            GameObject bookObject = bookObjects[worldIndex, bookIndex];
+            if (bookObject == null)
+            {
+                continue;
+            }
+
+            Book book = bookObject.GetComponent<Book>();
+            if (book == null)
+            {
+                continue;
+            }
+
+            book.Setup(bookData);
+        }
+
         for (int barrierDestinationIndex = 1; barrierDestinationIndex <= maxWorld; barrierDestinationIndex++)
         {
             GameObject barrierObject = worldBarrierObjects[worldIndex, barrierDestinationIndex];
@@ -1233,6 +1354,29 @@ public class GameManager : MonoBehaviour
             }
 
             npc.Setup(npcData);
+        }
+
+        for (int bookIndex = 1; bookIndex <= maxBooks; bookIndex++)
+        {
+            BookData bookData = data.GetBookData(bookIndex);
+            if (bookData == null)
+            {
+                bookData = new BookData();
+            }
+
+            GameObject bookObject = bookObjects[0, bookIndex];
+            if (bookObject == null)
+            {
+                continue;
+            }
+
+            Book book = bookObject.GetComponent<Book>();
+            if (book == null)
+            {
+                continue;
+            }
+
+            book.Setup(bookData);
         }
     }
 
