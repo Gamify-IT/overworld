@@ -451,6 +451,11 @@ public class GameManager : MonoBehaviour
         Debug.Log("Got all data.");
 
         //process Data
+        if(loadingError)
+        {
+            getDummyData();
+        }
+
         for (int worldIndex = 1; worldIndex <= maxWorld; worldIndex++)
         {
             ProcessWorldDto(worldIndex);
@@ -460,6 +465,27 @@ public class GameManager : MonoBehaviour
         ProcessPlayerNpcStatistics(playerNPCStatistics);
 
         Debug.Log("Everything set up");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void getDummyData()
+    {
+        //worldDTO dummy data
+        for(int worldIndex = 0; worldIndex<maxWorld; worldIndex++)
+        {
+            worldDTOs[worldIndex] = new WorldDTO();
+        }
+
+        //playerMinigameStatistics dummy data
+        playerMinigameStatistics = null;
+
+        //playerNPCStatistics dummy data
+        playerNPCStatistics = null;
+
+        //player dummy data
+        playerData = new PlayerstatisticDTO();
     }
 
     /// <summary>
