@@ -24,6 +24,5 @@ public class URLOpenerInCurrentTab : MonoBehaviour
     public void Open()
     {
         CloseOverworld();
-        Application.ExternalEval("window.open('/" + path + "','_self')");
     }
 }
