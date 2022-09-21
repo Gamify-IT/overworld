@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Runtime.InteropServices;
 
 /// <summary>
 ///     This class opens a link on the current webserver with path 'path' in current tab.
@@ -6,15 +7,17 @@ using UnityEngine;
 public class URLOpenerInCurrentTab : MonoBehaviour
 {
     /// <summary>
-    ///     The path that opened by 'Open()'.
+    ///     Import of the overworld close methode
     /// </summary>
-    public string path;
+    [DllImport("__Internal")]
+    private static extern void CloseOverworld();
 
     /// <summary>
-    ///     This function opens a link on the current webserver with path 'path' in current tab.
+    ///  This function opens a link on the current webserver with path 'path' in current tab.
+    ///  It calls a JavaScript method that closes the Overworld IFrame.
     /// </summary>
     public void Open()
     {
-        Application.ExternalEval("window.open('/" + path + "','_self')");
+        CloseOverworld();
     }
 }
