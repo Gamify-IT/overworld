@@ -13,11 +13,6 @@ public class URLOpenerInCurrentTab : MonoBehaviour
     private static extern void CloseOverworld();
 
     /// <summary>
-    ///     The path that opened by 'Open()'.
-    /// </summary>
-    public string path;
-
-    /// <summary>
     ///  This function opens a link on the current webserver with path 'path' in current tab.
     ///  It calls a JavaScript method that closes the Overworld IFrame.
     /// </summary>
