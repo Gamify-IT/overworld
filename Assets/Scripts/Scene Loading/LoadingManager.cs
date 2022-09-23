@@ -278,7 +278,8 @@ public class LoadingManager : MonoBehaviour
     /// <param name="unlockedAreas">All unlocked areas</param>
     private void SetupProgessBar(AreaLocationDTO[] unlockedAreas)
     {
-        for(int worldIndex = GameSettings.GetMaxWorlds(); worldIndex > 0; worldIndex--)
+        ProgressBar.Instance.setUnlockedArea(1);
+        for (int worldIndex = GameSettings.GetMaxWorlds(); worldIndex > 0; worldIndex--)
         {
             if(isWorldUnlocked(unlockedAreas, worldIndex))
             {
@@ -294,7 +295,6 @@ public class LoadingManager : MonoBehaviour
                 break;
             }
         }
-        ProgressBar.Instance.setUnlockedArea(1);
     }
 
     /// <summary>
