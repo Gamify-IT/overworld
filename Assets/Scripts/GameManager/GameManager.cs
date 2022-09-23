@@ -1487,9 +1487,13 @@ public class GameManager : MonoBehaviour
         {
             if(worldData[worldIndex].getMinigameData(minigameIndex) != null)
             {
-                minigames++;
-                if(worldData[worldIndex].getMinigameStatus(minigameIndex) == global::MinigameStatus.done)
+                if (worldData[worldIndex].getMinigameStatus(minigameIndex) == global::MinigameStatus.active)
                 {
+                    minigames++;
+                }   
+                else if(worldData[worldIndex].getMinigameStatus(minigameIndex) == global::MinigameStatus.done)
+                {
+                    minigames++;
                     completedMinigames++;
                 }
             }
@@ -1524,9 +1528,13 @@ public class GameManager : MonoBehaviour
         {
             if (dungeonData.GetMinigameData(minigameIndex) != null)
             {
-                minigames++;
-                if (worldData[worldIndex].getMinigameStatus(minigameIndex, dungeonIndex) == global::MinigameStatus.done)
+                if (worldData[worldIndex].getMinigameStatus(minigameIndex, dungeonIndex) == global::MinigameStatus.active)
                 {
+                    minigames++;
+                }  
+                else if (worldData[worldIndex].getMinigameStatus(minigameIndex, dungeonIndex) == global::MinigameStatus.done)
+                {
+                    minigames++;
                     completedMinigames++;
                 }
             }
