@@ -1481,20 +1481,28 @@ public class GameManager : MonoBehaviour
     /// <returns>The percentage of completed minigames</returns>
     public float getMinigameProgress(int worldIndex)
     {
-        MinigameData[] minigameData = worldData[worldIndex].GetMinigameData();
-        if(minigameData.Length == 0)
+        int completedMinigames = 0;
+        int minigames = 0;
+        for(int minigameIndex=1; minigameIndex <= GameSettings.GetMaxMinigames(); minigameIndex++)
+        {
+            if(worldData[worldIndex].getMinigameData(minigameIndex) != null)
+            {
+                minigames++;
+                if(worldData[worldIndex].getMinigameStatus(minigameIndex) == global::MinigameStatus.done)
+                {
+                    completedMinigames++;
+                }
+            }
+        }
+        Debug.Log(completedMinigames + "/" + minigames + " minigames completed");
+        if(minigames == 0)
         {
             return 0f;
         }
-        int completedMinigames = 0; 
-        foreach(MinigameData data in minigameData)
+        else
         {
-            if(data.GetStatus() == global::MinigameStatus.done)
-            {
-                completedMinigames++;
-            }
+            return (completedMinigames * 1f) / (minigames * 1f);
         }
-        return (completedMinigames * 1f) / (minigameData.Length * 1f);
     }
 
     /// <summary>
@@ -1505,20 +1513,33 @@ public class GameManager : MonoBehaviour
     /// <returns>The percentage of completed minigames</returns>
     public float getMinigameProgress(int worldIndex, int dungeonIndex)
     {
-        MinigameData[] minigameData = worldData[worldIndex].getDungeonData(dungeonIndex).GetMinigameData();
-        if (minigameData.Length == 0)
+        int completedMinigames = 0;
+        int minigames = 0;
+        DungeonData dungeonData = worldData[worldIndex].getDungeonData(dungeonIndex);
+        if(dungeonData == null)
         {
             return 0f;
         }
-        int completedMinigames = 0;
-        foreach (MinigameData data in minigameData)
+        for (int minigameIndex = 1; minigameIndex <= GameSettings.GetMaxMinigames(); minigameIndex++)
         {
-            if (data.GetStatus() == global::MinigameStatus.done)
+            if (dungeonData.GetMinigameData(minigameIndex) != null)
             {
-                completedMinigames++;
+                minigames++;
+                if (worldData[worldIndex].getMinigameStatus(minigameIndex, dungeonIndex) == global::MinigameStatus.done)
+                {
+                    completedMinigames++;
+                }
             }
         }
-        return (completedMinigames * 1f) / (minigameData.Length * 1f);
+        Debug.Log(completedMinigames + "/" + minigames + " minigames completed");
+        if (minigames == 0)
+        {
+            return 0f;
+        }
+        else
+        {
+            return (completedMinigames * 1f) / (minigames * 1f);
+        }
     }
 
     #endregion
