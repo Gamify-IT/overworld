@@ -8,7 +8,7 @@ public static class GameSettings
     private static readonly int maxWorld = 4;
     private static readonly int maxMinigames = 12;
     private static readonly int maxNPCs = 10;
-    private static readonly int maxBooks = 1;
+    private static readonly int maxBooks = 5;
     private static readonly int maxDungeons = 4;
 
     #endregion
