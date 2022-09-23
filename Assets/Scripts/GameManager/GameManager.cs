@@ -1474,5 +1474,41 @@ public class GameManager : MonoBehaviour
         return playerData.unlockedAreas;
     }
 
+    public float getMinigameProgress(int worldIndex)
+    {
+        MinigameData[] minigameData = worldData[worldIndex].GetMinigameData();
+        if(minigameData.Length == 0)
+        {
+            return 0f;
+        }
+        int completedMinigames = 0; 
+        foreach(MinigameData data in minigameData)
+        {
+            if(data.GetStatus() == global::MinigameStatus.done)
+            {
+                completedMinigames++;
+            }
+        }
+        return (completedMinigames * 1f) / (minigameData.Length * 1f);
+    }
+
+    public float getMinigameProgress(int worldIndex, int dungeonIndex)
+    {
+        MinigameData[] minigameData = worldData[worldIndex].getDungeonData(dungeonIndex).GetMinigameData();
+        if (minigameData.Length == 0)
+        {
+            return 0f;
+        }
+        int completedMinigames = 0;
+        foreach (MinigameData data in minigameData)
+        {
+            if (data.GetStatus() == global::MinigameStatus.done)
+            {
+                completedMinigames++;
+            }
+        }
+        return (completedMinigames * 1f) / (minigameData.Length * 1f);
+    }
+
     #endregion
 }

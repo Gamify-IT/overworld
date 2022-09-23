@@ -279,6 +279,7 @@ public class LoadingManager : MonoBehaviour
     private void SetupProgessBar(AreaLocationDTO[] unlockedAreas)
     {
         ProgressBar.Instance.setUnlockedArea(1);
+        ProgressBar.Instance.setProgress(0f);
         for (int worldIndex = GameSettings.GetMaxWorlds(); worldIndex > 0; worldIndex--)
         {
             if(isWorldUnlocked(unlockedAreas, worldIndex))
@@ -287,10 +288,14 @@ public class LoadingManager : MonoBehaviour
                 if(dungeonIndex == 0)
                 {
                     ProgressBar.Instance.setUnlockedArea(worldIndex);
+                    float progress = GameManager.Instance.getMinigameProgress(worldIndex);
+                    ProgressBar.Instance.setProgress(progress);
                 }
                 else
                 {
                     ProgressBar.Instance.setUnlockedArea(worldIndex, dungeonIndex);
+                    float progress = GameManager.Instance.getMinigameProgress(worldIndex, dungeonIndex);
+                    ProgressBar.Instance.setProgress(progress);
                 }
                 break;
             }
