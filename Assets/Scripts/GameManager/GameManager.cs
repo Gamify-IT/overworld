@@ -1474,6 +1474,11 @@ public class GameManager : MonoBehaviour
         return playerData.unlockedAreas;
     }
 
+    /// <summary>
+    /// This function returns the percentage of completed minigames in the given world
+    /// </summary>
+    /// <param name="worldIndex">The index of the world</param>
+    /// <returns>The percentage of completed minigames</returns>
     public float getMinigameProgress(int worldIndex)
     {
         MinigameData[] minigameData = worldData[worldIndex].GetMinigameData();
@@ -1492,6 +1497,12 @@ public class GameManager : MonoBehaviour
         return (completedMinigames * 1f) / (minigameData.Length * 1f);
     }
 
+    /// <summary>
+    /// This function returns the percentage of completed minigames in the given dungeon
+    /// </summary>
+    /// <param name="worldIndex">The index of the world the dungeon is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon</param>
+    /// <returns>The percentage of completed minigames</returns>
     public float getMinigameProgress(int worldIndex, int dungeonIndex)
     {
         MinigameData[] minigameData = worldData[worldIndex].getDungeonData(dungeonIndex).GetMinigameData();
