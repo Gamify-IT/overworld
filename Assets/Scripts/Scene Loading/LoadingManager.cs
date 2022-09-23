@@ -122,6 +122,8 @@ public class LoadingManager : MonoBehaviour
         Debug.Log("Setting data");
 
         GameManager.Instance.SetData(worldIndex, dungeonIndex);
+        AreaLocationDTO[] unlockedAreas = GameManager.Instance.GetUnlockedAreas();
+        SetupProgessBar(unlockedAreas);
 
         slider.value = 0.85f;
         progressText.text = "85%";
@@ -205,6 +207,16 @@ public class LoadingManager : MonoBehaviour
         loadingText.text = "PROCESSING DATA...";
 
         GameManager.Instance.SetData(worldIndex, dungeonIndex);
+        AreaLocationDTO[] unlockedAreasNew = GameManager.Instance.GetUnlockedAreas();
+        SetupProgessBar(unlockedAreasNew);
+        string infoText = CheckForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
+
+        if (infoText != "")
+        {
+            await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
+            string headerText = "";
+            InfoManager.Instance.DisplayInfo(headerText, infoText);
+        }
 
         slider.value = 0.85f;
         progressText.text = "85%";
@@ -215,16 +227,6 @@ public class LoadingManager : MonoBehaviour
         slider.value = 1;
         progressText.text = "100%";
         loadingText.text = "DONE...";
-
-        AreaLocationDTO[] unlockedAreasNew = GameManager.Instance.GetUnlockedAreas();
-        string infoText = CheckForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
-
-        if (infoText != "")
-        {
-            await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
-            string headerText = "";
-            InfoManager.Instance.DisplayInfo(headerText, infoText);
-        }
 
         await SceneManager.UnloadSceneAsync("LoadingScreen");
     }
@@ -268,6 +270,62 @@ public class LoadingManager : MonoBehaviour
         }
 
         return infoText;
+    }
+
+    private void SetupProgessBar(AreaLocationDTO[] unlockedAreas)
+    {
+        for(int worldIndex = GameSettings.GetMaxWorlds(); worldIndex > 0; worldIndex--)
+        {
+            if(isWorldUnlocked(unlockedAreas, worldIndex))
+            {
+                int dungeonIndex = getHighestUnlockedDungeonIndex(unlockedAreas, worldIndex);
+                if(dungeonIndex == 0)
+                {
+                    ProgressBar.Instance.setUnlockedArea(worldIndex);
+                }
+                else
+                {
+                    ProgressBar.Instance.setUnlockedArea(worldIndex, dungeonIndex);
+                }
+            }
+        }
+        ProgressBar.Instance.setUnlockedArea(1);
+    }
+
+    private bool isWorldUnlocked(AreaLocationDTO[] unlockedAreas, int worldIndex)
+    {
+        for (int index = 0; index < unlockedAreas.Length; index++)
+        {
+            if (unlockedAreas[index].worldIndex == worldIndex && unlockedAreas[index].dungeonIndex == 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool isDungeonUnlocked(AreaLocationDTO[] unlockedAreas, int worldIndex, int dungeonIndex)
+    {
+        for (int index = 0; index < unlockedAreas.Length; index++)
+        {
+            if (unlockedAreas[index].worldIndex == worldIndex && unlockedAreas[index].dungeonIndex == dungeonIndex)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int getHighestUnlockedDungeonIndex(AreaLocationDTO[] unlockedAreas, int worldIndex)
+    {
+        for(int dungeonIndex = GameSettings.GetMaxDungeons(); dungeonIndex > 0; dungeonIndex--)
+        {
+            if(isDungeonUnlocked(unlockedAreas, worldIndex, dungeonIndex))
+            {
+                return dungeonIndex;
+            }
+        }
+        return 0;
     }
 
     #endregion
