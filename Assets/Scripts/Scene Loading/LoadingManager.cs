@@ -237,7 +237,7 @@ public class LoadingManager : MonoBehaviour
     /// <param name="unlockedAreasOld">Set of unlocked areas before the reload</param>
     /// <param name="unlockedAreasNew">Set of unlocked areas after the reload</param>
     /// <returns>A info text to display, if a newly unlocked area was found, "" otherwise</returns>
-    public string CheckForNewUnlockedArea(AreaLocationDTO[] unlockedAreasOld, AreaLocationDTO[] unlockedAreasNew)
+    private string CheckForNewUnlockedArea(AreaLocationDTO[] unlockedAreasOld, AreaLocationDTO[] unlockedAreasNew)
     {
         string infoText = "";
         foreach (AreaLocationDTO newLocation in unlockedAreasNew)
@@ -272,6 +272,10 @@ public class LoadingManager : MonoBehaviour
         return infoText;
     }
 
+    /// <summary>
+    /// This function sets up the progress with the highest unlocked area and the minigame progress in that area
+    /// </summary>
+    /// <param name="unlockedAreas">All unlocked areas</param>
     private void SetupProgessBar(AreaLocationDTO[] unlockedAreas)
     {
         for(int worldIndex = GameSettings.GetMaxWorlds(); worldIndex > 0; worldIndex--)
@@ -287,11 +291,18 @@ public class LoadingManager : MonoBehaviour
                 {
                     ProgressBar.Instance.setUnlockedArea(worldIndex, dungeonIndex);
                 }
+                break;
             }
         }
         ProgressBar.Instance.setUnlockedArea(1);
     }
 
+    /// <summary>
+    /// This function checks whether the player has unlocked a world or not
+    /// </summary>
+    /// <param name="unlockedAreas">All unlocked areas</param>
+    /// <param name="worldIndex">The index of the world to be checked</param>
+    /// <returns>True, if the world is unlocked, false otherwise</returns>
     private bool isWorldUnlocked(AreaLocationDTO[] unlockedAreas, int worldIndex)
     {
         for (int index = 0; index < unlockedAreas.Length; index++)
@@ -304,6 +315,13 @@ public class LoadingManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// This function checks whether the player has unlocked a dungeon or not
+    /// </summary>
+    /// <param name="unlockedAreas">All unlocked areas</param>
+    /// <param name="worldIndex">The index of the world the dungeon to be checked is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon to be checked</param>
+    /// <returns>True, if the dungeon is unlocked, false otherwise</returns>
     private bool isDungeonUnlocked(AreaLocationDTO[] unlockedAreas, int worldIndex, int dungeonIndex)
     {
         for (int index = 0; index < unlockedAreas.Length; index++)
@@ -316,6 +334,12 @@ public class LoadingManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// This function returns the highest unlocked dungeon of a given world
+    /// </summary>
+    /// <param name="unlockedAreas">All unlocked areas</param>
+    /// <param name="worldIndex">The index of the world</param>
+    /// <returns></returns>
     private int getHighestUnlockedDungeonIndex(AreaLocationDTO[] unlockedAreas, int worldIndex)
     {
         for(int dungeonIndex = GameSettings.GetMaxDungeons(); dungeonIndex > 0; dungeonIndex--)
