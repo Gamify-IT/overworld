@@ -181,5 +181,14 @@ public class DungeonData
         }
     }
 
+    /// <summary>
+    /// This function the data of all minigames in the world.
+    /// </summary>
+    /// <returns>The data of the minigames</returns>
+    public MinigameData[] GetMinigameData()
+    {
+        return minigames;
+    }
+
     #endregion
 }

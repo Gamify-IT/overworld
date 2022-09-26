@@ -1474,5 +1474,81 @@ public class GameManager : MonoBehaviour
         return playerData.unlockedAreas;
     }
 
+    /// <summary>
+    /// This function returns the percentage of completed minigames in the given world
+    /// </summary>
+    /// <param name="worldIndex">The index of the world</param>
+    /// <returns>The percentage of completed minigames</returns>
+    public float getMinigameProgress(int worldIndex)
+    {
+        int completedMinigames = 0;
+        int minigames = 0;
+        for(int minigameIndex=1; minigameIndex <= GameSettings.GetMaxMinigames(); minigameIndex++)
+        {
+            if(worldData[worldIndex].getMinigameData(minigameIndex) != null)
+            {
+                if (worldData[worldIndex].getMinigameStatus(minigameIndex) == global::MinigameStatus.active)
+                {
+                    minigames++;
+                }   
+                else if(worldData[worldIndex].getMinigameStatus(minigameIndex) == global::MinigameStatus.done)
+                {
+                    minigames++;
+                    completedMinigames++;
+                }
+            }
+        }
+        Debug.Log(completedMinigames + "/" + minigames + " minigames completed");
+        if(minigames == 0)
+        {
+            return 0f;
+        }
+        else
+        {
+            return (completedMinigames * 1f) / (minigames * 1f);
+        }
+    }
+
+    /// <summary>
+    /// This function returns the percentage of completed minigames in the given dungeon
+    /// </summary>
+    /// <param name="worldIndex">The index of the world the dungeon is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon</param>
+    /// <returns>The percentage of completed minigames</returns>
+    public float getMinigameProgress(int worldIndex, int dungeonIndex)
+    {
+        int completedMinigames = 0;
+        int minigames = 0;
+        DungeonData dungeonData = worldData[worldIndex].getDungeonData(dungeonIndex);
+        if(dungeonData == null)
+        {
+            return 0f;
+        }
+        for (int minigameIndex = 1; minigameIndex <= GameSettings.GetMaxMinigames(); minigameIndex++)
+        {
+            if (dungeonData.GetMinigameData(minigameIndex) != null)
+            {
+                if (worldData[worldIndex].getMinigameStatus(minigameIndex, dungeonIndex) == global::MinigameStatus.active)
+                {
+                    minigames++;
+                }  
+                else if (worldData[worldIndex].getMinigameStatus(minigameIndex, dungeonIndex) == global::MinigameStatus.done)
+                {
+                    minigames++;
+                    completedMinigames++;
+                }
+            }
+        }
+        Debug.Log(completedMinigames + "/" + minigames + " minigames completed");
+        if (minigames == 0)
+        {
+            return 0f;
+        }
+        else
+        {
+            return (completedMinigames * 1f) / (minigames * 1f);
+        }
+    }
+
     #endregion
 }

@@ -46,10 +46,16 @@ public class PlayerstatisticDTO
     public PlayerstatisticDTO()
     {
         id = "";
-        AreaLocationDTO unlockedArea = new AreaLocationDTO();
-        unlockedAreas = new AreaLocationDTO[1];
-        unlockedAreas[0] = unlockedArea;
-        currentArea = unlockedArea;
+        AreaLocationDTO unlockedWorld = new AreaLocationDTO();
+        unlockedWorld.worldIndex = 1;
+        unlockedWorld.dungeonIndex = 0;
+        AreaLocationDTO unlockedDungeon = new AreaLocationDTO();
+        unlockedDungeon.worldIndex = 1;
+        unlockedDungeon.dungeonIndex = 1;
+        unlockedAreas = new AreaLocationDTO[2];
+        unlockedAreas[0] = unlockedWorld;
+        unlockedAreas[1] = unlockedDungeon;
+        currentArea = unlockedWorld;
         unlockedDungeons = null;
         userId = "";
         username = "";

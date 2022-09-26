@@ -122,6 +122,8 @@ public class LoadingManager : MonoBehaviour
         Debug.Log("Setting data");
 
         GameManager.Instance.SetData(worldIndex, dungeonIndex);
+        AreaLocationDTO[] unlockedAreas = GameManager.Instance.GetUnlockedAreas();
+        SetupProgessBar(unlockedAreas);
 
         slider.value = 0.85f;
         progressText.text = "85%";
@@ -205,6 +207,16 @@ public class LoadingManager : MonoBehaviour
         loadingText.text = "PROCESSING DATA...";
 
         GameManager.Instance.SetData(worldIndex, dungeonIndex);
+        AreaLocationDTO[] unlockedAreasNew = GameManager.Instance.GetUnlockedAreas();
+        SetupProgessBar(unlockedAreasNew);
+        string infoText = CheckForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
+
+        if (infoText != "")
+        {
+            await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
+            string headerText = "";
+            InfoManager.Instance.DisplayInfo(headerText, infoText);
+        }
 
         slider.value = 0.85f;
         progressText.text = "85%";
@@ -216,16 +228,6 @@ public class LoadingManager : MonoBehaviour
         progressText.text = "100%";
         loadingText.text = "DONE...";
 
-        AreaLocationDTO[] unlockedAreasNew = GameManager.Instance.GetUnlockedAreas();
-        string infoText = CheckForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
-
-        if (infoText != "")
-        {
-            await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
-            string headerText = "";
-            InfoManager.Instance.DisplayInfo(headerText, infoText);
-        }
-
         await SceneManager.UnloadSceneAsync("LoadingScreen");
     }
 
@@ -235,7 +237,7 @@ public class LoadingManager : MonoBehaviour
     /// <param name="unlockedAreasOld">Set of unlocked areas before the reload</param>
     /// <param name="unlockedAreasNew">Set of unlocked areas after the reload</param>
     /// <returns>A info text to display, if a newly unlocked area was found, "" otherwise</returns>
-    public string CheckForNewUnlockedArea(AreaLocationDTO[] unlockedAreasOld, AreaLocationDTO[] unlockedAreasNew)
+    private string CheckForNewUnlockedArea(AreaLocationDTO[] unlockedAreasOld, AreaLocationDTO[] unlockedAreasNew)
     {
         string infoText = "";
         foreach (AreaLocationDTO newLocation in unlockedAreasNew)
@@ -268,6 +270,91 @@ public class LoadingManager : MonoBehaviour
         }
 
         return infoText;
+    }
+
+    /// <summary>
+    /// This function sets up the progress with the highest unlocked area and the minigame progress in that area
+    /// </summary>
+    /// <param name="unlockedAreas">All unlocked areas</param>
+    private void SetupProgessBar(AreaLocationDTO[] unlockedAreas)
+    {
+        ProgressBar.Instance.setUnlockedArea(1);
+        ProgressBar.Instance.setProgress(0f);
+        for (int worldIndex = GameSettings.GetMaxWorlds(); worldIndex > 0; worldIndex--)
+        {
+            if(isWorldUnlocked(unlockedAreas, worldIndex))
+            {
+                int dungeonIndex = getHighestUnlockedDungeonIndex(unlockedAreas, worldIndex);
+                if(dungeonIndex == 0)
+                {
+                    ProgressBar.Instance.setUnlockedArea(worldIndex);
+                    float progress = GameManager.Instance.getMinigameProgress(worldIndex);
+                    ProgressBar.Instance.setProgress(progress);
+                }
+                else
+                {
+                    ProgressBar.Instance.setUnlockedArea(worldIndex, dungeonIndex);
+                    float progress = GameManager.Instance.getMinigameProgress(worldIndex, dungeonIndex);
+                    ProgressBar.Instance.setProgress(progress);
+                }
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// This function checks whether the player has unlocked a world or not
+    /// </summary>
+    /// <param name="unlockedAreas">All unlocked areas</param>
+    /// <param name="worldIndex">The index of the world to be checked</param>
+    /// <returns>True, if the world is unlocked, false otherwise</returns>
+    private bool isWorldUnlocked(AreaLocationDTO[] unlockedAreas, int worldIndex)
+    {
+        for (int index = 0; index < unlockedAreas.Length; index++)
+        {
+            if (unlockedAreas[index].worldIndex == worldIndex && unlockedAreas[index].dungeonIndex == 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// This function checks whether the player has unlocked a dungeon or not
+    /// </summary>
+    /// <param name="unlockedAreas">All unlocked areas</param>
+    /// <param name="worldIndex">The index of the world the dungeon to be checked is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon to be checked</param>
+    /// <returns>True, if the dungeon is unlocked, false otherwise</returns>
+    private bool isDungeonUnlocked(AreaLocationDTO[] unlockedAreas, int worldIndex, int dungeonIndex)
+    {
+        for (int index = 0; index < unlockedAreas.Length; index++)
+        {
+            if (unlockedAreas[index].worldIndex == worldIndex && unlockedAreas[index].dungeonIndex == dungeonIndex)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// This function returns the highest unlocked dungeon of a given world
+    /// </summary>
+    /// <param name="unlockedAreas">All unlocked areas</param>
+    /// <param name="worldIndex">The index of the world</param>
+    /// <returns></returns>
+    private int getHighestUnlockedDungeonIndex(AreaLocationDTO[] unlockedAreas, int worldIndex)
+    {
+        for(int dungeonIndex = GameSettings.GetMaxDungeons(); dungeonIndex > 0; dungeonIndex--)
+        {
+            if(isDungeonUnlocked(unlockedAreas, worldIndex, dungeonIndex))
+            {
+                return dungeonIndex;
+            }
+        }
+        return 0;
     }
 
     #endregion
