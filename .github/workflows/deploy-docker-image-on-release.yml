@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - "main"
-      - "feature/progress-bar"
       - "feature/add-books-to-world1"
     tags:
       - "v*"
