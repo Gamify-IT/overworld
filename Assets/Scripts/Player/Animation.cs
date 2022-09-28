@@ -49,24 +49,25 @@ public class Animation : MonoBehaviour
                 currentSpeed = currentSpeed - sprintingSpeed;
                 playerAnimator.speed = 1;
             }
-
-            if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
-            {
-                currentSpeed = currentSpeed + superSpeed;
-                playerAnimator.speed = 20;
-            }
-
-            if (Input.GetKeyUp("l") && currentSpeed == movementSpeed + superSpeed)
-            {
-                currentSpeed = currentSpeed - superSpeed;
-                playerAnimator.speed = 1;
-            }
-
-            if (Input.GetKeyDown("k"))
-            {
-                GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =
-                    !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
-            }
+            
+            // The following lines are dev keybindings, if needed they can be activated again by uncommenting them
+            // if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
+            // {
+            //     currentSpeed = currentSpeed + superSpeed;
+            //     playerAnimator.speed = 20;
+            // }
+            //
+            // if (Input.GetKeyUp("l") && currentSpeed == movementSpeed + superSpeed)
+            // {
+            //     currentSpeed = currentSpeed - superSpeed;
+            //     playerAnimator.speed = 1;
+            // }
+            //
+            // if (Input.GetKeyDown("k"))
+            // {
+            //     GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =
+            //         !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
+            // }
         }
     }
 

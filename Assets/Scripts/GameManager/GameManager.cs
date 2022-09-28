@@ -496,18 +496,19 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void Update()
     {
+        // The following lines are dev keybindings, if needed they can be activated again by uncommenting them
         //toggle game manager
-        if (Input.GetKeyDown("b"))
-        {
-            active = !active;
-            Debug.Log("game manager now " + active);
-        }
+        // if (Input.GetKeyDown("b"))
+        // {
+        //     active = !active;
+        //     Debug.Log("game manager now " + active);
+        // }
 
         //print all stored objects
-        if (Input.GetKeyDown("j"))
-        {
-            PrintInfo();
-        }
+        // if (Input.GetKeyDown("j"))
+        // {
+        //     PrintInfo();
+        // }
     }
 
     /// <summary>
