@@ -445,9 +445,9 @@ public class GameManager : MonoBehaviour
         }
 
         await UniTask.WhenAll(
-            GetPlayerMinigameStatistics(path + "/playerstatistics/" + userId + "/player-task-statistics"),
-            GetPlayerStatistics(path + "/playerstatistics/" + userId),
-            GetPlayerNPCStatistics(path + "/playerstatistics/" + userId + "/player-npc-statistics")
+            GetPlayerMinigameStatistics(path + "/playerstatistics/player-task-statistics"),
+            GetPlayerStatistics(path + "/playerstatistics/"),
+            GetPlayerNPCStatistics(path + "/playerstatistics/player-npc-statistics")
         );
 
         Debug.Log("Got all data.");
