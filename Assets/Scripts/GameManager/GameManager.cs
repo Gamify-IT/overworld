@@ -497,17 +497,17 @@ public class GameManager : MonoBehaviour
     public void Update()
     {
         //toggle game manager
-        if (Input.GetKeyDown("b"))
-        {
-            active = !active;
-            Debug.Log("game manager now " + active);
-        }
+        // if (Input.GetKeyDown("b"))
+        // {
+        //     active = !active;
+        //     Debug.Log("game manager now " + active);
+        // }
 
         //print all stored objects
-        if (Input.GetKeyDown("j"))
-        {
-            PrintInfo();
-        }
+        // if (Input.GetKeyDown("j"))
+        // {
+        //     PrintInfo();
+        // }
     }
 
     /// <summary>
