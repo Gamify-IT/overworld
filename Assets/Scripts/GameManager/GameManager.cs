@@ -496,6 +496,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void Update()
     {
+        // The following lines are dev keybindings, if needed they can be activated again by uncommenting them
         //toggle game manager
         // if (Input.GetKeyDown("b"))
         // {

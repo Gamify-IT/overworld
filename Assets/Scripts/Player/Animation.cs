@@ -49,7 +49,8 @@ public class Animation : MonoBehaviour
                 currentSpeed = currentSpeed - sprintingSpeed;
                 playerAnimator.speed = 1;
             }
-
+            
+            // The following lines are dev keybindings, if needed they can be activated again by uncommenting them
             // if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
             // {
             //     currentSpeed = currentSpeed + superSpeed;
