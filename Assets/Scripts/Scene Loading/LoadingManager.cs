@@ -85,12 +85,12 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("Start fetching data");
 
-        await GameManager.Instance.FetchData();
+        bool loadingSuccesful = await GameManager.Instance.FetchData();
 
         Debug.Log("Finish fetching data");
 
         Debug.Log("Validate data");
-        if (GameManager.Instance.loadingError)
+        if (loadingSuccesful)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
         }
@@ -122,7 +122,7 @@ public class LoadingManager : MonoBehaviour
         Debug.Log("Setting data");
 
         GameManager.Instance.SetData(worldIndex, dungeonIndex);
-        AreaLocationDTO[] unlockedAreas = GameManager.Instance.GetUnlockedAreas();
+        AreaLocationDTO[] unlockedAreas = DataManager.Instance.GetPlayerData().unlockedAreas;
         SetupProgessBar(unlockedAreas);
 
         slider.value = 0.85f;
@@ -187,16 +187,16 @@ public class LoadingManager : MonoBehaviour
             return;
         }
 
-        AreaLocationDTO[] unlockedAreasOld = GameManager.Instance.GetUnlockedAreas();
+        AreaLocationDTO[] unlockedAreasOld = DataManager.Instance.GetPlayerData().unlockedAreas;
 
         Debug.Log("Start fetching data");
 
-        await GameManager.Instance.FetchData();
+        bool loadingSuccesful = await GameManager.Instance.FetchData();
 
         Debug.Log("Finish fetching data");
 
         Debug.Log("Validate data");
-        if (GameManager.Instance.loadingError)
+        if (loadingSuccesful)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
             return;
@@ -207,7 +207,7 @@ public class LoadingManager : MonoBehaviour
         loadingText.text = "PROCESSING DATA...";
 
         GameManager.Instance.SetData(worldIndex, dungeonIndex);
-        AreaLocationDTO[] unlockedAreasNew = GameManager.Instance.GetUnlockedAreas();
+        AreaLocationDTO[] unlockedAreasNew = DataManager.Instance.GetPlayerData().unlockedAreas;
         SetupProgessBar(unlockedAreasNew);
         string infoText = CheckForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
 
@@ -288,13 +288,13 @@ public class LoadingManager : MonoBehaviour
                 if(dungeonIndex == 0)
                 {
                     ProgressBar.Instance.setUnlockedArea(worldIndex);
-                    float progress = GameManager.Instance.getMinigameProgress(worldIndex);
+                    float progress = DataManager.Instance.GetMinigameProgress(worldIndex);
                     ProgressBar.Instance.setProgress(progress);
                 }
                 else
                 {
                     ProgressBar.Instance.setUnlockedArea(worldIndex, dungeonIndex);
-                    float progress = GameManager.Instance.getMinigameProgress(worldIndex, dungeonIndex);
+                    float progress = DataManager.Instance.GetMinigameProgress(worldIndex, dungeonIndex);
                     ProgressBar.Instance.setProgress(progress);
                 }
                 break;

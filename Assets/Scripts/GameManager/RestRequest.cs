@@ -45,7 +45,44 @@ public static class RestRequest
         }
     }
 
-    public static async UniTask<bool> PostNpcCompleted(string uri, string json)
+    public static async UniTask<Optional<T[]>> GetArrayRequest<T>(string uri)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            Debug.Log("Get Request for path: " + uri);
+
+            // Request and wait for the desired page.
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(uri + ": Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
+                    T[] result = JsonHelper.GetJsonArray<T>(webRequest.downloadHandler.text);
+                    Optional<T[]> optional = new Optional<T[]>(result);
+                    return optional;
+            }
+            T type = default;
+            T[] array = { type };
+            Optional<T[]> v = new Optional<T[]>(array);
+            v.Disable();
+            return v;
+        }
+    }
+
+    public static async UniTask<bool> PostRequest(string uri, string json)
     {
         Debug.Log("Post Request for path: " + uri + ", posting: " + json);
 

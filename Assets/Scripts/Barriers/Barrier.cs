@@ -45,7 +45,7 @@ public class Barrier : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove " + type + ": " + originWorldIndex + "->" + destinationAreaIndex);
-        GameManager.Instance.RemoveBarrier(type, originWorldIndex, destinationAreaIndex);
+        ObjectManager.Instance.RemoveBarrier(type, originWorldIndex, destinationAreaIndex);
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public class Barrier : MonoBehaviour
     private void RegisterToGameManager()
     {
         Debug.Log("register " + type + ": " + originWorldIndex + "->" + destinationAreaIndex);
-        GameManager.Instance.AddBarrier(gameObject, type, originWorldIndex, destinationAreaIndex);
+        ObjectManager.Instance.AddBarrier(gameObject, type, originWorldIndex, destinationAreaIndex);
     }
 
     #endregion

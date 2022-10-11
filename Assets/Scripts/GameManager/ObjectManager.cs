@@ -16,6 +16,7 @@ public class ObjectManager : MonoBehaviour
     {
         if (Instance == null)
         {
+            Instance = this;
             SetupObjectManager();
         }
         else
@@ -63,7 +64,7 @@ public class ObjectManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function registers a new minigame at the <c>GameManager</c>
+    ///     This function registers a new minigame at the <c>ObjectManager</c>
     /// </summary>
     /// <param name="minigame">The minigame gameObject</param>
     /// <param name="world">The index of the world the minigame is in</param>
@@ -85,7 +86,7 @@ public class ObjectManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function removes a minigame from the <c>GameManager</c>
+    ///     This function removes a minigame from the <c>ObjectManager</c>
     /// </summary>
     /// <param name="world">The index of the world the minigame is in</param>
     /// <param name="dungeon">The index of the dungeon the minigame is in (0 if in no dungeon)</param>
@@ -103,7 +104,7 @@ public class ObjectManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function registers a new barrier at the <c>GameManager</c>
+    ///     This function registers a new barrier at the <c>ObjectManager</c>
     /// </summary>
     /// <param name="barrier">The barrier gameObject</param>
     /// <param name="originWorldIndex">The index of the world which exit the barrier is blocking</param>
@@ -125,7 +126,7 @@ public class ObjectManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function removes a barrier from the <c>GameManager</c>
+    ///     This function removes a barrier from the <c>ObjectManager</c>
     /// </summary>
     /// <param name="worldIndexOrigin">The index of the world which exit the barrier is blocking</param>
     /// <param name="worldIndexDestination">The index of the world which entry the barrier is blocking</param>
@@ -143,7 +144,7 @@ public class ObjectManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function registers a new npc at the <c>GameManager</c>
+    ///     This function registers a new npc at the <c>ObjectManager</c>
     /// </summary>
     /// <param name="npc">The npc gameObject</param>
     /// <param name="world">The index of the world the npc is in</param>
@@ -165,7 +166,7 @@ public class ObjectManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function removes a npc from the <c>GameManager</c>
+    ///     This function removes a npc from the <c>ObjectManager</c>
     /// </summary>
     /// <param name="world">The index of the world the npc is in</param>
     /// <param name="dungeon">The index of the dungeon the npc is in (0 if in no dungeon)</param>
@@ -185,7 +186,7 @@ public class ObjectManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function registers a new book at the <c>GameManager</c>
+    ///     This function registers a new book at the <c>ObjectManager</c>
     /// </summary>
     /// <param name="book">The npc gameObject</param>
     /// <param name="world">The index of the world the book is in</param>
@@ -207,7 +208,7 @@ public class ObjectManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function removes a book from the <c>GameManager</c>
+    ///     This function removes a book from the <c>ObjectManager</c>
     /// </summary>
     /// <param name="world">The index of the world the book is in</param>
     /// <param name="dungeon">The index of the dungeon the book is in (0 if in no dungeon)</param>

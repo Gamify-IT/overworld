@@ -16,6 +16,7 @@ public class DataManager : MonoBehaviour
     {
         if (Instance == null)
         {
+            Instance = this;
             SetupDataManager();
         }
         else
@@ -122,6 +123,15 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function returns the player data
+    /// </summary>
+    /// <returns>The player data</returns>
+    public PlayerstatisticDTO GetPlayerData()
+    {
+        return playerData;
+    }
+
+    /// <summary>
     ///     This function checks if a player has unlocked a world.
     /// </summary>
     /// <param name="worldIndex">The index of the world to check</param>
@@ -188,10 +198,10 @@ public class DataManager : MonoBehaviour
 
     /// <summary>
     ///     This function processes the player minigame statistics data returned form backend and stores the needed data in the
-    ///     <c>GameManager</c>
+    ///     <c>DataManager</c>
     /// </summary>
     /// <param name="playerTaskStatistics">The player minigame statistics data returned from the backend</param>
-    public void ProcessPlayerTaskStatisitcs(PlayerTaskStatisticDTO[] playerTaskStatistics)
+    public void ProcessMinigameStatisitcs(PlayerTaskStatisticDTO[] playerTaskStatistics)
     {
         if (playerTaskStatistics == null)
         {
@@ -253,10 +263,10 @@ public class DataManager : MonoBehaviour
 
     /// <summary>
     ///     This function processes the player npc statistcs data returned from the backend and stores the needed data in the
-    ///     <c>GameManager</c>
+    ///     <c>DataManager</c>
     /// </summary>
     /// <param name="playerNPCStatistics">The player npc statistics data returned from the backend</param>
-    public void ProcessPlayerNpcStatistics(PlayerNPCStatisticDTO[] playerNPCStatistics)
+    public void ProcessNpcStatistics(PlayerNPCStatisticDTO[] playerNPCStatistics)
     {
         if (playerNPCStatistics == null)
         {
@@ -274,6 +284,91 @@ public class DataManager : MonoBehaviour
             {
                 worldData[worldIndex].setNPCStatus(dungeonIndex, index, completed);
             }
+        }
+    }
+
+    /// <summary>
+    ///     This function processes the player data
+    /// </summary>
+    /// <param name="playerData">The player statistics returned from the backend</param>
+    public void ProcessPlayerStatistics(PlayerstatisticDTO playerStatistics)
+    {
+        playerData = playerStatistics;
+    }
+
+    /// <summary>
+    /// This function returns the percentage of completed minigames in the given world
+    /// </summary>
+    /// <param name="worldIndex">The index of the world</param>
+    /// <returns>The percentage of completed minigames</returns>
+    public float GetMinigameProgress(int worldIndex)
+    {
+        int completedMinigames = 0;
+        int minigames = 0;
+        for (int minigameIndex = 1; minigameIndex <= GameSettings.GetMaxMinigames(); minigameIndex++)
+        {
+            if (worldData[worldIndex].getMinigameData(minigameIndex) != null)
+            {
+                if (worldData[worldIndex].getMinigameStatus(minigameIndex) == global::MinigameStatus.active)
+                {
+                    minigames++;
+                }
+                else if (worldData[worldIndex].getMinigameStatus(minigameIndex) == global::MinigameStatus.done)
+                {
+                    minigames++;
+                    completedMinigames++;
+                }
+            }
+        }
+        Debug.Log(completedMinigames + "/" + minigames + " minigames completed");
+        if (minigames == 0)
+        {
+            return 0f;
+        }
+        else
+        {
+            return (completedMinigames * 1f) / (minigames * 1f);
+        }
+    }
+
+    /// <summary>
+    /// This function returns the percentage of completed minigames in the given dungeon
+    /// </summary>
+    /// <param name="worldIndex">The index of the world the dungeon is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon</param>
+    /// <returns>The percentage of completed minigames</returns>
+    public float GetMinigameProgress(int worldIndex, int dungeonIndex)
+    {
+        int completedMinigames = 0;
+        int minigames = 0;
+        DungeonData dungeonData = worldData[worldIndex].getDungeonData(dungeonIndex);
+        if (dungeonData == null)
+        {
+            return 0f;
+        }
+        for (int minigameIndex = 1; minigameIndex <= GameSettings.GetMaxMinigames(); minigameIndex++)
+        {
+            if (dungeonData.GetMinigameData(minigameIndex) != null)
+            {
+                if (worldData[worldIndex].getMinigameStatus(minigameIndex, dungeonIndex) == global::MinigameStatus.active)
+                {
+                    minigames++;
+                }
+                else if (worldData[worldIndex].getMinigameStatus(minigameIndex, dungeonIndex) == global::MinigameStatus.done)
+                {
+                    minigames++;
+                    completedMinigames++;
+                }
+            }
+        }
+        Debug.Log(completedMinigames + "/" + minigames + " minigames completed");
+        if (minigames == 0)
+        {
+            return 0f;
+        }
+        else
+        {
+            return (completedMinigames * 1f) / (minigames * 1f);
         }
     }
 }
