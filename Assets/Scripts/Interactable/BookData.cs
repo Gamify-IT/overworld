@@ -16,6 +16,26 @@ public class BookData
         bookText = text;
     }
 
+    /// <summary>
+    ///     This function converts a BookDTO to BookData 
+    /// </summary>
+    /// <param name="dto">The BookDTO to convert</param>
+    /// <returns>The converted BookData </returns>
+    public static BookData ConvertDtoToData(BookDTO dto)
+    {
+        string uuid = dto.id;
+        string bookText = dto.text;
+
+        if (bookText.Length == 0)
+        {
+            string dummyText = "This is just an empty Book. No one has written anything here.";
+            bookText = dummyText;
+        }
+
+        BookData data = new BookData(uuid, bookText);
+        return data;
+    }
+
     #region Attributes
 
     private string uuid;

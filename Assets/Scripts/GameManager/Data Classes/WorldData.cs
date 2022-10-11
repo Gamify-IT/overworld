@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 /// <summary>
 ///     This class defines all needed data for a <c>World</c>.
 /// </summary>
@@ -66,6 +68,55 @@ public class WorldData
     }
 
     #endregion
+
+    /// <summary>
+    ///     This function converts a WorldDTO to WorldData 
+    /// </summary>
+    /// <param name="dto">The WorldDTO to convert</param>
+    /// <returns>The converted WorldData</returns>
+    public static WorldData ConvertDtoToData(WorldDTO dto)
+    {
+        string id = dto.id;
+        int index = dto.index;
+        string staticName = dto.staticName;
+        string topicName = dto.topicName;
+        bool active = dto.active;
+
+        MinigameData[] minigames = new MinigameData[GameSettings.GetMaxMinigames() + 1];
+        List<MinigameTaskDTO> minigameDTOs = dto.minigameTasks;
+        foreach (MinigameTaskDTO minigameDTO in minigameDTOs)
+        {
+            MinigameData minigameData = MinigameData.ConvertDtoToData(minigameDTO);
+            minigames[minigameDTO.index] = minigameData;
+        }
+
+        NPCData[] npcs = new NPCData[GameSettings.GetMaxNpCs() + 1];
+        List<NPCDTO> npcDTOs = dto.npcs;
+        foreach (NPCDTO npcDTO in npcDTOs)
+        {
+            NPCData npcData = NPCData.ConvertDtoToData(npcDTO);
+            npcs[npcDTO.index] = npcData;
+        }
+
+        BookData[] books = new BookData[GameSettings.GetMaxBooks() + 1];
+        List<BookDTO> bookDTOs = dto.books;
+        foreach (BookDTO bookDTO in bookDTOs)
+        {
+            BookData bookData = BookData.ConvertDtoToData(bookDTO);
+            books[bookDTO.index] = bookData;
+        }
+
+        DungeonData[] dungeons = new DungeonData[GameSettings.GetMaxDungeons() + 1];
+        List<DungeonDTO> dungeonDTOs = dto.dungeons;
+        foreach(DungeonDTO dungeonDTO in dungeonDTOs)
+        {
+            DungeonData dungeonData = DungeonData.ConvertDtoToData(dungeonDTO);
+            dungeons[dungeonDTO.index] = dungeonData;
+        }
+
+        WorldData data = new WorldData(id, index, staticName, topicName, active, minigames, npcs, dungeons, books);
+        return data;
+    }
 
     #region GetterAndSetter
 
