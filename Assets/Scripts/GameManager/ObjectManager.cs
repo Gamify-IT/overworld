@@ -1,67 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     The <c>ObjectManager</c> manages the communication between the <c>GameManager</c> and <c>GameObjects</c> in the areas. It also sets up these objects with provided data.
+/// </summary>
 public class ObjectManager : MonoBehaviour
 {
-    #region Singleton
-
+    //Singleton
     public static ObjectManager Instance { get; private set; }
 
-    /// <summary>
-    ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
-    ///     deletes the object otherwise
-    /// </summary>
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            SetupObjectManager();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    #endregion
-
-    #region Attributes
-
-    private GameObject[,] minigameObjects;
-    private GameObject[,] worldBarrierObjects;
-    private GameObject[,] dungeonBarrierObjects;
-    private GameObject[,] npcObjects;
-    private GameObject[,] bookObjects;
-
+    //Game settigs
     private int maxWorld;
     private int maxMinigames;
     private int maxNPCs;
     private int maxBooks;
     private int maxDungeons;
 
-    #endregion
-
-    #region Setup
-
-    /// <summary>
-    ///     This function initializes the <c>ObjectManager</c>. All arrays are initialized with empty objects.
-    /// </summary>
-    private void SetupObjectManager()
-    {
-        maxWorld = GameSettings.GetMaxWorlds();
-        maxMinigames = GameSettings.GetMaxMinigames();
-        maxNPCs = GameSettings.GetMaxNpCs();
-        maxBooks = GameSettings.GetMaxBooks();
-        maxDungeons = GameSettings.GetMaxDungeons();
-
-        minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
-        worldBarrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
-        dungeonBarrierObjects = new GameObject[maxWorld + 1, maxDungeons + 1];
-        npcObjects = new GameObject[maxWorld + 1, maxNPCs + 1];
-        bookObjects = new GameObject[maxWorld + 1, maxBooks + 1];
-    }
+    //Object refernce fields
+    private GameObject[,] minigameObjects;
+    private GameObject[,] worldBarrierObjects;
+    private GameObject[,] dungeonBarrierObjects;
+    private GameObject[,] npcObjects;
+    private GameObject[,] bookObjects;
 
     /// <summary>
     ///     This function registers a new minigame at the <c>ObjectManager</c>
@@ -227,10 +186,6 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
-    #endregion
-
-    #region SettingData
-
     /// <summary>
     ///     This functions sets the data for a given world.
     /// </summary>
@@ -332,7 +287,7 @@ public class ObjectManager : MonoBehaviour
             {
                 activedByLecturer = worldData.isActive();
             }
-            bool unlockedByPlayer = DataManager.Instance.PlayerHasWorldUnlocked(barrierDestinationIndex);
+            bool unlockedByPlayer = DataManager.Instance.IsWorldUnlocked(barrierDestinationIndex);
             bool worldExplorable = activedByLecturer & unlockedByPlayer;
             BarrierData barrierData = new BarrierData(!worldExplorable);
             barrier.Setup(barrierData);
@@ -358,7 +313,7 @@ public class ObjectManager : MonoBehaviour
             {
                 activedByLecturer = dungeonData.IsActive();
             }
-            bool unlockedByPlayer = DataManager.Instance.PlayerHasDungeonUnlocked(worldIndex, barrierDestinationIndex);
+            bool unlockedByPlayer = DataManager.Instance.IsDungeonUnlocked(worldIndex, barrierDestinationIndex);
             bool dungeonExplorable = activedByLecturer & unlockedByPlayer;
             BarrierData barrierData = new BarrierData(!dungeonExplorable);
             barrier.Setup(barrierData);
@@ -453,5 +408,39 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
-    #endregion
+    /// <summary>
+    ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
+    ///     deletes the object otherwise
+    /// </summary>
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            SetupObjectManager();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    /// <summary>
+    ///     This function initializes the <c>ObjectManager</c>. All arrays are initialized with empty objects.
+    /// </summary>
+    private void SetupObjectManager()
+    {
+        maxWorld = GameSettings.GetMaxWorlds();
+        maxMinigames = GameSettings.GetMaxMinigames();
+        maxNPCs = GameSettings.GetMaxNpCs();
+        maxBooks = GameSettings.GetMaxBooks();
+        maxDungeons = GameSettings.GetMaxDungeons();
+
+        minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
+        worldBarrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
+        dungeonBarrierObjects = new GameObject[maxWorld + 1, maxDungeons + 1];
+        npcObjects = new GameObject[maxWorld + 1, maxNPCs + 1];
+        bookObjects = new GameObject[maxWorld + 1, maxBooks + 1];
+    }
+
 }

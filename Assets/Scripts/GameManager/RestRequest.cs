@@ -1,14 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 
 public static class RestRequest
 {
+    /// <summary>
+    ///     This function sends a GET REQUEST to the provided <c>uri</c> and casts the responst to an object of type <c>T</c> and returns an <c>Optional</c> of that type.  
+    /// </summary>
+    /// <typeparam name="T">The type to cast the response to</typeparam>
+    /// <param name="uri">The path to send the request to</param>
+    /// <returns>An <c>Optional</c> containing the casted return, if an error occurs, the returned <c>Optional</c> is empty</returns>
     public static async UniTask<Optional<T>> GetRequest<T>(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
@@ -35,16 +37,22 @@ public static class RestRequest
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
                     T value = JsonUtility.FromJson<T>(webRequest.downloadHandler.text);
-                    Optional<T> optional = new Optional<T>(value);
-                    return optional;
+                    Optional<T> result = new Optional<T>(value);
+                    return result;
             }
             T type = default;
             Optional<T> v = new Optional<T>(type);
-            v.Disable();
+            v.Clear();
             return v;
         }
     }
 
+    /// <summary>
+    ///     This function sends a GET REQUEST to the provided <c>uri</c> and casts the responst to an array of objects type <c>T</c> and returns an <c>Optional</c> of that type. 
+    /// </summary>
+    /// <typeparam name="T">The type to cast the response to</typeparam>
+    /// <param name="uri">The path to send the request to</param>
+    /// <returns>An <c>Optional</c> containing the casted return, if an error occurs, the returned <c>Optional</c> is empty</returns>
     public static async UniTask<Optional<T[]>> GetArrayRequest<T>(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
@@ -70,23 +78,28 @@ public static class RestRequest
                     break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
-                    T[] result = JsonHelper.GetJsonArray<T>(webRequest.downloadHandler.text);
-                    Optional<T[]> optional = new Optional<T[]>(result);
-                    return optional;
+                    T[] returnValue = JsonHelper.GetJsonArray<T>(webRequest.downloadHandler.text);
+                    Optional<T[]> result = new Optional<T[]>(returnValue);
+                    return result;
             }
             T type = default;
             T[] array = { type };
             Optional<T[]> v = new Optional<T[]>(array);
-            v.Disable();
+            v.Clear();
             return v;
         }
     }
 
+    /// <summary>
+    ///     This function sends a POST REQUEST to the provided <c>uri</c> with the <c>json</c> body. 
+    /// </summary>
+    /// <param name="uri">The type to cast the response to</param>
+    /// <param name="json">The body to be send</param>
+    /// <returns>true if post request was successful, false otherwise</returns>
     public static async UniTask<bool> PostRequest(string uri, string json)
     {
         Debug.Log("Post Request for path: " + uri + ", posting: " + json);
 
-        //UnityWebRequest webRequest = UnityWebRequest.Post(uri, json);
         UnityWebRequest webRequest = new UnityWebRequest(uri, UnityWebRequest.kHttpVerbPOST);
         byte[] bytes = new UTF8Encoding().GetBytes(json);
         webRequest.uploadHandler = new UploadHandlerRaw(bytes);

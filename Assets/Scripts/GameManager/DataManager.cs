@@ -1,71 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     The <c>DataManager</c> stores all required data to set up the objects in the areas. 
+/// </summary>
 public class DataManager : MonoBehaviour
 {
-    #region Singleton
-
+    //Singleton
     public static DataManager Instance { get; private set; }
 
-    /// <summary>
-    ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
-    ///     deletes the object otherwise
-    /// </summary>
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            SetupDataManager();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    #endregion
-
-    #region Attributes
-
+    //Game settigs
     private int maxWorld;
     private int maxMinigames;
     private int maxNPCs;
     private int maxBooks;
     private int maxDungeons;
 
+    //Data fields
     private WorldData[] worldData;
     private PlayerstatisticDTO playerData;
-
-    #endregion
-
-    /// <summary>
-    ///     This function initializes the <c>DataManager</c>. All arrays are initialized with empty objects.
-    /// </summary>
-    private void SetupDataManager()
-    {
-        maxWorld = GameSettings.GetMaxWorlds();
-        maxMinigames = GameSettings.GetMaxMinigames();
-        maxNPCs = GameSettings.GetMaxNpCs();
-        maxBooks = GameSettings.GetMaxBooks();
-        maxDungeons = GameSettings.GetMaxDungeons();
-
-        worldData = new WorldData[maxWorld + 1];
-        playerData = new PlayerstatisticDTO();
-
-        for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
-        {
-            worldData[worldIndex] = new WorldData();
-        }
-    }
 
     /// <summary>
     ///     This function sets given data for the specified world
     /// </summary>
     /// <param name="worldIndex">The world to set the data at</param>
     /// <param name="data">The data to set</param>
-    public void SetData(int worldIndex, WorldData data)
+    public void SetWorldData(int worldIndex, WorldData data)
     {
         if(worldIndex <= 0 || worldIndex > maxWorld)
         {
@@ -79,7 +38,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     /// <param name="worldIndex">The world to set the data at</param>
     /// <param name="data">The dto to convert and set</param>
-    public void SetData(int worldIndex, WorldDTO data)
+    public void SetWorldData(int worldIndex, WorldDTO data)
     {
         if (worldIndex <= 0 || worldIndex > maxWorld)
         {
@@ -136,7 +95,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     /// <param name="worldIndex">The index of the world to check</param>
     /// <returns>True, if the player has unlocked the world, false otherwise</returns>
-    public bool PlayerHasWorldUnlocked(int worldIndex)
+    public bool IsWorldUnlocked(int worldIndex)
     {
         for (int i = 0; i < playerData.unlockedAreas.Length; i++)
         {
@@ -156,7 +115,7 @@ public class DataManager : MonoBehaviour
     /// <param name="worldIndex">The index of the world the dungeon is in</param>
     /// <param name="dungeonIndex">The index of the dungeon to check</param>
     /// <returns>True, if the player has unlocked the dungeon, false otherwise</returns>
-    public bool PlayerHasDungeonUnlocked(int worldIndex, int dungeonIndex)
+    public bool IsDungeonUnlocked(int worldIndex, int dungeonIndex)
     {
         for (int i = 0; i < playerData.unlockedAreas.Length; i++)
         {
@@ -237,28 +196,6 @@ public class DataManager : MonoBehaviour
             worldData[worldIndex].setMinigameStatus(dungeonIndex, index, status);
             worldData[worldIndex].setMinigameHighscore(dungeonIndex, index, highscore);
         }
-    }
-
-    /// <summary>
-    ///     This function returns the status of a minigame in a world or dungeon.
-    /// </summary>
-    /// <param name="worldIndex">The index of the world the minigame is in</param>
-    /// <param name="dungeonIndex">The index of the dungeon the minigame is in (0 if in world)</param>
-    /// <param name="index">The index of the minigame in its area</param>
-    /// <returns>The status of the minigame, <c>notConfigurated if not found</c></returns>
-    private MinigameStatus MinigameStatus(int worldIndex, int dungeonIndex, int index)
-    {
-        if (worldIndex < 0 || worldIndex >= worldData.Length)
-        {
-            return global::MinigameStatus.notConfigurated;
-        }
-
-        if (dungeonIndex != 0)
-        {
-            return worldData[worldIndex].getMinigameStatus(dungeonIndex, index);
-        }
-
-        return worldData[worldIndex].getMinigameStatus(index);
     }
 
     /// <summary>
@@ -371,4 +308,64 @@ public class DataManager : MonoBehaviour
             return (completedMinigames * 1f) / (minigames * 1f);
         }
     }
+
+    /// <summary>
+    ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
+    ///     deletes the object otherwise
+    /// </summary>
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            SetupDataManager();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    /// <summary>
+    ///     This function initializes the <c>DataManager</c>. All arrays are initialized with empty objects.
+    /// </summary>
+    private void SetupDataManager()
+    {
+        maxWorld = GameSettings.GetMaxWorlds();
+        maxMinigames = GameSettings.GetMaxMinigames();
+        maxNPCs = GameSettings.GetMaxNpCs();
+        maxBooks = GameSettings.GetMaxBooks();
+        maxDungeons = GameSettings.GetMaxDungeons();
+
+        worldData = new WorldData[maxWorld + 1];
+        playerData = new PlayerstatisticDTO();
+
+        for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
+        {
+            worldData[worldIndex] = new WorldData();
+        }
+    }
+
+    /// <summary>
+    ///     This function returns the status of a minigame in a world or dungeon.
+    /// </summary>
+    /// <param name="worldIndex">The index of the world the minigame is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon the minigame is in (0 if in world)</param>
+    /// <param name="index">The index of the minigame in its area</param>
+    /// <returns>The status of the minigame, <c>notConfigurated if not found</c></returns>
+    private MinigameStatus MinigameStatus(int worldIndex, int dungeonIndex, int index)
+    {
+        if (worldIndex < 0 || worldIndex >= worldData.Length)
+        {
+            return global::MinigameStatus.notConfigurated;
+        }
+
+        if (dungeonIndex != 0)
+        {
+            return worldData[worldIndex].getMinigameStatus(dungeonIndex, index);
+        }
+
+        return worldData[worldIndex].getMinigameStatus(index);
+    }
+
 }

@@ -1,22 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+/// <summary>
+///     This struct specifies an Optional of given type <c>T</c>.
+/// </summary>
+/// <typeparam name="T">The type of the Optional</typeparam>
 [System.Serializable]
 public struct Optional<T>
 {
-    private bool enabled;
+    private bool present;
     private T value;
 
     public Optional(T initialValue)
     {
-        enabled = true;
+        present = true;
         value = initialValue;
     }
 
-    public bool Enabled()
+    public bool IsPresent()
     {
-        return enabled;
+        return present;
     }
 
     public T Value()
@@ -24,18 +24,14 @@ public struct Optional<T>
         return value;
     }
 
-    public void Enable()
+    public void Clear()
     {
-        enabled = true;
-    }
-
-    public void Disable()
-    {
-        enabled = false;
+        present = false;
     }
 
     public void SetValue(T value)
     {
+        present = true;
         this.value = value;
     }
 }

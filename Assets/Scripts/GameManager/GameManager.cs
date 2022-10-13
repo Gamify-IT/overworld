@@ -1,44 +1,20 @@
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-///     The <c>GameManager</c> retrievs all needed data from the backend and sets up the objects depending on those data.
+///     The <c>GameManager</c> retrievs all needed data from the backend, stores it in the <c>DataManager</c> and sets up the objects via the <c>ObjectMananger</c> depending on those data.
 /// </summary>
 public class GameManager : MonoBehaviour
 {
     [DllImport("__Internal")]
     private static extern string GetToken(string tokenName);
 
-    #region Singleton
-
+    //Singleton
     public static GameManager Instance { get; private set; }
-
-    /// <summary>
-    ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
-    ///     deletes the object otherwise
-    /// </summary>
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            SetupGameManager();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    #endregion
-
-    #region Attributes
 
     //Game settigs
     private string overworldBackendPath;
@@ -55,27 +31,6 @@ public class GameManager : MonoBehaviour
     private Vector2 minigameRespawnPosition;
     private int minigameWorldIndex;
     private int minigameDungeonIndex;
-
-    //public bool loadingError;
-
-    #endregion
-
-    #region Setup
-
-    /// <summary>
-    ///     This function initializes the <c>GameManager</c>. All arrays are initialized with empty objects.
-    /// </summary>
-    private void SetupGameManager()
-    {
-        //loadingError = false;
-
-        overworldBackendPath = GameSettings.GetOverworldBackendPath();
-        maxWorld = GameSettings.GetMaxWorlds();
-        maxMinigames = GameSettings.GetMaxMinigames();
-        maxNPCs = GameSettings.GetMaxNpCs();
-        maxBooks = GameSettings.GetMaxBooks();
-        maxDungeons = GameSettings.GetMaxDungeons();
-    }
 
     /// <summary>
     ///     This function checks whether or not a valid courseId was passed or not.
@@ -145,31 +100,67 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function checks, if a user with the found id exists, and if not creates one.
+    ///     This function loads all needed data from the backend an converts the data into usable formats.
+    ///     If an error accours while loading, the <c>loadingError</c> flag is set.
     /// </summary>
-    private async UniTask<bool> ValidateUserId()
+    /// <returns></returns>
+    public async UniTask<bool> FetchData()
     {
-        string uri = overworldBackendPath + "/course/" + courseId + "/playerstatistics/" + userId;
+        bool loadingError = false;
 
-        Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(uri);
+        //path to get world data from
+        string path = overworldBackendPath + "/courses/" + courseId;
 
-        if(playerStatistics.Enabled())
+        //get data
+        Optional<WorldDTO>[] worldDTOs = new Optional<WorldDTO>[maxWorld + 1];
+        for (int worldIndex = 1; worldIndex <= maxWorld; worldIndex++)
         {
-            return true;
+            Optional<WorldDTO> dto = await RestRequest.GetRequest<WorldDTO>(path + "/worlds/" + worldIndex);
+            worldDTOs[worldIndex] = dto;
+            if (!dto.IsPresent())
+            {
+                loadingError = true;
+            }
+        }
+
+        Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(path + "/playerstatistics/");
+        if (!playerStatistics.IsPresent())
+        {
+            loadingError = true;
+        }
+
+        Optional<PlayerTaskStatisticDTO[]> minigameStatistics = await RestRequest.GetArrayRequest<PlayerTaskStatisticDTO>(path + "/playerstatistics/player-task-statistics");
+        if (!minigameStatistics.IsPresent())
+        {
+            loadingError = true;
+        }
+
+        Optional<PlayerNPCStatisticDTO[]> npcStatistics = await RestRequest.GetArrayRequest<PlayerNPCStatisticDTO>(path + "/playerstatistics/player-npc-statistics");
+        if (!npcStatistics.IsPresent())
+        {
+            loadingError = true;
+        }
+
+        Debug.Log("Got all data.");
+
+        if (!loadingError)
+        {
+            for (int worldIndex = 1; worldIndex <= maxWorld; worldIndex++)
+            {
+                DataManager.Instance.SetWorldData(worldIndex, worldDTOs[worldIndex].Value());
+            }
+            DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
+            DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
+            DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
         }
         else
         {
-            string postUri = overworldBackendPath + "/course/" + courseId + "/playerstatistics";
-            UserData userData = new UserData(userId, username);
-            string json = JsonUtility.ToJson(userData, true);
-            bool userCreated = await RestRequest.PostRequest(postUri, json);
-            return userCreated;
+            GetDummyData();
         }
+        Debug.Log("Everything set up");
+
+        return loadingError;
     }
-
-    #endregion
-
-    #region Loading
 
     /// <summary>
     ///     This function stores the data needed after a reload.
@@ -194,95 +185,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("Start minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
         Reload();
     }
-
-    /// <summary>
-    ///     This function reloads the game.
-    /// </summary>
-    private async void Reload()
-    {
-        await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
-        await LoadingManager.Instance.ReloadData(minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
-    }
-
-    /// <summary>
-    ///     This function loads all needed data from the backend an converts the data into usable formats.
-    ///     If an error accours while loading, the <c>loadingError</c> flag is set.
-    /// </summary>
-    /// <returns></returns>
-    public async UniTask<bool> FetchData()
-    {
-        bool loadingError = false;
-
-        //path to get world data from
-        string path = overworldBackendPath + "/courses/" + courseId;
-
-        //get data
-        Optional<WorldDTO>[] worldDTOs = new Optional<WorldDTO>[maxWorld + 1];
-        for (int worldIndex = 1; worldIndex <= maxWorld; worldIndex++)
-        {
-            Optional<WorldDTO> dto = await RestRequest.GetRequest<WorldDTO>(path + "/worlds/" + worldIndex);
-            worldDTOs[worldIndex] = dto;
-            if (!dto.Enabled())
-            {
-                loadingError = true;
-            }
-        }
-
-        Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(path + "/playerstatistics/");
-        if (!playerStatistics.Enabled())
-        {
-            loadingError = true;
-        }
-
-        Optional<PlayerTaskStatisticDTO[]> minigameStatistics = await RestRequest.GetArrayRequest<PlayerTaskStatisticDTO>(path + "/playerstatistics/player-task-statistics");
-        if(!minigameStatistics.Enabled())
-        {
-            loadingError = true;
-        }
-
-        Optional<PlayerNPCStatisticDTO[]> npcStatistics = await RestRequest.GetArrayRequest<PlayerNPCStatisticDTO>(path + "/playerstatistics/player-npc-statistics");
-        if(!npcStatistics.Enabled())
-        {
-            loadingError = true;
-        }
-
-        Debug.Log("Got all data.");
-
-        if(!loadingError)
-        {
-            for(int worldIndex = 1; worldIndex <= maxWorld; worldIndex++)
-            {
-                DataManager.Instance.SetData(worldIndex, worldDTOs[worldIndex].Value());
-            }
-            DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
-            DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
-            DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
-        }
-        else
-        {
-            GetDummyData();
-        }
-        Debug.Log("Everything set up");
-
-        return loadingError;
-    }
-
-    /// <summary>
-    ///     This function sets up everything with dummy data for the offline mode
-    /// </summary>
-    private void GetDummyData()
-    {
-        //worldDTO dummy data
-        for(int worldIndex = 0; worldIndex<maxWorld; worldIndex++)
-        {
-            DataManager.Instance.SetData(worldIndex, new WorldDTO());
-        }
-        DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
-    }
-
-    #endregion
-
-    #region SettingData
 
     /// <summary>
     ///     This function sets the data for the given area.
@@ -321,15 +223,11 @@ public class GameManager : MonoBehaviour
 
         bool successful = await RestRequest.PostRequest(path, json);
 
-        if(successful)
+        if (successful)
         {
             DataManager.Instance.CompleteNPC(worldIndex, dungeonIndex, number);
         }
     }
-
-    #endregion
-
-    #region InfoScreen
 
     /// <summary>
     ///     This functions returns an information text about the barrier.
@@ -344,6 +242,81 @@ public class GameManager : MonoBehaviour
         return info;
     }
 
-    #endregion
+    /// <summary>
+    ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
+    ///     deletes the object otherwise
+    /// </summary>
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            SetupGameManager();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    /// <summary>
+    ///     This function initializes the <c>GameManager</c>. All arrays are initialized with empty objects.
+    /// </summary>
+    private void SetupGameManager()
+    {
+        //loadingError = false;
+
+        overworldBackendPath = GameSettings.GetOverworldBackendPath();
+        maxWorld = GameSettings.GetMaxWorlds();
+        maxMinigames = GameSettings.GetMaxMinigames();
+        maxNPCs = GameSettings.GetMaxNpCs();
+        maxBooks = GameSettings.GetMaxBooks();
+        maxDungeons = GameSettings.GetMaxDungeons();
+    }
+
+    /// <summary>
+    ///     This function checks, if a user with the found id exists, and if not creates one.
+    /// </summary>
+    private async UniTask<bool> ValidateUserId()
+    {
+        string uri = overworldBackendPath + "/course/" + courseId + "/playerstatistics/" + userId;
+
+        Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(uri);
+
+        if(playerStatistics.IsPresent())
+        {
+            return true;
+        }
+        else
+        {
+            string postUri = overworldBackendPath + "/course/" + courseId + "/playerstatistics";
+            UserData userData = new UserData(userId, username);
+            string json = JsonUtility.ToJson(userData, true);
+            bool userCreated = await RestRequest.PostRequest(postUri, json);
+            return userCreated;
+        }
+    }
+
+    /// <summary>
+    ///     This function reloads the game.
+    /// </summary>
+    private async void Reload()
+    {
+        await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+        await LoadingManager.Instance.ReloadData(minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
+    }
+
+    /// <summary>
+    ///     This function sets up everything with dummy data for the offline mode
+    /// </summary>
+    private void GetDummyData()
+    {
+        //worldDTO dummy data
+        for(int worldIndex = 0; worldIndex<maxWorld; worldIndex++)
+        {
+            DataManager.Instance.SetWorldData(worldIndex, new WorldDTO());
+        }
+        DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
+    }
 
 }
