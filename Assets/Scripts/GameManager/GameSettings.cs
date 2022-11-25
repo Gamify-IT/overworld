@@ -5,6 +5,7 @@ public static class GameSettings
 {
     #region Attributes
 
+    private static readonly string overworldBackendPath = "/overworld/api/v1";
     private static readonly int maxWorld = 4;
     private static readonly int maxMinigames = 12;
     private static readonly int maxNPCs = 10;
@@ -14,6 +15,15 @@ public static class GameSettings
     #endregion
 
     #region GetterAndSetter
+
+    /// <summary>
+    ///     This function returns the path of the overworld backend
+    /// </summary>
+    /// <returns>The overworld backend path</returns>
+    public static string GetOverworldBackendPath()
+    {
+        return overworldBackendPath;
+    }
 
     /// <summary>
     ///     This function returns the maximum amount of worlds.

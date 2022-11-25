@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     #region Attributes
 
     //Game settigs
+    private string overworldBackendPath;
     private int maxWorld;
     private int maxMinigames;
     private int maxNPCs;
@@ -87,6 +88,7 @@ public class GameManager : MonoBehaviour
 
         loadingError = false;
 
+        overworldBackendPath = GameSettings.GetOverworldBackendPath();
         maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
         maxNPCs = GameSettings.GetMaxNpCs();
@@ -120,11 +122,11 @@ public class GameManager : MonoBehaviour
     public async UniTask<bool> GetCourseId()
     {
         courseId = Application.absoluteURL.Split("/")[^1];
-        string uri = "/overworld/api/v1/courses/";
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + courseId))
+        string uri = overworldBackendPath + "/courses/" + courseId;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             Debug.Log("Checking courseId: " + courseId);
-            Debug.Log("Path: " + uri + courseId);
+            Debug.Log("Path: " + uri);
 
             // Request and wait for the desired page.
             var request = webRequest.SendWebRequest();
@@ -139,12 +141,12 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                 case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError(uri + courseId + ": Error: " + webRequest.error);
+                    Debug.LogError(uri + ": Error: " + webRequest.error);
                     Debug.Log("CourseId " + courseId + " is invalid.");
                     courseId = "";
                     break;
                 case UnityWebRequest.Result.Success:
-                    Debug.Log(uri + courseId + ":\nReceived: " + webRequest.downloadHandler.text);
+                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
                     Debug.Log("CourseId " + courseId + " is valid.");
                     return true;
                     break;
@@ -184,12 +186,12 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private async UniTask<bool> ValidateUserId()
     {
-        string uri = "/overworld/api/v1/courses/" + courseId + "/playerstatistics/";
-        string postUri = "/overworld/api/v1/courses/" + courseId + "/playerstatistics";
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri + userId))
+        string uri = overworldBackendPath + "/course/" + courseId + "/playerstatistics/" + userId;
+        string postUri = overworldBackendPath + "/course/" + courseId + "/playerstatistics";
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             Debug.Log("Checking userId: " + userId);
-            Debug.Log("Path: " + uri + userId);
+            Debug.Log("Path: " + uri);
 
             // Request and wait for the desired page.
             var request = webRequest.SendWebRequest();
@@ -204,13 +206,13 @@ public class GameManager : MonoBehaviour
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                 case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError(uri + userId + ": Error: " + webRequest.error);
+                    Debug.LogError(uri + ": Error: " + webRequest.error);
                     Debug.Log("UserId " + userId + " does not exist yet.");
                     bool userCreated = await PostUser(postUri);
                     return userCreated;
                     break;
                 case UnityWebRequest.Result.Success:
-                    Debug.Log(uri + courseId + ":\nReceived: " + webRequest.downloadHandler.text);
+                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
                     Debug.Log("UserId " + userId + " is valid.");
                     return true;
                     break;
@@ -436,7 +438,7 @@ public class GameManager : MonoBehaviour
         loadingError = false;
 
         //path to get world data from
-        string path = "/overworld/api/v1/courses/" + courseId;
+        string path = overworldBackendPath + "/courses/" + courseId;
 
         //get data
         for (int worldIndex = 1; worldIndex <= maxWorld; worldIndex++)
@@ -470,7 +472,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    ///     This function sets up everything with dummy data for the offline mode
     /// </summary>
     private void getDummyData()
     {
@@ -887,7 +889,6 @@ public class GameManager : MonoBehaviour
     ///     <c>GameManager</c>
     /// </summary>
     /// <param name="worldIndex">The index of the world the data refers to</param>
-    /// <param name="worldDTO">The world data returned from the backend</param>
     private void ProcessWorldDto(int worldIndex)
     {
         if (worldIndex < 1 || worldIndex >= worldDTOs.Length)
@@ -1422,7 +1423,7 @@ public class GameManager : MonoBehaviour
     {
         if (active)
         {
-            string path = "/overworld/api/v1/internal/submit-npc-pass";
+            string path = overworldBackendPath + "/internal/submit-npc-pass";
             bool successful = await PostNpcCompleted(path, uuid);
 
             if(!successful)
