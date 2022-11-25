@@ -279,7 +279,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private async UniTask<bool> ValidateUserId()
     {
-        string uri = overworldBackendPath + "/course/" + courseId + "/playerstatistics/" + userId;
+        string uri = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/" + userId;
 
         Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(uri);
 
@@ -289,7 +289,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            string postUri = overworldBackendPath + "/course/" + courseId + "/playerstatistics";
+            string postUri = overworldBackendPath + "/courses/" + courseId + "/playerstatistics";
             UserData userData = new UserData(userId, username);
             string json = JsonUtility.ToJson(userData, true);
             bool userCreated = await RestRequest.PostRequest(postUri, json);
