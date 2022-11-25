@@ -46,7 +46,7 @@ public class LoadFirstScene : MonoBehaviour
 
         Debug.Log("Start retrieving courseId");
 
-        bool validCourseId = await GameManager.Instance.GetCourseId();
+        bool validCourseId = await GameManager.Instance.ValidateCourseId();
         if (!validCourseId)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);

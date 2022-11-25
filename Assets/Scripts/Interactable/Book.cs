@@ -49,7 +49,7 @@ public class Book : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove Book " + world + "-" + dungeon + "-" + number);
-        GameManager.Instance.RemoveBook(world, dungeon, number);
+        ObjectManager.Instance.RemoveBook(world, dungeon, number);
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ public class Book : MonoBehaviour
     private void RegisterToGameManager()
     {
         Debug.Log("register Book " + world + "-" + dungeon + "-" + number);
-        GameManager.Instance.AddBook(gameObject, world, dungeon, number);
+        ObjectManager.Instance.AddBook(gameObject, world, dungeon, number);
     }
 
     /// <summary>

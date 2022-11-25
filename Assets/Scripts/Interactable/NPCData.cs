@@ -18,6 +18,27 @@ public class NPCData
         hasBeenTalkedTo = true;
     }
 
+    /// <summary>
+    ///     This function converts a NPCDTO to NPCData 
+    /// </summary>
+    /// <param name="dto">The NPCDTO to convert</param>
+    /// <returns>The converted NPCData</returns>
+    public static NPCData ConvertDtoToData(NPCDTO dto)
+    {
+        string uuid = dto.id;
+        string[] dialogue = dto.text.ToArray();
+        bool hasBeenTalkedTo = false;
+        
+        if (dialogue.Length == 0)
+        {
+            string[] dummyText = { "I could tell you something useful...", "...But i don't remember." };
+            dialogue = dummyText;
+        }
+
+        NPCData data = new NPCData(uuid, dialogue, hasBeenTalkedTo);
+        return data;
+    }
+
     #region Attributes
 
     private string uuid;

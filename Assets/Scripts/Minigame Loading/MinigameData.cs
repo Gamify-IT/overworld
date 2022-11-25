@@ -28,6 +28,27 @@ public class MinigameData
 
     #endregion
 
+    /// <summary>
+    ///     This function converts a MinigameTaskDTO to MinigameData 
+    /// </summary>
+    /// <param name="dto">The MinigameTaskDTO to convert</param>
+    /// <returns>The converted MinigameData</returns>
+    public static MinigameData ConvertDtoToData(MinigameTaskDTO dto)
+    {
+        string game = dto.game;
+        string configurationId = dto.configurationId;
+        MinigameStatus status = global::MinigameStatus.notConfigurated;
+        int highscore = 0;
+
+        if (configurationId != "" && configurationId != null && configurationId != "NONE")
+        {
+            status = global::MinigameStatus.active;
+        }
+
+        MinigameData data = new MinigameData(game, configurationId, status, highscore);
+        return data;
+    }
+
     #region GetterAndSetter
 
     /// <summary>

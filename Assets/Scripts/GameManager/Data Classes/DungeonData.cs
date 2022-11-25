@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 /// <summary>
 ///     This class defines all needed data for a <c>Dungeon</c>.
 /// </summary>
@@ -58,6 +60,47 @@ public class DungeonData
     }
 
     #endregion
+
+    /// <summary>
+    ///     This function converts a DungeonDTO to DungeonData 
+    /// </summary>
+    /// <param name="dto">The DungeonDTO to convert</param>
+    /// <returns>The converted DungeonData</returns>
+    public static DungeonData ConvertDtoToData(DungeonDTO dto)
+    {
+        string id = dto.id;
+        int index = dto.index;
+        string staticName = dto.staticName;
+        string topicName = dto.topicName;
+        bool active = dto.active;
+
+        MinigameData[] minigames = new MinigameData[GameSettings.GetMaxMinigames() + 1];
+        List<MinigameTaskDTO> minigameDTOs = dto.minigameTasks;
+        foreach (MinigameTaskDTO minigameDTO in minigameDTOs)
+        {
+            MinigameData minigameData = MinigameData.ConvertDtoToData(minigameDTO);
+            minigames[minigameDTO.index] = minigameData;
+        }
+
+        NPCData[] npcs = new NPCData[GameSettings.GetMaxNpCs() + 1];
+        List<NPCDTO> npcDTOs = dto.npcs;
+        foreach(NPCDTO npcDTO in npcDTOs)
+        {
+            NPCData npcData = NPCData.ConvertDtoToData(npcDTO);
+            npcs[npcDTO.index] = npcData;
+        }
+
+        BookData[] books = new BookData[GameSettings.GetMaxBooks() + 1];
+        List<BookDTO> bookDTOs = dto.books;
+        foreach(BookDTO bookDTO in bookDTOs)
+        {
+            BookData bookData = BookData.ConvertDtoToData(bookDTO);
+            books[bookDTO.index] = bookData;
+        }
+
+        DungeonData data = new DungeonData(id, index, staticName, topicName, active, minigames, npcs, books);
+        return data;
+    }
 
     #region GetterAndSetter
 

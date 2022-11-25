@@ -51,7 +51,7 @@ public class NPC : MonoBehaviour
         {
             if (!hasBeenTalkedTo)
             {
-                MarkAsRead();
+                Complete();
             }
 
             StartCoroutine(LoadDialogueScene());
@@ -82,7 +82,7 @@ public class NPC : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
-        GameManager.Instance.RemoveNpc(world, dungeon, number);
+        ObjectManager.Instance.RemoveNpc(world, dungeon, number);
     }
 
     /// <summary>
@@ -116,11 +116,11 @@ public class NPC : MonoBehaviour
     /// <summary>
     ///     This method sets the NPC as talked to.
     /// </summary>
-    private void MarkAsRead()
+    private void Complete()
     {
         hasBeenTalkedTo = true;
         speechIndicator.SetActive(false);
-        GameManager.Instance.MarkNpCasRead(world, dungeon, number, uuid);
+        GameManager.Instance.CompleteNPC(world, dungeon, number, uuid);
     }
 
     /// <summary>
@@ -129,7 +129,7 @@ public class NPC : MonoBehaviour
     private void RegisterToGameManager()
     {
         Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
-        GameManager.Instance.AddNpc(gameObject, world, dungeon, number);
+        ObjectManager.Instance.AddNpc(gameObject, world, dungeon, number);
     }
 
     /// <summary>
