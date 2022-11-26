@@ -41,8 +41,8 @@ public class MinigameStarting : MonoBehaviour
     /// <param name="highscore">highscore of the minigame for this configurationId</param>
     public void SetupMinigame(string game, string configurationId, int highscore)
     {
-        Animation.Instance.SetBusy(true);
-        Animation.Instance.DisableMovement();
+        PlayerAnimation.Instance.SetBusy(true);
+        PlayerAnimation.Instance.DisableMovement();
 
         this.game = game;
         this.configurationId = configurationId;
@@ -83,8 +83,8 @@ public class MinigameStarting : MonoBehaviour
     private void QuitMinigame()
     {
         Reset();
-        Animation.Instance.SetBusy(false);
-        Animation.Instance.EnableMovement();
+        PlayerAnimation.Instance.SetBusy(false);
+        PlayerAnimation.Instance.EnableMovement();
         SceneManager.UnloadSceneAsync("MinigameStarting Overlay");
     }
 

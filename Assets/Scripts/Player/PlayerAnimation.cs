@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 ///     This class manages the movement and the animations of the player.
 /// </summary>
-public class Animation : MonoBehaviour
+public class PlayerAnimation : MonoBehaviour
 {
     public float movementSpeed = 3f;
     public float sprintingSpeed = 6f;
@@ -49,25 +49,25 @@ public class Animation : MonoBehaviour
                 currentSpeed = currentSpeed - sprintingSpeed;
                 playerAnimator.speed = 1;
             }
-            
+
             // The following lines are dev keybindings, if needed they can be activated again by uncommenting them
-            // if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
-            // {
-            //     currentSpeed = currentSpeed + superSpeed;
-            //     playerAnimator.speed = 20;
-            // }
-            //
-            // if (Input.GetKeyUp("l") && currentSpeed == movementSpeed + superSpeed)
-            // {
-            //     currentSpeed = currentSpeed - superSpeed;
-            //     playerAnimator.speed = 1;
-            // }
-            //
-            // if (Input.GetKeyDown("k"))
-            // {
-            //     GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =
-            //         !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
-            // }
+            if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
+            {
+                currentSpeed = currentSpeed + superSpeed;
+                playerAnimator.speed = 20;
+            }
+
+            if (Input.GetKeyUp("l") && currentSpeed == movementSpeed + superSpeed)
+            {
+                currentSpeed = currentSpeed - superSpeed;
+                playerAnimator.speed = 1;
+            }
+
+            if (Input.GetKeyDown("k"))
+            {
+                GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =
+                    !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
+            }
         }
     }
 
@@ -155,7 +155,7 @@ public class Animation : MonoBehaviour
 
     #region Singleton
 
-    public static Animation Instance { get; private set; }
+    public static PlayerAnimation Instance { get; private set; }
 
     /// <summary>
     ///     The Awake function is called after an object is initialized and before the Start function.

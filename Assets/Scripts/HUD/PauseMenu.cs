@@ -17,7 +17,7 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !Animation.Instance.IsBusy())
+        if (Input.GetKeyDown(KeyCode.Escape) && !PlayerAnimation.Instance.IsBusy())
         {
             PauseOrResume();
         }
