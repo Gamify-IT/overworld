@@ -14,6 +14,7 @@ public class PlayerAnimation : MonoBehaviour
     private bool busy;
     private bool canMove;
     private float currentSpeed;
+    private float targetSpeed;
 
     /// <summary>
     ///     This method is called before the first frame update.
@@ -25,6 +26,7 @@ public class PlayerAnimation : MonoBehaviour
         busy = false;
         playerRigidBody = GetComponent<Rigidbody2D>();
         currentSpeed = movementSpeed;
+        targetSpeed = currentSpeed;
     }
 
     /// <summary>
@@ -38,17 +40,17 @@ public class PlayerAnimation : MonoBehaviour
             movement.y = Input.GetAxisRaw("Vertical");
             movement = movement.normalized;
 
-            if (Input.GetKeyDown(KeyCode.LeftShift) && currentSpeed == movementSpeed)
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                currentSpeed = currentSpeed + sprintingSpeed;
+                targetSpeed = movementSpeed + sprintingSpeed;
                 playerAnimator.speed = 2;
             }
-
-            if (Input.GetKeyUp(KeyCode.LeftShift) && currentSpeed == movementSpeed + sprintingSpeed)
+            if (Input.GetKeyUp(KeyCode.LeftShift))
             {
-                currentSpeed = currentSpeed - sprintingSpeed;
+                targetSpeed = movementSpeed;
                 playerAnimator.speed = 1;
             }
+            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * 50);
 
             // The following lines are dev keybindings, if needed they can be activated again by uncommenting them
             if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)

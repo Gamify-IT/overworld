@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class Teleporter : MonoBehaviour
@@ -35,6 +36,7 @@ public class Teleporter : MonoBehaviour
             SetupTeleporterUI(teleporterUI);
             currentTeleporterCanvas = newCanvas;
         }
+        
 
     }
     /// <summary>
@@ -70,13 +72,14 @@ public class Teleporter : MonoBehaviour
     /// <param name="ui"></param>
     private void SetupTeleporterUI(TeleporterUI ui)
     {
-        List<int> destinationIndices = new List<int> { 0, 1, 2, 3 };
+        List<int> destinationIndices = new List<int> { 0,1, 2, 3};
         destinationIndices.Remove(teleporterWorldID);
-        for (int i = 0; i < 4-1; i++)
+        for (int i = 0; i < destinationIndices.Count; i++)
         {
-            bool worldUnlocked = false;
-            //bool worldUnlocked = DataManager.Instance.GetWorldData(0).isActive();
+            bool worldUnlocked = true;
+            //bool worldUnlocked = DataManager.Instance.IsWorldUnlocked(destinationIndices[i]);
             Button currentButton = ui.targetButtons[i];
+            //string worldName = ?
             currentButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "World " + (destinationIndices[i]+1).ToString();
             currentButton.interactable = worldUnlocked;
             int index = i;
@@ -96,14 +99,40 @@ public class Teleporter : MonoBehaviour
         Animation ufoAnimation = GetComponent<Animation>();
         ufoAnimation.Play();
         player.GetComponent<PlayerAnimation>().DisableMovement();
+        
     }
 
     /// <summary>
-    /// This function is called by an animation event of the Ufo Animation.
+    /// This function is called by an animation event of the Ufo Animation. It loads the new world and teleports the player there.
     /// </summary>
     public void FinishTeleportation()
     {
         player.position = teleporterPositions[finalTargetIndex];
         player.GetComponent<PlayerAnimation>().EnableMovement();
+        player.GetComponent<SpriteRenderer>().enabled = true;
+    }
+
+    public void FadeOutPlayer()
+    {
+        player.GetComponent<SpriteRenderer>().enabled = false;
+    }
+
+    private void LoadTargetScene()
+    {
+        // add triggers at the marketplaces of each world with a LoadMaps Component
+        // LoadMaps needs to work without scene origin!
+        // or manually:
+        StartCoroutine(LoadTargetSceneAsync());
+    }
+
+    IEnumerator LoadTargetSceneAsync()
+    {
+        AsyncOperation load = SceneManager.LoadSceneAsync("World1");
+
+        while (!load.isDone)
+        {
+            
+            yield return null;
+        }
     }
 }
