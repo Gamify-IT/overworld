@@ -9,4 +9,9 @@ using UnityEngine.UI;
 public class TeleporterUI : MonoBehaviour
 {
     public Button[] targetButtons = new Button[3];
+
+    public void SetupUI(Teleporter teleporter)
+    {
+
+    }
 }

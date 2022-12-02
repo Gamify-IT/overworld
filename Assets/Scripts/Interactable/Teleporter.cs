@@ -7,6 +7,7 @@ using TMPro;
 
 public class Teleporter : MonoBehaviour
 {
+    public bool unlocked = false;
     [SerializeField]
     private int teleporterWorldID;
     [SerializeField]
@@ -15,6 +16,9 @@ public class Teleporter : MonoBehaviour
     [SerializeField]
     private Vector2[] teleporterPositions = new Vector2[4];
 
+
+    private Teleporter[] registeredTeleporters;
+
     private Transform player;
 
     private GameObject currentTeleporterCanvas;
@@ -22,19 +26,31 @@ public class Teleporter : MonoBehaviour
 
     private int finalTargetIndex = 0;
     private bool inTrigger = false;
+    private bool interactable = true;
 
+    private void Start()
+    {
+        // Receive teleporter data
+        //registeredTeleporters = ...
+        SetUnLockedState(unlocked);
+    }
 
     /// <summary>
     /// Open TeleporterUI when the player interacts with the teleporter.
     /// </summary>
     void Update()
     {
-        if (inTrigger && Input.GetKeyDown("e") && currentTeleporterCanvas == null)
+        if (inTrigger && interactable && currentTeleporterCanvas == null)
         {
-            GameObject newCanvas = GameObject.Instantiate(teleporterCanvas);
-            teleporterUI = newCanvas.transform.GetChild(0).GetComponent<TeleporterUI>();
-            SetupTeleporterUI(teleporterUI);
-            currentTeleporterCanvas = newCanvas;
+            if (Input.GetKeyDown("e"))
+            {
+                interactable = false;
+                GameObject newCanvas = GameObject.Instantiate(teleporterCanvas);
+                teleporterUI = newCanvas.transform.GetChild(0).GetComponent<TeleporterUI>();
+                SetupTeleporterUI(teleporterUI);
+                currentTeleporterCanvas = newCanvas;
+            }
+            
         }
         
 
@@ -48,6 +64,12 @@ public class Teleporter : MonoBehaviour
         {
             player = collision.transform;
             inTrigger = true;
+            if (!unlocked)
+            {
+                unlocked = true;
+                SetUnLockedState(unlocked);
+                // Register teleport in datamanager
+            }
         }
     }
 
@@ -58,11 +80,26 @@ public class Teleporter : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            interactable = true;
             inTrigger = false;
             Destroy(currentTeleporterCanvas);
             currentTeleporterCanvas = null;
 
         }
+    }
+
+    private void SetUnLockedState(bool isUnLocked)
+    {
+        interactable = true;
+        if (isUnLocked)
+        {
+            GetComponent<SpriteRenderer>().color = Color.white;
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().color = Color.black;
+        }
+        
     }
 
 
@@ -84,8 +121,7 @@ public class Teleporter : MonoBehaviour
             currentButton.interactable = worldUnlocked;
             int index = i;
             currentButton.onClick.AddListener(() => TeleportPlayerToWorld(destinationIndices[index]));
-        }
-        
+        }     
     }
 
     /// <summary>
@@ -110,29 +146,15 @@ public class Teleporter : MonoBehaviour
         player.position = teleporterPositions[finalTargetIndex];
         player.GetComponent<PlayerAnimation>().EnableMovement();
         player.GetComponent<SpriteRenderer>().enabled = true;
+        interactable = true;
     }
 
+
+    /// <summary>
+    /// This function is called by an animation event of the Ufo Animation. It hides the player for some time.
+    /// </summary>
     public void FadeOutPlayer()
     {
         player.GetComponent<SpriteRenderer>().enabled = false;
-    }
-
-    private void LoadTargetScene()
-    {
-        // add triggers at the marketplaces of each world with a LoadMaps Component
-        // LoadMaps needs to work without scene origin!
-        // or manually:
-        StartCoroutine(LoadTargetSceneAsync());
-    }
-
-    IEnumerator LoadTargetSceneAsync()
-    {
-        AsyncOperation load = SceneManager.LoadSceneAsync("World1");
-
-        while (!load.isDone)
-        {
-            
-            yield return null;
-        }
     }
 }

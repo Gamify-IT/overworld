@@ -15802,13 +15802,45 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 734151043475365575, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 734151043475365575, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 734151043475365575, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 734151043475365575, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2502631961731398172, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
       propertyPath: m_Radius
       value: 0.16
       objectReference: {fileID: 0}
+    - target: {fileID: 6307204030187759391, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7412971639986456646, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
       propertyPath: m_Name
       value: Teleporter1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412971639986456648, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412971639986456648, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412971639986456648, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7412971639986456650, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
       propertyPath: teleporterWorldID
@@ -15857,6 +15889,26 @@ PrefabInstance:
     - target: {fileID: 7412971639986456651, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7948549348578229196, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
+      propertyPath: m_fontSize
+      value: 3.87
+      objectReference: {fileID: 0}
+    - target: {fileID: 7948549348578229196, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 3.87
+      objectReference: {fileID: 0}
+    - target: {fileID: 7948549348578229196, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7948549348578229196, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 7948549348578229196, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9051830983203198200, guid: f6559bffdb9e0b4449e100df875fe1af, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

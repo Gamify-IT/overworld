@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 458239855
   m_SortingLayer: 1
   m_SortingOrder: 46
-  m_Sprite: {fileID: 21300000, guid: 1204ebfc644640d499a69660deb1f988, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 78f1c7cbe18a1984bb7a85b3b1b91351, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -157,7 +157,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 458239855
   m_SortingLayer: 1
-  m_SortingOrder: 2
+  m_SortingOrder: 12
   m_Sprite: {fileID: 21300000, guid: 86e2249a797c2ea4ba7f42f8aa398d53, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -269,6 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf004dea68fc7bd44acdfd2a72980355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unlocked: 0
   teleporterWorldID: 3
   teleporterCanvas: {fileID: 7636015094161461849, guid: f5a85ab3988b91042908794acc6a58ca, type: 3}
   teleporterPositions:
