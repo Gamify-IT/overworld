@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 ///     The <c>DataManager</c> stores all required data to set up the objects in the areas. 
@@ -18,6 +19,8 @@ public class DataManager : MonoBehaviour
     //Data fields
     private WorldData[] worldData;
     private PlayerstatisticDTO playerData;
+
+    public Dictionary<int, List<Teleporter>> registeredTeleporters = new Dictionary<int, List<Teleporter>>();
 
     /// <summary>
     ///     This function sets given data for the specified world

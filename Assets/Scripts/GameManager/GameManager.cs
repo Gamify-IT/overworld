@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviour
     /// <param name="respawnLocation">The position the player has to be in</param>
     /// <param name="worldIndex">The index of the world the minigame is in</param>
     /// <param name="dungeonIndex">The index of the dungeon the minigame is in (0 if in world)</param>
-    public void SetMinigameRespawn(Vector2 respawnLocation, int worldIndex, int dungeonIndex)
+    public void SetReloadLocation(Vector2 respawnLocation, int worldIndex, int dungeonIndex)
     {
         minigameRespawnPosition = respawnLocation;
         minigameWorldIndex = worldIndex;
@@ -183,6 +183,14 @@ public class GameManager : MonoBehaviour
     public void MinigameDone()
     {
         Debug.Log("Start minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
+        Reload();
+    }
+
+    /// <summary>
+    /// This function is used by a teleporter to update the position of the player.
+    /// </summary>
+    public void ExecuteTeleportation()
+    {
         Reload();
     }
 

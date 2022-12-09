@@ -14,8 +14,6 @@ public class Teleporter : MonoBehaviour
     [SerializeField]
     private GameObject teleporterCanvas;
 
-    private Dictionary<int,List<Teleporter>> registeredTargetTeleporters;
-
     private Transform player;
 
     private GameObject currentTeleporterCanvas;
@@ -30,9 +28,6 @@ public class Teleporter : MonoBehaviour
 
     private void Start()
     {
-        // Receive teleporter data
-        //registeredTeleporters = ...
-        registeredTargetTeleporters[worldID].Remove(this);
         SetUnLockedState(unlocked);
     }
 
@@ -57,7 +52,7 @@ public class Teleporter : MonoBehaviour
 
     }
     /// <summary>
-    /// Recognize the player entering the teleporter
+    /// Recognize the player entering the teleporter. When this is the first time, it unlocks the teleporter and registers it in the DataManager
     /// </summary>
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -69,8 +64,11 @@ public class Teleporter : MonoBehaviour
             {
                 unlocked = true;
                 SetUnLockedState(unlocked);
-                // Register teleport in datamanager
-                
+                DataManager dataManager = DataManager.Instance;
+                if (!dataManager.registeredTeleporters.ContainsKey(worldID)){
+                    dataManager.registeredTeleporters.Add(worldID, new List<Teleporter>());
+                }
+                dataManager.registeredTeleporters[worldID].Add(this);               
             }
         }
     }
@@ -134,7 +132,8 @@ public class Teleporter : MonoBehaviour
     public void FinishTeleportation()
     {
         player.position = finalTargetPosition;
-        GameManager.Instance.SetMinigameRespawn(finalTargetPosition, finalTargetWorld, finalTargetDungeon);
+        GameManager.Instance.SetReloadLocation(finalTargetPosition, finalTargetWorld, finalTargetDungeon);
+        GameManager.Instance.ExecuteTeleportation();
         player.GetComponent<PlayerAnimation>().EnableMovement();
         player.GetComponent<SpriteRenderer>().enabled = true;
         interactable = true;
@@ -147,10 +146,5 @@ public class Teleporter : MonoBehaviour
     public void FadeOutPlayer()
     {
         player.GetComponent<SpriteRenderer>().enabled = false;
-    }
-
-    public Dictionary<int,List<Teleporter>> getTargetTeleporters()
-    {
-        return this.registeredTargetTeleporters;
     }
 }
