@@ -7,24 +7,24 @@ using TMPro;
 
 public class Teleporter : MonoBehaviour
 {
+    public string teleporterName = "MyTeleporter";
+    public int worldID;
     public bool unlocked = false;
-    [SerializeField]
-    private int teleporterWorldID;
+    public int dungeonID = 0;
     [SerializeField]
     private GameObject teleporterCanvas;
 
-    [SerializeField]
-    private Vector2[] teleporterPositions = new Vector2[4];
-
-
-    private Teleporter[] registeredTeleporters;
+    private Dictionary<int,List<Teleporter>> registeredTargetTeleporters;
 
     private Transform player;
 
     private GameObject currentTeleporterCanvas;
     private TeleporterUI teleporterUI;
 
-    private int finalTargetIndex = 0;
+    private Vector2 finalTargetPosition;
+    private int finalTargetWorld;
+    private int finalTargetDungeon;
+
     private bool inTrigger = false;
     private bool interactable = true;
 
@@ -32,6 +32,7 @@ public class Teleporter : MonoBehaviour
     {
         // Receive teleporter data
         //registeredTeleporters = ...
+        registeredTargetTeleporters[worldID].Remove(this);
         SetUnLockedState(unlocked);
     }
 
@@ -69,6 +70,7 @@ public class Teleporter : MonoBehaviour
                 unlocked = true;
                 SetUnLockedState(unlocked);
                 // Register teleport in datamanager
+                
             }
         }
     }
@@ -98,8 +100,7 @@ public class Teleporter : MonoBehaviour
         else
         {
             GetComponent<SpriteRenderer>().color = Color.black;
-        }
-        
+        } 
     }
 
 
@@ -109,29 +110,18 @@ public class Teleporter : MonoBehaviour
     /// <param name="ui"></param>
     private void SetupTeleporterUI(TeleporterUI ui)
     {
-        List<int> destinationIndices = new List<int> { 0,1, 2, 3};
-        destinationIndices.Remove(teleporterWorldID);
-        for (int i = 0; i < destinationIndices.Count; i++)
-        {
-            bool worldUnlocked = true;
-            //bool worldUnlocked = DataManager.Instance.IsWorldUnlocked(destinationIndices[i]);
-            Button currentButton = ui.targetButtons[i];
-            //string worldName = ?
-            currentButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "World " + (destinationIndices[i]+1).ToString();
-            currentButton.interactable = worldUnlocked;
-            int index = i;
-            currentButton.onClick.AddListener(() => TeleportPlayerToWorld(destinationIndices[index]));
-        }     
+        ui.SetupUI(this);
     }
 
     /// <summary>
-    /// This function is called by a button of the TeleporterUI. It will teleport the player to a specific location.
+    /// This function is called by a button of the TeleporterUI. It will initialize the teleporting process.
     /// </summary>
     /// <param name="worldIndex"></param>
-    public void TeleportPlayerToWorld(int worldIndex)
+    public void TeleportPlayerTo(Vector2 position,int worldID,int dungeonID)
     {
         Destroy(currentTeleporterCanvas);
-        finalTargetIndex = worldIndex;
+        finalTargetPosition = position;
+        finalTargetWorld = worldID;
         Animation ufoAnimation = GetComponent<Animation>();
         ufoAnimation.Play();
         player.GetComponent<PlayerAnimation>().DisableMovement();
@@ -143,7 +133,8 @@ public class Teleporter : MonoBehaviour
     /// </summary>
     public void FinishTeleportation()
     {
-        player.position = teleporterPositions[finalTargetIndex];
+        player.position = finalTargetPosition;
+        GameManager.Instance.SetMinigameRespawn(finalTargetPosition, finalTargetWorld, finalTargetDungeon);
         player.GetComponent<PlayerAnimation>().EnableMovement();
         player.GetComponent<SpriteRenderer>().enabled = true;
         interactable = true;
@@ -156,5 +147,10 @@ public class Teleporter : MonoBehaviour
     public void FadeOutPlayer()
     {
         player.GetComponent<SpriteRenderer>().enabled = false;
+    }
+
+    public Dictionary<int,List<Teleporter>> getTargetTeleporters()
+    {
+        return this.registeredTargetTeleporters;
     }
 }
