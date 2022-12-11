@@ -141,6 +141,9 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
+        //TODO: replace with backend call, once implemented in backend!
+        AchievementStatistic[] achievementStatistics = GetDummyAchievements();
+
         Debug.Log("Got all data.");
 
         if (!loadingError)
@@ -152,6 +155,7 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
             DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
+            DataManager.Instance.ProcessAchievementStatistics(achievementStatistics);
         }
         else
         {
@@ -317,6 +321,12 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.SetWorldData(worldIndex, new WorldDTO());
         }
         DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
+    }
+
+    private AchievementStatistic[] GetDummyAchievements()
+    {
+        AchievementStatistic[] statistcs = new AchievementStatistic[1];
+        return statistcs;
     }
 
 }

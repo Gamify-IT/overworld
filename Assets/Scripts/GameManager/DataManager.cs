@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 ///     The <c>DataManager</c> stores all required data to set up the objects in the areas. 
@@ -18,6 +19,7 @@ public class DataManager : MonoBehaviour
     //Data fields
     private WorldData[] worldData;
     private PlayerstatisticDTO playerData;
+    private List<AchievementUIElement> achievementData;
 
     /// <summary>
     ///     This function sets given data for the specified world
@@ -234,6 +236,27 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function processes the achievement statistics data returned from the backend and stores the needed data in the
+    ///     <c>DataManager</c>
+    /// </summary>
+    /// <param name="achievementStatistics">The achievement statistic data returned from the backend</param>
+    public void ProcessAchievementStatistics(AchievementStatistic[] achievementStatistics)
+    {
+        achievementData = new List<AchievementUIElement>();
+
+        if(achievementStatistics == null)
+        {
+            return;
+        }
+
+        foreach(AchievementStatistic statistic in achievementStatistics)
+        {
+            AchievementUIElement achievement = AchievementUIElement.ConvertFromAchievementStatistic(statistic);
+            achievementData.Add(achievement);
+        }
+    }
+
+    /// <summary>
     /// This function returns the percentage of completed minigames in the given world
     /// </summary>
     /// <param name="worldIndex">The index of the world</param>
@@ -307,6 +330,15 @@ public class DataManager : MonoBehaviour
         {
             return (completedMinigames * 1f) / (minigames * 1f);
         }
+    }
+
+    /// <summary>
+    ///     This function returns all stored achievements
+    /// </summary>
+    /// <returns>A list containing all achievements</returns>
+    public List<AchievementUIElement> GetAchievements()
+    {
+        return achievementData;
     }
 
     /// <summary>
