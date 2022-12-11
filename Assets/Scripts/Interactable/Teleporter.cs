@@ -97,7 +97,7 @@ public class Teleporter : MonoBehaviour
         }
         else
         {
-            GetComponent<SpriteRenderer>().color = Color.black;
+            GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 0.2f);;
         } 
     }
 
