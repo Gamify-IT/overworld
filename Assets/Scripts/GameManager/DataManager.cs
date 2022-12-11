@@ -338,6 +338,7 @@ public class DataManager : MonoBehaviour
     /// <returns>A list containing all achievements</returns>
     public List<AchievementUIElement> GetAchievements()
     {
+        Debug.Log("Data Manager, achievements: " + achievementData.Count);
         return achievementData;
     }
 
@@ -371,11 +372,24 @@ public class DataManager : MonoBehaviour
 
         worldData = new WorldData[maxWorld + 1];
         playerData = new PlayerstatisticDTO();
+        achievementData = GetDummyAchievements();
 
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
         {
             worldData[worldIndex] = new WorldData();
         }
+    }
+
+    private List<AchievementUIElement> GetDummyAchievements()
+    {
+        List<string> categories1 = new() { "Blub", "Bla" };
+        AchievementUIElement achievement1 = new AchievementUIElement("Achievement 1", "First Achievement", categories1, "achievement1", 5, 1, false);
+
+        List<string> categories2 = new() { "Story" };
+        AchievementUIElement achievement2 = new AchievementUIElement("Achievement 2", "Second Achievement", categories2, "achievement2", 3, 2, false);
+
+        List<AchievementUIElement> achievements = new List<AchievementUIElement>() { achievement1, achievement2 };
+        return achievements;
     }
 
     /// <summary>

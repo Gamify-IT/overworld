@@ -3410,6 +3410,7 @@ GameObject:
   - component: {fileID: 1108062195}
   - component: {fileID: 1108062194}
   - component: {fileID: 1108062198}
+  - component: {fileID: 1108062199}
   m_Layer: 5
   m_Name: Achievement Canvas
   m_TagString: Untagged
@@ -3516,6 +3517,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdfdbb4fa184c3c478cf632db506b501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1108062199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108062193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b706451701890de46a9a0c9f6eab6d0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  content: {fileID: 225447719}
+  categoryDropdown: {fileID: 39812055}
+  statusDropdown: {fileID: 851026552}
+  filterinputField: {fileID: 183215014}
 --- !u!1 &1363197640
 GameObject:
   m_ObjectHideFlags: 0
@@ -5030,7 +5047,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 400089789}
   m_HandleRect: {fileID: 400089788}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

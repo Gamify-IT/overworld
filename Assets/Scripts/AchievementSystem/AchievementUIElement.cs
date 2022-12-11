@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 ///     This class is used to store all relevant information about achievements in the overworld frontend
@@ -10,16 +11,18 @@ public class AchievementUIElement
 
     private readonly string title;
     private readonly string description;
+    private readonly List<string> categories;
     private readonly string imageName;
     private readonly Sprite image;
     private readonly int amountRequired;
     private int progress;
     private bool completed;
 
-    public AchievementUIElement(string title, string description, string imageName, int amountRequired, int progress, bool completed) 
+    public AchievementUIElement(string title, string description, List<string> categories, string imageName, int amountRequired, int progress, bool completed) 
     {
         this.title = title;
         this.description = description;
+        this.categories = categories;
         this.imageName = imageName;
         this.image = GetImage(imageName);
         this.amountRequired = amountRequired;
@@ -36,12 +39,13 @@ public class AchievementUIElement
     {
         string title = statistic.achievement.title;
         string description = statistic.achievement.description;
+        List<string> categories = statistic.achievement.categories;
         string imageName = statistic.achievement.imageName;
         int amountRequired = statistic.achievement.amountRequired;
         int progress = statistic.progress;
         bool completed = statistic.completed;
 
-        AchievementUIElement data = new AchievementUIElement(title, description, imageName, amountRequired, progress, completed);
+        AchievementUIElement data = new AchievementUIElement(title, description, categories, imageName, amountRequired, progress, completed);
         return data;
     }
 
@@ -84,6 +88,11 @@ public class AchievementUIElement
     public string GetDescription()
     {
         return description;
+    }
+
+    public List<string> GetCategories()
+    {
+        return categories;
     }
 
     public string GetImageName()
