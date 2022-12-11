@@ -171,8 +171,9 @@ public class LoadingManager : MonoBehaviour
     /// <param name="worldIndex">index of the current world</param>
     /// <param name="dungeonIndex">index of the current dungeon - null if the area is a world</param>
     /// <param name="playerPosition">position where the player should start</param>
-    public async UniTask ReloadData(int worldIndex, int dungeonIndex, Vector2 playerPosition)
+    public async UniTask ReloadData(string sceneToLoad, int worldIndex, int dungeonIndex, Vector2 playerPosition)
     {
+        this.sceneToLoad = sceneToLoad;
         this.worldIndex = worldIndex;
         this.dungeonIndex = dungeonIndex;
         this.playerPosition = playerPosition;

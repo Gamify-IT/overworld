@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     private string username;
 
     //Minigame reload
+    private string sceneName;
     private Vector2 minigameRespawnPosition;
     private int minigameWorldIndex;
     private int minigameDungeonIndex;
@@ -173,7 +174,23 @@ public class GameManager : MonoBehaviour
         minigameRespawnPosition = respawnLocation;
         minigameWorldIndex = worldIndex;
         minigameDungeonIndex = dungeonIndex;
+        this.sceneName = BuildSceneName();
         Debug.Log("Setup minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
+    }
+
+    private string BuildSceneName()
+    {
+        string sceneName;
+        if (minigameDungeonIndex == 0)
+        {
+            sceneName = "World " + minigameWorldIndex;
+        }
+        else
+        {
+            sceneName = "Dungeon " + minigameWorldIndex + "-" + minigameDungeonIndex;
+        }
+        Debug.Log(sceneName);
+        return sceneName;
     }
 
     /// <summary>
@@ -311,7 +328,7 @@ public class GameManager : MonoBehaviour
     private async void Reload()
     {
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
-        await LoadingManager.Instance.ReloadData(minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
+        await LoadingManager.Instance.ReloadData(sceneName, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
     }
 
     /// <summary>

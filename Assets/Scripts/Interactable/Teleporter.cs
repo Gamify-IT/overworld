@@ -120,6 +120,7 @@ public class Teleporter : MonoBehaviour
         Destroy(currentTeleporterCanvas);
         finalTargetPosition = position;
         finalTargetWorld = worldID;
+        finalTargetDungeon = dungeonID;
         Animation ufoAnimation = GetComponent<Animation>();
         ufoAnimation.Play();
         player.GetComponent<PlayerAnimation>().DisableMovement();
@@ -132,12 +133,17 @@ public class Teleporter : MonoBehaviour
     public void FinishTeleportation()
     {
         player.position = finalTargetPosition;
+
+        Debug.Log("Final world" + finalTargetWorld);
+        Debug.Log("Final dungeon" + finalTargetDungeon);
         GameManager.Instance.SetReloadLocation(finalTargetPosition, finalTargetWorld, finalTargetDungeon);
         GameManager.Instance.ExecuteTeleportation();
         player.GetComponent<PlayerAnimation>().EnableMovement();
         player.GetComponent<SpriteRenderer>().enabled = true;
         interactable = true;
     }
+
+    
 
 
     /// <summary>

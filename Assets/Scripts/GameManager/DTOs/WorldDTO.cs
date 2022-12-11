@@ -50,6 +50,10 @@ public class WorldDTO
 
     public WorldDTO()
     {
+        minigameTasks = new List<MinigameTaskDTO>();
+        npcs = new List<NPCDTO>();
+        dungeons = new List<DungeonDTO>();
+        books = new List<BookDTO>();
     }
 
     #endregion
