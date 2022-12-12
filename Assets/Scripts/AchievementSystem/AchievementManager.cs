@@ -192,8 +192,8 @@ public class AchievementManager : MonoBehaviour
     private bool CheckFilter(AchievementData achievement)
     {
         bool valid = false;
-        if (!filterActive || achievement.GetTitle().Contains(filterText) ||
-            achievement.GetDescription().Contains(filterText))
+        if (!filterActive || achievement.GetTitle().ToLower().Contains(filterText.ToLower()) ||
+            achievement.GetDescription().ToLower().Contains(filterText.ToLower()))
         {
             valid = true;
         }
