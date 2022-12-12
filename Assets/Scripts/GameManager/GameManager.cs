@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 /// <summary>
 ///     The <c>GameManager</c> retrievs all needed data from the backend, stores it in the <c>DataManager</c> and sets up the objects via the <c>ObjectMananger</c> depending on those data.
@@ -317,6 +318,19 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.SetWorldData(worldIndex, new WorldDTO());
         }
         DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
+        AchievementStatistic[] achivements = GetDummyAchievements();
+        Debug.Log("Game Manager, achievements: " + achivements.Length);
+        DataManager.Instance.ProcessAchievementStatistics(achivements);
+    }
+
+    private AchievementStatistic[] GetDummyAchievements()
+    {
+        AchievementStatistic[] statistcs = new AchievementStatistic[1];
+        List<string> categories1 = new() { "Blub", "Bla" };
+        Achievement achievement1 = new Achievement("Achievement 1", "First Achievement", categories1, "achievement1", 5);
+        AchievementStatistic achievementStatistic1 = new AchievementStatistic("blub", achievement1, 0, false);
+        statistcs[0] = achievementStatistic1;
+        return statistcs;
     }
 
 }

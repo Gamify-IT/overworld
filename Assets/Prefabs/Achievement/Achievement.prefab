@@ -246,8 +246,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 5, y: -5}
-  m_SizeDelta: {x: 40, y: 40}
+  m_AnchoredPosition: {x: 7.5, y: -7.5}
+  m_SizeDelta: {x: 35, y: 35}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &5665550251433515151
 CanvasRenderer:
@@ -434,6 +434,7 @@ GameObject:
   - component: {fileID: 5665550252209616794}
   - component: {fileID: 5665550252209616797}
   - component: {fileID: 5665550252209616796}
+  - component: {fileID: 2125794447858471718}
   m_Layer: 5
   m_Name: Achievement
   m_TagString: Untagged
@@ -451,7 +452,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5665550250683315228}
   - {fileID: 5665550251433515137}
@@ -525,6 +526,23 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &2125794447858471718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5665550252209616798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0095b2e9ce3b5304e851dddc10241fef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: {fileID: 5665550252337826511}
+  description: {fileID: 5665550252024020059}
+  image: {fileID: 5665550251433515150}
+  progress: {fileID: 3279845860059195228}
+  status: {fileID: 5665550252379712954}
 --- !u!1 &5665550252337826497
 GameObject:
   m_ObjectHideFlags: 0
