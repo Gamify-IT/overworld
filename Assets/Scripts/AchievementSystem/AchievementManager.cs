@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 /// <summary>
 ///     The <c>AchievementManager</c> sets up the achievements menu and handles all UI inputs
@@ -10,7 +9,7 @@ public class AchievementManager : MonoBehaviour
 {
     [SerializeField] private GameObject achievementPrefab;
     [SerializeField] private GameObject content;
-    [SerializeField] private TMP_Dropdown categoryDropdown;   
+    [SerializeField] private TMP_Dropdown categoryDropdown;
     [SerializeField] private TMP_Dropdown statusDropdown;
     [SerializeField] private TMP_InputField filterInputField;
     private string category;
@@ -101,14 +100,15 @@ public class AchievementManager : MonoBehaviour
         };
         foreach (AchievementData achievement in achievements)
         {
-            foreach(string category in achievement.GetCategories())
+            foreach (string category in achievement.GetCategories())
             {
-                if(!categories.Contains(category))
+                if (!categories.Contains(category))
                 {
                     categories.Add(category);
                 }
             }
         }
+
         return categories;
     }
 
@@ -127,9 +127,9 @@ public class AchievementManager : MonoBehaviour
     /// </summary>
     private void ResetUI()
     {
-        foreach(Transform child in content.transform)
+        foreach (Transform child in content.transform)
         {
-            GameObject.Destroy(child.gameObject);
+            Destroy(child.gameObject);
         }
     }
 
@@ -140,13 +140,14 @@ public class AchievementManager : MonoBehaviour
     private List<AchievementData> FilterAchievements()
     {
         List<AchievementData> achievementsToDisplay = new List<AchievementData>();
-        foreach(AchievementData achievement in achievements)
+        foreach (AchievementData achievement in achievements)
         {
-            if(CheckCategory(achievement) && CheckStatus(achievement) && CheckFilter(achievement))
+            if (CheckCategory(achievement) && CheckStatus(achievement) && CheckFilter(achievement))
             {
                 achievementsToDisplay.Add(achievement);
             }
         }
+
         return achievementsToDisplay;
     }
 
@@ -158,10 +159,11 @@ public class AchievementManager : MonoBehaviour
     private bool CheckCategory(AchievementData achievement)
     {
         bool valid = false;
-        if(category.Equals("All") || achievement.GetCategories().Contains(category))
+        if (category.Equals("All") || achievement.GetCategories().Contains(category))
         {
             valid = true;
         }
+
         return valid;
     }
 
@@ -173,10 +175,12 @@ public class AchievementManager : MonoBehaviour
     private bool CheckStatus(AchievementData achievement)
     {
         bool valid = false;
-        if(status.Equals("All") || (achievement.IsCompleted() && status.Equals("Completed")) || (!achievement.IsCompleted() && status.Equals("Locked")))
+        if (status.Equals("All") || (achievement.IsCompleted() && status.Equals("Completed")) ||
+            (!achievement.IsCompleted() && status.Equals("Locked")))
         {
             valid = true;
         }
+
         return valid;
     }
 
@@ -188,10 +192,12 @@ public class AchievementManager : MonoBehaviour
     private bool CheckFilter(AchievementData achievement)
     {
         bool valid = false;
-        if(!filterActive || achievement.GetTitle().Contains(filterText) || achievement.GetDescription().Contains(filterText))
+        if (!filterActive || achievement.GetTitle().Contains(filterText) ||
+            achievement.GetDescription().Contains(filterText))
         {
             valid = true;
         }
+
         return valid;
     }
 
@@ -201,7 +207,7 @@ public class AchievementManager : MonoBehaviour
     /// <param name="achievementsToDisplay">The achievements to be displayed</param>
     private void DisplayAchievements(List<AchievementData> achievementsToDisplay)
     {
-        foreach(AchievementData achievement in achievementsToDisplay)
+        foreach (AchievementData achievement in achievementsToDisplay)
         {
             DisplayAchievement(achievement);
         }
@@ -213,8 +219,7 @@ public class AchievementManager : MonoBehaviour
     /// <param name="achievement">The achievement a GameObject should be created for</param>
     private void DisplayAchievement(AchievementData achievement)
     {
-        GameObject achievementObject = (GameObject)Instantiate(achievementPrefab);
-        achievementObject.transform.SetParent(content.transform);
+        GameObject achievementObject = Instantiate(achievementPrefab, content.transform, false);
 
         AchievementUIElement achievementUIElement = achievementObject.GetComponent<AchievementUIElement>();
         if (achievementUIElement != null)
