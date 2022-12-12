@@ -19,7 +19,7 @@ public class DataManager : MonoBehaviour
     //Data fields
     private WorldData[] worldData;
     private PlayerstatisticDTO playerData;
-    private List<AchievementUIElement> achievementData;
+    private List<AchievementData> achievementData;
 
     /// <summary>
     ///     This function sets given data for the specified world
@@ -242,7 +242,7 @@ public class DataManager : MonoBehaviour
     /// <param name="achievementStatistics">The achievement statistic data returned from the backend</param>
     public void ProcessAchievementStatistics(AchievementStatistic[] achievementStatistics)
     {
-        achievementData = new List<AchievementUIElement>();
+        achievementData = new List<AchievementData>();
 
         if(achievementStatistics == null)
         {
@@ -251,7 +251,7 @@ public class DataManager : MonoBehaviour
 
         foreach(AchievementStatistic statistic in achievementStatistics)
         {
-            AchievementUIElement achievement = AchievementUIElement.ConvertFromAchievementStatistic(statistic);
+            AchievementData achievement = AchievementData.ConvertFromAchievementStatistic(statistic);
             achievementData.Add(achievement);
         }
     }
@@ -336,7 +336,7 @@ public class DataManager : MonoBehaviour
     ///     This function returns all stored achievements
     /// </summary>
     /// <returns>A list containing all achievements</returns>
-    public List<AchievementUIElement> GetAchievements()
+    public List<AchievementData> GetAchievements()
     {
         Debug.Log("Data Manager, achievements: " + achievementData.Count);
         return achievementData;
@@ -380,15 +380,15 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    private List<AchievementUIElement> GetDummyAchievements()
+    private List<AchievementData> GetDummyAchievements()
     {
         List<string> categories1 = new() { "Blub", "Bla" };
-        AchievementUIElement achievement1 = new AchievementUIElement("Achievement 1", "First Achievement", categories1, "achievement1", 5, 1, false);
+        AchievementData achievement1 = new AchievementData("Achievement 1", "First Achievement", categories1, "target", 5, 1, false);
 
         List<string> categories2 = new() { "Story" };
-        AchievementUIElement achievement2 = new AchievementUIElement("Achievement 2", "Second Achievement", categories2, "achievement2", 3, 2, false);
+        AchievementData achievement2 = new AchievementData("Achievement 2", "Second Achievement", categories2, "achievement2", 3, 3, true);
 
-        List<AchievementUIElement> achievements = new List<AchievementUIElement>() { achievement1, achievement2 };
+        List<AchievementData> achievements = new List<AchievementData>() { achievement1, achievement2 };
         return achievements;
     }
 
