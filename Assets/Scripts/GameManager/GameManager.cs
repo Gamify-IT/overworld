@@ -209,6 +209,7 @@ public class GameManager : MonoBehaviour
     public void ExecuteTeleportation()
     {
         Reload();
+
     }
 
     /// <summary>

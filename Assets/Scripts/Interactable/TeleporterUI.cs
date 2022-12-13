@@ -19,7 +19,6 @@ public class TeleporterUI : MonoBehaviour
     private Transform teleporterSelectionContent;
 
     private List<GameObject> currentTeleporterButtons = new List<GameObject>();
-    private Dictionary<int, List<Teleporter>> registeredTeleporters;
 
     private Teleporter correspondingTeleporter;
 
@@ -31,19 +30,27 @@ public class TeleporterUI : MonoBehaviour
     public void SetupUI(Teleporter teleporter)
     {
         correspondingTeleporter = teleporter;
-        registeredTeleporters = DataManager.Instance.registeredTeleporters;
-        List<int> destinationWorlds = new List<int>(registeredTeleporters.Keys);
-        if (registeredTeleporters[teleporter.worldID].Count == 1)
+
+        for (int i = 1; i < GameSettings.GetMaxWorlds(); i++)
         {
-            destinationWorlds.Remove(teleporter.worldID);
-        }
-        foreach (int worldID in destinationWorlds)
-        {
+            int worldIndex = i;
+            List<TeleporterData> dataList = DataManager.Instance.GetUnlockedTeleportersInWorld(worldIndex);
+            if (dataList.Count == 0)
+            {
+                continue;
+            }
+            if (worldIndex == teleporter.worldID && dataList.Count == 1)
+            {
+                if (dataList.Count == 1)
+                {
+                    continue;
+                }
+            }
             GameObject newToggle = GameObject.Instantiate(prototypeToggle, worldSelectionContent);
-            newToggle.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "World " + worldID.ToString();
+            newToggle.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "World " + worldIndex.ToString();
             Image image = newToggle.GetComponent<Image>();
             newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => ToggleEnabledColor(b, image));
-            newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => UpdateTeleporterSelections(worldID));
+            newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => UpdateTeleporterSelections(worldIndex,dataList));
             newToggle.SetActive(true);
         }
     }
@@ -53,26 +60,28 @@ public class TeleporterUI : MonoBehaviour
     /// Updates the right side of the menu. This contains the buttons corresponding to the target teleporters.
     /// </summary>
     /// <param name="worldID"></param>
-    public void UpdateTeleporterSelections(int worldID)
+    public void UpdateTeleporterSelections(int worldID, List<TeleporterData> dataList)
     {
         foreach (GameObject button in currentTeleporterButtons)
         {
             Destroy(button);
         }
         currentTeleporterButtons.Clear();
-        foreach (Teleporter teleporter in registeredTeleporters[worldID])
+        foreach (TeleporterData data in dataList)
         {
-            if (worldID == correspondingTeleporter.worldID && teleporter.Equals(correspondingTeleporter))
+            print("InDataNumber " + data.teleporterNumber);
+            if (data.teleporterNumber == correspondingTeleporter.teleporterNumber)
             {
                 continue;
             }
             GameObject newButton = GameObject.Instantiate(prototypeButton.gameObject, teleporterSelectionContent);
-            newButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = teleporter.teleporterName;
-            newButton.GetComponent<Button>().onClick.AddListener(() => correspondingTeleporter.TeleportPlayerTo(teleporter.transform.position,teleporter.worldID,teleporter.dungeonID));
+            newButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = data.teleporterName;
+            newButton.GetComponent<Button>().onClick.AddListener(() => correspondingTeleporter.TeleportPlayerTo(data.position, data.worldID, data.dungeonID));
             newButton.SetActive(true);
             currentTeleporterButtons.Add(newButton);
         }
     }
+
 
     public void ToggleEnabledColor(bool enabled, Image image)
     {

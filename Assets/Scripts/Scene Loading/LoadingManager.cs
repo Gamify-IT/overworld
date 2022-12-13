@@ -131,16 +131,7 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("Start unloading other scenes");
 
-        for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
-        {
-            string tempSceneName = SceneManager.GetSceneAt(sceneIndex).name;
-            if (!tempSceneName.Equals("Player") && !tempSceneName.Equals("Player HUD") &&
-                !tempSceneName.Equals(sceneToLoad) && !tempSceneName.Equals("LoadingScreen") &&
-                !tempSceneName.Equals("OfflineMode"))
-            {
-                await SceneManager.UnloadSceneAsync(tempSceneName);
-            }
-        }
+        UnloadUnneededScenesExcept(sceneToLoad);
 
         Debug.Log("Finish unloading other scenes");
 
@@ -356,6 +347,24 @@ public class LoadingManager : MonoBehaviour
             }
         }
         return 0;
+    }
+
+    /// <summary>
+    /// This function unloades every scene that is not the given openScene or player and hud related scenes.
+    /// </summary>
+    /// <param name="openScene"></param>
+    public async void UnloadUnneededScenesExcept(string openScene)
+    {
+        for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
+        {
+            string tempSceneName = SceneManager.GetSceneAt(sceneIndex).name;
+            if (!tempSceneName.Equals("Player") && !tempSceneName.Equals("Player HUD") &&
+                !tempSceneName.Equals(sceneToLoad) && !tempSceneName.Equals("LoadingScreen") &&
+                !tempSceneName.Equals("OfflineMode"))
+            {
+                await SceneManager.UnloadSceneAsync(tempSceneName);
+            }
+        }
     }
 
     #endregion

@@ -7,10 +7,16 @@ using TMPro;
 
 public class Teleporter : MonoBehaviour
 {
-    public string teleporterName = "MyTeleporter";
-    public int worldID;
-    public bool unlocked = false;
-    public int dungeonID = 0;
+    [field: SerializeField]
+    public string teleporterName { get; private set; } = "My Teleporter";
+    [field: SerializeField]
+    public int worldID { get; private set; } = 1;
+    [field: SerializeField]
+    public int dungeonID { get; private set; } = 0;
+    [field: SerializeField]
+    public int teleporterNumber { get; private set; } = 1;
+
+    private bool isUnlocked = false;
     [SerializeField]
     private GameObject teleporterCanvas;
 
@@ -26,9 +32,18 @@ public class Teleporter : MonoBehaviour
     private bool inTrigger = false;
     private bool interactable = true;
 
+    private void Awake()
+    {
+        ObjectManager.Instance.AddTeleporter(this.gameObject, worldID, dungeonID, teleporterNumber);
+    }
+    private void OnDestroy()
+    {
+        ObjectManager.Instance.RemoveTeleporter(worldID, dungeonID, teleporterNumber);
+    }
+
     private void Start()
     {
-        SetUnLockedState(unlocked);
+        SetUnLockedState(isUnlocked);
     }
 
     /// <summary>
@@ -60,15 +75,12 @@ public class Teleporter : MonoBehaviour
         {
             player = collision.transform;
             inTrigger = true;
-            if (!unlocked)
+            if (!isUnlocked)
             {
-                unlocked = true;
-                SetUnLockedState(unlocked);
-                DataManager dataManager = DataManager.Instance;
-                if (!dataManager.registeredTeleporters.ContainsKey(worldID)){
-                    dataManager.registeredTeleporters.Add(worldID, new List<Teleporter>());
-                }
-                dataManager.registeredTeleporters[worldID].Add(this);               
+                isUnlocked = true;
+                SetUnLockedState(isUnlocked);
+                WorldData worldData = DataManager.Instance.GetWorldData(worldID);
+                worldData.UpdateTeleporterData(teleporterNumber, teleporterName, worldID, dungeonID, transform.position);       
             }
         }
     }
@@ -88,6 +100,21 @@ public class Teleporter : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This function sets up the teleporter based on the provided data
+    /// </summary>
+    /// <param name="data"></param>
+    public void Setup(TeleporterData data)
+    {
+        isUnlocked = data.isUnlocked;
+        SetUnLockedState(isUnlocked);
+    }
+
+
+    /// <summary>
+    /// Makes visual changes to the teleporter to indicate wether it is locked or not.
+    /// </summary>
+    /// <param name="isUnLocked"></param>
     private void SetUnLockedState(bool isUnLocked)
     {
         interactable = true;
@@ -134,10 +161,18 @@ public class Teleporter : MonoBehaviour
     {
         player.position = finalTargetPosition;
 
-        Debug.Log("Final world" + finalTargetWorld);
-        Debug.Log("Final dungeon" + finalTargetDungeon);
-        GameManager.Instance.SetReloadLocation(finalTargetPosition, finalTargetWorld, finalTargetDungeon);
-        GameManager.Instance.ExecuteTeleportation();
+        Debug.Log("Final world:" + finalTargetWorld);
+        Debug.Log("Final dungeon:" + finalTargetDungeon);
+
+        if (finalTargetWorld != worldID || finalTargetDungeon != dungeonID)
+        {
+            GameManager.Instance.SetReloadLocation(finalTargetPosition, finalTargetWorld, finalTargetDungeon);
+            GameManager.Instance.ExecuteTeleportation();
+        }
+        else
+        {
+            player.position = finalTargetPosition;
+        }
         player.GetComponent<PlayerAnimation>().EnableMovement();
         player.GetComponent<SpriteRenderer>().enabled = true;
         interactable = true;

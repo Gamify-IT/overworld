@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 ///     This class defines all needed data for a <c>World</c>.
@@ -16,13 +17,14 @@ public class WorldData
     private readonly NPCData[] npcs;
     private readonly BookData[] books;
     private readonly DungeonData[] dungeons;
+    private readonly TeleporterData[] teleporters;
 
     #endregion
 
     #region Constructors
 
     public WorldData(string id, int index, string staticName, string topicName, bool active, MinigameData[] minigames,
-        NPCData[] npcs, DungeonData[] dungeons, BookData[] books)
+        NPCData[] npcs, DungeonData[] dungeons, BookData[] books, TeleporterData[] teleporters)
     {
         this.id = id;
         this.index = index;
@@ -33,6 +35,7 @@ public class WorldData
         this.npcs = npcs;
         this.books = books;
         this.dungeons = dungeons;
+        this.teleporters = teleporters;
     }
 
     public WorldData()
@@ -64,6 +67,12 @@ public class WorldData
         for (int dungeonIndex = 1; dungeonIndex < dungeons.Length; dungeonIndex++)
         {
             dungeons[dungeonIndex] = new DungeonData();
+        }
+
+        teleporters = new TeleporterData[GameSettings.GetMaxTeleporters() + 1];
+        for (int tpIndex = 1; tpIndex < teleporters.Length; tpIndex++)
+        {
+            teleporters[tpIndex] = new TeleporterData();
         }
     }
 
@@ -114,7 +123,14 @@ public class WorldData
             dungeons[dungeonDTO.index] = dungeonData;
         }
 
-        WorldData data = new WorldData(id, index, staticName, topicName, active, minigames, npcs, dungeons, books);
+        // just for demonstration
+        TeleporterData[] teleporters = new TeleporterData[GameSettings.GetMaxTeleporters() + 1];
+        for (int tpIndex = 1; tpIndex < teleporters.Length; tpIndex++)
+        {
+            teleporters[tpIndex] = new TeleporterData();
+        }
+
+        WorldData data = new WorldData(id, index, staticName, topicName, active, minigames, npcs, dungeons, books,teleporters);
         return data;
     }
 
@@ -260,6 +276,21 @@ public class WorldData
     }
 
     /// <summary>
+    ///     This function returns the data of a Teleporter in the world.
+    /// </summary>
+    /// <param name="index">This index of the Book</param>
+    /// <returns>The data of the Book, <c>null</c> if invalid index</returns>
+    public TeleporterData getTeleporterData(int index)
+    {
+        if (index > 0 && index < teleporters.Length)
+        {
+            return teleporters[index];
+        }
+
+        return null;
+    }
+
+    /// <summary>
     ///     This function returns the data of a dungeon of the world.
     /// </summary>
     /// <param name="index">This index of the dungeon</param>
@@ -325,6 +356,19 @@ public class WorldData
     public MinigameData[] GetMinigameData()
     {
         return minigames;
+    }
+
+
+    public void UpdateTeleporterData(int number, string name, int worldID, int dungeonID, Vector2 position)
+    {
+        Debug.Log("TP Number: " + number);
+        TeleporterData data = getTeleporterData(number);
+        data.teleporterNumber = number;
+        data.teleporterName = name;
+        data.worldID = worldID;
+        data.dungeonID = dungeonID;
+        data.position = position;
+        data.isUnlocked = true;
     }
 
     #endregion

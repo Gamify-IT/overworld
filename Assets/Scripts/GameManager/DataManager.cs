@@ -20,8 +20,6 @@ public class DataManager : MonoBehaviour
     private WorldData[] worldData;
     private PlayerstatisticDTO playerData;
 
-    public Dictionary<int, List<Teleporter>> registeredTeleporters = new Dictionary<int, List<Teleporter>>();
-
     /// <summary>
     ///     This function sets given data for the specified world
     /// </summary>
@@ -311,6 +309,29 @@ public class DataManager : MonoBehaviour
             return (completedMinigames * 1f) / (minigames * 1f);
         }
     }
+
+
+    /// <summary>
+    /// Returns a list of all unlocked teleporters in a world (including its dungeons)
+    /// </summary>
+    /// <param name="worldIndex"></param>
+    /// <returns></returns>
+    public List<TeleporterData> GetUnlockedTeleportersInWorld(int worldIndex)
+    {
+        List<TeleporterData> dataList = new List<TeleporterData>();
+        for (int i = 0; i < GameSettings.GetMaxTeleporters(); i++)
+        {
+            TeleporterData currentData = GetWorldData(worldIndex).getTeleporterData(i);
+            if (currentData != null && currentData.isUnlocked)
+            {
+                dataList.Add(currentData);
+            }
+            
+        }
+        return dataList;
+    }
+
+    
 
     /// <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
