@@ -11,6 +11,7 @@ public static class GameSettings
     private static readonly int maxNPCs = 10;
     private static readonly int maxBooks = 5;
     private static readonly int maxDungeons = 4;
+    private static readonly int maxTeleporters = 10;
 
     #endregion
 
@@ -66,6 +67,15 @@ public static class GameSettings
     public static int GetMaxDungeons()
     {
         return maxDungeons;
+    }
+
+    /// <summary>
+    ///     This function returns the maximum amount of teleporters in a world (including its dungeons).
+    /// </summary>
+    /// <returns>The maximum amount of dungeons in a world</returns>
+    public static int GetMaxTeleporters()
+    {
+        return maxTeleporters;
     }
 
     #endregion

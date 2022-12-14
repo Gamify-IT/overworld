@@ -116,7 +116,7 @@ public class Minigame : MonoBehaviour
         }
 
         Vector2 respawnPosition = transform.position;
-        GameManager.Instance.SetMinigameRespawn(respawnPosition, world, dungeon);
+        GameManager.Instance.SetReloadLocation(respawnPosition, world, dungeon);
         MinigameStarting.Instance.SetupMinigame(game, configurationID, highscore);
     }
 

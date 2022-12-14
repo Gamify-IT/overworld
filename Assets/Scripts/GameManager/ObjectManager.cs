@@ -14,6 +14,7 @@ public class ObjectManager : MonoBehaviour
     private int maxNPCs;
     private int maxBooks;
     private int maxDungeons;
+    private int maxTeleporters;
 
     //Object refernce fields
     private GameObject[,] minigameObjects;
@@ -21,6 +22,7 @@ public class ObjectManager : MonoBehaviour
     private GameObject[,] dungeonBarrierObjects;
     private GameObject[,] npcObjects;
     private GameObject[,] bookObjects;
+    private GameObject[,] teleporterObjects;
 
     /// <summary>
     ///     This function registers a new minigame at the <c>ObjectManager</c>
@@ -186,6 +188,34 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
+    public void AddTeleporter(GameObject teleporter, int world, int dungeon, int number)
+    {
+        if (teleporter != null)
+        {
+            if (dungeon == 0)
+            {
+                teleporterObjects[world, number] = teleporter;
+            }
+            else
+            {
+                teleporterObjects[0, number] = teleporter;
+            }
+        }
+    }
+
+    public void RemoveTeleporter(int world, int dungeon, int number)
+    {
+        if (dungeon == 0)
+        {
+            teleporterObjects[world, number] = null;
+        }
+        else
+        {
+            teleporterObjects[0, number] = null;
+        }
+    }
+
+
     /// <summary>
     ///     This functions sets the data for a given world.
     /// </summary>
@@ -265,6 +295,28 @@ public class ObjectManager : MonoBehaviour
             }
 
             book.Setup(bookData);
+        }
+
+        for (int tpIndex = 0; tpIndex < maxTeleporters; tpIndex++)
+        {
+            TeleporterData teleporterData = data.getTeleporterData(tpIndex);
+            if (teleporterData == null)
+            {
+                teleporterData = new TeleporterData();
+            }
+
+            GameObject teleporterObject = teleporterObjects[worldIndex, tpIndex];
+            if (teleporterObject == null)
+            {
+                continue;
+            }
+
+            Teleporter teleporter = teleporterObject.GetComponent<Teleporter>();
+            if (teleporter == null)
+            {
+                continue;
+            }
+            teleporter.Setup(teleporterData);
         }
 
         for (int barrierDestinationIndex = 1; barrierDestinationIndex <= maxWorld; barrierDestinationIndex++)
@@ -435,12 +487,14 @@ public class ObjectManager : MonoBehaviour
         maxNPCs = GameSettings.GetMaxNpCs();
         maxBooks = GameSettings.GetMaxBooks();
         maxDungeons = GameSettings.GetMaxDungeons();
+        maxTeleporters = GameSettings.GetMaxTeleporters();
 
         minigameObjects = new GameObject[maxWorld + 1, maxMinigames + 1];
         worldBarrierObjects = new GameObject[maxWorld + 1, maxWorld + 1];
         dungeonBarrierObjects = new GameObject[maxWorld + 1, maxDungeons + 1];
         npcObjects = new GameObject[maxWorld + 1, maxNPCs + 1];
         bookObjects = new GameObject[maxWorld + 1, maxBooks + 1];
+        teleporterObjects = new GameObject[maxWorld + 1, maxTeleporters + 1];
     }
 
 }

@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     private string username;
 
     //Minigame reload
+    private string sceneName;
     private Vector2 minigameRespawnPosition;
     private int minigameWorldIndex;
     private int minigameDungeonIndex;
@@ -169,12 +170,28 @@ public class GameManager : MonoBehaviour
     /// <param name="respawnLocation">The position the player has to be in</param>
     /// <param name="worldIndex">The index of the world the minigame is in</param>
     /// <param name="dungeonIndex">The index of the dungeon the minigame is in (0 if in world)</param>
-    public void SetMinigameRespawn(Vector2 respawnLocation, int worldIndex, int dungeonIndex)
+    public void SetReloadLocation(Vector2 respawnLocation, int worldIndex, int dungeonIndex)
     {
         minigameRespawnPosition = respawnLocation;
         minigameWorldIndex = worldIndex;
         minigameDungeonIndex = dungeonIndex;
+        this.sceneName = BuildSceneName();
         Debug.Log("Setup minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
+    }
+
+    private string BuildSceneName()
+    {
+        string sceneName;
+        if (minigameDungeonIndex == 0)
+        {
+            sceneName = "World " + minigameWorldIndex;
+        }
+        else
+        {
+            sceneName = "Dungeon " + minigameWorldIndex + "-" + minigameDungeonIndex;
+        }
+        Debug.Log(sceneName);
+        return sceneName;
     }
 
     /// <summary>
@@ -185,6 +202,15 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Start minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
         Reload();
+    }
+
+    /// <summary>
+    /// This function is used by a teleporter to update the position of the player.
+    /// </summary>
+    public void ExecuteTeleportation()
+    {
+        Reload();
+
     }
 
     /// <summary>
@@ -304,7 +330,7 @@ public class GameManager : MonoBehaviour
     private async void Reload()
     {
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
-        await LoadingManager.Instance.ReloadData(minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
+        await LoadingManager.Instance.ReloadData(sceneName, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
     }
 
     /// <summary>

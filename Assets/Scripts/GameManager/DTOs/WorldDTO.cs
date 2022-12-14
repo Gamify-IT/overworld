@@ -29,6 +29,7 @@ public class WorldDTO
     public List<NPCDTO> npcs;
     public List<BookDTO> books;
     public List<DungeonDTO> dungeons;
+    public List<TeleporterDTO> teleporters;
 
     #endregion
 
@@ -50,6 +51,11 @@ public class WorldDTO
 
     public WorldDTO()
     {
+        minigameTasks = new List<MinigameTaskDTO>();
+        npcs = new List<NPCDTO>();
+        dungeons = new List<DungeonDTO>();
+        books = new List<BookDTO>();
+        teleporters = new List<TeleporterDTO>();
     }
 
     #endregion

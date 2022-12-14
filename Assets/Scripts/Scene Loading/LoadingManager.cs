@@ -131,16 +131,7 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("Start unloading other scenes");
 
-        for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
-        {
-            string tempSceneName = SceneManager.GetSceneAt(sceneIndex).name;
-            if (!tempSceneName.Equals("Player") && !tempSceneName.Equals("Player HUD") &&
-                !tempSceneName.Equals(sceneToLoad) && !tempSceneName.Equals("LoadingScreen") &&
-                !tempSceneName.Equals("OfflineMode"))
-            {
-                await SceneManager.UnloadSceneAsync(tempSceneName);
-            }
-        }
+        UnloadUnneededScenesExcept(sceneToLoad);
 
         Debug.Log("Finish unloading other scenes");
 
@@ -171,8 +162,9 @@ public class LoadingManager : MonoBehaviour
     /// <param name="worldIndex">index of the current world</param>
     /// <param name="dungeonIndex">index of the current dungeon - null if the area is a world</param>
     /// <param name="playerPosition">position where the player should start</param>
-    public async UniTask ReloadData(int worldIndex, int dungeonIndex, Vector2 playerPosition)
+    public async UniTask ReloadData(string sceneToLoad, int worldIndex, int dungeonIndex, Vector2 playerPosition)
     {
+        this.sceneToLoad = sceneToLoad;
         this.worldIndex = worldIndex;
         this.dungeonIndex = dungeonIndex;
         this.playerPosition = playerPosition;
@@ -355,6 +347,24 @@ public class LoadingManager : MonoBehaviour
             }
         }
         return 0;
+    }
+
+    /// <summary>
+    /// This function unloades every scene that is not the given openScene or player and hud related scenes.
+    /// </summary>
+    /// <param name="openScene"></param>
+    public async void UnloadUnneededScenesExcept(string openScene)
+    {
+        for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
+        {
+            string tempSceneName = SceneManager.GetSceneAt(sceneIndex).name;
+            if (!tempSceneName.Equals("Player") && !tempSceneName.Equals("Player HUD") &&
+                !tempSceneName.Equals(sceneToLoad) && !tempSceneName.Equals("LoadingScreen") &&
+                !tempSceneName.Equals("OfflineMode"))
+            {
+                await SceneManager.UnloadSceneAsync(tempSceneName);
+            }
+        }
     }
 
     #endregion

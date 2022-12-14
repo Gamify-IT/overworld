@@ -332,6 +332,29 @@ public class DataManager : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Returns a list of all unlocked teleporters in a world (including its dungeons)
+    /// </summary>
+    /// <param name="worldIndex"></param>
+    /// <returns></returns>
+    public List<TeleporterData> GetUnlockedTeleportersInWorld(int worldIndex)
+    {
+        List<TeleporterData> dataList = new List<TeleporterData>();
+        for (int i = 0; i < GameSettings.GetMaxTeleporters(); i++)
+        {
+            TeleporterData currentData = GetWorldData(worldIndex).getTeleporterData(i);
+            if (currentData != null && currentData.isUnlocked)
+            {
+                dataList.Add(currentData);
+            }
+            
+        }
+        return dataList;
+    }
+
+    
+
     /// <summary>
     ///     This function returns all stored achievements
     /// </summary>

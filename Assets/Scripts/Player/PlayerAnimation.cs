@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 ///     This class manages the movement and the animations of the player.
 /// </summary>
-public class Animation : MonoBehaviour
+public class PlayerAnimation : MonoBehaviour
 {
     public float movementSpeed = 3f;
     public float sprintingSpeed = 6f;
@@ -14,6 +14,7 @@ public class Animation : MonoBehaviour
     private bool busy;
     private bool canMove;
     private float currentSpeed;
+    private float targetSpeed;
 
     /// <summary>
     ///     This method is called before the first frame update.
@@ -25,6 +26,7 @@ public class Animation : MonoBehaviour
         busy = false;
         playerRigidBody = GetComponent<Rigidbody2D>();
         currentSpeed = movementSpeed;
+        targetSpeed = currentSpeed;
     }
 
     /// <summary>
@@ -38,31 +40,31 @@ public class Animation : MonoBehaviour
             movement.y = Input.GetAxisRaw("Vertical");
             movement = movement.normalized;
 
-            if (Input.GetKeyDown(KeyCode.LeftShift) && currentSpeed == movementSpeed)
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                currentSpeed = currentSpeed + sprintingSpeed;
+                targetSpeed = movementSpeed + sprintingSpeed;
                 playerAnimator.speed = 2;
             }
-
-            if (Input.GetKeyUp(KeyCode.LeftShift) && currentSpeed == movementSpeed + sprintingSpeed)
+            if (Input.GetKeyUp(KeyCode.LeftShift))
             {
-                currentSpeed = currentSpeed - sprintingSpeed;
+                targetSpeed = movementSpeed;
                 playerAnimator.speed = 1;
             }
-            
+            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * 50);
+
             // The following lines are dev keybindings, if needed they can be activated again by uncommenting them
             if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
             {
                 currentSpeed = currentSpeed + superSpeed;
                 playerAnimator.speed = 20;
             }
-            
+
             if (Input.GetKeyUp("l") && currentSpeed == movementSpeed + superSpeed)
             {
                 currentSpeed = currentSpeed - superSpeed;
                 playerAnimator.speed = 1;
             }
-            
+
             if (Input.GetKeyDown("k"))
             {
                 GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =
@@ -155,7 +157,7 @@ public class Animation : MonoBehaviour
 
     #region Singleton
 
-    public static Animation Instance { get; private set; }
+    public static PlayerAnimation Instance { get; private set; }
 
     /// <summary>
     ///     The Awake function is called after an object is initialized and before the Start function.
