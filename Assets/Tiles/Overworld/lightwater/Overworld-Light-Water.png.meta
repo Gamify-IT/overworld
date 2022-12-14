@@ -5353,10 +5353,13 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
+      - - {x: 8, y: -4}
+        - {x: 8, y: -8}
+        - {x: 8, y: -8}
+        - {x: 8, y: -8}
+        - {x: 3, y: -8}
+        - {x: 4, y: -6}
+        - {x: 5, y: -5}
       tessellationDetail: 0
       bones: []
       spriteID: f659a03295b071b409880861319ec045
@@ -5378,10 +5381,10 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
+      - - {x: -8, y: -4}
+        - {x: -8, y: -8}
+        - {x: 8, y: -8}
+        - {x: 8, y: -4}
       tessellationDetail: 0
       bones: []
       spriteID: eeb788aa1b4fc854b8bd77dbb3383e0f
@@ -5403,10 +5406,11 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
+      - - {x: -6, y: -5}
+        - {x: -8, y: -4}
+        - {x: -8, y: -8}
+        - {x: -4, y: -8}
+        - {x: -5, y: -6}
       tessellationDetail: 0
       bones: []
       spriteID: cb4417de13721064da177200d5a2af36
@@ -6217,10 +6221,10 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
+      - - {x: 3, y: 8}
+        - {x: 3, y: -8}
+        - {x: 8, y: -8}
+        - {x: 8, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: f77bfe6ef7387a14c969359e92830647
@@ -6243,9 +6247,9 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
+        - {x: -8, y: -8}
+        - {x: -4, y: -8}
+        - {x: -4, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: 858b8d353b02c574891fd7a467dcec69
@@ -6972,10 +6976,11 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
+      - - {x: 3, y: 8}
+        - {x: 3, y: 6}
+        - {x: 5, y: 4}
+        - {x: 8, y: 4}
+        - {x: 8, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: 0021664456644364cb9486dc22eda58d
@@ -6998,9 +7003,9 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
+        - {x: -8, y: 4}
+        - {x: 8, y: 4}
+        - {x: 8, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: df5b2b81fbdda0b4a84b2aaf4481eccd
@@ -7023,9 +7028,10 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
+        - {x: -8, y: 4}
+        - {x: -6, y: 4}
+        - {x: -4, y: 6}
+        - {x: -4, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: 8a7a6a6e74812f64994b98247b9f4911
@@ -7770,9 +7776,16 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
+        - {x: -8, y: -8}
+        - {x: -4, y: -8}
+        - {x: -4, y: -6}
+        - {x: -4, y: -3}
+        - {x: -4, y: 2}
+        - {x: -2, y: 4}
+        - {x: 2, y: 4}
+        - {x: 6, y: 4}
+        - {x: 8, y: 4}
+        - {x: 8, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: 68926a099744f21429e0482b0fe9f881
@@ -7795,9 +7808,19 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
+        - {x: 1, y: 8}
+        - {x: 8, y: 8}
+        - {x: 8, y: 2}
+        - {x: 8, y: -8}
+        - {x: 4, y: -8}
+        - {x: 4, y: -5}
+        - {x: 3, y: -2}
+        - {x: 4, y: 2}
+        - {x: 2, y: 3}
+        - {x: 0, y: 4}
+        - {x: -3, y: 3}
+        - {x: -5, y: 3}
+        - {x: -8, y: 4}
       tessellationDetail: 0
       bones: []
       spriteID: e0539fb6cf4375b4aa58a3942119626e
@@ -8499,10 +8522,15 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: -8, y: 8}
+      - - {x: 3, y: -4}
+        - {x: -3, y: -4}
+        - {x: -4, y: -1}
+        - {x: -4, y: 3}
+        - {x: -4, y: 8}
         - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
+        - {x: -8, y: -8}
+        - {x: 8, y: -8}
+        - {x: 8, y: -4}
       tessellationDetail: 0
       bones: []
       spriteID: 0bcc01b8f7ca90d44aaa0737ecbab6ef
@@ -8525,9 +8553,15 @@ TextureImporter:
       outline: []
       physicsShape:
       - - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
-        - {x: -8, y: 8}
+        - {x: 5, y: 8}
+        - {x: 5, y: 3}
+        - {x: 4, y: -3}
+        - {x: -1, y: -4}
+        - {x: -6, y: -4}
+        - {x: -8, y: -4}
+        - {x: -8, y: -8}
+        - {x: 8, y: -8}
+        - {x: 8, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: 7b1ec9bd293e122488a3ba581bd9adbc
@@ -22885,16 +22919,16 @@ TextureImporter:
       Overworld-Light-Water_542: -360190488
       Overworld-Light-Water_398: 501052594
       Overworld-Light-Water_1010: -1126157399
-      Overworld-Light-Water_843: 250871621
       Overworld-Light-Water_660: -1047712034
-      Overworld-Light-Water_885: 476175373
+      Overworld-Light-Water_744: -650854112
       Overworld-Light-Water_939: -1301523687
-      Overworld-Light-Water_453: -589367145
       Overworld-Light-Water_378: 265419514
       Overworld-Light-Water_165: 1523753468
+      Overworld-Light-Water_885: 476175373
       Overworld-Light-Water_192: -1570613641
+      Overworld-Light-Water_453: -589367145
       Overworld-Light-Water_615: 1510961215
-      Overworld-Light-Water_744: -650854112
+      Overworld-Light-Water_843: 250871621
       Overworld-Light-Water_151: -1535793488
       Overworld-Light-Water_315: 1005087208
       Overworld-Light-Water_527: -95878060
