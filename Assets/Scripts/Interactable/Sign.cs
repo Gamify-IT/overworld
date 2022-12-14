@@ -59,6 +59,7 @@ public class Sign : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
             !PauseMenu.menuOpen)
         {
+            signText.text = text;
             SignPanel.SetActive(!SignPanel.activeInHierarchy);
         }
     }
