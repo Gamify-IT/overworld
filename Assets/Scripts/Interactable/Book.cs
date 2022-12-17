@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 /// <summary>
 ///     This class is responsible for the Book logic.
 /// </summary>
-public class Book : MonoBehaviour
+public class Book : MonoBehaviour, IGameEntity
 {
     [SerializeField] private int world;
     [SerializeField] private int dungeon;
@@ -49,7 +49,7 @@ public class Book : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove Book " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveBook(world, dungeon, number);
+        ObjectManager.Instance.RemoveGameEntity<Book>(world, dungeon, number);
     }
 
     /// <summary>
@@ -87,19 +87,27 @@ public class Book : MonoBehaviour
     private void RegisterToGameManager()
     {
         Debug.Log("register Book " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.AddBook(gameObject, world, dungeon, number);
+        ObjectManager.Instance.AddGameEntity<Book>(gameObject, world, dungeon, number);
     }
 
     /// <summary>
     ///     setup called by game manager
     /// </summary>
     /// <param name="data"></param>
-    public void Setup(BookData data)
+    public void Setup(IGameEntityData data)
     {
-        uuid = data.GetUuid();
-        bookContent = data.GetBookText();
-        string text = bookContent;
-        Debug.Log("setup book " + world + "-" + number + " with Text: " + text);
+        try
+        {
+            BookData bookData = (BookData)data;
+            uuid = bookData.GetUuid();
+            bookContent = bookData.GetBookText();
+            string text = bookContent;
+            Debug.Log("setup book " + world + "-" + number + " with Text: " + text);
+        }
+        catch(System.InvalidCastException e)
+        {
+            Debug.LogError(e.StackTrace);
+        }
     }
 
 

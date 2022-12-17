@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 ///     This class defines all needed data for a <c>Dungeon</c>.
 /// </summary>
-public class DungeonData
+public class DungeonData: IAreaData
 {
     #region Attributes
 
@@ -231,6 +232,28 @@ public class DungeonData
     public MinigameData[] GetMinigameData()
     {
         return minigames;
+    }
+
+    public IGameEntityData GetEntityDataAt<T>(int index) where T : IGameEntity
+    {
+        IGameEntityData entityData;
+        if (typeof(T) == typeof(BookData))
+        {
+            entityData = books[index];
+        }
+        else if (typeof(T) == typeof(NPCData))
+        {
+            entityData = npcs[index];
+        }
+        else if (typeof(T) == typeof(MinigameData))
+        {
+            entityData = minigames[index];
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException("There exists no Data Array for " + typeof(T).FullName);
+        }
+        return entityData;
     }
 
     #endregion

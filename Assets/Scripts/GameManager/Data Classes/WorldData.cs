@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /// <summary>
 ///     This class defines all needed data for a <c>World</c>.
 /// </summary>
-public class WorldData
+public class WorldData: IAreaData
 {
     #region Attributes
 
@@ -117,7 +118,7 @@ public class WorldData
 
         DungeonData[] dungeons = new DungeonData[GameSettings.GetMaxDungeons() + 1];
         List<DungeonDTO> dungeonDTOs = dto.dungeons;
-        foreach(DungeonDTO dungeonDTO in dungeonDTOs)
+        foreach (DungeonDTO dungeonDTO in dungeonDTOs)
         {
             DungeonData dungeonData = DungeonData.ConvertDtoToData(dungeonDTO);
             dungeons[dungeonDTO.index] = dungeonData;
@@ -130,7 +131,7 @@ public class WorldData
             teleporters[tpIndex] = new TeleporterData();
         }
 
-        WorldData data = new WorldData(id, index, staticName, topicName, active, minigames, npcs, dungeons, books,teleporters);
+        WorldData data = new WorldData(id, index, staticName, topicName, active, minigames, npcs, dungeons, books, teleporters);
         return data;
     }
 
@@ -303,6 +304,32 @@ public class WorldData
         }
 
         return null;
+    }
+
+    public IGameEntityData GetEntityDataAt<T>(int index) where T : IGameEntity
+    {
+        IGameEntityData entityData;
+        if (typeof(T) == typeof(BookData))
+        {
+            entityData = books[index];
+        }
+        else if (typeof(T) == typeof(NPCData))
+        {
+            entityData = npcs[index];
+        }
+        else if (typeof(T) == typeof(TeleporterData))
+        {
+            entityData = teleporters[index];
+        }
+        else if (typeof(T) == typeof(MinigameData))
+        {
+            entityData = minigames[index];
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException("There exists no Data Array for " + typeof(T).FullName);
+        }
+        return entityData;
     }
 
     /// <summary>

@@ -19,7 +19,7 @@ public enum MinigameStatus
 /// <summary>
 ///     This script defines a minigame spot in a world or dungeon.
 /// </summary>
-public class Minigame : MonoBehaviour
+public class Minigame : MonoBehaviour, IGameEntity
 {
     [DllImport("__Internal")]
     private static extern string LoadMinigameInIframe(string minigameName, string minigameConfiguration);
@@ -57,7 +57,7 @@ public class Minigame : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveMinigame(world, dungeon, number);
+        ObjectManager.Instance.RemoveGameEntity<Minigame>(world, dungeon, number);
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class Minigame : MonoBehaviour
     private void RegisterToGameManager()
     {
         Debug.Log("register Minigame " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.AddMinigame(gameObject, world, dungeon, number);
+        ObjectManager.Instance.AddGameEntity<Minigame>(gameObject, world, dungeon, number);
     }
 
     #endregion
@@ -77,14 +77,23 @@ public class Minigame : MonoBehaviour
     ///     This functions configurates the minigame with the given data and updates the object.
     /// </summary>
     /// <param name="data">the data to be set</param>
-    public void Setup(MinigameData data)
+    public void Setup(IGameEntityData data)
     {
-        status = data.GetStatus();
-        game = data.GetGame();
-        configurationID = data.GetConfigurationID();
-        highscore = data.GetHighscore();
+        try
+        {
+            MinigameData minigameData = (MinigameData)data;
+            status = minigameData.GetStatus();
+            game = minigameData.GetGame();
+            configurationID = minigameData.GetConfigurationID();
+            highscore = minigameData.GetHighscore();
 
-        UpdateStatus();
+            UpdateStatus();
+        }
+        catch (System.InvalidCastException e)
+        {
+            Debug.LogError(e.StackTrace);
+        }
+        
     }
 
     /// <summary>

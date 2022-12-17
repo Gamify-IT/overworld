@@ -348,7 +348,6 @@ public class DataManager : MonoBehaviour
             {
                 dataList.Add(currentData);
             }
-            
         }
         return dataList;
     }
