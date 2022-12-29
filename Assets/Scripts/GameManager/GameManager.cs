@@ -34,6 +34,9 @@ public class GameManager : MonoBehaviour
     private int minigameWorldIndex;
     private int minigameDungeonIndex;
 
+    //Achievements
+    [SerializeField] private GameObject achievementNotificationManagerPrefab;
+
     /// <summary>
     ///     This function checks whether or not a valid courseId was passed or not.
     ///     If a valid id was passed, it gets stored.
@@ -261,9 +264,18 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="newProgress">The new progress of the achievement</param>
-    public async UniTask<bool> UpdateAchievement(string title, int newProgress)
+    public async void UpdateAchievement(string title, int newProgress)
     {
-        return DataManager.Instance.UpdateAchievement(title, newProgress);
+        bool unlocked = DataManager.Instance.UpdateAchievement(title, newProgress);
+        if (unlocked)
+        {
+            AchievementData achievement = DataManager.Instance.GetAchievement(title);
+            if (achievement == null)
+            {
+                return;
+            }
+            EarnAchievement(achievement);
+        }
     }
 
     /// <summary>
@@ -272,10 +284,18 @@ public class GameManager : MonoBehaviour
     /// <param name="title">The title of the achievement</param>
     /// <param name="increment">The amount to increase the progress</param>
     /// <returns>True if the acheivement is now completed, false otherwise</returns>
-    public async UniTask<bool> IncreaseAchievementProgress(string title, int increment)
+    public async void IncreaseAchievementProgress(string title, int increment)
     {
-        Debug.Log("Increase achievement '" + title + "' by " + increment);
-        return DataManager.Instance.IncreaseAchievementProgress(title, increment);
+        bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment);
+        if(unlocked)
+        {
+            AchievementData achievement = DataManager.Instance.GetAchievement(title);
+            if(achievement == null)
+            {
+                return;
+            }
+            EarnAchievement(achievement);
+        }
     }
 
     /// <summary>
@@ -353,6 +373,19 @@ public class GameManager : MonoBehaviour
     {
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
         await LoadingManager.Instance.ReloadData(sceneName, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
+    }
+
+    /// <summary>
+    ///     This function creates an <c>AchievementNotificationManager</c>, if needed, and adds the given achievement to be displayed
+    /// </summary>
+    /// <param name="achievement">The achievement to be displayed</param>
+    private void EarnAchievement(AchievementData achievement)
+    {
+        if(AchievementNotificationManager.Instance == null)
+        {
+            Instantiate(achievementNotificationManagerPrefab, this.transform, false);
+        }
+        AchievementNotificationManager.Instance.AddAchievement(achievement);
     }
 
     /// <summary>

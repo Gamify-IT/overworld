@@ -368,7 +368,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="newProgress">The new progress of the achievement</param>
-    /// <returns>True if the acheivement is now completed, false otherwise</returns>
+    /// <returns>True if the acheivement is just now completed, false otherwise</returns>
     public bool UpdateAchievement(string title, int newProgress)
     {
         AchievementData achievement = GetAchievement(title);
@@ -384,7 +384,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="increment">The amount to increase the progress</param>
-    /// <returns>True if the acheivement is now completed, false otherwise</returns>
+    /// <returns>True if the acheivement is just now completed, false otherwise</returns>
     public bool IncreaseAchievementProgress(string title, int increment)
     {
         AchievementData achievement = GetAchievement(title);
@@ -402,7 +402,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement to look for</param>
     /// <returns>The <c>AchievementData</c> corresponding with the given title if present, null otherwise</returns>
-    private AchievementData GetAchievement(string title)
+    public AchievementData GetAchievement(string title)
     {
         foreach(AchievementData achievement in achievementData)
         {
@@ -458,9 +458,10 @@ public class DataManager : MonoBehaviour
         AchievementData achievement1 = new AchievementData("Achievement 1", "First Achievement", categories1, "target", 5, 1, false);
 
         List<string> categories2 = new() { "Exploring" };
-        AchievementData achievement2 = new AchievementData("Go for a walk", "Walk 1000 tiles", categories2, "achievement2", 100, 0, false);
+        AchievementData achievement2 = new AchievementData("Go for a walk", "Walk 10 tiles", categories2, "achievement2", 10, 0, false);
+        AchievementData achievement3 = new AchievementData("Go for a longer walk", "Walk 15 tiles", categories2, "achievement2", 15, 0, false);
 
-        List<AchievementData> achievements = new List<AchievementData>() { achievement1, achievement2 };
+        List<AchievementData> achievements = new List<AchievementData>() { achievement1, achievement2, achievement3 };
         return achievements;
     }
 
