@@ -257,6 +257,28 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function updates the progress of an achievement
+    /// </summary>
+    /// <param name="title">The title of the achievement</param>
+    /// <param name="newProgress">The new progress of the achievement</param>
+    public async UniTask<bool> UpdateAchievement(string title, int newProgress)
+    {
+        return DataManager.Instance.UpdateAchievement(title, newProgress);
+    }
+
+    /// <summary>
+    ///     This function increases an achievements progress by a given increment
+    /// </summary>
+    /// <param name="title">The title of the achievement</param>
+    /// <param name="increment">The amount to increase the progress</param>
+    /// <returns>True if the acheivement is now completed, false otherwise</returns>
+    public async UniTask<bool> IncreaseAchievementProgress(string title, int increment)
+    {
+        Debug.Log("Increase achievement '" + title + "' by " + increment);
+        return DataManager.Instance.IncreaseAchievementProgress(title, increment);
+    }
+
+    /// <summary>
     ///     This functions returns an information text about the barrier.
     /// </summary>
     /// <param name="type">The type of the barrier</param>

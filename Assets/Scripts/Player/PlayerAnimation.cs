@@ -16,6 +16,10 @@ public class PlayerAnimation : MonoBehaviour
     private float currentSpeed;
     private float targetSpeed;
 
+    private Vector3 lastPosition;
+    private float distanceWalked = 0;
+    private int achievementUpdateIntervall = 1;
+
     /// <summary>
     ///     This method is called before the first frame update.
     ///     It is used to initialize variables.
@@ -27,6 +31,7 @@ public class PlayerAnimation : MonoBehaviour
         playerRigidBody = GetComponent<Rigidbody2D>();
         currentSpeed = movementSpeed;
         targetSpeed = currentSpeed;
+        lastPosition = transform.position;
     }
 
     /// <summary>
@@ -51,6 +56,8 @@ public class PlayerAnimation : MonoBehaviour
                 playerAnimator.speed = 1;
             }
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * 50);
+
+            UpdateAchievement();
 
             // The following lines are dev keybindings, if needed they can be activated again by uncommenting them
             if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
@@ -119,6 +126,21 @@ public class PlayerAnimation : MonoBehaviour
             playerAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
             playerAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
         }
+    }
+
+    private void UpdateAchievement()
+    {
+        float distance = Vector3.Distance(transform.position, lastPosition);
+        if(distance <= 5)
+        {
+            distanceWalked += distance;
+        }        
+        if (distanceWalked >= achievementUpdateIntervall)
+        {
+            GameManager.Instance.IncreaseAchievementProgress("Go for a walk", achievementUpdateIntervall);
+            distanceWalked -= achievementUpdateIntervall;
+        }
+        lastPosition = transform.position;
     }
 
     /// <summary>
