@@ -79,6 +79,9 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_URL=postgresql://overworld-db:5432/postgres
+      - CHICKENSHOCK_URL=http://chickenshock-backend/api/v1
+      - KEYCLOAK_ISSUER=http://localhost/keycloak/realms/Gamify-IT
+      - KEYCLOAK_URL=http://keycloak/keycloak/realms/Gamify-IT
 
   chickenshock-backend:
     container_name: chickenshock-backend
@@ -93,6 +96,9 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_URL=postgresql://chickenshock-db:5432/postgres
+      - OVERWORLD_URL=http://overworld-backend/api/v1
+      - KEYCLOAK_ISSUER=http://localhost/keycloak/realms/Gamify-IT
+      - KEYCLOAK_URL=http://keycloak/keycloak/realms/Gamify-IT
 
   #frontends
   landing-page:
@@ -119,6 +125,18 @@ services:
     expose:
       - "80"
 
+  overworld:
+    container_name: overworld
+    image: ghcr.io/gamify-it/overworld:main
+    restart: always
+    pull_policy: always
+    volumes:
+      - ./.nginx/webgl.conf:/etc/nginx/conf.d/default.conf
+      - ./build:/webgl/
+      - ./.nginx/style.css:/webgl/TemplateData/style.css
+    expose:
+      - "80"
+
   # reverse-proxy
   reverse-proxy:
     container_name: reverse-proxy
@@ -126,7 +144,5 @@ services:
     restart: always
     volumes:
       - ./.nginx/compose/nginx-dev.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./build:/var/www/html/overworld
-      - ./.nginx/style.css:/var/www/html/overworld/TemplateData/style.css
     ports:
       - "80:80"
