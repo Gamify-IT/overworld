@@ -232,66 +232,6 @@ public class WorldData: IAreaData
     }
 
     /// <summary>
-    ///     This function returns the data of a minigame in the world.
-    /// </summary>
-    /// <param name="index">This index of the minigame</param>
-    /// <returns>The data of the minigame, <c>null</c> if invalid index</returns>
-    public MinigameData getMinigameData(int index)
-    {
-        if (index > 0 && index < minigames.Length)
-        {
-            return minigames[index];
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    ///     This function returns the data of a NPC in the world.
-    /// </summary>
-    /// <param name="index">This index of the NPC</param>
-    /// <returns>The data of the NPC, <c>null</c> if invalid index</returns>
-    public NPCData getNPCData(int index)
-    {
-        if (index > 0 && index < npcs.Length)
-        {
-            return npcs[index];
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    ///     This function returns the data of a Book in the world.
-    /// </summary>
-    /// <param name="index">This index of the Book</param>
-    /// <returns>The data of the Book, <c>null</c> if invalid index</returns>
-    public BookData getBookData(int index)
-    {
-        if (index > 0 && index < books.Length)
-        {
-            return books[index];
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    ///     This function returns the data of a Teleporter in the world.
-    /// </summary>
-    /// <param name="index">This index of the Book</param>
-    /// <returns>The data of the Book, <c>null</c> if invalid index</returns>
-    public TeleporterData getTeleporterData(int index)
-    {
-        if (index > 0 && index < teleporters.Length)
-        {
-            return teleporters[index];
-        }
-
-        return null;
-    }
-
-    /// <summary>
     ///     This function returns the data of a dungeon of the world.
     /// </summary>
     /// <param name="index">This index of the dungeon</param>
@@ -312,34 +252,35 @@ public class WorldData: IAreaData
     /// <typeparam name="T"></typeparam>
     /// <param name="index"></param>
     /// <returns></returns>
-    public IGameEntityData GetEntityDataAt<T>(int index) where T : IGameEntity
+    public T GetEntityDataAt<T>(int index) where T : IGameEntityData
     {
-        IGameEntityData[] searchingArray;
-        if (typeof(T) == typeof(Book))
+        IGameEntityData entityData;
+        if (typeof(T) == typeof(BookData) && IsIndexInArrayRange(index, books))
         {
-            searchingArray = books;
+            entityData = books[index];
         }
-        else if (typeof(T) == typeof(NPC))
+        else if (typeof(T) == typeof(NPCData) && IsIndexInArrayRange(index, npcs))
         {
-            searchingArray = npcs;
+            entityData = npcs[index];
         }
-        else if (typeof(T) == typeof(Teleporter))
+        else if (typeof(T) == typeof(MinigameData) && IsIndexInArrayRange(index, minigames))
         {
-            searchingArray = teleporters;
+            entityData = minigames[index];
         }
-        else if (typeof(T) == typeof(Minigame))
+        else if (typeof(T) == typeof(TeleporterData) && IsIndexInArrayRange(index, teleporters))
         {
-            searchingArray = minigames;
+            entityData = teleporters[index];
         }
         else
         {
             throw new ArgumentOutOfRangeException("There exists no Data Array for " + typeof(T).FullName);
         }
-        if (index > 0 && index < searchingArray.Length)
-        {
-            return searchingArray[index];
-        }
-        return null;
+        return (T)entityData;
+    }
+
+    private bool IsIndexInArrayRange(int index, IGameEntityData[] data)
+    {
+        return index > 0 && index < data.Length;
     }
 
     /// <summary>
@@ -399,37 +340,13 @@ public class WorldData: IAreaData
     public void UpdateTeleporterData(int number, string name, int worldID, int dungeonID, Vector2 position)
     {
         Debug.Log("TP Number: " + number);
-        TeleporterData data = getTeleporterData(number);
+        TeleporterData data = GetEntityDataAt<TeleporterData>(number);
         data.teleporterNumber = number;
         data.teleporterName = name;
         data.worldID = worldID;
         data.dungeonID = dungeonID;
         data.position = position;
         data.isUnlocked = true;
-    }
-
-    public void InitializeEmptyDataAt<T>(int index) where T : IGameEntity
-    {
-        if (typeof(T) == typeof(Book))
-        {
-            books[index] = new BookData();
-        }
-        else if (typeof(T) == typeof(NPC))
-        {
-            npcs[index] = new NPCData();
-        }
-        else if (typeof(T) == typeof(Minigame))
-        {
-            minigames[index] = new MinigameData();
-        }
-        else if (typeof(T) == typeof(Teleporter))
-        {
-            teleporters[index] = new TeleporterData();
-        }
-        else
-        {
-            throw new ArgumentOutOfRangeException("Could not initilize data. There exists no Data Array for " + typeof(T).FullName);
-        }
     }
 
     #endregion

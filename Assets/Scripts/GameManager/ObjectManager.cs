@@ -73,7 +73,7 @@ public class ObjectManager : MonoBehaviour
     /// <param name="world">The index of the world the game entity is in</param>
     /// <param name="dungeon">The index of the dungeon the game entity is in (0 if in no dungeon)</param>
     /// <param name="number">The index of the game entity in its area</param>
-    public void AddGameEntity<T>(GameObject entity, int world, int dungeon, int number) where T : IGameEntity
+    public void AddGameEntity<T,U>(GameObject entity, int world, int dungeon, int number) where T : IGameEntity<U> where U: IGameEntityData
     {
         if (entity == null)
         {
@@ -81,7 +81,7 @@ public class ObjectManager : MonoBehaviour
         }
         try
         {
-            GameObject[,] targetArray = GetArrayForGameEntity<T>();
+            GameObject[,] targetArray = GetArrayForGameEntity<T,U>();
             if (dungeon == 0)
             {
                 targetArray[world, number] = entity;
@@ -91,7 +91,7 @@ public class ObjectManager : MonoBehaviour
                 targetArray[0, number] = entity;
             }
         }
-        catch (ArgumentOutOfRangeException e)
+        catch
         {
             Debug.LogError("Entity could not be added to the object manager");
             return;
@@ -106,11 +106,11 @@ public class ObjectManager : MonoBehaviour
     /// <param name="world">The index of the world the game entity is in</param>
     /// <param name="dungeon">The index of the dungeon the game entity is in (0 if in no dungeon)</param>
     /// <param name="number">The index of the game entity in its area</param>
-    public void RemoveGameEntity<T>(int world, int dungeon, int number) where T : IGameEntity
+    public void RemoveGameEntity<T,U>(int world, int dungeon, int number) where T : IGameEntity<U> where U : IGameEntityData
     {
         try
         {
-            GameObject[,] targetArray = GetArrayForGameEntity<T>();
+            GameObject[,] targetArray = GetArrayForGameEntity<T,U>();
             if (dungeon == 0)
             {
                 npcObjects[world, number] = null;
@@ -120,7 +120,7 @@ public class ObjectManager : MonoBehaviour
                 npcObjects[0, number] = null;
             }
         }
-        catch (ArgumentOutOfRangeException e)
+        catch
         {
             Debug.LogError("Entity could not be removed from the object manager");
             return;
@@ -133,7 +133,7 @@ public class ObjectManager : MonoBehaviour
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    private GameObject[,] GetArrayForGameEntity<T>() where T : IGameEntity
+    private GameObject[,] GetArrayForGameEntity<T,U>() where T : IGameEntity<U> where U: IGameEntityData
     {
         GameObject[,] targetArray;
         if (typeof(T) == typeof(Book))
@@ -170,10 +170,10 @@ public class ObjectManager : MonoBehaviour
         {
             return;
         }
-        SetupEntityData<Minigame>(worldIndex, data);
-        SetupEntityData<NPC>(worldIndex, data);
-        SetupEntityData<Book>(worldIndex, data);
-        SetupEntityData<Teleporter>(worldIndex, data);
+        SetupEntityData<Minigame,MinigameData>(worldIndex, data);
+        SetupEntityData<NPC,NPCData>(worldIndex, data);
+        SetupEntityData<Book,BookData>(worldIndex, data);
+        SetupEntityData<Teleporter,TeleporterData>(worldIndex, data);
 
         for (int barrierDestinationIndex = 1; barrierDestinationIndex <= maxWorld; barrierDestinationIndex++)
         {
@@ -245,9 +245,9 @@ public class ObjectManager : MonoBehaviour
         {
             return;
         }
-        SetupEntityData<Minigame>(0, data);
-        SetupEntityData<NPC>(0, data);
-        SetupEntityData<Book>(0, data); 
+        SetupEntityData<Minigame,MinigameData>(0, data);
+        SetupEntityData<NPC,NPCData>(0, data);
+        SetupEntityData<Book,BookData>(0, data); 
     }
 
 
@@ -257,12 +257,12 @@ public class ObjectManager : MonoBehaviour
     /// <typeparam name="T"></typeparam>
     /// <param name="worldIndex"></param>
     /// <param name="data"></param>
-    private void SetupEntityData<T>(int worldIndex, IAreaData data) where T : IGameEntity
+    private void SetupEntityData<T,U>(int worldIndex, IAreaData data) where T : IGameEntity<U> where U : IGameEntityData, new()
     {
         GameObject[,] entityArray;
         try
         {
-            entityArray = GetArrayForGameEntity<T>();
+            entityArray = GetArrayForGameEntity<T,U>();
         }
         catch (ArgumentOutOfRangeException e)
         {
@@ -276,15 +276,15 @@ public class ObjectManager : MonoBehaviour
             {
                 continue;
             }
-            IGameEntity entity = entityGameObject.GetComponent<T>();
+            T entity = entityGameObject.GetComponent<T>();
             if (entity == null)
             {
                 continue;
             }
-            IGameEntityData entityData = data.GetEntityDataAt<T>(i);
+            U entityData = data.GetEntityDataAt<U>(i);
             if (entityData == null)
             {
-                data.InitializeEmptyDataAt<T>(i);
+                entityData = new U();
             }
             entity.Setup(entityData);
         }

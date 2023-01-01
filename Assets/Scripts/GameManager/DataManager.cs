@@ -267,13 +267,14 @@ public class DataManager : MonoBehaviour
         int minigames = 0;
         for (int minigameIndex = 1; minigameIndex <= GameSettings.GetMaxMinigames(); minigameIndex++)
         {
-            if (worldData[worldIndex].GetEntityDataAt<Minigame>(minigameIndex) != null)
+            WorldData data = worldData[worldIndex];
+            if (data.GetEntityDataAt<MinigameData>(minigameIndex) != null)
             {
-                if (worldData[worldIndex].getMinigameStatus(minigameIndex) == global::MinigameStatus.active)
+                if (data.getMinigameStatus(minigameIndex) == global::MinigameStatus.active)
                 {
                     minigames++;
                 }
-                else if (worldData[worldIndex].getMinigameStatus(minigameIndex) == global::MinigameStatus.done)
+                else if (data.getMinigameStatus(minigameIndex) == global::MinigameStatus.done)
                 {
                     minigames++;
                     completedMinigames++;
@@ -308,7 +309,7 @@ public class DataManager : MonoBehaviour
         }
         for (int minigameIndex = 1; minigameIndex <= GameSettings.GetMaxMinigames(); minigameIndex++)
         {
-            if (dungeonData.GetMinigameData(minigameIndex) != null)
+            if (dungeonData.GetEntityDataAt<MinigameData>(minigameIndex) != null)
             {
                 if (worldData[worldIndex].getMinigameStatus(minigameIndex, dungeonIndex) == global::MinigameStatus.active)
                 {
@@ -343,7 +344,7 @@ public class DataManager : MonoBehaviour
         List<TeleporterData> dataList = new List<TeleporterData>();
         for (int i = 0; i < GameSettings.GetMaxTeleporters(); i++)
         {
-            TeleporterData currentData = GetWorldData(worldIndex).getTeleporterData(i);
+            TeleporterData currentData = GetWorldData(worldIndex).GetEntityDataAt<TeleporterData>(i);
             if (currentData != null && currentData.isUnlocked)
             {
                 dataList.Add(currentData);

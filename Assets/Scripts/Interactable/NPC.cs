@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 ///     This class is responsible for the NPC logic.
 /// </summary>
-public class NPC : MonoBehaviour, IGameEntity
+public class NPC : MonoBehaviour, IGameEntity<NPCData>
 {
     [SerializeField] private int world;
     [SerializeField] private int dungeon;
@@ -82,7 +82,7 @@ public class NPC : MonoBehaviour, IGameEntity
     private void OnDestroy()
     {
         Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveGameEntity<NPC>(world, dungeon, number);
+        ObjectManager.Instance.RemoveGameEntity<NPC,NPCData>(world, dungeon, number);
     }
 
     /// <summary>
@@ -129,37 +129,28 @@ public class NPC : MonoBehaviour, IGameEntity
     private void RegisterToGameManager()
     {
         Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.AddGameEntity<NPC>(gameObject, world, dungeon, number);
+        ObjectManager.Instance.AddGameEntity<NPC,NPCData>(gameObject, world, dungeon, number);
     }
 
     /// <summary>
     ///     setup called by game manager
     /// </summary>
     /// <param name="data"></param>
-    public void Setup(IGameEntityData data)
+    public void Setup(NPCData data)
     {
-        try
+        uuid = data.GetUuid();
+        dialogue = data.GetDialogue();
+        hasBeenTalkedTo = data.GetHasBeenTalkedTo();
+        InitNewStuffSprite();
+        string text = "";
+        for (int index = 0; index < dialogue.Length; index++)
         {
-            NPCData npcData = (NPCData)data;
-            uuid = npcData.GetUuid();
-            dialogue = npcData.GetDialogue();
-            hasBeenTalkedTo = npcData.GetHasBeenTalkedTo();
-            InitNewStuffSprite();
-            string text = "";
-            for (int index = 0; index < dialogue.Length; index++)
-            {
-                text += dialogue[index];
-                text += " ; ";
-            }
+            text += dialogue[index];
+            text += " ; ";
+        }
 
-            Debug.Log("setup npc " + world + "-" + number + " with new dialogue: " + text + ", new info: " +
-                      !hasBeenTalkedTo);
-        }
-        catch (System.InvalidCastException e) 
-        {
-            Debug.LogError(e.StackTrace);
-        }
-        
+        Debug.Log("setup npc " + world + "-" + number + " with new dialogue: " + text + ", new info: " +
+                  !hasBeenTalkedTo);
     }
 
     /// <summary>

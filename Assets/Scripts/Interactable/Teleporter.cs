@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class Teleporter : MonoBehaviour, IGameEntity
+public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
 {
     [field: SerializeField]
     public string teleporterName { get; private set; } = "My Teleporter";
@@ -34,11 +34,11 @@ public class Teleporter : MonoBehaviour, IGameEntity
 
     private void Awake()
     {
-        ObjectManager.Instance.AddGameEntity<Teleporter>(this.gameObject, worldID, dungeonID, teleporterNumber);
+        ObjectManager.Instance.AddGameEntity<Teleporter,TeleporterData>(this.gameObject, worldID, dungeonID, teleporterNumber);
     }
     private void OnDestroy()
     {
-        ObjectManager.Instance.RemoveGameEntity<Teleporter>(worldID, dungeonID, teleporterNumber);
+        ObjectManager.Instance.RemoveGameEntity<Teleporter,TeleporterData>(worldID, dungeonID, teleporterNumber);
     }
 
     private void Start()
@@ -179,18 +179,9 @@ public class Teleporter : MonoBehaviour, IGameEntity
         player.GetComponent<SpriteRenderer>().enabled = false;
     }
 
-    public void Setup(IGameEntityData data)
+    public void Setup(TeleporterData data)
     {
-        try
-        {
-            TeleporterData tpData = (TeleporterData)data;
-            isUnlocked = tpData.isUnlocked;
+            isUnlocked = data.isUnlocked;
             SetUnLockedState(isUnlocked);
-        }
-        catch(System.InvalidCastException e)
-        {
-            Debug.LogError(e.StackTrace);
-        }
-        
     }
 }

@@ -19,7 +19,7 @@ public enum MinigameStatus
 /// <summary>
 ///     This script defines a minigame spot in a world or dungeon.
 /// </summary>
-public class Minigame : MonoBehaviour, IGameEntity
+public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
 {
     [DllImport("__Internal")]
     private static extern string LoadMinigameInIframe(string minigameName, string minigameConfiguration);
@@ -57,7 +57,7 @@ public class Minigame : MonoBehaviour, IGameEntity
     private void OnDestroy()
     {
         Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveGameEntity<Minigame>(world, dungeon, number);
+        ObjectManager.Instance.RemoveGameEntity<Minigame, MinigameData>(world, dungeon, number);
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class Minigame : MonoBehaviour, IGameEntity
     private void RegisterToGameManager()
     {
         Debug.Log("register Minigame " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.AddGameEntity<Minigame>(gameObject, world, dungeon, number);
+        ObjectManager.Instance.AddGameEntity<Minigame, MinigameData>(gameObject, world, dungeon, number);
     }
 
     #endregion
@@ -77,23 +77,14 @@ public class Minigame : MonoBehaviour, IGameEntity
     ///     This functions configurates the minigame with the given data and updates the object.
     /// </summary>
     /// <param name="data">the data to be set</param>
-    public void Setup(IGameEntityData data)
+    public void Setup(MinigameData data)
     {
-        try
-        {
-            MinigameData minigameData = (MinigameData)data;
-            status = minigameData.GetStatus();
-            game = minigameData.GetGame();
-            configurationID = minigameData.GetConfigurationID();
-            highscore = minigameData.GetHighscore();
+        status = data.GetStatus();
+        game = data.GetGame();
+        configurationID = data.GetConfigurationID();
+        highscore = data.GetHighscore();
 
-            UpdateStatus();
-        }
-        catch (System.InvalidCastException e)
-        {
-            Debug.LogError(e.StackTrace);
-        }
-        
+        UpdateStatus();
     }
 
     /// <summary>

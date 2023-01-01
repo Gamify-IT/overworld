@@ -8,6 +8,11 @@ using UnityEngine;
 /// </summary>
 public interface IAreaData
 {
-    public IGameEntityData GetEntityDataAt<T>(int index) where T : IGameEntity;
-    public void InitializeEmptyDataAt<T>(int index) where T : IGameEntity;
+    /// <summary>
+    /// Returns the data object at given index inside the array of GameEntityData of type T.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public T GetEntityDataAt<T>(int index) where T : IGameEntityData;
 }

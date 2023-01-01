@@ -160,51 +160,6 @@ public class DungeonData : IAreaData
     }
 
     /// <summary>
-    ///     This function returns the data of a minigame in the dungeon.
-    /// </summary>
-    /// <param name="index">This index of the minigame</param>
-    /// <returns>The data of the minigame, <c>null</c> if invalid index</returns>
-    public MinigameData GetMinigameData(int index)
-    {
-        if (index > 0 && index < minigames.Length)
-        {
-            return minigames[index];
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    ///     This function returns the data of a NPC in the world.
-    /// </summary>
-    /// <param name="index">This index of the NPC</param>
-    /// <returns>The data of the NPC, <c>null</c> if invalid index</returns>
-    public NPCData GetNpcData(int index)
-    {
-        if (index > 0 && index < npcs.Length)
-        {
-            return npcs[index];
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    ///     This function returns the data of a Book in the world.
-    /// </summary>
-    /// <param name="index">This index of the Book</param>
-    /// <returns>The data of the Book, <c>null</c> if invalid index</returns>
-    public BookData GetBookData(int index)
-    {
-        if (index > 0 && index < books.Length)
-        {
-            return books[index];
-        }
-
-        return null;
-    }
-
-    /// <summary>
     ///     This function returns whether the dungeon is set as active or not.
     /// </summary>
     /// <returns>The active status of the dungeon</returns>
@@ -234,18 +189,18 @@ public class DungeonData : IAreaData
         return minigames;
     }
 
-    public IGameEntityData GetEntityDataAt<T>(int index) where T : IGameEntity
+    public T GetEntityDataAt<T>(int index) where T : IGameEntityData
     {
         IGameEntityData entityData;
-        if (typeof(T) == typeof(Book))
+        if (typeof(T) == typeof(BookData) && IsIndexInArrayRange(index, books))
         {
             entityData = books[index];
         }
-        else if (typeof(T) == typeof(NPC))
+        else if (typeof(T) == typeof(NPCData) && IsIndexInArrayRange(index, npcs))
         {
             entityData = npcs[index];
         }
-        else if (typeof(T) == typeof(Minigame))
+        else if (typeof(T) == typeof(MinigameData) && IsIndexInArrayRange(index, minigames))
         {
             entityData = minigames[index];
         }
@@ -253,32 +208,12 @@ public class DungeonData : IAreaData
         {
             throw new ArgumentOutOfRangeException("There exists no Data Array for " + typeof(T).FullName);
         }
-        return entityData;
+        return (T)entityData;
     }
 
-    /// <summary>
-    /// Calls the constructor of the given GameEntityData class on the given array position 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="index"></param>
-    void IAreaData.InitializeEmptyDataAt<T>(int index)
+    private bool IsIndexInArrayRange(int index, IGameEntityData[] data)
     {
-        if (typeof(T) == typeof(Book))
-        {
-            books[index] = new BookData();
-        }
-        else if (typeof(T) == typeof(NPC))
-        {
-            npcs[index] = new NPCData();
-        }
-        else if (typeof(T) == typeof(Minigame))
-        {
-            minigames[index] = new MinigameData();
-        }
-        else
-        {
-            throw new ArgumentOutOfRangeException("Could not initilize data. There exists no Data Array for " + typeof(T).FullName);
-        }
+        return index > 0 && index < data.Length;
     }
 
     #endregion
