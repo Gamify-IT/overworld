@@ -306,30 +306,40 @@ public class WorldData: IAreaData
         return null;
     }
 
+    /// <summary>
+    /// This function returns the data array of the game entity type specified by the generic parameter T.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="index"></param>
+    /// <returns></returns>
     public IGameEntityData GetEntityDataAt<T>(int index) where T : IGameEntity
     {
-        IGameEntityData entityData;
-        if (typeof(T) == typeof(BookData))
+        IGameEntityData[] searchingArray;
+        if (typeof(T) == typeof(Book))
         {
-            entityData = books[index];
+            searchingArray = books;
         }
-        else if (typeof(T) == typeof(NPCData))
+        else if (typeof(T) == typeof(NPC))
         {
-            entityData = npcs[index];
+            searchingArray = npcs;
         }
-        else if (typeof(T) == typeof(TeleporterData))
+        else if (typeof(T) == typeof(Teleporter))
         {
-            entityData = teleporters[index];
+            searchingArray = teleporters;
         }
-        else if (typeof(T) == typeof(MinigameData))
+        else if (typeof(T) == typeof(Minigame))
         {
-            entityData = minigames[index];
+            searchingArray = minigames;
         }
         else
         {
             throw new ArgumentOutOfRangeException("There exists no Data Array for " + typeof(T).FullName);
         }
-        return entityData;
+        if (index > 0 && index < searchingArray.Length)
+        {
+            return searchingArray[index];
+        }
+        return null;
     }
 
     /// <summary>

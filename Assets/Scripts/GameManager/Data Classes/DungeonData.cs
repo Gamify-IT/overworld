@@ -237,15 +237,15 @@ public class DungeonData: IAreaData
     public IGameEntityData GetEntityDataAt<T>(int index) where T : IGameEntity
     {
         IGameEntityData entityData;
-        if (typeof(T) == typeof(BookData))
+        if (typeof(T) == typeof(Book))
         {
             entityData = books[index];
         }
-        else if (typeof(T) == typeof(NPCData))
+        else if (typeof(T) == typeof(NPC))
         {
             entityData = npcs[index];
         }
-        else if (typeof(T) == typeof(MinigameData))
+        else if (typeof(T) == typeof(Minigame))
         {
             entityData = minigames[index];
         }

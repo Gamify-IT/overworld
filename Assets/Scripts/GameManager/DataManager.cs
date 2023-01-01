@@ -267,7 +267,7 @@ public class DataManager : MonoBehaviour
         int minigames = 0;
         for (int minigameIndex = 1; minigameIndex <= GameSettings.GetMaxMinigames(); minigameIndex++)
         {
-            if (worldData[worldIndex].getMinigameData(minigameIndex) != null)
+            if (worldData[worldIndex].GetEntityDataAt<Minigame>(minigameIndex) != null)
             {
                 if (worldData[worldIndex].getMinigameStatus(minigameIndex) == global::MinigameStatus.active)
                 {
