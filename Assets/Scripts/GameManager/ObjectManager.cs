@@ -282,6 +282,10 @@ public class ObjectManager : MonoBehaviour
                 continue;
             }
             IGameEntityData entityData = data.GetEntityDataAt<T>(i);
+            if (entityData == null)
+            {
+                data.InitializeEmptyDataAt<T>(i);
+            }
             entity.Setup(entityData);
         }
     }

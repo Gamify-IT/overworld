@@ -408,5 +408,29 @@ public class WorldData: IAreaData
         data.isUnlocked = true;
     }
 
+    public void InitializeEmptyDataAt<T>(int index) where T : IGameEntity
+    {
+        if (typeof(T) == typeof(Book))
+        {
+            books[index] = new BookData();
+        }
+        else if (typeof(T) == typeof(NPC))
+        {
+            npcs[index] = new NPCData();
+        }
+        else if (typeof(T) == typeof(Minigame))
+        {
+            minigames[index] = new MinigameData();
+        }
+        else if (typeof(T) == typeof(Teleporter))
+        {
+            teleporters[index] = new TeleporterData();
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException("Could not initilize data. There exists no Data Array for " + typeof(T).FullName);
+        }
+    }
+
     #endregion
 }

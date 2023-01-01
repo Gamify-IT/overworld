@@ -4,7 +4,7 @@ using System;
 /// <summary>
 ///     This class defines all needed data for a <c>Dungeon</c>.
 /// </summary>
-public class DungeonData: IAreaData
+public class DungeonData : IAreaData
 {
     #region Attributes
 
@@ -52,7 +52,7 @@ public class DungeonData: IAreaData
         {
             npcs[npcIndex] = new NPCData();
         }
-        
+
         books = new BookData[GameSettings.GetMaxBooks() + 1];
         for (int bookIndex = 1; bookIndex < books.Length; bookIndex++)
         {
@@ -85,7 +85,7 @@ public class DungeonData: IAreaData
 
         NPCData[] npcs = new NPCData[GameSettings.GetMaxNpCs() + 1];
         List<NPCDTO> npcDTOs = dto.npcs;
-        foreach(NPCDTO npcDTO in npcDTOs)
+        foreach (NPCDTO npcDTO in npcDTOs)
         {
             NPCData npcData = NPCData.ConvertDtoToData(npcDTO);
             npcs[npcDTO.index] = npcData;
@@ -93,7 +93,7 @@ public class DungeonData: IAreaData
 
         BookData[] books = new BookData[GameSettings.GetMaxBooks() + 1];
         List<BookDTO> bookDTOs = dto.books;
-        foreach(BookDTO bookDTO in bookDTOs)
+        foreach (BookDTO bookDTO in bookDTOs)
         {
             BookData bookData = BookData.ConvertDtoToData(bookDTO);
             books[bookDTO.index] = bookData;
@@ -203,7 +203,7 @@ public class DungeonData: IAreaData
 
         return null;
     }
-    
+
     /// <summary>
     ///     This function returns whether the dungeon is set as active or not.
     /// </summary>
@@ -254,6 +254,31 @@ public class DungeonData: IAreaData
             throw new ArgumentOutOfRangeException("There exists no Data Array for " + typeof(T).FullName);
         }
         return entityData;
+    }
+
+    /// <summary>
+    /// Calls the constructor of the given GameEntityData class on the given array position 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="index"></param>
+    void IAreaData.InitializeEmptyDataAt<T>(int index)
+    {
+        if (typeof(T) == typeof(Book))
+        {
+            books[index] = new BookData();
+        }
+        else if (typeof(T) == typeof(NPC))
+        {
+            npcs[index] = new NPCData();
+        }
+        else if (typeof(T) == typeof(Minigame))
+        {
+            minigames[index] = new MinigameData();
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException("Could not initilize data. There exists no Data Array for " + typeof(T).FullName);
+        }
     }
 
     #endregion
