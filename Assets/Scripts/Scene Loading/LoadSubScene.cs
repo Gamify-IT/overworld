@@ -14,6 +14,7 @@ public class LoadSubScene : MonoBehaviour
     public GameObject fadeOutPanel;
     public float loadingTime;
     public Vector2 playerPosition;
+    public string facingDirection;
 
     /// <summary>
     ///     This function is called when the player enters a dungeon entrance.
@@ -60,6 +61,27 @@ public class LoadSubScene : MonoBehaviour
 
         GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
         GameObject panel = Instantiate(fadeInPanel, Vector3.zero, Quaternion.identity);
+
+        if (facingDirection == "N")
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().Play("Idle_Up");
+        }
+
+        if (facingDirection == "E")
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().Play("Idle_Right");
+        }
+
+        if (facingDirection == "S")
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().Play("Idle_Down");
+        }
+
+        if (facingDirection == "W")
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().Play("Idle_Left");
+        }
+
         DestroyImmediate(fadeOutPanelCopy, true);
         Destroy(panel, 1);
     }
