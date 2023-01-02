@@ -454,12 +454,10 @@ public class DataManager : MonoBehaviour
 
     private List<AchievementData> GetDummyAchievements()
     {
-        List<string> categories1 = new() { "Blub", "Bla" };
-        AchievementData achievement1 = new AchievementData("Achievement 1", "First Achievement", categories1, "target", 5, 1, false);
-
-        List<string> categories2 = new() { "Exploring" };
-        AchievementData achievement2 = new AchievementData("GO_FOR_A_WALK", "Walk 10 tiles", categories2, "achievement2", 10, 0, false);
-        AchievementData achievement3 = new AchievementData("GO_FOR_A_LONGER_WALK", "Walk 15 tiles", categories2, "achievement2", 15, 0, false);
+        List<string> categories1 = new() { "Exploring" };
+        AchievementData achievement1 = new AchievementData("GO_FOR_A_WALK", "Walk 10 tiles", categories1, "achievement2", 10, 0, false);
+        AchievementData achievement2 = new AchievementData("GO_FOR_A_LONGER_WALK", "Walk 15 tiles", categories1, "achievement2", 15, 0, false);
+        AchievementData achievement3 = new AchievementData("TALK_TO_NPCS", "Talkt to 15 NPCs", categories1, "achievement2", 5, 0, false);
 
         List<AchievementData> achievements = new List<AchievementData>() { achievement1, achievement2, achievement3 };
         return achievements;
