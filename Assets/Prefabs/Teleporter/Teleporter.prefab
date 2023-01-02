@@ -246,7 +246,7 @@ SpriteRenderer:
   m_SortingLayerID: 458239855
   m_SortingLayer: 1
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 21f52bccad8509540a3e3882e40ba855, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f6dd73e64cbe51647aa0d8d0fbd7e097, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -269,14 +269,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf004dea68fc7bd44acdfd2a72980355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unlocked: 0
-  teleporterWorldID: 3
+  <teleporterName>k__BackingField: My Teleporter
+  <worldID>k__BackingField: 1
+  <dungeonID>k__BackingField: 0
+  <teleporterNumber>k__BackingField: 1
   teleporterCanvas: {fileID: 7636015094161461849, guid: f5a85ab3988b91042908794acc6a58ca, type: 3}
-  teleporterPositions:
-  - {x: -6, y: 1}
-  - {x: 12, y: 1}
-  - {x: 12, y: -6}
-  - {x: -4, y: -9}
+  spriteNormal: {fileID: 21300000, guid: f6dd73e64cbe51647aa0d8d0fbd7e097, type: 3}
+  spriteHighlight: {fileID: 21300000, guid: 119506f0cd1edf24a9b9e616982dddc3, type: 3}
 --- !u!111 &939188827077960799
 Animation:
   m_ObjectHideFlags: 0

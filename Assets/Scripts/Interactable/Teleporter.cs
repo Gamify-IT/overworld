@@ -19,6 +19,10 @@ public class Teleporter : MonoBehaviour
     private bool isUnlocked = false;
     [SerializeField]
     private GameObject teleporterCanvas;
+    [SerializeField]
+    private Sprite spriteNormal;
+    [SerializeField]
+    private Sprite spriteHighlight;
 
     private Transform player;
 
@@ -120,11 +124,11 @@ public class Teleporter : MonoBehaviour
         interactable = true;
         if (isUnLocked)
         {
-            GetComponent<SpriteRenderer>().color = Color.white;
+            GetComponent<SpriteRenderer>().sprite = spriteHighlight;
         }
         else
         {
-            GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 0.2f);;
+            GetComponent<SpriteRenderer>().sprite = spriteNormal;
         } 
     }
 
