@@ -137,8 +137,8 @@ public class PlayerAnimation : MonoBehaviour
         }        
         if (distanceWalked >= achievementUpdateIntervall)
         {
-            GameManager.Instance.IncreaseAchievementProgress("Go for a walk", achievementUpdateIntervall);
-            GameManager.Instance.IncreaseAchievementProgress("Go for a longer walk", achievementUpdateIntervall);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_WALK, achievementUpdateIntervall);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_LONGER_WALK, achievementUpdateIntervall);
             distanceWalked -= achievementUpdateIntervall;
         }
         lastPosition = transform.position;

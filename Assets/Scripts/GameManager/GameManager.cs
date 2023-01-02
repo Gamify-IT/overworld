@@ -264,7 +264,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="newProgress">The new progress of the achievement</param>
-    public async void UpdateAchievement(string title, int newProgress)
+    public async void UpdateAchievement(AchievementTitle title, int newProgress)
     {
         bool unlocked = DataManager.Instance.UpdateAchievement(title, newProgress);
         if (unlocked)
@@ -284,7 +284,7 @@ public class GameManager : MonoBehaviour
     /// <param name="title">The title of the achievement</param>
     /// <param name="increment">The amount to increase the progress</param>
     /// <returns>True if the acheivement is now completed, false otherwise</returns>
-    public async void IncreaseAchievementProgress(string title, int increment)
+    public async void IncreaseAchievementProgress(AchievementTitle title, int increment)
     {
         bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment);
         if(unlocked)
