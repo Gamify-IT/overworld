@@ -64,22 +64,22 @@ public class LoadSubScene : MonoBehaviour
 
         if (facingDirection == "N")
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().Play("Idle_Up");
+            PlayerAnimation.Instance.playerAnimator.Play("Idle_Up");
         }
 
         if (facingDirection == "E")
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().Play("Idle_Right");
+            PlayerAnimation.Instance.playerAnimator.Play("Idle_Right");
         }
 
         if (facingDirection == "S")
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().Play("Idle_Down");
+            PlayerAnimation.Instance.playerAnimator.Play("Idle_Down");
         }
 
         if (facingDirection == "W")
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().Play("Idle_Left");
+            PlayerAnimation.Instance.playerAnimator.Play("Idle_Left");
         }
 
         DestroyImmediate(fadeOutPanelCopy, true);
