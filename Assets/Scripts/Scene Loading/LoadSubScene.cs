@@ -2,6 +2,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum FacingDirection
+{
+    north,
+    east,
+    south,
+    west
+}
+
 /// <summary>
 ///     This class is used to manage the dungeon transition.
 /// </summary>
@@ -14,6 +22,7 @@ public class LoadSubScene : MonoBehaviour
     public GameObject fadeOutPanel;
     public float loadingTime;
     public Vector2 playerPosition;
+    public FacingDirection facingDirection;
 
     /// <summary>
     ///     This function is called when the player enters a dungeon entrance.
@@ -60,6 +69,27 @@ public class LoadSubScene : MonoBehaviour
 
         GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
         GameObject panel = Instantiate(fadeInPanel, Vector3.zero, Quaternion.identity);
+
+        if (facingDirection == FacingDirection.north)
+        {
+            PlayerAnimation.Instance.playerAnimator.Play("Idle_Up");
+        }
+
+        if (facingDirection == FacingDirection.east)
+        {
+            PlayerAnimation.Instance.playerAnimator.Play("Idle_Right");
+        }
+
+        if (facingDirection == FacingDirection.south)
+        {
+            PlayerAnimation.Instance.playerAnimator.Play("Idle_Down");
+        }
+
+        if (facingDirection == FacingDirection.west)
+        {
+            PlayerAnimation.Instance.playerAnimator.Play("Idle_Left");
+        }
+
         DestroyImmediate(fadeOutPanelCopy, true);
         Destroy(panel, 1);
     }
