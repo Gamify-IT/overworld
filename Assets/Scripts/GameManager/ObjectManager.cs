@@ -91,9 +91,9 @@ public class ObjectManager : MonoBehaviour
                 targetArray[0, number] = entity;
             }
         }
-        catch
+        catch (ArgumentOutOfRangeException e)
         {
-            Debug.LogError("Entity could not be added to the object manager");
+            Debug.LogError("Entity could not be added to the object manager. " + e.StackTrace);
             return;
         }
     }
@@ -113,16 +113,16 @@ public class ObjectManager : MonoBehaviour
             GameObject[,] targetArray = GetArrayForGameEntity<T,U>();
             if (dungeon == 0)
             {
-                npcObjects[world, number] = null;
+                targetArray[world, number] = null;
             }
             else
             {
-                npcObjects[0, number] = null;
+                targetArray[0, number] = null;
             }
         }
-        catch
+        catch (ArgumentOutOfRangeException e)
         {
-            Debug.LogError("Entity could not be removed from the object manager");
+            Debug.LogError("Entity could not be removed from the object manager" + e.StackTrace);
             return;
         }
 
@@ -150,7 +150,7 @@ public class ObjectManager : MonoBehaviour
         }
         else if (typeof(T) == typeof(Minigame))
         {
-            targetArray = worldBarrierObjects;
+            targetArray = minigameObjects;
         }
         else
         {
