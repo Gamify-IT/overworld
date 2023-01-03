@@ -22,6 +22,7 @@ public class PlayerstatisticDTO
     public string id;
     public AreaLocationDTO[] unlockedAreas;
     public AreaLocationDTO[] unlockedDungeons;
+    public TeleporterDTO[] unlockedTeleporters;
     public AreaLocationDTO currentArea;
     public string userId;
     public string username;
@@ -31,12 +32,13 @@ public class PlayerstatisticDTO
 
     #region Constructors
 
-    public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons,
+    public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
         AreaLocationDTO currentArea, string userId, string username, int knowledge)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
         this.unlockedDungeons = unlockedDungeons;
+        this.unlockedTeleporters = unlockedTeleporters;
         this.currentArea = currentArea;
         this.userId = userId;
         this.username = username;
@@ -53,6 +55,7 @@ public class PlayerstatisticDTO
         unlockedAreas[0] = unlockedWorld;
         currentArea = unlockedWorld;
         unlockedDungeons = null;
+        unlockedTeleporters = null;
         userId = "";
         username = "";
         knowledge = 0;

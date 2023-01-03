@@ -28,13 +28,14 @@ public class DungeonDTO
     public List<MinigameTaskDTO> minigameTasks;
     public List<NPCDTO> npcs;
     public List<BookDTO> books;
+    public List<BookDTO> teleporters;
 
     #endregion
 
     #region Constructors
 
     public DungeonDTO(string id, int index, string staticName, string topicName, bool active,
-        List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs, List<BookDTO> books)
+        List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs, List<BookDTO> books, List<BookDTO> teleporters)
     {
         this.id = id;
         this.index = index;
@@ -44,6 +45,7 @@ public class DungeonDTO
         this.minigameTasks = minigameTasks;
         this.npcs = npcs;
         this.books = books;
+        this.teleporters = teleporters;
     }
 
     public DungeonDTO()

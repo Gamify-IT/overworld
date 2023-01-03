@@ -36,7 +36,7 @@ public class WorldDTO
     #region Constructors
 
     public WorldDTO(string id, int index, string staticName, string topicName, bool active,
-        List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs, List<DungeonDTO> dungeons, List<BookDTO> books)
+        List<MinigameTaskDTO> minigameTasks, List<NPCDTO> npcs, List<DungeonDTO> dungeons, List<BookDTO> books, List<TeleporterDTO> teleporters)
     {
         this.id = id;
         this.index = index;
@@ -47,6 +47,7 @@ public class WorldDTO
         this.npcs = npcs;
         this.dungeons = dungeons;
         this.books = books;
+        this.teleporters = teleporters;
     }
 
     public WorldDTO()

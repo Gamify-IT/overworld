@@ -28,7 +28,7 @@ public class DataManager : MonoBehaviour
     /// <param name="data">The data to set</param>
     public void SetWorldData(int worldIndex, WorldData data)
     {
-        if(worldIndex <= 0 || worldIndex > maxWorld)
+        if (worldIndex <= 0 || worldIndex > maxWorld)
         {
             return;
         }
@@ -76,7 +76,7 @@ public class DataManager : MonoBehaviour
         {
             return null;
         }
-        if(dungeonIndex <= 0 || dungeonIndex > maxDungeons)
+        if (dungeonIndex <= 0 || dungeonIndex > maxDungeons)
         {
             return null;
         }
@@ -143,7 +143,7 @@ public class DataManager : MonoBehaviour
         {
             return;
         }
-        if(dungeonIndex != 0)
+        if (dungeonIndex != 0)
         {
             if (dungeonIndex <= 0 || dungeonIndex > maxDungeons)
             {
@@ -156,6 +156,22 @@ public class DataManager : MonoBehaviour
             worldData[worldIndex].npcCompleted(number);
         }
     }
+
+    /// <summary>
+    /// This function unlocks a teleporter
+    /// </summary>
+    /// <param name="worldIndex">The index of the world the NPC is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon the NPC is in (0 if in world)</param>
+    /// <param name="number">The number of the NPC in its area</param>
+    public void ActivateTeleporter(int worldIndex, int dungeonIndex, int number)
+    {
+        if (worldIndex <= 0 || worldIndex > maxWorld)
+        {
+            return;
+        }
+        worldData[worldIndex].UnlockTeleporter(dungeonIndex, number);
+    }
+
 
     /// <summary>
     ///     This function processes the player minigame statistics data returned form backend and stores the needed data in the
@@ -233,6 +249,10 @@ public class DataManager : MonoBehaviour
     public void ProcessPlayerStatistics(PlayerstatisticDTO playerStatistics)
     {
         playerData = playerStatistics;
+        foreach (TeleporterDTO teleporterDTO in playerData.unlockedTeleporters)
+        {
+            worldData[teleporterDTO.area.worldIndex].UnlockTeleporter(teleporterDTO.area.dungeonIndex, teleporterDTO.index);
+        }
     }
 
     /// <summary>
@@ -244,12 +264,12 @@ public class DataManager : MonoBehaviour
     {
         achievementData = new List<AchievementData>();
 
-        if(achievementStatistics == null)
+        if (achievementStatistics == null)
         {
             return;
         }
 
-        foreach(AchievementStatistic statistic in achievementStatistics)
+        foreach (AchievementStatistic statistic in achievementStatistics)
         {
             AchievementData achievement = AchievementData.ConvertFromAchievementStatistic(statistic);
             achievementData.Add(achievement);
@@ -353,7 +373,7 @@ public class DataManager : MonoBehaviour
         return dataList;
     }
 
-    
+
 
     /// <summary>
     ///     This function returns all stored achievements

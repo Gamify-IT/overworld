@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+/// <summary>
+/// This class is part of an teleporter game object
+/// </summary>
 public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
 {
     [field: SerializeField]
@@ -16,7 +19,8 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     [field: SerializeField]
     public int teleporterNumber { get; private set; } = 1;
 
-    private bool isUnlocked = false;
+    public bool isUnlocked { get; private set; } = false;
+    private string uuid;
     [SerializeField]
     private GameObject teleporterCanvas;
     [SerializeField]
@@ -38,11 +42,11 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
 
     private void Awake()
     {
-        ObjectManager.Instance.AddGameEntity<Teleporter,TeleporterData>(this.gameObject, worldID, dungeonID, teleporterNumber);
+        ObjectManager.Instance.AddGameEntity<Teleporter, TeleporterData>(this.gameObject, worldID, dungeonID, teleporterNumber);
     }
     private void OnDestroy()
     {
-        ObjectManager.Instance.RemoveGameEntity<Teleporter,TeleporterData>(worldID, dungeonID, teleporterNumber);
+        ObjectManager.Instance.RemoveGameEntity<Teleporter, TeleporterData>(worldID, dungeonID, teleporterNumber);
     }
 
     private void Start()
@@ -65,9 +69,9 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
                 SetupTeleporterUI(teleporterUI);
                 currentTeleporterCanvas = newCanvas;
             }
-            
+
         }
-        
+
 
     }
     /// <summary>
@@ -83,8 +87,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             {
                 isUnlocked = true;
                 SetUnLockedState(isUnlocked);
-                WorldData worldData = DataManager.Instance.GetWorldData(worldID);
-                worldData.UpdateTeleporterData(teleporterNumber, teleporterName, worldID, dungeonID, transform.position);       
+                GameManager.Instance.ActivateTeleporter(worldID, dungeonID, teleporterNumber, uuid);
             }
         }
     }
@@ -119,7 +122,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         else
         {
             GetComponent<SpriteRenderer>().sprite = spriteNormal;
-        } 
+        }
     }
 
 
@@ -136,7 +139,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     /// This function is called by a button of the TeleporterUI. It will initialize the teleporting process.
     /// </summary>
     /// <param name="worldIndex"></param>
-    public void TeleportPlayerTo(Vector2 position,int worldID,int dungeonID)
+    public void TeleportPlayerTo(Vector2 position, int worldID, int dungeonID)
     {
         Destroy(currentTeleporterCanvas);
         finalTargetPosition = position;
@@ -145,7 +148,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         Animation ufoAnimation = GetComponent<Animation>();
         ufoAnimation.Play();
         player.GetComponent<PlayerAnimation>().DisableMovement();
-        
+
     }
 
     /// <summary>
@@ -172,7 +175,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         interactable = true;
     }
 
-    
+
 
 
     /// <summary>
@@ -185,7 +188,12 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
 
     public void Setup(TeleporterData data)
     {
-            isUnlocked = data.isUnlocked;
-            SetUnLockedState(isUnlocked);
+        this.isUnlocked = data.isUnlocked;
+        transform.position = data.position;
+        this.teleporterName = data.teleporterName;
+        this.worldID = data.worldID;
+        this.dungeonID = data.dungeonID;
+        this.teleporterNumber = data.teleporterNumber;
+        SetUnLockedState(isUnlocked);
     }
 }

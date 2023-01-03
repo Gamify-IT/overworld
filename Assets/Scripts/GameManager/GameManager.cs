@@ -257,6 +257,28 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    /// This function activates a teleporter by saving the data in the backend as well as the data manager.
+    /// </summary>
+    /// <param name="worldIndex"></param>
+    /// <param name="dungeonIndex"></param>
+    /// <param name="number"></param>
+    /// <param name="uuid"></param>
+    public async void ActivateTeleporter(int worldIndex, int dungeonIndex, int number, string uuid)
+    {
+        string path = overworldBackendPath + "/internal/submit-teleporter-pass";
+
+        TeleporterUnlockedEvent teleporterData = new TeleporterUnlockedEvent(uuid, true, userId);
+        string json = JsonUtility.ToJson(teleporterData, true);
+
+        bool successful = await RestRequest.PostRequest(path, json);
+
+        if (successful)
+        {
+            DataManager.Instance.ActivateTeleporter(worldIndex, dungeonIndex, number);
+        }
+    }
+
+    /// <summary>
     ///     This functions returns an information text about the barrier.
     /// </summary>
     /// <param name="type">The type of the barrier</param>

@@ -5,7 +5,7 @@ using System;
 /// <summary>
 ///     This class defines all needed data for a <c>World</c>.
 /// </summary>
-public class WorldData: IAreaData
+public class WorldData : IAreaData
 {
     #region Attributes
 
@@ -126,9 +126,10 @@ public class WorldData: IAreaData
 
         // just for demonstration
         TeleporterData[] teleporters = new TeleporterData[GameSettings.GetMaxTeleporters() + 1];
-        for (int tpIndex = 1; tpIndex < teleporters.Length; tpIndex++)
+        List<TeleporterDTO> teleporterDTOs = dto.teleporters;
+        foreach (TeleporterDTO teleporterDTO in teleporterDTOs)
         {
-            teleporters[tpIndex] = new TeleporterData();
+            teleporters[teleporterDTO.index] = TeleporterData.ConvertDtoToData(teleporterDTO);
         }
 
         WorldData data = new WorldData(id, index, staticName, topicName, active, minigames, npcs, dungeons, books, teleporters);
@@ -200,6 +201,21 @@ public class WorldData: IAreaData
         }
     }
 
+    public void UnlockTeleporter(int dungeonIndex, int index)
+    {
+        if (dungeonIndex != 0)
+        {
+            if (dungeonIndex < dungeons.Length)
+            {
+                dungeons[dungeonIndex].UnlockTeleporter(index, true);
+            }
+        }
+        else if (index < npcs.Length)
+        {
+            teleporters[index].isUnlocked = true;
+        }
+    }
+
     /// <summary>
     ///     This function returns the status of a minigame in the world.
     /// </summary>
@@ -267,7 +283,7 @@ public class WorldData: IAreaData
         {
             entityData = minigames[index];
         }
-        else if (typeof(T) == typeof(TeleporterData) && IsIndexInArrayRange(index, teleporters))
+        else if (typeof(T) == typeof(TeleporterData) /*&& IsIndexInArrayRange(index, teleporters)*/)
         {
             entityData = teleporters[index];
         }
@@ -334,19 +350,6 @@ public class WorldData: IAreaData
     public MinigameData[] GetMinigameData()
     {
         return minigames;
-    }
-
-
-    public void UpdateTeleporterData(int number, string name, int worldID, int dungeonID, Vector2 position)
-    {
-        Debug.Log("TP Number: " + number);
-        TeleporterData data = GetEntityDataAt<TeleporterData>(number);
-        data.teleporterNumber = number;
-        data.teleporterName = name;
-        data.worldID = worldID;
-        data.dungeonID = dungeonID;
-        data.position = position;
-        data.isUnlocked = true;
     }
 
     #endregion

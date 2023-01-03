@@ -16,6 +16,7 @@ public class DungeonData : IAreaData
     private readonly MinigameData[] minigames;
     private readonly NPCData[] npcs;
     private readonly BookData[] books;
+    private readonly TeleporterData[] teleporters;
 
     #endregion
 
@@ -57,6 +58,12 @@ public class DungeonData : IAreaData
         for (int bookIndex = 1; bookIndex < books.Length; bookIndex++)
         {
             books[bookIndex] = new BookData();
+        }
+
+        teleporters = new TeleporterData[GameSettings.GetMaxTeleporters() + 1];
+        for (int tpIndex = 1; tpIndex < teleporters.Length; tpIndex++)
+        {
+            teleporters[tpIndex] = new TeleporterData();
         }
     }
 
@@ -139,6 +146,14 @@ public class DungeonData : IAreaData
     public void SetNpcStatus(int index, bool completed)
     {
         if (index < npcs.Length)
+        {
+            npcs[index].SetHasBeenTalkedTo(completed);
+        }
+    }
+
+    public void UnlockTeleporter(int index, bool completed)
+    {
+        if (index < teleporters.Length)
         {
             npcs[index].SetHasBeenTalkedTo(completed);
         }
