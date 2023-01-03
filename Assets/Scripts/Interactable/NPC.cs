@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 ///     This class is responsible for the NPC logic.
 /// </summary>
-public class NPC : MonoBehaviour
+public class NPC : MonoBehaviour, IGameEntity<NPCData>
 {
     [SerializeField] private int world;
     [SerializeField] private int dungeon;
@@ -82,7 +82,7 @@ public class NPC : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveNpc(world, dungeon, number);
+        ObjectManager.Instance.RemoveGameEntity<NPC,NPCData>(world, dungeon, number);
     }
 
     /// <summary>
@@ -129,7 +129,7 @@ public class NPC : MonoBehaviour
     private void RegisterToGameManager()
     {
         Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.AddNpc(gameObject, world, dungeon, number);
+        ObjectManager.Instance.AddGameEntity<NPC,NPCData>(gameObject, world, dungeon, number);
     }
 
     /// <summary>

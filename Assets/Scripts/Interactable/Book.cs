@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 /// <summary>
 ///     This class is responsible for the Book logic.
 /// </summary>
-public class Book : MonoBehaviour
+public class Book : MonoBehaviour, IGameEntity<BookData>
 {
     [SerializeField] private int world;
     [SerializeField] private int dungeon;
@@ -49,7 +49,7 @@ public class Book : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove Book " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveBook(world, dungeon, number);
+        ObjectManager.Instance.RemoveGameEntity<Book, BookData>(world, dungeon, number);
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ public class Book : MonoBehaviour
     private void RegisterToGameManager()
     {
         Debug.Log("register Book " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.AddBook(gameObject, world, dungeon, number);
+        ObjectManager.Instance.AddGameEntity<Book, BookData>(gameObject, world, dungeon, number);
     }
 
     /// <summary>
