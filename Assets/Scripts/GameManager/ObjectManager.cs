@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 /// <summary>
 ///     The <c>ObjectManager</c> manages the communication between the <c>GameManager</c> and <c>GameObjects</c> in the areas. It also sets up these objects with provided data.
@@ -23,46 +24,6 @@ public class ObjectManager : MonoBehaviour
     private GameObject[,] npcObjects;
     private GameObject[,] bookObjects;
     private GameObject[,] teleporterObjects;
-
-    /// <summary>
-    ///     This function registers a new minigame at the <c>ObjectManager</c>
-    /// </summary>
-    /// <param name="minigame">The minigame gameObject</param>
-    /// <param name="world">The index of the world the minigame is in</param>
-    /// <param name="dungeon">The index of the dungeon the minigame is in (0 if in no dungeon)</param>
-    /// <param name="number">The index of the minigame in its area</param>
-    public void AddMinigame(GameObject minigame, int world, int dungeon, int number)
-    {
-        if (minigame != null)
-        {
-            if (dungeon == 0)
-            {
-                minigameObjects[world, number] = minigame;
-            }
-            else
-            {
-                minigameObjects[0, number] = minigame;
-            }
-        }
-    }
-
-    /// <summary>
-    ///     This function removes a minigame from the <c>ObjectManager</c>
-    /// </summary>
-    /// <param name="world">The index of the world the minigame is in</param>
-    /// <param name="dungeon">The index of the dungeon the minigame is in (0 if in no dungeon)</param>
-    /// <param name="number">The index of the minigame in its area</param>
-    public void RemoveMinigame(int world, int dungeon, int number)
-    {
-        if (dungeon == 0)
-        {
-            minigameObjects[world, number] = null;
-        }
-        else
-        {
-            minigameObjects[0, number] = null;
-        }
-    }
 
     /// <summary>
     ///     This function registers a new barrier at the <c>ObjectManager</c>
@@ -105,116 +66,98 @@ public class ObjectManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function registers a new npc at the <c>ObjectManager</c>
+    ///     This function registers a new game entity at the <c>ObjectManager</c>. Allowed game entites are Book, NPC, Teleporter and Minigame.
+    ///     The type is given by the generic parameter.
     /// </summary>
-    /// <param name="npc">The npc gameObject</param>
-    /// <param name="world">The index of the world the npc is in</param>
-    /// <param name="dungeon">The index of the dungeon the npc is in (0 if in no dungeon)</param>
-    /// <param name="number">The index of the npc in its area</param>
-    public void AddNpc(GameObject npc, int world, int dungeon, int number)
+    /// <param name="entity">The gameObject to add</param>
+    /// <param name="world">The index of the world the game entity is in</param>
+    /// <param name="dungeon">The index of the dungeon the game entity is in (0 if in no dungeon)</param>
+    /// <param name="number">The index of the game entity in its area</param>
+    public void AddGameEntity<T,U>(GameObject entity, int world, int dungeon, int number) where T : IGameEntity<U> where U: IGameEntityData
     {
-        if (npc != null)
+        if (entity == null)
         {
+            return;
+        }
+        try
+        {
+            GameObject[,] targetArray = GetArrayForGameEntity<T,U>();
             if (dungeon == 0)
             {
-                npcObjects[world, number] = npc;
+                targetArray[world, number] = entity;
             }
             else
             {
-                npcObjects[0, number] = npc;
+                targetArray[0, number] = entity;
             }
+        }
+        catch (ArgumentOutOfRangeException e)
+        {
+            Debug.LogError("Entity could not be added to the object manager. " + e.StackTrace);
+            return;
         }
     }
 
     /// <summary>
-    ///     This function removes a npc from the <c>ObjectManager</c>
+    ///     This function removes a game entity at the <c>ObjectManager</c>. Allowed game entites are Book, NPC, Teleporter and Minigame.
+    ///     The type is given by the generic parameter.
     /// </summary>
-    /// <param name="world">The index of the world the npc is in</param>
-    /// <param name="dungeon">The index of the dungeon the npc is in (0 if in no dungeon)</param>
-    /// <param name="number">The index of the npc in its area</param>
-    public void RemoveNpc(int world, int dungeon, int number)
+    /// <param name="entity">The gameObject to add</param>
+    /// <param name="world">The index of the world the game entity is in</param>
+    /// <param name="dungeon">The index of the dungeon the game entity is in (0 if in no dungeon)</param>
+    /// <param name="number">The index of the game entity in its area</param>
+    public void RemoveGameEntity<T,U>(int world, int dungeon, int number) where T : IGameEntity<U> where U : IGameEntityData
     {
-        if (dungeon == 0)
+        try
         {
-            npcObjects[world, number] = null;
-            string[] emptyArray = { "" };
-        }
-        else
-        {
-            npcObjects[0, number] = null;
-            string[] emptyArray = { "" };
-        }
-    }
-
-    /// <summary>
-    ///     This function registers a new book at the <c>ObjectManager</c>
-    /// </summary>
-    /// <param name="book">The npc gameObject</param>
-    /// <param name="world">The index of the world the book is in</param>
-    /// <param name="dungeon">The index of the dungeon the book is in (0 if in no dungeon)</param>
-    /// <param name="number">The index of the book in its area</param>
-    public void AddBook(GameObject book, int world, int dungeon, int number)
-    {
-        if (book != null)
-        {
+            GameObject[,] targetArray = GetArrayForGameEntity<T,U>();
             if (dungeon == 0)
             {
-                bookObjects[world, number] = book;
+                targetArray[world, number] = null;
             }
             else
             {
-                bookObjects[0, number] = book;
+                targetArray[0, number] = null;
             }
         }
+        catch (ArgumentOutOfRangeException e)
+        {
+            Debug.LogError("Entity could not be removed from the object manager" + e.StackTrace);
+            return;
+        }
+
     }
 
     /// <summary>
-    ///     This function removes a book from the <c>ObjectManager</c>
+    /// This function returns the object array with components of type T. An exception is thrown if this array is not existing.
     /// </summary>
-    /// <param name="world">The index of the world the book is in</param>
-    /// <param name="dungeon">The index of the dungeon the book is in (0 if in no dungeon)</param>
-    /// <param name="number">The index of the book in its area</param>
-    public void RemoveBook(int world, int dungeon, int number)
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    private GameObject[,] GetArrayForGameEntity<T,U>() where T : IGameEntity<U> where U: IGameEntityData
     {
-        if (dungeon == 0)
+        GameObject[,] targetArray;
+        if (typeof(T) == typeof(Book))
         {
-            bookObjects[world, number] = null;
-            string[] emptyArray = { "" };
+            targetArray = bookObjects;
+        }
+        else if (typeof(T) == typeof(NPC))
+        {
+            targetArray = npcObjects;
+        }
+        else if (typeof(T) == typeof(Teleporter))
+        {
+            targetArray = teleporterObjects;
+        }
+        else if (typeof(T) == typeof(Minigame))
+        {
+            targetArray = minigameObjects;
         }
         else
         {
-            bookObjects[0, number] = null;
-            string[] emptyArray = { "" };
+            throw new ArgumentOutOfRangeException("There exists no GameObject[,] for " + typeof(T).FullName);
         }
+        return targetArray;
     }
-
-    public void AddTeleporter(GameObject teleporter, int world, int dungeon, int number)
-    {
-        if (teleporter != null)
-        {
-            if (dungeon == 0)
-            {
-                teleporterObjects[world, number] = teleporter;
-            }
-            else
-            {
-                teleporterObjects[0, number] = teleporter;
-            }
-        }
-    }
-
-    public void RemoveTeleporter(int world, int dungeon, int number)
-    {
-        if (dungeon == 0)
-        {
-            teleporterObjects[world, number] = null;
-        }
-        else
-        {
-            teleporterObjects[0, number] = null;
-        }
-    }
-
 
     /// <summary>
     ///     This functions sets the data for a given world.
@@ -227,97 +170,10 @@ public class ObjectManager : MonoBehaviour
         {
             return;
         }
-
-        for (int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
-        {
-            MinigameData minigameData = data.getMinigameData(minigameIndex);
-            if (minigameData == null)
-            {
-                minigameData = new MinigameData();
-            }
-
-            GameObject minigameObject = minigameObjects[worldIndex, minigameIndex];
-            if (minigameObject == null)
-            {
-                continue;
-            }
-
-            Minigame minigame = minigameObject.GetComponent<Minigame>();
-            if (minigame == null)
-            {
-                continue;
-            }
-
-            minigame.Setup(minigameData);
-        }
-
-        for (int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
-        {
-            NPCData npcData = data.getNPCData(npcIndex);
-            if (npcData == null)
-            {
-                npcData = new NPCData();
-            }
-
-            GameObject npcObject = npcObjects[worldIndex, npcIndex];
-            if (npcObject == null)
-            {
-                continue;
-            }
-
-            NPC npc = npcObject.GetComponent<NPC>();
-            if (npc == null)
-            {
-                continue;
-            }
-
-            npc.Setup(npcData);
-        }
-
-        for (int bookIndex = 1; bookIndex <= maxBooks; bookIndex++)
-        {
-            BookData bookData = data.getBookData(bookIndex);
-            if (bookData == null)
-            {
-                bookData = new BookData();
-            }
-
-            GameObject bookObject = bookObjects[worldIndex, bookIndex];
-            if (bookObject == null)
-            {
-                continue;
-            }
-
-            Book book = bookObject.GetComponent<Book>();
-            if (book == null)
-            {
-                continue;
-            }
-
-            book.Setup(bookData);
-        }
-
-        for (int tpIndex = 0; tpIndex < maxTeleporters; tpIndex++)
-        {
-            TeleporterData teleporterData = data.getTeleporterData(tpIndex);
-            if (teleporterData == null)
-            {
-                teleporterData = new TeleporterData();
-            }
-
-            GameObject teleporterObject = teleporterObjects[worldIndex, tpIndex];
-            if (teleporterObject == null)
-            {
-                continue;
-            }
-
-            Teleporter teleporter = teleporterObject.GetComponent<Teleporter>();
-            if (teleporter == null)
-            {
-                continue;
-            }
-            teleporter.Setup(teleporterData);
-        }
+        SetupEntityData<Minigame,MinigameData>(worldIndex, data);
+        SetupEntityData<NPC,NPCData>(worldIndex, data);
+        SetupEntityData<Book,BookData>(worldIndex, data);
+        SetupEntityData<Teleporter,TeleporterData>(worldIndex, data);
 
         for (int barrierDestinationIndex = 1; barrierDestinationIndex <= maxWorld; barrierDestinationIndex++)
         {
@@ -335,7 +191,7 @@ public class ObjectManager : MonoBehaviour
 
             bool activedByLecturer = false;
             WorldData worldData = DataManager.Instance.GetWorldData(barrierDestinationIndex);
-            if(worldData != null)
+            if (worldData != null)
             {
                 activedByLecturer = worldData.isActive();
             }
@@ -380,83 +236,57 @@ public class ObjectManager : MonoBehaviour
     /// <param name="data">The data to be set</param>
     public void SetDungeonData(int worldIndex, int dungeonIndex, DungeonData data)
     {
-        if(worldIndex <= 0 || worldIndex > maxWorld)
+        if (worldIndex <= 0 || worldIndex > maxWorld)
         {
             return;
         }
 
-        if(dungeonIndex <= 0 ||dungeonIndex > maxDungeons)
+        if (dungeonIndex <= 0 || dungeonIndex > maxDungeons)
         {
             return;
         }
+        SetupEntityData<Minigame,MinigameData>(0, data);
+        SetupEntityData<NPC,NPCData>(0, data);
+        SetupEntityData<Book,BookData>(0, data); 
+    }
 
-        for (int minigameIndex = 1; minigameIndex <= maxMinigames; minigameIndex++)
+
+    /// <summary>
+    /// This function calls the setup method of all GameEntities given by the generic parameter T.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="worldIndex"></param>
+    /// <param name="data"></param>
+    private void SetupEntityData<T,U>(int worldIndex, IAreaData data) where T : IGameEntity<U> where U : IGameEntityData, new()
+    {
+        GameObject[,] entityArray;
+        try
         {
-            MinigameData minigameData = data.GetMinigameData(minigameIndex);
-            if (minigameData == null)
-            {
-                minigameData = new MinigameData();
-            }
-
-            GameObject minigameObject = minigameObjects[0, minigameIndex];
-            if (minigameObject == null)
-            {
-                continue;
-            }
-
-            Minigame minigame = minigameObject.GetComponent<Minigame>();
-            if (minigame == null)
-            {
-                continue;
-            }
-
-            minigame.Setup(minigameData);
+            entityArray = GetArrayForGameEntity<T,U>();
         }
-
-        for (int npcIndex = 1; npcIndex <= maxNPCs; npcIndex++)
+        catch (ArgumentOutOfRangeException e)
         {
-            NPCData npcData = data.GetNpcData(npcIndex);
-            if (npcData == null)
-            {
-                npcData = new NPCData();
-            }
-
-            GameObject npcObject = npcObjects[0, npcIndex];
-            if (npcObject == null)
-            {
-                continue;
-            }
-
-            NPC npc = npcObject.GetComponent<NPC>();
-            if (npc == null)
-            {
-                continue;
-            }
-
-            npc.Setup(npcData);
+            Debug.LogError(e.ToString());
+            return;
         }
-
-        for (int bookIndex = 1; bookIndex <= maxBooks; bookIndex++)
+        for (int i = 1; i < entityArray.GetLength(1); i++)
         {
-            BookData bookData = data.GetBookData(bookIndex);
-            if (bookData == null)
-            {
-                bookData = new BookData();
-            }
-
-            GameObject bookObject = bookObjects[0, bookIndex];
-            if (bookObject == null)
+            GameObject entityGameObject = entityArray[worldIndex, i];
+            if (entityGameObject == null)
             {
                 continue;
             }
-
-            Book book = bookObject.GetComponent<Book>();
-            if (book == null)
+            T entity = entityGameObject.GetComponent<T>();
+            if (entity == null)
             {
                 continue;
             }
-
-            book.Setup(bookData);
+            U entityData = data.GetEntityDataAt<U>(i);
+            if (entityData == null)
+            {
+                entityData = new U();
+            }
+            entity.Setup(entityData);
         }
     }
 

@@ -1,7 +1,7 @@
 /// <summary>
 ///     This class defines all needed data for a <c>NPC</c>.
 /// </summary>
-public class NPCData
+public class NPCData:IGameEntityData
 {
     public NPCData(string uuid, string[] dialogue, bool hasBeenTalkedTo)
     {

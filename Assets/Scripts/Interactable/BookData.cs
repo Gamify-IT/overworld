@@ -1,7 +1,7 @@
 /// <summary>
 ///     This class defines all needed data for a <c>Book</c>.
 /// </summary>
-public class BookData
+public class BookData: IGameEntityData
 {
     public BookData(string uuid, string bookText)
     {
