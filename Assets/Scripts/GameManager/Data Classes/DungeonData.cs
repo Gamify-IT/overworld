@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 ///     This class defines all needed data for a <c>Dungeon</c>.
 /// </summary>
-public class DungeonData
+public class DungeonData : IAreaData
 {
     #region Attributes
 
@@ -51,7 +52,7 @@ public class DungeonData
         {
             npcs[npcIndex] = new NPCData();
         }
-        
+
         books = new BookData[GameSettings.GetMaxBooks() + 1];
         for (int bookIndex = 1; bookIndex < books.Length; bookIndex++)
         {
@@ -84,7 +85,7 @@ public class DungeonData
 
         NPCData[] npcs = new NPCData[GameSettings.GetMaxNpCs() + 1];
         List<NPCDTO> npcDTOs = dto.npcs;
-        foreach(NPCDTO npcDTO in npcDTOs)
+        foreach (NPCDTO npcDTO in npcDTOs)
         {
             NPCData npcData = NPCData.ConvertDtoToData(npcDTO);
             npcs[npcDTO.index] = npcData;
@@ -92,7 +93,7 @@ public class DungeonData
 
         BookData[] books = new BookData[GameSettings.GetMaxBooks() + 1];
         List<BookDTO> bookDTOs = dto.books;
-        foreach(BookDTO bookDTO in bookDTOs)
+        foreach (BookDTO bookDTO in bookDTOs)
         {
             BookData bookData = BookData.ConvertDtoToData(bookDTO);
             books[bookDTO.index] = bookData;
@@ -159,51 +160,6 @@ public class DungeonData
     }
 
     /// <summary>
-    ///     This function returns the data of a minigame in the dungeon.
-    /// </summary>
-    /// <param name="index">This index of the minigame</param>
-    /// <returns>The data of the minigame, <c>null</c> if invalid index</returns>
-    public MinigameData GetMinigameData(int index)
-    {
-        if (index > 0 && index < minigames.Length)
-        {
-            return minigames[index];
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    ///     This function returns the data of a NPC in the world.
-    /// </summary>
-    /// <param name="index">This index of the NPC</param>
-    /// <returns>The data of the NPC, <c>null</c> if invalid index</returns>
-    public NPCData GetNpcData(int index)
-    {
-        if (index > 0 && index < npcs.Length)
-        {
-            return npcs[index];
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    ///     This function returns the data of a Book in the world.
-    /// </summary>
-    /// <param name="index">This index of the Book</param>
-    /// <returns>The data of the Book, <c>null</c> if invalid index</returns>
-    public BookData GetBookData(int index)
-    {
-        if (index > 0 && index < books.Length)
-        {
-            return books[index];
-        }
-
-        return null;
-    }
-    
-    /// <summary>
     ///     This function returns whether the dungeon is set as active or not.
     /// </summary>
     /// <returns>The active status of the dungeon</returns>
@@ -231,6 +187,33 @@ public class DungeonData
     public MinigameData[] GetMinigameData()
     {
         return minigames;
+    }
+
+    public T GetEntityDataAt<T>(int index) where T : IGameEntityData
+    {
+        IGameEntityData entityData;
+        if (typeof(T) == typeof(BookData) && IsIndexInArrayRange(index, books))
+        {
+            entityData = books[index];
+        }
+        else if (typeof(T) == typeof(NPCData) && IsIndexInArrayRange(index, npcs))
+        {
+            entityData = npcs[index];
+        }
+        else if (typeof(T) == typeof(MinigameData) && IsIndexInArrayRange(index, minigames))
+        {
+            entityData = minigames[index];
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException("There exists no Data Array for " + typeof(T).FullName);
+        }
+        return (T)entityData;
+    }
+
+    private bool IsIndexInArrayRange(int index, IGameEntityData[] data)
+    {
+        return index > 0 && index < data.Length;
     }
 
     #endregion
