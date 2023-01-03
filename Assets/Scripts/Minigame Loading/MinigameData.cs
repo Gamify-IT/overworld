@@ -1,7 +1,7 @@
 /// <summary>
 ///     This class defines all needed data for a <c>Minigame</c>.
 /// </summary>
-public class MinigameData
+public class MinigameData : IGameEntityData
 {
     public MinigameData(string game, string configurationID, MinigameStatus status, int highscore)
     {

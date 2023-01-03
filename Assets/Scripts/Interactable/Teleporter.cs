@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class Teleporter : MonoBehaviour
+public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
 {
     [field: SerializeField]
     public string teleporterName { get; private set; } = "My Teleporter";
@@ -34,11 +34,11 @@ public class Teleporter : MonoBehaviour
 
     private void Awake()
     {
-        ObjectManager.Instance.AddTeleporter(this.gameObject, worldID, dungeonID, teleporterNumber);
+        ObjectManager.Instance.AddGameEntity<Teleporter,TeleporterData>(this.gameObject, worldID, dungeonID, teleporterNumber);
     }
     private void OnDestroy()
     {
-        ObjectManager.Instance.RemoveTeleporter(worldID, dungeonID, teleporterNumber);
+        ObjectManager.Instance.RemoveGameEntity<Teleporter,TeleporterData>(worldID, dungeonID, teleporterNumber);
     }
 
     private void Start()
@@ -98,16 +98,6 @@ public class Teleporter : MonoBehaviour
             currentTeleporterCanvas = null;
 
         }
-    }
-
-    /// <summary>
-    /// This function sets up the teleporter based on the provided data
-    /// </summary>
-    /// <param name="data"></param>
-    public void Setup(TeleporterData data)
-    {
-        isUnlocked = data.isUnlocked;
-        SetUnLockedState(isUnlocked);
     }
 
 
@@ -187,5 +177,11 @@ public class Teleporter : MonoBehaviour
     public void FadeOutPlayer()
     {
         player.GetComponent<SpriteRenderer>().enabled = false;
+    }
+
+    public void Setup(TeleporterData data)
+    {
+            isUnlocked = data.isUnlocked;
+            SetUnLockedState(isUnlocked);
     }
 }
