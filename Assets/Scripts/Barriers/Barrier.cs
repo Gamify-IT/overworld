@@ -118,6 +118,7 @@ public class Barrier : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             string infoText = GameManager.Instance.GetBarrierInfoText(type, originWorldIndex, destinationAreaIndex);
+            CloseInfoPanel(); //so if a info panel is open it will be closed before the new one opens
             OpenInfoPanel(infoText);
         }
     }
@@ -146,8 +147,9 @@ public class Barrier : MonoBehaviour
         {
             return;
         }
+
         string headerText = "";
-        switch(type)
+        switch (type)
         {
             case BarrierType.worldBarrier:
                 headerText = "World " + destinationAreaIndex;
@@ -157,6 +159,7 @@ public class Barrier : MonoBehaviour
                 headerText = "Dungeon " + originWorldIndex + "-" + destinationAreaIndex;
                 break;
         }
+
         InfoManager.Instance.DisplayInfo(headerText, infoText);
     }
 
