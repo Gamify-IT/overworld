@@ -139,6 +139,10 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         return info;
     }
 
+    /// <summary>
+    ///     This function updates the keybindings
+    /// </summary>
+    /// <param name="binding">The binding that changed</param>
     private void UpdateKeybindings(Binding binding)
     {
         if (binding == Binding.INTERACT)

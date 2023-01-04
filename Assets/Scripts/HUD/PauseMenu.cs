@@ -12,11 +12,11 @@ public class PauseMenu : MonoBehaviour
     public static string buttonName;
 
     //KeyCodes
-    private KeyCode pauseMenu;
+    private KeyCode escape;
 
     private void Start()
     {
-        pauseMenu = GameManager.Instance.GetKeyCode(Binding.PAUSE_MENU);
+        escape = GameManager.Instance.GetKeyCode(Binding.ESCAPE);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
 
@@ -26,7 +26,7 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (Input.GetKeyDown(pauseMenu) && !PlayerAnimation.Instance.IsBusy())
+        if (Input.GetKeyDown(escape) && !PlayerAnimation.Instance.IsBusy())
         {
             PauseOrResume();
         }
@@ -116,11 +116,15 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
     }
 
+    /// <summary>
+    ///     This function updates the keybindings
+    /// </summary>
+    /// <param name="binding">The binding that changed</param>
     private void UpdateKeybindings(Binding binding)
     {
-        if (binding == Binding.PAUSE_MENU)
+        if (binding == Binding.ESCAPE)
         {
-            pauseMenu = GameManager.Instance.GetKeyCode(Binding.PAUSE_MENU);
+            escape = GameManager.Instance.GetKeyCode(Binding.ESCAPE);
         }
     }
 }

@@ -168,7 +168,10 @@ public class ZoomScript : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    ///     This function updates the keybindings
+    /// </summary>
+    /// <param name="binding">The binding that changed</param>
     private void UpdateKeybindings(Binding binding)
     {
         if (binding == Binding.MINIMAP_ZOOM_IN)

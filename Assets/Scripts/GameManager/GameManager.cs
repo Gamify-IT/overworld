@@ -278,14 +278,33 @@ public class GameManager : MonoBehaviour
         return DataManager.Instance.GetKeybindings();
     }
 
+    /// <summary>
+    ///     This function changes the keybind of the given <c>Binding</c> to the given <c>KeyCode</c>
+    /// </summary>
+    /// <param name="keybinding">The binding to change</param>
     public void ChangeKeybind(Keybinding keybinding)
     {
         DataManager.Instance.ChangeKeybind(keybinding);
     }
 
+    /// <summary>
+    ///     This function returns the <c>KeyCode</c> for the given <c>Binding</c>
+    /// </summary>
+    /// <param name="binding">The binding the <c>KeyCode</c> should be returned for</param>
+    /// <returns>The <c>KeyCode</c> of the binding if present, KeyCode.NONE otherwise</returns>
     public KeyCode GetKeyCode(Binding binding)
     {
         return DataManager.Instance.GetKeyCode(binding);
+    }
+
+    /// <summary>
+    ///     This function checks, whether a <c>KeyCode</c> is already in use or not
+    /// </summary>
+    /// <param name="keyCode">The keyCode to be checked</param>
+    /// <returns>False, if the <c>KeyCode</c> is already in use, true otherwise</returns>
+    public bool IsValidKeyCode(KeyCode keyCode)
+    {
+        return DataManager.Instance.IsValidKeyCode(keyCode);
     }
 
     /// <summary>

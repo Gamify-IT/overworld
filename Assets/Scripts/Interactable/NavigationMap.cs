@@ -69,6 +69,10 @@ public class NavigationMap : MonoBehaviour
         GameEvents.current.onKeybindingChange -= UpdateKeybindings;
     }
 
+    /// <summary>
+    ///     This function updates the keybindings
+    /// </summary>
+    /// <param name="binding">The binding that changed</param>
     private void UpdateKeybindings(Binding binding)
     {
         if (binding == Binding.INTERACT)

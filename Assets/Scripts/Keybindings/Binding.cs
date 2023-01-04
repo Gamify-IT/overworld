@@ -10,7 +10,7 @@ public enum Binding
     MOVE_LEFT,
     SPRINT,
     INTERACT,
-    PAUSE_MENU,
+    ESCAPE,
     MINIMAP_ZOOM_IN,
     MINIMAP_ZOOM_OUT,
     GAME_ZOOM_IN,

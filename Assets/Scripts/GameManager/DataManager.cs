@@ -375,6 +375,10 @@ public class DataManager : MonoBehaviour
         return KeybindingsAsList();
     }
 
+    /// <summary>
+    ///     This function changes the keybind of the given <c>Binding</c> to the given <c>KeyCode</c>
+    /// </summary>
+    /// <param name="keybinding">The binding to change</param>
     public void ChangeKeybind(Keybinding keybinding)
     {
         Binding binding = keybinding.GetBinding();
@@ -382,6 +386,11 @@ public class DataManager : MonoBehaviour
         GameEvents.current.KeybindingChange(binding);
     }
 
+    /// <summary>
+    ///     This function returns the <c>KeyCode</c> for the given <c>Binding</c>
+    /// </summary>
+    /// <param name="binding">The binding the <c>KeyCode</c> should be returned for</param>
+    /// <returns>The <c>KeyCode</c> of the binding if present, KeyCode.NONE otherwise</returns>
     public KeyCode GetKeyCode(Binding binding)
     {
         KeyCode keyCode = KeyCode.None;
@@ -390,6 +399,21 @@ public class DataManager : MonoBehaviour
             keyCode = keybindings[binding];
         }
         return keyCode;
+    }
+
+    /// <summary>
+    ///     This function checks, whether a <c>KeyCode</c> is already in use or not
+    /// </summary>
+    /// <param name="keyCode">The keyCode to be checked</param>
+    /// <returns>False, if the <c>KeyCode</c> is already in use, true otherwise</returns>
+    public bool IsValidKeyCode(KeyCode keyCode)
+    {
+        bool isValid = true;
+        if(keybindings.ContainsValue(keyCode))
+        {
+            isValid = false;
+        }
+        return isValid;
     }
 
     /// <summary>
@@ -457,7 +481,7 @@ public class DataManager : MonoBehaviour
         keybindings.Add(Binding.MOVE_RIGHT, KeyCode.D);
         keybindings.Add(Binding.SPRINT, KeyCode.LeftShift);
         keybindings.Add(Binding.INTERACT, KeyCode.E);
-        keybindings.Add(Binding.PAUSE_MENU, KeyCode.Escape);
+        keybindings.Add(Binding.ESCAPE, KeyCode.Escape);
         keybindings.Add(Binding.MINIMAP_ZOOM_IN, KeyCode.P);
         keybindings.Add(Binding.MINIMAP_ZOOM_OUT, KeyCode.O);
         keybindings.Add(Binding.GAME_ZOOM_IN, KeyCode.Alpha0);
