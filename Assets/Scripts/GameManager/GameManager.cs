@@ -278,6 +278,16 @@ public class GameManager : MonoBehaviour
         return DataManager.Instance.GetKeybindings();
     }
 
+    public void ChangeKeybind(Keybinding keybinding)
+    {
+        DataManager.Instance.ChangeKeybind(keybinding);
+    }
+
+    public KeyCode GetKeyCode(Binding binding)
+    {
+        return DataManager.Instance.GetKeyCode(binding);
+    }
+
     /// <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
     ///     deletes the object otherwise

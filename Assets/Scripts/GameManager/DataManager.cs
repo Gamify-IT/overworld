@@ -375,6 +375,23 @@ public class DataManager : MonoBehaviour
         return KeybindingsAsList();
     }
 
+    public void ChangeKeybind(Keybinding keybinding)
+    {
+        Binding binding = keybinding.GetBinding();
+        keybindings[binding] = keybinding.GetKey();
+        GameEvents.current.KeybindingChange(binding);
+    }
+
+    public KeyCode GetKeyCode(Binding binding)
+    {
+        KeyCode keyCode = KeyCode.None;
+        if(keybindings.ContainsKey(binding))
+        {
+            keyCode = keybindings[binding];
+        }
+        return keyCode;
+    }
+
     /// <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
     ///     deletes the object otherwise
@@ -435,9 +452,9 @@ public class DataManager : MonoBehaviour
         Dictionary<Binding, KeyCode> keybindings = new Dictionary<Binding, KeyCode>();
 
         keybindings.Add(Binding.MOVE_UP, KeyCode.W);
-        keybindings.Add(Binding.MOVE_RIGHT, KeyCode.D);
+        keybindings.Add(Binding.MOVE_LEFT, KeyCode.A);        
         keybindings.Add(Binding.MOVE_DOWN, KeyCode.S);
-        keybindings.Add(Binding.MOVE_LEFT, KeyCode.A);
+        keybindings.Add(Binding.MOVE_RIGHT, KeyCode.D);
         keybindings.Add(Binding.SPRINT, KeyCode.LeftShift);
         keybindings.Add(Binding.INTERACT, KeyCode.E);
         keybindings.Add(Binding.PAUSE_MENU, KeyCode.Escape);
