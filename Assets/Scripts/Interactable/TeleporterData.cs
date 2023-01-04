@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeleporterData
+public class TeleporterData:IGameEntityData
 {
     
     public string teleporterName { get; set; }

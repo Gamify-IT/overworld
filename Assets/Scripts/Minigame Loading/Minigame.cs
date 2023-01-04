@@ -19,7 +19,7 @@ public enum MinigameStatus
 /// <summary>
 ///     This script defines a minigame spot in a world or dungeon.
 /// </summary>
-public class Minigame : MonoBehaviour
+public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
 {
     [DllImport("__Internal")]
     private static extern string LoadMinigameInIframe(string minigameName, string minigameConfiguration);
@@ -57,7 +57,7 @@ public class Minigame : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveMinigame(world, dungeon, number);
+        ObjectManager.Instance.RemoveGameEntity<Minigame, MinigameData>(world, dungeon, number);
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class Minigame : MonoBehaviour
     private void RegisterToGameManager()
     {
         Debug.Log("register Minigame " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.AddMinigame(gameObject, world, dungeon, number);
+        ObjectManager.Instance.AddGameEntity<Minigame, MinigameData>(gameObject, world, dungeon, number);
     }
 
     #endregion
