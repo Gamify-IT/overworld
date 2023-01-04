@@ -12,7 +12,7 @@ public class GameEvents : MonoBehaviour
 
     public event Action<Binding> onKeybindingChange;
 
-    public void KeybingingChange(Binding binding)
+    public void KeybindingChange(Binding binding)
     {
         if (onKeybindingChange != null)
         {
