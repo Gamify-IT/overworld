@@ -16,6 +16,7 @@ public class PlayerAnimation : MonoBehaviour
     private float currentSpeed;
     private float targetSpeed;
 
+    //KeyCodes
     private KeyCode moveUp;
     private KeyCode moveLeft;
     private KeyCode moveDown;
@@ -147,6 +148,11 @@ public class PlayerAnimation : MonoBehaviour
             playerAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
             playerAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
         }
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
     }
 
     private void UpdateKeybindings(Binding binding)

@@ -46,7 +46,6 @@ public class KeyBindingUIElement : MonoBehaviour
             }
             yield return null;
         }
-        Debug.Log("Stop animation");
         if (pressedKey != keybinding.GetKey())
         {
             Keybinding newKeybinding = new Keybinding(keybinding.GetBinding(), pressedKey);

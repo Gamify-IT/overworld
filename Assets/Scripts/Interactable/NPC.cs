@@ -24,6 +24,9 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     private bool typingIsFinished;
     private string uuid;
 
+    //KeyCodes
+    private KeyCode interact;
+
     /// <summary>
     ///     This function is called when the object becomes enabled and active.
     ///     It is used to initialize the NPCs.
@@ -38,6 +41,8 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
 
         RegisterToGameManager();
         InitNewStuffSprite();
+        interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+        GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
 
     /// <summary>
@@ -46,7 +51,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     /// </summary>
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+        if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
             !PauseMenu.menuOpen)
         {
             if (!hasBeenTalkedTo)
@@ -56,7 +61,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
 
             StartCoroutine(LoadDialogueScene());
         }
-        else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+        else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
                  typingIsFinished &&
                  !PauseMenu.menuOpen)
         {
@@ -65,7 +70,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             NextLine();
             Debug.Log("index after next" + index);
         }
-        else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+        else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
                  !typingIsFinished &&
                  !PauseMenu.menuOpen)
         {
@@ -83,6 +88,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     {
         Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
         ObjectManager.Instance.RemoveGameEntity<NPC,NPCData>(world, dungeon, number);
+        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
     }
 
     /// <summary>
@@ -247,6 +253,14 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
 
         info = world + "-" + dungeon + "-" + number + ": Text: " + text + ", completed: " + hasBeenTalkedTo;
         return info;
+    }
+
+    private void UpdateKeybindings(Binding binding)
+    {
+        if (binding == Binding.INTERACT)
+        {
+            interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+        }
     }
 
     #region Getter

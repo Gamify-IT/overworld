@@ -15,6 +15,9 @@ public class Sign : MonoBehaviour
     private bool playerIsClose;
     public string text;
 
+    //KeyCodes
+    private KeyCode interact;
+
     /// <summary>
     ///     This function is called when the object becomes enabled and active.
     ///     It is used to initialize the sign.
@@ -23,6 +26,8 @@ public class Sign : MonoBehaviour
     {
         SignPanel.SetActive(false);
         signText.text = text;
+        interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+        GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
 
 
@@ -56,11 +61,24 @@ public class Sign : MonoBehaviour
     private void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.E) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+        if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
             !PauseMenu.menuOpen)
         {
             signText.text = text;
             SignPanel.SetActive(!SignPanel.activeInHierarchy);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+    }
+
+    private void UpdateKeybindings(Binding binding)
+    {
+        if (binding == Binding.INTERACT)
+        {
+            interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         }
     }
 }

@@ -8,6 +8,15 @@ public class Interaction : MonoBehaviour
     public LayerMask detectionLayer;
     public GameObject detectedObject;
 
+    //KeyCodes
+    private KeyCode interact;
+
+    private void Start()
+    {
+        interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+        GameEvents.current.onKeybindingChange += UpdateKeybindings;
+    }
+
     /// <summary>
     /// The <c>Update</c> function is called once every frame.
     /// This function checks, if a interactable object is found and the player wants to interact with it, and if so, starts the interaction.
@@ -21,13 +30,18 @@ public class Interaction : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+    }
+
     /// <summary>
     /// This function checks, if the <c>E</c> button is pressed or not
     /// </summary>
     /// <returns>True, if <c>E</c> button pressed, false otherwise</returns>
     bool InteractInput()
     {
-        return Input.GetKeyDown(KeyCode.E);
+        return Input.GetKeyDown(interact);
     }
 
     /// <summary>
@@ -46,6 +60,14 @@ public class Interaction : MonoBehaviour
         {
             detectedObject = obj.gameObject;
             return true;
+        }
+    }
+
+    private void UpdateKeybindings(Binding binding)
+    {
+        if (binding == Binding.INTERACT)
+        {
+            interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         }
     }
 }
