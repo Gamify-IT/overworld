@@ -270,6 +270,15 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function returns all keybings
+    /// </summary>
+    /// <returns>A List containing all keybindings</returns>
+    public List<Keybinding> GetKeybindings()
+    {
+        return DataManager.Instance.GetKeybindings();
+    }
+
+    /// <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
     ///     deletes the object otherwise
     /// </summary>

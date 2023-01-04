@@ -20,6 +20,7 @@ public class DataManager : MonoBehaviour
     private WorldData[] worldData;
     private PlayerstatisticDTO playerData;
     private List<AchievementData> achievementData;
+    private Dictionary<Binding, KeyCode> keybindings;
 
     /// <summary>
     ///     This function sets given data for the specified world
@@ -366,6 +367,15 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function returns all stored keybindings
+    /// </summary>
+    /// <returns>A List containing all keybindings</returns>
+    public List<Keybinding> GetKeybindings()
+    {
+        return KeybindingsAsList();
+    }
+
+    /// <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
     ///     deletes the object otherwise
     /// </summary>
@@ -396,6 +406,7 @@ public class DataManager : MonoBehaviour
         worldData = new WorldData[maxWorld + 1];
         playerData = new PlayerstatisticDTO();
         achievementData = GetDummyAchievements();
+        keybindings = GetDefaultKeybindings();
 
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
         {
@@ -413,6 +424,29 @@ public class DataManager : MonoBehaviour
 
         List<AchievementData> achievements = new List<AchievementData>() { achievement1, achievement2 };
         return achievements;
+    }
+
+    /// <summary>
+    ///     This function returns the default keybindings
+    /// </summary>
+    /// <returns>A dictionary containing the default keybindings</returns>
+    private Dictionary<Binding, KeyCode> GetDefaultKeybindings()
+    {
+        Dictionary<Binding, KeyCode> keybindings = new Dictionary<Binding, KeyCode>();
+
+        keybindings.Add(Binding.MOVE_UP, KeyCode.W);
+        keybindings.Add(Binding.MOVE_RIGHT, KeyCode.D);
+        keybindings.Add(Binding.MOVE_DOWN, KeyCode.S);
+        keybindings.Add(Binding.MOVE_LEFT, KeyCode.A);
+        keybindings.Add(Binding.SPRINT, KeyCode.LeftShift);
+        keybindings.Add(Binding.INTERACT, KeyCode.E);
+        keybindings.Add(Binding.PAUSE_MENU, KeyCode.Escape);
+        keybindings.Add(Binding.MINIMAP_ZOOM_IN, KeyCode.P);
+        keybindings.Add(Binding.MINIMAP_ZOOM_OUT, KeyCode.O);
+        keybindings.Add(Binding.GAME_ZOOM_IN, KeyCode.Alpha0);
+        keybindings.Add(Binding.GAME_ZOOM_OUT, KeyCode.Alpha9);
+
+        return keybindings;
     }
 
     /// <summary>
@@ -435,6 +469,23 @@ public class DataManager : MonoBehaviour
         }
 
         return worldData[worldIndex].getMinigameStatus(index);
+    }
+
+    /// <summary>
+    ///     This function returns all keybindings as a list of <c>Keybinding</c>
+    /// </summary>
+    /// <returns>A list containing all keybindings</returns>
+    private List<Keybinding> KeybindingsAsList()
+    {
+        List<Keybinding> keybindingsList = new List<Keybinding>();
+
+        foreach(KeyValuePair<Binding, KeyCode> pair in keybindings)
+        {
+            Keybinding newBinding = new Keybinding(pair.Key, pair.Value);
+            keybindingsList.Add(newBinding);
+        }
+
+        return keybindingsList;
     }
 
 }
