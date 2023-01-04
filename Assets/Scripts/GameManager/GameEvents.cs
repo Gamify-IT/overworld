@@ -10,13 +10,13 @@ public class GameEvents : MonoBehaviour
         current = this;
     }
 
-    public event Action onKeybindingChange;
+    public event Action<Binding> onKeybindingChange;
 
-    public void KeybingingChange()
+    public void KeybingingChange(Binding binding)
     {
         if (onKeybindingChange != null)
         {
-            onKeybindingChange();
+            onKeybindingChange(binding);
         }
     }
 }
