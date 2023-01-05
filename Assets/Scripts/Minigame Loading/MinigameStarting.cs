@@ -9,11 +9,11 @@ using UnityEngine.SceneManagement;
 public class MinigameStarting : MonoBehaviour
 {
     //KeyCodes
-    private KeyCode escape;
+    private KeyCode cancel;
 
     private void Start()
     {
-        escape = GameManager.Instance.GetKeyCode(Binding.ESCAPE);
+        cancel = GameManager.Instance.GetKeyCode(Binding.CANCEL);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
 
@@ -33,7 +33,7 @@ public class MinigameStarting : MonoBehaviour
     private void Update()
     {
         //esc handling
-        if (Input.GetKeyDown(escape))
+        if (Input.GetKeyDown(cancel))
         {
             QuitMinigame();
         }
@@ -111,9 +111,9 @@ public class MinigameStarting : MonoBehaviour
     /// <param name="binding">The binding that changed</param>
     private void UpdateKeybindings(Binding binding)
     {
-        if (binding == Binding.ESCAPE)
+        if (binding == Binding.CANCEL)
         {
-            escape = GameManager.Instance.GetKeyCode(Binding.ESCAPE);
+            cancel = GameManager.Instance.GetKeyCode(Binding.CANCEL);
         }
     }
 
