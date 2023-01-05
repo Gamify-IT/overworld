@@ -411,26 +411,6 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function count how often <c>KeyCode<c> is in the keybindings dictonary
-    /// </summary>
-    /// <param name="keyCode">The keyCode to be counted</param>
-    /// <returns>Integer how often <c>KeyCode<c> is in the keybindings dictonary</returns>
-    public int CountSameKeyCodesInKeybindings(KeyCode keyCode)
-    {
-        int count = 0;
-
-        foreach (Keybinding keybinding in KeybindingsAsList())
-        {
-            if (keybinding.GetKey() == keyCode)
-            {
-                count++;
-            }
-        }
-
-        return count;
-    }
-
-    /// <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
     ///     deletes the object otherwise
     /// </summary>

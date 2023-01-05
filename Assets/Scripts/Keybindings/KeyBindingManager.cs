@@ -3,14 +3,17 @@ using UnityEngine;
 
 public class KeyBindingManager : MonoBehaviour
 {
+    //Object references
     [SerializeField] private GameObject keybindingPrefab;
     [SerializeField] private GameObject content;
     [SerializeField] private GameObject confirmationCanvas;
 
+    //Keybinding
     private List<Keybinding> currentKeybindings;
     private List<Keybinding> newKeybindings;
     private bool validBindings;
 
+    //Keybinding Objects
     private Dictionary<Binding, KeyBindingUIElement> keybindingObjects;
 
     //KeyCodes

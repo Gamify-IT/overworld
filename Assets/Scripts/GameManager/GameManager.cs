@@ -305,16 +305,6 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function count how often <c>KeyCode<c> is in the keybindings dictonary
-    /// </summary>
-    /// <param name="keyCode">The keyCode to be counted</param>
-    /// <returns>Integer how often <c>KeyCode<c> is in the keybindings dictonary</returns>
-    public int CountSameKeyCodesInKeybindings(KeyCode keyCode)
-    {
-        return DataManager.Instance.CountSameKeyCodesInKeybindings(keyCode);
-    }
-
-    /// <summary>
     ///     This function resets the keybindings to the default ones
     /// </summary>
     public void ResetKeybindings()
