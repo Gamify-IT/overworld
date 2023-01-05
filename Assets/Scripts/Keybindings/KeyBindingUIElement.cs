@@ -8,67 +8,44 @@ public class KeyBindingUIElement : MonoBehaviour
     [SerializeField] private TMP_Text title;
     [SerializeField] private TMP_Text binding;
 
+    private KeyBindingManager keyBindingManager;
+
     private Keybinding keybinding;
 
     /// <summary>
     ///     This function sets up the UI Element
     /// </summary>
     /// <param name="keybinding">The keybinding data</param>
-    public void Setup(Keybinding keybinding)
+    public void Setup(Keybinding keybinding, KeyBindingManager keyBindingManager)
     {
+        this.keyBindingManager = keyBindingManager;
         this.keybinding = keybinding;
-        title.text = keybinding.GetBinding().ToString();
-        binding.text = keybinding.GetKey().ToString();
+        UpdateUI();
         title.color = Color.black;
         binding.color = Color.black;
-
-        ValidateKeybinding(new Binding());
-    }
-
-    private void Reset()
-    {
-        title.text = keybinding.GetBinding().ToString();
-        binding.text = GameManager.Instance.GetKeyCode(keybinding.GetBinding()).ToString();
-        title.color = Color.black;
-        binding.color = Color.black;
-    }
-
-    private void Start()
-    {
-        GameEvents.current.onKeybindingChange += ValidateKeybinding;
-
-        GameEvents.current.onKeybindingReset += Reset;
-    }
-
-    private void OnDestroy()
-    {
-        GameEvents.current.onKeybindingChange -= ValidateKeybinding;
-
-        GameEvents.current.onKeybindingReset -= Reset;
     }
 
     /// <summary>
-    ///     This function validate the keybinding. If invalid it will color the two bindings red.
+    ///     This function marks this keybinding as invalid
     /// </summary>
-    /// <param name="binding">Dummy and never needed</param>
-    private void ValidateKeybinding(Binding binding) //binding is just there that the event system works
+    public void MarkInvalid()
     {
-        if (GameManager.Instance.CountSameKeyCodesInKeybindings(keybinding.GetKey()) > 1)
-        {
-            title.color = Color.red;
-            this.binding.color = Color.red;
-            Debug.Log("Invalid button: " + keybinding.GetKey());
-        }
-        else
-        {
-            title.color = Color.black;
-            this.binding.color = Color.black;
-            Debug.Log("Valid button: " + keybinding.GetKey());
-        }
+        title.color = Color.red;
+        binding.color = Color.red;
     }
 
     /// <summary>
-    ///     This function is called by the Change Key Button and starts the keychanging process
+    ///     This function marks this keybinding as valid
+    /// </summary>
+    public void MarkValid()
+    {
+        title.color = Color.black;
+        binding.color = Color.black;
+    }
+
+    /// <summary>
+    ///     This function is called when the Change Key Button is pressed
+    ///     It starts the keychanging process
     /// </summary>
     public void ChangeKeyButtonPressed()
     {
@@ -109,16 +86,19 @@ public class KeyBindingUIElement : MonoBehaviour
 
         if (pressedKey != keybinding.GetKey())
         {
-            Keybinding newKeybinding = new Keybinding(keybinding.GetBinding(), pressedKey);
-            Setup(newKeybinding);
+            keybinding.SetKey(pressedKey);
+            UpdateUI();
 
-            GameManager.Instance.ChangeKeybind(newKeybinding);
+            keyBindingManager.ChangeKeybinding(keybinding);
         }
-        else
-        {
-            Keybinding newKeybinding = new Keybinding(keybinding.GetBinding(), pressedKey);
-            Setup(newKeybinding);
-            Debug.Log("Same button " + pressedKey);
-        }
+    }
+
+    /// <summary>
+    ///     This function updates the UI
+    /// </summary>
+    private void UpdateUI()
+    {
+        title.text = keybinding.GetBinding().ToString();
+        binding.text = keybinding.GetKey().ToString();
     }
 }

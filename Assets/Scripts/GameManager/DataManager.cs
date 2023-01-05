@@ -469,16 +469,12 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void ResetKeybindingsToDefault()
+    /// <summary>
+    ///     This function resets the keybindings
+    /// </summary>
+    public void ResetKeybindings()
     {
-        keybindings = GetDefaultKeybindings();
-
-        foreach (Keybinding keybinding in GetKeybindings())
-        {
-            GameEvents.current.KeybindingChange(keybinding.GetBinding());
-        }
-
-        GameEvents.current.KeybindingReset();
+        keybindings = GetDefaultKeybindings();        
     }
 
     private List<AchievementData> GetDummyAchievements()

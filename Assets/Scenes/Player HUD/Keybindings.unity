@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -158,7 +158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.50064087, y: -0.0006713867}
+  m_AnchoredPosition: {x: -0.50061035, y: -0.0006713867}
   m_SizeDelta: {x: 0.51000977, y: -0.23999023}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &19828632
@@ -363,7 +363,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: On exit saves won't be saved!
+  m_text: On exit changes won't be saved!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0ad93bae8466be34a9bdef4732fe6a58, type: 2}
   m_sharedMaterial: {fileID: -8391701417571377768, guid: 0ad93bae8466be34a9bdef4732fe6a58, type: 2}
@@ -897,8 +897,6 @@ GameObject:
   - component: {fileID: 918020612}
   - component: {fileID: 918020611}
   - component: {fileID: 918020610}
-  - component: {fileID: 918020609}
-  - component: {fileID: 918020608}
   m_Layer: 5
   m_Name: Keybindingconfirmation Canvas
   m_TagString: Untagged
@@ -906,32 +904,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &918020608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 918020607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d9108c25e5bf4c469318d23b2c0c28e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  keybindingPrefab: {fileID: 8736629390583445025, guid: 9ed104c1ae40d3a4892a285f2949104f, type: 3}
-  content: {fileID: 0}
---- !u!114 &918020609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 918020607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bdfdbb4fa184c3c478cf632db506b501, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &918020610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1284,6 +1256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keybindingPrefab: {fileID: 8736629390583445025, guid: 9ed104c1ae40d3a4892a285f2949104f, type: 3}
   content: {fileID: 1597790133}
+  confirmationCanvas: {fileID: 918020607}
 --- !u!1 &1386258752
 GameObject:
   m_ObjectHideFlags: 0
@@ -1373,7 +1346,7 @@ GameObject:
   - component: {fileID: 1428646880}
   - component: {fileID: 1428646879}
   m_Layer: 5
-  m_Name: Change Button
+  m_Name: Cancel Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1444,9 +1417,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 918020608}
+      - m_Target: {fileID: 1108062199}
         m_TargetAssemblyTypeName: KeyBindingManager, Assembly-CSharp
-        m_MethodName: ResetKeybindingsToDefault
+        m_MethodName: CancelButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1455,7 +1428,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 0
+        m_CallState: 2
 --- !u!114 &1428646880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1507,7 +1480,7 @@ GameObject:
   - component: {fileID: 1460694228}
   - component: {fileID: 1460694227}
   m_Layer: 5
-  m_Name: Exit Button
+  m_Name: Confirm Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1578,9 +1551,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 918020609}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: CloseSubMenu
+      - m_Target: {fileID: 1108062199}
+        m_TargetAssemblyTypeName: KeyBindingManager, Assembly-CSharp
+        m_MethodName: ConfirmButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1928,7 +1901,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1108062199}
         m_TargetAssemblyTypeName: KeyBindingManager, Assembly-CSharp
-        m_MethodName: ResetKeybindingsToDefault
+        m_MethodName: ResetButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2196,7 +2169,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1386258754}
   m_HandleRect: {fileID: 1386258753}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2298,7 +2271,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Exit
+  m_text: Confirm
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0ad93bae8466be34a9bdef4732fe6a58, type: 2}
   m_sharedMaterial: {fileID: -8391701417571377768, guid: 0ad93bae8466be34a9bdef4732fe6a58, type: 2}
@@ -2459,9 +2432,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1108062198}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: CloseSubMenu
+      - m_Target: {fileID: 1108062199}
+        m_TargetAssemblyTypeName: KeyBindingManager, Assembly-CSharp
+        m_MethodName: BackButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2567,7 +2540,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Change
+  m_text: Cancel
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0ad93bae8466be34a9bdef4732fe6a58, type: 2}
   m_sharedMaterial: {fileID: -8391701417571377768, guid: 0ad93bae8466be34a9bdef4732fe6a58, type: 2}

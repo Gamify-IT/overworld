@@ -19,14 +19,4 @@ public class GameEvents : MonoBehaviour
             onKeybindingChange(binding);
         }
     }
-
-    public event Action onKeybindingReset;
-
-    public void KeybindingReset()
-    {
-        if (onKeybindingReset != null)
-        {
-            onKeybindingReset();
-        }
-    }
 }

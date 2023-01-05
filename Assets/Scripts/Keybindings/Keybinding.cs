@@ -13,7 +13,7 @@ public class Keybinding
         this.key = key;
     }
 
-    #region Getter
+    #region Getter And Setter
 
     public Binding GetBinding()
     {
@@ -23,6 +23,11 @@ public class Keybinding
     public KeyCode GetKey()
     {
         return key;
+    }
+
+    public void SetKey(KeyCode keyCode)
+    {
+        key = keyCode;
     }
 
     #endregion

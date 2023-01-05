@@ -56,7 +56,10 @@ public class PauseMenu : MonoBehaviour
         //add option to go back out of a submenu into the normal pause menu again (instead of clicking the back button)
         else
         {
-            CloseSubMenu();
+            if(!buttonName.Equals("Keybindings"))
+            {
+                CloseSubMenu();
+            }         
         }
     }
 

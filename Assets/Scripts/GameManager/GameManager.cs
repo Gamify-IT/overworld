@@ -314,9 +314,12 @@ public class GameManager : MonoBehaviour
         return DataManager.Instance.CountSameKeyCodesInKeybindings(keyCode);
     }
 
-    public void ResetKeybindingsToDefault()
+    /// <summary>
+    ///     This function resets the keybindings to the default ones
+    /// </summary>
+    public void ResetKeybindings()
     {
-        DataManager.Instance.ResetKeybindingsToDefault();
+        DataManager.Instance.ResetKeybindings();
     }
 
     /// <summary>
