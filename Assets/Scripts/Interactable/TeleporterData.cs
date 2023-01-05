@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class TeleporterData : IGameEntityData
 {
-    public string uuid { get; set; }
     public string teleporterName { get; set; }
     public int worldID { get; set; }
     public int dungeonID { get; set; }
@@ -20,9 +19,8 @@ public class TeleporterData : IGameEntityData
         this.position = Vector2.zero;
     }
 
-    public TeleporterData(string uuid, string name, int worldID, int dungeonID,  int number, Vector2 position, bool isUnlocked)
+    public TeleporterData(string name, int worldID, int dungeonID,  int number, Vector2 position, bool isUnlocked)
     {
-        this.uuid = uuid;
         this.teleporterName = name;
         this.worldID = worldID;
         this.dungeonID = dungeonID;
@@ -31,7 +29,7 @@ public class TeleporterData : IGameEntityData
         this.isUnlocked = isUnlocked;
     }
 
-    public static TeleporterData ConvertDtoToData(TeleporterDTO dto)
+    /*public static TeleporterData ConvertDtoToData(TeleporterDTO dto)
     {
         string uuid = dto.id;
         string name = dto.name;
@@ -47,5 +45,5 @@ public class TeleporterData : IGameEntityData
         }
         TeleporterData data = new TeleporterData(uuid, name, worldID, dungeonID, number, position, unlocked);
         return data;
-    }
+    }*/
 }

@@ -32,7 +32,7 @@ public class DataManager : MonoBehaviour
         {
             return;
         }
-        worldData[worldIndex] = data;
+        worldData[worldIndex] = data;      
     }
 
     /// <summary>
@@ -165,10 +165,6 @@ public class DataManager : MonoBehaviour
     /// <param name="number">The number of the NPC in its area</param>
     public void ActivateTeleporter(int worldIndex, int dungeonIndex, int number)
     {
-        if (worldIndex <= 0 || worldIndex > maxWorld)
-        {
-            return;
-        }
         worldData[worldIndex].UnlockTeleporter(dungeonIndex, number);
     }
 
@@ -362,7 +358,7 @@ public class DataManager : MonoBehaviour
     public List<TeleporterData> GetUnlockedTeleportersInWorld(int worldIndex)
     {
         List<TeleporterData> dataList = new List<TeleporterData>();
-        for (int i = 0; i < GameSettings.GetMaxTeleporters(); i++)
+        for (int i = 1; i < GameSettings.GetMaxTeleporters() + 1; i++)
         {
             TeleporterData currentData = GetWorldData(worldIndex).GetEntityDataAt<TeleporterData>(i);
             if (currentData != null && currentData.isUnlocked)
@@ -370,6 +366,16 @@ public class DataManager : MonoBehaviour
                 dataList.Add(currentData);
             }
         }
+        Debug.Log("UnlockedTPs in World " + worldIndex + ": " + dataList.Count);
+        /*
+        foreach (TeleporterDTO dto in playerData.unlockedTeleporters)
+        {
+            if (dto.area.worldIndex == worldIndex)
+            {
+                TeleporterData correspondingTPData = GetWorldData(dto.area.worldIndex).GetEntityDataAt<TeleporterData>(dto.index);
+                dataList.Add(correspondingTPData);
+            }
+        }*/
         return dataList;
     }
 
@@ -455,6 +461,23 @@ public class DataManager : MonoBehaviour
         }
 
         return worldData[worldIndex].getMinigameStatus(index);
+    }
+
+
+    /// <summary>
+    /// Reads the teleporter config and assigns its data to the TeleporterData array of its belonging IAreaData
+    /// </summary>
+    public void ReadTeleporterConfig()
+    {
+        TextAsset textAsset = Resources.Load<TextAsset>("TeleporterConfig/TeleporterConfigJson");
+        var manager = JsonUtility.FromJson<TeleporterConfigManager>(textAsset.text);
+        Debug.Log("Number of found teleporters: " + manager.teleporters.Length);
+        foreach (TeleporterConfig config in manager.teleporters)
+        {
+            int worldID = config.worldID;
+            WorldData worldData = this.GetWorldData(worldID);
+            worldData.SetTeleporterData(config);        
+        }
     }
 
 }

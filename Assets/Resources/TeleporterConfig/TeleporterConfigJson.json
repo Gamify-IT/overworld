@@ -1,0 +1,36 @@
+{
+    "teleporters": [
+        {
+            "name": "Teleporter 1 World 1",
+            "worldID": 1,
+            "dungeonID": 0,
+            "index": 1,
+            "x": 14,
+            "y": 7
+        },
+        {
+            "name": "Teleporter 2 World 1",
+            "worldID": 1,
+            "dungeonID": 0,
+            "index": 2,
+            "x": 6,
+            "y": 12
+        },
+        {
+            "name": "Teleporter 3 World 1",
+            "worldID": 1,
+            "dungeonID": 0,
+            "index": 3,
+            "x": 21,
+            "y": 14
+        },
+        {
+            "name": "Teleporter 1 World 2",
+            "worldID": 2,
+            "dungeonID": 0,
+            "index": 1,
+            "x": -42,
+            "y": 40
+        }
+    ]
+}

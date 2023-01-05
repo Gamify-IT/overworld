@@ -21,22 +21,18 @@ public class TeleporterDTO
     #region Attributes
 
     public string id;
-    public string name;
     public AreaLocationDTO area;
     public int index;
-    public Position position;
 
     #endregion
 
     #region Constructors
 
-    public TeleporterDTO(string id, string name, AreaLocationDTO area, int index, Vector2 position)
+    public TeleporterDTO(string id, AreaLocationDTO area, int index)
     {
         this.id = id;
-        this.name = name;
         this.area = area;
         this.index = index;
-        this.position = new Position(position.x, position.y);
     }
 
     public TeleporterDTO()

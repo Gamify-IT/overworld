@@ -55,7 +55,7 @@ public class PlayerstatisticDTO
         unlockedAreas[0] = unlockedWorld;
         currentArea = unlockedWorld;
         unlockedDungeons = null;
-        unlockedTeleporters = null;
+        unlockedTeleporters = new TeleporterDTO[0];
         userId = "";
         username = "";
         knowledge = 0;

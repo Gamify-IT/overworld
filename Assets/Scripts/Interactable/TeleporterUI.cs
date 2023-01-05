@@ -41,10 +41,7 @@ public class TeleporterUI : MonoBehaviour
             }
             if (worldIndex == teleporter.worldID && dataList.Count == 1)
             {
-                if (dataList.Count == 1)
-                {
-                    continue;
-                }
+                continue;
             }
             GameObject newToggle = GameObject.Instantiate(prototypeToggle, worldSelectionContent);
             newToggle.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "World " + worldIndex.ToString();
@@ -70,7 +67,7 @@ public class TeleporterUI : MonoBehaviour
         foreach (TeleporterData data in dataList)
         {
             print("InDataNumber " + data.teleporterNumber);
-            if (data.teleporterNumber == correspondingTeleporter.teleporterNumber)
+            if (data.teleporterNumber == correspondingTeleporter.teleporterNumber && data.worldID == correspondingTeleporter.worldID && data.dungeonID == correspondingTeleporter.dungeonID)
             {
                 continue;
             }

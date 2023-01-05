@@ -10,16 +10,16 @@ using UnityEngine;
 public class TeleporterUnlockedEvent
 {
     #region Attributes
-    public string teleporterID;
-    public bool completed;
+    public AreaLocationDTO area;
+    public int index;
     public string userId;
     #endregion
 
     #region Constructor
-    public TeleporterUnlockedEvent(string teleporterID, bool unlocked, string userId)
+    public TeleporterUnlockedEvent(int worldID, int dungeonID, int index, string userId)
     {
-        this.teleporterID = teleporterID;
-        this.completed = unlocked;
+        this.area = new AreaLocationDTO(worldID, dungeonID);
+        this.index = index;
         this.userId = userId;
     }
     #endregion

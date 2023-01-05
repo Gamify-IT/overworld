@@ -220,6 +220,7 @@ public class GameManager : MonoBehaviour
     /// <param name="dungeonIndex">The index of the dungeon (0 if world)</param>
     public void SetData(int worldIndex, int dungeonIndex)
     {
+        DataManager.Instance.ReadTeleporterConfig();
         if (dungeonIndex != 0)
         {
             Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
@@ -263,19 +264,21 @@ public class GameManager : MonoBehaviour
     /// <param name="dungeonIndex"></param>
     /// <param name="number"></param>
     /// <param name="uuid"></param>
-    public async void ActivateTeleporter(int worldIndex, int dungeonIndex, int number, string uuid)
+    public async void ActivateTeleporter(int worldIndex, int dungeonIndex, int number)
     {
-        string path = overworldBackendPath + "/internal/submit-teleporter-pass";
+        string path = overworldBackendPath + "/courses/" + courseId + "/teleporters";
 
-        TeleporterUnlockedEvent teleporterData = new TeleporterUnlockedEvent(uuid, true, userId);
+        TeleporterUnlockedEvent teleporterData = new TeleporterUnlockedEvent(worldIndex, dungeonIndex, number, userId);
         string json = JsonUtility.ToJson(teleporterData, true);
 
+        DataManager.Instance.ActivateTeleporter(worldIndex, dungeonIndex, number);
         bool successful = await RestRequest.PostRequest(path, json);
 
-        if (successful)
+        if (!successful)
         {
-            DataManager.Instance.ActivateTeleporter(worldIndex, dungeonIndex, number);
+            Debug.LogError("Teleporter unlocking could not be transfered to Backend.");
         }
+
     }
 
     /// <summary>
