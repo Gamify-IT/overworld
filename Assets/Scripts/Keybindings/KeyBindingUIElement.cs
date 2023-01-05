@@ -1,8 +1,7 @@
-using UnityEngine;
-using TMPro;
-using Cysharp.Threading.Tasks;
-using System.Collections;
 using System;
+using System.Collections;
+using TMPro;
+using UnityEngine;
 
 public class KeyBindingUIElement : MonoBehaviour
 {
@@ -22,6 +21,38 @@ public class KeyBindingUIElement : MonoBehaviour
         binding.text = keybinding.GetKey().ToString();
         title.color = Color.black;
         binding.color = Color.black;
+
+        ValidateKeybinding(new Binding());
+    }
+
+    private void Start()
+    {
+        GameEvents.current.onKeybindingChange += ValidateKeybinding;
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onKeybindingChange -= ValidateKeybinding;
+    }
+
+    /// <summary>
+    ///     This function validate the keybinding. If invalid it will color the two bindings red.
+    /// </summary>
+    /// <param name="binding">Dummy and never needed</param>
+    private void ValidateKeybinding(Binding binding) //binding is just there that the event system works
+    {
+        if (GameManager.Instance.CountSameKeyCodesInKeybindings(keybinding.GetKey()) > 1)
+        {
+            title.color = Color.red;
+            this.binding.color = Color.red;
+            Debug.Log("Invalid button: " + keybinding.GetKey());
+        }
+        else
+        {
+            title.color = Color.black;
+            this.binding.color = Color.black;
+            Debug.Log("Valid button: " + keybinding.GetKey());
+        }
     }
 
     /// <summary>
@@ -32,7 +63,7 @@ public class KeyBindingUIElement : MonoBehaviour
         title.color = Color.black;
         binding.color = Color.black;
         binding.text = "___";
-        StartCoroutine(UpdateKeyBinding());        
+        StartCoroutine(UpdateKeyBinding());
     }
 
     /// <summary>
@@ -43,7 +74,6 @@ public class KeyBindingUIElement : MonoBehaviour
     /// </summary>
     private IEnumerator UpdateKeyBinding()
     {
-        
         Array keyCodes = Enum.GetValues(typeof(KeyCode));
         KeyCode pressedKey = KeyCode.None;
         bool userInput = false;
@@ -61,23 +91,16 @@ public class KeyBindingUIElement : MonoBehaviour
                     }
                 }
             }
+
             yield return null;
-        }        
+        }
+
         if (pressedKey != keybinding.GetKey())
         {
             Keybinding newKeybinding = new Keybinding(keybinding.GetBinding(), pressedKey);
             Setup(newKeybinding);
-            if (GameManager.Instance.IsValidKeyCode(pressedKey))
-            {
-                Debug.Log("Valid button " + pressedKey);
-                GameManager.Instance.ChangeKeybind(newKeybinding);
-            }
-            else
-            {
-                Debug.Log("Invalid button " + pressedKey);
-                title.color = Color.red;
-                binding.color = Color.red;
-            }
+
+            GameManager.Instance.ChangeKeybind(newKeybinding);
         }
         else
         {

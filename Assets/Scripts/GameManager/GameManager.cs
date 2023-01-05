@@ -1,13 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
 
 /// <summary>
-///     The <c>GameManager</c> retrievs all needed data from the backend, stores it in the <c>DataManager</c> and sets up the objects via the <c>ObjectMananger</c> depending on those data.
+///     The <c>GameManager</c> retrievs all needed data from the backend, stores it in the <c>DataManager</c> and sets up
+///     the objects via the <c>ObjectMananger</c> depending on those data.
 /// </summary>
 public class GameManager : MonoBehaviour
 {
@@ -125,19 +126,23 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(path + "/playerstatistics/");
+        Optional<PlayerstatisticDTO> playerStatistics =
+            await RestRequest.GetRequest<PlayerstatisticDTO>(path + "/playerstatistics/");
         if (!playerStatistics.IsPresent())
         {
             loadingError = true;
         }
 
-        Optional<PlayerTaskStatisticDTO[]> minigameStatistics = await RestRequest.GetArrayRequest<PlayerTaskStatisticDTO>(path + "/playerstatistics/player-task-statistics");
+        Optional<PlayerTaskStatisticDTO[]> minigameStatistics =
+            await RestRequest.GetArrayRequest<PlayerTaskStatisticDTO>(path +
+                                                                      "/playerstatistics/player-task-statistics");
         if (!minigameStatistics.IsPresent())
         {
             loadingError = true;
         }
 
-        Optional<PlayerNPCStatisticDTO[]> npcStatistics = await RestRequest.GetArrayRequest<PlayerNPCStatisticDTO>(path + "/playerstatistics/player-npc-statistics");
+        Optional<PlayerNPCStatisticDTO[]> npcStatistics =
+            await RestRequest.GetArrayRequest<PlayerNPCStatisticDTO>(path + "/playerstatistics/player-npc-statistics");
         if (!npcStatistics.IsPresent())
         {
             loadingError = true;
@@ -151,6 +156,7 @@ public class GameManager : MonoBehaviour
             {
                 DataManager.Instance.SetWorldData(worldIndex, worldDTOs[worldIndex].Value());
             }
+
             DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
             DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
@@ -159,6 +165,7 @@ public class GameManager : MonoBehaviour
         {
             GetDummyData();
         }
+
         Debug.Log("Everything set up");
 
         return loadingError;
@@ -175,7 +182,7 @@ public class GameManager : MonoBehaviour
         minigameRespawnPosition = respawnLocation;
         minigameWorldIndex = worldIndex;
         minigameDungeonIndex = dungeonIndex;
-        this.sceneName = BuildSceneName();
+        sceneName = BuildSceneName();
         Debug.Log("Setup minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
     }
 
@@ -190,6 +197,7 @@ public class GameManager : MonoBehaviour
         {
             sceneName = "Dungeon " + minigameWorldIndex + "-" + minigameDungeonIndex;
         }
+
         Debug.Log(sceneName);
         return sceneName;
     }
@@ -205,12 +213,11 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function is used by a teleporter to update the position of the player.
+    ///     This function is used by a teleporter to update the position of the player.
     /// </summary>
     public void ExecuteTeleportation()
     {
         Reload();
-
     }
 
     /// <summary>
@@ -298,13 +305,13 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function checks, whether a <c>KeyCode</c> is already in use or not
+    ///     This function count how often <c>KeyCode<c> is in the keybindings dictonary
     /// </summary>
-    /// <param name="keyCode">The keyCode to be checked</param>
-    /// <returns>False, if the <c>KeyCode</c> is already in use, true otherwise</returns>
-    public bool IsValidKeyCode(KeyCode keyCode)
+    /// <param name="keyCode">The keyCode to be counted</param>
+    /// <returns>Integer how often <c>KeyCode<c> is in the keybindings dictonary</returns>
+    public int CountSameKeyCodesInKeybindings(KeyCode keyCode)
     {
-        return DataManager.Instance.IsValidKeyCode(keyCode);
+        return DataManager.Instance.CountSameKeyCodesInKeybindings(keyCode);
     }
 
     /// <summary>
@@ -348,18 +355,16 @@ public class GameManager : MonoBehaviour
 
         Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(uri);
 
-        if(playerStatistics.IsPresent())
+        if (playerStatistics.IsPresent())
         {
             return true;
         }
-        else
-        {
-            string postUri = overworldBackendPath + "/courses/" + courseId + "/playerstatistics";
-            UserData userData = new UserData(userId, username);
-            string json = JsonUtility.ToJson(userData, true);
-            bool userCreated = await RestRequest.PostRequest(postUri, json);
-            return userCreated;
-        }
+
+        string postUri = overworldBackendPath + "/courses/" + courseId + "/playerstatistics";
+        UserData userData = new UserData(userId, username);
+        string json = JsonUtility.ToJson(userData, true);
+        bool userCreated = await RestRequest.PostRequest(postUri, json);
+        return userCreated;
     }
 
     /// <summary>
@@ -368,7 +373,8 @@ public class GameManager : MonoBehaviour
     private async void Reload()
     {
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
-        await LoadingManager.Instance.ReloadData(sceneName, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
+        await LoadingManager.Instance.ReloadData(sceneName, minigameWorldIndex, minigameDungeonIndex,
+            minigameRespawnPosition);
     }
 
     /// <summary>
@@ -377,10 +383,11 @@ public class GameManager : MonoBehaviour
     private void GetDummyData()
     {
         //worldDTO dummy data
-        for(int worldIndex = 0; worldIndex<maxWorld; worldIndex++)
+        for (int worldIndex = 0; worldIndex < maxWorld; worldIndex++)
         {
             DataManager.Instance.SetWorldData(worldIndex, new WorldDTO());
         }
+
         DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
         AchievementStatistic[] achivements = GetDummyAchievements();
         Debug.Log("Game Manager, achievements: " + achivements.Length);
@@ -391,10 +398,10 @@ public class GameManager : MonoBehaviour
     {
         AchievementStatistic[] statistcs = new AchievementStatistic[1];
         List<string> categories1 = new() { "Blub", "Bla" };
-        Achievement achievement1 = new Achievement("Achievement 1", "First Achievement", categories1, "achievement1", 5);
+        Achievement achievement1 =
+            new Achievement("Achievement 1", "First Achievement", categories1, "achievement1", 5);
         AchievementStatistic achievementStatistic1 = new AchievementStatistic("blub", achievement1, 0, false);
         statistcs[0] = achievementStatistic1;
         return statistcs;
     }
-
 }
