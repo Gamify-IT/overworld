@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,13 +34,18 @@ public class KeyBindingManager : MonoBehaviour
         GameObject keybindingObject = Instantiate(keybindingPrefab, content.transform, false);
 
         KeyBindingUIElement keyBindingUIElement = keybindingObject.GetComponent<KeyBindingUIElement>();
-        if(keyBindingUIElement != null)
+        if (keyBindingUIElement != null)
         {
-            keyBindingUIElement.Setup(keybinding);            
+            keyBindingUIElement.Setup(keybinding);
         }
         else
         {
             Destroy(keybindingObject);
         }
+    }
+
+    public void ResetKeybindingsToDefault()
+    {
+        GameManager.Instance.ResetKeybindingsToDefault();
     }
 }

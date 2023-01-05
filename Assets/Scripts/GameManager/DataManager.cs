@@ -469,6 +469,18 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    public void ResetKeybindingsToDefault()
+    {
+        keybindings = GetDefaultKeybindings();
+
+        foreach (Keybinding keybinding in GetKeybindings())
+        {
+            GameEvents.current.KeybindingChange(keybinding.GetBinding());
+        }
+
+        GameEvents.current.KeybindingReset();
+    }
+
     private List<AchievementData> GetDummyAchievements()
     {
         List<string> categories1 = new() { "Blub", "Bla" };

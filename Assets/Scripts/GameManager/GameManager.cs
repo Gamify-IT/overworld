@@ -314,6 +314,11 @@ public class GameManager : MonoBehaviour
         return DataManager.Instance.CountSameKeyCodesInKeybindings(keyCode);
     }
 
+    public void ResetKeybindingsToDefault()
+    {
+        DataManager.Instance.ResetKeybindingsToDefault();
+    }
+
     /// <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
     ///     deletes the object otherwise

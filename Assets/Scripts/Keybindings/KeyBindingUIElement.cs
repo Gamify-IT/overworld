@@ -25,14 +25,26 @@ public class KeyBindingUIElement : MonoBehaviour
         ValidateKeybinding(new Binding());
     }
 
+    private void Reset()
+    {
+        title.text = keybinding.GetBinding().ToString();
+        binding.text = GameManager.Instance.GetKeyCode(keybinding.GetBinding()).ToString();
+        title.color = Color.black;
+        binding.color = Color.black;
+    }
+
     private void Start()
     {
         GameEvents.current.onKeybindingChange += ValidateKeybinding;
+
+        GameEvents.current.onKeybindingReset += Reset;
     }
 
     private void OnDestroy()
     {
         GameEvents.current.onKeybindingChange -= ValidateKeybinding;
+
+        GameEvents.current.onKeybindingReset -= Reset;
     }
 
     /// <summary>
