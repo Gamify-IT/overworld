@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// This script manages the pause menu.
+///     This script manages the pause menu.
 /// </summary>
 public class PauseMenu : MonoBehaviour
 {
@@ -11,21 +11,35 @@ public class PauseMenu : MonoBehaviour
     public static bool subMenuOpen;
     public static string buttonName;
 
+    //KeyCodes
+    private KeyCode cancel;
+
+    private void Start()
+    {
+        cancel = GameManager.Instance.GetKeyCode(Binding.CANCEL);
+        GameEvents.current.onKeybindingChange += UpdateKeybindings;
+    }
+
     /// <summary>
-    /// The <c>Update</c> function is called once every frame.
-    /// This function checks, if an input occured and if so, adapts the pause menu accordingly.
+    ///     The <c>Update</c> function is called once every frame.
+    ///     This function checks, if an input occured and if so, adapts the pause menu accordingly.
     /// </summary>
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !PlayerAnimation.Instance.IsBusy())
+        if (Input.GetKeyDown(cancel) && !PlayerAnimation.Instance.IsBusy())
         {
             PauseOrResume();
         }
     }
 
+    private void OnDestroy()
+    {
+        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+    }
+
     /// <summary>
-    /// This function changes the state of the pause menu.
-    /// It opens or closes the menu or closes a submenu, based on the current state.
+    ///     This function changes the state of the pause menu.
+    ///     It opens or closes the menu or closes a submenu, based on the current state.
     /// </summary>
     public void PauseOrResume()
     {
@@ -42,12 +56,15 @@ public class PauseMenu : MonoBehaviour
         //add option to go back out of a submenu into the normal pause menu again (instead of clicking the back button)
         else
         {
-            CloseSubMenu();
+            if(!buttonName.Equals("Keybindings"))
+            {
+                CloseSubMenu();
+            }         
         }
     }
 
     /// <summary>
-    /// This function closes the pause menu.
+    ///     This function closes the pause menu.
     /// </summary>
     public void Resume()
     {
@@ -57,7 +74,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// This function opens the pause menu.
+    ///     This function opens the pause menu.
     /// </summary>
     public void Pause()
     {
@@ -67,8 +84,8 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// This function is called by a menu button.
-    /// This function stores which button was pressed.
+    ///     This function is called by a menu button.
+    ///     This function stores which button was pressed.
     /// </summary>
     public void SubMenuSelection()
     {
@@ -79,8 +96,8 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// This function is called by a menu button.
-    /// This function opens the submenu.
+    ///     This function is called by a menu button.
+    ///     This function opens the submenu.
     /// </summary>
     public void OpenSubMenu()
     {
@@ -92,7 +109,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// This function closes a submenu.
+    ///     This function closes a submenu.
     /// </summary>
     public void CloseSubMenu()
     {
@@ -100,5 +117,17 @@ public class PauseMenu : MonoBehaviour
         subMenuOpen = false;
         SceneManager.UnloadScene(buttonName);
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
+    }
+
+    /// <summary>
+    ///     This function updates the keybindings
+    /// </summary>
+    /// <param name="binding">The binding that changed</param>
+    private void UpdateKeybindings(Binding binding)
+    {
+        if (binding == Binding.CANCEL)
+        {
+            cancel = GameManager.Instance.GetKeyCode(Binding.CANCEL);
+        }
     }
 }

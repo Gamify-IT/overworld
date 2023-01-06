@@ -32,13 +32,19 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     private bool inTrigger = false;
     private bool interactable = true;
 
+    //KeyCodes
+    private KeyCode interact;
+
     private void Awake()
     {
         ObjectManager.Instance.AddGameEntity<Teleporter,TeleporterData>(this.gameObject, worldID, dungeonID, teleporterNumber);
+        interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+        GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
     private void OnDestroy()
     {
         ObjectManager.Instance.RemoveGameEntity<Teleporter,TeleporterData>(worldID, dungeonID, teleporterNumber);
+        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
     }
 
     private void Start()
@@ -53,7 +59,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     {
         if (inTrigger && interactable && currentTeleporterCanvas == null)
         {
-            if (Input.GetKeyDown("e"))
+            if (Input.GetKeyDown(interact))
             {
                 interactable = false;
                 GameObject newCanvas = GameObject.Instantiate(teleporterCanvas);
@@ -183,5 +189,13 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     {
             isUnlocked = data.isUnlocked;
             SetUnLockedState(isUnlocked);
+    }
+
+    private void UpdateKeybindings(Binding binding)
+    {
+        if (binding == Binding.INTERACT)
+        {
+            interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+        }
     }
 }
