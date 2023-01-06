@@ -1,8 +1,8 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
-///     The <c>DataManager</c> stores all required data to set up the objects in the areas. 
+///     The <c>DataManager</c> stores all required data to set up the objects in the areas.
 /// </summary>
 public class DataManager : MonoBehaviour
 {
@@ -20,6 +20,7 @@ public class DataManager : MonoBehaviour
     private WorldData[] worldData;
     private PlayerstatisticDTO playerData;
     private List<AchievementData> achievementData;
+    private Dictionary<Binding, KeyCode> keybindings;
 
     /// <summary>
     ///     This function sets given data for the specified world
@@ -28,10 +29,11 @@ public class DataManager : MonoBehaviour
     /// <param name="data">The data to set</param>
     public void SetWorldData(int worldIndex, WorldData data)
     {
-        if(worldIndex <= 0 || worldIndex > maxWorld)
+        if (worldIndex <= 0 || worldIndex > maxWorld)
         {
             return;
         }
+
         worldData[worldIndex] = data;
     }
 
@@ -46,6 +48,7 @@ public class DataManager : MonoBehaviour
         {
             return;
         }
+
         WorldData convertedData = WorldData.ConvertDtoToData(data);
         worldData[worldIndex] = convertedData;
     }
@@ -61,6 +64,7 @@ public class DataManager : MonoBehaviour
         {
             return null;
         }
+
         return worldData[worldIndex];
     }
 
@@ -76,10 +80,12 @@ public class DataManager : MonoBehaviour
         {
             return null;
         }
-        if(dungeonIndex <= 0 || dungeonIndex > maxDungeons)
+
+        if (dungeonIndex <= 0 || dungeonIndex > maxDungeons)
         {
             return null;
         }
+
         return worldData[worldIndex].getDungeonData(dungeonIndex);
     }
 
@@ -143,12 +149,14 @@ public class DataManager : MonoBehaviour
         {
             return;
         }
-        if(dungeonIndex != 0)
+
+        if (dungeonIndex != 0)
         {
             if (dungeonIndex <= 0 || dungeonIndex > maxDungeons)
             {
                 return;
             }
+
             worldData[worldIndex].npcCompleted(dungeonIndex, number);
         }
         else
@@ -244,12 +252,12 @@ public class DataManager : MonoBehaviour
     {
         achievementData = new List<AchievementData>();
 
-        if(achievementStatistics == null)
+        if (achievementStatistics == null)
         {
             return;
         }
 
-        foreach(AchievementStatistic statistic in achievementStatistics)
+        foreach (AchievementStatistic statistic in achievementStatistics)
         {
             AchievementData achievement = AchievementData.ConvertFromAchievementStatistic(statistic);
             achievementData.Add(achievement);
@@ -257,7 +265,7 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function returns the percentage of completed minigames in the given world
+    ///     This function returns the percentage of completed minigames in the given world
     /// </summary>
     /// <param name="worldIndex">The index of the world</param>
     /// <returns>The percentage of completed minigames</returns>
@@ -281,19 +289,18 @@ public class DataManager : MonoBehaviour
                 }
             }
         }
+
         Debug.Log(completedMinigames + "/" + minigames + " minigames completed");
         if (minigames == 0)
         {
             return 0f;
         }
-        else
-        {
-            return (completedMinigames * 1f) / (minigames * 1f);
-        }
+
+        return completedMinigames * 1f / (minigames * 1f);
     }
 
     /// <summary>
-    /// This function returns the percentage of completed minigames in the given dungeon
+    ///     This function returns the percentage of completed minigames in the given dungeon
     /// </summary>
     /// <param name="worldIndex">The index of the world the dungeon is in</param>
     /// <param name="dungeonIndex">The index of the dungeon</param>
@@ -307,35 +314,37 @@ public class DataManager : MonoBehaviour
         {
             return 0f;
         }
+
         for (int minigameIndex = 1; minigameIndex <= GameSettings.GetMaxMinigames(); minigameIndex++)
         {
             if (dungeonData.GetEntityDataAt<MinigameData>(minigameIndex) != null)
             {
-                if (worldData[worldIndex].getMinigameStatus(minigameIndex, dungeonIndex) == global::MinigameStatus.active)
+                if (worldData[worldIndex].getMinigameStatus(minigameIndex, dungeonIndex) ==
+                    global::MinigameStatus.active)
                 {
                     minigames++;
                 }
-                else if (worldData[worldIndex].getMinigameStatus(minigameIndex, dungeonIndex) == global::MinigameStatus.done)
+                else if (worldData[worldIndex].getMinigameStatus(minigameIndex, dungeonIndex) ==
+                         global::MinigameStatus.done)
                 {
                     minigames++;
                     completedMinigames++;
                 }
             }
         }
+
         Debug.Log(completedMinigames + "/" + minigames + " minigames completed");
         if (minigames == 0)
         {
             return 0f;
         }
-        else
-        {
-            return (completedMinigames * 1f) / (minigames * 1f);
-        }
+
+        return completedMinigames * 1f / (minigames * 1f);
     }
 
 
     /// <summary>
-    /// Returns a list of all unlocked teleporters in a world (including its dungeons)
+    ///     Returns a list of all unlocked teleporters in a world (including its dungeons)
     /// </summary>
     /// <param name="worldIndex"></param>
     /// <returns></returns>
@@ -350,10 +359,10 @@ public class DataManager : MonoBehaviour
                 dataList.Add(currentData);
             }
         }
+
         return dataList;
     }
 
-    
 
     /// <summary>
     ///     This function returns all stored achievements
@@ -363,6 +372,42 @@ public class DataManager : MonoBehaviour
     {
         Debug.Log("Data Manager, achievements: " + achievementData.Count);
         return achievementData;
+    }
+
+    /// <summary>
+    ///     This function returns all stored keybindings
+    /// </summary>
+    /// <returns>A List containing all keybindings</returns>
+    public List<Keybinding> GetKeybindings()
+    {
+        return KeybindingsAsList();
+    }
+
+    /// <summary>
+    ///     This function changes the keybind of the given <c>Binding</c> to the given <c>KeyCode</c>
+    /// </summary>
+    /// <param name="keybinding">The binding to change</param>
+    public void ChangeKeybind(Keybinding keybinding)
+    {
+        Binding binding = keybinding.GetBinding();
+        keybindings[binding] = keybinding.GetKey();
+        GameEvents.current.KeybindingChange(binding);
+    }
+
+    /// <summary>
+    ///     This function returns the <c>KeyCode</c> for the given <c>Binding</c>
+    /// </summary>
+    /// <param name="binding">The binding the <c>KeyCode</c> should be returned for</param>
+    /// <returns>The <c>KeyCode</c> of the binding if present, KeyCode.NONE otherwise</returns>
+    public KeyCode GetKeyCode(Binding binding)
+    {
+        KeyCode keyCode = KeyCode.None;
+        if (keybindings.ContainsKey(binding))
+        {
+            keyCode = keybindings[binding];
+        }
+
+        return keyCode;
     }
 
     /// <summary>
@@ -396,6 +441,7 @@ public class DataManager : MonoBehaviour
         worldData = new WorldData[maxWorld + 1];
         playerData = new PlayerstatisticDTO();
         achievementData = GetDummyAchievements();
+        keybindings = GetDefaultKeybindings();
 
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
         {
@@ -403,16 +449,49 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///     This function resets the keybindings
+    /// </summary>
+    public void ResetKeybindings()
+    {
+        keybindings = GetDefaultKeybindings();        
+    }
+
     private List<AchievementData> GetDummyAchievements()
     {
         List<string> categories1 = new() { "Blub", "Bla" };
-        AchievementData achievement1 = new AchievementData("Achievement 1", "First Achievement", categories1, "target", 5, 1, false);
+        AchievementData achievement1 =
+            new AchievementData("Achievement 1", "First Achievement", categories1, "target", 5, 1, false);
 
         List<string> categories2 = new() { "Story" };
-        AchievementData achievement2 = new AchievementData("Achievement 2", "Second Achievement", categories2, "achievement2", 3, 3, true);
+        AchievementData achievement2 = new AchievementData("Achievement 2", "Second Achievement", categories2,
+            "achievement2", 3, 3, true);
 
-        List<AchievementData> achievements = new List<AchievementData>() { achievement1, achievement2 };
+        List<AchievementData> achievements = new List<AchievementData> { achievement1, achievement2 };
         return achievements;
+    }
+
+    /// <summary>
+    ///     This function returns the default keybindings
+    /// </summary>
+    /// <returns>A dictionary containing the default keybindings</returns>
+    private Dictionary<Binding, KeyCode> GetDefaultKeybindings()
+    {
+        Dictionary<Binding, KeyCode> keybindings = new Dictionary<Binding, KeyCode>();
+
+        keybindings.Add(Binding.MOVE_UP, KeyCode.W);
+        keybindings.Add(Binding.MOVE_LEFT, KeyCode.A);
+        keybindings.Add(Binding.MOVE_DOWN, KeyCode.S);
+        keybindings.Add(Binding.MOVE_RIGHT, KeyCode.D);
+        keybindings.Add(Binding.SPRINT, KeyCode.LeftShift);
+        keybindings.Add(Binding.INTERACT, KeyCode.E);
+        keybindings.Add(Binding.CANCEL, KeyCode.Escape);
+        keybindings.Add(Binding.MINIMAP_ZOOM_IN, KeyCode.P);
+        keybindings.Add(Binding.MINIMAP_ZOOM_OUT, KeyCode.O);
+        keybindings.Add(Binding.GAME_ZOOM_IN, KeyCode.Alpha0);
+        keybindings.Add(Binding.GAME_ZOOM_OUT, KeyCode.Alpha9);
+
+        return keybindings;
     }
 
     /// <summary>
@@ -437,4 +516,20 @@ public class DataManager : MonoBehaviour
         return worldData[worldIndex].getMinigameStatus(index);
     }
 
+    /// <summary>
+    ///     This function returns all keybindings as a list of <c>Keybinding</c>
+    /// </summary>
+    /// <returns>A list containing all keybindings</returns>
+    private List<Keybinding> KeybindingsAsList()
+    {
+        List<Keybinding> keybindingsList = new List<Keybinding>();
+
+        foreach (KeyValuePair<Binding, KeyCode> pair in keybindings)
+        {
+            Keybinding newBinding = new Keybinding(pair.Key, pair.Value);
+            keybindingsList.Add(newBinding);
+        }
+
+        return keybindingsList;
+    }
 }

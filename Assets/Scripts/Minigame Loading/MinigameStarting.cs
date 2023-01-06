@@ -8,6 +8,15 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class MinigameStarting : MonoBehaviour
 {
+    //KeyCodes
+    private KeyCode cancel;
+
+    private void Start()
+    {
+        cancel = GameManager.Instance.GetKeyCode(Binding.CANCEL);
+        GameEvents.current.onKeybindingChange += UpdateKeybindings;
+    }
+
     /// <summary>
     ///     This function resets the game- & hightscoreText.
     /// </summary>
@@ -24,10 +33,15 @@ public class MinigameStarting : MonoBehaviour
     private void Update()
     {
         //esc handling
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(cancel))
         {
             QuitMinigame();
         }
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
     }
 
     [DllImport("__Internal")]
@@ -89,6 +103,18 @@ public class MinigameStarting : MonoBehaviour
         PlayerAnimation.Instance.SetBusy(false);
         PlayerAnimation.Instance.EnableMovement();
         SceneManager.UnloadSceneAsync("MinigameStarting Overlay");
+    }
+
+    /// <summary>
+    ///     This function updates the keybindings
+    /// </summary>
+    /// <param name="binding">The binding that changed</param>
+    private void UpdateKeybindings(Binding binding)
+    {
+        if (binding == Binding.CANCEL)
+        {
+            cancel = GameManager.Instance.GetKeyCode(Binding.CANCEL);
+        }
     }
 
     #region Singleton

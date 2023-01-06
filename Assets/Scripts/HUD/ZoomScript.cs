@@ -20,6 +20,12 @@ public class ZoomScript : MonoBehaviour
     private float minimapIconResizeValue = (float)9;
     private PixelPerfectCamera pixelCam;
 
+    //KeyCodes
+    private KeyCode minimapZoomIn;
+    private KeyCode minimapZoomOut;
+    private KeyCode gameZoomIn;
+    private KeyCode gameZoomOut;
+
     public static string areaName = "Loading...";
 
     /// <summary>
@@ -33,6 +39,11 @@ public class ZoomScript : MonoBehaviour
         pixelCam = GameObject.Find("Main Camera").GetComponent<PixelPerfectCamera>();
         miniMapCam.transform.SetParent(player.transform);
         miniMapCam.transform.localPosition = new Vector3(0, 0, zoomLevel);
+        minimapZoomIn = GameManager.Instance.GetKeyCode(Binding.MINIMAP_ZOOM_IN);
+        minimapZoomOut = GameManager.Instance.GetKeyCode(Binding.MINIMAP_ZOOM_OUT);
+        gameZoomIn = GameManager.Instance.GetKeyCode(Binding.GAME_ZOOM_IN);
+        gameZoomOut = GameManager.Instance.GetKeyCode(Binding.GAME_ZOOM_OUT);
+        GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
 
     /// <summary>
@@ -42,25 +53,25 @@ public class ZoomScript : MonoBehaviour
     void Update()
     {
         //zoom in
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(minimapZoomIn))
         {
             MinimapZoomIn();
         }
 
         //zoom out
-        if (Input.GetKeyDown(KeyCode.O))
+        if (Input.GetKeyDown(minimapZoomOut))
         {
             MinimapZoomOut();
         }
 
         //zoom game in
-        if (Input.GetKeyDown(KeyCode.Alpha0))
+        if (Input.GetKeyDown(gameZoomIn))
         {
             GameZoomIn();
         }
 
         //zoom game out
-        if (Input.GetKeyDown(KeyCode.Alpha9))
+        if (Input.GetKeyDown(gameZoomOut))
         {
             GameZoomOut();
         }
@@ -72,6 +83,11 @@ public class ZoomScript : MonoBehaviour
             minimapIcon.transform.localScale = new Vector3(-1 * zoomLevel / minimapIconResizeValue,
                 -1 * zoomLevel / minimapIconResizeValue, 0);
         }
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
     }
 
     /// <summary>
@@ -149,6 +165,30 @@ public class ZoomScript : MonoBehaviour
             maxZoomLevel += 10;
             minZoomLevel += 10;
             MinimapZoomIn();
+        }
+    }
+
+    /// <summary>
+    ///     This function updates the keybindings
+    /// </summary>
+    /// <param name="binding">The binding that changed</param>
+    private void UpdateKeybindings(Binding binding)
+    {
+        if (binding == Binding.MINIMAP_ZOOM_IN)
+        {
+            minimapZoomIn = GameManager.Instance.GetKeyCode(Binding.MINIMAP_ZOOM_IN);
+        }
+        else if (binding == Binding.MINIMAP_ZOOM_OUT)
+        {
+            minimapZoomOut = GameManager.Instance.GetKeyCode(Binding.MINIMAP_ZOOM_OUT);
+        }
+        else if (binding == Binding.GAME_ZOOM_IN)
+        {
+            gameZoomIn = GameManager.Instance.GetKeyCode(Binding.GAME_ZOOM_IN);
+        }
+        else if (binding == Binding.GAME_ZOOM_OUT)
+        {
+            gameZoomOut = GameManager.Instance.GetKeyCode(Binding.GAME_ZOOM_OUT);
         }
     }
 }
