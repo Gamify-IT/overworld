@@ -127,6 +127,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         hasBeenTalkedTo = true;
         speechIndicator.SetActive(false);
         GameManager.Instance.CompleteNPC(world, dungeon, number, uuid);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TALK_TO_NPCS, 1);
     }
 
     /// <summary>

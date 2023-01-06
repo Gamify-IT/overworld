@@ -246,6 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b5c52f8b6c5b2e4092829fdd2d9e475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  achievementNotificationManagerPrefab: {fileID: 3353499656544615801, guid: 84d1d0654029bb2418bc58e6a9bedbb4, type: 3}
 --- !u!4 &1749240694
 Transform:
   m_ObjectHideFlags: 0

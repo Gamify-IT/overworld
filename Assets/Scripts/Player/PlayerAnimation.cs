@@ -16,12 +16,17 @@ public class PlayerAnimation : MonoBehaviour
     private float currentSpeed;
     private float targetSpeed;
 
+    private Vector3 lastPosition;
+    private float distanceWalked = 0;
+    private int achievementUpdateIntervall = 1;
+
     //KeyCodes
     private KeyCode moveUp;
     private KeyCode moveLeft;
     private KeyCode moveDown;
     private KeyCode moveRight;
     private KeyCode sprint;
+
 
     /// <summary>
     ///     This method is called before the first frame update.
@@ -34,6 +39,9 @@ public class PlayerAnimation : MonoBehaviour
         playerRigidBody = GetComponent<Rigidbody2D>();
         currentSpeed = movementSpeed;
         targetSpeed = currentSpeed;
+
+        lastPosition = transform.position;
+
         moveUp = GameManager.Instance.GetKeyCode(Binding.MOVE_UP);
         moveLeft = GameManager.Instance.GetKeyCode(Binding.MOVE_LEFT);
         moveDown = GameManager.Instance.GetKeyCode(Binding.MOVE_DOWN);
@@ -80,6 +88,8 @@ public class PlayerAnimation : MonoBehaviour
                 playerAnimator.speed = 1;
             }
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * 50);
+
+            UpdateAchievement();
 
             // The following lines are dev keybindings, if needed they can be activated again by uncommenting them
             if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
@@ -150,6 +160,22 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
+    private void UpdateAchievement()
+    {
+        float distance = Vector3.Distance(transform.position, lastPosition);
+        if(distance <= 5)
+        {
+            distanceWalked += distance;
+        }        
+        if (distanceWalked >= achievementUpdateIntervall)
+        {
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_WALK, achievementUpdateIntervall);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_LONGER_WALK, achievementUpdateIntervall);
+            distanceWalked -= achievementUpdateIntervall;
+        }
+        lastPosition = transform.position;
+    }
+    
     private void OnDestroy()
     {
         GameEvents.current.onKeybindingChange -= UpdateKeybindings;

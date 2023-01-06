@@ -363,7 +363,6 @@ public class DataManager : MonoBehaviour
         return dataList;
     }
 
-
     /// <summary>
     ///     This function returns all stored achievements
     /// </summary>
@@ -372,6 +371,57 @@ public class DataManager : MonoBehaviour
     {
         Debug.Log("Data Manager, achievements: " + achievementData.Count);
         return achievementData;
+    }
+
+    /// <summary>
+    ///     This function updates an achievement
+    /// </summary>
+    /// <param name="title">The title of the achievement</param>
+    /// <param name="newProgress">The new progress of the achievement</param>
+    /// <returns>True if the acheivement is just now completed, false otherwise</returns>
+    public bool UpdateAchievement(AchievementTitle title, int newProgress)
+    {
+        AchievementData achievement = GetAchievement(title);
+        if(achievement != null)
+        {
+            return achievement.UpdateProgress(newProgress);
+        }
+        return false;
+    }
+
+    /// <summary>
+    ///     This function increases an achievements progress by a given increment
+    /// </summary>
+    /// <param name="title">The title of the achievement</param>
+    /// <param name="increment">The amount to increase the progress</param>
+    /// <returns>True if the acheivement is just now completed, false otherwise</returns>
+    public bool IncreaseAchievementProgress(AchievementTitle title, int increment)
+    {
+        AchievementData achievement = GetAchievement(title);
+        if (achievement != null)
+        {
+            int newProgress = achievement.GetProgress() + increment;
+            Debug.Log("New Progress of '" + title + "': " + achievement.GetProgress());
+            return achievement.UpdateProgress(newProgress);
+        }
+        return false;
+    }
+
+    /// <summary>
+    ///     This function returns the achievement with the given title
+    /// </summary>
+    /// <param name="title">The title of the achievement to look for</param>
+    /// <returns>The <c>AchievementData</c> corresponding with the given title if present, null otherwise</returns>
+    public AchievementData GetAchievement(AchievementTitle title)
+    {
+        foreach(AchievementData achievement in achievementData)
+        {
+            if(achievement.GetTitle().Equals(title.ToString()))
+            {
+                return achievement;
+            }
+        }
+        return null;
     }
 
     /// <summary>
@@ -459,15 +509,13 @@ public class DataManager : MonoBehaviour
 
     private List<AchievementData> GetDummyAchievements()
     {
-        List<string> categories1 = new() { "Blub", "Bla" };
-        AchievementData achievement1 =
-            new AchievementData("Achievement 1", "First Achievement", categories1, "target", 5, 1, false);
+        List<string> categories1 = new() { "Exploring" };
+        AchievementData achievement1 = new AchievementData("GO_FOR_A_WALK", "Walk 10 tiles", categories1, "achievement2", 10, 0, false);
+        AchievementData achievement2 = new AchievementData("GO_FOR_A_LONGER_WALK", "Walk 15 tiles", categories1, "achievement2", 15, 0, false);
+        AchievementData achievement3 = new AchievementData("TALK_TO_NPCS", "Talkt to 15 NPCs", categories1, "achievement2", 5, 0, false);
 
-        List<string> categories2 = new() { "Story" };
-        AchievementData achievement2 = new AchievementData("Achievement 2", "Second Achievement", categories2,
-            "achievement2", 3, 3, true);
+        List<AchievementData> achievements = new List<AchievementData>() { achievement1, achievement2, achievement3 };
 
-        List<AchievementData> achievements = new List<AchievementData> { achievement1, achievement2 };
         return achievements;
     }
 
