@@ -87,6 +87,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             {
                 isUnlocked = true;
                 SetUnLockedState(isUnlocked);
+                Debug.Log("xy shit");
                 GameManager.Instance.ActivateTeleporter(worldID, dungeonID, teleporterNumber);
             }
         }
@@ -188,7 +189,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
 
     public void Setup(TeleporterData data)
     {
-        Debug.Log("xyz " + data.position);
+        Debug.Log("xy blub");
         this.isUnlocked = data.isUnlocked;
         transform.position = data.position;
         this.teleporterName = data.teleporterName;

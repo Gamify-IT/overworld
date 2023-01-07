@@ -202,12 +202,9 @@ public class WorldData : IAreaData
     {
         if (dungeonIndex != 0)
         {
-            if (dungeonIndex < dungeons.Length)
-            {
-                dungeons[dungeonIndex].UnlockTeleporter(index);
-            }
+            getDungeonData(dungeonIndex).UnlockTeleporter(index);
         }
-        else if (index < npcs.Length)
+        else if (index < teleporters.Length)
         {
             teleporters[index].isUnlocked = true;
         }

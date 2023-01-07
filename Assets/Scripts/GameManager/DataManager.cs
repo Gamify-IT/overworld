@@ -247,7 +247,10 @@ public class DataManager : MonoBehaviour
         playerData = playerStatistics;
         foreach (TeleporterDTO teleporterDTO in playerData.unlockedTeleporters)
         {
-            worldData[teleporterDTO.area.worldIndex].UnlockTeleporter(teleporterDTO.area.dungeonIndex, teleporterDTO.index);
+            int worldIndex = teleporterDTO.area.worldIndex;
+            int dungeonIndex = teleporterDTO.area.dungeonIndex;
+            int number = teleporterDTO.index;
+            GetWorldData(worldIndex).UnlockTeleporter(dungeonIndex, number);
         }
     }
 
@@ -358,24 +361,35 @@ public class DataManager : MonoBehaviour
     public List<TeleporterData> GetUnlockedTeleportersInWorld(int worldIndex)
     {
         List<TeleporterData> dataList = new List<TeleporterData>();
+        WorldData worldData = GetWorldData(worldIndex);
         for (int i = 1; i < GameSettings.GetMaxTeleporters() + 1; i++)
         {
-            TeleporterData currentData = GetWorldData(worldIndex).GetEntityDataAt<TeleporterData>(i);
+            TeleporterData currentData = worldData.GetEntityDataAt<TeleporterData>(i);
             if (currentData != null && currentData.isUnlocked)
             {
                 dataList.Add(currentData);
+            } 
+        }
+        for (int i = 1; i < GameSettings.GetMaxDungeons() + 1; i++)
+        {
+            
+            DungeonData dungeonData = worldData.getDungeonData(i);
+            
+            if (dungeonData == null)
+            {
+                continue;
+            }
+            for (int j = 1; j < GameSettings.GetMaxTeleporters() + 1; j++)
+            {
+                
+                TeleporterData currentData = dungeonData.GetEntityDataAt<TeleporterData>(j);
+                if (currentData != null && currentData.isUnlocked)
+                {
+                    dataList.Add(currentData);
+                }
             }
         }
         Debug.Log("UnlockedTPs in World " + worldIndex + ": " + dataList.Count);
-        /*
-        foreach (TeleporterDTO dto in playerData.unlockedTeleporters)
-        {
-            if (dto.area.worldIndex == worldIndex)
-            {
-                TeleporterData correspondingTPData = GetWorldData(dto.area.worldIndex).GetEntityDataAt<TeleporterData>(dto.index);
-                dataList.Add(correspondingTPData);
-            }
-        }*/
         return dataList;
     }
 
@@ -469,6 +483,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public void ReadTeleporterConfig()
     {
+        Debug.Log("Du dreckiger");
         TextAsset textAsset = Resources.Load<TextAsset>("TeleporterConfig/TeleporterConfigJson");
         var manager = JsonUtility.FromJson<TeleporterConfigManager>(textAsset.text);
         Debug.Log("Number of found teleporters: " + manager.teleporters.Length);
@@ -476,6 +491,11 @@ public class DataManager : MonoBehaviour
         {
             int worldID = config.worldID;
             WorldData worldData = this.GetWorldData(worldID);
+            if (worldData == null)
+            {
+                Debug.LogError("Could not assign teleporter config data to worldData. WorldData is null.");
+                continue;
+            }
             worldData.SetTeleporterData(config);        
         }
     }

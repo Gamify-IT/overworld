@@ -151,6 +151,7 @@ public class GameManager : MonoBehaviour
             {
                 DataManager.Instance.SetWorldData(worldIndex, worldDTOs[worldIndex].Value());
             }
+            DataManager.Instance.ReadTeleporterConfig();
             DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
             DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
@@ -158,6 +159,7 @@ public class GameManager : MonoBehaviour
         else
         {
             GetDummyData();
+            DataManager.Instance.ReadTeleporterConfig();
         }
         Debug.Log("Everything set up");
 
@@ -209,8 +211,16 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ExecuteTeleportation()
     {
-        Reload();
+        //Reload();
+        TeleporterSpecificLoading();
+    }
 
+    private async void TeleporterSpecificLoading()
+    {
+        await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+        LoadingManager.Instance.UnloadUnneededScenesExcept("no exceptions in this case ;)");
+        LoadingManager.Instance.setup(sceneName, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
+        await LoadingManager.Instance.LoadScene();
     }
 
     /// <summary>
@@ -220,7 +230,7 @@ public class GameManager : MonoBehaviour
     /// <param name="dungeonIndex">The index of the dungeon (0 if world)</param>
     public void SetData(int worldIndex, int dungeonIndex)
     {
-        DataManager.Instance.ReadTeleporterConfig();
+        //DataManager.Instance.ReadTeleporterConfig();
         if (dungeonIndex != 0)
         {
             Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
@@ -335,7 +345,7 @@ public class GameManager : MonoBehaviour
 
         Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(uri);
 
-        if(playerStatistics.IsPresent())
+        if (playerStatistics.IsPresent())
         {
             return true;
         }
@@ -364,7 +374,7 @@ public class GameManager : MonoBehaviour
     private void GetDummyData()
     {
         //worldDTO dummy data
-        for(int worldIndex = 0; worldIndex<maxWorld; worldIndex++)
+        for (int worldIndex = 0; worldIndex < maxWorld; worldIndex++)
         {
             DataManager.Instance.SetWorldData(worldIndex, new WorldDTO());
         }

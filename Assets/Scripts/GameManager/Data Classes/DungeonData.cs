@@ -34,6 +34,11 @@ public class DungeonData : IAreaData
         this.minigames = minigames;
         this.npcs = npcs;
         this.books = books;
+        teleporters = new TeleporterData[GameSettings.GetMaxTeleporters() + 1];
+        for (int tpIndex = 1; tpIndex < teleporters.Length; tpIndex++)
+        {
+            teleporters[tpIndex] = new TeleporterData();
+        }
     }
 
     public DungeonData()
