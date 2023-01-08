@@ -28,22 +28,4 @@ public class TeleporterData : IGameEntityData
         this.position = position;
         this.isUnlocked = isUnlocked;
     }
-
-    /*public static TeleporterData ConvertDtoToData(TeleporterDTO dto)
-    {
-        string uuid = dto.id;
-        string name = dto.name;
-        bool unlocked = false;
-        Vector2 position = new Vector2(dto.position.x, dto.position.y);
-        int worldID = dto.area.worldIndex;
-        int dungeonID = dto.area.dungeonIndex;
-        int number = dto.index;
-
-        if (name.Length == 0)
-        {
-            name = "Some Teleporter";
-        }
-        TeleporterData data = new TeleporterData(uuid, name, worldID, dungeonID, number, position, unlocked);
-        return data;
-    }*/
 }

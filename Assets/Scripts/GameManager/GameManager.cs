@@ -211,7 +211,6 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ExecuteTeleportation()
     {
-        //Reload();
         TeleporterSpecificLoading();
     }
 

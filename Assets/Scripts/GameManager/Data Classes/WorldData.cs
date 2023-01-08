@@ -11,7 +11,7 @@ public class WorldData : IAreaData
 
     private string id;
     private int index;
-    private string staticName;
+    public string staticName { get; private set; }
     private string topicName;
     private readonly bool active;
     private readonly MinigameData[] minigames;
