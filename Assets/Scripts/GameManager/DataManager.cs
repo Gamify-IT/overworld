@@ -33,6 +33,7 @@ public class DataManager : MonoBehaviour
         {
             return;
         }
+
         worldData[worldIndex] = data;
     }
 
@@ -79,6 +80,7 @@ public class DataManager : MonoBehaviour
         {
             return null;
         }
+
         if (dungeonIndex <= 0 || dungeonIndex > maxDungeons)
         {
             return null;
@@ -147,6 +149,7 @@ public class DataManager : MonoBehaviour
         {
             return;
         }
+
         if (dungeonIndex != 0)
         {
             if (dungeonIndex <= 0 || dungeonIndex > maxDungeons)
@@ -399,8 +402,6 @@ public class DataManager : MonoBehaviour
         return dataList;
     }
 
-
-
     /// <summary>
     ///     This function returns all stored achievements
     /// </summary>
@@ -608,7 +609,6 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public void ReadTeleporterConfig()
     {
-        Debug.Log("Du dreckiger");
         TextAsset textAsset = Resources.Load<TextAsset>("TeleporterConfig/TeleporterConfigJson");
         var manager = JsonUtility.FromJson<TeleporterConfigManager>(textAsset.text);
         Debug.Log("Number of found teleporters: " + manager.teleporters.Length);

@@ -460,11 +460,10 @@ public class GameManager : MonoBehaviour
     /// <param name="achievement">The achievement to be displayed</param>
     private void EarnAchievement(AchievementData achievement)
     {
-        if (AchievementNotificationManager.Instance == null)
+        if(AchievementNotificationManager.Instance == null)
         {
-            Instantiate(achievementNotificationManagerPrefab, transform, false);
+            Instantiate(achievementNotificationManagerPrefab, this.transform, false);
         }
-
         AchievementNotificationManager.Instance.AddAchievement(achievement);
     }
 

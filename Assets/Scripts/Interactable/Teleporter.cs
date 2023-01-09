@@ -210,4 +210,12 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         }
     }
+
+    private void UpdateKeybindings(Binding binding)
+    {
+        if (binding == Binding.INTERACT)
+        {
+            interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+        }
+    }
 }
