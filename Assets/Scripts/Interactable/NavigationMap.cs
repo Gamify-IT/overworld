@@ -12,6 +12,9 @@ public class NavigationMap : MonoBehaviour
     public GameObject MapPanel;
     private bool playerIsClose;
 
+    //KeyCodes
+    private KeyCode interact;
+
     /// <summary>
     ///     This function is called when the object becomes enabled and active.
     ///     It is used to initialize the map.
@@ -19,6 +22,8 @@ public class NavigationMap : MonoBehaviour
     private void Awake()
     {
         MapPanel.SetActive(false);
+        interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+        GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
 
 
@@ -52,10 +57,27 @@ public class NavigationMap : MonoBehaviour
     private void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.E) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+        if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
             !PauseMenu.menuOpen)
         {
             MapPanel.SetActive(!MapPanel.activeInHierarchy);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+    }
+
+    /// <summary>
+    ///     This function updates the keybindings
+    /// </summary>
+    /// <param name="binding">The binding that changed</param>
+    private void UpdateKeybindings(Binding binding)
+    {
+        if (binding == Binding.INTERACT)
+        {
+            interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         }
     }
 }

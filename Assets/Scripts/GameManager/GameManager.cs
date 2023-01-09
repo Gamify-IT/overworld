@@ -1,13 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
 
 /// <summary>
-///     The <c>GameManager</c> retrievs all needed data from the backend, stores it in the <c>DataManager</c> and sets up the objects via the <c>ObjectMananger</c> depending on those data.
+///     The <c>GameManager</c> retrievs all needed data from the backend, stores it in the <c>DataManager</c> and sets up
+///     the objects via the <c>ObjectMananger</c> depending on those data.
 /// </summary>
 public class GameManager : MonoBehaviour
 {
@@ -33,6 +34,9 @@ public class GameManager : MonoBehaviour
     private Vector2 minigameRespawnPosition;
     private int minigameWorldIndex;
     private int minigameDungeonIndex;
+
+    //Achievements
+    [SerializeField] private GameObject achievementNotificationManagerPrefab;
 
     /// <summary>
     ///     This function checks whether or not a valid courseId was passed or not.
@@ -125,19 +129,23 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(path + "/playerstatistics/");
+        Optional<PlayerstatisticDTO> playerStatistics =
+            await RestRequest.GetRequest<PlayerstatisticDTO>(path + "/playerstatistics/");
         if (!playerStatistics.IsPresent())
         {
             loadingError = true;
         }
 
-        Optional<PlayerTaskStatisticDTO[]> minigameStatistics = await RestRequest.GetArrayRequest<PlayerTaskStatisticDTO>(path + "/playerstatistics/player-task-statistics");
+        Optional<PlayerTaskStatisticDTO[]> minigameStatistics =
+            await RestRequest.GetArrayRequest<PlayerTaskStatisticDTO>(path +
+                                                                      "/playerstatistics/player-task-statistics");
         if (!minigameStatistics.IsPresent())
         {
             loadingError = true;
         }
 
-        Optional<PlayerNPCStatisticDTO[]> npcStatistics = await RestRequest.GetArrayRequest<PlayerNPCStatisticDTO>(path + "/playerstatistics/player-npc-statistics");
+        Optional<PlayerNPCStatisticDTO[]> npcStatistics =
+            await RestRequest.GetArrayRequest<PlayerNPCStatisticDTO>(path + "/playerstatistics/player-npc-statistics");
         if (!npcStatistics.IsPresent())
         {
             loadingError = true;
@@ -151,6 +159,7 @@ public class GameManager : MonoBehaviour
             {
                 DataManager.Instance.SetWorldData(worldIndex, worldDTOs[worldIndex].Value());
             }
+
             DataManager.Instance.ReadTeleporterConfig();
             DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
             DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
@@ -161,6 +170,7 @@ public class GameManager : MonoBehaviour
             GetDummyData();
             DataManager.Instance.ReadTeleporterConfig();
         }
+
         Debug.Log("Everything set up");
 
         return loadingError;
@@ -177,7 +187,7 @@ public class GameManager : MonoBehaviour
         minigameRespawnPosition = respawnLocation;
         minigameWorldIndex = worldIndex;
         minigameDungeonIndex = dungeonIndex;
-        this.sceneName = BuildSceneName();
+        sceneName = BuildSceneName();
         Debug.Log("Setup minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
     }
 
@@ -192,6 +202,7 @@ public class GameManager : MonoBehaviour
         {
             sceneName = "Dungeon " + minigameWorldIndex + "-" + minigameDungeonIndex;
         }
+
         Debug.Log(sceneName);
         return sceneName;
     }
@@ -207,7 +218,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function is used by a teleporter to update the position of the player.
+    ///     This function is used by a teleporter to update the position of the player.
     /// </summary>
     public void ExecuteTeleportation()
     {
@@ -267,7 +278,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function activates a teleporter by saving the data in the backend as well as the data manager.
+    ///     This function activates a teleporter by saving the data in the backend as well as the data manager.
     /// </summary>
     /// <param name="worldIndex"></param>
     /// <param name="dungeonIndex"></param>
@@ -287,7 +298,47 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("Teleporter unlocking could not be transfered to Backend.");
         }
+    }
 
+    /// <summary>
+    ///     This function updates the progress of an achievement
+    /// </summary>
+    /// <param name="title">The title of the achievement</param>
+    /// <param name="newProgress">The new progress of the achievement</param>
+    public async void UpdateAchievement(AchievementTitle title, int newProgress)
+    {
+        bool unlocked = DataManager.Instance.UpdateAchievement(title, newProgress);
+        if (unlocked)
+        {
+            AchievementData achievement = DataManager.Instance.GetAchievement(title);
+            if (achievement == null)
+            {
+                return;
+            }
+
+            EarnAchievement(achievement);
+        }
+    }
+
+    /// <summary>
+    ///     This function increases an achievements progress by a given increment
+    /// </summary>
+    /// <param name="title">The title of the achievement</param>
+    /// <param name="increment">The amount to increase the progress</param>
+    /// <returns>True if the acheivement is now completed, false otherwise</returns>
+    public async void IncreaseAchievementProgress(AchievementTitle title, int increment)
+    {
+        bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment);
+        if (unlocked)
+        {
+            AchievementData achievement = DataManager.Instance.GetAchievement(title);
+            if (achievement == null)
+            {
+                return;
+            }
+
+            EarnAchievement(achievement);
+        }
     }
 
     /// <summary>
@@ -301,6 +352,42 @@ public class GameManager : MonoBehaviour
     {
         string info = "NOT UNLOCKED YET";
         return info;
+    }
+
+    /// <summary>
+    ///     This function returns all keybings
+    /// </summary>
+    /// <returns>A List containing all keybindings</returns>
+    public List<Keybinding> GetKeybindings()
+    {
+        return DataManager.Instance.GetKeybindings();
+    }
+
+    /// <summary>
+    ///     This function changes the keybind of the given <c>Binding</c> to the given <c>KeyCode</c>
+    /// </summary>
+    /// <param name="keybinding">The binding to change</param>
+    public void ChangeKeybind(Keybinding keybinding)
+    {
+        DataManager.Instance.ChangeKeybind(keybinding);
+    }
+
+    /// <summary>
+    ///     This function returns the <c>KeyCode</c> for the given <c>Binding</c>
+    /// </summary>
+    /// <param name="binding">The binding the <c>KeyCode</c> should be returned for</param>
+    /// <returns>The <c>KeyCode</c> of the binding if present, KeyCode.NONE otherwise</returns>
+    public KeyCode GetKeyCode(Binding binding)
+    {
+        return DataManager.Instance.GetKeyCode(binding);
+    }
+
+    /// <summary>
+    ///     This function resets the keybindings to the default ones
+    /// </summary>
+    public void ResetKeybindings()
+    {
+        DataManager.Instance.ResetKeybindings();
     }
 
     /// <summary>
@@ -348,14 +435,12 @@ public class GameManager : MonoBehaviour
         {
             return true;
         }
-        else
-        {
-            string postUri = overworldBackendPath + "/courses/" + courseId + "/playerstatistics";
-            UserData userData = new UserData(userId, username);
-            string json = JsonUtility.ToJson(userData, true);
-            bool userCreated = await RestRequest.PostRequest(postUri, json);
-            return userCreated;
-        }
+
+        string postUri = overworldBackendPath + "/courses/" + courseId + "/playerstatistics";
+        UserData userData = new UserData(userId, username);
+        string json = JsonUtility.ToJson(userData, true);
+        bool userCreated = await RestRequest.PostRequest(postUri, json);
+        return userCreated;
     }
 
     /// <summary>
@@ -364,7 +449,23 @@ public class GameManager : MonoBehaviour
     private async void Reload()
     {
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
-        await LoadingManager.Instance.ReloadData(sceneName, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
+        await LoadingManager.Instance.ReloadData(sceneName, minigameWorldIndex, minigameDungeonIndex,
+            minigameRespawnPosition);
+    }
+
+    /// <summary>
+    ///     This function creates an <c>AchievementNotificationManager</c>, if needed, and adds the given achievement to be
+    ///     displayed
+    /// </summary>
+    /// <param name="achievement">The achievement to be displayed</param>
+    private void EarnAchievement(AchievementData achievement)
+    {
+        if (AchievementNotificationManager.Instance == null)
+        {
+            Instantiate(achievementNotificationManagerPrefab, transform, false);
+        }
+
+        AchievementNotificationManager.Instance.AddAchievement(achievement);
     }
 
     /// <summary>
@@ -377,6 +478,7 @@ public class GameManager : MonoBehaviour
         {
             DataManager.Instance.SetWorldData(worldIndex, new WorldDTO());
         }
+
         DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
         AchievementStatistic[] achivements = GetDummyAchievements();
         Debug.Log("Game Manager, achievements: " + achivements.Length);
@@ -387,10 +489,10 @@ public class GameManager : MonoBehaviour
     {
         AchievementStatistic[] statistcs = new AchievementStatistic[1];
         List<string> categories1 = new() { "Blub", "Bla" };
-        Achievement achievement1 = new Achievement("Achievement 1", "First Achievement", categories1, "achievement1", 5);
+        Achievement achievement1 =
+            new Achievement("Achievement 1", "First Achievement", categories1, "achievement1", 5);
         AchievementStatistic achievementStatistic1 = new AchievementStatistic("blub", achievement1, 0, false);
         statistcs[0] = achievementStatistic1;
         return statistcs;
     }
-
 }

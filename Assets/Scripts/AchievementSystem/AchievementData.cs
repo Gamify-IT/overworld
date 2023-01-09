@@ -53,15 +53,16 @@ public class AchievementData
     ///     This function updates the progress and sets the completed flag if needed
     /// </summary>
     /// <param name="newProgress">The new progress</param>
-    /// <returns>True if the achievement is now completed, false otherwise</returns>
+    /// <returns>True if the achievement is just now completed, false otherwise</returns>
     public bool UpdateProgress(int newProgress)
     {
         progress = newProgress;
-        if(newProgress >= amountRequired)
+        if(newProgress >= amountRequired && !completed)
         {
             completed = true;
+            return true;
         }
-        return completed;
+        return false;
     }
 
     /// <summary>

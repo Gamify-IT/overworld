@@ -16,6 +16,18 @@ public class PlayerAnimation : MonoBehaviour
     private float currentSpeed;
     private float targetSpeed;
 
+    private Vector3 lastPosition;
+    private float distanceWalked = 0;
+    private int achievementUpdateIntervall = 1;
+
+    //KeyCodes
+    private KeyCode moveUp;
+    private KeyCode moveLeft;
+    private KeyCode moveDown;
+    private KeyCode moveRight;
+    private KeyCode sprint;
+
+
     /// <summary>
     ///     This method is called before the first frame update.
     ///     It is used to initialize variables.
@@ -27,6 +39,15 @@ public class PlayerAnimation : MonoBehaviour
         playerRigidBody = GetComponent<Rigidbody2D>();
         currentSpeed = movementSpeed;
         targetSpeed = currentSpeed;
+
+        lastPosition = transform.position;
+
+        moveUp = GameManager.Instance.GetKeyCode(Binding.MOVE_UP);
+        moveLeft = GameManager.Instance.GetKeyCode(Binding.MOVE_LEFT);
+        moveDown = GameManager.Instance.GetKeyCode(Binding.MOVE_DOWN);
+        moveRight = GameManager.Instance.GetKeyCode(Binding.MOVE_RIGHT);
+        sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
+        GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
 
     /// <summary>
@@ -36,21 +57,39 @@ public class PlayerAnimation : MonoBehaviour
     {
         if (canMove)
         {
-            movement.x = Input.GetAxisRaw("Horizontal");
-            movement.y = Input.GetAxisRaw("Vertical");
+            movement.x = 0;
+            movement.y = 0;
+            if(Input.GetKey(moveLeft))
+            {
+                movement.x -= 1;
+            }
+            if (Input.GetKey(moveRight))
+            {
+                movement.x += 1;
+            }
+            if (Input.GetKey(moveDown))
+            {
+                movement.y -= 1;
+            }
+            if (Input.GetKey(moveUp))
+            {
+                movement.y += 1;
+            }
             movement = movement.normalized;
 
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            if (Input.GetKeyDown(sprint))
             {
                 targetSpeed = movementSpeed + sprintingSpeed;
                 playerAnimator.speed = 2;
             }
-            if (Input.GetKeyUp(KeyCode.LeftShift))
+            if (Input.GetKeyUp(sprint))
             {
                 targetSpeed = movementSpeed;
                 playerAnimator.speed = 1;
             }
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * 50);
+
+            UpdateAchievement();
 
             // The following lines are dev keybindings, if needed they can be activated again by uncommenting them
             if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
@@ -118,6 +157,55 @@ public class PlayerAnimation : MonoBehaviour
             playerAnimator.SetFloat("Vertical", movement.y);
             playerAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
             playerAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
+        }
+    }
+
+    private void UpdateAchievement()
+    {
+        float distance = Vector3.Distance(transform.position, lastPosition);
+        if(distance <= 5)
+        {
+            distanceWalked += distance;
+        }        
+        if (distanceWalked >= achievementUpdateIntervall)
+        {
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_WALK, achievementUpdateIntervall);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_LONGER_WALK, achievementUpdateIntervall);
+            distanceWalked -= achievementUpdateIntervall;
+        }
+        lastPosition = transform.position;
+    }
+    
+    private void OnDestroy()
+    {
+        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+    }
+
+    /// <summary>
+    ///     This function updates the keybindings
+    /// </summary>
+    /// <param name="binding">The binding that changed</param>
+    private void UpdateKeybindings(Binding binding)
+    {
+        if(binding == Binding.MOVE_UP)
+        {
+            moveUp = GameManager.Instance.GetKeyCode(Binding.MOVE_UP);
+        }
+        else if(binding == Binding.MOVE_LEFT)
+        {
+            moveLeft = GameManager.Instance.GetKeyCode(Binding.MOVE_LEFT);
+        }
+        else if (binding == Binding.MOVE_DOWN)
+        {
+            moveDown = GameManager.Instance.GetKeyCode(Binding.MOVE_DOWN);
+        }
+        else if (binding == Binding.MOVE_RIGHT)
+        {
+            moveRight= GameManager.Instance.GetKeyCode(Binding.MOVE_RIGHT);
+        }
+        else if(binding == Binding.SPRINT)
+        {
+            sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
         }
     }
 

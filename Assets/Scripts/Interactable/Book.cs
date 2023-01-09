@@ -17,6 +17,9 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     private bool playerIsClose;
     private string uuid;
 
+    //KeyCodes
+    private KeyCode interact;
+
     /// <summary>
     ///     This function is called when the object becomes enabled and active.
     ///     It is used to initialize the Books.
@@ -24,6 +27,8 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     private void Awake()
     {
         RegisterToGameManager();
+        interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+        GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
 
     /// <summary>
@@ -31,12 +36,12 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// </summary>
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && playerIsClose && !SceneManager.GetSceneByName("Book").isLoaded &&
+        if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByName("Book").isLoaded &&
             !PauseMenu.menuOpen)
         {
             StartCoroutine(LoadBookScene());
         }
-        else if (Input.GetKeyDown(KeyCode.E) && playerIsClose && SceneManager.GetSceneByName("Book").isLoaded &&
+        else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByName("Book").isLoaded &&
                  !PauseMenu.menuOpen)
         {
             SceneManager.UnloadSceneAsync("Book");
@@ -50,6 +55,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     {
         Debug.Log("remove Book " + world + "-" + dungeon + "-" + number);
         ObjectManager.Instance.RemoveGameEntity<Book, BookData>(world, dungeon, number);
+        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
     }
 
     /// <summary>
@@ -131,6 +137,18 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
 
         info = world + "-" + dungeon + "-" + number + ": Text: " + text + ", completed: ";
         return info;
+    }
+
+    /// <summary>
+    ///     This function updates the keybindings
+    /// </summary>
+    /// <param name="binding">The binding that changed</param>
+    private void UpdateKeybindings(Binding binding)
+    {
+        if (binding == Binding.INTERACT)
+        {
+            interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+        }
     }
 
     #region Getter
