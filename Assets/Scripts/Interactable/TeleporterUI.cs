@@ -41,13 +41,10 @@ public class TeleporterUI : MonoBehaviour
             }
             if (worldIndex == teleporter.worldID && dataList.Count == 1)
             {
-                if (dataList.Count == 1)
-                {
-                    continue;
-                }
+                continue;
             }
             GameObject newToggle = GameObject.Instantiate(prototypeToggle, worldSelectionContent);
-            newToggle.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "World " + worldIndex.ToString();
+            newToggle.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = GetWorldName(worldIndex);
             Image image = newToggle.GetComponent<Image>();
             newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => ToggleEnabledColor(b, image));
             newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => UpdateTeleporterSelections(worldIndex,dataList));
@@ -69,8 +66,7 @@ public class TeleporterUI : MonoBehaviour
         currentTeleporterButtons.Clear();
         foreach (TeleporterData data in dataList)
         {
-            print("InDataNumber " + data.teleporterNumber);
-            if (data.teleporterNumber == correspondingTeleporter.teleporterNumber)
+            if (data.teleporterNumber == correspondingTeleporter.teleporterNumber && data.worldID == correspondingTeleporter.worldID && data.dungeonID == correspondingTeleporter.dungeonID)
             {
                 continue;
             }
@@ -82,6 +78,20 @@ public class TeleporterUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Returns the static world name of the given world id.
+    /// </summary>
+    /// <param name="worldID"></param>
+    /// <returns></returns>
+    private string GetWorldName(int worldID)
+    {
+        string worldName = DataManager.Instance.GetWorldData(worldID).staticName;
+        if (worldName.Equals(""))
+        {
+            worldName = "World " + worldID;
+        }
+        return worldName;
+    }
 
     public void ToggleEnabledColor(bool enabled, Image image)
     {

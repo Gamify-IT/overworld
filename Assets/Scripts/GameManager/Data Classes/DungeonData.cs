@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 /// <summary>
 ///     This class defines all needed data for a <c>Dungeon</c>.
@@ -16,6 +17,7 @@ public class DungeonData : IAreaData
     private readonly MinigameData[] minigames;
     private readonly NPCData[] npcs;
     private readonly BookData[] books;
+    private readonly TeleporterData[] teleporters;
 
     #endregion
 
@@ -32,6 +34,11 @@ public class DungeonData : IAreaData
         this.minigames = minigames;
         this.npcs = npcs;
         this.books = books;
+        teleporters = new TeleporterData[GameSettings.GetMaxTeleporters() + 1];
+        for (int tpIndex = 1; tpIndex < teleporters.Length; tpIndex++)
+        {
+            teleporters[tpIndex] = new TeleporterData();
+        }
     }
 
     public DungeonData()
@@ -57,6 +64,12 @@ public class DungeonData : IAreaData
         for (int bookIndex = 1; bookIndex < books.Length; bookIndex++)
         {
             books[bookIndex] = new BookData();
+        }
+
+        teleporters = new TeleporterData[GameSettings.GetMaxTeleporters() + 1];
+        for (int tpIndex = 1; tpIndex < teleporters.Length; tpIndex++)
+        {
+            teleporters[tpIndex] = new TeleporterData();
         }
     }
 
@@ -144,6 +157,14 @@ public class DungeonData : IAreaData
         }
     }
 
+    public void UnlockTeleporter(int index)
+    {
+        if (index < teleporters.Length)
+        {
+            teleporters[index].isUnlocked = true;
+        }
+    }
+
     /// <summary>
     ///     This function returns the status of a minigame in the dungeon.
     /// </summary>
@@ -204,6 +225,10 @@ public class DungeonData : IAreaData
         {
             entityData = minigames[index];
         }
+        else if (typeof(T) == typeof(TeleporterData) && IsIndexInArrayRange(index, minigames))
+        {
+            entityData = teleporters[index];
+        }
         else
         {
             throw new ArgumentOutOfRangeException("There exists no Data Array for " + typeof(T).FullName);
@@ -214,6 +239,17 @@ public class DungeonData : IAreaData
     private bool IsIndexInArrayRange(int index, IGameEntityData[] data)
     {
         return index > 0 && index < data.Length;
+    }
+
+    public void SetTeleporterData(TeleporterConfig config)
+    {
+        TeleporterData data = teleporters[config.index];
+        bool isUnlocked = false;
+        if (data != null)
+        {
+            isUnlocked = data.isUnlocked;
+        }
+        teleporters[config.index] = new TeleporterData(config.name, config.worldID, config.dungeonID, config.index, new Vector2(config.x, config.y), isUnlocked);
     }
 
     #endregion

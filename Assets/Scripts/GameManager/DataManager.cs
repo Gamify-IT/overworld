@@ -166,6 +166,18 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
+    /// This function unlocks a teleporter
+    /// </summary>
+    /// <param name="worldIndex">The index of the world the NPC is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon the NPC is in (0 if in world)</param>
+    /// <param name="number">The number of the NPC in its area</param>
+    public void ActivateTeleporter(int worldIndex, int dungeonIndex, int number)
+    {
+        worldData[worldIndex].UnlockTeleporter(dungeonIndex, number);
+    }
+
+
+    /// <summary>
     ///     This function processes the player minigame statistics data returned form backend and stores the needed data in the
     ///     <c>DataManager</c>
     /// </summary>
@@ -241,6 +253,13 @@ public class DataManager : MonoBehaviour
     public void ProcessPlayerStatistics(PlayerstatisticDTO playerStatistics)
     {
         playerData = playerStatistics;
+        foreach (TeleporterDTO teleporterDTO in playerData.unlockedTeleporters)
+        {
+            int worldIndex = teleporterDTO.area.worldIndex;
+            int dungeonIndex = teleporterDTO.area.dungeonIndex;
+            int number = teleporterDTO.index;
+            GetWorldData(worldIndex).UnlockTeleporter(dungeonIndex, number);
+        }
     }
 
     /// <summary>
@@ -351,15 +370,35 @@ public class DataManager : MonoBehaviour
     public List<TeleporterData> GetUnlockedTeleportersInWorld(int worldIndex)
     {
         List<TeleporterData> dataList = new List<TeleporterData>();
-        for (int i = 0; i < GameSettings.GetMaxTeleporters(); i++)
+        WorldData worldData = GetWorldData(worldIndex);
+        for (int i = 1; i < GameSettings.GetMaxTeleporters() + 1; i++)
         {
-            TeleporterData currentData = GetWorldData(worldIndex).GetEntityDataAt<TeleporterData>(i);
+            TeleporterData currentData = worldData.GetEntityDataAt<TeleporterData>(i);
             if (currentData != null && currentData.isUnlocked)
             {
                 dataList.Add(currentData);
             }
         }
+        for (int i = 1; i < GameSettings.GetMaxDungeons() + 1; i++)
+        {
 
+            DungeonData dungeonData = worldData.getDungeonData(i);
+
+            if (dungeonData == null)
+            {
+                continue;
+            }
+            for (int j = 1; j < GameSettings.GetMaxTeleporters() + 1; j++)
+            {
+
+                TeleporterData currentData = dungeonData.GetEntityDataAt<TeleporterData>(j);
+                if (currentData != null && currentData.isUnlocked)
+                {
+                    dataList.Add(currentData);
+                }
+            }
+        }
+        Debug.Log("UnlockedTPs in World " + worldIndex + ": " + dataList.Count);
         return dataList;
     }
 
@@ -504,7 +543,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public void ResetKeybindings()
     {
-        keybindings = GetDefaultKeybindings();        
+        keybindings = GetDefaultKeybindings();
     }
 
     private List<AchievementData> GetDummyAchievements()
@@ -562,6 +601,28 @@ public class DataManager : MonoBehaviour
         }
 
         return worldData[worldIndex].getMinigameStatus(index);
+    }
+
+
+    /// <summary>
+    /// Reads the teleporter config and assigns its data to the TeleporterData array of its belonging IAreaData
+    /// </summary>
+    public void ReadTeleporterConfig()
+    {
+        TextAsset textAsset = Resources.Load<TextAsset>("TeleporterConfig/TeleporterConfigJson");
+        var manager = JsonUtility.FromJson<TeleporterConfigManager>(textAsset.text);
+        Debug.Log("Number of found teleporters: " + manager.teleporters.Length);
+        foreach (TeleporterConfig config in manager.teleporters)
+        {
+            int worldID = config.worldID;
+            WorldData worldData = this.GetWorldData(worldID);
+            if (worldData == null)
+            {
+                Debug.LogError("Could not assign teleporter config data to worldData. WorldData is null.");
+                continue;
+            }
+            worldData.SetTeleporterData(config);
+        }
     }
 
     /// <summary>

@@ -5,13 +5,13 @@ using System;
 /// <summary>
 ///     This class defines all needed data for a <c>World</c>.
 /// </summary>
-public class WorldData: IAreaData
+public class WorldData : IAreaData
 {
     #region Attributes
 
     private string id;
     private int index;
-    private string staticName;
+    public string staticName { get; private set; }
     private string topicName;
     private readonly bool active;
     private readonly MinigameData[] minigames;
@@ -124,12 +124,10 @@ public class WorldData: IAreaData
             dungeons[dungeonDTO.index] = dungeonData;
         }
 
+        
         // just for demonstration
         TeleporterData[] teleporters = new TeleporterData[GameSettings.GetMaxTeleporters() + 1];
-        for (int tpIndex = 1; tpIndex < teleporters.Length; tpIndex++)
-        {
-            teleporters[tpIndex] = new TeleporterData();
-        }
+        
 
         WorldData data = new WorldData(id, index, staticName, topicName, active, minigames, npcs, dungeons, books, teleporters);
         return data;
@@ -197,6 +195,18 @@ public class WorldData: IAreaData
         else if (index < npcs.Length)
         {
             npcs[index].SetHasBeenTalkedTo(completed);
+        }
+    }
+
+    public void UnlockTeleporter(int dungeonIndex, int index)
+    {
+        if (dungeonIndex != 0)
+        {
+            getDungeonData(dungeonIndex).UnlockTeleporter(index);
+        }
+        else if (index < teleporters.Length)
+        {
+            teleporters[index].isUnlocked = true;
         }
     }
 
@@ -336,17 +346,31 @@ public class WorldData: IAreaData
         return minigames;
     }
 
-
-    public void UpdateTeleporterData(int number, string name, int worldID, int dungeonID, Vector2 position)
+    public void SetTeleporterData(TeleporterConfig config)
     {
-        Debug.Log("TP Number: " + number);
-        TeleporterData data = GetEntityDataAt<TeleporterData>(number);
-        data.teleporterNumber = number;
-        data.teleporterName = name;
-        data.worldID = worldID;
-        data.dungeonID = dungeonID;
-        data.position = position;
-        data.isUnlocked = true;
+        if (config.dungeonID != 0)
+        {
+            getDungeonData(config.dungeonID).SetTeleporterData(config);
+        }
+        else
+        {
+            TeleporterData data = teleporters[config.index];
+            bool isUnlocked = false;
+            if (data != null)
+            {
+                isUnlocked = data.isUnlocked;
+            }
+            teleporters[config.index] = new TeleporterData(config.name, config.worldID, config.dungeonID, config.index, new Vector2(config.x, config.y), isUnlocked);
+        }
+    }
+
+    public TeleporterData GetTeleporterData(int dungeonID, int index)
+    {
+        if (dungeonID != 0)
+        {
+            return getDungeonData(dungeonID).GetEntityDataAt<TeleporterData>(index);
+        }
+        return teleporters[index];
     }
 
     #endregion

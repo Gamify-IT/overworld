@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class LoadingManager : MonoBehaviour
 {
@@ -274,10 +275,10 @@ public class LoadingManager : MonoBehaviour
         ProgressBar.Instance.setProgress(0f);
         for (int worldIndex = GameSettings.GetMaxWorlds(); worldIndex > 0; worldIndex--)
         {
-            if(isWorldUnlocked(unlockedAreas, worldIndex))
+            if (isWorldUnlocked(unlockedAreas, worldIndex))
             {
                 int dungeonIndex = getHighestUnlockedDungeonIndex(unlockedAreas, worldIndex);
-                if(dungeonIndex == 0)
+                if (dungeonIndex == 0)
                 {
                     ProgressBar.Instance.setUnlockedArea(worldIndex);
                     float progress = DataManager.Instance.GetMinigameProgress(worldIndex);
@@ -339,9 +340,9 @@ public class LoadingManager : MonoBehaviour
     /// <returns></returns>
     private int getHighestUnlockedDungeonIndex(AreaLocationDTO[] unlockedAreas, int worldIndex)
     {
-        for(int dungeonIndex = GameSettings.GetMaxDungeons(); dungeonIndex > 0; dungeonIndex--)
+        for (int dungeonIndex = GameSettings.GetMaxDungeons(); dungeonIndex > 0; dungeonIndex--)
         {
-            if(isDungeonUnlocked(unlockedAreas, worldIndex, dungeonIndex))
+            if (isDungeonUnlocked(unlockedAreas, worldIndex, dungeonIndex))
             {
                 return dungeonIndex;
             }
@@ -355,15 +356,23 @@ public class LoadingManager : MonoBehaviour
     /// <param name="openScene"></param>
     public async void UnloadUnneededScenesExcept(string openScene)
     {
+        List<Scene> scenesToUnload = new List<Scene>();
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
             string tempSceneName = SceneManager.GetSceneAt(sceneIndex).name;
             if (!tempSceneName.Equals("Player") && !tempSceneName.Equals("Player HUD") &&
-                !tempSceneName.Equals(sceneToLoad) && !tempSceneName.Equals("LoadingScreen") &&
+                !tempSceneName.Equals(openScene) && !tempSceneName.Equals("LoadingScreen") &&
                 !tempSceneName.Equals("OfflineMode"))
             {
-                await SceneManager.UnloadSceneAsync(tempSceneName);
+                scenesToUnload.Add(SceneManager.GetSceneAt(sceneIndex));
             }
+        }
+        foreach (Scene scene in scenesToUnload)
+        {
+            if(scene.isLoaded)
+            {
+                await SceneManager.UnloadSceneAsync(scene);
+            }            
         }
     }
 

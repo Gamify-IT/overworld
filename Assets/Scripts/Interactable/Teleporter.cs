@@ -1,24 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using TMPro;
 
+/// <summary>
+///     This class is part of an teleporter game object
+/// </summary>
 public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
 {
-    [field: SerializeField]
-    public string teleporterName { get; private set; } = "My Teleporter";
-    [field: SerializeField]
-    public int worldID { get; private set; } = 1;
-    [field: SerializeField]
-    public int dungeonID { get; private set; } = 0;
-    [field: SerializeField]
-    public int teleporterNumber { get; private set; } = 1;
+    [field: SerializeField] public string teleporterName { get; private set; } = "My Teleporter";
+    [field: SerializeField] public int worldID { get; private set; } = 1;
+    [field: SerializeField] public int dungeonID { get; private set; }
+    [field: SerializeField] public int teleporterNumber { get; private set; } = 1;
 
-    private bool isUnlocked = false;
-    [SerializeField]
-    private GameObject teleporterCanvas;
+    public bool isUnlocked { get; private set; }
+    private string uuid;
+    [SerializeField] private GameObject teleporterCanvas;
+    [SerializeField] private Sprite spriteNormal;
+    [SerializeField] private Sprite spriteHighlight;
 
     private Transform player;
 
@@ -29,7 +25,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     private int finalTargetWorld;
     private int finalTargetDungeon;
 
-    private bool inTrigger = false;
+    private bool inTrigger;
     private bool interactable = true;
 
     //KeyCodes
@@ -37,13 +33,15 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
 
     private void Awake()
     {
-        ObjectManager.Instance.AddGameEntity<Teleporter,TeleporterData>(this.gameObject, worldID, dungeonID, teleporterNumber);
+        ObjectManager.Instance.AddGameEntity<Teleporter, TeleporterData>(gameObject, worldID, dungeonID,
+            teleporterNumber);
         interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
+
     private void OnDestroy()
     {
-        ObjectManager.Instance.RemoveGameEntity<Teleporter,TeleporterData>(worldID, dungeonID, teleporterNumber);
+        ObjectManager.Instance.RemoveGameEntity<Teleporter, TeleporterData>(worldID, dungeonID, teleporterNumber);
         GameEvents.current.onKeybindingChange -= UpdateKeybindings;
     }
 
@@ -53,27 +51,26 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     }
 
     /// <summary>
-    /// Open TeleporterUI when the player interacts with the teleporter.
+    ///     Open TeleporterUI when the player interacts with the teleporter.
     /// </summary>
-    void Update()
+    private void Update()
     {
         if (inTrigger && interactable && currentTeleporterCanvas == null)
         {
             if (Input.GetKeyDown(interact))
             {
                 interactable = false;
-                GameObject newCanvas = GameObject.Instantiate(teleporterCanvas);
+                GameObject newCanvas = Instantiate(teleporterCanvas);
                 teleporterUI = newCanvas.transform.GetChild(0).GetComponent<TeleporterUI>();
                 SetupTeleporterUI(teleporterUI);
                 currentTeleporterCanvas = newCanvas;
             }
-            
         }
-        
-
     }
+
     /// <summary>
-    /// Recognize the player entering the teleporter. When this is the first time, it unlocks the teleporter and registers it in the DataManager
+    ///     Recognize the player entering the teleporter. When this is the first time, it unlocks the teleporter and registers
+    ///     it in the DataManager
     /// </summary>
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -85,14 +82,13 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             {
                 isUnlocked = true;
                 SetUnLockedState(isUnlocked);
-                WorldData worldData = DataManager.Instance.GetWorldData(worldID);
-                worldData.UpdateTeleporterData(teleporterNumber, teleporterName, worldID, dungeonID, transform.position);       
+                GameManager.Instance.ActivateTeleporter(worldID, dungeonID, teleporterNumber);
             }
         }
     }
 
     /// <summary>
-    /// Recognize the player exiting the teleporter
+    ///     Recognize the player exiting the teleporter
     /// </summary>
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -102,13 +98,12 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             inTrigger = false;
             Destroy(currentTeleporterCanvas);
             currentTeleporterCanvas = null;
-
         }
     }
 
 
     /// <summary>
-    /// Makes visual changes to the teleporter to indicate wether it is locked or not.
+    ///     Makes visual changes to the teleporter to indicate wether it is locked or not.
     /// </summary>
     /// <param name="isUnLocked"></param>
     private void SetUnLockedState(bool isUnLocked)
@@ -116,17 +111,17 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         interactable = true;
         if (isUnLocked)
         {
-            GetComponent<SpriteRenderer>().color = Color.white;
+            GetComponent<SpriteRenderer>().sprite = spriteHighlight;
         }
         else
         {
-            GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 0.2f);;
-        } 
+            GetComponent<SpriteRenderer>().sprite = spriteNormal;
+        }
     }
 
 
     /// <summary>
-    /// Setups the buttons inside the TeleporterUI.
+    ///     Setups the buttons inside the TeleporterUI.
     /// </summary>
     /// <param name="ui"></param>
     private void SetupTeleporterUI(TeleporterUI ui)
@@ -135,10 +130,10 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     }
 
     /// <summary>
-    /// This function is called by a button of the TeleporterUI. It will initialize the teleporting process.
+    ///     This function is called by a button of the TeleporterUI. It will initialize the teleporting process.
     /// </summary>
     /// <param name="worldIndex"></param>
-    public void TeleportPlayerTo(Vector2 position,int worldID,int dungeonID)
+    public void TeleportPlayerTo(Vector2 position, int worldID, int dungeonID)
     {
         Destroy(currentTeleporterCanvas);
         finalTargetPosition = position;
@@ -147,11 +142,11 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         Animation ufoAnimation = GetComponent<Animation>();
         ufoAnimation.Play();
         player.GetComponent<PlayerAnimation>().DisableMovement();
-        
     }
 
     /// <summary>
-    /// This function is called by an animation event of the Ufo Animation. It loads the new world and teleports the player there.
+    ///     This function is called by an animation event of the Ufo Animation. It loads the new world and teleports the player
+    ///     there.
     /// </summary>
     public void FinishTeleportation()
     {
@@ -169,16 +164,15 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         {
             player.position = finalTargetPosition;
         }
+
         player.GetComponent<PlayerAnimation>().EnableMovement();
         player.GetComponent<SpriteRenderer>().enabled = true;
         interactable = true;
     }
 
-    
-
 
     /// <summary>
-    /// This function is called by an animation event of the Ufo Animation. It hides the player for some time.
+    ///     This function is called by an animation event of the Ufo Animation. It hides the player for some time.
     /// </summary>
     public void FadeOutPlayer()
     {
@@ -187,8 +181,13 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
 
     public void Setup(TeleporterData data)
     {
-            isUnlocked = data.isUnlocked;
-            SetUnLockedState(isUnlocked);
+        isUnlocked = data.isUnlocked;
+        transform.position = data.position;
+        teleporterName = data.teleporterName;
+        worldID = data.worldID;
+        dungeonID = data.dungeonID;
+        teleporterNumber = data.teleporterNumber;
+        SetUnLockedState(isUnlocked);
     }
 
     private void UpdateKeybindings(Binding binding)

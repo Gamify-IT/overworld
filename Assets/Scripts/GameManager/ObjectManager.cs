@@ -247,7 +247,8 @@ public class ObjectManager : MonoBehaviour
         }
         SetupEntityData<Minigame,MinigameData>(0, data);
         SetupEntityData<NPC,NPCData>(0, data);
-        SetupEntityData<Book,BookData>(0, data); 
+        SetupEntityData<Book,BookData>(0, data);
+        SetupEntityData<Teleporter, TeleporterData>(0, data);
     }
 
 

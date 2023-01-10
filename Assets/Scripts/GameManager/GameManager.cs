@@ -160,6 +160,7 @@ public class GameManager : MonoBehaviour
                 DataManager.Instance.SetWorldData(worldIndex, worldDTOs[worldIndex].Value());
             }
 
+            DataManager.Instance.ReadTeleporterConfig();
             DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
             DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
@@ -167,6 +168,7 @@ public class GameManager : MonoBehaviour
         else
         {
             GetDummyData();
+            DataManager.Instance.ReadTeleporterConfig();
         }
 
         Debug.Log("Everything set up");
@@ -220,7 +222,15 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ExecuteTeleportation()
     {
-        Reload();
+        TeleporterSpecificLoading();
+    }
+
+    private async void TeleporterSpecificLoading()
+    {
+        await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+        LoadingManager.Instance.UnloadUnneededScenesExcept("no exceptions in this case ;)");
+        LoadingManager.Instance.setup(sceneName, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
+        await LoadingManager.Instance.LoadScene();
     }
 
     /// <summary>
@@ -230,6 +240,7 @@ public class GameManager : MonoBehaviour
     /// <param name="dungeonIndex">The index of the dungeon (0 if world)</param>
     public void SetData(int worldIndex, int dungeonIndex)
     {
+        //DataManager.Instance.ReadTeleporterConfig();
         if (dungeonIndex != 0)
         {
             Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
@@ -267,6 +278,29 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function activates a teleporter by saving the data in the backend as well as the data manager.
+    /// </summary>
+    /// <param name="worldIndex"></param>
+    /// <param name="dungeonIndex"></param>
+    /// <param name="number"></param>
+    /// <param name="uuid"></param>
+    public async void ActivateTeleporter(int worldIndex, int dungeonIndex, int number)
+    {
+        string path = overworldBackendPath + "/courses/" + courseId + "/teleporters";
+
+        TeleporterUnlockedEvent teleporterData = new TeleporterUnlockedEvent(worldIndex, dungeonIndex, number, userId);
+        string json = JsonUtility.ToJson(teleporterData, true);
+
+        DataManager.Instance.ActivateTeleporter(worldIndex, dungeonIndex, number);
+        bool successful = await RestRequest.PostRequest(path, json);
+
+        if (!successful)
+        {
+            Debug.LogError("Teleporter unlocking could not be transfered to Backend.");
+        }
+    }
+
+    /// <summary>
     ///     This function updates the progress of an achievement
     /// </summary>
     /// <param name="title">The title of the achievement</param>
@@ -281,6 +315,7 @@ public class GameManager : MonoBehaviour
             {
                 return;
             }
+
             EarnAchievement(achievement);
         }
     }
@@ -294,13 +329,14 @@ public class GameManager : MonoBehaviour
     public async void IncreaseAchievementProgress(AchievementTitle title, int increment)
     {
         bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment);
-        if(unlocked)
+        if (unlocked)
         {
             AchievementData achievement = DataManager.Instance.GetAchievement(title);
-            if(achievement == null)
+            if (achievement == null)
             {
                 return;
             }
+
             EarnAchievement(achievement);
         }
     }
@@ -418,7 +454,8 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function creates an <c>AchievementNotificationManager</c>, if needed, and adds the given achievement to be displayed
+    ///     This function creates an <c>AchievementNotificationManager</c>, if needed, and adds the given achievement to be
+    ///     displayed
     /// </summary>
     /// <param name="achievement">The achievement to be displayed</param>
     private void EarnAchievement(AchievementData achievement)

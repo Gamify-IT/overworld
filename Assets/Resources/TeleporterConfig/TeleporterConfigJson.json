@@ -1,0 +1,347 @@
+{
+    "teleporters": [
+        {
+            "name": "Park",
+            "worldID": 1,
+            "dungeonID": 0,
+            "index": 1,
+            "x": 65,
+            "y": 41
+        },
+        {
+            "name": "Marketplace",
+            "worldID": 1,
+            "dungeonID": 0,
+            "index": 2,
+            "x": 6,
+            "y": 12
+        },
+        {
+            "name": "Graveyard",
+            "worldID": 1,
+            "dungeonID": 0,
+            "index": 3,
+            "x": -2,
+            "y": 54
+        },
+
+
+        {
+            "name": "D1 Entrance",
+            "worldID": 1,
+            "dungeonID": 1,
+            "index": 1,
+            "x": -4,
+            "y": -2
+        },
+        {
+            "name": "D1 Ancient Shrine",
+            "worldID": 1,
+            "dungeonID": 1,
+            "index": 2,
+            "x": 59,
+            "y": -47
+        },
+        {
+            "name": "D1 Storage Place",
+            "worldID": 1,
+            "dungeonID": 1,
+            "index": 3,
+            "x": -3,
+            "y": -65
+        },
+        {
+            "name": "D1 Western Cave",
+            "worldID": 1,
+            "dungeonID": 1,
+            "index": 4,
+            "x": -52,
+            "y": -22
+        },
+
+        {
+            "name": "D2 Entrance",
+            "worldID": 1,
+            "dungeonID": 2,
+            "index": 1,
+            "x": -4,
+            "y": -2
+        },
+        {
+            "name": "D2 Ancient Shrine",
+            "worldID": 1,
+            "dungeonID": 2,
+            "index": 2,
+            "x": 59,
+            "y": -47
+        },
+        {
+            "name": "D2 Storage Place",
+            "worldID": 1,
+            "dungeonID": 2,
+            "index": 3,
+            "x": -3,
+            "y": -65
+        },
+        {
+            "name": "D2 Western Cave",
+            "worldID": 1,
+            "dungeonID": 2,
+            "index": 4,
+            "x": -52,
+            "y": -22
+        },
+
+        {
+            "name": "D3 Entrance",
+            "worldID": 1,
+            "dungeonID": 3,
+            "index": 1,
+            "x": -4,
+            "y": -2
+        },
+        {
+            "name": "D3 Ancient Shrine",
+            "worldID": 1,
+            "dungeonID": 3,
+            "index": 2,
+            "x": 59,
+            "y": -47
+        },
+        {
+            "name": "D3 Storage Place",
+            "worldID": 1,
+            "dungeonID": 3,
+            "index": 3,
+            "x": -3,
+            "y": -65
+        },
+        {
+            "name": "D3 Western Cave",
+            "worldID": 1,
+            "dungeonID": 3,
+            "index": 4,
+            "x": -52,
+            "y": -22
+        },
+
+        {
+            "name": "D4 Entrance",
+            "worldID": 1,
+            "dungeonID": 4,
+            "index": 1,
+            "x": -4,
+            "y": -2
+        },
+        {
+            "name": "D4 Ancient Shrine",
+            "worldID": 1,
+            "dungeonID": 4,
+            "index": 2,
+            "x": 59,
+            "y": -47
+        },
+        {
+            "name": "D4 Storage Place",
+            "worldID": 1,
+            "dungeonID": 4,
+            "index": 3,
+            "x": -3,
+            "y": -65
+        },
+        {
+            "name": "D4 Western Cave",
+            "worldID": 1,
+            "dungeonID": 4,
+            "index": 4,
+            "x": -52,
+            "y": -22
+        },
+
+
+
+
+        {
+            "name": "Southern Trail",
+            "worldID": 2,
+            "dungeonID": 0,
+            "index": 1,
+            "x": -142,
+            "y": 44
+        },
+        {
+            "name": "Ancient Battlefield",
+            "worldID": 2,
+            "dungeonID": 0,
+            "index": 2,
+            "x": -251,
+            "y": 112
+        },
+        {
+            "name": "Northern Park",
+            "worldID": 2,
+            "dungeonID": 0,
+            "index": 3,
+            "x": -151,
+            "y": 188
+        },
+        {
+            "name": "Village",
+            "worldID": 2,
+            "dungeonID": 0,
+            "index": 4,
+            "x": -110,
+            "y": 166
+        },
+        {
+            "name": "Marketplace",
+            "worldID": 2,
+            "dungeonID": 0,
+            "index": 5,
+            "x": -113,
+            "y": 86
+        },
+        {
+            "name": "Beachy Isle",
+            "worldID": 2,
+            "dungeonID": 0,
+            "index": 6,
+            "x": -183,
+            "y": 110
+        },
+
+
+        {
+            "name": "D1 Entrance",
+            "worldID": 2,
+            "dungeonID": 1,
+            "index": 1,
+            "x": -4,
+            "y": -2
+        },
+        {
+            "name": "D1 Ancient Shrine",
+            "worldID": 2,
+            "dungeonID": 1,
+            "index": 2,
+            "x": 59,
+            "y": -47
+        },
+        {
+            "name": "D1 Storage Place",
+            "worldID": 2,
+            "dungeonID": 1,
+            "index": 3,
+            "x": -3,
+            "y": -65
+        },
+        {
+            "name": "D1 Western Cave",
+            "worldID": 2,
+            "dungeonID": 1,
+            "index": 4,
+            "x": -52,
+            "y": -22
+        },
+
+        {
+            "name": "D2 Entrance",
+            "worldID": 2,
+            "dungeonID": 2,
+            "index": 1,
+            "x": -4,
+            "y": -2
+        },
+        {
+            "name": "D2 Ancient Shrine",
+            "worldID": 2,
+            "dungeonID": 2,
+            "index": 2,
+            "x": 59,
+            "y": -47
+        },
+        {
+            "name": "D2 Storage Place",
+            "worldID": 2,
+            "dungeonID": 2,
+            "index": 3,
+            "x": -3,
+            "y": -65
+        },
+        {
+            "name": "D2 Western Cave",
+            "worldID": 2,
+            "dungeonID": 2,
+            "index": 4,
+            "x": -52,
+            "y": -22
+        },
+
+        {
+            "name": "D3 Entrance",
+            "worldID": 2,
+            "dungeonID": 3,
+            "index": 1,
+            "x": -4,
+            "y": -2
+        },
+        {
+            "name": "D3 Ancient Shrine",
+            "worldID": 2,
+            "dungeonID": 3,
+            "index": 2,
+            "x": 59,
+            "y": -47
+        },
+        {
+            "name": "D3 Storage Place",
+            "worldID": 2,
+            "dungeonID": 3,
+            "index": 3,
+            "x": -3,
+            "y": -65
+        },
+        {
+            "name": "D3 Western Cave",
+            "worldID": 2,
+            "dungeonID": 3,
+            "index": 4,
+            "x": -52,
+            "y": -22
+        },
+
+        {
+            "name": "D4 Entrance",
+            "worldID": 2,
+            "dungeonID": 4,
+            "index": 1,
+            "x": -4,
+            "y": -2
+        },
+        {
+            "name": "D4 Ancient Shrine",
+            "worldID": 2,
+            "dungeonID": 4,
+            "index": 2,
+            "x": 59,
+            "y": -47
+        },
+        {
+            "name": "D4 Storage Place",
+            "worldID": 2,
+            "dungeonID": 4,
+            "index": 3,
+            "x": -3,
+            "y": -65
+        },
+        {
+            "name": "D4 Western Cave",
+            "worldID": 2,
+            "dungeonID": 4,
+            "index": 4,
+            "x": -52,
+            "y": -22
+        }
+
+    ]
+}

@@ -20,23 +20,19 @@ public class TeleporterDTO
 
     #region Attributes
 
-    public string name;
+    public string id;
     public AreaLocationDTO area;
     public int index;
-    public Vector2 position;
-    public bool isEnabled;
 
     #endregion
 
     #region Constructors
 
-    public TeleporterDTO(string name, AreaLocationDTO area, int index, Vector2 position, bool isEnabled)
+    public TeleporterDTO(string id, AreaLocationDTO area, int index)
     {
-        this.name = name;
+        this.id = id;
         this.area = area;
         this.index = index;
-        this.position = position;
-        this.isEnabled = isEnabled;
     }
 
     public TeleporterDTO()
