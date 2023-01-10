@@ -369,7 +369,10 @@ public class LoadingManager : MonoBehaviour
         }
         foreach (Scene scene in scenesToUnload)
         {
-            await SceneManager.UnloadSceneAsync(scene);
+            if(scene.isLoaded)
+            {
+                await SceneManager.UnloadSceneAsync(scene);
+            }            
         }
     }
 
