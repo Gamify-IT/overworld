@@ -55,10 +55,18 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     /// </summary>
     private void Update()
     {
+        if (currentTeleporterCanvas != null && currentTeleporterCanvas.activeInHierarchy && Input.GetKeyDown(interact))
+        {
+            Debug.Log("Close Teleporter UI");
+            CloseTeleporterUI();
+            return;
+        }
+
         if (inTrigger && interactable && currentTeleporterCanvas == null)
         {
             if (Input.GetKeyDown(interact))
             {
+                Debug.Log("Open Teleporter UI");
                 interactable = false;
                 GameObject newCanvas = Instantiate(teleporterCanvas);
                 teleporterUI = newCanvas.transform.GetChild(0).GetComponent<TeleporterUI>();
@@ -94,13 +102,20 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     {
         if (collision.CompareTag("Player"))
         {
-            interactable = true;
+            CloseTeleporterUI();
             inTrigger = false;
-            Destroy(currentTeleporterCanvas);
-            currentTeleporterCanvas = null;
         }
     }
 
+    /// <summary>
+    ///     Closes teleporter UI
+    /// </summary>
+    private void CloseTeleporterUI()
+    {
+        interactable = true;
+        Destroy(currentTeleporterCanvas);
+        currentTeleporterCanvas = null;
+    }
 
     /// <summary>
     ///     Makes visual changes to the teleporter to indicate wether it is locked or not.
