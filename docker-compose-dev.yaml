@@ -67,7 +67,7 @@ services:
 
   overworld-backend:
     container_name:   overworld-backend
-    image: ghcr.io/gamify-it/overworld-backend:feature-teleporters
+    image: ghcr.io/gamify-it/overworld-backend:main
     restart: always
     pull_policy: always
     expose:
