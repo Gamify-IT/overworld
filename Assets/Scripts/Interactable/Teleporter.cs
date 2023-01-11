@@ -135,14 +135,22 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     /// <param name="worldIndex"></param>
     public void TeleportPlayerTo(Vector2 position, int worldID, int dungeonID)
     {
+        Debug.Log("TeleportPlayerTo start");
+
         Destroy(currentTeleporterCanvas);
         finalTargetPosition = position;
         finalTargetWorld = worldID;
         finalTargetDungeon = dungeonID;
         Animation ufoAnimation = GetComponent<Animation>();
-        ufoAnimation.Play();
         player.GetComponent<PlayerAnimation>().DisableMovement();
+        Debug.Log("start animation");
+        ufoAnimation.Play();
+
+        Debug.Log("Animation length: " + ufoAnimation.clip.length);
+
+        Invoke("FinishTeleportation", ufoAnimation.clip.length);
     }
+
 
     /// <summary>
     ///     This function is called by an animation event of the Ufo Animation. It loads the new world and teleports the player

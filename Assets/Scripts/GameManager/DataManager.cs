@@ -166,7 +166,7 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function unlocks a teleporter
+    ///     This function unlocks a teleporter
     /// </summary>
     /// <param name="worldIndex">The index of the world the NPC is in</param>
     /// <param name="dungeonIndex">The index of the dungeon the NPC is in (0 if in world)</param>
@@ -379,18 +379,18 @@ public class DataManager : MonoBehaviour
                 dataList.Add(currentData);
             }
         }
+
         for (int i = 1; i < GameSettings.GetMaxDungeons() + 1; i++)
         {
-
             DungeonData dungeonData = worldData.getDungeonData(i);
 
             if (dungeonData == null)
             {
                 continue;
             }
+
             for (int j = 1; j < GameSettings.GetMaxTeleporters() + 1; j++)
             {
-
                 TeleporterData currentData = dungeonData.GetEntityDataAt<TeleporterData>(j);
                 if (currentData != null && currentData.isUnlocked)
                 {
@@ -398,6 +398,7 @@ public class DataManager : MonoBehaviour
                 }
             }
         }
+
         Debug.Log("UnlockedTPs in World " + worldIndex + ": " + dataList.Count);
         return dataList;
     }
@@ -421,10 +422,11 @@ public class DataManager : MonoBehaviour
     public bool UpdateAchievement(AchievementTitle title, int newProgress)
     {
         AchievementData achievement = GetAchievement(title);
-        if(achievement != null)
+        if (achievement != null)
         {
             return achievement.UpdateProgress(newProgress);
         }
+
         return false;
     }
 
@@ -440,9 +442,10 @@ public class DataManager : MonoBehaviour
         if (achievement != null)
         {
             int newProgress = achievement.GetProgress() + increment;
-            Debug.Log("New Progress of '" + title + "': " + achievement.GetProgress());
+            //Debug.Log("New Progress of '" + title + "': " + achievement.GetProgress());
             return achievement.UpdateProgress(newProgress);
         }
+
         return false;
     }
 
@@ -453,13 +456,14 @@ public class DataManager : MonoBehaviour
     /// <returns>The <c>AchievementData</c> corresponding with the given title if present, null otherwise</returns>
     public AchievementData GetAchievement(AchievementTitle title)
     {
-        foreach(AchievementData achievement in achievementData)
+        foreach (AchievementData achievement in achievementData)
         {
-            if(achievement.GetTitle().Equals(title.ToString()))
+            if (achievement.GetTitle().Equals(title.ToString()))
             {
                 return achievement;
             }
         }
+
         return null;
     }
 
@@ -549,11 +553,14 @@ public class DataManager : MonoBehaviour
     private List<AchievementData> GetDummyAchievements()
     {
         List<string> categories1 = new() { "Exploring" };
-        AchievementData achievement1 = new AchievementData("GO_FOR_A_WALK", "Walk 10 tiles", categories1, "achievement2", 10, 0, false);
-        AchievementData achievement2 = new AchievementData("GO_FOR_A_LONGER_WALK", "Walk 15 tiles", categories1, "achievement2", 15, 0, false);
-        AchievementData achievement3 = new AchievementData("TALK_TO_NPCS", "Talkt to 15 NPCs", categories1, "achievement2", 5, 0, false);
+        AchievementData achievement1 =
+            new AchievementData("GO_FOR_A_WALK", "Walk 10 tiles", categories1, "achievement2", 10, 0, false);
+        AchievementData achievement2 = new AchievementData("GO_FOR_A_LONGER_WALK", "Walk 15 tiles", categories1,
+            "achievement2", 15, 0, false);
+        AchievementData achievement3 =
+            new AchievementData("TALK_TO_NPCS", "Talkt to 15 NPCs", categories1, "achievement2", 5, 0, false);
 
-        List<AchievementData> achievements = new List<AchievementData>() { achievement1, achievement2, achievement3 };
+        List<AchievementData> achievements = new List<AchievementData> { achievement1, achievement2, achievement3 };
 
         return achievements;
     }
@@ -605,7 +612,7 @@ public class DataManager : MonoBehaviour
 
 
     /// <summary>
-    /// Reads the teleporter config and assigns its data to the TeleporterData array of its belonging IAreaData
+    ///     Reads the teleporter config and assigns its data to the TeleporterData array of its belonging IAreaData
     /// </summary>
     public void ReadTeleporterConfig()
     {
@@ -615,12 +622,13 @@ public class DataManager : MonoBehaviour
         foreach (TeleporterConfig config in manager.teleporters)
         {
             int worldID = config.worldID;
-            WorldData worldData = this.GetWorldData(worldID);
+            WorldData worldData = GetWorldData(worldID);
             if (worldData == null)
             {
                 Debug.LogError("Could not assign teleporter config data to worldData. WorldData is null.");
                 continue;
             }
+
             worldData.SetTeleporterData(config);
         }
     }

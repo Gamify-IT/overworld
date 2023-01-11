@@ -1,9 +1,9 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 public class LoadingManager : MonoBehaviour
 {
@@ -54,7 +54,7 @@ public class LoadingManager : MonoBehaviour
     #region Functionality
 
     /// <summary>
-    /// This function sets up what the <c>Loading Manager</c> should load.
+    ///     This function sets up what the <c>Loading Manager</c> should load.
     /// </summary>
     /// <param name="sceneToLoad">name of the scene to load</param>
     /// <param name="worldIndex">index of the current world</param>
@@ -266,7 +266,7 @@ public class LoadingManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This function sets up the progress with the highest unlocked area and the minigame progress in that area
+    ///     This function sets up the progress with the highest unlocked area and the minigame progress in that area
     /// </summary>
     /// <param name="unlockedAreas">All unlocked areas</param>
     private void SetupProgessBar(AreaLocationDTO[] unlockedAreas)
@@ -290,13 +290,14 @@ public class LoadingManager : MonoBehaviour
                     float progress = DataManager.Instance.GetMinigameProgress(worldIndex, dungeonIndex);
                     ProgressBar.Instance.setProgress(progress);
                 }
+
                 break;
             }
         }
     }
 
     /// <summary>
-    /// This function checks whether the player has unlocked a world or not
+    ///     This function checks whether the player has unlocked a world or not
     /// </summary>
     /// <param name="unlockedAreas">All unlocked areas</param>
     /// <param name="worldIndex">The index of the world to be checked</param>
@@ -310,11 +311,12 @@ public class LoadingManager : MonoBehaviour
                 return true;
             }
         }
+
         return false;
     }
 
     /// <summary>
-    /// This function checks whether the player has unlocked a dungeon or not
+    ///     This function checks whether the player has unlocked a dungeon or not
     /// </summary>
     /// <param name="unlockedAreas">All unlocked areas</param>
     /// <param name="worldIndex">The index of the world the dungeon to be checked is in</param>
@@ -329,11 +331,12 @@ public class LoadingManager : MonoBehaviour
                 return true;
             }
         }
+
         return false;
     }
 
     /// <summary>
-    /// This function returns the highest unlocked dungeon of a given world
+    ///     This function returns the highest unlocked dungeon of a given world
     /// </summary>
     /// <param name="unlockedAreas">All unlocked areas</param>
     /// <param name="worldIndex">The index of the world</param>
@@ -347,11 +350,12 @@ public class LoadingManager : MonoBehaviour
                 return dungeonIndex;
             }
         }
+
         return 0;
     }
 
     /// <summary>
-    /// This function unloades every scene that is not the given openScene or player and hud related scenes.
+    ///     This function unloades every scene that is not the given openScene or player and hud related scenes.
     /// </summary>
     /// <param name="openScene"></param>
     public async void UnloadUnneededScenesExcept(string openScene)
@@ -367,12 +371,13 @@ public class LoadingManager : MonoBehaviour
                 scenesToUnload.Add(SceneManager.GetSceneAt(sceneIndex));
             }
         }
+
         foreach (Scene scene in scenesToUnload)
         {
-            if(scene.isLoaded)
+            if (scene.isLoaded)
             {
                 await SceneManager.UnloadSceneAsync(scene);
-            }            
+            }
         }
     }
 
