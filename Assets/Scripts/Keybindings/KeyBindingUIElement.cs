@@ -98,7 +98,7 @@ public class KeyBindingUIElement : MonoBehaviour
     /// </summary>
     private void UpdateUI()
     {
-        title.text = keybinding.GetBinding().ToString();
-        binding.text = keybinding.GetKey().ToString().Replace("_", " ");
+        title.text = keybinding.GetBinding().ToString().Replace("_", " ");
+        binding.text = keybinding.GetKey().ToString();
     }
 }
