@@ -99,6 +99,6 @@ public class KeyBindingUIElement : MonoBehaviour
     private void UpdateUI()
     {
         title.text = keybinding.GetBinding().ToString();
-        binding.text = keybinding.GetKey().ToString();
+        binding.text = keybinding.GetKey().ToString().Replace("_", " ");
     }
 }
