@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class AchievementUIElement : MonoBehaviour
 {
@@ -14,7 +12,7 @@ public class AchievementUIElement : MonoBehaviour
 
     public void Setup(string title, string description, Sprite image, int progress, int amountRequired, bool completed)
     {
-        this.title.text = title;
+        this.title.text = title.Replace("_", " ");
         this.description.text = description;
         this.image.sprite = image;
         this.progress.text = progress + "/" + amountRequired;
