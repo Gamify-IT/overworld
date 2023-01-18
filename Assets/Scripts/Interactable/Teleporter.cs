@@ -56,14 +56,15 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     private void Update()
     {
         if (currentTeleporterCanvas != null && currentTeleporterCanvas.activeInHierarchy &&
-            Input.GetKeyDown(interact) && !PauseMenu.menuOpen)
+            Input.GetKeyDown(interact) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
             Debug.Log("Close Teleporter UI");
             CloseTeleporterUI();
             return;
         }
 
-        if (inTrigger && interactable && currentTeleporterCanvas == null && !PauseMenu.menuOpen)
+        if (inTrigger && interactable && currentTeleporterCanvas == null && !PauseMenu.menuOpen &&
+            !PauseMenu.subMenuOpen)
         {
             if (Input.GetKeyDown(interact))
             {

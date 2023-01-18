@@ -18,12 +18,13 @@ public class Interaction : MonoBehaviour
     }
 
     /// <summary>
-    /// The <c>Update</c> function is called once every frame.
-    /// This function checks, if a interactable object is found and the player wants to interact with it, and if so, starts the interaction.
+    ///     The <c>Update</c> function is called once every frame.
+    ///     This function checks, if a interactable object is found and the player wants to interact with it, and if so, starts
+    ///     the interaction.
     /// </summary>
-    void Update()
+    private void Update()
     {
-        if (DetectObject() && !PauseMenu.menuOpen && InteractInput())
+        if (DetectObject() && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen && InteractInput())
         {
             Debug.Log("Interact");
             detectedObject.GetComponent<Item>().Interact();
@@ -36,19 +37,19 @@ public class Interaction : MonoBehaviour
     }
 
     /// <summary>
-    /// This function checks, if the <c>E</c> button is pressed or not
+    ///     This function checks, if the <c>E</c> button is pressed or not
     /// </summary>
     /// <returns>True, if <c>E</c> button pressed, false otherwise</returns>
-    bool InteractInput()
+    private bool InteractInput()
     {
         return Input.GetKeyDown(interact);
     }
 
     /// <summary>
-    /// This function checks, if a object is nearby.
+    ///     This function checks, if a object is nearby.
     /// </summary>
     /// <returns>True, if a object was found, false otherwise</returns>
-    bool DetectObject()
+    private bool DetectObject()
     {
         Collider2D obj = Physics2D.OverlapCircle(detectionPoint.position, detectionRadius, detectionLayer);
         if (obj == null)
@@ -56,11 +57,9 @@ public class Interaction : MonoBehaviour
             detectedObject = null;
             return false;
         }
-        else
-        {
-            detectedObject = obj.gameObject;
-            return true;
-        }
+
+        detectedObject = obj.gameObject;
+        return true;
     }
 
     /// <summary>

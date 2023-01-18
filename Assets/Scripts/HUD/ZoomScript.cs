@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.U2D;
 
 /// <summary>
-/// This script manages the zooming of the game and the minimap.
+///     This script manages the zooming of the game and the minimap.
 /// </summary>
 public class ZoomScript : MonoBehaviour
 {
@@ -13,11 +13,11 @@ public class ZoomScript : MonoBehaviour
     private int minZoomLevel = -60;
 
     //normal camera zoom levels
-    private int[] gameZoomLevelX = new int[] { 320, 355, 425 };
-    private int[] gameZoomLevelY = new int[] { 180, 200, 240 };
+    private readonly int[] gameZoomLevelX = { 320, 355, 425 };
+    private readonly int[] gameZoomLevelY = { 180, 200, 240 };
     private int gameZoomLevel = 1;
 
-    private float minimapIconResizeValue = (float)9;
+    private readonly float minimapIconResizeValue = 9;
     private PixelPerfectCamera pixelCam;
 
     //KeyCodes
@@ -29,10 +29,10 @@ public class ZoomScript : MonoBehaviour
     public static string areaName = "Loading...";
 
     /// <summary>
-    /// The <c>Start</c> function is called after the object is initialized.
-    /// This function sets up the references of the object.
+    ///     The <c>Start</c> function is called after the object is initialized.
+    ///     This function sets up the references of the object.
     /// </summary>
-    void Start()
+    private void Start()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         GameObject miniMapCam = GameObject.Find("Minimap Camera");
@@ -47,31 +47,31 @@ public class ZoomScript : MonoBehaviour
     }
 
     /// <summary>
-    /// The <c>Update</c> function is called once every frame.
-    /// This function checks if the game or minimap needs to be zoomed out or in.
+    ///     The <c>Update</c> function is called once every frame.
+    ///     This function checks if the game or minimap needs to be zoomed out or in.
     /// </summary>
-    void Update()
+    private void Update()
     {
         //zoom in
-        if (Input.GetKeyDown(minimapZoomIn))
+        if (Input.GetKeyDown(minimapZoomIn) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
             MinimapZoomIn();
         }
 
         //zoom out
-        if (Input.GetKeyDown(minimapZoomOut))
+        if (Input.GetKeyDown(minimapZoomOut) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
             MinimapZoomOut();
         }
 
         //zoom game in
-        if (Input.GetKeyDown(gameZoomIn))
+        if (Input.GetKeyDown(gameZoomIn) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
             GameZoomIn();
         }
 
         //zoom game out
-        if (Input.GetKeyDown(gameZoomOut))
+        if (Input.GetKeyDown(gameZoomOut) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
             GameZoomOut();
         }
@@ -91,7 +91,7 @@ public class ZoomScript : MonoBehaviour
     }
 
     /// <summary>
-    /// This function zooms in the minimap by one step
+    ///     This function zooms in the minimap by one step
     /// </summary>
     public void MinimapZoomIn()
     {
@@ -111,7 +111,7 @@ public class ZoomScript : MonoBehaviour
     }
 
     /// <summary>
-    /// This function zooms out the minimap by one step
+    ///     This function zooms out the minimap by one step
     /// </summary>
     public void MinimapZoomOut()
     {
@@ -131,7 +131,7 @@ public class ZoomScript : MonoBehaviour
     }
 
     /// <summary>
-    /// This function zooms out the game by one step
+    ///     This function zooms out the game by one step
     /// </summary>
     public void GameZoomOut()
     {
@@ -150,7 +150,7 @@ public class ZoomScript : MonoBehaviour
     }
 
     /// <summary>
-    /// This function zooms in the game by one step
+    ///     This function zooms in the game by one step
     /// </summary>
     public void GameZoomIn()
     {
