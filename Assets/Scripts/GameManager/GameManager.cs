@@ -367,7 +367,7 @@ public class GameManager : MonoBehaviour
                     {
                         Debug.Log("Message by world part of code");
                         return "YOU HAVE TO UNLOCK WORLD " + (destinationAreaIndex - i) +
-                               " FIRST"; //welt davor is noch nicht frigeschaltet
+                               " FIRST";
                     }
                 }
 
@@ -377,8 +377,8 @@ public class GameManager : MonoBehaviour
                         !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, i))
                     {
                         Debug.Log("Message by world part of code");
-                        return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
-                               " FIRST"; //dungeon davor is noch nicht frigeschaltet
+                        return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + i +
+                               " FIRST";
                     }
 
                     if (inBetweenWorld > 1)
@@ -389,7 +389,7 @@ public class GameManager : MonoBehaviour
                             Debug.Log("Message by world part of code");
                             return "YOU HAVE TO UNLOCK DUNGEON " + inBetweenWorld + "-" +
                                    (destinationAreaIndex - i) +
-                                   " FIRST"; //dungeon in welt davor der aktiv ist is noch nicht frigeschaltet
+                                   " FIRST";
                         }
                     }
                 }
@@ -429,8 +429,6 @@ public class GameManager : MonoBehaviour
         if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex)
             .IsActive())
         {
-            //TODO: change unlock message to highest active & lower than destination & locked dungeon
-
             for (int i = 1; i < destinationAreaIndex; i++)
             {
                 if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex - i)
@@ -439,7 +437,7 @@ public class GameManager : MonoBehaviour
                 {
                     Debug.Log("Message by dungeon part of code");
                     return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
-                           " FIRST"; //anderer Dungeon der aktiv ist muss zuerst freigeschaltet werden
+                           " FIRST";
                 }
             }
 
