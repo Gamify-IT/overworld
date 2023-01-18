@@ -352,13 +352,20 @@ public class GameManager : MonoBehaviour
     {
         if (type == BarrierType.worldBarrier)
         {
+            int inBetweenWorld = 0;
+
+            if (destinationAreaIndex > originWorldIndex + 1)
+            {
+                inBetweenWorld = destinationAreaIndex - 1;
+            }
+
             if (DataManager.Instance.GetWorldData(destinationAreaIndex).isActive())
             {
-                for (int i = destinationAreaIndex; i > 0; i--)
+                for (int i = destinationAreaIndex; i > 1; i--)
                 {
-                    if (!DataManager.Instance.IsWorldUnlocked(destinationAreaIndex - i + 1))
+                    if (!DataManager.Instance.IsWorldUnlocked(destinationAreaIndex - i))
                     {
-                        return "YOU HAVE TO UNLOCK WORLD " + (destinationAreaIndex - i + 1) + " FIRST";
+                        return "YOU HAVE TO UNLOCK WORLD " + (destinationAreaIndex - i) + " FIRST";
                     }
                 }
 
@@ -369,9 +376,19 @@ public class GameManager : MonoBehaviour
                         return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
                                " FIRST";
                     }
+
+                    if (inBetweenWorld > 1)
+                    {
+                        if (!DataManager.Instance.IsDungeonUnlocked(inBetweenWorld, i))
+                        {
+                            return "YOU HAVE TO UNLOCK DUNGEON " + inBetweenWorld + "-" + (destinationAreaIndex - i) +
+                                   " FIRST";
+                        }
+                    }
                 }
 
                 int activeMinigameCount = 0;
+                int doneMinigameCount = 0;
 
                 foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
                              .GetMinigameData())
@@ -380,13 +397,14 @@ public class GameManager : MonoBehaviour
                     {
                         activeMinigameCount++;
                     }
+
+                    if (minigameData.GetStatus() == MinigameStatus.done)
+                    {
+                        doneMinigameCount++;
+                    }
                 }
 
-                float uncompletedMinigames = activeMinigameCount -
-                                             activeMinigameCount *
-                                             DataManager.Instance.GetMinigameProgress(originWorldIndex);
-
-                return "COMPLETE " + uncompletedMinigames + " MORE MINIGAMES TO UNLOCK THIS AREA.";
+                return "COMPLETE " + (activeMinigameCount - doneMinigameCount) + " MORE MINIGAMES TO UNLOCK THIS AREA.";
             }
 
             return "NOT UNLOCKABLE IN THIS GAME VERSION";
