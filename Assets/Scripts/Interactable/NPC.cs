@@ -52,7 +52,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     private void Update()
     {
         if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
-            !PauseMenu.menuOpen)
+            !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
             if (!hasBeenTalkedTo)
             {
@@ -62,8 +62,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             StartCoroutine(LoadDialogueScene());
         }
         else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
-                 typingIsFinished &&
-                 !PauseMenu.menuOpen)
+                 typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
             Debug.Log(dialogue.Length - 1);
             Debug.Log("index before next" + index);
@@ -71,8 +70,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             Debug.Log("index after next" + index);
         }
         else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
-                 !typingIsFinished &&
-                 !PauseMenu.menuOpen)
+                 !typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
             StopCoroutine("Typing");
             dialogueText.text = "";
@@ -87,7 +85,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     private void OnDestroy()
     {
         Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveGameEntity<NPC,NPCData>(world, dungeon, number);
+        ObjectManager.Instance.RemoveGameEntity<NPC, NPCData>(world, dungeon, number);
         GameEvents.current.onKeybindingChange -= UpdateKeybindings;
     }
 
@@ -136,7 +134,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     private void RegisterToGameManager()
     {
         Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.AddGameEntity<NPC,NPCData>(gameObject, world, dungeon, number);
+        ObjectManager.Instance.AddGameEntity<NPC, NPCData>(gameObject, world, dungeon, number);
     }
 
     /// <summary>

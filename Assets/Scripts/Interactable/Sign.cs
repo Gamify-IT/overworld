@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 ///     This class is responsible for the sign logic.
@@ -43,7 +40,8 @@ public class Sign : MonoBehaviour
     }
 
     /// <summary>
-    ///     If the player leaves the range of the sign while the sign is open, the sign will be closed and playerIsClose check will be set to false.
+    ///     If the player leaves the range of the sign while the sign is open, the sign will be closed and playerIsClose check
+    ///     will be set to false.
     /// </summary>
     private void OnTriggerExit2D(Collider2D other)
     {
@@ -60,9 +58,8 @@ public class Sign : MonoBehaviour
     /// </summary>
     private void Update()
     {
-
         if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
-            !PauseMenu.menuOpen)
+            !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
             signText.text = text;
             SignPanel.SetActive(!SignPanel.activeInHierarchy);
