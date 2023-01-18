@@ -356,9 +356,9 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = destinationAreaIndex; i > 0; i--)
                 {
-                    if (!DataManager.Instance.IsWorldUnlocked(destinationAreaIndex - i))
+                    if (!DataManager.Instance.IsWorldUnlocked(destinationAreaIndex - i + 1))
                     {
-                        return "YOU HAVE TO UNLOCK WORLD " + (destinationAreaIndex - i) + " FIRST";
+                        return "YOU HAVE TO UNLOCK WORLD " + (destinationAreaIndex - i + 1) + " FIRST";
                     }
                 }
 
@@ -370,40 +370,6 @@ public class GameManager : MonoBehaviour
                                " FIRST";
                     }
                 }
-                
-                int activeMinigameCount = 0;
-
-                foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                             .GetMinigameData())
-                {
-                    if (minigameData.GetStatus() == MinigameStatus.active)
-                    {
-                        activeMinigameCount++;
-                    }
-                }
-
-                float uncompletedMinigames = activeMinigameCount -
-                                             activeMinigameCount * DataManager.Instance.GetMinigameProgress(originWorldIndex);
-                
-                return "COMPLETE " + uncompletedMinigames + " MORE MINIGAMES TO UNLOCK THIS AREA.";
-            }
-            else
-            {
-                return "NOT UNLOCKABLE IN THIS GAME VERSION";
-            }
-        }
-        else
-        {
-            if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex).IsActive())
-            {
-                for (int i = destinationAreaIndex; i > 0; i--)
-                {
-                    if (!DataManager.Instance.IsDungeonUnlocked(originWorldIndex, destinationAreaIndex - i))
-                    {
-                        return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
-                               " FIRST";
-                    }
-                }
 
                 int activeMinigameCount = 0;
 
@@ -417,12 +383,44 @@ public class GameManager : MonoBehaviour
                 }
 
                 float uncompletedMinigames = activeMinigameCount -
-                        activeMinigameCount * DataManager.Instance.GetMinigameProgress(originWorldIndex);
+                                             activeMinigameCount *
+                                             DataManager.Instance.GetMinigameProgress(originWorldIndex);
+
                 return "COMPLETE " + uncompletedMinigames + " MORE MINIGAMES TO UNLOCK THIS AREA.";
             }
 
             return "NOT UNLOCKABLE IN THIS GAME VERSION";
         }
+
+        if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex).IsActive())
+        {
+            for (int i = destinationAreaIndex; i > 0; i--)
+            {
+                if (!DataManager.Instance.IsDungeonUnlocked(originWorldIndex, destinationAreaIndex - i))
+                {
+                    return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
+                           " FIRST";
+                }
+            }
+
+            int activeMinigameCount = 0;
+
+            foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
+                         .GetMinigameData())
+            {
+                if (minigameData.GetStatus() == MinigameStatus.active)
+                {
+                    activeMinigameCount++;
+                }
+            }
+
+            float uncompletedMinigames = activeMinigameCount -
+                                         activeMinigameCount *
+                                         DataManager.Instance.GetMinigameProgress(originWorldIndex);
+            return "COMPLETE " + uncompletedMinigames + " MORE MINIGAMES TO UNLOCK THIS AREA.";
+        }
+
+        return "NOT UNLOCKABLE IN THIS GAME VERSION";
     }
 
     /// <summary>
