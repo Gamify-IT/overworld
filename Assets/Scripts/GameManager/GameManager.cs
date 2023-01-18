@@ -415,43 +415,58 @@ public class GameManager : MonoBehaviour
             Debug.Log("Message by world part of code");
             return "NOT UNLOCKABLE IN THIS GAME VERSION";
         }
-
-        if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex)
-            .IsActive())
+        else
         {
-            for (int i = 1; i < destinationAreaIndex; i++)
+            if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex)
+                .IsActive())
             {
-                if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex - i)
-                        .IsActive() &&
-                    !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, destinationAreaIndex - i))
+                for (int i = 1; i < destinationAreaIndex; i++)
                 {
-                    Debug.Log("Message by dungeon part of code");
-                    return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
-                           " FIRST";
+                    if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex - i)
+                            .IsActive() &&
+                        !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, destinationAreaIndex - i))
+                    {
+                        Debug.Log("Message by dungeon part of code");
+                        return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
+                               " FIRST";
+                    }
                 }
+
+                int activeMinigameCount = 0;
+
+                if (destinationAreaIndex == 1)
+                {
+                    foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
+                                 .GetMinigameData())
+                    {
+                        if (minigameData.GetStatus() == MinigameStatus.active)
+                        {
+                            activeMinigameCount++;
+                        }
+                    }
+
+                    return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
+                }
+                else
+                {
+                    foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
+                                 .getDungeonData(destinationAreaIndex - 1)
+                                 .GetMinigameData())
+                    {
+                        if (minigameData.GetStatus() == MinigameStatus.active)
+                        {
+                            activeMinigameCount++;
+                        }
+                    }
+                }
+
+                return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex + "-" +
+                       (destinationAreaIndex - 1) + " TO UNLOCK THIS AREA.";
             }
 
-            //TODO: unterscheidung wo die minispiele noch gespielt werden müssen (aktuelle welt oder anderer dungeon)
-
-            int activeMinigameCount = 0;
-
-            foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                         .GetMinigameData())
-            {
-                if (minigameData.GetStatus() == MinigameStatus.active)
-                {
-                    activeMinigameCount++;
-                    Debug.Log("Dungeon - Minigame " + minigameData.GetConfigurationID() + " in world " +
-                              originWorldIndex + "is active; activeMinigameCount: " + activeMinigameCount);
-                }
-            }
-
-            Debug.Log("Message by dungeon part of code; activeMinigameCount: " + activeMinigameCount);
-            return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
+            return "NOT UNLOCKABLE IN THIS GAME VERSION";
         }
-
-        Debug.Log("Message by dungeon part of code");
-        return "NOT UNLOCKABLE IN THIS GAME VERSION";
+        
     }
 
     /// <summary>
