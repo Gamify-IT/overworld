@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -39,7 +36,8 @@ public class NavigationMap : MonoBehaviour
     }
 
     /// <summary>
-    ///     If the player leaves the range of the map while the map is open, the map will be closed and playerIsClose check will be set to false.
+    ///     If the player leaves the range of the map while the map is open, the map will be closed and playerIsClose check
+    ///     will be set to false.
     /// </summary>
     private void OnTriggerExit2D(Collider2D other)
     {
@@ -56,9 +54,8 @@ public class NavigationMap : MonoBehaviour
     /// </summary>
     private void Update()
     {
-
         if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
-            !PauseMenu.menuOpen)
+            !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
             MapPanel.SetActive(!MapPanel.activeInHierarchy);
         }

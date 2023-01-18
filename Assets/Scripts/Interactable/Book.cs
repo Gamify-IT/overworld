@@ -37,12 +37,12 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     private void Update()
     {
         if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByName("Book").isLoaded &&
-            !PauseMenu.menuOpen)
+            !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
             StartCoroutine(LoadBookScene());
         }
         else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByName("Book").isLoaded &&
-                 !PauseMenu.menuOpen)
+                 !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
             SceneManager.UnloadSceneAsync("Book");
         }
