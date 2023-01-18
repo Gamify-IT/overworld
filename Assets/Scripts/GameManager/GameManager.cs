@@ -350,6 +350,8 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public string GetBarrierInfoText(BarrierType type, int originWorldIndex, int destinationAreaIndex)
     {
+        //wenn Barriere zwei Welten trennt
+
         if (type == BarrierType.worldBarrier)
         {
             int inBetweenWorld = 0;
@@ -359,33 +361,40 @@ public class GameManager : MonoBehaviour
                 inBetweenWorld = destinationAreaIndex - 1;
             }
 
-            if (DataManager.Instance.GetWorldData(destinationAreaIndex).isActive())
+            if (DataManager.Instance.GetWorldData(destinationAreaIndex).isActive()) //ziel welt is aktiv
             {
-                for (int i = destinationAreaIndex; i > 1; i--)
+                for (int i = destinationAreaIndex - 1; i > 0; i--)
                 {
                     if (!DataManager.Instance.IsWorldUnlocked(destinationAreaIndex - i))
                     {
-                        return "YOU HAVE TO UNLOCK WORLD " + (destinationAreaIndex - i) + " FIRST";
+                        return "YOU HAVE TO UNLOCK WORLD " + (destinationAreaIndex - i) +
+                               " FIRST"; //welt davor is noch nicht frigeschaltet
                     }
                 }
 
                 for (int i = 0; i < 4; i++)
                 {
-                    if (!DataManager.Instance.IsDungeonUnlocked(originWorldIndex, i))
+                    if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(i).IsActive() &&
+                        !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, i))
                     {
                         return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
-                               " FIRST";
+                               " FIRST"; //dungeon davor is noch nicht frigeschaltet
                     }
 
                     if (inBetweenWorld > 1)
                     {
-                        if (!DataManager.Instance.IsDungeonUnlocked(inBetweenWorld, i))
+                        if (DataManager.Instance.GetWorldData(inBetweenWorld).getDungeonData(i).IsActive() &&
+                            !DataManager.Instance.IsDungeonUnlocked(inBetweenWorld, i))
                         {
-                            return "YOU HAVE TO UNLOCK DUNGEON " + inBetweenWorld + "-" + (destinationAreaIndex - i) +
-                                   " FIRST";
+                            return "YOU HAVE TO UNLOCK DUNGEON " + inBetweenWorld + "-" +
+                                   (destinationAreaIndex - i) +
+                                   " FIRST"; //dungeon in welt davor der aktiv ist is noch nicht frigeschaltet
                         }
                     }
                 }
+
+                //ziel welt is aktiv aber es hängt nich an dungeon oder welt die zuerst freigeschaltet werden muss
+                //TODO: unterscheidung wo die minispiele noch gespielt werden müssen (aktuelle welt oder andere welt/dungeon)
 
                 int activeMinigameCount = 0;
                 int doneMinigameCount = 0;
@@ -407,19 +416,30 @@ public class GameManager : MonoBehaviour
                 return "COMPLETE " + (activeMinigameCount - doneMinigameCount) + " MORE MINIGAMES TO UNLOCK THIS AREA.";
             }
 
+            //ziel welt is inaktiv
+
             return "NOT UNLOCKABLE IN THIS GAME VERSION";
         }
 
-        if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex).IsActive())
+
+        //wenn Barriere Welt & Dungeon trennt
+
+        if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex)
+            .IsActive()) //ziel dungeon ist aktiv
         {
             for (int i = destinationAreaIndex; i > 0; i--)
             {
-                if (!DataManager.Instance.IsDungeonUnlocked(originWorldIndex, destinationAreaIndex - i))
+                if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex - i)
+                        .IsActive() &&
+                    !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, destinationAreaIndex - i))
                 {
                     return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
-                           " FIRST";
+                           " FIRST"; //anderer Dungeon der aktiv ist muss zuerst freigeschaltet werden
                 }
             }
+
+            //ziel dungeon is aktiv aber es hängt nich an anderem dungeon der zuerst freigeschaltet werden muss
+            //TODO: unterscheidung wo die minispiele noch gespielt werden müssen (aktuelle welt oder anderer dungeon)
 
             int activeMinigameCount = 0;
 
@@ -437,6 +457,8 @@ public class GameManager : MonoBehaviour
                                          DataManager.Instance.GetMinigameProgress(originWorldIndex);
             return "COMPLETE " + uncompletedMinigames + " MORE MINIGAMES TO UNLOCK THIS AREA.";
         }
+
+        //ziel dungeon is inaktiv
 
         return "NOT UNLOCKABLE IN THIS GAME VERSION";
     }
