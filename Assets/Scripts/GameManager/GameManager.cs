@@ -556,60 +556,60 @@ public class GameManager : MonoBehaviour
     {
         if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex)
                 .IsActive())
+        {
+            for (int i = 1; i < destinationAreaIndex; i++)
             {
-                for (int i = 1; i < destinationAreaIndex; i++)
+                if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex - i)
+                        .IsActive() &&
+                    !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, destinationAreaIndex - i))
                 {
-                    if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex - i)
-                            .IsActive() &&
-                        !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, destinationAreaIndex - i))
-                    {
-                        return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
-                               " FIRST";
-                    }
-                }
-
-                int activeMinigameCount = 0;
-
-                if (destinationAreaIndex == 1)
-                {
-                    foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                                 .GetMinigameData())
-                    {
-                        if (minigameData.GetStatus() == MinigameStatus.active)
-                        {
-                            activeMinigameCount++;
-                        }
-                    }
-
-                    if (activeMinigameCount == 0)
-                    {
-                        return "ERROR - PLEASE CONTACT THE DEVELOPERS";
-                    }
-                    
-                    return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
-                }
-                else
-                {
-                    foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                                 .getDungeonData(destinationAreaIndex - 1).GetMinigameData())
-                    {
-                        if (minigameData.GetStatus() == MinigameStatus.active)
-                        {
-                            activeMinigameCount++;
-                        }
-                    }
-                    
-                    if (activeMinigameCount == 0)
-                    {
-                        return "ERROR - PLEASE CONTACT THE DEVELOPERS";
-                    }
-                    
-                    return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex + "-" +
-                           (destinationAreaIndex - 1) + " TO UNLOCK THIS AREA.";
+                    return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
+                           " FIRST";
                 }
             }
 
-            return "NOT UNLOCKABLE IN THIS GAME VERSION";
+            int activeMinigameCount = 0;
+
+            if (destinationAreaIndex == 1)
+            {
+                foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
+                             .GetMinigameData())
+                {
+                    if (minigameData.GetStatus() == MinigameStatus.active)
+                    {
+                        activeMinigameCount++;
+                    }
+                }
+
+                if (activeMinigameCount == 0)
+                {
+                    return "ERROR - PLEASE CONTACT THE DEVELOPERS";
+                }
+                
+                return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
+            }
+            else
+            {
+                foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
+                             .getDungeonData(destinationAreaIndex - 1).GetMinigameData())
+                {
+                    if (minigameData.GetStatus() == MinigameStatus.active)
+                    {
+                        activeMinigameCount++;
+                    }
+                }
+                
+                if (activeMinigameCount == 0)
+                {
+                    return "ERROR - PLEASE CONTACT THE DEVELOPERS";
+                }
+                
+                return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex + "-" +
+                       (destinationAreaIndex - 1) + " TO UNLOCK THIS AREA.";
+            }
+        }
+
+        return "NOT UNLOCKABLE IN THIS GAME VERSION";
     }
 
     /// <summary>
