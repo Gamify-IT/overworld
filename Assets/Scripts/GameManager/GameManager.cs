@@ -387,8 +387,7 @@ public class GameManager : MonoBehaviour
                             !DataManager.Instance.IsDungeonUnlocked(inBetweenWorld, i))
                         {
                             Debug.Log("Message by world part of code");
-                            return "YOU HAVE TO UNLOCK DUNGEON " + inBetweenWorld + "-" +
-                                   (destinationAreaIndex - i) +
+                            return "YOU HAVE TO UNLOCK DUNGEON " + inBetweenWorld + "-" + (destinationAreaIndex - i) +
                                    " FIRST";
                         }
                     }
@@ -397,7 +396,6 @@ public class GameManager : MonoBehaviour
                 //TODO: unterscheidung wo die minispiele noch gespielt werden müssen (aktuelle welt oder andere welt/dungeon)
 
                 int activeMinigameCount = 0;
-                int doneMinigameCount = 0;
 
                 foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
                              .GetMinigameData())
@@ -408,18 +406,10 @@ public class GameManager : MonoBehaviour
                         Debug.Log("World - Minigame " + minigameData.GetConfigurationID() + " in world " +
                                   originWorldIndex + "is active; activeMinigameCount: " + activeMinigameCount);
                     }
-
-                    if (minigameData.GetStatus() == MinigameStatus.done)
-                    {
-                        doneMinigameCount++;
-                        Debug.Log("World - Minigame " + minigameData.GetConfigurationID() + " in world " +
-                                  originWorldIndex + "is done; doneMinigameCount: " + doneMinigameCount);
-                    }
                 }
 
-                Debug.Log("Message by world part of code; activeMinigameCount: " + activeMinigameCount +
-                          "; doneMinigameCount: " + doneMinigameCount);
-                return "COMPLETE " + (activeMinigameCount - doneMinigameCount) + " MORE MINIGAMES TO UNLOCK THIS AREA.";
+                Debug.Log("Message by world part of code; activeMinigameCount: " + activeMinigameCount);
+                return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
             }
 
             Debug.Log("Message by world part of code");
@@ -444,7 +434,6 @@ public class GameManager : MonoBehaviour
             //TODO: unterscheidung wo die minispiele noch gespielt werden müssen (aktuelle welt oder anderer dungeon)
 
             int activeMinigameCount = 0;
-            int doneMinigameCount = 0;
 
             foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
                          .GetMinigameData())
@@ -455,18 +444,10 @@ public class GameManager : MonoBehaviour
                     Debug.Log("Dungeon - Minigame " + minigameData.GetConfigurationID() + " in world " +
                               originWorldIndex + "is active; activeMinigameCount: " + activeMinigameCount);
                 }
-
-                if (minigameData.GetStatus() == MinigameStatus.done)
-                {
-                    doneMinigameCount++;
-                    Debug.Log("Dungeon - Minigame " + minigameData.GetConfigurationID() + " in world " +
-                              originWorldIndex + "is done; doneMinigameCount: " + doneMinigameCount);
-                }
             }
 
-            Debug.Log("Message by dungeon part of code; activeMinigameCount: " + activeMinigameCount +
-                      "; doneMinigameCount: " + doneMinigameCount);
-            return "COMPLETE " + (activeMinigameCount - doneMinigameCount) + " MORE MINIGAMES TO UNLOCK THIS AREA.";
+            Debug.Log("Message by dungeon part of code; activeMinigameCount: " + activeMinigameCount);
+            return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
         }
 
         Debug.Log("Message by dungeon part of code");
