@@ -436,7 +436,12 @@ public class GameManager : MonoBehaviour
                     activeMinigameCount++;
                 }
             }
-
+            
+            if (activeMinigameCount == 0)
+            {
+                return "ERROR - PLEASE CONTACT THE DEVELOPERS";
+            }
+            
             return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
         }
         else if (highestActiveDungeon == highestUnlockedDungeon)
@@ -450,6 +455,11 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+            if (activeMinigameCount == 0)
+            {
+                return "ERROR - PLEASE CONTACT THE DEVELOPERS";
+            }
+            
             return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex +
                    "-" + highestUnlockedDungeon + " TO UNLOCK THIS AREA.";
         }
@@ -500,6 +510,11 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+            if (activeMinigameCount == 0)
+            {
+                return "ERROR - PLEASE CONTACT THE DEVELOPERS";
+            }
+            
             return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN WORLD " + inBetweenWorld +
                    " TO UNLOCK THIS AREA.";
         }
@@ -514,6 +529,11 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+            if (activeMinigameCount == 0)
+            {
+                return "ERROR - PLEASE CONTACT THE DEVELOPERS";
+            }
+            
             return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + inBetweenWorld +
                    "-" + highestUnlockedDungeon + " TO UNLOCK THIS AREA.";
         }
@@ -561,6 +581,11 @@ public class GameManager : MonoBehaviour
                         }
                     }
 
+                    if (activeMinigameCount == 0)
+                    {
+                        return "ERROR - PLEASE CONTACT THE DEVELOPERS";
+                    }
+                    
                     return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
                 }
                 else
@@ -572,6 +597,11 @@ public class GameManager : MonoBehaviour
                         {
                             activeMinigameCount++;
                         }
+                    }
+                    
+                    if (activeMinigameCount == 0)
+                    {
+                        return "ERROR - PLEASE CONTACT THE DEVELOPERS";
                     }
                     
                     return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex + "-" +
