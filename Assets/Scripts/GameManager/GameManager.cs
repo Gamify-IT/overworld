@@ -350,8 +350,6 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public string GetBarrierInfoText(BarrierType type, int originWorldIndex, int destinationAreaIndex)
     {
-        //wenn Barriere zwei Welten trennt
-
         if (type == BarrierType.worldBarrier)
         {
             int inBetweenWorld = 0;
@@ -361,7 +359,7 @@ public class GameManager : MonoBehaviour
                 inBetweenWorld = destinationAreaIndex - 1;
             }
 
-            if (DataManager.Instance.GetWorldData(destinationAreaIndex).isActive()) //ziel welt is aktiv
+            if (DataManager.Instance.GetWorldData(destinationAreaIndex).isActive())
             {
                 for (int i = destinationAreaIndex - 1; i > 0; i--)
                 {
@@ -393,7 +391,6 @@ public class GameManager : MonoBehaviour
                     }
                 }
 
-                //ziel welt is aktiv aber es hängt nich an dungeon oder welt die zuerst freigeschaltet werden muss
                 //TODO: unterscheidung wo die minispiele noch gespielt werden müssen (aktuelle welt oder andere welt/dungeon)
 
                 int activeMinigameCount = 0;
@@ -416,16 +413,11 @@ public class GameManager : MonoBehaviour
                 return "COMPLETE " + (activeMinigameCount - doneMinigameCount) + " MORE MINIGAMES TO UNLOCK THIS AREA.";
             }
 
-            //ziel welt is inaktiv
-
             return "NOT UNLOCKABLE IN THIS GAME VERSION";
         }
 
-
-        //wenn Barriere Welt & Dungeon trennt
-
         if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex)
-            .IsActive()) //ziel dungeon ist aktiv
+            .IsActive())
         {
             for (int i = destinationAreaIndex; i > 0; i--)
             {
@@ -438,10 +430,10 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            //ziel dungeon is aktiv aber es hängt nich an anderem dungeon der zuerst freigeschaltet werden muss
             //TODO: unterscheidung wo die minispiele noch gespielt werden müssen (aktuelle welt oder anderer dungeon)
 
             int activeMinigameCount = 0;
+            int doneMinigameCount = 0;
 
             foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
                          .GetMinigameData())
@@ -450,15 +442,15 @@ public class GameManager : MonoBehaviour
                 {
                     activeMinigameCount++;
                 }
+
+                if (minigameData.GetStatus() == MinigameStatus.done)
+                {
+                    doneMinigameCount++;
+                }
             }
 
-            float uncompletedMinigames = activeMinigameCount -
-                                         activeMinigameCount *
-                                         DataManager.Instance.GetMinigameProgress(originWorldIndex);
-            return "COMPLETE " + uncompletedMinigames + " MORE MINIGAMES TO UNLOCK THIS AREA.";
+            return "COMPLETE " + (activeMinigameCount - doneMinigameCount) + " MORE MINIGAMES TO UNLOCK THIS AREA.";
         }
-
-        //ziel dungeon is inaktiv
 
         return "NOT UNLOCKABLE IN THIS GAME VERSION";
     }
