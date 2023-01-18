@@ -390,16 +390,14 @@ public class GameManager : MonoBehaviour
                         }
                     }
                 }
-
-                //TODO: unterscheidung wo die minispiele noch gespielt werden müssen (aktuelle welt oder andere welt/dungeon)
-
+                
                 int activeMinigameCount = 0;
 
                 if (destinationAreaIndex == originWorldIndex + 1)
                 {
                     int highestUnlockedDungeon = 0;
                     int highestActiveDungeon = 0;
-                
+
                     for (int i = 0; i < 4; i++)
                     {
                         if (DataManager.Instance.IsDungeonUnlocked(originWorldIndex, i + 1))
@@ -423,11 +421,13 @@ public class GameManager : MonoBehaviour
                                 activeMinigameCount++;
                             }
                         }
-                    
+
                         return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
-                    }else if (highestActiveDungeon == highestUnlockedDungeon)
+                    }
+                    else if (highestActiveDungeon == highestUnlockedDungeon)
                     {
-                        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(highestUnlockedDungeon)
+                        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
+                                     .getDungeonData(highestUnlockedDungeon)
                                      .GetMinigameData())
                         {
                             if (minigameData.GetStatus() == MinigameStatus.active)
@@ -435,8 +435,9 @@ public class GameManager : MonoBehaviour
                                 activeMinigameCount++;
                             }
                         }
-                    
-                        return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex + "-" +
+
+                        return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex +
+                               "-" +
                                highestUnlockedDungeon + " TO UNLOCK THIS AREA.";
                     }
                 }
@@ -444,7 +445,7 @@ public class GameManager : MonoBehaviour
                 {
                     int highestUnlockedDungeon = 0;
                     int highestActiveDungeon = 0;
-                    
+
                     for (int i = 0; i < 4; i++)
                     {
                         if (DataManager.Instance.IsDungeonUnlocked(inBetweenWorld, i + 1))
@@ -472,9 +473,10 @@ public class GameManager : MonoBehaviour
                         return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN WORLD " + inBetweenWorld +
                                " TO UNLOCK THIS AREA.";
                     }
-                    else if(highestActiveDungeon == highestUnlockedDungeon)
+                    else if (highestActiveDungeon == highestUnlockedDungeon)
                     {
-                        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(inBetweenWorld).getDungeonData(highestUnlockedDungeon)
+                        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(inBetweenWorld)
+                                     .getDungeonData(highestUnlockedDungeon)
                                      .GetMinigameData())
                         {
                             if (minigameData.GetStatus() == MinigameStatus.active)
@@ -482,13 +484,15 @@ public class GameManager : MonoBehaviour
                                 activeMinigameCount++;
                             }
                         }
-                    
-                        return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + inBetweenWorld + "-" +
+
+                        return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + inBetweenWorld +
+                               "-" +
                                highestUnlockedDungeon + " TO UNLOCK THIS AREA.";
                     }
                 }
 
-            return "NOT UNLOCKABLE IN THIS GAME VERSION";
+                return "NOT UNLOCKABLE IN THIS GAME VERSION";
+            }
         }
         else
         {
@@ -540,6 +544,8 @@ public class GameManager : MonoBehaviour
 
             return "NOT UNLOCKABLE IN THIS GAME VERSION";
         }
+        
+        return "NOT UNLOCKABLE IN THIS GAME VERSION";
         
     }
 
