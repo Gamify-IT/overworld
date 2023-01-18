@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Cysharp.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -365,7 +366,6 @@ public class GameManager : MonoBehaviour
                 {
                     if (!DataManager.Instance.IsWorldUnlocked(destinationAreaIndex - i))
                     {
-                        Debug.Log("Message by world part of code");
                         return "YOU HAVE TO UNLOCK WORLD " + (destinationAreaIndex - i) +
                                " FIRST";
                     }
@@ -376,7 +376,6 @@ public class GameManager : MonoBehaviour
                     if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(i).IsActive() &&
                         !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, i))
                     {
-                        Debug.Log("Message by world part of code");
                         return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + i +
                                " FIRST";
                     }
@@ -386,7 +385,6 @@ public class GameManager : MonoBehaviour
                         if (DataManager.Instance.GetWorldData(inBetweenWorld).getDungeonData(i).IsActive() &&
                             !DataManager.Instance.IsDungeonUnlocked(inBetweenWorld, i))
                         {
-                            Debug.Log("Message by world part of code");
                             return "YOU HAVE TO UNLOCK DUNGEON " + inBetweenWorld + "-" + (destinationAreaIndex - i) +
                                    " FIRST";
                         }
@@ -397,22 +395,99 @@ public class GameManager : MonoBehaviour
 
                 int activeMinigameCount = 0;
 
-                foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                             .GetMinigameData())
+                if (destinationAreaIndex == originWorldIndex + 1)
                 {
-                    if (minigameData.GetStatus() == MinigameStatus.active)
+                    int highestUnlockedDungeon = 0;
+                    int highestActiveDungeon = 0;
+                
+                    for (int i = 0; i < 4; i++)
                     {
-                        activeMinigameCount++;
-                        Debug.Log("World - Minigame " + minigameData.GetConfigurationID() + " in world " +
-                                  originWorldIndex + "is active; activeMinigameCount: " + activeMinigameCount);
+                        if (DataManager.Instance.IsDungeonUnlocked(originWorldIndex, i + 1))
+                        {
+                            highestUnlockedDungeon = i + 1;
+                        }
+
+                        if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(i + 1).IsActive())
+                        {
+                            highestActiveDungeon = i + 1;
+                        }
+                    }
+
+                    if (highestActiveDungeon == 0)
+                    {
+                        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
+                                     .GetMinigameData())
+                        {
+                            if (minigameData.GetStatus() == MinigameStatus.active)
+                            {
+                                activeMinigameCount++;
+                            }
+                        }
+                    
+                        return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
+                    }else if (highestActiveDungeon == highestUnlockedDungeon)
+                    {
+                        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(highestUnlockedDungeon)
+                                     .GetMinigameData())
+                        {
+                            if (minigameData.GetStatus() == MinigameStatus.active)
+                            {
+                                activeMinigameCount++;
+                            }
+                        }
+                    
+                        return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex + "-" +
+                               highestUnlockedDungeon + " TO UNLOCK THIS AREA.";
+                    }
+                }
+                else
+                {
+                    int highestUnlockedDungeon = 0;
+                    int highestActiveDungeon = 0;
+                    
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (DataManager.Instance.IsDungeonUnlocked(inBetweenWorld, i + 1))
+                        {
+                            highestUnlockedDungeon = i + 1;
+                        }
+
+                        if (DataManager.Instance.GetWorldData(inBetweenWorld).getDungeonData(i + 1).IsActive())
+                        {
+                            highestActiveDungeon = i + 1;
+                        }
+                    }
+
+                    if (highestActiveDungeon == 0)
+                    {
+                        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(inBetweenWorld)
+                                     .GetMinigameData())
+                        {
+                            if (minigameData.GetStatus() == MinigameStatus.active)
+                            {
+                                activeMinigameCount++;
+                            }
+                        }
+
+                        return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN WORLD " + inBetweenWorld +
+                               " TO UNLOCK THIS AREA.";
+                    }
+                    else if(highestActiveDungeon == highestUnlockedDungeon)
+                    {
+                        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(inBetweenWorld).getDungeonData(highestUnlockedDungeon)
+                                     .GetMinigameData())
+                        {
+                            if (minigameData.GetStatus() == MinigameStatus.active)
+                            {
+                                activeMinigameCount++;
+                            }
+                        }
+                    
+                        return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + inBetweenWorld + "-" +
+                               highestUnlockedDungeon + " TO UNLOCK THIS AREA.";
                     }
                 }
 
-                Debug.Log("Message by world part of code; activeMinigameCount: " + activeMinigameCount);
-                return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
-            }
-
-            Debug.Log("Message by world part of code");
             return "NOT UNLOCKABLE IN THIS GAME VERSION";
         }
         else
@@ -426,7 +501,6 @@ public class GameManager : MonoBehaviour
                             .IsActive() &&
                         !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, destinationAreaIndex - i))
                     {
-                        Debug.Log("Message by dungeon part of code");
                         return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
                                " FIRST";
                     }
@@ -458,10 +532,10 @@ public class GameManager : MonoBehaviour
                             activeMinigameCount++;
                         }
                     }
+                    
+                    return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex + "-" +
+                           (destinationAreaIndex - 1) + " TO UNLOCK THIS AREA.";
                 }
-
-                return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex + "-" +
-                       (destinationAreaIndex - 1) + " TO UNLOCK THIS AREA.";
             }
 
             return "NOT UNLOCKABLE IN THIS GAME VERSION";
