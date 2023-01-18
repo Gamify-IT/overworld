@@ -365,16 +365,18 @@ public class GameManager : MonoBehaviour
                 {
                     if (!DataManager.Instance.IsWorldUnlocked(destinationAreaIndex - i))
                     {
+                        Debug.Log("Message by world part of code");
                         return "YOU HAVE TO UNLOCK WORLD " + (destinationAreaIndex - i) +
                                " FIRST"; //welt davor is noch nicht frigeschaltet
                     }
                 }
 
-                for (int i = 0; i < 4; i++)
+                for (int i = 4; i > 0; i--)
                 {
                     if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(i).IsActive() &&
                         !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, i))
                     {
+                        Debug.Log("Message by world part of code");
                         return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
                                " FIRST"; //dungeon davor is noch nicht frigeschaltet
                     }
@@ -384,6 +386,7 @@ public class GameManager : MonoBehaviour
                         if (DataManager.Instance.GetWorldData(inBetweenWorld).getDungeonData(i).IsActive() &&
                             !DataManager.Instance.IsDungeonUnlocked(inBetweenWorld, i))
                         {
+                            Debug.Log("Message by world part of code");
                             return "YOU HAVE TO UNLOCK DUNGEON " + inBetweenWorld + "-" +
                                    (destinationAreaIndex - i) +
                                    " FIRST"; //dungeon in welt davor der aktiv ist is noch nicht frigeschaltet
@@ -402,29 +405,39 @@ public class GameManager : MonoBehaviour
                     if (minigameData.GetStatus() == MinigameStatus.active)
                     {
                         activeMinigameCount++;
+                        Debug.Log("World - Minigame " + minigameData.GetConfigurationID() + " in world " +
+                                  originWorldIndex + "is active; activeMinigameCount: " + activeMinigameCount);
                     }
 
                     if (minigameData.GetStatus() == MinigameStatus.done)
                     {
                         doneMinigameCount++;
+                        Debug.Log("World - Minigame " + minigameData.GetConfigurationID() + " in world " +
+                                  originWorldIndex + "is done; doneMinigameCount: " + doneMinigameCount);
                     }
                 }
 
+                Debug.Log("Message by world part of code; activeMinigameCount: " + activeMinigameCount +
+                          "; doneMinigameCount: " + doneMinigameCount);
                 return "COMPLETE " + (activeMinigameCount - doneMinigameCount) + " MORE MINIGAMES TO UNLOCK THIS AREA.";
             }
 
+            Debug.Log("Message by world part of code");
             return "NOT UNLOCKABLE IN THIS GAME VERSION";
         }
 
         if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex)
             .IsActive())
         {
-            for (int i = destinationAreaIndex; i > 0; i--)
+            //TODO: change unlock message to highest active & lower than destination & locked dungeon
+
+            for (int i = 1; i < destinationAreaIndex; i++)
             {
                 if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex - i)
                         .IsActive() &&
                     !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, destinationAreaIndex - i))
                 {
+                    Debug.Log("Message by dungeon part of code");
                     return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
                            " FIRST"; //anderer Dungeon der aktiv ist muss zuerst freigeschaltet werden
                 }
@@ -441,17 +454,24 @@ public class GameManager : MonoBehaviour
                 if (minigameData.GetStatus() == MinigameStatus.active)
                 {
                     activeMinigameCount++;
+                    Debug.Log("Dungeon - Minigame " + minigameData.GetConfigurationID() + " in world " +
+                              originWorldIndex + "is active; activeMinigameCount: " + activeMinigameCount);
                 }
 
                 if (minigameData.GetStatus() == MinigameStatus.done)
                 {
                     doneMinigameCount++;
+                    Debug.Log("Dungeon - Minigame " + minigameData.GetConfigurationID() + " in world " +
+                              originWorldIndex + "is done; doneMinigameCount: " + doneMinigameCount);
                 }
             }
 
+            Debug.Log("Message by dungeon part of code; activeMinigameCount: " + activeMinigameCount +
+                      "; doneMinigameCount: " + doneMinigameCount);
             return "COMPLETE " + (activeMinigameCount - doneMinigameCount) + " MORE MINIGAMES TO UNLOCK THIS AREA.";
         }
 
+        Debug.Log("Message by dungeon part of code");
         return "NOT UNLOCKABLE IN THIS GAME VERSION";
     }
 
