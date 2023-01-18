@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Cysharp.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -356,6 +357,7 @@ public class GameManager : MonoBehaviour
         }
 
         return GenerateDungeonBarrierInfoText(originWorldIndex, destinationAreaIndex);
+
     }
 
     /// <summary>
@@ -366,13 +368,6 @@ public class GameManager : MonoBehaviour
     /// <returns>The generated info text</returns>
     private string GenerateWorldBarrierInfoText(int originWorldIndex, int destinationAreaIndex)
     {
-        int inBetweenWorld = 0;
-
-        if (destinationAreaIndex > originWorldIndex + 1)
-        {
-            inBetweenWorld = destinationAreaIndex - 1;
-        }
-
         if (DataManager.Instance.GetWorldData(destinationAreaIndex).isActive())
         {
             for (int i = destinationAreaIndex - 1; i > 0; i--)
@@ -398,13 +393,15 @@ public class GameManager : MonoBehaviour
             {
                 return GenerateWorldBarrierInfoTextWithoutInBetweenWorld(originWorldIndex);
             }
-
-            return GenerateWorldBarrierInfoTextWithInBetweenWorld(originWorldIndex, destinationAreaIndex);
+            else
+            {
+                return GenerateWorldBarrierInfoTextWithInBetweenWorld(originWorldIndex, destinationAreaIndex);
+            }
         }
-
+            
         return "NOT UNLOCKABLE IN THIS GAME VERSION";
     }
-
+    
     /// <summary>
     ///     This methods generates the info text for a world barrier without an world between the origin & the destination one.
     /// </summary>
@@ -442,8 +439,7 @@ public class GameManager : MonoBehaviour
 
             return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
         }
-
-        if (highestActiveDungeon == highestUnlockedDungeon)
+        else if (highestActiveDungeon == highestUnlockedDungeon)
         {
             foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
                          .getDungeonData(highestUnlockedDungeon).GetMinigameData())
@@ -457,10 +453,10 @@ public class GameManager : MonoBehaviour
             return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex +
                    "-" + highestUnlockedDungeon + " TO UNLOCK THIS AREA.";
         }
-
+        
         return "NOT UNLOCKABLE IN THIS GAME VERSION";
     }
-
+    
     /// <summary>
     ///     This methods generates the info text for a world barrier with an world between the origin & the destination one.
     /// </summary>
@@ -475,7 +471,7 @@ public class GameManager : MonoBehaviour
         {
             inBetweenWorld = destinationAreaIndex - 1;
         }
-
+        
         int activeMinigameCount = 0;
         int highestUnlockedDungeon = 0;
         int highestActiveDungeon = 0;
@@ -507,8 +503,7 @@ public class GameManager : MonoBehaviour
             return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN WORLD " + inBetweenWorld +
                    " TO UNLOCK THIS AREA.";
         }
-
-        if (highestActiveDungeon == highestUnlockedDungeon)
+        else if (highestActiveDungeon == highestUnlockedDungeon)
         {
             foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(inBetweenWorld)
                          .getDungeonData(highestUnlockedDungeon).GetMinigameData())
@@ -522,16 +517,15 @@ public class GameManager : MonoBehaviour
             return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + inBetweenWorld +
                    "-" + highestUnlockedDungeon + " TO UNLOCK THIS AREA.";
         }
-
-        if (highestActiveDungeon > highestUnlockedDungeon)
+        else if(highestActiveDungeon > highestUnlockedDungeon)
         {
-            return "YOU HAVE TO UNLOCK DUNGEON " + inBetweenWorld + "-" + highestActiveDungeon +
+            return "YOU HAVE TO UNLOCK DUNGEON " + inBetweenWorld + "-" + (highestActiveDungeon) +
                    " FIRST";
         }
-
+        
         return "NOT UNLOCKABLE IN THIS GAME VERSION";
     }
-
+    
     /// <summary>
     ///     This methods generates the info text for a dungeon barrier.
     /// </summary>
@@ -541,49 +535,51 @@ public class GameManager : MonoBehaviour
     private string GenerateDungeonBarrierInfoText(int originWorldIndex, int destinationAreaIndex)
     {
         if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex)
-            .IsActive())
-        {
-            for (int i = 1; i < destinationAreaIndex; i++)
+                .IsActive())
             {
-                if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex - i)
-                        .IsActive() &&
-                    !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, destinationAreaIndex - i))
+                for (int i = 1; i < destinationAreaIndex; i++)
                 {
-                    return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
-                           " FIRST";
-                }
-            }
-
-            int activeMinigameCount = 0;
-
-            if (destinationAreaIndex == 1)
-            {
-                foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                             .GetMinigameData())
-                {
-                    if (minigameData.GetStatus() == MinigameStatus.active)
+                    if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex - i)
+                            .IsActive() &&
+                        !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, destinationAreaIndex - i))
                     {
-                        activeMinigameCount++;
+                        return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
+                               " FIRST";
                     }
                 }
 
-                return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
-            }
+                int activeMinigameCount = 0;
 
-            foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                         .getDungeonData(destinationAreaIndex - 1).GetMinigameData())
-            {
-                if (minigameData.GetStatus() == MinigameStatus.active)
+                if (destinationAreaIndex == 1)
                 {
-                    activeMinigameCount++;
+                    foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
+                                 .GetMinigameData())
+                    {
+                        if (minigameData.GetStatus() == MinigameStatus.active)
+                        {
+                            activeMinigameCount++;
+                        }
+                    }
+
+                    return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
+                }
+                else
+                {
+                    foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
+                                 .getDungeonData(destinationAreaIndex - 1).GetMinigameData())
+                    {
+                        if (minigameData.GetStatus() == MinigameStatus.active)
+                        {
+                            activeMinigameCount++;
+                        }
+                    }
+                    
+                    return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex + "-" +
+                           (destinationAreaIndex - 1) + " TO UNLOCK THIS AREA.";
                 }
             }
 
-            return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex + "-" +
-                   (destinationAreaIndex - 1) + " TO UNLOCK THIS AREA.";
-        }
-
-        return "NOT UNLOCKABLE IN THIS GAME VERSION";
+            return "NOT UNLOCKABLE IN THIS GAME VERSION";
     }
 
     /// <summary>
