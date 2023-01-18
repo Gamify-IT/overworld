@@ -350,8 +350,79 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public string GetBarrierInfoText(BarrierType type, int originWorldIndex, int destinationAreaIndex)
     {
-        string info = "NOT UNLOCKED YET";
-        return info;
+        if (type == BarrierType.worldBarrier)
+        {
+            if (DataManager.Instance.GetWorldData(destinationAreaIndex).isActive())
+            {
+                for (int i = destinationAreaIndex; i > 0; i--)
+                {
+                    if (!DataManager.Instance.IsWorldUnlocked(destinationAreaIndex - i))
+                    {
+                        return "YOU HAVE TO UNLOCK WORLD " + (destinationAreaIndex - i) + " FIRST";
+                    }
+                }
+
+                for (int i = 0; i < 4; i++)
+                {
+                    if (!DataManager.Instance.IsDungeonUnlocked(originWorldIndex, i))
+                    {
+                        return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
+                               " FIRST";
+                    }
+                }
+                
+                int activeMinigameCount = 0;
+
+                foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
+                             .GetMinigameData())
+                {
+                    if (minigameData.GetStatus() == MinigameStatus.active)
+                    {
+                        activeMinigameCount++;
+                    }
+                }
+
+                float uncompletedMinigames = activeMinigameCount -
+                                             activeMinigameCount * DataManager.Instance.GetMinigameProgress(originWorldIndex);
+                
+                return "COMPLETE " + uncompletedMinigames + " MORE MINIGAMES TO UNLOCK THIS AREA.";
+            }
+            else
+            {
+                return "NOT UNLOCKABLE IN THIS GAME VERSION";
+            }
+        }
+        else
+        {
+            if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex).IsActive())
+            {
+                for (int i = destinationAreaIndex; i > 0; i--)
+                {
+                    if (!DataManager.Instance.IsDungeonUnlocked(originWorldIndex, destinationAreaIndex - i))
+                    {
+                        return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + (destinationAreaIndex - i) +
+                               " FIRST";
+                    }
+                }
+
+                int activeMinigameCount = 0;
+
+                foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
+                             .GetMinigameData())
+                {
+                    if (minigameData.GetStatus() == MinigameStatus.active)
+                    {
+                        activeMinigameCount++;
+                    }
+                }
+
+                float uncompletedMinigames = activeMinigameCount -
+                        activeMinigameCount * DataManager.Instance.GetMinigameProgress(originWorldIndex);
+                return "COMPLETE " + uncompletedMinigames + " MORE MINIGAMES TO UNLOCK THIS AREA.";
+            }
+
+            return "NOT UNLOCKABLE IN THIS GAME VERSION";
+        }
     }
 
     /// <summary>
@@ -460,10 +531,11 @@ public class GameManager : MonoBehaviour
     /// <param name="achievement">The achievement to be displayed</param>
     private void EarnAchievement(AchievementData achievement)
     {
-        if(AchievementNotificationManager.Instance == null)
+        if (AchievementNotificationManager.Instance == null)
         {
-            Instantiate(achievementNotificationManagerPrefab, this.transform, false);
+            Instantiate(achievementNotificationManagerPrefab, transform, false);
         }
+
         AchievementNotificationManager.Instance.AddAchievement(achievement);
     }
 
