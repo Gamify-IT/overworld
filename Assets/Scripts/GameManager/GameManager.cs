@@ -353,13 +353,28 @@ public class GameManager : MonoBehaviour
     {
         if (type == BarrierType.worldBarrier)
         {
+            return GenerateWorldBarrierInfoText(originWorldIndex, destinationAreaIndex);
+        }
+
+        return GenerateDungeonBarrierInfoText(originWorldIndex, destinationAreaIndex);
+
+    }
+
+    /// <summary>
+    ///     This methods generates the info text for a world barrier.
+    /// </summary>
+    /// <param name="originWorldIndex">The index of the area the barrier is blocking access to</param>
+    /// <param name="destinationAreaIndex">The index of the area the barrier is blocking access to</param>
+    /// <returns>The generated info text</returns>
+    private string GenerateWorldBarrierInfoText(int originWorldIndex, int destinationAreaIndex)
+    {
             int inBetweenWorld = 0;
 
             if (destinationAreaIndex > originWorldIndex + 1)
             {
                 inBetweenWorld = destinationAreaIndex - 1;
             }
-
+            
             if (DataManager.Instance.GetWorldData(destinationAreaIndex).isActive())
             {
                 for (int i = destinationAreaIndex - 1; i > 0; i--)
@@ -390,113 +405,140 @@ public class GameManager : MonoBehaviour
                         }
                     }
                 }
-                
-                int activeMinigameCount = 0;
 
                 if (destinationAreaIndex == originWorldIndex + 1)
                 {
-                    int highestUnlockedDungeon = 0;
-                    int highestActiveDungeon = 0;
-
-                    for (int i = 0; i < 4; i++)
-                    {
-                        if (DataManager.Instance.IsDungeonUnlocked(originWorldIndex, i + 1))
-                        {
-                            highestUnlockedDungeon = i + 1;
-                        }
-
-                        if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(i + 1).IsActive())
-                        {
-                            highestActiveDungeon = i + 1;
-                        }
-                    }
-
-                    if (highestActiveDungeon == 0)
-                    {
-                        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                                     .GetMinigameData())
-                        {
-                            if (minigameData.GetStatus() == MinigameStatus.active)
-                            {
-                                activeMinigameCount++;
-                            }
-                        }
-
-                        return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
-                    }
-                    else if (highestActiveDungeon == highestUnlockedDungeon)
-                    {
-                        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                                     .getDungeonData(highestUnlockedDungeon)
-                                     .GetMinigameData())
-                        {
-                            if (minigameData.GetStatus() == MinigameStatus.active)
-                            {
-                                activeMinigameCount++;
-                            }
-                        }
-
-                        return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex +
-                               "-" +
-                               highestUnlockedDungeon + " TO UNLOCK THIS AREA.";
-                    }
+                    return GenerateWorldBarrierInfoTextWithoutInBetweenWorld(originWorldIndex);
                 }
                 else
                 {
-                    int highestUnlockedDungeon = 0;
-                    int highestActiveDungeon = 0;
-
-                    for (int i = 0; i < 4; i++)
-                    {
-                        if (DataManager.Instance.IsDungeonUnlocked(inBetweenWorld, i + 1))
-                        {
-                            highestUnlockedDungeon = i + 1;
-                        }
-
-                        if (DataManager.Instance.GetWorldData(inBetweenWorld).getDungeonData(i + 1).IsActive())
-                        {
-                            highestActiveDungeon = i + 1;
-                        }
-                    }
-
-                    if (highestActiveDungeon == 0)
-                    {
-                        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(inBetweenWorld)
-                                     .GetMinigameData())
-                        {
-                            if (minigameData.GetStatus() == MinigameStatus.active)
-                            {
-                                activeMinigameCount++;
-                            }
-                        }
-
-                        return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN WORLD " + inBetweenWorld +
-                               " TO UNLOCK THIS AREA.";
-                    }
-                    else if (highestActiveDungeon == highestUnlockedDungeon)
-                    {
-                        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(inBetweenWorld)
-                                     .getDungeonData(highestUnlockedDungeon)
-                                     .GetMinigameData())
-                        {
-                            if (minigameData.GetStatus() == MinigameStatus.active)
-                            {
-                                activeMinigameCount++;
-                            }
-                        }
-
-                        return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + inBetweenWorld +
-                               "-" +
-                               highestUnlockedDungeon + " TO UNLOCK THIS AREA.";
-                    }
+                    return GenerateWorldBarrierInfoTextWithInBetweenWorld(inBetweenWorld);
                 }
+            }
+            
+            return "NOT UNLOCKABLE IN THIS GAME VERSION";
+    }
+    
+    /// <summary>
+    ///     This methods generates the info text for a world barrier without an world between the origin & the destination one.
+    /// </summary>
+    /// <param name="originWorldIndex">The index of the world the barrier is in</param>
+    /// <returns>The generated info text</returns>
+    private string GenerateWorldBarrierInfoTextWithoutInBetweenWorld(int originWorldIndex)
+    {
+        int activeMinigameCount = 0;
+        int highestUnlockedDungeon = 0;
+        int highestActiveDungeon = 0;
 
-                return "NOT UNLOCKABLE IN THIS GAME VERSION";
+        for (int i = 0; i < 4; i++)
+        {
+            if (DataManager.Instance.IsDungeonUnlocked(originWorldIndex, i + 1))
+            {
+                highestUnlockedDungeon = i + 1;
+            }
+
+            if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(i + 1).IsActive())
+            {
+                highestActiveDungeon = i + 1;
             }
         }
-        else
+
+        if (highestActiveDungeon == 0)
         {
-            if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex)
+            foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
+                         .GetMinigameData())
+            {
+                if (minigameData.GetStatus() == MinigameStatus.active)
+                {
+                    activeMinigameCount++;
+                }
+            }
+
+            return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
+        }
+        else if (highestActiveDungeon == highestUnlockedDungeon)
+        {
+            foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
+                         .getDungeonData(highestUnlockedDungeon).GetMinigameData())
+            {
+                if (minigameData.GetStatus() == MinigameStatus.active)
+                {
+                    activeMinigameCount++;
+                }
+            }
+
+            return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex +
+                   "-" + highestUnlockedDungeon + " TO UNLOCK THIS AREA.";
+        }
+        
+        return "NOT UNLOCKABLE IN THIS GAME VERSION";
+    }
+    
+    /// <summary>
+    ///     This methods generates the info text for a world barrier with an world between the origin & the destination one.
+    /// </summary>
+    /// <param name="inBetweenWorld">The Index of the world which is between the origin & the destination one</param>
+    /// <returns>The generated info text</returns>
+    private string GenerateWorldBarrierInfoTextWithInBetweenWorld(int inBetweenWorld)
+    {   
+        int activeMinigameCount = 0;
+        int highestUnlockedDungeon = 0;
+        int highestActiveDungeon = 0;
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (DataManager.Instance.IsDungeonUnlocked(inBetweenWorld, i + 1))
+            {
+                highestUnlockedDungeon = i + 1;
+            }
+
+            if (DataManager.Instance.GetWorldData(inBetweenWorld).getDungeonData(i + 1).IsActive())
+            {
+                highestActiveDungeon = i + 1;
+            }
+        }
+
+        if (highestActiveDungeon == 0)
+        {
+            foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(inBetweenWorld)
+                         .GetMinigameData())
+            {
+                if (minigameData.GetStatus() == MinigameStatus.active)
+                {
+                    activeMinigameCount++;
+                }
+            }
+
+            return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN WORLD " + inBetweenWorld +
+                   " TO UNLOCK THIS AREA.";
+        }
+        else if (highestActiveDungeon == highestUnlockedDungeon)
+        {
+            foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(inBetweenWorld)
+                         .getDungeonData(highestUnlockedDungeon).GetMinigameData())
+            {
+                if (minigameData.GetStatus() == MinigameStatus.active)
+                {
+                    activeMinigameCount++;
+                }
+            }
+
+            return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + inBetweenWorld +
+                   "-" + highestUnlockedDungeon + " TO UNLOCK THIS AREA.";
+        }
+        
+        return "NOT UNLOCKABLE IN THIS GAME VERSION";
+    }
+    
+    /// <summary>
+    ///     This methods generates the info text for a dungeon barrier.
+    /// </summary>
+    /// <param name="originWorldIndex">The index of the area the barrier is blocking access to</param>
+    /// <param name="destinationAreaIndex">The index of the area the barrier is blocking access to</param>
+    /// <returns>The generated info text</returns>
+    private string GenerateDungeonBarrierInfoText(int originWorldIndex, int destinationAreaIndex)
+    {
+        if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex)
                 .IsActive())
             {
                 for (int i = 1; i < destinationAreaIndex; i++)
@@ -528,8 +570,7 @@ public class GameManager : MonoBehaviour
                 else
                 {
                     foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                                 .getDungeonData(destinationAreaIndex - 1)
-                                 .GetMinigameData())
+                                 .getDungeonData(destinationAreaIndex - 1).GetMinigameData())
                     {
                         if (minigameData.GetStatus() == MinigameStatus.active)
                         {
@@ -543,10 +584,6 @@ public class GameManager : MonoBehaviour
             }
 
             return "NOT UNLOCKABLE IN THIS GAME VERSION";
-        }
-        
-        return "NOT UNLOCKABLE IN THIS GAME VERSION";
-        
     }
 
     /// <summary>
