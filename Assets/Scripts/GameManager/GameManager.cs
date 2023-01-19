@@ -409,33 +409,12 @@ public class GameManager : MonoBehaviour
     /// <returns>The generated info text</returns>
     private string GenerateWorldBarrierInfoTextWithoutInBetweenWorld(int originWorldIndex)
     {
-        int activeMinigameCount = 0;
-        int highestUnlockedDungeon = 0;
-        int highestActiveDungeon = 0;
-
-        for (int i = 0; i < 4; i++)
-        {
-            if (DataManager.Instance.IsDungeonUnlocked(originWorldIndex, i + 1))
-            {
-                highestUnlockedDungeon = i + 1;
-            }
-
-            if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(i + 1).IsActive())
-            {
-                highestActiveDungeon = i + 1;
-            }
-        }
+        int highestUnlockedDungeon = getHighestUnlockedDungeon(originWorldIndex);
+        int highestActiveDungeon = getHighestActiveDungeon(originWorldIndex);
 
         if (highestActiveDungeon == 0)
         {
-            foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                         .GetMinigameData())
-            {
-                if (minigameData.GetStatus() == MinigameStatus.active)
-                {
-                    activeMinigameCount++;
-                }
-            }
+            int activeMinigameCount = getActiveMinigameCount(originWorldIndex);
             
             if (activeMinigameCount == 0)
             {
@@ -446,14 +425,7 @@ public class GameManager : MonoBehaviour
         }
         else if (highestActiveDungeon == highestUnlockedDungeon)
         {
-            foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                         .getDungeonData(highestUnlockedDungeon).GetMinigameData())
-            {
-                if (minigameData.GetStatus() == MinigameStatus.active)
-                {
-                    activeMinigameCount++;
-                }
-            }
+            int activeMinigameCount = getActiveMinigameCount(originWorldIndex, highestUnlockedDungeon);
 
             if (activeMinigameCount == 0)
             {
@@ -482,34 +454,13 @@ public class GameManager : MonoBehaviour
             inBetweenWorld = destinationAreaIndex - 1;
         }
         
-        int activeMinigameCount = 0;
-        int highestUnlockedDungeon = 0;
-        int highestActiveDungeon = 0;
-
-        for (int i = 0; i < 4; i++)
-        {
-            if (DataManager.Instance.IsDungeonUnlocked(inBetweenWorld, i + 1))
-            {
-                highestUnlockedDungeon = i + 1;
-            }
-
-            if (DataManager.Instance.GetWorldData(inBetweenWorld).getDungeonData(i + 1).IsActive())
-            {
-                highestActiveDungeon = i + 1;
-            }
-        }
+        int highestUnlockedDungeon = getHighestUnlockedDungeon(inBetweenWorld);
+        int highestActiveDungeon = getHighestActiveDungeon(inBetweenWorld);
 
         if (highestActiveDungeon == 0)
-        {
-            foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(inBetweenWorld)
-                         .GetMinigameData())
-            {
-                if (minigameData.GetStatus() == MinigameStatus.active)
-                {
-                    activeMinigameCount++;
-                }
-            }
-
+        { 
+            int activeMinigameCount = getActiveMinigameCount(inBetweenWorld);
+            
             if (activeMinigameCount == 0)
             {
                 return "ERROR - PLEASE CONTACT THE DEVELOPERS";
@@ -520,14 +471,7 @@ public class GameManager : MonoBehaviour
         }
         else if (highestActiveDungeon == highestUnlockedDungeon)
         {
-            foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(inBetweenWorld)
-                         .getDungeonData(highestUnlockedDungeon).GetMinigameData())
-            {
-                if (minigameData.GetStatus() == MinigameStatus.active)
-                {
-                    activeMinigameCount++;
-                }
-            }
+            int activeMinigameCount = getActiveMinigameCount(inBetweenWorld, highestUnlockedDungeon);
 
             if (activeMinigameCount == 0)
             {
@@ -568,18 +512,9 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            int activeMinigameCount = 0;
-
             if (destinationAreaIndex == 1)
             {
-                foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                             .GetMinigameData())
-                {
-                    if (minigameData.GetStatus() == MinigameStatus.active)
-                    {
-                        activeMinigameCount++;
-                    }
-                }
+                int activeMinigameCount = getActiveMinigameCount(originWorldIndex);
 
                 if (activeMinigameCount == 0)
                 {
@@ -590,15 +525,8 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(originWorldIndex)
-                             .getDungeonData(destinationAreaIndex - 1).GetMinigameData())
-                {
-                    if (minigameData.GetStatus() == MinigameStatus.active)
-                    {
-                        activeMinigameCount++;
-                    }
-                }
-                
+                int activeMinigameCount = getActiveMinigameCount(originWorldIndex, destinationAreaIndex -1);
+
                 if (activeMinigameCount == 0)
                 {
                     return "ERROR - PLEASE CONTACT THE DEVELOPERS";
@@ -611,7 +539,90 @@ public class GameManager : MonoBehaviour
 
         return "NOT UNLOCKABLE IN THIS GAME VERSION";
     }
+    
+    /// <summary>
+    ///     This methods calculates the highest unlocked dungeon in given world.
+    /// </summary>
+    /// <param name="worldIndex">The index of the world</param>
+    /// <returns>The index of the highest unlocked dungeon</returns>
+    private int getHighestUnlockedDungeon(int worldIndex)
+    {
+        int highestUnlockedDungeon = 0;
+        
+        for (int i = 0; i < 4; i++)
+        {
+            if (DataManager.Instance.IsDungeonUnlocked(worldIndex, i + 1))
+            {
+                highestUnlockedDungeon = i + 1;
+            }
+        }
 
+        return highestUnlockedDungeon;
+    }
+
+    /// <summary>
+    ///     This methods calculates the highest active dungeon in given world.
+    /// </summary>
+    /// <param name="worldIndex">The index of the world</param>
+    /// <returns>The index of the highest active dungeon</returns>
+    private int getHighestActiveDungeon(int worldIndex)
+    {
+        int highestActiveDungeon = 0;
+        
+        for (int i = 0; i < 4; i++)
+        {
+            if (DataManager.Instance.GetWorldData(worldIndex).getDungeonData(i + 1).IsActive())
+            {
+                highestActiveDungeon = i + 1;
+            }
+        }
+
+        return highestActiveDungeon;
+    }
+    
+    /// <summary>
+    ///     This method calculates the number of active minigames in given world
+    /// </summary>
+    /// <param name="worldIndex">The index of the world</param>
+    /// <returns>Number of active minigames</returns>
+    private int getActiveMinigameCount(int worldIndex)
+    {
+        int activeMinigameCount = 0;
+
+        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(worldIndex)
+                     .GetMinigameData())
+        {
+            if (minigameData.GetStatus() == MinigameStatus.active)
+            {
+                activeMinigameCount++;
+            }
+        }
+        
+        return activeMinigameCount;
+    }
+    
+    /// <summary>
+    ///     This method calculates the number of active minigames in given dungeon
+    /// </summary>
+    /// <param name="worldIndex">The index of the world the dungeon is in</param>
+    /// <param name="dungeonIndex">The index of the dungeon</param>
+    /// <returns>Number of active minigames</returns>
+    private int getActiveMinigameCount(int worldIndex, int dungeonIndex)
+    {
+        int activeMinigameCount = 0;
+
+        foreach (MinigameData minigameData in DataManager.Instance.GetWorldData(worldIndex)
+                     .getDungeonData(dungeonIndex).GetMinigameData())
+        {
+            if (minigameData.GetStatus() == MinigameStatus.active)
+            {
+                activeMinigameCount++;
+            }
+        }
+        
+        return activeMinigameCount;
+    }
+    
     /// <summary>
     ///     This function returns all keybings
     /// </summary>
