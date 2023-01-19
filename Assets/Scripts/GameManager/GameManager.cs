@@ -374,8 +374,15 @@ public class GameManager : MonoBehaviour
             {
                 if (!DataManager.Instance.IsWorldUnlocked(destinationAreaIndex - i))
                 {
-                    return "YOU HAVE TO UNLOCK WORLD " + (destinationAreaIndex - i) +
-                           " FIRST";
+                    int highestActiveDungeon = getHighestActiveDungeon(destinationAreaIndex - i);
+
+                    if (highestActiveDungeon > 0)
+                    {
+                        return "YOU HAVE TO UNLOCK DUNGEON " + (destinationAreaIndex - i) + "-" + highestActiveDungeon +
+                               " FIRST";
+                    }
+                    
+                    return "YOU HAVE TO UNLOCK WORLD " + (destinationAreaIndex - i) + " FIRST";
                 }
             }
 
@@ -384,8 +391,7 @@ public class GameManager : MonoBehaviour
                 if (DataManager.Instance.GetWorldData(originWorldIndex).getDungeonData(i).IsActive() &&
                     !DataManager.Instance.IsDungeonUnlocked(originWorldIndex, i))
                 {
-                    return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + i +
-                           " FIRST";
+                    return "YOU HAVE TO UNLOCK DUNGEON " + originWorldIndex + "-" + i + " FIRST";
                 }
             }
 
