@@ -350,8 +350,7 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public string GetBarrierInfoText(BarrierType type, int originWorldIndex, int destinationAreaIndex)
     {
-        string info = "NOT UNLOCKED YET";
-        return info;
+        return DataManager.Instance.GetBarrierInfoText(type, originWorldIndex, destinationAreaIndex);
     }
 
     /// <summary>
@@ -460,10 +459,11 @@ public class GameManager : MonoBehaviour
     /// <param name="achievement">The achievement to be displayed</param>
     private void EarnAchievement(AchievementData achievement)
     {
-        if(AchievementNotificationManager.Instance == null)
+        if (AchievementNotificationManager.Instance == null)
         {
-            Instantiate(achievementNotificationManagerPrefab, this.transform, false);
+            Instantiate(achievementNotificationManagerPrefab, transform, false);
         }
+
         AchievementNotificationManager.Instance.AddAchievement(achievement);
     }
 
