@@ -17,8 +17,8 @@ public class PlayerAnimation : MonoBehaviour
     private float targetSpeed;
 
     private Vector3 lastPosition;
-    private float distanceWalked = 0;
-    private int achievementUpdateIntervall = 1;
+    private float distanceWalked;
+    private readonly int achievementUpdateIntervall = 1;
 
     //KeyCodes
     private KeyCode moveUp;
@@ -59,22 +59,26 @@ public class PlayerAnimation : MonoBehaviour
         {
             movement.x = 0;
             movement.y = 0;
-            if(Input.GetKey(moveLeft))
+            if (Input.GetKey(moveLeft))
             {
                 movement.x -= 1;
             }
+
             if (Input.GetKey(moveRight))
             {
                 movement.x += 1;
             }
+
             if (Input.GetKey(moveDown))
             {
                 movement.y -= 1;
             }
+
             if (Input.GetKey(moveUp))
             {
                 movement.y += 1;
             }
+
             movement = movement.normalized;
 
             if (Input.GetKeyDown(sprint))
@@ -82,33 +86,38 @@ public class PlayerAnimation : MonoBehaviour
                 targetSpeed = movementSpeed + sprintingSpeed;
                 playerAnimator.speed = 2;
             }
+
             if (Input.GetKeyUp(sprint))
             {
                 targetSpeed = movementSpeed;
                 playerAnimator.speed = 1;
             }
+
+            // dev keybindings
+            if (Input.GetKeyDown("l") && targetSpeed == movementSpeed)
+            {
+                targetSpeed = targetSpeed + superSpeed;
+                playerAnimator.speed = 20;
+            }
+
+            if (Input.GetKeyUp("l") && targetSpeed == movementSpeed + superSpeed)
+            {
+                targetSpeed = targetSpeed - superSpeed;
+                playerAnimator.speed = 1;
+            }
+            // dev keybindings
+
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * 50);
 
             UpdateAchievement();
 
-            // The following lines are dev keybindings, if needed they can be activated again by uncommenting them
-            if (Input.GetKeyDown("l") && currentSpeed == movementSpeed)
-            {
-                currentSpeed = currentSpeed + superSpeed;
-                playerAnimator.speed = 20;
-            }
-
-            if (Input.GetKeyUp("l") && currentSpeed == movementSpeed + superSpeed)
-            {
-                currentSpeed = currentSpeed - superSpeed;
-                playerAnimator.speed = 1;
-            }
-
+            // dev keybindings
             if (Input.GetKeyDown("k"))
             {
                 GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =
                     !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
             }
+            // dev keybindings
         }
     }
 
@@ -163,19 +172,23 @@ public class PlayerAnimation : MonoBehaviour
     private void UpdateAchievement()
     {
         float distance = Vector3.Distance(transform.position, lastPosition);
-        if(distance <= 5)
+        if (distance <= 5)
         {
             distanceWalked += distance;
-        }        
+        }
+
         if (distanceWalked >= achievementUpdateIntervall)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_WALK, achievementUpdateIntervall);
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_LONGER_WALK, achievementUpdateIntervall);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_WALK,
+                achievementUpdateIntervall);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_LONGER_WALK,
+                achievementUpdateIntervall);
             distanceWalked -= achievementUpdateIntervall;
         }
+
         lastPosition = transform.position;
     }
-    
+
     private void OnDestroy()
     {
         GameEvents.current.onKeybindingChange -= UpdateKeybindings;
@@ -187,11 +200,11 @@ public class PlayerAnimation : MonoBehaviour
     /// <param name="binding">The binding that changed</param>
     private void UpdateKeybindings(Binding binding)
     {
-        if(binding == Binding.MOVE_UP)
+        if (binding == Binding.MOVE_UP)
         {
             moveUp = GameManager.Instance.GetKeyCode(Binding.MOVE_UP);
         }
-        else if(binding == Binding.MOVE_LEFT)
+        else if (binding == Binding.MOVE_LEFT)
         {
             moveLeft = GameManager.Instance.GetKeyCode(Binding.MOVE_LEFT);
         }
@@ -201,9 +214,9 @@ public class PlayerAnimation : MonoBehaviour
         }
         else if (binding == Binding.MOVE_RIGHT)
         {
-            moveRight= GameManager.Instance.GetKeyCode(Binding.MOVE_RIGHT);
+            moveRight = GameManager.Instance.GetKeyCode(Binding.MOVE_RIGHT);
         }
-        else if(binding == Binding.SPRINT)
+        else if (binding == Binding.SPRINT)
         {
             sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
         }
