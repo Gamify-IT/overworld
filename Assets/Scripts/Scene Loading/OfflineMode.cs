@@ -11,8 +11,8 @@ public class OfflineMode : MonoBehaviour
     /// </summary>
     public void StartOfflineMode()
     {
+        GameManager.Instance.GetDummyData();
         LoadingManager.Instance.LoadScene();
-        DataManager.Instance.ReadTeleporterConfig();
         SceneManager.UnloadSceneAsync("OfflineMode");
     }
 }

@@ -86,12 +86,12 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("Start fetching data");
 
-        bool loadingSuccesful = await GameManager.Instance.FetchData();
+        bool loadingError = await GameManager.Instance.FetchData();
 
         Debug.Log("Finish fetching data");
 
         Debug.Log("Validate data");
-        if (loadingSuccesful)
+        if (loadingError)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
         }

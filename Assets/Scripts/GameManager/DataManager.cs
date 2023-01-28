@@ -270,7 +270,6 @@ public class DataManager : MonoBehaviour
     public void ProcessAchievementStatistics(AchievementStatistic[] achievementStatistics)
     {
         achievementData = new List<AchievementData>();
-
         if (achievementStatistics == null)
         {
             return;
@@ -533,7 +532,6 @@ public class DataManager : MonoBehaviour
 
         worldData = new WorldData[maxWorld + 1];
         playerData = new PlayerstatisticDTO();
-        achievementData = GetDummyAchievements();
         keybindings = GetDefaultKeybindings();
 
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
@@ -548,21 +546,6 @@ public class DataManager : MonoBehaviour
     public void ResetKeybindings()
     {
         keybindings = GetDefaultKeybindings();
-    }
-
-    private List<AchievementData> GetDummyAchievements()
-    {
-        List<string> categories1 = new() { "Exploring" };
-        AchievementData achievement1 =
-            new AchievementData("GO_FOR_A_WALK", "Walk 10 tiles", categories1, "achievement2", 10, 0, false);
-        AchievementData achievement2 = new AchievementData("GO_FOR_A_LONGER_WALK", "Walk 15 tiles", categories1,
-            "achievement2", 15, 0, false);
-        AchievementData achievement3 =
-            new AchievementData("TALK_TO_NPCS", "Talkt to 15 NPCs", categories1, "achievement2", 5, 0, false);
-
-        List<AchievementData> achievements = new List<AchievementData> { achievement1, achievement2, achievement3 };
-
-        return achievements;
     }
 
     /// <summary>
@@ -609,7 +592,6 @@ public class DataManager : MonoBehaviour
 
         return worldData[worldIndex].getMinigameStatus(index);
     }
-
 
     /// <summary>
     ///     Reads the teleporter config and assigns its data to the TeleporterData array of its belonging IAreaData
