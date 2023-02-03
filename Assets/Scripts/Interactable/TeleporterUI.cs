@@ -21,6 +21,7 @@ public class TeleporterUI : MonoBehaviour
     private List<GameObject> currentTeleporterButtons = new List<GameObject>();
 
     private Teleporter correspondingTeleporter;
+    private Color standardButtonColor = new Color(1, 0.9176471f, 0.7960784f);
 
 
     /// <summary>
@@ -95,6 +96,6 @@ public class TeleporterUI : MonoBehaviour
 
     public void ToggleEnabledColor(bool enabled, Image image)
     {
-        image.color = enabled ? Color.green : Color.white;
+        image.color = enabled ? Color.green : standardButtonColor;
     }
 }
