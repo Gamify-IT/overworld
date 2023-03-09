@@ -37,7 +37,7 @@ public class AchievementData
     /// <returns>The converted <c>AchievementUIElement</c> object</returns>
     public static AchievementData ConvertFromAchievementStatistic(AchievementStatistic statistic)
     {
-        string title = statistic.achievement.title;
+        string title = statistic.achievement.achievementTitle;
         string description = statistic.achievement.description;
         List<string> categories = statistic.achievement.categories;
         string imageName = statistic.achievement.imageName;
