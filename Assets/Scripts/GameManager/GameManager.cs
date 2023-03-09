@@ -153,14 +153,12 @@ public class GameManager : MonoBehaviour
 
         string playerPath = overworldBackendPath + "/players/" + userId;
 
-        /*
         Optional<AchievementStatistic[]> achievementStatistics =
             await RestRequest.GetArrayRequest<AchievementStatistic>(playerPath + "/achievements");
         if(!achievementStatistics.IsPresent())
         {
             loadingError = true;
         }
-        */
 
         Debug.Log("Got all data.");
 
@@ -175,7 +173,7 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
             DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
-            //DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
+            DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
         }
 
         Debug.Log("Everything set up");
