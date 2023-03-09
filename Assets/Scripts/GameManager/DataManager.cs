@@ -274,10 +274,12 @@ public class DataManager : MonoBehaviour
         {
             return;
         }
+        Debug.Log("Process " + achievementStatistics.Length + " achievements");
 
         foreach (AchievementStatistic statistic in achievementStatistics)
         {
             AchievementData achievement = AchievementData.ConvertFromAchievementStatistic(statistic);
+            Debug.Log("Processed achievement: " + achievement.GetTitle());
             achievementData.Add(achievement);
         }
     }

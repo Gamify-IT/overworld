@@ -10,9 +10,9 @@ public class Achievement
     public string description;
     public string imageName;
     public int amountRequired;
-    public List<string> categories;
+    public string[] categories;
 
-    public Achievement(string achievementTitle, string description, List<string> categories, string imageName, int amountRequired)
+    public Achievement(string achievementTitle, string description, string[] categories, string imageName, int amountRequired)
     {
         this.achievementTitle = achievementTitle;
         this.description = description;

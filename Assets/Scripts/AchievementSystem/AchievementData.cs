@@ -39,7 +39,11 @@ public class AchievementData
     {
         string title = statistic.achievement.achievementTitle;
         string description = statistic.achievement.description;
-        List<string> categories = statistic.achievement.categories;
+        List<string> categories = new List<string>();
+        foreach(string category in statistic.achievement.categories)
+        {
+            categories.Add(category);
+        }
         string imageName = statistic.achievement.imageName;
         int amountRequired = statistic.achievement.amountRequired;
         int progress = statistic.progress;

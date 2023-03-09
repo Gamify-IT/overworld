@@ -492,7 +492,7 @@ public class GameManager : MonoBehaviour
     private AchievementStatistic[] GetDummyAchievements()
     {
         AchievementStatistic[] statistcs = new AchievementStatistic[2];
-        List<string> categories1 = new() { "Exploring" };
+        string[] categories1 = { "Exploring" };
         Achievement achievement1 =
             new Achievement("GO_FOR_A_WALK", "Walk 10 tiles", categories1, "achievement2", 10);
         AchievementStatistic achievementStatistic1 = new AchievementStatistic(username, achievement1, 0, false);
