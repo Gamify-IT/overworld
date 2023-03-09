@@ -6,15 +6,15 @@ using System.Collections.Generic;
 /// </summary>
 public class Achievement
 {
-    public string title;
+    public string achievementTitle;
     public string description;
-    public List<string> categories;
     public string imageName;
     public int amountRequired;
+    public List<string> categories;
 
-    public Achievement(string title, string description, List<string> categories, string imageName, int amountRequired)
+    public Achievement(string achievementTitle, string description, List<string> categories, string imageName, int amountRequired)
     {
-        this.title = title;
+        this.achievementTitle = achievementTitle;
         this.description = description;
         this.categories = categories;
         this.imageName = imageName;
