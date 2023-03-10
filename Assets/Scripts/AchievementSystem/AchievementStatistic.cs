@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 
 /// <summary>
 ///     This class is used to retrieve <c>AchievementStatistic</c> data from Get Requests.
 /// </summary>
+[Serializable]
 public class AchievementStatistic
 {
     public string id;

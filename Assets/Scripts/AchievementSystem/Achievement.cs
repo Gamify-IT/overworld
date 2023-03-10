@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
-using System.Collections.Generic;
 
 /// <summary>
 ///     This class is used to retrieve <c>Achievement</c> data from Get Requests.
 /// </summary>
+[Serializable]
 public class Achievement
 {
     public string achievementTitle;

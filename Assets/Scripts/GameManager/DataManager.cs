@@ -272,6 +272,7 @@ public class DataManager : MonoBehaviour
         achievementData = new List<AchievementData>();
         if (achievementStatistics == null)
         {
+            Debug.Log("achievements list is null");
             return;
         }
         Debug.Log("Process " + achievementStatistics.Length + " achievements");
