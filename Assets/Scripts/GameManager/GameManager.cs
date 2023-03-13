@@ -151,6 +151,15 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
+        string playerPath = overworldBackendPath + "/players/" + userId;
+
+        Optional<AchievementStatistic[]> achievementStatistics =
+            await RestRequest.GetArrayRequest<AchievementStatistic>(playerPath + "/achievements");
+        if(!achievementStatistics.IsPresent())
+        {
+            loadingError = true;
+        }
+
         Debug.Log("Got all data.");
 
         if (!loadingError)
@@ -164,11 +173,7 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
             DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
-        }
-        else
-        {
-            GetDummyData();
-            DataManager.Instance.ReadTeleporterConfig();
+            DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
         }
 
         Debug.Log("Everything set up");
@@ -470,8 +475,9 @@ public class GameManager : MonoBehaviour
     /// <summary>
     ///     This function sets up everything with dummy data for the offline mode
     /// </summary>
-    private void GetDummyData()
+    public void GetDummyData()
     {
+        DataManager.Instance.ReadTeleporterConfig();
         //worldDTO dummy data
         for (int worldIndex = 0; worldIndex < maxWorld; worldIndex++)
         {
@@ -480,18 +486,21 @@ public class GameManager : MonoBehaviour
 
         DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
         AchievementStatistic[] achivements = GetDummyAchievements();
-        Debug.Log("Game Manager, achievements: " + achivements.Length);
         DataManager.Instance.ProcessAchievementStatistics(achivements);
     }
 
     private AchievementStatistic[] GetDummyAchievements()
     {
-        AchievementStatistic[] statistcs = new AchievementStatistic[1];
-        List<string> categories1 = new() { "Blub", "Bla" };
+        AchievementStatistic[] statistcs = new AchievementStatistic[2];
+        string[] categories1 = { "Exploring" };
         Achievement achievement1 =
-            new Achievement("Achievement 1", "First Achievement", categories1, "achievement1", 5);
-        AchievementStatistic achievementStatistic1 = new AchievementStatistic("blub", achievement1, 0, false);
+            new Achievement("GO_FOR_A_WALK", "Walk 10 tiles", categories1, "achievement2", 10);
+        AchievementStatistic achievementStatistic1 = new AchievementStatistic(username, achievement1, 0, false);
+        Achievement achievement2 =
+            new Achievement("GO_FOR_A_LONGER_WALK", "Walk 1000 tiles", categories1, "achievement2", 1000);
+        AchievementStatistic achievementStatistic2 = new AchievementStatistic(username, achievement2, 0, false);
         statistcs[0] = achievementStatistic1;
+        statistcs[1] = achievementStatistic2;
         return statistcs;
     }
 }

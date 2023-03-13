@@ -1,18 +1,20 @@
+using System;
 using UnityEngine;
 
 /// <summary>
 ///     This class is used to retrieve <c>AchievementStatistic</c> data from Get Requests.
 /// </summary>
+[Serializable]
 public class AchievementStatistic
 {
-    public string player;
+    public string id;
     public Achievement achievement;
     public int progress;
     public bool completed;
 
-    public AchievementStatistic(string player, Achievement achievement, int progress, bool completed)
+    public AchievementStatistic(string id, Achievement achievement, int progress, bool completed)
     {
-        this.player = player;
+        this.id = id;
         this.achievement = achievement;
         this.progress = progress;
         this.completed = completed;
