@@ -160,6 +160,9 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
+        Optional<KeybindingDTO[]> keybindings =
+            await RestRequest.GetArrayRequest<KeybindingDTO>(playerPath + "/keybindings");
+
         Debug.Log("Got all data.");
 
         if (!loadingError)
@@ -174,6 +177,7 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
+            DataManager.Instance.ProcessKeybindings(keybindings.Value());
         }
 
         Debug.Log("Everything set up");
@@ -487,6 +491,7 @@ public class GameManager : MonoBehaviour
         DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
         AchievementStatistic[] achivements = GetDummyAchievements();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
+        DataManager.Instance.ResetKeybindings();
     }
 
     private AchievementStatistic[] GetDummyAchievements()
