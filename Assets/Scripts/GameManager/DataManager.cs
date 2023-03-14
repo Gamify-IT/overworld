@@ -662,14 +662,17 @@ public class DataManager : MonoBehaviour
             bindingContained[binding] = true;
         }
 
-        foreach (Binding bindingValue in Enum.GetValues(typeof(Binding)))
+        if(validBindings)
         {
-            if(!bindingContained[bindingValue])
+            foreach (Binding bindingValue in Enum.GetValues(typeof(Binding)))
             {
-                Debug.Log("No binding for: " + bindingValue);
-                validBindings = false;
+                if (!bindingContained[bindingValue])
+                {
+                    Debug.Log("No binding for: " + bindingValue);
+                    validBindings = false;
+                }
             }
-        }
+        }        
 
         return validBindings;
     }
