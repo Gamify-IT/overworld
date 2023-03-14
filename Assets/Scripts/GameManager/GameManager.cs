@@ -375,9 +375,28 @@ public class GameManager : MonoBehaviour
     ///     This function changes the keybind of the given <c>Binding</c> to the given <c>KeyCode</c>
     /// </summary>
     /// <param name="keybinding">The binding to change</param>
-    public void ChangeKeybind(Keybinding keybinding)
+    public async void ChangeKeybind(Keybinding keybinding)
     {
-        DataManager.Instance.ChangeKeybind(keybinding);
+        bool keyChanged = DataManager.Instance.ChangeKeybind(keybinding);
+        if(keyChanged)
+        {
+            string path = overworldBackendPath + "/players/" + userId + "/keybindings";
+            string binding = keybinding.GetBinding().ToString();
+            string key = keybinding.GetKey().ToString();
+            KeybindingDTO keybindingDTO = new KeybindingDTO(userId, binding, key);
+
+            string json = JsonUtility.ToJson(keybindingDTO, true);
+
+            bool successful = await RestRequest.PostRequest(path, json);
+            if(successful)
+            {
+                Debug.Log("Updated the binding (" + binding + " -> " + key + ") in the overworld backend");
+            }
+            else
+            {
+                Debug.Log("Could not updated the binding (" + binding + " -> " + key + ") in the overworld backend");
+            }
+        }
     }
 
     /// <summary>
@@ -395,7 +414,38 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ResetKeybindings()
     {
-        DataManager.Instance.ResetKeybindings();
+        Keybinding moveUp = new Keybinding(Binding.MOVE_UP, KeyCode.W);
+        ChangeKeybind(moveUp);
+
+        Keybinding moveLeft = new Keybinding(Binding.MOVE_LEFT, KeyCode.A);
+        ChangeKeybind(moveLeft);
+
+        Keybinding moveDown = new Keybinding(Binding.MOVE_DOWN, KeyCode.S);
+        ChangeKeybind(moveDown);
+
+        Keybinding moveRight = new Keybinding(Binding.MOVE_RIGHT, KeyCode.D);
+        ChangeKeybind(moveRight);
+
+        Keybinding sprint = new Keybinding(Binding.SPRINT, KeyCode.LeftShift);
+        ChangeKeybind(sprint);
+
+        Keybinding interact = new Keybinding(Binding.INTERACT, KeyCode.E);
+        ChangeKeybind(interact);
+
+        Keybinding cancel = new Keybinding(Binding.CANCEL, KeyCode.Escape);
+        ChangeKeybind(cancel);
+
+        Keybinding minimapZoomIn = new Keybinding(Binding.MINIMAP_ZOOM_IN, KeyCode.P);
+        ChangeKeybind(minimapZoomIn);
+
+        Keybinding minimapZoomOut = new Keybinding(Binding.MINIMAP_ZOOM_OUT, KeyCode.O);
+        ChangeKeybind(minimapZoomOut);
+
+        Keybinding gameZoomIn = new Keybinding(Binding.GAME_ZOOM_IN, KeyCode.Alpha0);
+        ChangeKeybind(gameZoomIn);
+
+        Keybinding gameZoomOut = new Keybinding(Binding.GAME_ZOOM_OUT, KeyCode.Alpha9);
+        ChangeKeybind(gameZoomOut);
     }
 
     /// <summary>
@@ -491,7 +541,7 @@ public class GameManager : MonoBehaviour
         DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
         AchievementStatistic[] achivements = GetDummyAchievements();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
-        DataManager.Instance.ResetKeybindings();
+        ResetKeybindings();
     }
 
     private AchievementStatistic[] GetDummyAchievements()

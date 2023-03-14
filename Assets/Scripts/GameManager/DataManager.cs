@@ -302,7 +302,7 @@ public class DataManager : MonoBehaviour
         else
         {
             Debug.Log("Keybindings invalid");
-            GetDefaultKeybindings();
+            GameManager.Instance.ResetKeybindings();
         }
     }
 
@@ -502,16 +502,22 @@ public class DataManager : MonoBehaviour
     ///     This function changes the keybind of the given <c>Binding</c> to the given <c>KeyCode</c>
     /// </summary>
     /// <param name="keybinding">The binding to change</param>
-    public void ChangeKeybind(Keybinding keybinding)
+    /// <returns>True if the key was changed, false otherwise</returns>
+    public bool ChangeKeybind(Keybinding keybinding)
     {
         Binding binding = keybinding.GetBinding();
         KeyCode keyCode = keybinding.GetKey();
+
+        bool keyChanged = false;
+
         if(keybindings[binding] != keyCode)
         {
             keybindings[binding] = keyCode;
             GameEvents.current.KeybindingChange(binding);
+            keyChanged = true;
             Debug.Log("Changed binding " + binding + " to: " + keybinding.GetKey().ToString());
-        }        
+        }
+        return keyChanged;
     }
 
     /// <summary>
@@ -560,7 +566,7 @@ public class DataManager : MonoBehaviour
 
         worldData = new WorldData[maxWorld + 1];
         playerData = new PlayerstatisticDTO();
-        keybindings = GetDefaultKeybindings();
+        InitKeybindingsDictionary();
 
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
         {
@@ -569,34 +575,25 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function resets the keybindings
+    ///     This function initializes the keybindings dictionary
     /// </summary>
-    public void ResetKeybindings()
-    {
-        keybindings = GetDefaultKeybindings();
-    }
-
-    /// <summary>
-    ///     This function returns the default keybindings
-    /// </summary>
-    /// <returns>A dictionary containing the default keybindings</returns>
-    private Dictionary<Binding, KeyCode> GetDefaultKeybindings()
+    private void InitKeybindingsDictionary()
     {
         Dictionary<Binding, KeyCode> keybindings = new Dictionary<Binding, KeyCode>();
 
-        keybindings.Add(Binding.MOVE_UP, KeyCode.W);
-        keybindings.Add(Binding.MOVE_LEFT, KeyCode.A);
-        keybindings.Add(Binding.MOVE_DOWN, KeyCode.S);
-        keybindings.Add(Binding.MOVE_RIGHT, KeyCode.D);
-        keybindings.Add(Binding.SPRINT, KeyCode.LeftShift);
-        keybindings.Add(Binding.INTERACT, KeyCode.E);
-        keybindings.Add(Binding.CANCEL, KeyCode.Escape);
-        keybindings.Add(Binding.MINIMAP_ZOOM_IN, KeyCode.P);
-        keybindings.Add(Binding.MINIMAP_ZOOM_OUT, KeyCode.O);
-        keybindings.Add(Binding.GAME_ZOOM_IN, KeyCode.Alpha0);
-        keybindings.Add(Binding.GAME_ZOOM_OUT, KeyCode.Alpha9);
+        keybindings.Add(Binding.MOVE_UP, KeyCode.None);
+        keybindings.Add(Binding.MOVE_LEFT, KeyCode.None);
+        keybindings.Add(Binding.MOVE_DOWN, KeyCode.None);
+        keybindings.Add(Binding.MOVE_RIGHT, KeyCode.None);
+        keybindings.Add(Binding.SPRINT, KeyCode.None);
+        keybindings.Add(Binding.INTERACT, KeyCode.None);
+        keybindings.Add(Binding.CANCEL, KeyCode.None);
+        keybindings.Add(Binding.MINIMAP_ZOOM_IN, KeyCode.None);
+        keybindings.Add(Binding.MINIMAP_ZOOM_OUT, KeyCode.None);
+        keybindings.Add(Binding.GAME_ZOOM_IN, KeyCode.None);
+        keybindings.Add(Binding.GAME_ZOOM_OUT, KeyCode.None);
 
-        return keybindings;
+        this.keybindings = keybindings;
     }
 
     /// <summary>
