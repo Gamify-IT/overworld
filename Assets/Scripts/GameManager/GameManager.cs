@@ -380,12 +380,12 @@ public class GameManager : MonoBehaviour
         bool keyChanged = DataManager.Instance.ChangeKeybind(keybinding);
         if(keyChanged)
         {
-            string path = overworldBackendPath + "/players/" + userId + "/keybindings";
             string binding = keybinding.GetBinding().ToString();
             string key = keybinding.GetKey().ToString();
             KeybindingDTO keybindingDTO = new KeybindingDTO(userId, binding, key);
 
             string json = JsonUtility.ToJson(keybindingDTO, true);
+            string path = overworldBackendPath + "/players/" + userId + "/keybindings/" + binding;
 
             bool successful = await RestRequest.PutRequest(path, json);
             if(successful)
