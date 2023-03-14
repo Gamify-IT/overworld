@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /// <summary>
 ///     The <c>DataManager</c> stores all required data to set up the objects in the areas.
@@ -286,6 +287,26 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function checks for a given array of <c>KeycodeDTO</c>s whether they are valid or not.
+    ///     If so, they are set as the bindings, otherwise the default bindings are set.
+    /// </summary>
+    /// <param name="keybindingDTOs"></param>
+    public void ProcessKeybindings(KeybindingDTO[] keybindingDTOs)
+    {
+        List<Keybinding> keybindings = ConvertKeybindings(keybindingDTOs);
+        if (ValidKeybindings(keybindings))
+        {
+            Debug.Log("Keybindings valid");
+            SetKeybindings(keybindings);
+        }
+        else
+        {
+            Debug.Log("Keybindings invalid");
+            GameManager.Instance.ResetKeybindings();
+        }
+    }
+
+    /// <summary>
     ///     This function returns the percentage of completed minigames in the given world
     /// </summary>
     /// <param name="worldIndex">The index of the world</param>
@@ -362,7 +383,6 @@ public class DataManager : MonoBehaviour
 
         return completedMinigames * 1f / (minigames * 1f);
     }
-
 
     /// <summary>
     ///     Returns a list of all unlocked teleporters in a world (including its dungeons)
@@ -482,11 +502,22 @@ public class DataManager : MonoBehaviour
     ///     This function changes the keybind of the given <c>Binding</c> to the given <c>KeyCode</c>
     /// </summary>
     /// <param name="keybinding">The binding to change</param>
-    public void ChangeKeybind(Keybinding keybinding)
+    /// <returns>True if the key was changed, false otherwise</returns>
+    public bool ChangeKeybind(Keybinding keybinding)
     {
         Binding binding = keybinding.GetBinding();
-        keybindings[binding] = keybinding.GetKey();
-        GameEvents.current.KeybindingChange(binding);
+        KeyCode keyCode = keybinding.GetKey();
+
+        bool keyChanged = false;
+
+        if(keybindings[binding] != keyCode)
+        {
+            keybindings[binding] = keyCode;
+            GameEvents.current.KeybindingChange(binding);
+            keyChanged = true;
+            Debug.Log("Changed binding " + binding + " to: " + keybinding.GetKey().ToString());
+        }
+        return keyChanged;
     }
 
     /// <summary>
@@ -535,7 +566,7 @@ public class DataManager : MonoBehaviour
 
         worldData = new WorldData[maxWorld + 1];
         playerData = new PlayerstatisticDTO();
-        keybindings = GetDefaultKeybindings();
+        InitKeybindingsDictionary();
 
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
         {
@@ -544,34 +575,118 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function resets the keybindings
+    ///     This function initializes the keybindings dictionary
     /// </summary>
-    public void ResetKeybindings()
-    {
-        keybindings = GetDefaultKeybindings();
-    }
-
-    /// <summary>
-    ///     This function returns the default keybindings
-    /// </summary>
-    /// <returns>A dictionary containing the default keybindings</returns>
-    private Dictionary<Binding, KeyCode> GetDefaultKeybindings()
+    private void InitKeybindingsDictionary()
     {
         Dictionary<Binding, KeyCode> keybindings = new Dictionary<Binding, KeyCode>();
 
-        keybindings.Add(Binding.MOVE_UP, KeyCode.W);
-        keybindings.Add(Binding.MOVE_LEFT, KeyCode.A);
-        keybindings.Add(Binding.MOVE_DOWN, KeyCode.S);
-        keybindings.Add(Binding.MOVE_RIGHT, KeyCode.D);
-        keybindings.Add(Binding.SPRINT, KeyCode.LeftShift);
-        keybindings.Add(Binding.INTERACT, KeyCode.E);
-        keybindings.Add(Binding.CANCEL, KeyCode.Escape);
-        keybindings.Add(Binding.MINIMAP_ZOOM_IN, KeyCode.P);
-        keybindings.Add(Binding.MINIMAP_ZOOM_OUT, KeyCode.O);
-        keybindings.Add(Binding.GAME_ZOOM_IN, KeyCode.Alpha0);
-        keybindings.Add(Binding.GAME_ZOOM_OUT, KeyCode.Alpha9);
+        keybindings.Add(Binding.MOVE_UP, KeyCode.None);
+        keybindings.Add(Binding.MOVE_LEFT, KeyCode.None);
+        keybindings.Add(Binding.MOVE_DOWN, KeyCode.None);
+        keybindings.Add(Binding.MOVE_RIGHT, KeyCode.None);
+        keybindings.Add(Binding.SPRINT, KeyCode.None);
+        keybindings.Add(Binding.INTERACT, KeyCode.None);
+        keybindings.Add(Binding.CANCEL, KeyCode.None);
+        keybindings.Add(Binding.MINIMAP_ZOOM_IN, KeyCode.None);
+        keybindings.Add(Binding.MINIMAP_ZOOM_OUT, KeyCode.None);
+        keybindings.Add(Binding.GAME_ZOOM_IN, KeyCode.None);
+        keybindings.Add(Binding.GAME_ZOOM_OUT, KeyCode.None);
 
+        this.keybindings = keybindings;
+    }
+
+    /// <summary>
+    ///     This function converts an array of <c>KeybindingDTO</c>s to a list of <c>Keybinding</c>s
+    /// </summary>
+    /// <param name="keybindingDTOs">The array of <c>KeybindingDTO</c>s to convert</param>
+    /// <returns></returns>
+    private List<Keybinding> ConvertKeybindings(KeybindingDTO[] keybindingDTOs)
+    {
+        List<Keybinding> keybindings = new List<Keybinding>();
+        foreach(KeybindingDTO keybindingDTO in keybindingDTOs)
+        {
+            try
+            {
+                Keybinding keybinding = Keybinding.ConvertDTO(keybindingDTO);
+                keybindings.Add(keybinding);
+            }
+            catch (ArgumentException)
+            {
+                Debug.Log("Could not convert the binding: " + keybindingDTO.binding + " -> " + keybindingDTO.key);
+            }
+        }
         return keybindings;
+    }
+
+    /// <summary>
+    ///     This function checks whether the given keybindings are valid or not.
+    ///     That means each binding has a unique key, so no keys can be bound to multiple binding, 
+    ///     nor can a binding occour multiple times or not at all. 
+    /// </summary>
+    /// <param name="keybindings"></param>
+    /// <returns></returns>
+    private bool ValidKeybindings(List<Keybinding> keybindings)
+    {
+        bool validBindings = true;
+
+        List<KeyCode> keyCodes = new List<KeyCode>();
+        List<Binding> bindings = new List<Binding>();
+        Dictionary<Binding, bool> bindingContained = new Dictionary<Binding, bool>();
+        foreach(Binding bindingValue in Enum.GetValues(typeof(Binding)))
+        {
+            bindingContained.Add(bindingValue, false);
+        }
+
+        foreach (Keybinding keybinding in keybindings)
+        {
+            KeyCode keyCode = keybinding.GetKey();
+            Binding binding = keybinding.GetBinding();
+            
+            if(keyCodes.Contains(keyCode))
+            {
+                Debug.Log("Multiple uses of keyCode: " + keyCode);
+                validBindings = false;
+                break;
+            }
+            keyCodes.Add(keyCode);
+
+            if(bindings.Contains(binding))
+            {
+                Debug.Log("Multiple bindings for: " + binding);
+                validBindings = false;
+                break;
+            }
+            bindings.Add(binding);
+
+            bindingContained[binding] = true;
+        }
+
+        if(validBindings)
+        {
+            foreach (Binding bindingValue in Enum.GetValues(typeof(Binding)))
+            {
+                if (!bindingContained[bindingValue])
+                {
+                    Debug.Log("No binding for: " + bindingValue);
+                    validBindings = false;
+                }
+            }
+        }        
+
+        return validBindings;
+    }
+
+    /// <summary>
+    ///     This function sets the given keybindings as the active ones
+    /// </summary>
+    /// <param name="keybindings"></param>
+    private void SetKeybindings(List<Keybinding> keybindings)
+    {
+        foreach(Keybinding keybinding in keybindings)
+        {
+            ChangeKeybind(keybinding);
+        }
     }
 
     /// <summary>

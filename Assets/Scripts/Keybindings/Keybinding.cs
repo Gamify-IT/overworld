@@ -30,5 +30,18 @@ public class Keybinding
         key = keyCode;
     }
 
+    /// <summary>
+    ///     This function converts a <c>KeybindingDTO</c> to a <c>Keybinding</c>
+    /// </summary>
+    /// <param name="keybindingDTO">The <c>KeybindingDTO</c> to convert</param>
+    /// <returns></returns>
+    public static Keybinding ConvertDTO(KeybindingDTO keybindingDTO)
+    {
+        Binding binding = (Binding) System.Enum.Parse(typeof(Binding), keybindingDTO.binding);
+        KeyCode key = (KeyCode)System.Enum.Parse(typeof(KeyCode), keybindingDTO.key);
+        Keybinding keybinding = new Keybinding(binding, key);
+        return keybinding;
+    }
+
     #endregion
 }

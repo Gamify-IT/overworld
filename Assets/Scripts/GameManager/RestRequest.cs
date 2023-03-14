@@ -128,4 +128,43 @@ public static class RestRequest
             }
         }
     }
+
+    /// <summary>
+    ///     This function sends a PUT REQUEST to the provided <c>uri</c> with the <c>json</c> body. 
+    /// </summary>
+    /// <param name="uri">The type to cast the response to</param>
+    /// <param name="json">The body to be send</param>
+    /// <returns>true if put request was successful, false otherwise</returns>
+    public static async UniTask<bool> PutRequest(string uri, string json)
+    {
+        Debug.Log("Put Request for path: " + uri + ", posting: " + json);
+
+        UnityWebRequest webRequest = new UnityWebRequest(uri, UnityWebRequest.kHttpVerbPUT);
+        byte[] bytes = new UTF8Encoding().GetBytes(json);
+        webRequest.uploadHandler = new UploadHandlerRaw(bytes);
+        webRequest.downloadHandler = new DownloadHandlerBuffer();
+        webRequest.SetRequestHeader("Content-Type", "application/json");
+
+        using (webRequest)
+        {
+            // Request and wait for the desired page.
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
+
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(webRequest.error);
+                return false;
+            }
+            else
+            {
+                Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
+                return true;
+            }
+        }
+    }
 }
