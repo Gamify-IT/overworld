@@ -387,7 +387,7 @@ public class GameManager : MonoBehaviour
 
             string json = JsonUtility.ToJson(keybindingDTO, true);
 
-            bool successful = await RestRequest.PostRequest(path, json);
+            bool successful = await RestRequest.PutRequest(path, json);
             if(successful)
             {
                 Debug.Log("Updated the binding (" + binding + " -> " + key + ") in the overworld backend");
