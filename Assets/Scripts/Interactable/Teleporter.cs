@@ -158,13 +158,12 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         finalTargetPosition = position;
         finalTargetWorld = worldID;
         finalTargetDungeon = dungeonID;
-        Animation ufoAnimation = GetComponent<Animation>();
+        Animation ufoAnimation = player.GetComponent<Animation>();
         player.GetComponent<PlayerAnimation>().DisableMovement();
-        Debug.Log("start animation");
-        ufoAnimation.Play();
+        interactable = false;
+        ufoAnimation.Play("UfoDeparture");
 
         Debug.Log("Animation length: " + ufoAnimation.clip.length);
-
         Invoke("FinishTeleportation", ufoAnimation.clip.length);
     }
 
@@ -173,7 +172,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     ///     This function is called by an animation event of the Ufo Animation. It loads the new world and teleports the player
     ///     there.
     /// </summary>
-    public void FinishTeleportation()
+    public async void FinishTeleportation()
     {
         player.position = finalTargetPosition;
 
@@ -183,26 +182,16 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         if (finalTargetWorld != worldID || finalTargetDungeon != dungeonID)
         {
             GameManager.Instance.SetReloadLocation(finalTargetPosition, finalTargetWorld, finalTargetDungeon);
-            GameManager.Instance.ExecuteTeleportation();
+            await GameManager.Instance.ExecuteTeleportation();
         }
         else
         {
             player.position = finalTargetPosition;
         }
-
-        player.GetComponent<PlayerAnimation>().EnableMovement();
-        player.GetComponent<SpriteRenderer>().enabled = true;
-        interactable = true;
+        Animation animation = player.GetComponent<Animation>();
+        animation.Play("UfoArrival");
     }
 
-
-    /// <summary>
-    ///     This function is called by an animation event of the Ufo Animation. It hides the player for some time.
-    /// </summary>
-    public void FadeOutPlayer()
-    {
-        player.GetComponent<SpriteRenderer>().enabled = false;
-    }
 
     public void Setup(TeleporterData data)
     {
