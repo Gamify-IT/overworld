@@ -229,12 +229,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     ///     This function is used by a teleporter to update the position of the player.
     /// </summary>
-    public void ExecuteTeleportation()
-    {
-        TeleporterSpecificLoading();
-    }
-
-    private async void TeleporterSpecificLoading()
+    public async UniTask ExecuteTeleportation()
     {
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
         LoadingManager.Instance.UnloadUnneededScenesExcept("no exceptions in this case ;)");
