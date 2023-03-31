@@ -1900,8 +1900,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1712877350}
-        m_TargetAssemblyTypeName: URLOpenerInCurrentTab, Assembly-CSharp
-        m_MethodName: Open
+        m_TargetAssemblyTypeName: CloseGame, Assembly-CSharp
+        m_MethodName: CloseButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1958,7 +1958,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1712877345}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41bb5be228dc04ec1b7965aa5e240b58, type: 3}
+  m_Script: {fileID: 11500000, guid: 2ce3a92dca049df47826b235b480e93a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1888040105
