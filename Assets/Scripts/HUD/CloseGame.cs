@@ -18,11 +18,11 @@ public class CloseGame : MonoBehaviour
         if(success)
         {
             Debug.Log("Saved all achievement progress");
+            CloseOverworld();
         }
         else
         {
             Debug.Log("Could not save all achievement progress");
         }
-        CloseOverworld();
     }
 }
