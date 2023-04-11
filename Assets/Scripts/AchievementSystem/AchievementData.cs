@@ -9,6 +9,7 @@ public class AchievementData
     private static string imageFolder = "AchievementImages";
     private static string defaultImageName = "defaultImage";
 
+    private readonly string id;
     private readonly string title;
     private readonly string description;
     private readonly List<string> categories;
@@ -17,9 +18,11 @@ public class AchievementData
     private readonly int amountRequired;
     private int progress;
     private bool completed;
+    private bool updated;
 
-    public AchievementData(string title, string description, List<string> categories, string imageName, int amountRequired, int progress, bool completed) 
+    public AchievementData(string id, string title, string description, List<string> categories, string imageName, int amountRequired, int progress, bool completed) 
     {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.categories = categories;
@@ -28,15 +31,17 @@ public class AchievementData
         this.amountRequired = amountRequired;
         this.progress = progress;
         this.completed = completed;
+        updated = false;
     }
 
     /// <summary>
-    ///     This function converts a <c>AchievementStatistic</c> to an <c>AchievementUIElement</c>
+    ///     This function converts a <c>AchievementStatistic</c> to an <c>AchievementData</c>
     /// </summary>
     /// <param name="statistic">The <c>AchievementStatistic</c> to convert</param>
-    /// <returns>The converted <c>AchievementUIElement</c> object</returns>
+    /// <returns>The converted <c>AchievementData</c> object</returns>
     public static AchievementData ConvertFromAchievementStatistic(AchievementStatistic statistic)
     {
+        string id = statistic.id;
         string title = statistic.achievement.achievementTitle;
         string description = statistic.achievement.description;
         List<string> categories = new List<string>();
@@ -49,8 +54,32 @@ public class AchievementData
         int progress = statistic.progress;
         bool completed = statistic.completed;
 
-        AchievementData data = new AchievementData(title, description, categories, imageName, amountRequired, progress, completed);
+        AchievementData data = new AchievementData(id, title, description, categories, imageName, amountRequired, progress, completed);
         return data;
+    }
+
+    /// <summary>
+    ///     This function converts a <c>AchievementData</c> to an <c>AchievementStatistic</c>
+    /// </summary>
+    /// <param name="achievementData">The <c>AchievementData</c> to convert</param>
+    /// <returns>The converted <c>AchievementStatistic</c> object</returns>
+    public static AchievementStatistic ConvertToAchievmentStatistic(AchievementData achievementData)
+    {
+        string title = achievementData.GetTitle();
+        string description = achievementData.GetDescription();
+        string[] categories = achievementData.GetCategories().ToArray();
+        string imageName = achievementData.GetImageName();
+        int amountRequired = achievementData.GetAmountRequired();
+
+        string id = achievementData.GetId();
+        int progress = achievementData.GetProgress();
+        bool completed = achievementData.IsCompleted();
+
+        Achievement achievement = new Achievement(title, description, categories, imageName, amountRequired);
+
+        AchievementStatistic achievementStatistic = new AchievementStatistic(id, achievement, progress, completed);
+
+        return achievementStatistic;
     }
 
     /// <summary>
@@ -60,6 +89,7 @@ public class AchievementData
     /// <returns>True if the achievement is just now completed, false otherwise</returns>
     public bool UpdateProgress(int newProgress)
     {
+        updated = true;
         progress = newProgress;
         if(newProgress >= amountRequired && !completed)
         {
@@ -87,6 +117,12 @@ public class AchievementData
     }
 
     #region Getter
+
+    public string GetId()
+    {
+        return id;
+    }
+
     public string GetTitle()
     {
         return title;
@@ -125,6 +161,11 @@ public class AchievementData
     public bool IsCompleted()
     {
         return completed;
+    }
+
+    public bool isUpdated()
+    {
+        return updated;
     }
     #endregion
 }

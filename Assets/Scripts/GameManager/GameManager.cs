@@ -346,6 +346,40 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function saves all achievements, which made progress in the current session
+    /// </summary>
+    public async UniTask<bool> SaveAchievements()
+    {
+        List<AchievementData> achievements = DataManager.Instance.GetAchievements();
+        string basePath = overworldBackendPath + "/players/" + userId + "/achievements/";
+
+        bool savingSuccessful = true;
+
+        foreach (AchievementData achievementData in achievements)
+        {
+            if(achievementData.isUpdated())
+            {
+                AchievementStatistic achievementStatistic = AchievementData.ConvertToAchievmentStatistic(achievementData);
+
+                string path = basePath + achievementData.GetTitle();
+                string json = JsonUtility.ToJson(achievementStatistic, true);
+                bool successful = await RestRequest.PutRequest(path, json);
+                if (successful)
+                {
+                    Debug.Log("Updated achievement progress for " + achievementStatistic.achievement.achievementTitle + " in the overworld backend");
+                }
+                else
+                {
+                    savingSuccessful = false;
+                    Debug.Log("Could not update the achievement progress for " + achievementStatistic.achievement.achievementTitle + " in the overworld backend");
+                }
+            }
+        }
+
+        return savingSuccessful;
+    }
+
+    /// <summary>
     ///     This functions returns an information text about the barrier.
     /// </summary>
     /// <param name="type">The type of the barrier</param>
@@ -389,7 +423,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Could not updated the binding (" + binding + " -> " + key + ") in the overworld backend");
+                Debug.Log("Could not update the binding (" + binding + " -> " + key + ") in the overworld backend");
             }
         }
     }
