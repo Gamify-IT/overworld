@@ -110,4 +110,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Player HUD/Book.unity
     guid: 3fe4170a8634f99448d06508f3ad9937
+  - enabled: 1
+    path: Assets/Scenes/Worlds/Tutorial/Tutorial.unity
+    guid: f8548483a8188004d9da1c82592e1d71
   m_configObjects: {}
