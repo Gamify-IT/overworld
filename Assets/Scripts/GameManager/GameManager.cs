@@ -378,6 +378,35 @@ public class GameManager : MonoBehaviour
 
         return savingSuccessful;
     }
+    
+    public async UniTask<bool> SaveLogoutData()
+    {
+        PlayerstatisticDTO playerData = DataManager.Instance.GetPlayerData();
+        playerData.logoutXPosition = GameObject.FindGameObjectWithTag("Player").transform.position.x;
+        playerData.logoutYPosition = GameObject.FindGameObjectWithTag("Player").transform.position.y;
+        
+        //TODO
+        //playerData.logoutScene = ?;
+        //playerData.currentArea = ?;
+        
+        bool savingSuccessful = true;
+
+        string path = overworldBackendPath + "/playerstatistics/";
+        string json = JsonUtility.ToJson(playerData, true);
+        bool successful = await RestRequest.PutRequest(path, json);
+
+        if (successful)
+        {
+            Debug.Log("Updated player position in the overworld backend");
+        }
+        else
+        {
+            savingSuccessful = false;
+            Debug.Log("Could not update the player position in the overworld backend");
+        }
+
+        return savingSuccessful;
+    }
 
     /// <summary>
     ///     This functions returns an information text about the barrier.
