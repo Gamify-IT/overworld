@@ -179,7 +179,24 @@ public class LoadingManager : MonoBehaviour
             Debug.Log("Game Manager not online yet.");
             return;
         }
+        
+        ReloadDataAndCheckConsistency();
+ 
+        slider.value = 0.85f;
+        progressText.text = "85%";
+        loadingText.text = "SETTING UP PLAYER...";
 
+        GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+
+        slider.value = 1;
+        progressText.text = "100%";
+        loadingText.text = "DONE...";
+
+        await SceneManager.UnloadSceneAsync("LoadingScreen");
+    }
+    
+    public async void ReloadDataAndCheckConsistency() {
+    
         AreaLocationDTO[] unlockedAreasOld = DataManager.Instance.GetPlayerData().unlockedAreas;
 
         Debug.Log("Start fetching data");
@@ -210,18 +227,6 @@ public class LoadingManager : MonoBehaviour
             string headerText = "";
             InfoManager.Instance.DisplayInfo(headerText, infoText);
         }
-
-        slider.value = 0.85f;
-        progressText.text = "85%";
-        loadingText.text = "SETTING UP PLAYER...";
-
-        GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
-
-        slider.value = 1;
-        progressText.text = "100%";
-        loadingText.text = "DONE...";
-
-        await SceneManager.UnloadSceneAsync("LoadingScreen");
     }
 
     /// <summary>
