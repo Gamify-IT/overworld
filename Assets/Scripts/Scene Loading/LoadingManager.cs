@@ -197,6 +197,7 @@ public class LoadingManager : MonoBehaviour
     
     public async void ReloadDataAndCheckConsistency() {
     
+        Debug.Log("Start getting old unlocked areas");
         AreaLocationDTO[] unlockedAreasOld = DataManager.Instance.GetPlayerData().unlockedAreas;
 
         Debug.Log("Start fetching data");
@@ -208,21 +209,38 @@ public class LoadingManager : MonoBehaviour
         Debug.Log("Validate data");
         if (loadingSuccesful)
         {
+
+            Debug.Log("Load offline mode");
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+            Debug.Log("Loaded offline mode");
             return;
         }
 
-        slider.value = 0.5f;
-        progressText.text = "50%";
-        loadingText.text = "PROCESSING DATA...";
+        if (slider != null) {
+            Debug.Log("set slider value");
+            slider.value = 0.5f;
+        }
+        if (progressText != null) {
+            Debug.Log("set progress text");
+            progressText.text = "50%";
+        }
+        if (loadingText != null) {
+            Debug.Log("set loading text");
+            loadingText.text = "PROCESSING DATA...";
+        }
 
+        Debug.Log("start setting data");
         GameManager.Instance.SetData(worldIndex, dungeonIndex);
+        Debug.Log("collect new unlocked areas");
         AreaLocationDTO[] unlockedAreasNew = DataManager.Instance.GetPlayerData().unlockedAreas;
+        Debug.Log("setup progressbar");
         SetupProgessBar(unlockedAreasNew);
+        Debug.Log("check for new unlocked areas");
         string infoText = CheckForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
 
         if (infoText != "")
         {
+            Debug.Log("new areas have been unlocked");
             await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
             string headerText = "";
             InfoManager.Instance.DisplayInfo(headerText, infoText);
