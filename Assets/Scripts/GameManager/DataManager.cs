@@ -829,12 +829,14 @@ public class DataManager : MonoBehaviour
         if (highestActiveDungeon == 0)
         {
             int activeMinigameCount = getActiveMinigameCount(originWorldIndex);
-            
+            Debug.Log("World " + originWorldIndex + " has no active minigames");
             if (activeMinigameCount == 0)
             {
-                return "ERROR - PLEASE CONTACT THE DEVELOPERS";
+                string log = "World " + originWorldIndex + " has no active minigames";
+                Debug.Log(log);
+                return "ERROR - PLEASE CONTACT THE DEVELOPERS: " + log;
             }
-            
+            Debug.Log("World " + originWorldIndex + " has no active minigames");
             return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
         }
         else if (highestActiveDungeon == highestUnlockedDungeon)
@@ -843,7 +845,9 @@ public class DataManager : MonoBehaviour
 
             if (activeMinigameCount == 0)
             {
-                return "ERROR - PLEASE CONTACT THE DEVELOPERS";
+                string log = "World " + originWorldIndex + ", Dungeon " + highestUnlockedDungeon + " has no active minigames";
+                Debug.Log(log);
+                return "ERROR - PLEASE CONTACT THE DEVELOPERS: " + log;
             }
             
             return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex +
@@ -877,7 +881,9 @@ public class DataManager : MonoBehaviour
             
             if (activeMinigameCount == 0)
             {
-                return "ERROR - PLEASE CONTACT THE DEVELOPERS";
+                string log = "World " + inBetweenWorld + " has no active minigames";
+                Debug.Log(log);
+                return "ERROR - PLEASE CONTACT THE DEVELOPERS: " + log;
             }
             
             return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN WORLD " + inBetweenWorld +
@@ -889,7 +895,9 @@ public class DataManager : MonoBehaviour
 
             if (activeMinigameCount == 0)
             {
-                return "ERROR - PLEASE CONTACT THE DEVELOPERS";
+                string log = "World " + inBetweenWorld + ", Dungeon " + highestUnlockedDungeon + " has no active minigames";
+                Debug.Log(log);
+                return "ERROR - PLEASE CONTACT THE DEVELOPERS: " + log;
             }
             
             return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + inBetweenWorld +
@@ -932,7 +940,9 @@ public class DataManager : MonoBehaviour
 
                 if (activeMinigameCount == 0)
                 {
-                    return "ERROR - PLEASE CONTACT THE DEVELOPERS";
+                    string log = "World " + originWorldIndex + " has no active minigames";
+                    Debug.Log(log);
+                    return "ERROR - PLEASE CONTACT THE DEVELOPERS: " + log;
                 }
                 
                 return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES TO UNLOCK THIS AREA.";
@@ -943,7 +953,9 @@ public class DataManager : MonoBehaviour
 
                 if (activeMinigameCount == 0)
                 {
-                    return "ERROR - PLEASE CONTACT THE DEVELOPERS";
+                    string log = "World " + originWorldIndex + ", Dungeon " + (destinationAreaIndex - 1) + " has no active minigames";
+                    Debug.Log(log);
+                    return "ERROR - PLEASE CONTACT THE DEVELOPERS: " + log;
                 }
                 
                 return "COMPLETE " + activeMinigameCount + " MORE MINIGAMES IN DUNGEON " + originWorldIndex + "-" +
