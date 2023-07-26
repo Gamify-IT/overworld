@@ -170,6 +170,15 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     }
 
     /// <summary>
+    ///     This function sets the world to the given value
+    /// </summary>
+    /// <param name="worldIndex">The new world value</param>
+    public void SetWorldIndex(int worldIndex)
+    {
+        world = worldIndex;
+    }
+
+    /// <summary>
     ///     This function returns the dungeon of the minigame.
     /// </summary>
     /// <returns>dungeon</returns>
@@ -179,12 +188,30 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     }
 
     /// <summary>
+    ///     This function sets the dungeon to the given value
+    /// </summary>
+    /// <param name="dungeonIndex">The new dungeon value</param>
+    public void SetDungeonIndex(int dungeonIndex)
+    {
+        dungeon = dungeonIndex;
+    }
+
+    /// <summary>
     ///     This function returns the number of the minigame.
     /// </summary>
     /// <returns>number</returns>
     public int GetIndex()
     {
         return number;
+    }
+
+    /// <summary>
+    ///     This function sets the index to the given value
+    /// </summary>
+    /// <param name="index">The new index value</param>
+    public void SetIndex(int index)
+    {
+        this.number = index;
     }
 
     #endregion
