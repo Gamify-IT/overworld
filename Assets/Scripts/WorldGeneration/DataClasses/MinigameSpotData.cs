@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class contains all data to manage a minigame spot
+/// </summary>
 public class MinigameSpotData
 {
     #region Attribute
@@ -19,16 +22,21 @@ public class MinigameSpotData
         this.position = position;
     }
 
+    /// <summary>
+    ///     This function converts a <c>MinigameSpotDTO</c> object into a <c>MinigameSpotData</c> instance
+    /// </summary>
+    /// <param name="minigameSpotDTO">The <c>MinigameSpotDTO</c> object to convert</param>
+    /// <returns></returns>
     public static MinigameSpotData ConvertDtoToData(MinigameSpotDTO minigameSpotDTO)
     {
-        int worldIndex = minigameSpotDTO.worldIndex;
+        int worldIndex = minigameSpotDTO.location.worldIndex;
         Optional<int> dungeonIndex = new Optional<int>();
-        if(minigameSpotDTO.dungeonIndex != 0)
+        if(minigameSpotDTO.location.dungeonIndex != 0)
         {
-            dungeonIndex.SetValue(minigameSpotDTO.dungeonIndex);
+            dungeonIndex.SetValue(minigameSpotDTO.location.dungeonIndex);
         }
         int index = minigameSpotDTO.index;
-        Vector2 position = new Vector2(minigameSpotDTO.positionX, minigameSpotDTO.positionY);
+        Vector2 position = new Vector2(minigameSpotDTO.position.x, minigameSpotDTO.position.y);
         MinigameSpotData data = new MinigameSpotData(worldIndex, dungeonIndex, index, position);
         return data;
     }

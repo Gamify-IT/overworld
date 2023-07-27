@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class manages the creation and setup of minigames spot at world loading
+/// </summary>
 public class MinigamesManager : MonoBehaviour
 {
     [SerializeField] private GameObject minigameSpotPrefab;
@@ -52,5 +55,9 @@ public class MinigamesManager : MonoBehaviour
             }
             minigame.SetIndex(data.GetIndex());
         }
+        else
+        {
+            Debug.LogError("Error creating minigame");
+        }        
     }
 }

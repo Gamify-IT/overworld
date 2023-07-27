@@ -277,6 +277,11 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         return world;
     }
 
+    public void SetWorldIndex(int worldIndex)
+    {
+        world = worldIndex;
+    }
+
     /// <summary>
     ///     This method returns the dungeon index of the NPC.
     /// </summary>
@@ -286,6 +291,11 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         return dungeon;
     }
 
+    public void SetDungeonIndex(int dungeonIndex)
+    {
+        dungeon = dungeonIndex;
+    }
+
     /// <summary>
     ///     This method returns the number of the NPC.
     /// </summary>
@@ -293,6 +303,21 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     public int getIndex()
     {
         return number;
+    }
+
+    public void SetIndex(int index)
+    {
+        this.index = index;
+    }
+
+    public void SetName(string name)
+    {
+        nameOfNPC = name;
+    }
+
+    public void SetSprite(Sprite sprite)
+    {
+        imageOfNPC = sprite;
     }
 
     #endregion

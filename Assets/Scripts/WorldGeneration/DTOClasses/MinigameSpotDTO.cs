@@ -10,23 +10,19 @@ using System;
 public class MinigameSpotDTO
 {
     #region Attributes
-    public int worldIndex;
-    public int dungeonIndex;
+    public AreaLocationDTO location;
     public int index;
-    public float positionX;
-    public float positionY;
+    public Position position;
     #endregion
 
     #region Constructors
     public MinigameSpotDTO() { }
 
-    public MinigameSpotDTO(int worldIndex, int dungeonIndex, int index, float positionX, float positionY)
+    public MinigameSpotDTO(AreaLocationDTO location, int index, Position position)
     {
-        this.worldIndex = worldIndex;
-        this.dungeonIndex = dungeonIndex;
+        this.location = location;
         this.index = index;
-        this.positionX = positionX;
-        this.positionY = positionY;
+        this.position = position;
     }
     #endregion
 
