@@ -184,9 +184,24 @@ public class Barrier : MonoBehaviour
         return originWorldIndex;
     }
 
+    public void SetWorldOriginIndex(int worldOriginIndex)
+    {
+        originWorldIndex = worldOriginIndex;
+    }
+
     public int GetWorldDestinationIndex()
     {
         return destinationAreaIndex;
+    }
+
+    public void SetDestionationAreaIndex(int destinationAreaIndex)
+    {
+        this.destinationAreaIndex = destinationAreaIndex;
+    }
+
+    public void  SetBarrierType(BarrierType type)
+    {
+        this.type = type;
     }
 
     #endregion
