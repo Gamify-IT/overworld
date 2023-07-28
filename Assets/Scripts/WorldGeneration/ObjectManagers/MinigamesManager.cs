@@ -47,11 +47,11 @@ public class MinigamesManager : MonoBehaviour
             minigame.SetWorldIndex(data.GetWorldIndex());
             if(data.IsDungeon())
             {
-                minigame.SetDungeonIndex(0);
+                minigame.SetDungeonIndex(data.GetDungeonIndex());                
             }
             else
             {
-                minigame.SetDungeonIndex(data.GetDungeonIndex());
+                minigame.SetDungeonIndex(0);
             }
             minigame.SetIndex(data.GetIndex());
         }

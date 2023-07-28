@@ -162,6 +162,11 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         return world;
     }
 
+    public void SetWorldIndex(int worldIndex)
+    {
+        world = worldIndex;
+    }
+
     /// <summary>
     ///     This method returns the dungeon index of the Book.
     /// </summary>
@@ -171,6 +176,11 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         return dungeon;
     }
 
+    public void SetDungeonIndex(int dungeonIndex)
+    {
+        dungeon = dungeonIndex;
+    }
+
     /// <summary>
     ///     This method returns the number of the Book.
     /// </summary>
@@ -178,6 +188,16 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     public int getIndex()
     {
         return number;
+    }
+
+    public void SetIndex(int index)
+    {
+        number = index;
+    }
+
+    public void SetName(string name)
+    {
+        nameOfBook = name;
     }
 
     #endregion

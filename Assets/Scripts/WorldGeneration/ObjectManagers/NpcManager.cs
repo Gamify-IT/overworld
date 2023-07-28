@@ -68,11 +68,11 @@ public class NpcManager : MonoBehaviour
             npc.SetWorldIndex(data.GetWorldIndex());
             if (data.IsDungeon())
             {
-                npc.SetDungeonIndex(0);
+                npc.SetDungeonIndex(data.GetDungeonIndex());                
             }
             else
             {
-                npc.SetDungeonIndex(data.GetDungeonIndex());
+                npc.SetDungeonIndex(0);
             }
             npc.SetIndex(data.GetIndex());
             npc.SetName(data.GetName());

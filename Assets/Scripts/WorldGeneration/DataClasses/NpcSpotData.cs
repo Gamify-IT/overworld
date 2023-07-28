@@ -31,7 +31,7 @@ public class NpcSpotData
     /// <summary>
     ///     This function converts a <c>NpcSpotDTO</c> object into a <c>NpcSpotData</c> instance
     /// </summary>
-    /// <param name="minigameSpotDTO">The <c>NpcSpotDTO</c> object to convert</param>
+    /// <param name="npcSpotDTO">The <c>NpcSpotDTO</c> object to convert</param>
     /// <returns></returns>
     public static NpcSpotData ConvertDtoToData(NpcSpotDTO npcSpotDTO)
     {
