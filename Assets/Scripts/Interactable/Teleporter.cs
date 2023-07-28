@@ -211,4 +211,55 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         }
     }
+
+    #region Getter
+
+    /// <summary>
+    ///     This method returns the world index of the Book.
+    /// </summary>
+    /// <returns>world</returns>
+    public int GetWorldIndex()
+    {
+        return worldID;
+    }
+
+    public void SetWorldIndex(int worldIndex)
+    {
+        worldID = worldIndex;
+    }
+
+    /// <summary>
+    ///     This method returns the dungeon index of the Book.
+    /// </summary>
+    /// <returns>dungeon</returns>
+    public int GetDungeonIndex()
+    {
+        return dungeonID;
+    }
+
+    public void SetDungeonIndex(int dungeonIndex)
+    {
+        dungeonID = dungeonIndex;
+    }
+
+    /// <summary>
+    ///     This method returns the number of the Book.
+    /// </summary>
+    /// <returns>number</returns>
+    public int getIndex()
+    {
+        return teleporterNumber;
+    }
+
+    public void SetIndex(int index)
+    {
+        teleporterNumber = index;
+    }
+
+    public void SetName(string name)
+    {
+        teleporterName = name;
+    }
+
+    #endregion
 }

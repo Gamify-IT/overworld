@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 /// <summary>
-///     This class is used to retrieve minigame spot data from Get Requests.
+///     This class is used to retrieve book spot data from Get Requests.
 /// </summary>
 [Serializable]
 public class BookSpotDTO
@@ -33,8 +33,8 @@ public class BookSpotDTO
     /// </summary>
     /// <param name="jsonString">The json string to convert</param>
     /// <returns>A <c>BookSpotDTO</c> object containing the data</returns>
-    public static NpcSpotDTO CreateFromJSON(string jsonString)
+    public static BookSpotDTO CreateFromJSON(string jsonString)
     {
-        return JsonUtility.FromJson<NpcSpotDTO>(jsonString);
+        return JsonUtility.FromJson<BookSpotDTO>(jsonString);
     }
 }

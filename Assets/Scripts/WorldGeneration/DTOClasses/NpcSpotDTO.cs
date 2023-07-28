@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 /// <summary>
-///     This class is used to retrieve minigame spot data from Get Requests.
+///     This class is used to retrieve npc spot data from Get Requests.
 /// </summary>
 [Serializable]
 public class NpcSpotDTO
