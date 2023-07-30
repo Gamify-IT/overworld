@@ -44,7 +44,7 @@ public class BarrierManager : MonoBehaviour
         Barrier barrier = barrierSpot.GetComponent<Barrier>();
         if (barrier != null)
         {
-            barrier.SetWorldOriginIndex(data.GetWorldIndex());
+            barrier.SetWorldOriginIndex(data.GetArea().GetWorldIndex());
             barrier.SetDestionationAreaIndex(data.GetDestinationAreaIndex());
             barrier.SetBarrierType(data.GetBarrierType());
         }

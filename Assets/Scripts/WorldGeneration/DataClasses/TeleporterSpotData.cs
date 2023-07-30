@@ -5,17 +5,15 @@ using UnityEngine;
 public class TeleporterSpotData
 {
     #region Attributes
-    private int worldIndex;
-    private Optional<int> dungeonIndex;
+    AreaInformation area;
     private int index;
     private Vector2 position;
     private string name;
     #endregion
 
-    public TeleporterSpotData(int worldIndex, Optional<int> dungeonIndex, int index, Vector2 position, string name)
+    public TeleporterSpotData(AreaInformation area, int index, Vector2 position, string name)
     {
-        this.worldIndex = worldIndex;
-        this.dungeonIndex = dungeonIndex;
+        this.area = area;
         this.index = index;
         this.position = position;
         this.name = name;
@@ -28,16 +26,15 @@ public class TeleporterSpotData
     /// <returns>A <c>TeleporterSpotData</c> object with the data</returns>
     public static TeleporterSpotData ConvertDtoToData(TeleporterSpotDTO teleporterSpotDTO)
     {
-        int worldIndex = teleporterSpotDTO.location.worldIndex;
-        Optional<int> dungeonIndex = new Optional<int>();
+        AreaInformation area = new AreaInformation(teleporterSpotDTO.location.worldIndex, new Optional<int>());
         if (teleporterSpotDTO.location.dungeonIndex != 0)
         {
-            dungeonIndex.SetValue(teleporterSpotDTO.location.dungeonIndex);
+            area.SetDungeonIndex(teleporterSpotDTO.location.dungeonIndex);
         }
         int index = teleporterSpotDTO.index;
         Vector2 position = new Vector2(teleporterSpotDTO.position.x, teleporterSpotDTO.position.y);
         string name = teleporterSpotDTO.name;
-        TeleporterSpotData data = new TeleporterSpotData(worldIndex, dungeonIndex, index, position, name);
+        TeleporterSpotData data = new TeleporterSpotData(area, index, position, name);
         return data;
     }
 
@@ -52,29 +49,14 @@ public class TeleporterSpotData
         return index;
     }
 
-    public void SetWorldIndex(int worldIndex)
+    public void SetArea(AreaInformation area)
     {
-        this.worldIndex = worldIndex;
+        this.area = area;
     }
 
-    public int GetWorldIndex()
+    public AreaInformation GetArea()
     {
-        return worldIndex;
-    }
-
-    public void SetDungeonIndex(int dungeonIndex)
-    {
-        this.dungeonIndex.SetValue(dungeonIndex);
-    }
-
-    public bool IsDungeon()
-    {
-        return dungeonIndex.IsPresent();
-    }
-
-    public int GetDungeonIndex()
-    {
-        return dungeonIndex.Value();
+        return area;
     }
 
     public void SetPosition(Vector2 position)

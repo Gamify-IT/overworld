@@ -8,16 +8,14 @@ using UnityEngine;
 public class MinigameSpotData
 {
     #region Attribute
-    private int worldIndex;
-    private Optional<int> dungeonIndex;
+    private AreaInformation area;
     private int index;
     private Vector2 position;   
     #endregion
 
-    public MinigameSpotData(int worldIndex, Optional<int> dungeonIndex, int index, Vector2 position)
+    public MinigameSpotData(AreaInformation area, int index, Vector2 position)
     {
-        this.worldIndex = worldIndex;
-        this.dungeonIndex = dungeonIndex;
+        this.area = area;
         this.index = index;
         this.position = position;
     }
@@ -29,15 +27,14 @@ public class MinigameSpotData
     /// <returns></returns>
     public static MinigameSpotData ConvertDtoToData(MinigameSpotDTO minigameSpotDTO)
     {
-        int worldIndex = minigameSpotDTO.location.worldIndex;
-        Optional<int> dungeonIndex = new Optional<int>();
+        AreaInformation area = new AreaInformation(minigameSpotDTO.location.worldIndex, new Optional<int>());
         if(minigameSpotDTO.location.dungeonIndex != 0)
         {
-            dungeonIndex.SetValue(minigameSpotDTO.location.dungeonIndex);
+            area.SetDungeonIndex(minigameSpotDTO.location.dungeonIndex);
         }
         int index = minigameSpotDTO.index;
         Vector2 position = new Vector2(minigameSpotDTO.position.x, minigameSpotDTO.position.y);
-        MinigameSpotData data = new MinigameSpotData(worldIndex, dungeonIndex, index, position);
+        MinigameSpotData data = new MinigameSpotData(area, index, position);
         return data;
     }
 
@@ -52,29 +49,14 @@ public class MinigameSpotData
         return index;
     }
 
-    public void SetWorldIndex(int worldIndex)
+    public void SetArea(AreaInformation area)
     {
-        this.worldIndex = worldIndex;
+        this.area = area;
     }
 
-    public int GetWorldIndex()
+    public AreaInformation GetArea()
     {
-        return worldIndex;
-    }
-
-    public void SetDungeonIndex(int dungeonIndex)
-    {
-        this.dungeonIndex.SetValue(dungeonIndex);
-    }
-
-    public bool IsDungeon()
-    {
-        return dungeonIndex.IsPresent();
-    }
-
-    public int GetDungeonIndex()
-    {
-        return dungeonIndex.Value();
+        return area;
     }
 
     public void SetPosition(Vector2 position)

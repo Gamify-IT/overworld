@@ -42,10 +42,10 @@ public class BookManager : MonoBehaviour
         Book book = bookSpot.GetComponent<Book>();
         if (book != null)
         {
-            book.SetWorldIndex(data.GetWorldIndex());
-            if (data.IsDungeon())
+            book.SetWorldIndex(data.GetArea().GetWorldIndex());
+            if (data.GetArea().IsDungeon())
             {
-                book.SetDungeonIndex(data.GetDungeonIndex());                
+                book.SetDungeonIndex(data.GetArea().GetDungeonIndex());                
             }
             else
             {

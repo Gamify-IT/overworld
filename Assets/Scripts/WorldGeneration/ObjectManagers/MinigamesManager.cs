@@ -44,10 +44,10 @@ public class MinigamesManager : MonoBehaviour
         Minigame minigame = minigameSpot.GetComponent<Minigame>();
         if(minigame != null)
         {
-            minigame.SetWorldIndex(data.GetWorldIndex());
-            if(data.IsDungeon())
+            minigame.SetWorldIndex(data.GetArea().GetWorldIndex());
+            if(data.GetArea().IsDungeon())
             {
-                minigame.SetDungeonIndex(data.GetDungeonIndex());                
+                minigame.SetDungeonIndex(data.GetArea().GetDungeonIndex());                
             }
             else
             {

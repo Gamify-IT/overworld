@@ -42,10 +42,10 @@ public class TeleporterManager : MonoBehaviour
         Teleporter teleporter = teleporterSpot.GetComponent<Teleporter>();
         if (teleporter != null)
         {
-            teleporter.SetWorldIndex(data.GetWorldIndex());
-            if (data.IsDungeon())
+            teleporter.SetWorldIndex(data.GetArea().GetWorldIndex());
+            if (data.GetArea().IsDungeon())
             {
-                teleporter.SetDungeonIndex(data.GetDungeonIndex());
+                teleporter.SetDungeonIndex(data.GetArea().GetDungeonIndex());
             }
             else
             {

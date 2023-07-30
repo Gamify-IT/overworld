@@ -11,7 +11,7 @@ public class BarrierSpotDTO
 {
     #region Attribute
     public AreaLocationDTO location;
-    public Vector2 position;
+    public Position position;
     public string type;
     public int destinationWorldIndex;
     #endregion
@@ -19,7 +19,7 @@ public class BarrierSpotDTO
     #region Constructors
     public BarrierSpotDTO() { }
 
-    public BarrierSpotDTO(AreaLocationDTO location, Vector2 position, string type, int destinationWorldIndex)
+    public BarrierSpotDTO(AreaLocationDTO location, Position position, string type, int destinationWorldIndex)
     {
         this.location = location;
         this.position = position;

@@ -8,17 +8,17 @@ using UnityEngine;
 public class BarrierSpotData
 {
     #region Attribute
-    private int worldIndex;
-    private Optional<int> dungeonIndex;
+    private AreaInformation area;
+    //private int worldIndex;
+    //private Optional<int> dungeonIndex;
     private Vector2 position;
     private BarrierType type;
     private int destinationWorldIndex;
     #endregion
 
-    public BarrierSpotData(int worldIndex, Optional<int> dungeonIndex, Vector2 position, BarrierType type, int destinationWorldIndex)
+    public BarrierSpotData(AreaInformation area, Vector2 position, BarrierType type, int destinationWorldIndex)
     {
-        this.worldIndex = worldIndex;
-        this.dungeonIndex = dungeonIndex;
+        this.area = area;
         this.position = position;
         this.type = type;
         this.destinationWorldIndex = destinationWorldIndex;
@@ -31,43 +31,28 @@ public class BarrierSpotData
     /// <returns></returns>
     public static BarrierSpotData ConvertDtoToData(BarrierSpotDTO barrierSpotDTO)
     {
-        int worldIndex = barrierSpotDTO.location.worldIndex;
         Optional<int> dungeonIndex = new Optional<int>();
+        AreaInformation area = new AreaInformation(barrierSpotDTO.location.worldIndex, dungeonIndex);
         if (barrierSpotDTO.location.dungeonIndex != 0)
         {
-            dungeonIndex.SetValue(barrierSpotDTO.location.dungeonIndex);
+            area.SetDungeonIndex(barrierSpotDTO.location.dungeonIndex);
         }
         Vector2 position = new Vector2(barrierSpotDTO.position.x, barrierSpotDTO.position.y);
         BarrierType type = (BarrierType)System.Enum.Parse(typeof(BarrierType), barrierSpotDTO.type);
         int destinationWorldIndex = barrierSpotDTO.destinationWorldIndex;
-        BarrierSpotData data = new BarrierSpotData(worldIndex, dungeonIndex, position, type, destinationWorldIndex);
+        BarrierSpotData data = new BarrierSpotData(area, position, type, destinationWorldIndex);
         return data;
     }
 
     #region GetterAndSetter
-    public void SetWorldIndex(int worldIndex)
+    public void SetArea(AreaInformation area)
     {
-        this.worldIndex = worldIndex;
+        this.area = area;
     }
 
-    public int GetWorldIndex()
+    public AreaInformation GetArea()
     {
-        return worldIndex;
-    }
-
-    public void SetDungeonIndex(int dungeonIndex)
-    {
-        this.dungeonIndex.SetValue(dungeonIndex);
-    }
-
-    public bool IsDungeon()
-    {
-        return dungeonIndex.IsPresent();
-    }
-
-    public int GetDungeonIndex()
-    {
-        return dungeonIndex.Value();
+        return area;
     }
 
     public void SetPosition(Vector2 position)

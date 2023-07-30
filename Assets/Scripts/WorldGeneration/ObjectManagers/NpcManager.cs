@@ -65,10 +65,10 @@ public class NpcManager : MonoBehaviour
         NPC npc = npcSpot.GetComponent<NPC>();
         if(npc != null)
         {
-            npc.SetWorldIndex(data.GetWorldIndex());
-            if (data.IsDungeon())
+            npc.SetWorldIndex(data.GetArea().GetWorldIndex());
+            if (data.GetArea().IsDungeon())
             {
-                npc.SetDungeonIndex(data.GetDungeonIndex());                
+                npc.SetDungeonIndex(data.GetArea().GetDungeonIndex());                
             }
             else
             {
