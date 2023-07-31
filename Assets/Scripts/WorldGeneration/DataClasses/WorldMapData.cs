@@ -8,7 +8,7 @@ using UnityEngine;
 public class WorldMapData
 {
     #region Attributes
-    //grid data
+    private string[,,] tiles;
     private List<MinigameSpotData> minigameSpots;
     private List<NpcSpotData> npcSpots;
     private List<BookSpotData> bookSpots;
@@ -17,8 +17,9 @@ public class WorldMapData
     private List<SceneTransitionSpotData> sceneTransitionSpots;
     #endregion
 
-    public WorldMapData(List<MinigameSpotData> minigameSpots, List<NpcSpotData> npcSpots, List<BookSpotData> bookSpots, List<BarrierSpotData> barrierSpots, List<TeleporterSpotData> teleporterSpots, List<SceneTransitionSpotData> sceneTransitionSpots)
+    public WorldMapData(string[,,] tiles, List<MinigameSpotData> minigameSpots, List<NpcSpotData> npcSpots, List<BookSpotData> bookSpots, List<BarrierSpotData> barrierSpots, List<TeleporterSpotData> teleporterSpots, List<SceneTransitionSpotData> sceneTransitionSpots)
     {
+        this.tiles = tiles;
         this.minigameSpots = minigameSpots;
         this.npcSpots = npcSpots;
         this.bookSpots = bookSpots;
@@ -34,6 +35,8 @@ public class WorldMapData
     /// <returns></returns>
     public static WorldMapData ConvertDtoToData(WorldMapDTO worldMapDTO)
     {
+        string[,,] tiles = worldMapDTO.tiles;
+
         List<MinigameSpotData> minigameSpots = new List<MinigameSpotData>();
         for(int i = 0; i  <worldMapDTO.minigameSpots.Length; i++)
         {
@@ -70,11 +73,21 @@ public class WorldMapData
             sceneTransitionSpots.Add(SceneTransitionSpotData.ConvertDtoToData(worldMapDTO.sceneTransitions[i]));
         }
 
-        WorldMapData data = new WorldMapData(minigameSpots, npcSpots, bookSpots, barrierSpots, teleporterSpots, sceneTransitionSpots);
+        WorldMapData data = new WorldMapData(tiles, minigameSpots, npcSpots, bookSpots, barrierSpots, teleporterSpots, sceneTransitionSpots);
         return data;
     }
 
     #region GetterAndSetter
+    public string[,,] GetTiles()
+    {
+        return tiles;
+    }
+
+    public void SetTiles(string[,,] tiles)
+    {
+        this.tiles = tiles;
+    }
+
     public List<MinigameSpotData> GetMinigameSpots()
     {
         return minigameSpots;
