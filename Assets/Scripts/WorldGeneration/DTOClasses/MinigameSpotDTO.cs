@@ -35,4 +35,22 @@ public class MinigameSpotDTO
     {
         return JsonUtility.FromJson<MinigameSpotDTO>(jsonString);
     }
+
+    /// <summary>
+    ///     This function converts a <c>MinigameSpotData</c> object into a <c>MinigameSpotDTO</c> instance
+    /// </summary>
+    /// <param name="minigameSpotData">The <c>MinigameSpotData</c> object to convert</param>
+    /// <returns></returns>
+    public static MinigameSpotDTO ConvertDataToDto(MinigameSpotData minigameSpotData)
+    {
+        AreaLocationDTO areaLocation = new AreaLocationDTO(minigameSpotData.GetArea().GetWorldIndex(), 0);
+        if(minigameSpotData.GetArea().IsDungeon())
+        {
+            areaLocation.dungeonIndex = minigameSpotData.GetArea().GetDungeonIndex();
+        }
+        int index = minigameSpotData.GetIndex();
+        Position position = new Position(minigameSpotData.GetPosition().x, minigameSpotData.GetPosition().y);
+        MinigameSpotDTO data = new MinigameSpotDTO(areaLocation, index, position);
+        return data;
+    }
 }

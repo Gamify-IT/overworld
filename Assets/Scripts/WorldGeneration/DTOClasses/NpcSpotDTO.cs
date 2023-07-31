@@ -41,4 +41,25 @@ public class NpcSpotDTO
     {
         return JsonUtility.FromJson<NpcSpotDTO>(jsonString);
     }
+
+    /// <summary>
+    ///     This function converts a <c>NpcSpotData</c> object into a <c>NpcSpotDTO</c> instance
+    /// </summary>
+    /// <param name="npcSpotData">The <c>NpcSpotData</c> object to convert</param>
+    /// <returns></returns>
+    public static NpcSpotDTO ConvertDataToDto(NpcSpotData npcSpotData)
+    {
+        AreaLocationDTO areaLocation = new AreaLocationDTO(npcSpotData.GetArea().GetWorldIndex(), 0);
+        if (npcSpotData.GetArea().IsDungeon())
+        {
+            areaLocation.dungeonIndex = npcSpotData.GetArea().GetDungeonIndex();
+        }
+        int index = npcSpotData.GetIndex();
+        Position position = new Position(npcSpotData.GetPosition().x, npcSpotData.GetPosition().y);
+        string name = npcSpotData.GetName();
+        string spriteName = npcSpotData.GetSpriteName();
+        string iconName = npcSpotData.GetIconName();
+        NpcSpotDTO data = new NpcSpotDTO(areaLocation, index, position, name, spriteName, iconName);
+        return data;
+    }
 }

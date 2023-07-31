@@ -13,18 +13,18 @@ public class BarrierSpotDTO
     public AreaLocationDTO location;
     public Position position;
     public string type;
-    public int destinationWorldIndex;
+    public int destinationAreaIndex;
     #endregion
 
     #region Constructors
     public BarrierSpotDTO() { }
 
-    public BarrierSpotDTO(AreaLocationDTO location, Position position, string type, int destinationWorldIndex)
+    public BarrierSpotDTO(AreaLocationDTO location, Position position, string type, int destinationAreaIndex)
     {
         this.location = location;
         this.position = position;
         this.type = type;
-        this.destinationWorldIndex = destinationWorldIndex;
+        this.destinationAreaIndex = destinationAreaIndex;
     }
     #endregion
 
@@ -36,5 +36,24 @@ public class BarrierSpotDTO
     public static BarrierSpotDTO CreateFromJSON(string jsonString)
     {
         return JsonUtility.FromJson<BarrierSpotDTO>(jsonString);
+    }
+
+    /// <summary>
+    ///     This function converts a <c>BarrierSpotData</c> object into a <c>BarrierSpotDTO</c> instance
+    /// </summary>
+    /// <param name="barrierSpotData">The <c>BarrierSpotData</c> object to convert</param>
+    /// <returns></returns>
+    public static BarrierSpotDTO ConvertDataToDto(BarrierSpotData barrierSpotData)
+    {
+        AreaLocationDTO areaLocation = new AreaLocationDTO(barrierSpotData.GetArea().GetWorldIndex(), 0);
+        if (barrierSpotData.GetArea().IsDungeon())
+        {
+            areaLocation.dungeonIndex = barrierSpotData.GetArea().GetDungeonIndex();
+        }
+        Position position = new Position(barrierSpotData.GetPosition().x, barrierSpotData.GetPosition().y);
+        string type = barrierSpotData.GetBarrierType().ToString();
+        int destinationWorldIndex = barrierSpotData.GetDestinationAreaIndex();
+        BarrierSpotDTO data = new BarrierSpotDTO(areaLocation, position, type, destinationWorldIndex);
+        return data;
     }
 }

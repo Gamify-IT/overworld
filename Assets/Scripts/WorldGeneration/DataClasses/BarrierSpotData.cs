@@ -9,19 +9,17 @@ public class BarrierSpotData
 {
     #region Attribute
     private AreaInformation area;
-    //private int worldIndex;
-    //private Optional<int> dungeonIndex;
     private Vector2 position;
     private BarrierType type;
-    private int destinationWorldIndex;
+    private int destinationAreaIndex;
     #endregion
 
-    public BarrierSpotData(AreaInformation area, Vector2 position, BarrierType type, int destinationWorldIndex)
+    public BarrierSpotData(AreaInformation area, Vector2 position, BarrierType type, int destinationAreaIndex)
     {
         this.area = area;
         this.position = position;
         this.type = type;
-        this.destinationWorldIndex = destinationWorldIndex;
+        this.destinationAreaIndex = destinationAreaIndex;
     }
 
     /// <summary>
@@ -39,8 +37,8 @@ public class BarrierSpotData
         }
         Vector2 position = new Vector2(barrierSpotDTO.position.x, barrierSpotDTO.position.y);
         BarrierType type = (BarrierType)System.Enum.Parse(typeof(BarrierType), barrierSpotDTO.type);
-        int destinationWorldIndex = barrierSpotDTO.destinationWorldIndex;
-        BarrierSpotData data = new BarrierSpotData(area, position, type, destinationWorldIndex);
+        int destinationAreaIndex = barrierSpotDTO.destinationAreaIndex;
+        BarrierSpotData data = new BarrierSpotData(area, position, type, destinationAreaIndex);
         return data;
     }
 
@@ -77,13 +75,13 @@ public class BarrierSpotData
 
     public void SetDestinationAreaIndex(int destinationAreaIndex)
     {
-        this.destinationWorldIndex = destinationAreaIndex;
+        this.destinationAreaIndex = destinationAreaIndex;
 
     }
 
     public int GetDestinationAreaIndex()
     {
-        return destinationWorldIndex;
+        return destinationAreaIndex;
     }
     #endregion
 }

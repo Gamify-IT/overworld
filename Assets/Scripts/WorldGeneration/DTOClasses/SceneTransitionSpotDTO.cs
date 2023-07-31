@@ -43,4 +43,30 @@ public class SceneTransitionSpotDTO
     {
         return JsonUtility.FromJson<SceneTransitionSpotDTO>(jsonString);
     }
+
+    /// <summary>
+    ///     This function converts a <c>SceneTransitionSpotData</c> object into a <c>SceneTransitionSpotDTO</c> instance
+    /// </summary>
+    /// <param name="sceneTransitionSpotData">The <c>SceneTransitionSpotData</c> object to convert</param>
+    /// <returns></returns>
+    public static SceneTransitionSpotDTO ConvertDataToDto(SceneTransitionSpotData sceneTransitionSpotData)
+    {
+        AreaLocationDTO areaLocation = new AreaLocationDTO(sceneTransitionSpotData.GetArea().GetWorldIndex(), 0);
+        if (sceneTransitionSpotData.GetArea().IsDungeon())
+        {
+            areaLocation.dungeonIndex = sceneTransitionSpotData.GetArea().GetDungeonIndex();
+        }
+        Position position = new Position(sceneTransitionSpotData.GetPosition().x, sceneTransitionSpotData.GetPosition().y);
+        Position size = new Position(sceneTransitionSpotData.GetSize().x, sceneTransitionSpotData.GetSize().y);
+        string sceneToLoad = sceneTransitionSpotData.GetSceneToLoad();
+        AreaLocationDTO areaToLoad = new AreaLocationDTO(sceneTransitionSpotData.GetAreaToLoad().GetWorldIndex(), 0);
+        if(sceneTransitionSpotData.GetAreaToLoad().IsDungeon())
+        {
+            areaToLoad.dungeonIndex = sceneTransitionSpotData.GetAreaToLoad().GetDungeonIndex();
+        }
+        Position playerPosition = new Position(sceneTransitionSpotData.GetPlayerPosition().x, sceneTransitionSpotData.GetPlayerPosition().y);
+        string facingDirection = sceneTransitionSpotData.GetFacingDirection().ToString();
+        SceneTransitionSpotDTO data = new SceneTransitionSpotDTO(areaLocation, position, size, sceneToLoad, areaToLoad, playerPosition, facingDirection);
+        return data;
+    }
 }

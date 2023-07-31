@@ -37,4 +37,23 @@ public class TeleporterSpotDTO
     {
         return JsonUtility.FromJson<TeleporterSpotDTO>(jsonString);
     }
+
+    /// <summary>
+    ///     This function converts a <c>TeleporterSpotData</c> object into a <c>TeleporterSpotDTO</c> instance
+    /// </summary>
+    /// <param name="teleporterSpotData">The <c>TeleporterSpotData</c> object to convert</param>
+    /// <returns></returns>
+    public static TeleporterSpotDTO ConvertDataToDto(TeleporterSpotData teleporterSpotData)
+    {
+        AreaLocationDTO areaLocation = new AreaLocationDTO(teleporterSpotData.GetArea().GetWorldIndex(), 0);
+        if (teleporterSpotData.GetArea().IsDungeon())
+        {
+            areaLocation.dungeonIndex = teleporterSpotData.GetArea().GetDungeonIndex();
+        }
+        int index = teleporterSpotData.GetIndex();
+        Position position = new Position(teleporterSpotData.GetPosition().x, teleporterSpotData.GetPosition().y);
+        string name = teleporterSpotData.GetName();
+        TeleporterSpotDTO data = new TeleporterSpotDTO(areaLocation, index, position, name);
+        return data;
+    }
 }
