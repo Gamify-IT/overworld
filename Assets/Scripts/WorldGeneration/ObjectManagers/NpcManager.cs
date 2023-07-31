@@ -8,7 +8,7 @@ using UnityEngine;
 public class NpcManager : MonoBehaviour
 {
     [SerializeField] private GameObject npcSpotPrefab;
-
+    [SerializeField] private GameObject minimapIcons;
     [SerializeField] private List<Sprite> sprites;
 
     /// <summary>
@@ -43,7 +43,7 @@ public class NpcManager : MonoBehaviour
     {
         Vector3 position = new Vector3(data.GetPosition().x, data.GetPosition().y, 0);
         GameObject npcSpot = Instantiate(npcSpotPrefab, position, Quaternion.identity, this.transform) as GameObject;
-
+        
         SpriteRenderer spriteRenderer = npcSpot.GetComponent<SpriteRenderer>();
         if(spriteRenderer != null)
         {
@@ -89,6 +89,16 @@ public class NpcManager : MonoBehaviour
         else
         {
             Debug.LogError("Error creating npc - Script not found");
+        }
+
+        MinimapIconManager minimapIconManager = minimapIcons.GetComponent<MinimapIconManager>();
+        if (minimapIconManager != null)
+        {
+            minimapIconManager.AddMinimapIcon(MinimapIconType.NPC, position);
+        }
+        else
+        {
+            Debug.LogError("Error creating npc minimap icon - MinimapIconManager not found");
         }
     }
 

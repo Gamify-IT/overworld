@@ -8,6 +8,7 @@ using UnityEngine;
 public class SceneTransitionManager : MonoBehaviour
 {
     [SerializeField] private GameObject sceneTransitionSpotPrefab;
+    [SerializeField] private GameObject minimapIcons;
 
     /// <summary>
     ///     This function sets up scene transition objects for the data given
@@ -67,6 +68,16 @@ public class SceneTransitionManager : MonoBehaviour
         else
         {
             Debug.LogError("Error creating scene transition - script not found");
+        }
+
+        MinimapIconManager minimapIconManager = minimapIcons.GetComponent<MinimapIconManager>();
+        if (minimapIconManager != null)
+        {
+            minimapIconManager.AddMinimapIcon(MinimapIconType.DUNGEON, position);
+        }
+        else
+        {
+            Debug.LogError("Error creating npc minimap icon - MinimapIconManager not found");
         }
     }
 }
