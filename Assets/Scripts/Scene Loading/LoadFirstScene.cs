@@ -1,18 +1,61 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
+using System.Runtime.InteropServices;
 
 /// <summary>
 ///     This class manages the loading of the game scenes.
 /// </summary>
 public class LoadFirstScene : MonoBehaviour
 {
+    [DllImport("__Internal")]
+    private static extern string GetToken(string tokenName);
+
     /// <summary>
     ///     This function is called by Unity before the first frame updates.
     /// </summary>
     private void Start()
     {
-        StartGame();
+        Optional<string> mode = TryToReadMode();
+        if(mode.IsPresent())
+        {
+            if(mode.Value().Equals("Generator"))
+            {
+                Debug.Log("Starting in Generator Mode");
+                StartGenerator();
+            }
+            else
+            {
+                Debug.Log("Starting in Play Mode");
+                StartGame();
+            }
+        }
+        else
+        {
+            Debug.LogError("Generator variable not found");
+            Debug.Log("Starting in Generator Mode");
+            StartGenerator();
+        }     
+    }
+
+    /// <summary>
+    ///     This function tries to read the browser variable "mode"
+    /// </summary>
+    /// <returns>An optional string, containing the read value, if present</returns>
+    private Optional<string> TryToReadMode()
+    {
+        Optional<string> result = new Optional<string>();
+        try
+        {
+            string mode = GetToken("mode");
+            result.SetValue(mode);
+        }
+        catch (EntryPointNotFoundException e)
+        {
+            Debug.LogError("Function not found: " + e);
+        }
+        return result;
     }
 
     /// <summary>
@@ -70,5 +113,19 @@ public class LoadFirstScene : MonoBehaviour
         await LoadingManager.Instance.LoadData();
 
         Debug.Log("Finish loading World 1");
+    }
+
+    /// <summary>
+    ///     This function starts the GeneratorWorld 
+    /// </summary>
+    /// <returns></returns>
+    private async UniTask StartGenerator()
+    {
+        await SceneManager.LoadSceneAsync("GeneratorWorld");
+        GeneratorManager generator = FindObjectOfType<GeneratorManager>();
+        if(generator != null)
+        {
+            generator.Setup();
+        }
     }
 }
