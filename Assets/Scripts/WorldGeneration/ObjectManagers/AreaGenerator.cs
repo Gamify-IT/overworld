@@ -9,9 +9,9 @@ public class AreaGenerator
     private Vector2Int size;
     private WorldStyle style;
     private float accessability;
-    private List<WorldConnection> worldConnections;
+    private Optional<List<WorldConnection>> worldConnections;
 
-    public AreaGenerator(Vector2Int size, WorldStyle style, float accessability, List<WorldConnection> worldConnections)
+    public AreaGenerator(Vector2Int size, WorldStyle style, float accessability, Optional<List<WorldConnection>> worldConnections)
     {
         layout = new string[size.x, size.y, 5];
         this.size = size;

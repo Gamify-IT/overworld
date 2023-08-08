@@ -4861,6 +4861,11 @@ MonoBehaviour:
   offsetY: {fileID: 8209161386278346935}
   stypeDropdown: {fileID: 8209161384491205266}
   accessabilitySlider: {fileID: 8209161386259700859}
+  amountMinigames: {fileID: 8209161384859477815}
+  amountNPCs: {fileID: 8209161384516477142}
+  amountBooks: {fileID: 8209161385326879950}
+  amountTeleporter: {fileID: 8209161385508648617}
+  amountDungeons: {fileID: 8209161386339209788}
 --- !u!1 &8209161385076928659
 GameObject:
   m_ObjectHideFlags: 0

@@ -100,8 +100,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   world: 0
+  dungeon: 0
   number: 0
-  status: 0
+  game: 
+  configurationID: 
+  status: 1
+  highscore: 0
+  sprites: {fileID: 0}
 --- !u!61 &901141394909980510
 BoxCollider2D:
   m_ObjectHideFlags: 0

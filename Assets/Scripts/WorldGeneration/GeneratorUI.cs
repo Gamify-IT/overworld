@@ -10,6 +10,8 @@ public class GeneratorUI : MonoBehaviour
     #region Attributes
     //WorldGenerator
     private GeneratorManager generator;
+    private AreaInformation currentArea;
+
     //Panels
     [SerializeField] private GameObject generatorPanel;
     [SerializeField] private GameObject smallGeneratorPanel;
@@ -23,7 +25,19 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private TMP_InputField offsetY;
     [SerializeField] private TMP_Dropdown stypeDropdown;
     [SerializeField] private Slider accessabilitySlider;
+
+    //Content
+    [SerializeField] private TMP_InputField amountMinigames;
+    [SerializeField] private TMP_InputField amountNPCs;
+    [SerializeField] private TMP_InputField amountBooks;
+    [SerializeField] private TMP_InputField amountTeleporter;
+    [SerializeField] private TMP_InputField amountDungeons;
     #endregion
+
+    private void Awake()
+    {
+        currentArea = new AreaInformation(1, new Optional<int>());
+    }
 
     /// <summary>
     ///     This function sets up the generator UI with the given values
@@ -81,7 +95,7 @@ public class GeneratorUI : MonoBehaviour
         Vector2Int offset = new Vector2Int(int.Parse(offsetX.text), int.Parse(offsetY.text));
         WorldStyle style = (WorldStyle) stypeDropdown.value;
         float accessability = accessabilitySlider.value;
-        List<WorldConnection> worldConnections = new List<WorldConnection>();
+        Optional<List<WorldConnection>> worldConnections = new Optional<List<WorldConnection>>();
         generator.CreateLayout(size, offset, style, accessability, worldConnections);
     }
 
@@ -97,12 +111,14 @@ public class GeneratorUI : MonoBehaviour
     #region Generation Buttons
     public void GenerateMinigamesButtonPressed()
     {
-
+        Vector2Int offset = GetOffset();
+        generator.GenerateMinigames(int.Parse(amountMinigames.text), currentArea, offset);
     }
 
     public void GenerateNpcsButtonPressed()
     {
-
+        Vector2Int offset = GetOffset();
+        generator.GenerateNPCs(int.Parse(amountNPCs.text), currentArea, offset);
     }
 
     public void GenerateBooksButtonPressed()
@@ -137,4 +153,10 @@ public class GeneratorUI : MonoBehaviour
 
     }
     #endregion
+
+    private Vector2Int GetOffset()
+    {
+        Vector2Int offset = new Vector2Int(int.Parse(offsetX.text), int.Parse(offsetY.text));
+        return offset;
+    }
 }

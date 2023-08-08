@@ -307,7 +307,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
 
     public void SetIndex(int index)
     {
-        this.index = index;
+        this.number = index;
     }
 
     public void SetName(string name)
