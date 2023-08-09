@@ -17,6 +17,17 @@ public class WorldMapData
     private List<SceneTransitionSpotData> sceneTransitionSpots;
     #endregion
 
+    public WorldMapData()
+    {
+        tiles = new string[0,0,0];
+        minigameSpots = new List<MinigameSpotData>();
+        npcSpots = new List<NpcSpotData>();
+        bookSpots = new List<BookSpotData>();
+        barrierSpots = new List<BarrierSpotData>();
+        teleporterSpots = new List<TeleporterSpotData>();
+        sceneTransitionSpots = new List<SceneTransitionSpotData>();
+    }
+
     public WorldMapData(string[,,] tiles, List<MinigameSpotData> minigameSpots, List<NpcSpotData> npcSpots, List<BookSpotData> bookSpots, List<BarrierSpotData> barrierSpots, List<TeleporterSpotData> teleporterSpots, List<SceneTransitionSpotData> sceneTransitionSpots)
     {
         this.tiles = tiles;

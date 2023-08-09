@@ -123,17 +123,20 @@ public class GeneratorUI : MonoBehaviour
 
     public void GenerateBooksButtonPressed()
     {
-
+        Vector2Int offset = GetOffset();
+        generator.GenerateBooks(int.Parse(amountBooks.text), currentArea, offset);
     }
 
     public void GenerateTeleporterButtonPressed()
     {
-
+        Vector2Int offset = GetOffset();
+        generator.GenerateTeleporter(int.Parse(amountTeleporter.text), currentArea, offset);
     }
 
     public void GenerateDungeonsButtonPressed()
     {
-
+        Vector2Int offset = GetOffset();
+        generator.GenerateDungeons(int.Parse(amountDungeons.text), currentArea, offset);
     }
     #endregion
 
@@ -145,12 +148,17 @@ public class GeneratorUI : MonoBehaviour
 
     public void GenerateAllContentButtonPressed()
     {
-
+        Vector2Int offset = GetOffset();
+        generator.GenerateMinigames(int.Parse(amountMinigames.text), currentArea, offset);
+        generator.GenerateNPCs(int.Parse(amountNPCs.text), currentArea, offset);
+        generator.GenerateBooks(int.Parse(amountBooks.text), currentArea, offset);
+        generator.GenerateTeleporter(int.Parse(amountTeleporter.text), currentArea, offset);
+        generator.GenerateDungeons(int.Parse(amountDungeons.text), currentArea, offset);
     }
 
     public void SaveAreaButtonPressed()
     {
-
+        generator.SaveArea();
     }
     #endregion
 

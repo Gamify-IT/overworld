@@ -7,7 +7,7 @@ public class GeneratorManager : MonoBehaviour
 {
     #region Attributes
     //Camera
-    [SerializeField] private Camera Camera;
+    [SerializeField] private Camera cameraObject;
 
     //UI
     [SerializeField] private GameObject generatorUIPrefab;
@@ -21,10 +21,14 @@ public class GeneratorManager : MonoBehaviour
     [SerializeField] private SceneTransitionManager sceneTransitionManager;
     [SerializeField] private BarrierManager barrierManager;
     [SerializeField] private MinimapIconManager minimapIconsManager;
+
+    //World map data
+    private WorldMapData worldMapData;
     #endregion
 
     public void Setup()
     {
+        worldMapData = new WorldMapData();
         SetupUI();
     }
 
@@ -61,6 +65,10 @@ public class GeneratorManager : MonoBehaviour
         areaGenerator.GenerateLayout();
         string[,,] layout = areaGenerator.GetLayout();
         areaPainter.Paint(layout, size, offset);
+
+        ResetWorldMapDataContent();
+        ClearContent();
+        worldMapData.SetTiles(layout);
     }
 
     /// <summary>
@@ -68,6 +76,7 @@ public class GeneratorManager : MonoBehaviour
     /// </summary>
     public void ResetToCustom()
     {
+        //TODO: replace with actual area loading
         string[,,] layout = new string[200,118,5];
         for(int i=0; i<200; i++)
         {
@@ -85,6 +94,10 @@ public class GeneratorManager : MonoBehaviour
         Vector2Int offset = new Vector2Int(-69, -20);
 
         areaPainter.Paint(layout, size, offset);
+
+        ResetWorldMapDataContent();
+        ClearContent();
+        worldMapData.SetTiles(layout);
     }
     #endregion
 
@@ -100,11 +113,12 @@ public class GeneratorManager : MonoBehaviour
         List<MinigameSpotData> minigameSpots = new List<MinigameSpotData>();
         for(int i=0; i<amount; i++)
         {
-            Vector2 position = new Vector2(offset.x + 2*i, offset.y);
+            Vector2 position = new Vector2(offset.x + 5 * i, offset.y);
             MinigameSpotData data = new MinigameSpotData(area, i+1, position);
             minigameSpots.Add(data);
         }
         minigamesManager.Setup(minigameSpots);
+        worldMapData.SetMinigameSpots(minigameSpots);
     }
 
     /// <summary>
@@ -123,6 +137,96 @@ public class GeneratorManager : MonoBehaviour
             npcSpots.Add(data);
         }
         npcManager.Setup(npcSpots);
+        worldMapData.SetNpcSpots(npcSpots);
+    }
+
+    /// <summary>
+    ///     This function generates book spots
+    /// </summary>
+    /// <param name="amount">The amount of book spots to be generated</param>
+    /// <param name="area">The area the book spots are part of</param>
+    /// <param name="offset">The offset of the area</param>
+    public void GenerateBooks(int amount, AreaInformation area, Vector2Int offset)
+    {
+        List<BookSpotData> bookSpots = new List<BookSpotData>();
+        for (int i = 0; i < amount; i++)
+        {
+            Vector2 position = new Vector2(offset.x + 5 * i, offset.y + 20);
+            BookSpotData data = new BookSpotData(area, i + 1, position, "");
+            bookSpots.Add(data);
+        }
+        bookManager.Setup(bookSpots);
+        worldMapData.SetBookSpots(bookSpots);
+    }
+
+    /// <summary>
+    ///     This function generates teleporter spots
+    /// </summary>
+    /// <param name="amount">The amount of teleporter spots to be generated</param>
+    /// <param name="area">The area the teleporter spots are part of</param>
+    /// <param name="offset">The offset of the area</param>
+    public void GenerateTeleporter(int amount, AreaInformation area, Vector2Int offset)
+    {
+        List<TeleporterSpotData> teleporterSpots = new List<TeleporterSpotData>();
+        for (int i = 0; i < amount; i++)
+        {
+            Vector2 position = new Vector2(offset.x + 5 * i, offset.y + 30);
+            TeleporterSpotData data = new TeleporterSpotData(area, i + 1, position, "");
+            teleporterSpots.Add(data);
+        }
+        teleporterManager.Setup(teleporterSpots);
+        worldMapData.SetTeleporterSpots(teleporterSpots);
+    }
+
+    /// <summary>
+    ///     This function generates dungeon spots
+    /// </summary>
+    /// <param name="amount">The amount of dungeon spots to be generated</param>
+    /// <param name="area">The area the dungeon spots are part of</param>
+    /// <param name="offset">The offset of the area</param>
+    public void GenerateDungeons(int amount, AreaInformation area, Vector2Int offset)
+    {
+        List<SceneTransitionSpotData> dungeonSpots = new List<SceneTransitionSpotData>();
+        for (int i = 0; i < amount; i++)
+        {
+            Vector2 position = new Vector2(offset.x + 5 * i, offset.y + 40);
+            SceneTransitionSpotData data = new SceneTransitionSpotData(area, position, new Vector2(1,1), "", new AreaInformation(1, new Optional<int>()), new Vector2(1,1), FacingDirection.south);
+            dungeonSpots.Add(data);
+        }
+        sceneTransitionManager.Setup(dungeonSpots);
+        worldMapData.SetSceneTransitionSpots(dungeonSpots);
     }
     #endregion
+
+    public async void SaveArea()
+    {
+        //TODO: send world map data to backend
+        //TODO: adjust backend path
+        string path = GameSettings.GetOverworldBackendPath();
+
+        WorldMapDTO worldMapDTO = WorldMapDTO.ConvertDataToDto(worldMapData);
+        string json = JsonUtility.ToJson(worldMapDTO, true);
+        Debug.Log(json);
+
+        bool successful = await RestRequest.PostRequest(path, json);
+    }
+
+    private void ClearContent()
+    {
+        minigamesManager.Setup(new List<MinigameSpotData>());
+        npcManager.Setup(new List<NpcSpotData>());
+        bookManager.Setup(new List<BookSpotData>());
+        teleporterManager.Setup(new List<TeleporterSpotData>());
+        sceneTransitionManager.Setup(new List<SceneTransitionSpotData>());
+    }
+
+    private void ResetWorldMapDataContent()
+    {
+        worldMapData.SetMinigameSpots(new List<MinigameSpotData>());
+        worldMapData.SetNpcSpots(new List<NpcSpotData>());
+        worldMapData.SetBookSpots(new List<BookSpotData>());
+        worldMapData.SetBarrierSpots(new List<BarrierSpotData>());
+        worldMapData.SetTeleporterSpots(new List<TeleporterSpotData>());
+        worldMapData.SetSceneTransitionSpots(new List<SceneTransitionSpotData>());
+    }
 }
