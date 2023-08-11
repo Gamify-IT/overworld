@@ -125,7 +125,8 @@ public class LoadFirstScene : MonoBehaviour
         GeneratorManager generator = FindObjectOfType<GeneratorManager>();
         if(generator != null)
         {
-            generator.Setup();
+            AreaInformation area = new AreaInformation(1, new Optional<int>());
+            generator.Setup(area);
         }
     }
 }

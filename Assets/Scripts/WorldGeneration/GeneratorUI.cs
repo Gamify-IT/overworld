@@ -39,6 +39,7 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private Button generateTeleporterButton;
     [SerializeField] private Button generateDungeonsButton;
     [SerializeField] private Button generateAllContentButton;
+    [SerializeField] private Button saveAreaButton;
     #endregion
 
     private void Awake()
@@ -55,7 +56,7 @@ public class GeneratorUI : MonoBehaviour
     /// <param name="style">The style of the area</param>
     /// <param name="accessability">The percentage of walkable space</param>
     /// <param name="worldConnections">A list of connection points to other worlds (only for worlds relevant)</param>
-    public void Setup(GeneratorManager generator, Vector2Int size, Vector2Int offset, WorldStyle style, float accessability, List<WorldConnection> worldConnections)
+    public void Setup(GeneratorManager generator, WorldMapData worldMapData)
     {
         this.generator = generator;
 
@@ -64,18 +65,24 @@ public class GeneratorUI : MonoBehaviour
         content.SetActive(false);
         generatorPanel.SetActive(true);
         
-        sizeX.text = size.x.ToString();
-        sizeY.text = size.y.ToString();
+        sizeX.text = worldMapData.GetTiles().GetLength(0).ToString();
+        sizeY.text = worldMapData.GetTiles().GetLength(1).ToString();
 
-        offsetX.text = offset.x.ToString();
-        offsetY.text = offset.y.ToString();
+        offsetX.text = worldMapData.GetOffset().x.ToString();
+        offsetY.text = worldMapData.GetOffset().y.ToString();
 
         stypeDropdown.ClearOptions();
         List<string> options = System.Enum.GetNames(typeof(WorldStyle)).ToList();
         stypeDropdown.AddOptions(options);
-        stypeDropdown.value = (int) style;
+        stypeDropdown.value = (int) worldMapData.GetWorldStyle();
 
-        accessabilitySlider.value = accessability;
+        accessabilitySlider.value = 0.5f;
+
+        amountMinigames.text = worldMapData.GetMinigameSpots().Count.ToString();
+        amountNPCs.text = worldMapData.GetNpcSpots().Count.ToString();
+        amountBooks.text = worldMapData.GetBookSpots().Count.ToString();
+        amountTeleporter.text = worldMapData.GetTeleporterSpots().Count.ToString();
+        amountDungeons.text = worldMapData.GetTeleporterSpots().Count.ToString();
     }
 
     public void MinimizeButtonPressed()
@@ -105,6 +112,20 @@ public class GeneratorUI : MonoBehaviour
         float accessability = accessabilitySlider.value;
         Optional<List<WorldConnection>> worldConnections = new Optional<List<WorldConnection>>();
         generator.CreateLayout(size, offset, style, accessability, worldConnections);
+        ResetContentPanel();
+    }
+
+    /// <summary>
+    ///     This function resets the content panel
+    /// </summary>
+    private void ResetContentPanel()
+    {
+        amountMinigames.text = "0";
+        OnMinigameAmountChange();
+        amountNPCs.text = "0";
+        amountBooks.text = "0";
+        amountTeleporter.text = "0";
+        amountDungeons.text = "0";
     }
 
     public void ContinueButtonPressed()
@@ -130,6 +151,7 @@ public class GeneratorUI : MonoBehaviour
             amount = 1;
         }
         generator.GenerateMinigames(amount, currentArea, offset);
+        CheckSaveWorldButtonStatus();
     }
 
     public void GenerateNpcsButtonPressed()
@@ -239,15 +261,31 @@ public class GeneratorUI : MonoBehaviour
     /// </summary>
     public void OnMinigameAmountChange()
     {
-        if(amountMinigames.text.Equals(""))
+        bool validAmountOfMinigames = true;
+        if (amountMinigames.text.Equals(""))
         {
-            generateMinigamesButton.interactable = false;
+            validAmountOfMinigames = false;
         }
         else
         {
-            generateMinigamesButton.interactable = true;
+            int amount;
+            try
+            {
+                amount = int.Parse(amountMinigames.text);
+                if (amount == 0)
+                {
+                    validAmountOfMinigames = false;
+                }
+            }
+            catch (System.FormatException e)
+            {
+                validAmountOfMinigames = false;
+            }
         }
+        generateMinigamesButton.interactable = validAmountOfMinigames;
+
         CheckGenerateAllContentButtonStatus();
+        CheckSaveWorldButtonStatus();
     }
 
     /// <summary>
@@ -346,6 +384,22 @@ public class GeneratorUI : MonoBehaviour
             allValid = false;
         }
         generateAllContentButton.interactable = allValid;
+    }
+
+    /// <summary>
+    ///     This function is called, when the value of the <c>Amount of Minigames</c> input field value is changed and sets the <c>Save Area</c>
+    ///     button active, if at least one minigame exists, or inactive, otherwise
+    /// </summary>
+    private void CheckSaveWorldButtonStatus()
+    {
+        if(generator.GetWorldMapData().GetMinigameSpots().Count > 0)
+        {
+            saveAreaButton.interactable = true;
+        }
+        else
+        {
+            saveAreaButton.interactable = false;
+        }
     }
     #endregion
 

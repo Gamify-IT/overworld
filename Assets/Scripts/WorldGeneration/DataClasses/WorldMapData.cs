@@ -9,6 +9,9 @@ public class WorldMapData
 {
     #region Attributes
     private string[,,] tiles;
+    private Vector2Int offset;
+    private WorldStyle style;
+    private List<WorldConnection> worldConnections;
     private List<MinigameSpotData> minigameSpots;
     private List<NpcSpotData> npcSpots;
     private List<BookSpotData> bookSpots;
@@ -28,9 +31,12 @@ public class WorldMapData
         sceneTransitionSpots = new List<SceneTransitionSpotData>();
     }
 
-    public WorldMapData(string[,,] tiles, List<MinigameSpotData> minigameSpots, List<NpcSpotData> npcSpots, List<BookSpotData> bookSpots, List<BarrierSpotData> barrierSpots, List<TeleporterSpotData> teleporterSpots, List<SceneTransitionSpotData> sceneTransitionSpots)
+    public WorldMapData(string[,,] tiles, Vector2Int offset, WorldStyle style, List<WorldConnection> worldConnections, List<MinigameSpotData> minigameSpots, List<NpcSpotData> npcSpots, List<BookSpotData> bookSpots, List<BarrierSpotData> barrierSpots, List<TeleporterSpotData> teleporterSpots, List<SceneTransitionSpotData> sceneTransitionSpots)
     {
         this.tiles = tiles;
+        this.offset = offset;
+        this.style = style;
+        this.worldConnections = worldConnections;
         this.minigameSpots = minigameSpots;
         this.npcSpots = npcSpots;
         this.bookSpots = bookSpots;
@@ -46,7 +52,18 @@ public class WorldMapData
     /// <returns></returns>
     public static WorldMapData ConvertDtoToData(WorldMapDTO worldMapDTO)
     {
-        string[,,] tiles = worldMapDTO.tiles;
+        string[,,] tiles = Layout.ConvertLayoutToArray(worldMapDTO.layout);
+
+        Vector2Int offset = new Vector2Int((int) worldMapDTO.offset.x, (int) worldMapDTO.offset.y);
+
+        WorldStyle style = (WorldStyle) System.Enum.Parse(typeof(WorldStyle) , worldMapDTO.style);
+
+        List<WorldConnection> worldConnections = new List<WorldConnection>();
+        foreach(WorldConnectionDTO connection in worldMapDTO.worldConnections)
+        {
+            WorldConnection worldConnection = WorldConnection.ConvertDtoToData(connection);
+            worldConnections.Add(worldConnection);
+        }
 
         List<MinigameSpotData> minigameSpots = new List<MinigameSpotData>();
         for(int i = 0; i  <worldMapDTO.minigameSpots.Length; i++)
@@ -84,7 +101,7 @@ public class WorldMapData
             sceneTransitionSpots.Add(SceneTransitionSpotData.ConvertDtoToData(worldMapDTO.sceneTransitions[i]));
         }
 
-        WorldMapData data = new WorldMapData(tiles, minigameSpots, npcSpots, bookSpots, barrierSpots, teleporterSpots, sceneTransitionSpots);
+        WorldMapData data = new WorldMapData(tiles, offset, style, worldConnections, minigameSpots, npcSpots, bookSpots, barrierSpots, teleporterSpots, sceneTransitionSpots);
         return data;
     }
 
@@ -97,6 +114,36 @@ public class WorldMapData
     public void SetTiles(string[,,] tiles)
     {
         this.tiles = tiles;
+    }
+
+    public Vector2Int GetOffset()
+    {
+        return offset;
+    }
+
+    public void SetOffset(Vector2Int offset)
+    {
+        this.offset = offset;
+    }
+
+    public WorldStyle GetWorldStyle()
+    {
+        return style;
+    }
+
+    public void SetWorldStyle(WorldStyle style)
+    {
+        this.style = style;
+    }
+
+    public List<WorldConnection> GetWorldConnections()
+    {
+        return worldConnections;
+    }
+
+    public void SetWorldConnections(List<WorldConnection> worldConnections)
+    {
+        this.worldConnections = worldConnections;
     }
 
     public List<MinigameSpotData> GetMinigameSpots()

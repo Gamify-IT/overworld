@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -24,12 +25,58 @@ public class GeneratorManager : MonoBehaviour
 
     //World map data
     private WorldMapData worldMapData;
+    private AreaInformation currentArea;
     #endregion
 
-    public void Setup()
+    /// <summary>
+    ///     This function sets up everything for the given area
+    /// </summary>
+    /// <param name="area">The area to set up</param>
+    public void Setup(AreaInformation area)
     {
-        worldMapData = new WorldMapData();
+        currentArea = area;
+        worldMapData = LoadAreaData();
+        SetupArea();
         SetupUI();
+    }
+
+    /// <summary>
+    ///     This function loads the world map data for the edited data
+    /// </summary>
+    /// <returns>The <c>WorldMapData</c> of the given world</returns>
+    private WorldMapData LoadAreaData()
+    {
+        //TODO: load world data from backend
+
+        //Workaround: use local json files
+        string path;
+        if (currentArea.IsDungeon())
+        {
+            path = "Areas/Dungeon" + currentArea.GetDungeonIndex();
+        }
+        else
+        {
+            path = "Areas/World" + currentArea.GetWorldIndex();
+        }
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        WorldMapDTO worldMapDTO = WorldMapDTO.CreateFromJSON(json);
+        WorldMapData worldMapData = WorldMapData.ConvertDtoToData(worldMapDTO);
+        return worldMapData;
+    }
+
+    /// <summary>
+    ///     This function sets up the area for the data in <c>worldMapData</c>
+    /// </summary>
+    private void SetupArea()
+    {
+        areaPainter.Paint(worldMapData.GetTiles(), worldMapData.GetOffset());
+        minigamesManager.Setup(worldMapData.GetMinigameSpots());
+        npcManager.Setup(worldMapData.GetNpcSpots());
+        bookManager.Setup(worldMapData.GetBookSpots());
+        barrierManager.Setup(worldMapData.GetBarrierSpots());
+        teleporterManager.Setup(worldMapData.GetTeleporterSpots());
+        sceneTransitionManager.Setup(worldMapData.GetSceneTransitionSpots());
     }
 
     /// <summary>
@@ -41,12 +88,7 @@ public class GeneratorManager : MonoBehaviour
         GeneratorUI generatorUI = uiObject.GetComponent<GeneratorUI>();
         if(generatorUI != null)
         {
-            Vector2Int size = new Vector2Int(200, 118);
-            Vector2Int offset = new Vector2Int(-69, -20);
-            WorldStyle style = WorldStyle.CUSTOM;
-            float accessability = 0.75f;
-            List<WorldConnection> worldConnections = new List<WorldConnection>();
-            generatorUI.Setup(this, size, offset, style, accessability, worldConnections);
+            generatorUI.Setup(this, worldMapData);
         }
     }
 
@@ -64,11 +106,11 @@ public class GeneratorManager : MonoBehaviour
         AreaGenerator areaGenerator = new AreaGenerator(size, style, accessability, worldConnections);
         areaGenerator.GenerateLayout();
         string[,,] layout = areaGenerator.GetLayout();
-        areaPainter.Paint(layout, size, offset);
+        areaPainter.Paint(layout, offset);
 
-        ResetWorldMapDataContent();
         ClearContent();
         worldMapData.SetTiles(layout);
+        worldMapData.SetWorldStyle(style);
     }
 
     /// <summary>
@@ -76,28 +118,23 @@ public class GeneratorManager : MonoBehaviour
     /// </summary>
     public void ResetToCustom()
     {
-        //TODO: replace with actual area loading
-        string[,,] layout = new string[200,118,5];
-        for(int i=0; i<200; i++)
+        string path;
+        if (currentArea.IsDungeon())
         {
-            for(int j=0; j<118; j++)
-            {
-                layout[i, j, 0] = "Overworld-Savanna_0";
-                for (int k=1; k<5; k++)
-                {
-                    layout[i, j, k] = "none";
-                }
-            }
+            path = "Areas/DefaultDungeon";
+        }
+        else
+        {
+            path = "Areas/DefaultWorld" + currentArea.GetWorldIndex();
         }
 
-        Vector2Int size = new Vector2Int(200, 118);
-        Vector2Int offset = new Vector2Int(-69, -20);
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        WorldMapDTO worldMapDTO = WorldMapDTO.CreateFromJSON(json);
+        WorldMapData worldMapData = WorldMapData.ConvertDtoToData(worldMapDTO);
+        this.worldMapData = worldMapData;
 
-        areaPainter.Paint(layout, size, offset);
-
-        ResetWorldMapDataContent();
-        ClearContent();
-        worldMapData.SetTiles(layout);
+        SetupArea();
     }
     #endregion
 
@@ -198,35 +235,71 @@ public class GeneratorManager : MonoBehaviour
     }
     #endregion
 
+    /// <summary>
+    ///     This function saves the created world to the backend
+    /// </summary>
     public async void SaveArea()
     {
         //TODO: send world map data to backend
-        //TODO: adjust backend path
-        string path = GameSettings.GetOverworldBackendPath();
 
+        //Workaround: use local json files
         WorldMapDTO worldMapDTO = WorldMapDTO.ConvertDataToDto(worldMapData);
         string json = JsonUtility.ToJson(worldMapDTO, true);
-        Debug.Log(json);
-
-        bool successful = await RestRequest.PostRequest(path, json);
+        string path;
+        if(currentArea.IsDungeon())
+        {
+            path = "Assets/Resources/Areas/Dungeon" + currentArea.GetDungeonIndex() + ".json";
+        }
+        else
+        {
+            path = "Assets/Resources/Areas/World" + currentArea.GetWorldIndex() + ".json";
+        }
+        WriteToJsonFile(json, path);
     }
 
+    //THIS FUNCTION IS ONLY NEEDED UNTIL BACKEND LOADING AND STORING IS IMPLEMENTED!
+    private void WriteToJsonFile(string json, string path)
+    {
+        using (FileStream fs = File.Create(path))
+        {
+            using (StreamWriter writer = new StreamWriter(fs))
+            {
+                writer.Write(json);
+            }
+        }
+        UnityEditor.AssetDatabase.Refresh();
+    }
+
+    /// <summary>
+    ///     This function removes all created objects in the world
+    /// </summary>
     private void ClearContent()
     {
         minigamesManager.Setup(new List<MinigameSpotData>());
+        worldMapData.SetMinigameSpots(new List<MinigameSpotData>());
+
         npcManager.Setup(new List<NpcSpotData>());
+        worldMapData.SetNpcSpots(new List<NpcSpotData>());
+
         bookManager.Setup(new List<BookSpotData>());
+        worldMapData.SetBookSpots(new List<BookSpotData>());
+
+        barrierManager.Setup(new List<BarrierSpotData>());
+        worldMapData.SetBarrierSpots(new List<BarrierSpotData>());
+
         teleporterManager.Setup(new List<TeleporterSpotData>());
+        worldMapData.SetTeleporterSpots(new List<TeleporterSpotData>());
+
         sceneTransitionManager.Setup(new List<SceneTransitionSpotData>());
+        worldMapData.SetSceneTransitionSpots(new List<SceneTransitionSpotData>());
     }
 
-    private void ResetWorldMapDataContent()
+    /// <summary>
+    ///     This function returns the current <c>WorldMapData</c> object
+    /// </summary>
+    /// <returns></returns>
+    public WorldMapData GetWorldMapData()
     {
-        worldMapData.SetMinigameSpots(new List<MinigameSpotData>());
-        worldMapData.SetNpcSpots(new List<NpcSpotData>());
-        worldMapData.SetBookSpots(new List<BookSpotData>());
-        worldMapData.SetBarrierSpots(new List<BarrierSpotData>());
-        worldMapData.SetTeleporterSpots(new List<TeleporterSpotData>());
-        worldMapData.SetSceneTransitionSpots(new List<SceneTransitionSpotData>());
+        return worldMapData;
     }
 }

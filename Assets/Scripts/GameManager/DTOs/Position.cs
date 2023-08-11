@@ -1,7 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+/// <summary>
+///     This class is used to serialize position data.
+/// </summary>
+[Serializable]
 public class Position
 {
 

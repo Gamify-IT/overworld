@@ -4909,6 +4909,7 @@ MonoBehaviour:
   generateTeleporterButton: {fileID: 4787692674376223294}
   generateDungeonsButton: {fileID: 8955451842015349226}
   generateAllContentButton: {fileID: 3576160372127395064}
+  saveAreaButton: {fileID: 8209161384904866043}
 --- !u!1 &8209161385076928659
 GameObject:
   m_ObjectHideFlags: 0

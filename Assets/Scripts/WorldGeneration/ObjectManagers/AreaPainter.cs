@@ -30,7 +30,7 @@ public class AreaPainter : MonoBehaviour
     private Dictionary<string, Tile> tileMapper;
     #endregion
 
-    private void Start()
+    private void Awake()
     {
         tileMapper = new Dictionary<string, Tile>();
         tileMapper.Add("Overworld-Savanna_0", savannaGroundTile);
@@ -43,8 +43,9 @@ public class AreaPainter : MonoBehaviour
         tileMapper.Add("Overworld_574", forestWallTile);
     }
 
-    public void Paint(string[,,] layout, Vector2Int size, Vector2Int offset)
+    public void Paint(string[,,] layout, Vector2Int offset)
     {
+        Vector2Int size = new Vector2Int(layout.GetLength(0), layout.GetLength(1));
         for(int x = 0; x < size.x; x++)
         {
             for(int y = 0; y < size.y; y++)
