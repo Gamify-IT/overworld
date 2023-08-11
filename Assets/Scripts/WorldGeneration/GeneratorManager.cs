@@ -43,7 +43,7 @@ public class GeneratorManager : MonoBehaviour
         {
             Vector2Int size = new Vector2Int(200, 118);
             Vector2Int offset = new Vector2Int(-69, -20);
-            WorldStyle style = WorldStyle.CAVE;
+            WorldStyle style = WorldStyle.CUSTOM;
             float accessability = 0.75f;
             List<WorldConnection> worldConnections = new List<WorldConnection>();
             generatorUI.Setup(this, size, offset, style, accessability, worldConnections);

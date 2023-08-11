@@ -17,6 +17,15 @@ public class SceneTransitionManager : MonoBehaviour
     public void Setup(List<SceneTransitionSpotData> sceneTransitionSpots)
     {
         ClearSceneTransitionSpots();
+        MinimapIconManager minimapIconManager = minimapIcons.GetComponent<MinimapIconManager>();
+        if (minimapIconManager != null)
+        {
+            minimapIconManager.ClearMinimapIconsOfType(MinimapIconType.DUNGEON);
+        }
+        else
+        {
+            Debug.LogError("Error creating npc minimap icon - MinimapIconManager not found");
+        }
         foreach (SceneTransitionSpotData sceneTransitionSpotData in sceneTransitionSpots)
         {
             CreateSceneTransitionSpot(sceneTransitionSpotData);

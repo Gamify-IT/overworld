@@ -18,7 +18,16 @@ public class NpcManager : MonoBehaviour
     public void Setup(List<NpcSpotData> npcSpots)
     {
         ClearNpcSpots();
-        foreach(NpcSpotData npcSpotData in npcSpots)
+        MinimapIconManager minimapIconManager = minimapIcons.GetComponent<MinimapIconManager>();
+        if (minimapIconManager != null)
+        {
+            minimapIconManager.ClearMinimapIconsOfType(MinimapIconType.NPC);
+        }
+        else
+        {
+            Debug.LogError("Error creating npc minimap icon - MinimapIconManager not found");
+        }
+        foreach (NpcSpotData npcSpotData in npcSpots)
         {
             CreateNpcSpot(npcSpotData);
         }

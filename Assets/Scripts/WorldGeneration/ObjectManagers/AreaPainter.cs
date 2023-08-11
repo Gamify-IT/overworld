@@ -14,8 +14,17 @@ public class AreaPainter : MonoBehaviour
     [SerializeField] private Tilemap objects;
 
     //Tiles
-    [SerializeField] private Tile groundTile;
-    [SerializeField] private Tile wallTile;
+    [SerializeField] private Tile savannaGroundTile;
+    [SerializeField] private Tile savannaWallTile;
+
+    [SerializeField] private Tile beachGroundTile;
+    [SerializeField] private Tile beachWallTile;
+
+    [SerializeField] private Tile caveGroundTile;
+    [SerializeField] private Tile caveWallTile;
+
+    [SerializeField] private Tile forestGroundTile;
+    [SerializeField] private Tile forestWallTile;
 
     //Mapper
     private Dictionary<string, Tile> tileMapper;
@@ -24,8 +33,14 @@ public class AreaPainter : MonoBehaviour
     private void Start()
     {
         tileMapper = new Dictionary<string, Tile>();
-        tileMapper.Add("Overworld-Savanna_0", groundTile);
-        tileMapper.Add("Overworld-Savanna_453", wallTile);
+        tileMapper.Add("Overworld-Savanna_0", savannaGroundTile);
+        tileMapper.Add("Overworld-Savanna_453", savannaWallTile);
+        tileMapper.Add("Overworld_156", beachGroundTile);
+        tileMapper.Add("Overworld_276", beachWallTile);
+        tileMapper.Add("cave_0", caveGroundTile);
+        tileMapper.Add("cave_12", caveWallTile);
+        tileMapper.Add("Overworld_0", forestGroundTile);
+        tileMapper.Add("Overworld_574", forestWallTile);
     }
 
     public void Paint(string[,,] layout, Vector2Int size, Vector2Int offset)
@@ -37,7 +52,6 @@ public class AreaPainter : MonoBehaviour
                 Vector3Int position = new Vector3Int(x + offset.x, y + offset.y, 0);
 
                 //paint ground layer
-                //Debug.Log("Tile an Position (" + position.x + ", " + position.y + ", 0): " + layout[x, y, 0]);
                 if (tileMapper.ContainsKey(layout[x, y, 0]))
                 {
                     Tile tile = tileMapper[layout[x, y, 0]];
@@ -49,7 +63,6 @@ public class AreaPainter : MonoBehaviour
                 }
 
                 //paint ground decoration layer
-                //Debug.Log("Tile an Position (" + position.x + ", " + position.y + ", 1): " + layout[x, y, 1]);
                 if (tileMapper.ContainsKey(layout[x, y, 1]))
                 {
                     Tile tile = tileMapper[layout[x, y, 1]];
@@ -61,7 +74,6 @@ public class AreaPainter : MonoBehaviour
                 }
 
                 //paint wall layer
-                //Debug.Log("Tile an Position (" + position.x + ", " + position.y + ", 2): " + layout[x, y, 2]);
                 if (tileMapper.ContainsKey(layout[x, y, 2]))
                 {
                     Tile tile = tileMapper[layout[x, y, 2]];
@@ -73,7 +85,6 @@ public class AreaPainter : MonoBehaviour
                 }
 
                 //paint wall decoration layer
-                //Debug.Log("Tile an Position (" + position.x + ", " + position.y + ", 3): " + layout[x, y, 3]);
                 if (tileMapper.ContainsKey(layout[x, y, 3]))
                 {
                     Tile tile = tileMapper[layout[x, y, 3]];
@@ -85,7 +96,6 @@ public class AreaPainter : MonoBehaviour
                 }
 
                 //paint objects layer
-                //Debug.Log("Tile an Position (" + position.x + ", " + position.y + ", 4): " + layout[x, y, 4]);
                 if (tileMapper.ContainsKey(layout[x, y, 4]))
                 {
                     Tile tile = tileMapper[layout[x, y, 4]];

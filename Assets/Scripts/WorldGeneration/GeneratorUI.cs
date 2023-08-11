@@ -25,6 +25,7 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private TMP_InputField offsetY;
     [SerializeField] private TMP_Dropdown stypeDropdown;
     [SerializeField] private Slider accessabilitySlider;
+    [SerializeField] private Button generateLayoutButton;
 
     //Content
     [SerializeField] private TMP_InputField amountMinigames;
@@ -32,6 +33,12 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private TMP_InputField amountBooks;
     [SerializeField] private TMP_InputField amountTeleporter;
     [SerializeField] private TMP_InputField amountDungeons;
+    [SerializeField] private Button generateMinigamesButton;
+    [SerializeField] private Button generateNpcsButton;
+    [SerializeField] private Button generateBooksButton;
+    [SerializeField] private Button generateTeleporterButton;
+    [SerializeField] private Button generateDungeonsButton;
+    [SerializeField] private Button generateAllContentButton;
     #endregion
 
     private void Awake()
@@ -66,7 +73,7 @@ public class GeneratorUI : MonoBehaviour
         stypeDropdown.ClearOptions();
         List<string> options = System.Enum.GetNames(typeof(WorldStyle)).ToList();
         stypeDropdown.AddOptions(options);
-        stypeDropdown.value = 1;
+        stypeDropdown.value = (int) style;
 
         accessabilitySlider.value = accessability;
     }
@@ -87,6 +94,7 @@ public class GeneratorUI : MonoBehaviour
     public void ResetToCustomButtonPressed()
     {
         generator.ResetToCustom();
+        stypeDropdown.value = 0;
     }
 
     public void GenerateLayoutButtonPressed()
@@ -112,31 +120,76 @@ public class GeneratorUI : MonoBehaviour
     public void GenerateMinigamesButtonPressed()
     {
         Vector2Int offset = GetOffset();
-        generator.GenerateMinigames(int.Parse(amountMinigames.text), currentArea, offset);
+        int amount;
+        try
+        {
+            amount = int.Parse(amountMinigames.text);
+        }
+        catch (System.FormatException e)
+        {
+            amount = 1;
+        }
+        generator.GenerateMinigames(amount, currentArea, offset);
     }
 
     public void GenerateNpcsButtonPressed()
     {
         Vector2Int offset = GetOffset();
-        generator.GenerateNPCs(int.Parse(amountNPCs.text), currentArea, offset);
+        int amount;
+        try
+        {
+            amount = int.Parse(amountNPCs.text);
+        }
+        catch(System.FormatException e)
+        {
+            amount = 0;
+        }
+        generator.GenerateNPCs(amount, currentArea, offset);
     }
 
     public void GenerateBooksButtonPressed()
     {
         Vector2Int offset = GetOffset();
-        generator.GenerateBooks(int.Parse(amountBooks.text), currentArea, offset);
+        int amount;
+        try
+        {
+            amount = int.Parse(amountBooks.text);
+        }
+        catch (System.FormatException e)
+        {
+            amount = 0;
+        }
+        generator.GenerateBooks(amount, currentArea, offset);
     }
 
     public void GenerateTeleporterButtonPressed()
     {
         Vector2Int offset = GetOffset();
-        generator.GenerateTeleporter(int.Parse(amountTeleporter.text), currentArea, offset);
+        int amount;
+        try
+        {
+            amount = int.Parse(amountTeleporter.text);
+        }
+        catch (System.FormatException e)
+        {
+            amount = 0;
+        }
+        generator.GenerateTeleporter(amount, currentArea, offset);
     }
 
     public void GenerateDungeonsButtonPressed()
     {
         Vector2Int offset = GetOffset();
-        generator.GenerateDungeons(int.Parse(amountDungeons.text), currentArea, offset);
+        int amount;
+        try
+        {
+            amount = int.Parse(amountDungeons.text);
+        }
+        catch (System.FormatException e)
+        {
+            amount = 0;
+        }
+        generator.GenerateDungeons(amount, currentArea, offset);
     }
     #endregion
 
@@ -149,16 +202,150 @@ public class GeneratorUI : MonoBehaviour
     public void GenerateAllContentButtonPressed()
     {
         Vector2Int offset = GetOffset();
-        generator.GenerateMinigames(int.Parse(amountMinigames.text), currentArea, offset);
-        generator.GenerateNPCs(int.Parse(amountNPCs.text), currentArea, offset);
-        generator.GenerateBooks(int.Parse(amountBooks.text), currentArea, offset);
-        generator.GenerateTeleporter(int.Parse(amountTeleporter.text), currentArea, offset);
-        generator.GenerateDungeons(int.Parse(amountDungeons.text), currentArea, offset);
+        GenerateMinigamesButtonPressed();
+        GenerateNpcsButtonPressed();
+        GenerateBooksButtonPressed();
+        GenerateTeleporterButtonPressed();
+        GenerateDungeonsButtonPressed();
     }
 
     public void SaveAreaButtonPressed()
     {
         generator.SaveArea();
+    }
+    #endregion
+
+    #region ButtonStatusManagement
+    /// <summary>
+    ///     This function is called when the <c>Style Dropdown</c> value is changed and sets the <c>Generate Layout</c> button active or inactive,
+    ///     based on the selected value
+    /// </summary>
+    public void OnStyleChange()
+    {
+        WorldStyle style = (WorldStyle)stypeDropdown.value;
+        if (style == WorldStyle.CUSTOM)
+        {
+            generateLayoutButton.interactable = false;
+        }
+        else
+        {
+            generateLayoutButton.interactable = true;
+        }
+    }
+
+    /// <summary>
+    ///     This function is called when the value of the <c>Amount of Minigames</c> input field value is changed and sets the <c>Generate Minigames</c>
+    ///     button active or inactive, based on the entered value
+    /// </summary>
+    public void OnMinigameAmountChange()
+    {
+        if(amountMinigames.text.Equals(""))
+        {
+            generateMinigamesButton.interactable = false;
+        }
+        else
+        {
+            generateMinigamesButton.interactable = true;
+        }
+        CheckGenerateAllContentButtonStatus();
+    }
+
+    /// <summary>
+    ///     This function is called when the value of the <c>Amount of NPCs</c> input field value is changed and sets the <c>Generate NPCs</c>
+    ///     button active or inactive, based on the entered value
+    /// </summary>
+    public void OnNpcAmountChange()
+    {
+        if (amountNPCs.text.Equals(""))
+        {
+            generateNpcsButton.interactable = false;
+        }
+        else
+        {
+            generateNpcsButton.interactable = true;
+        }
+        CheckGenerateAllContentButtonStatus();
+    }
+
+    /// <summary>
+    ///     This function is called when the value of the <c>Amount of Books</c> input field value is changed and sets the <c>Generate Books</c>
+    ///     button active or inactive, based on the entered value
+    /// </summary>
+    public void OnBookAmountChange()
+    {
+        if (amountBooks.text.Equals(""))
+        {
+            generateBooksButton.interactable = false;
+        }
+        else
+        {
+            generateBooksButton.interactable = true;
+        }
+        CheckGenerateAllContentButtonStatus();
+    }
+
+    /// <summary>
+    ///     This function is called when the value of the <c>Amount of Teleporter</c> input field value is changed and sets the <c>Generate Teleporter</c>
+    ///     button active or inactive, based on the entered value
+    /// </summary>
+    public void OnTeleporterAmountChange()
+    {
+        if (amountTeleporter.text.Equals(""))
+        {
+            generateTeleporterButton.interactable = false;
+        }
+        else
+        {
+            generateTeleporterButton.interactable = true;
+        }
+        CheckGenerateAllContentButtonStatus();
+    }
+
+    /// <summary>
+    ///     This function is called when the value of the <c>Amount of Dungeons</c> input field value is changed and sets the <c>Generate Dungeons</c>
+    ///     button active or inactive, based on the entered value
+    /// </summary>
+    public void OnDungeonsAmountChange()
+    {
+        if (amountDungeons.text.Equals(""))
+        {
+            generateDungeonsButton.interactable = false;
+        }
+        else
+        {
+            generateDungeonsButton.interactable = true;
+        }
+        CheckGenerateAllContentButtonStatus();
+    }
+
+    /// <summary>
+    ///     This function is called, when the value of any <c>Amount of content</c> input field value is changed and sets the <c>Generate All Content</c>
+    ///     button active or inactive, based on the entered value
+    /// </summary>
+    private void CheckGenerateAllContentButtonStatus()
+    {
+        bool allValid = true;
+        if(!generateMinigamesButton.IsInteractable())
+        {
+            allValid = false;
+        }
+        if (!generateNpcsButton.IsInteractable())
+        {
+            allValid = false;
+        }
+        if (!generateBooksButton.IsInteractable())
+        {
+            allValid = false;
+        }
+        if (!generateTeleporterButton.IsInteractable())
+        {
+            allValid = false;
+        }
+        if (!generateDungeonsButton.IsInteractable())
+        {
+            allValid = false;
+        }
+        generateAllContentButton.interactable = allValid;
     }
     #endregion
 

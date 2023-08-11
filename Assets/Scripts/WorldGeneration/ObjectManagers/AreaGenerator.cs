@@ -37,17 +37,40 @@ public class AreaGenerator
     public void GenerateLayout()
     {
         InitLayout();
+
+        switch (style)
+        {
+            case WorldStyle.SAVANNA:
+                GenerateLayout("Overworld-Savanna_0", "Overworld-Savanna_453");
+                break;
+
+            case WorldStyle.BEACH:
+                GenerateLayout("Overworld_156", "Overworld_276");
+                break;
+
+            case WorldStyle.CAVE:
+                GenerateLayout("cave_0", "cave_12");
+                break;
+
+            case WorldStyle.FOREST:
+                GenerateLayout("Overworld_0", "Overworld_574");
+                break;
+        }        
+    }
+
+    private void GenerateLayout(string groundTile, string wallTile)
+    {
         for (int x = 0; x < size.x; x++)
         {
             for (int y = 0; y < size.y; y++)
             {
                 if (Random.Range(0f, 1f) < accessability)
                 {
-                    layout[x,y,0] = "Overworld-Savanna_0";
+                    layout[x, y, 0] = groundTile;
                 }
                 else
                 {
-                    layout[x, y, 2] = "Overworld-Savanna_453";
+                    layout[x, y, 2] = wallTile;
                 }
             }
         }

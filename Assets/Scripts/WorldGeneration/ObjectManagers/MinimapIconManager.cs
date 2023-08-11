@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum MinimapIconType
 {
+    UNSET,
     WORLD,
     DUNGEON,
     NPC
@@ -12,10 +13,6 @@ public enum MinimapIconType
 public class MinimapIconManager : MonoBehaviour
 {
     [SerializeField] private GameObject minimapIconPrefab;
-
-    [SerializeField] private Sprite worldSprite;
-    [SerializeField] private Sprite dungeonSprite;
-    [SerializeField] private Sprite npcSprite;
 
     /// <summary>
     ///     This function removes all existing minimap icon objects
@@ -29,36 +26,39 @@ public class MinimapIconManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function removes all minimap icons of the given type
+    /// </summary>
+    /// <param name="type">The type of minimap icons to remove</param>
+    public void ClearMinimapIconsOfType(MinimapIconType type)
+    {
+        foreach (Transform child in transform)
+        {
+            MinimapIcon minimapIcon = child.GetComponent<MinimapIcon>();
+            if (minimapIcon != null && minimapIcon.GetMinimapIconType() == type)
+            {
+                Destroy(child.gameObject);
+            }            
+        }
+    }
+
+    /// <summary>
     ///     This function creates a minimap icon and sets it up
     /// </summary>
     /// <param name="type">The type of the minimap icon</param>
     /// <param name="position">The position of the minimap icon</param>
     public void AddMinimapIcon(MinimapIconType type, Vector3 position)
     {
-        GameObject minimapIcon = Instantiate(minimapIconPrefab, position, Quaternion.identity, this.transform) as GameObject;
+        GameObject minimapIconObject = Instantiate(minimapIconPrefab, position, Quaternion.identity, this.transform) as GameObject;
 
-        SpriteRenderer spriteRenderer = minimapIcon.GetComponent<SpriteRenderer>();
+        MinimapIcon minimapIcon = minimapIconObject.GetComponent<MinimapIcon>();
 
-        if(spriteRenderer != null)
+        if(minimapIcon != null)
         {
-            switch (type)
-            {
-                case MinimapIconType.WORLD:
-                    spriteRenderer.sprite = worldSprite;
-                    break;
-
-                case MinimapIconType.DUNGEON:
-                    spriteRenderer.sprite = dungeonSprite;
-                    break;
-
-                case MinimapIconType.NPC:
-                    spriteRenderer.sprite = npcSprite;
-                    break;
-            }
+            minimapIcon.SetMinimapIconType(type);
         }
         else
         {
-            Debug.LogError("Error creating minimap icon - SpriteRenderer not found");
+            Debug.LogError("Error creating minimap icon - MinimapIcon not found");
         }                   
     }
 }
