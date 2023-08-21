@@ -31,13 +31,106 @@ public class GeneratorManager : MonoBehaviour
     /// <summary>
     ///     This function sets up everything for the given area
     /// </summary>
-    /// <param name="area">The area to set up</param>
-    public void Setup(AreaInformation area)
+    /// <param name="areaToLoad">The area to set up</param>
+    public void Setup(string areaToLoad)
     {
-        currentArea = area;
+        currentArea = GetAreInformation(areaToLoad);
         worldMapData = LoadAreaData();
         SetupArea();
         SetupUI();
+    }
+
+    /// <summary>
+    ///     This function converts a given string to an <c>AreaInformation</c>
+    /// </summary>
+    /// <param name="area">The string to be converted</param>
+    /// <returns>The converted <c>AreaInformation</c>, if valid, the default world 1 otherwise</returns>
+    private AreaInformation GetAreInformation(string area)
+    {
+        Optional<AreaInformation> areaInformation;
+        if(area.Contains("-"))
+        {
+            areaInformation = ConvertDungeon(area);
+        }
+        else
+        {
+            areaInformation = ConvertWorld(area);
+        }
+
+        if(areaInformation.IsPresent())
+        {
+            return areaInformation.Value();
+        }
+        else
+        {
+            Debug.LogError("Inavlid area specified, loading world 1 instead");
+            return new AreaInformation(4, new Optional<int>());
+        }        
+    }
+
+    /// <summary>
+    ///     This function tries to convert a string into a dungeon identifier
+    /// </summary>
+    /// <param name="area">the string to be converted</param>
+    /// <returns>The converted dungeon, if valid, an empty <c>Optional</c> otherwise</returns>
+    private Optional<AreaInformation> ConvertDungeon(string area)
+    {
+        Optional<AreaInformation> optionalAreaInformation = new Optional<AreaInformation>();
+        string[] parts = area.Split("-");
+        if(parts.Length == 2)
+        {
+            bool success = int.TryParse(parts[0], out int worldIndex);
+            if(success && IsValidWorldIndex(worldIndex))
+            {
+                AreaInformation areaInformation = new AreaInformation(worldIndex, new Optional<int>());
+                success = int.TryParse(parts[1], out int dungeonIndex);
+                if (success && IsValidDungeonIndex(worldIndex, dungeonIndex))
+                {
+                    areaInformation.SetDungeonIndex(dungeonIndex);
+                    optionalAreaInformation.SetValue(areaInformation);
+                }
+            }            
+        }
+        return optionalAreaInformation;
+    }
+
+    /// <summary>
+    ///     This function tries to convert a string into a world identifier
+    /// </summary>
+    /// <param name="area">the string to be converted</param>
+    /// <returns>The converted world, if valid, an empty <c>Optional</c> otherwise</returns>
+    private Optional<AreaInformation> ConvertWorld(string area)
+    {
+        Optional<AreaInformation> optionalAreaInformation = new Optional<AreaInformation>();
+        bool success = int.TryParse(area, out int worldIndex);
+        if (success && IsValidWorldIndex(worldIndex))
+        {
+            AreaInformation areaInformation = new AreaInformation(worldIndex, new Optional<int>());
+            optionalAreaInformation.SetValue(areaInformation);
+        }
+        return optionalAreaInformation;
+    }
+
+    /// <summary>
+    ///     This function checks, whether a given world index is valid
+    /// </summary>
+    /// <param name="worldIndex">the world index to be checked</param>
+    /// <returns>true, if given index is valid, false otherwise</returns>
+    private bool IsValidWorldIndex(int worldIndex)
+    {
+        return (worldIndex > 0 && worldIndex <= GameSettings.GetMaxWorlds());
+    }
+
+    /// <summary>
+    ///     This function checks, whether a given dungeon index is valid
+    /// </summary>
+    /// <param name="worldIndex">the world index to be checked</param>
+    /// <param name="dungeonIndex">the world index to be checked</param>
+    /// <returns>true, if given index is valid, false otherwise</returns>
+    private bool IsValidDungeonIndex(int worldIndex, int dungeonIndex)
+    {
+        //TODO: world has enough dungeons
+        return dungeonIndex > 0;
     }
 
     /// <summary>
@@ -111,6 +204,7 @@ public class GeneratorManager : MonoBehaviour
         ClearContent();
         worldMapData.SetTiles(layout);
         worldMapData.SetWorldStyle(style);
+        worldMapData.SetOffset(offset);
     }
 
     /// <summary>

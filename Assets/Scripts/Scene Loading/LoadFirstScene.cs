@@ -17,43 +17,92 @@ public class LoadFirstScene : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        Optional<string> mode = TryToReadMode();
-        if(mode.IsPresent())
+        Gamemode gamemode = GetGamemode();
+
+        switch(gamemode)
         {
-            if(mode.Value().Equals("Generator"))
-            {
+            case Gamemode.PLAY:
+                Debug.Log("Starting in Play Mode");
+                StartGame();
+                break;
+
+            case Gamemode.GENERATOR:
                 Debug.Log("Starting in Generator Mode");
-                StartGenerator();
+                string generatorArea = GetArea();
+                StartGenerator(generatorArea);
+                break;
+
+            case Gamemode.INSPECT:
+                Debug.Log("Starting in Inspect Mode");
+                string inspectorArea = GetArea();
+                StartGenerator(inspectorArea);
+                break;
+        }    
+    }
+
+    /// <summary>
+    ///     This function retrieves the current gamemode
+    /// </summary>
+    /// <returns>The gamemode specified in the browser variable "Gamemode", PLAY, if not present</returns>
+    private Gamemode GetGamemode()
+    {
+        Gamemode gamemode = Gamemode.GENERATOR;
+
+        Optional<string> result = TryToReadVariable("Gamemode");
+        if(result.IsPresent())
+        {
+            bool success = System.Enum.TryParse<Gamemode>(result.Value(), out gamemode);
+            if(success)
+            {
+                Debug.Log("Specified gamemode: " + gamemode);
             }
             else
             {
-                Debug.Log("Starting in Play Mode");
-                StartGame();
+                Debug.LogError("Incorrect gamemode specified: " + result.Value());
             }
         }
         else
         {
-            Debug.LogError("Generator variable not found");
-            Debug.Log("Starting in Generator Mode");
-            StartGenerator();
-        }     
+            Debug.LogError("No gamemode given");
+        }
+        return gamemode;
     }
 
     /// <summary>
-    ///     This function tries to read the browser variable "mode"
+    ///     This function retrives the area to be loaded
     /// </summary>
-    /// <returns>An optional string, containing the read value, if present</returns>
-    private Optional<string> TryToReadMode()
+    /// <returns>The area to be loaded, empty string if nothing is specified</returns>
+    private string GetArea()
+    {
+        Optional<string> result = TryToReadVariable("GeneratorArea");
+        if(result.IsPresent())
+        {
+            return result.Value();
+        }
+        else
+        {
+            Debug.LogError("No area given");
+            return "";
+        }
+    }
+
+
+    /// <summary>
+    ///     This function tries to read the given browser variable
+    /// </summary>
+    /// <param name="browserVariable">The browser variable to be read</param>
+    /// <returns>An optional containing the read value, if the variable exists, an empty optional otherwise</returns>
+    private Optional<string> TryToReadVariable(string browserVariable)
     {
         Optional<string> result = new Optional<string>();
         try
         {
-            string mode = GetToken("mode");
-            result.SetValue(mode);
+            string content = GetToken(browserVariable);
+            result.SetValue(content);
         }
         catch (EntryPointNotFoundException e)
         {
-            Debug.LogError("Function not found: " + e);
+            Debug.LogError("Browser variable not found: " + browserVariable);
         }
         return result;
     }
@@ -119,14 +168,13 @@ public class LoadFirstScene : MonoBehaviour
     ///     This function starts the GeneratorWorld 
     /// </summary>
     /// <returns></returns>
-    private async UniTask StartGenerator()
+    private async UniTask StartGenerator(string areaToLoad)
     {
         await SceneManager.LoadSceneAsync("GeneratorWorld");
         GeneratorManager generator = FindObjectOfType<GeneratorManager>();
         if(generator != null)
         {
-            AreaInformation area = new AreaInformation(1, new Optional<int>());
-            generator.Setup(area);
+            generator.Setup(areaToLoad);
         }
     }
 }
