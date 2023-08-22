@@ -89,12 +89,14 @@ public class GeneratorUI : MonoBehaviour
     {
         generatorPanel.SetActive(false);
         smallGeneratorPanel.SetActive(true);
+        generator.ActivateCameraMovement();
     }
 
     public void MaximizeButtonPressed()
     {
         smallGeneratorPanel.SetActive(false);
-        generatorPanel.SetActive(true);        
+        generatorPanel.SetActive(true);
+        generator.DeactivateCameraMovement();
     }
 
     #region Area Settings Buttons

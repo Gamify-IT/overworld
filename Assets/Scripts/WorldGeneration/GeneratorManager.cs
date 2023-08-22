@@ -7,11 +7,9 @@ using UnityEngine.Tilemaps;
 public class GeneratorManager : MonoBehaviour
 {
     #region Attributes
-    //Camera
-    [SerializeField] private Camera cameraObject;
-
     //UI
     [SerializeField] private GameObject generatorUIPrefab;
+    [SerializeField] private CameraMovement cameraMovement;
 
     //Parent Objects
     [SerializeField] private AreaPainter areaPainter;
@@ -64,7 +62,7 @@ public class GeneratorManager : MonoBehaviour
         else
         {
             Debug.LogError("Inavlid area specified, loading world 1 instead");
-            return new AreaInformation(4, new Optional<int>());
+            return new AreaInformation(1, new Optional<int>());
         }        
     }
 
@@ -395,5 +393,21 @@ public class GeneratorManager : MonoBehaviour
     public WorldMapData GetWorldMapData()
     {
         return worldMapData;
+    }
+
+    /// <summary>
+    ///     This function enables camera movement
+    /// </summary>
+    public void ActivateCameraMovement()
+    {
+        cameraMovement.Activate();
+    }
+
+    /// <summary>
+    ///     This function disables camera movement
+    /// </summary>
+    public void DeactivateCameraMovement()
+    {
+        cameraMovement.Deactivate();
     }
 }
