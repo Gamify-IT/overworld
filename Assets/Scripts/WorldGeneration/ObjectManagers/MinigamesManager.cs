@@ -13,9 +13,9 @@ public class MinigamesManager : MonoBehaviour
     ///     This function sets up minigame objects for the data given
     /// </summary>
     /// <param name="minigameSpots">The data needed for the minigames</param>
-    public void Setup(List<MinigameSpotData> minigameSpots)
+    public void Setup(AreaInformation area, List<MinigameSpotData> minigameSpots)
     {
-        ClearMinigameSpots();
+        ClearMinigameSpots(area);
         foreach(MinigameSpotData minigameSpotData in minigameSpots)
         {
             CreateMinigameSpot(minigameSpotData);
@@ -23,13 +23,30 @@ public class MinigamesManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function removes all existing minigame objects
+    ///     This function removes all existing minigame objects of the given area
     /// </summary>
-    private void ClearMinigameSpots()
+    private void ClearMinigameSpots(AreaInformation area)
     {
         foreach(Transform child in transform)
         {
-            Destroy(child.gameObject);
+            Minigame minigame = child.GetComponent<Minigame>();
+            if(minigame != null)
+            {
+                int worldIndex = area.GetWorldIndex();
+                int dungeonIndex = 0;
+                if (area.IsDungeon())
+                {
+                    dungeonIndex = area.GetDungeonIndex();
+                }
+                if( !(minigame.GetWorldIndex() == worldIndex && minigame.GetDungeonIndex() == dungeonIndex))
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+            else
+            {
+                Destroy(child.gameObject);
+            }
         }
     }
 

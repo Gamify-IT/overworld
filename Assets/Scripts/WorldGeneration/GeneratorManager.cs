@@ -22,7 +22,7 @@ public class GeneratorManager : MonoBehaviour
     [SerializeField] private MinimapIconManager minimapIconsManager;
 
     //World map data
-    private WorldMapData worldMapData;
+    private Dictionary<int, WorldMapData> worldMaps;
     private AreaInformation currentArea;
     #endregion
 
@@ -33,8 +33,17 @@ public class GeneratorManager : MonoBehaviour
     public void Setup(string areaToLoad)
     {
         currentArea = GetAreInformation(areaToLoad);
-        worldMapData = LoadAreaData();
-        SetupArea();
+        worldMaps = LoadAreaData();
+
+        if(currentArea.IsDungeon())
+        {
+            //TODO: SetupDungeonMap
+        }
+        else
+        {
+            SetupWorldMap();
+        }
+        SetupCamera();
         SetupUI();
     }
 
@@ -132,42 +141,70 @@ public class GeneratorManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function loads the world map data for the edited data
+    ///     This function retrieves all area data from the backend
     /// </summary>
-    /// <returns>The <c>WorldMapData</c> of the given world</returns>
-    private WorldMapData LoadAreaData()
+    private Dictionary<int, WorldMapData> LoadAreaData()
     {
-        //TODO: load world data from backend
+        Dictionary<int, WorldMapData> worldMaps = new Dictionary<int, WorldMapData>();
 
-        //Workaround: use local json files
-        string path;
-        if (currentArea.IsDungeon())
+        WorldMapDTO[] worldMapDTOs = GetAllWorldMaps();
+        for(int i = 0; i < worldMapDTOs.Length; i++)
         {
-            path = "Areas/Dungeon" + currentArea.GetDungeonIndex();
+            WorldMapData worldMapData = WorldMapData.ConvertDtoToData(worldMapDTOs[i]);
+            worldMaps.Add(worldMapData.GetArea().GetWorldIndex(), worldMapData);
         }
-        else
-        {
-            path = "Areas/World" + currentArea.GetWorldIndex();
-        }
-        TextAsset targetFile = Resources.Load<TextAsset>(path);
-        string json = targetFile.text;
-        WorldMapDTO worldMapDTO = WorldMapDTO.CreateFromJSON(json);
-        WorldMapData worldMapData = WorldMapData.ConvertDtoToData(worldMapDTO);
-        return worldMapData;
+
+        return worldMaps;
     }
 
     /// <summary>
-    ///     This function sets up the area for the data in <c>worldMapData</c>
+    ///     This function retrieves all world maps from the backend
     /// </summary>
-    private void SetupArea()
+    /// <returns>An array containing all world maps</returns>
+    private WorldMapDTO[] GetAllWorldMaps()
     {
-        areaPainter.Paint(worldMapData.GetTiles(), worldMapData.GetOffset());
-        minigamesManager.Setup(worldMapData.GetMinigameSpots());
-        npcManager.Setup(worldMapData.GetNpcSpots());
-        bookManager.Setup(worldMapData.GetBookSpots());
-        barrierManager.Setup(worldMapData.GetBarrierSpots());
-        teleporterManager.Setup(worldMapData.GetTeleporterSpots());
-        sceneTransitionManager.Setup(worldMapData.GetSceneTransitionSpots());
+        //TODO: load data from backend
+
+        //Workaround: use local json files
+        WorldMapDTO[] worldMapDTOs = new WorldMapDTO[4];
+        for(int i = 0; i < 4; i++)
+        {
+            string path = "Areas/World" + (i+1);
+            TextAsset targetFile = Resources.Load<TextAsset>(path);
+            string json = targetFile.text;
+            WorldMapDTO worldMapDTO = WorldMapDTO.CreateFromJSON(json);
+            worldMapDTOs[i] = worldMapDTO;
+        }
+        return worldMapDTOs;
+    }
+
+    /// <summary>
+    ///     This function sets up the world map
+    /// </summary>
+    private void SetupWorldMap()
+    {
+        foreach(KeyValuePair<int, WorldMapData> entry in worldMaps)
+        {
+            areaPainter.Paint(entry.Value.GetTiles(), entry.Value.GetOffset());
+            minigamesManager.Setup(currentArea, entry.Value.GetMinigameSpots());
+            npcManager.Setup(currentArea, entry.Value.GetNpcSpots());
+            bookManager.Setup(currentArea, entry.Value.GetBookSpots());
+            barrierManager.Setup(entry.Value.GetBarrierSpots());
+            teleporterManager.Setup(currentArea, entry.Value.GetTeleporterSpots());
+            sceneTransitionManager.Setup(currentArea, entry.Value.GetSceneTransitionSpots());
+        }
+    }
+
+    /// <summary>
+    ///     This function moves to camera to the middle of the current world
+    /// </summary>
+    private void SetupCamera()
+    {
+        WorldMapData worldMapData = worldMaps[currentArea.GetWorldIndex()];
+        Vector2Int size = new Vector2Int(worldMapData.GetTiles().GetLength(0), worldMapData.GetTiles().GetLength(1));
+        Vector2Int offset = worldMapData.GetOffset();
+        Vector3 position = new Vector3((size.x / 2) + offset.x, (size.y / 2) + offset.y, cameraMovement.transform.position.z);
+        cameraMovement.transform.position = position;
     }
 
     /// <summary>
@@ -179,7 +216,7 @@ public class GeneratorManager : MonoBehaviour
         GeneratorUI generatorUI = uiObject.GetComponent<GeneratorUI>();
         if(generatorUI != null)
         {
-            generatorUI.Setup(this, worldMapData);
+            generatorUI.Setup(this, worldMaps[currentArea.GetWorldIndex()]);
         }
     }
 
@@ -200,9 +237,9 @@ public class GeneratorManager : MonoBehaviour
         areaPainter.Paint(layout, offset);
 
         ClearContent();
-        worldMapData.SetTiles(layout);
-        worldMapData.SetWorldStyle(style);
-        worldMapData.SetOffset(offset);
+        worldMaps[currentArea.GetWorldIndex()].SetTiles(layout);
+        worldMaps[currentArea.GetWorldIndex()].SetWorldStyle(style);
+        worldMaps[currentArea.GetWorldIndex()].SetOffset(offset);
     }
 
     /// <summary>
@@ -224,9 +261,9 @@ public class GeneratorManager : MonoBehaviour
         string json = targetFile.text;
         WorldMapDTO worldMapDTO = WorldMapDTO.CreateFromJSON(json);
         WorldMapData worldMapData = WorldMapData.ConvertDtoToData(worldMapDTO);
-        this.worldMapData = worldMapData;
+        worldMaps[currentArea.GetWorldIndex()] = worldMapData;
 
-        SetupArea();
+        SetupWorldMap();
     }
     #endregion
 
@@ -246,8 +283,8 @@ public class GeneratorManager : MonoBehaviour
             MinigameSpotData data = new MinigameSpotData(area, i+1, position);
             minigameSpots.Add(data);
         }
-        minigamesManager.Setup(minigameSpots);
-        worldMapData.SetMinigameSpots(minigameSpots);
+        minigamesManager.Setup(area, minigameSpots);
+        worldMaps[currentArea.GetWorldIndex()].SetMinigameSpots(minigameSpots);
     }
 
     /// <summary>
@@ -265,8 +302,8 @@ public class GeneratorManager : MonoBehaviour
             NpcSpotData data = new NpcSpotData(area, i + 1, position, "", "NPCHeads_0", "npc_0");
             npcSpots.Add(data);
         }
-        npcManager.Setup(npcSpots);
-        worldMapData.SetNpcSpots(npcSpots);
+        npcManager.Setup(currentArea, npcSpots);
+        worldMaps[currentArea.GetWorldIndex()].SetNpcSpots(npcSpots);
     }
 
     /// <summary>
@@ -284,8 +321,8 @@ public class GeneratorManager : MonoBehaviour
             BookSpotData data = new BookSpotData(area, i + 1, position, "");
             bookSpots.Add(data);
         }
-        bookManager.Setup(bookSpots);
-        worldMapData.SetBookSpots(bookSpots);
+        bookManager.Setup(currentArea, bookSpots);
+        worldMaps[currentArea.GetWorldIndex()].SetBookSpots(bookSpots);
     }
 
     /// <summary>
@@ -303,8 +340,8 @@ public class GeneratorManager : MonoBehaviour
             TeleporterSpotData data = new TeleporterSpotData(area, i + 1, position, "");
             teleporterSpots.Add(data);
         }
-        teleporterManager.Setup(teleporterSpots);
-        worldMapData.SetTeleporterSpots(teleporterSpots);
+        teleporterManager.Setup(currentArea, teleporterSpots);
+        worldMaps[currentArea.GetWorldIndex()].SetTeleporterSpots(teleporterSpots);
     }
 
     /// <summary>
@@ -322,8 +359,8 @@ public class GeneratorManager : MonoBehaviour
             SceneTransitionSpotData data = new SceneTransitionSpotData(area, position, new Vector2(1,1), "", new AreaInformation(1, new Optional<int>()), new Vector2(1,1), FacingDirection.south);
             dungeonSpots.Add(data);
         }
-        sceneTransitionManager.Setup(dungeonSpots);
-        worldMapData.SetSceneTransitionSpots(dungeonSpots);
+        sceneTransitionManager.Setup(currentArea, dungeonSpots);
+        worldMaps[currentArea.GetWorldIndex()].SetSceneTransitionSpots(dungeonSpots);
     }
     #endregion
 
@@ -335,7 +372,7 @@ public class GeneratorManager : MonoBehaviour
         //TODO: send world map data to backend
 
         //Workaround: use local json files
-        WorldMapDTO worldMapDTO = WorldMapDTO.ConvertDataToDto(worldMapData);
+        WorldMapDTO worldMapDTO = WorldMapDTO.ConvertDataToDto(worldMaps[currentArea.GetWorldIndex()]);
         string json = JsonUtility.ToJson(worldMapDTO, true);
         string path;
         if(currentArea.IsDungeon())
@@ -367,23 +404,23 @@ public class GeneratorManager : MonoBehaviour
     /// </summary>
     private void ClearContent()
     {
-        minigamesManager.Setup(new List<MinigameSpotData>());
-        worldMapData.SetMinigameSpots(new List<MinigameSpotData>());
+        minigamesManager.Setup(currentArea, new List<MinigameSpotData>());
+        worldMaps[currentArea.GetWorldIndex()].SetMinigameSpots(new List<MinigameSpotData>());
 
-        npcManager.Setup(new List<NpcSpotData>());
-        worldMapData.SetNpcSpots(new List<NpcSpotData>());
+        npcManager.Setup(currentArea, new List<NpcSpotData>());
+        worldMaps[currentArea.GetWorldIndex()].SetNpcSpots(new List<NpcSpotData>());
 
-        bookManager.Setup(new List<BookSpotData>());
-        worldMapData.SetBookSpots(new List<BookSpotData>());
+        bookManager.Setup(currentArea, new List<BookSpotData>());
+        worldMaps[currentArea.GetWorldIndex()].SetBookSpots(new List<BookSpotData>());
 
         barrierManager.Setup(new List<BarrierSpotData>());
-        worldMapData.SetBarrierSpots(new List<BarrierSpotData>());
+        worldMaps[currentArea.GetWorldIndex()].SetBarrierSpots(new List<BarrierSpotData>());
 
-        teleporterManager.Setup(new List<TeleporterSpotData>());
-        worldMapData.SetTeleporterSpots(new List<TeleporterSpotData>());
+        teleporterManager.Setup(currentArea, new List<TeleporterSpotData>());
+        worldMaps[currentArea.GetWorldIndex()].SetTeleporterSpots(new List<TeleporterSpotData>());
 
-        sceneTransitionManager.Setup(new List<SceneTransitionSpotData>());
-        worldMapData.SetSceneTransitionSpots(new List<SceneTransitionSpotData>());
+        sceneTransitionManager.Setup(currentArea, new List<SceneTransitionSpotData>());
+        worldMaps[currentArea.GetWorldIndex()].SetSceneTransitionSpots(new List<SceneTransitionSpotData>());
     }
 
     /// <summary>
@@ -392,7 +429,7 @@ public class GeneratorManager : MonoBehaviour
     /// <returns></returns>
     public WorldMapData GetWorldMapData()
     {
-        return worldMapData;
+        return worldMaps[currentArea.GetWorldIndex()];
     }
 
     /// <summary>

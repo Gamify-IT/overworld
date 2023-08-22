@@ -15,9 +15,11 @@ public enum FacingDirection
 /// </summary>
 public class LoadSubScene : MonoBehaviour
 {
+    private int worldIndex;
+    private int dungeonIndex;
     public string sceneToLoad;
-    public int worldIndex;
-    public int dungeonIndex;
+    public int worldIndexToLoad;
+    public int dungeonIndexToLoad;
     public GameObject fadeInPanel;
     public GameObject fadeOutPanel;
     public float loadingTime;
@@ -55,7 +57,7 @@ public class LoadSubScene : MonoBehaviour
             yield return null;
         }
 
-        GameManager.Instance.SetData(worldIndex, dungeonIndex);
+        GameManager.Instance.SetData(worldIndexToLoad, dungeonIndexToLoad);
 
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
@@ -93,4 +95,27 @@ public class LoadSubScene : MonoBehaviour
         DestroyImmediate(fadeOutPanelCopy, true);
         Destroy(panel, 1);
     }
+
+    #region GetterAndSetter
+    public void SetWorldIndex(int worldIndex)
+    {
+        this.worldIndex = worldIndex;
+    }
+
+    public int GetWorldIndex()
+    {
+        return worldIndex;
+    }
+
+    public void SetDungeonIndex(int dungeonIndex)
+    {
+        this.dungeonIndex = dungeonIndex;
+    }
+
+    public int GetDungeonIndex()
+    {
+        return dungeonIndex;
+    }
+
+    #endregion
 }

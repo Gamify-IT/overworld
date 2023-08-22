@@ -15,9 +15,9 @@ public class NpcManager : MonoBehaviour
     ///     This function sets up npc objects for the data given
     /// </summary>
     /// <param name="npcSpots">The data needed for the npcs</param>
-    public void Setup(List<NpcSpotData> npcSpots)
+    public void Setup(AreaInformation area, List<NpcSpotData> npcSpots)
     {
-        ClearNpcSpots();
+        ClearNpcSpots(area);
         MinimapIconManager minimapIconManager = minimapIcons.GetComponent<MinimapIconManager>();
         if (minimapIconManager != null)
         {
@@ -34,13 +34,30 @@ public class NpcManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function removes all existing npc objects
+    ///     This function removes all existing npc objects of the given area
     /// </summary>
-    private void ClearNpcSpots()
+    private void ClearNpcSpots(AreaInformation area)
     {
         foreach (Transform child in transform)
         {
-            Destroy(child.gameObject);
+            NPC npc = child.GetComponent<NPC>();
+            if (npc != null)
+            {
+                int worldIndex = area.GetWorldIndex();
+                int dungeonIndex = 0;
+                if (area.IsDungeon())
+                {
+                    dungeonIndex = area.GetDungeonIndex();
+                }
+                if (!(npc.GetWorldIndex() == worldIndex && npc.GetDungeonIndex() == dungeonIndex))
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+            else
+            {
+                Destroy(child.gameObject);
+            }
         }
     }
 

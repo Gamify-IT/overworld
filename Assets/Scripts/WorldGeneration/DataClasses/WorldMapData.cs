@@ -8,6 +8,7 @@ using UnityEngine;
 public class WorldMapData
 {
     #region Attributes
+    private AreaInformation area;
     private string[,,] tiles;
     private Vector2Int offset;
     private WorldStyle style;
@@ -31,8 +32,9 @@ public class WorldMapData
         sceneTransitionSpots = new List<SceneTransitionSpotData>();
     }
 
-    public WorldMapData(string[,,] tiles, Vector2Int offset, WorldStyle style, List<WorldConnection> worldConnections, List<MinigameSpotData> minigameSpots, List<NpcSpotData> npcSpots, List<BookSpotData> bookSpots, List<BarrierSpotData> barrierSpots, List<TeleporterSpotData> teleporterSpots, List<SceneTransitionSpotData> sceneTransitionSpots)
+    public WorldMapData(AreaInformation area, string[,,] tiles, Vector2Int offset, WorldStyle style, List<WorldConnection> worldConnections, List<MinigameSpotData> minigameSpots, List<NpcSpotData> npcSpots, List<BookSpotData> bookSpots, List<BarrierSpotData> barrierSpots, List<TeleporterSpotData> teleporterSpots, List<SceneTransitionSpotData> sceneTransitionSpots)
     {
+        this.area = area;
         this.tiles = tiles;
         this.offset = offset;
         this.style = style;
@@ -52,6 +54,13 @@ public class WorldMapData
     /// <returns></returns>
     public static WorldMapData ConvertDtoToData(WorldMapDTO worldMapDTO)
     {
+        Optional<int> dungeonIndex = new Optional<int>();
+        if(worldMapDTO.area.dungeonIndex != 0)
+        {
+            dungeonIndex.SetValue(worldMapDTO.area.dungeonIndex);
+        }
+        AreaInformation area = new AreaInformation(worldMapDTO.area.worldIndex, dungeonIndex);
+
         string[,,] tiles = Layout.ConvertLayoutToArray(worldMapDTO.layout);
 
         Vector2Int offset = new Vector2Int((int) worldMapDTO.offset.x, (int) worldMapDTO.offset.y);
@@ -101,11 +110,21 @@ public class WorldMapData
             sceneTransitionSpots.Add(SceneTransitionSpotData.ConvertDtoToData(worldMapDTO.sceneTransitions[i]));
         }
 
-        WorldMapData data = new WorldMapData(tiles, offset, style, worldConnections, minigameSpots, npcSpots, bookSpots, barrierSpots, teleporterSpots, sceneTransitionSpots);
+        WorldMapData data = new WorldMapData(area, tiles, offset, style, worldConnections, minigameSpots, npcSpots, bookSpots, barrierSpots, teleporterSpots, sceneTransitionSpots);
         return data;
     }
 
     #region GetterAndSetter
+    public AreaInformation GetArea()
+    {
+        return area;
+    }
+
+    public void SetArea(AreaInformation area)
+    {
+        this.area = area;
+    }
+
     public string[,,] GetTiles()
     {
         return tiles;

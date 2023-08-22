@@ -10,6 +10,7 @@ using System;
 public class WorldMapDTO
 {
     #region Attributes
+    public AreaLocationDTO area;
     public Layout layout;
     public Position offset;
     public string style;
@@ -25,8 +26,9 @@ public class WorldMapDTO
     #region Constructors
     public WorldMapDTO() { }
 
-    public WorldMapDTO(Layout layout, Position offset, string style, WorldConnectionDTO[] worldConnections, MinigameSpotDTO[] minigameSpots, NpcSpotDTO[] npcSpots, BookSpotDTO[] bookSpots, BarrierSpotDTO[] barrierSpots, TeleporterSpotDTO[] teleporterSpots, SceneTransitionSpotDTO[] sceneTransitions)
+    public WorldMapDTO(AreaLocationDTO area, Layout layout, Position offset, string style, WorldConnectionDTO[] worldConnections, MinigameSpotDTO[] minigameSpots, NpcSpotDTO[] npcSpots, BookSpotDTO[] bookSpots, BarrierSpotDTO[] barrierSpots, TeleporterSpotDTO[] teleporterSpots, SceneTransitionSpotDTO[] sceneTransitions)
     {
+        this.area = area;
         this.layout = layout;
         this.offset = offset;
         this.style = style;
@@ -57,6 +59,8 @@ public class WorldMapDTO
     /// <returns></returns>
     public static WorldMapDTO ConvertDataToDto(WorldMapData worldMapData)
     {
+        AreaLocationDTO area = new AreaLocationDTO(worldMapData.GetArea().GetWorldIndex(), worldMapData.GetArea().GetDungeonIndex());
+
         string[,,] tiles = worldMapData.GetTiles();
         Layout layout = Layout.ConvertArrayToLayout(tiles);
 
@@ -114,7 +118,7 @@ public class WorldMapDTO
         }
         SceneTransitionSpotDTO[] sceneTransitionSpots = sceneTransitionSpotDtos.ToArray();
 
-        WorldMapDTO data = new WorldMapDTO(layout, offset, style, worldConnections, minigameSpots, npcSpots, bookSpots, barrierSpots, teleporterSpots, sceneTransitionSpots);
+        WorldMapDTO data = new WorldMapDTO(area, layout, offset, style, worldConnections, minigameSpots, npcSpots, bookSpots, barrierSpots, teleporterSpots, sceneTransitionSpots);
         return data;
     }
 }

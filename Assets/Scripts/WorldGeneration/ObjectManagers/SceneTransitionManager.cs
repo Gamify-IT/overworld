@@ -14,9 +14,9 @@ public class SceneTransitionManager : MonoBehaviour
     ///     This function sets up scene transition objects for the data given
     /// </summary>
     /// <param name="sceneTransitionSpots">The data needed for the scene transitions</param>
-    public void Setup(List<SceneTransitionSpotData> sceneTransitionSpots)
+    public void Setup(AreaInformation area, List<SceneTransitionSpotData> sceneTransitionSpots)
     {
-        ClearSceneTransitionSpots();
+        ClearSceneTransitionSpots(area);
         MinimapIconManager minimapIconManager = minimapIcons.GetComponent<MinimapIconManager>();
         if (minimapIconManager != null)
         {
@@ -35,11 +35,28 @@ public class SceneTransitionManager : MonoBehaviour
     /// <summary>
     ///     This function removes all existing scene transition objects
     /// </summary>
-    private void ClearSceneTransitionSpots()
+    private void ClearSceneTransitionSpots(AreaInformation area)
     {
         foreach (Transform child in transform)
         {
-            Destroy(child.gameObject);
+            LoadSubScene sceneTransition = child.GetComponent<LoadSubScene>();
+            if (sceneTransition != null)
+            {
+                int worldIndex = area.GetWorldIndex();
+                int dungeonIndex = 0;
+                if (area.IsDungeon())
+                {
+                    dungeonIndex = area.GetDungeonIndex();
+                }
+                if (!(sceneTransition.GetWorldIndex() == worldIndex && sceneTransition.GetDungeonIndex() == dungeonIndex))
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+            else
+            {
+                Destroy(child.gameObject);
+            }
         }
     }
 
@@ -61,14 +78,24 @@ public class SceneTransitionManager : MonoBehaviour
         LoadSubScene sceneTransition = sceneTransitionSpot.GetComponent<LoadSubScene>();
         if (sceneTransition != null)
         {
-            sceneTransition.worldIndex = data.GetAreaToLoad().GetWorldIndex();
-            if (data.GetAreaToLoad().IsDungeon())
+            sceneTransition.SetWorldIndex(data.GetArea().GetWorldIndex());
+            if(data.GetArea().IsDungeon())
             {
-                sceneTransition.dungeonIndex = data.GetAreaToLoad().GetDungeonIndex();
+                sceneTransition.SetDungeonIndex(data.GetArea().GetDungeonIndex());
             }
             else
             {
-                sceneTransition.dungeonIndex = 0;
+                sceneTransition.SetDungeonIndex(0);
+            }
+
+            sceneTransition.worldIndexToLoad = data.GetAreaToLoad().GetWorldIndex();
+            if (data.GetAreaToLoad().IsDungeon())
+            {
+                sceneTransition.dungeonIndexToLoad = data.GetAreaToLoad().GetDungeonIndex();
+            }
+            else
+            {
+                sceneTransition.dungeonIndexToLoad = 0;
             }
             sceneTransition.sceneToLoad = data.GetSceneToLoad();
             sceneTransition.playerPosition = data.GetPlayerPosition();
