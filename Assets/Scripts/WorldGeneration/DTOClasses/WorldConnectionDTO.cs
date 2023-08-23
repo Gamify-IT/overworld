@@ -10,13 +10,15 @@ using System;
 public class WorldConnectionDTO
 {
     public Position position;
+    public int destinationWorld;
     public string connectionType;
 
     public WorldConnectionDTO() { }
 
-    public WorldConnectionDTO(Position position, string connectionType)
+    public WorldConnectionDTO(Position position, int destinationWorld, string connectionType)
     {
         this.position = position;
+        this.destinationWorld = destinationWorld;
         this.connectionType = connectionType;
     }
 
@@ -38,9 +40,10 @@ public class WorldConnectionDTO
     public static WorldConnectionDTO ConvertDataToDto(WorldConnection worldConnection)
     {
         Position position = new Position(worldConnection.GetPosition().x, worldConnection.GetPosition().y);
+        int destinationWorld = worldConnection.GetDestinationWorld();
         string connectionType = worldConnection.GetWorldConnectionType().ToString();
 
-        WorldConnectionDTO worldConnectionDTO = new WorldConnectionDTO(position, connectionType);
+        WorldConnectionDTO worldConnectionDTO = new WorldConnectionDTO(position, destinationWorld, connectionType);
         return worldConnectionDTO;
     }
 }

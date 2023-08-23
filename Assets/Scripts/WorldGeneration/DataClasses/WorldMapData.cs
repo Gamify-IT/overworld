@@ -114,6 +114,15 @@ public class WorldMapData
         return data;
     }
 
+    /// <summary>
+    ///     This function returns the size of the world
+    /// </summary>
+    /// <returns>A <c>Vector2Int</c> containing the size of the world</returns>
+    public Vector2Int GetSize()
+    {
+        return new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
+    }
+
     #region GetterAndSetter
     public AreaInformation GetArea()
     {

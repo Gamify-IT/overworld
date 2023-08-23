@@ -11,6 +11,7 @@ public class GeneratorUI : MonoBehaviour
     //WorldGenerator
     private GeneratorManager generator;
     private AreaInformation currentArea;
+    private WorldMapData worldMapData;
 
     //Panels
     [SerializeField] private GameObject generatorPanel;
@@ -59,6 +60,7 @@ public class GeneratorUI : MonoBehaviour
     public void Setup(GeneratorManager generator, WorldMapData worldMapData)
     {
         this.generator = generator;
+        this.worldMapData = worldMapData;
 
         smallGeneratorPanel.SetActive(false);
         areaSettings.SetActive(true);
@@ -110,10 +112,11 @@ public class GeneratorUI : MonoBehaviour
     {
         Vector2Int size = new Vector2Int(int.Parse(sizeX.text), int.Parse(sizeY.text));
         Vector2Int offset = new Vector2Int(int.Parse(offsetX.text), int.Parse(offsetY.text));
+        worldMapData.SetOffset(offset);
         WorldStyle style = (WorldStyle) stypeDropdown.value;
+        worldMapData.SetWorldStyle(style);
         float accessability = accessabilitySlider.value;
-        Optional<List<WorldConnection>> worldConnections = new Optional<List<WorldConnection>>();
-        generator.CreateLayout(size, offset, style, accessability, worldConnections);
+        generator.CreateLayout(size, worldMapData, accessability);
         ResetContentPanel();
     }
 

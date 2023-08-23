@@ -11,11 +11,13 @@ public enum WorldConnectionType
 public class WorldConnection
 {
     private Vector2Int position;
+    private int destinationWorld;
     private WorldConnectionType connectionType;
 
-    public WorldConnection(Vector2Int position, WorldConnectionType connectionType)
+    public WorldConnection(Vector2Int position, int destinationWorld, WorldConnectionType connectionType)
     {
         this.position = position;
+        this.destinationWorld = destinationWorld;
         this.connectionType = connectionType;
     }
 
@@ -27,9 +29,10 @@ public class WorldConnection
     public static WorldConnection ConvertDtoToData(WorldConnectionDTO worldConnectionDto)
     {
         Vector2Int position = new Vector2Int((int)worldConnectionDto.position.x, (int)worldConnectionDto.position.y);
+        int destinationWorld = worldConnectionDto.destinationWorld;
         WorldConnectionType connectionType = (WorldConnectionType)System.Enum.Parse(typeof(WorldConnectionType), worldConnectionDto.connectionType);
 
-        WorldConnection worldConnection = new WorldConnection(position, connectionType);
+        WorldConnection worldConnection = new WorldConnection(position, destinationWorld, connectionType);
         return worldConnection;
     }
 
@@ -37,6 +40,11 @@ public class WorldConnection
     public Vector2Int GetPosition()
     {
         return position;
+    }
+
+    public int GetDestinationWorld()
+    {
+        return destinationWorld;
     }
 
     public WorldConnectionType GetWorldConnectionType()

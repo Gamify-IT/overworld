@@ -12,9 +12,9 @@ public class AreaGenerator
     private Vector2Int size;
     private WorldStyle style;
     private float accessability;
-    private Optional<List<WorldConnection>> worldConnections;
+    private List<WorldConnection> worldConnections;
 
-    public AreaGenerator(Vector2Int size, WorldStyle style, float accessability, Optional<List<WorldConnection>> worldConnections)
+    public AreaGenerator(Vector2Int size, WorldStyle style, float accessability, List<WorldConnection> worldConnections)
     {
         layout = new string[size.x, size.y, 5];
         this.size = size;
@@ -112,59 +112,56 @@ public class AreaGenerator
             }
         }
 
-        if(worldConnections.IsPresent())
+        foreach (WorldConnection worldConnection in worldConnections)
         {
-            foreach (WorldConnection worldConnection in worldConnections.Value())
+            //connection on left side
+            if(worldConnection.GetPosition().x == 0 && worldConnection.GetPosition().y > (borderThickness+worldConnectionWidth) && worldConnection.GetPosition().y < size.y - (borderThickness+worldConnectionWidth))
             {
-                //connection on left side
-                if(worldConnection.GetPosition().x == 0 && worldConnection.GetPosition().y > (borderThickness+worldConnectionWidth) && worldConnection.GetPosition().y < size.y - (borderThickness+worldConnectionWidth))
+                for(int x=0; x<borderThickness; x++)
                 {
-                    for(int x=0; x<borderThickness; x++)
+                    for(int offset = -worldConnectionWidth; offset <= worldConnectionWidth; offset++)
                     {
-                        for(int offset = -worldConnectionWidth; offset <= worldConnectionWidth; offset++)
-                        {
-                            layout[x, worldConnection.GetPosition().y+offset, 2] = "none";
-                            layout[x, worldConnection.GetPosition().y+offset, 0] = groundTile;
-                        }
+                        layout[x, worldConnection.GetPosition().y+offset, 2] = "none";
+                        layout[x, worldConnection.GetPosition().y+offset, 0] = groundTile;
                     }
                 }
+            }
 
-                //connection on bottom side
-                if (worldConnection.GetPosition().y == 0 && worldConnection.GetPosition().x > (borderThickness + worldConnectionWidth) && worldConnection.GetPosition().x < size.x - (borderThickness + worldConnectionWidth))
+            //connection on bottom side
+            if (worldConnection.GetPosition().y == 0 && worldConnection.GetPosition().x > (borderThickness + worldConnectionWidth) && worldConnection.GetPosition().x < size.x - (borderThickness + worldConnectionWidth))
+            {
+                for (int y = 0; y < borderThickness; y++)
                 {
-                    for (int y = 0; y < borderThickness; y++)
+                    for (int offset = -worldConnectionWidth; offset <= worldConnectionWidth; offset++)
                     {
-                        for (int offset = -worldConnectionWidth; offset <= worldConnectionWidth; offset++)
-                        {
-                            layout[worldConnection.GetPosition().x + offset, y, 2] = "none";
-                            layout[worldConnection.GetPosition().x + offset, y, 0] = groundTile;
-                        }
+                        layout[worldConnection.GetPosition().x + offset, y, 2] = "none";
+                        layout[worldConnection.GetPosition().x + offset, y, 0] = groundTile;
                     }
                 }
+            }
 
-                //connection on right side
-                if (worldConnection.GetPosition().x == size.x && worldConnection.GetPosition().y > (borderThickness + worldConnectionWidth) && worldConnection.GetPosition().y < size.y - (borderThickness + worldConnectionWidth))
+            //connection on right side
+            if (worldConnection.GetPosition().x == size.x && worldConnection.GetPosition().y > (borderThickness + worldConnectionWidth) && worldConnection.GetPosition().y < size.y - (borderThickness + worldConnectionWidth))
+            {
+                for (int x = size.x-1; x > size.x-1-borderThickness; x--)
                 {
-                    for (int x = size.x-1; x > size.x-1-borderThickness; x--)
+                    for (int offset = -worldConnectionWidth; offset <= worldConnectionWidth; offset++)
                     {
-                        for (int offset = -worldConnectionWidth; offset <= worldConnectionWidth; offset++)
-                        {
-                            layout[x, worldConnection.GetPosition().y+offset, 2] = "none";
-                            layout[x, worldConnection.GetPosition().y+offset, 0] = groundTile;
-                        }
+                        layout[x, worldConnection.GetPosition().y+offset, 2] = "none";
+                        layout[x, worldConnection.GetPosition().y+offset, 0] = groundTile;
                     }
                 }
+            }
 
-                //connection on top side
-                if (worldConnection.GetPosition().y == 0 && worldConnection.GetPosition().x > (borderThickness + worldConnectionWidth) && worldConnection.GetPosition().x < size.x - (borderThickness + worldConnectionWidth))
+            //connection on top side
+            if (worldConnection.GetPosition().y == size.y && worldConnection.GetPosition().x > (borderThickness + worldConnectionWidth) && worldConnection.GetPosition().x < size.x - (borderThickness + worldConnectionWidth))
+            {
+                for (int y = size.y - 1; y > size.y - 1 - borderThickness; y--)
                 {
-                    for (int y = size.y - 1; y > size.y - 1 - borderThickness; y--)
+                    for (int offset = -worldConnectionWidth; offset <= worldConnectionWidth; offset++)
                     {
-                        for (int offset = -worldConnectionWidth; offset <= worldConnectionWidth; offset++)
-                        {
-                            layout[worldConnection.GetPosition().x + offset, y, 2] = "none";
-                            layout[worldConnection.GetPosition().x + offset, y, 0] = groundTile;
-                        }
+                        layout[worldConnection.GetPosition().x + offset, y, 2] = "none";
+                        layout[worldConnection.GetPosition().x + offset, y, 0] = groundTile;
                     }
                 }
             }

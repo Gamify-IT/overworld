@@ -20,6 +20,7 @@ public class GeneratorManager : MonoBehaviour
     [SerializeField] private SceneTransitionManager sceneTransitionManager;
     [SerializeField] private BarrierManager barrierManager;
     [SerializeField] private MinimapIconManager minimapIconsManager;
+    [SerializeField] private MaskManager maskManager;
 
     //World map data
     private Dictionary<int, WorldMapData> worldMaps;
@@ -42,6 +43,7 @@ public class GeneratorManager : MonoBehaviour
         else
         {
             SetupWorldMap();
+            CreateMask();
         }
         SetupCamera();
         SetupUI();
@@ -194,6 +196,22 @@ public class GeneratorManager : MonoBehaviour
             sceneTransitionManager.Setup(currentArea, entry.Value.GetSceneTransitionSpots());
         }
     }
+    
+    /// <summary>
+    ///     This function mask all worlds except the active one
+    /// </summary>
+    private void CreateMask()
+    {
+        List<WorldMapData> worlds = new List<WorldMapData>();
+
+        foreach (KeyValuePair<int, WorldMapData> entry in worldMaps)
+        {
+            worlds.Add(entry.Value);
+        }
+
+        maskManager.Setup(worlds);
+        maskManager.DeactivateMask(currentArea);
+    }
 
     /// <summary>
     ///     This function moves to camera to the middle of the current world
@@ -229,17 +247,23 @@ public class GeneratorManager : MonoBehaviour
     /// <param name="style">The style of the area map</param>
     /// <param name="accessability">The amount of accessabile space</param>
     /// <param name="worldConnections">A list of connection points to other worlds, if the area is a world, empty optional otherwise</param>
-    public void CreateLayout(Vector2Int size, Vector2Int offset, WorldStyle style, float accessability, Optional<List<WorldConnection>> worldConnections)
+    public void CreateLayout(Vector2Int size, WorldMapData worldMapData, float accessability)
     {
+        Vector2Int offset = worldMapData.GetOffset();
+        WorldStyle style = worldMapData.GetWorldStyle();
+        List<WorldConnection> worldConnections = worldMapData.GetWorldConnections();
         AreaGenerator areaGenerator = new AreaGenerator(size, style, accessability, worldConnections);
         areaGenerator.GenerateLayout();
         string[,,] layout = areaGenerator.GetLayout();
         areaPainter.Paint(layout, offset);
+        worldMapData.SetTiles(layout);
 
         ClearContent();
+        worldMaps[currentArea.GetWorldIndex()] = worldMapData;
         worldMaps[currentArea.GetWorldIndex()].SetTiles(layout);
         worldMaps[currentArea.GetWorldIndex()].SetWorldStyle(style);
         worldMaps[currentArea.GetWorldIndex()].SetOffset(offset);
+        worldMaps[currentArea.GetWorldIndex()].SetWorldConnections(worldConnections);      
     }
 
     /// <summary>
