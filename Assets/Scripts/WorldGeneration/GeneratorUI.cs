@@ -28,6 +28,7 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private TMP_Dropdown stypeDropdown;
     [SerializeField] private Slider accessabilitySlider;
     [SerializeField] private Button generateLayoutButton;
+    [SerializeField] private Button continueButton;
 
     //Content
     [SerializeField] private TMP_InputField amountMinigames;
@@ -81,6 +82,8 @@ public class GeneratorUI : MonoBehaviour
         {
             stypeDropdown.value = (int) areaData.GetAreaMapData().GetWorldStyle();
 
+            continueButton.interactable = true;
+
             amountMinigames.text = areaData.GetAreaMapData().GetMinigameSpots().Count.ToString();
             amountNPCs.text = areaData.GetAreaMapData().GetNpcSpots().Count.ToString();
             amountBooks.text = areaData.GetAreaMapData().GetBookSpots().Count.ToString();
@@ -90,6 +93,9 @@ public class GeneratorUI : MonoBehaviour
         else
         {
             stypeDropdown.value = (int) WorldStyle.CUSTOM;
+
+            continueButton.interactable = false;
+
             amountMinigames.text = "";
             amountNPCs.text = "";
             amountBooks.text = "";
@@ -151,6 +157,7 @@ public class GeneratorUI : MonoBehaviour
     {
         generator.ResetToCustom();
         stypeDropdown.value = 0;
+        continueButton.interactable = false;
     }
 
     public void GenerateLayoutButtonPressed()
@@ -161,6 +168,8 @@ public class GeneratorUI : MonoBehaviour
 
         CustomAreaMapData areaMapData = new CustomAreaMapData(style);
         generator.CreateLayout(size, areaMapData, accessability);
+
+        continueButton.interactable = true;
 
         ResetContentPanel();
     }
