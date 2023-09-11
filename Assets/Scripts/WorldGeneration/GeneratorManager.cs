@@ -9,7 +9,8 @@ public class GeneratorManager : MonoBehaviour
     #region Attributes
     //UI
     [SerializeField] private GameObject generatorUIPrefab;
-    [SerializeField] private CameraMovement cameraMovement;
+    private GeneratorUI ui;
+    private CameraMovement cameraMovement;    
 
     //Parent Objects
     [SerializeField] private AreaPainter areaPainter;
@@ -20,197 +21,72 @@ public class GeneratorManager : MonoBehaviour
     [SerializeField] private SceneTransitionManager sceneTransitionManager;
     [SerializeField] private BarrierManager barrierManager;
     [SerializeField] private MinimapIconManager minimapIconsManager;
-    [SerializeField] private MaskManager maskManager;
 
     //World map data
-    private Dictionary<int, WorldMapData> worldMaps;
+    private AreaData areaData;
     private AreaInformation currentArea;
+    private AreaInformationData areaInformation;
     #endregion
 
     /// <summary>
     ///     This function sets up everything for the given area
     /// </summary>
     /// <param name="areaToLoad">The area to set up</param>
-    public void Setup(string areaToLoad)
+    public void Setup(AreaData areaData, CameraMovement camera)
     {
-        currentArea = GetAreInformation(areaToLoad);
-        worldMaps = LoadAreaData();
+        this.areaData = areaData;
+        currentArea = areaData.GetArea();
+        cameraMovement = camera;
+        areaInformation = GetAreaInformation();
 
-        if(currentArea.IsDungeon())
+        if(areaData.IsGeneratedArea())
         {
-            //TODO: SetupDungeonMap
+            SetupGeneratedArea();
         }
-        else
-        {
-            SetupWorldMap();
-            CreateMask();
-        }
+
         SetupCamera();
         SetupUI();
     }
 
     /// <summary>
-    ///     This function converts a given string to an <c>AreaInformation</c>
+    ///     This function reads the information needed for area generation
     /// </summary>
-    /// <param name="area">The string to be converted</param>
-    /// <returns>The converted <c>AreaInformation</c>, if valid, the default world 1 otherwise</returns>
-    private AreaInformation GetAreInformation(string area)
+    /// <returns></returns>
+    private AreaInformationData GetAreaInformation()
     {
-        Optional<AreaInformation> areaInformation;
-        if(area.Contains("-"))
+        string path;
+        if (currentArea.IsDungeon())
         {
-            areaInformation = ConvertDungeon(area);
+            path = "AreaInfo/Dungeon" + currentArea.GetWorldIndex() + "-" + currentArea.GetWorldIndex();
         }
         else
         {
-            areaInformation = ConvertWorld(area);
+            path = "AreaInfo/World" + currentArea.GetWorldIndex();
         }
-
-        if(areaInformation.IsPresent())
-        {
-            return areaInformation.Value();
-        }
-        else
-        {
-            Debug.LogError("Inavlid area specified, loading world 1 instead");
-            return new AreaInformation(1, new Optional<int>());
-        }        
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        AreaInformationDTO areaInformationDTO = AreaInformationDTO.CreateFromJSON(json);
+        AreaInformationData areaInformationData = AreaInformationData.ConvertDtoToData(areaInformationDTO);
+        return areaInformationData;
     }
 
     /// <summary>
-    ///     This function tries to convert a string into a dungeon identifier
+    ///     This function recreated the generated area
     /// </summary>
-    /// <param name="area">the string to be converted</param>
-    /// <returns>The converted dungeon, if valid, an empty <c>Optional</c> otherwise</returns>
-    private Optional<AreaInformation> ConvertDungeon(string area)
+    private void SetupGeneratedArea()
     {
-        Optional<AreaInformation> optionalAreaInformation = new Optional<AreaInformation>();
-        string[] parts = area.Split("-");
-        if(parts.Length == 2)
-        {
-            bool success = int.TryParse(parts[0], out int worldIndex);
-            if(success && IsValidWorldIndex(worldIndex))
-            {
-                AreaInformation areaInformation = new AreaInformation(worldIndex, new Optional<int>());
-                success = int.TryParse(parts[1], out int dungeonIndex);
-                if (success && IsValidDungeonIndex(worldIndex, dungeonIndex))
-                {
-                    areaInformation.SetDungeonIndex(dungeonIndex);
-                    optionalAreaInformation.SetValue(areaInformation);
-                }
-            }            
-        }
-        return optionalAreaInformation;
-    }
+        Vector2Int offset = areaInformation.GetOffset();
+        CustomAreaMapData areaMap = areaData.GetAreaMapData();
 
-    /// <summary>
-    ///     This function tries to convert a string into a world identifier
-    /// </summary>
-    /// <param name="area">the string to be converted</param>
-    /// <returns>The converted world, if valid, an empty <c>Optional</c> otherwise</returns>
-    private Optional<AreaInformation> ConvertWorld(string area)
-    {
-        Optional<AreaInformation> optionalAreaInformation = new Optional<AreaInformation>();
-        bool success = int.TryParse(area, out int worldIndex);
-        if (success && IsValidWorldIndex(worldIndex))
-        {
-            AreaInformation areaInformation = new AreaInformation(worldIndex, new Optional<int>());
-            optionalAreaInformation.SetValue(areaInformation);
-        }
-        return optionalAreaInformation;
-    }
+        string[,,] layout = areaMap.GetTiles();
+        areaPainter.Paint(layout, offset);
 
-    /// <summary>
-    ///     This function checks, whether a given world index is valid
-    /// </summary>
-    /// <param name="worldIndex">the world index to be checked</param>
-    /// <returns>true, if given index is valid, false otherwise</returns>
-    private bool IsValidWorldIndex(int worldIndex)
-    {
-        return (worldIndex > 0 && worldIndex <= GameSettings.GetMaxWorlds());
-    }
-
-    /// <summary>
-    ///     This function checks, whether a given dungeon index is valid
-    /// </summary>
-    /// <param name="worldIndex">the world index to be checked</param>
-    /// <param name="dungeonIndex">the world index to be checked</param>
-    /// <returns>true, if given index is valid, false otherwise</returns>
-    private bool IsValidDungeonIndex(int worldIndex, int dungeonIndex)
-    {
-        //TODO: world has enough dungeons
-        return dungeonIndex > 0;
-    }
-
-    /// <summary>
-    ///     This function retrieves all area data from the backend
-    /// </summary>
-    private Dictionary<int, WorldMapData> LoadAreaData()
-    {
-        Dictionary<int, WorldMapData> worldMaps = new Dictionary<int, WorldMapData>();
-
-        WorldMapDTO[] worldMapDTOs = GetAllWorldMaps();
-        for(int i = 0; i < worldMapDTOs.Length; i++)
-        {
-            WorldMapData worldMapData = WorldMapData.ConvertDtoToData(worldMapDTOs[i]);
-            worldMaps.Add(worldMapData.GetArea().GetWorldIndex(), worldMapData);
-        }
-
-        return worldMaps;
-    }
-
-    /// <summary>
-    ///     This function retrieves all world maps from the backend
-    /// </summary>
-    /// <returns>An array containing all world maps</returns>
-    private WorldMapDTO[] GetAllWorldMaps()
-    {
-        //TODO: load data from backend
-
-        //Workaround: use local json files
-        WorldMapDTO[] worldMapDTOs = new WorldMapDTO[4];
-        for(int i = 0; i < 4; i++)
-        {
-            string path = "Areas/World" + (i+1);
-            TextAsset targetFile = Resources.Load<TextAsset>(path);
-            string json = targetFile.text;
-            WorldMapDTO worldMapDTO = WorldMapDTO.CreateFromJSON(json);
-            worldMapDTOs[i] = worldMapDTO;
-        }
-        return worldMapDTOs;
-    }
-
-    /// <summary>
-    ///     This function sets up the world map
-    /// </summary>
-    private void SetupWorldMap()
-    {
-        foreach(KeyValuePair<int, WorldMapData> entry in worldMaps)
-        {
-            areaPainter.Paint(entry.Value.GetTiles(), entry.Value.GetOffset());
-            minigamesManager.Setup(currentArea, entry.Value.GetMinigameSpots());
-            npcManager.Setup(currentArea, entry.Value.GetNpcSpots());
-            bookManager.Setup(currentArea, entry.Value.GetBookSpots());
-            barrierManager.Setup(entry.Value.GetBarrierSpots());
-            teleporterManager.Setup(currentArea, entry.Value.GetTeleporterSpots());
-            sceneTransitionManager.Setup(currentArea, entry.Value.GetSceneTransitionSpots());
-        }
-    }
-    
-    /// <summary>
-    ///     This function mask all worlds except the active one
-    /// </summary>
-    private void CreateMask()
-    {
-        List<WorldMapData> worlds = new List<WorldMapData>();
-
-        foreach (KeyValuePair<int, WorldMapData> entry in worldMaps)
-        {
-            worlds.Add(entry.Value);
-        }
-
-        maskManager.Setup(worlds);
-        maskManager.DeactivateMask(currentArea);
+        minigamesManager.Setup(areaMap.GetMinigameSpots());
+        npcManager.Setup(areaMap.GetNpcSpots());
+        bookManager.Setup(areaMap.GetBookSpots());
+        teleporterManager.Setup(areaMap.GetTeleporterSpots());
+        sceneTransitionManager.Setup(areaMap.GetSceneTransitionSpots());
+        barrierManager.Setup(areaMap.GetBarrierSpots());
     }
 
     /// <summary>
@@ -218,9 +94,8 @@ public class GeneratorManager : MonoBehaviour
     /// </summary>
     private void SetupCamera()
     {
-        WorldMapData worldMapData = worldMaps[currentArea.GetWorldIndex()];
-        Vector2Int size = new Vector2Int(worldMapData.GetTiles().GetLength(0), worldMapData.GetTiles().GetLength(1));
-        Vector2Int offset = worldMapData.GetOffset();
+        Vector2Int size = areaInformation.GetSize();
+        Vector2Int offset = areaInformation.GetOffset();
         Vector3 position = new Vector3((size.x / 2) + offset.x, (size.y / 2) + offset.y, cameraMovement.transform.position.z);
         cameraMovement.transform.position = position;
     }
@@ -230,12 +105,9 @@ public class GeneratorManager : MonoBehaviour
     /// </summary>
     private void SetupUI()
     {
-        GameObject uiObject = (GameObject)Instantiate(generatorUIPrefab) as GameObject;
-        GeneratorUI generatorUI = uiObject.GetComponent<GeneratorUI>();
-        if(generatorUI != null)
-        {
-            generatorUI.Setup(this, worldMaps[currentArea.GetWorldIndex()]);
-        }
+        GameObject uiObject = Instantiate(generatorUIPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        ui = uiObject.GetComponent<GeneratorUI>();
+        ui.Setup(this, areaData, areaInformation);
     }
 
     #region Area Settings
@@ -247,23 +119,20 @@ public class GeneratorManager : MonoBehaviour
     /// <param name="style">The style of the area map</param>
     /// <param name="accessability">The amount of accessabile space</param>
     /// <param name="worldConnections">A list of connection points to other worlds, if the area is a world, empty optional otherwise</param>
-    public void CreateLayout(Vector2Int size, WorldMapData worldMapData, float accessability)
-    {
-        Vector2Int offset = worldMapData.GetOffset();
-        WorldStyle style = worldMapData.GetWorldStyle();
-        List<WorldConnection> worldConnections = worldMapData.GetWorldConnections();
+    public void CreateLayout(Vector2Int size, CustomAreaMapData areaMapData, float accessability)
+    {        
+        WorldStyle style = areaMapData.GetWorldStyle();
+        List<WorldConnection> worldConnections = areaInformation.GetWorldConnections();
         AreaGenerator areaGenerator = new AreaGenerator(size, style, accessability, worldConnections);
         areaGenerator.GenerateLayout();
         string[,,] layout = areaGenerator.GetLayout();
-        areaPainter.Paint(layout, offset);
-        worldMapData.SetTiles(layout);
+        
+        CustomAreaMapData areaMap = new CustomAreaMapData(layout, style);
+        areaData.SetAreaMapData(areaMap);
 
         ClearContent();
-        worldMaps[currentArea.GetWorldIndex()] = worldMapData;
-        worldMaps[currentArea.GetWorldIndex()].SetTiles(layout);
-        worldMaps[currentArea.GetWorldIndex()].SetWorldStyle(style);
-        worldMaps[currentArea.GetWorldIndex()].SetOffset(offset);
-        worldMaps[currentArea.GetWorldIndex()].SetWorldConnections(worldConnections);      
+        Vector2Int offset = areaInformation.GetOffset();
+        areaPainter.Paint(layout, offset);
     }
 
     /// <summary>
@@ -271,23 +140,9 @@ public class GeneratorManager : MonoBehaviour
     /// </summary>
     public void ResetToCustom()
     {
-        string path;
-        if (currentArea.IsDungeon())
-        {
-            path = "Areas/DefaultDungeon";
-        }
-        else
-        {
-            path = "Areas/DefaultWorld" + currentArea.GetWorldIndex();
-        }
-
-        TextAsset targetFile = Resources.Load<TextAsset>(path);
-        string json = targetFile.text;
-        WorldMapDTO worldMapDTO = WorldMapDTO.CreateFromJSON(json);
-        WorldMapData worldMapData = WorldMapData.ConvertDtoToData(worldMapDTO);
-        worldMaps[currentArea.GetWorldIndex()] = worldMapData;
-
-        SetupWorldMap();
+        areaData.Reset();
+        SaveArea();
+        //TODO: trigger reload of scene
     }
     #endregion
 
@@ -307,8 +162,10 @@ public class GeneratorManager : MonoBehaviour
             MinigameSpotData data = new MinigameSpotData(area, i+1, position);
             minigameSpots.Add(data);
         }
-        minigamesManager.Setup(area, minigameSpots);
-        worldMaps[currentArea.GetWorldIndex()].SetMinigameSpots(minigameSpots);
+        CustomAreaMapData areaMapData = areaData.GetAreaMapData();
+        areaMapData.SetMinigameSpots(minigameSpots);
+
+        minigamesManager.Setup(minigameSpots);
     }
 
     /// <summary>
@@ -326,8 +183,10 @@ public class GeneratorManager : MonoBehaviour
             NpcSpotData data = new NpcSpotData(area, i + 1, position, "", "NPCHeads_0", "npc_0");
             npcSpots.Add(data);
         }
-        npcManager.Setup(currentArea, npcSpots);
-        worldMaps[currentArea.GetWorldIndex()].SetNpcSpots(npcSpots);
+        CustomAreaMapData areaMapData = areaData.GetAreaMapData();
+        areaMapData.SetNpcSpots(npcSpots);
+
+        npcManager.Setup(npcSpots);
     }
 
     /// <summary>
@@ -345,8 +204,10 @@ public class GeneratorManager : MonoBehaviour
             BookSpotData data = new BookSpotData(area, i + 1, position, "");
             bookSpots.Add(data);
         }
-        bookManager.Setup(currentArea, bookSpots);
-        worldMaps[currentArea.GetWorldIndex()].SetBookSpots(bookSpots);
+        CustomAreaMapData areaMapData = areaData.GetAreaMapData();
+        areaMapData.SetBookSpots(bookSpots);
+
+        bookManager.Setup(bookSpots);
     }
 
     /// <summary>
@@ -364,8 +225,10 @@ public class GeneratorManager : MonoBehaviour
             TeleporterSpotData data = new TeleporterSpotData(area, i + 1, position, "");
             teleporterSpots.Add(data);
         }
-        teleporterManager.Setup(currentArea, teleporterSpots);
-        worldMaps[currentArea.GetWorldIndex()].SetTeleporterSpots(teleporterSpots);
+        CustomAreaMapData areaMapData = areaData.GetAreaMapData();
+        areaMapData.SetTeleporterSpots(teleporterSpots);
+
+        teleporterManager.Setup(teleporterSpots);
     }
 
     /// <summary>
@@ -383,8 +246,10 @@ public class GeneratorManager : MonoBehaviour
             SceneTransitionSpotData data = new SceneTransitionSpotData(area, position, new Vector2(1,1), "", new AreaInformation(1, new Optional<int>()), new Vector2(1,1), FacingDirection.south);
             dungeonSpots.Add(data);
         }
-        sceneTransitionManager.Setup(currentArea, dungeonSpots);
-        worldMaps[currentArea.GetWorldIndex()].SetSceneTransitionSpots(dungeonSpots);
+        CustomAreaMapData areaMapData = areaData.GetAreaMapData();
+        areaMapData.SetSceneTransitionSpots(dungeonSpots);
+
+        sceneTransitionManager.Setup(dungeonSpots);
     }
     #endregion
 
@@ -396,12 +261,12 @@ public class GeneratorManager : MonoBehaviour
         //TODO: send world map data to backend
 
         //Workaround: use local json files
-        WorldMapDTO worldMapDTO = WorldMapDTO.ConvertDataToDto(worldMaps[currentArea.GetWorldIndex()]);
-        string json = JsonUtility.ToJson(worldMapDTO, true);
+        AreaDTO areaDTO = AreaDTO.ConvertDataToDto(areaData);
+        string json = JsonUtility.ToJson(areaDTO, true);
         string path;
         if(currentArea.IsDungeon())
         {
-            path = "Assets/Resources/Areas/Dungeon" + currentArea.GetDungeonIndex() + ".json";
+            path = "Assets/Resources/Areas/Dungeon" + currentArea.GetWorldIndex() + "-" + currentArea.GetDungeonIndex() + ".json";
         }
         else
         {
@@ -428,32 +293,26 @@ public class GeneratorManager : MonoBehaviour
     /// </summary>
     private void ClearContent()
     {
-        minigamesManager.Setup(currentArea, new List<MinigameSpotData>());
-        worldMaps[currentArea.GetWorldIndex()].SetMinigameSpots(new List<MinigameSpotData>());
+        minigamesManager.Setup(new List<MinigameSpotData>());
 
-        npcManager.Setup(currentArea, new List<NpcSpotData>());
-        worldMaps[currentArea.GetWorldIndex()].SetNpcSpots(new List<NpcSpotData>());
+        npcManager.Setup(new List<NpcSpotData>());
 
-        bookManager.Setup(currentArea, new List<BookSpotData>());
-        worldMaps[currentArea.GetWorldIndex()].SetBookSpots(new List<BookSpotData>());
+        bookManager.Setup(new List<BookSpotData>());
 
         barrierManager.Setup(new List<BarrierSpotData>());
-        worldMaps[currentArea.GetWorldIndex()].SetBarrierSpots(new List<BarrierSpotData>());
 
-        teleporterManager.Setup(currentArea, new List<TeleporterSpotData>());
-        worldMaps[currentArea.GetWorldIndex()].SetTeleporterSpots(new List<TeleporterSpotData>());
+        teleporterManager.Setup(new List<TeleporterSpotData>());
 
-        sceneTransitionManager.Setup(currentArea, new List<SceneTransitionSpotData>());
-        worldMaps[currentArea.GetWorldIndex()].SetSceneTransitionSpots(new List<SceneTransitionSpotData>());
+        sceneTransitionManager.Setup(new List<SceneTransitionSpotData>());
     }
 
     /// <summary>
-    ///     This function returns the current <c>WorldMapData</c> object
+    ///     This function returns the current <c>AreaData</c> object
     /// </summary>
     /// <returns></returns>
-    public WorldMapData GetWorldMapData()
+    public AreaData GetAreaData()
     {
-        return worldMaps[currentArea.GetWorldIndex()];
+        return areaData;
     }
 
     /// <summary>

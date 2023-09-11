@@ -47,8 +47,16 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     private void Awake()
     {
         sprites = transform.GetComponent<SpriteRenderer>();
-        RegisterToGameManager();
-        UpdateStatus();
+
+        if(GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            RegisterToGameManager();
+            UpdateStatus();
+        }
+        else
+        {
+            //Display minimap icon
+        }
     }
 
     /// <summary>
@@ -56,8 +64,11 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     /// </summary>
     private void OnDestroy()
     {
-        Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveGameEntity<Minigame, MinigameData>(world, dungeon, number);
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
+            ObjectManager.Instance.RemoveGameEntity<Minigame, MinigameData>(world, dungeon, number);
+        }
     }
 
     /// <summary>

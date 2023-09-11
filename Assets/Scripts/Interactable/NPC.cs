@@ -39,10 +39,17 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             speechIndicator = child;
         }
 
-        RegisterToGameManager();
-        InitNewStuffSprite();
-        interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
-        GameEvents.current.onKeybindingChange += UpdateKeybindings;
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            RegisterToGameManager();
+            InitNewStuffSprite();
+            interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+            GameEvents.current.onKeybindingChange += UpdateKeybindings;
+        }
+        else
+        {
+            //Display npc icon
+        }
     }
 
     /// <summary>
@@ -51,32 +58,35 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     /// </summary>
     private void Update()
     {
-        if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
             !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
-        {
-            if (!hasBeenTalkedTo)
             {
-                Complete();
-            }
+                if (!hasBeenTalkedTo)
+                {
+                    Complete();
+                }
 
-            StartCoroutine(LoadDialogueScene());
-        }
-        else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
-                 typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
-        {
-            Debug.Log(dialogue.Length - 1);
-            Debug.Log("index before next" + index);
-            NextLine();
-            Debug.Log("index after next" + index);
-        }
-        else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
-                 !typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
-        {
-            StopCoroutine("Typing");
-            dialogueText.text = "";
-            dialogueText.text = dialogue[index];
-            typingIsFinished = true;
-        }
+                StartCoroutine(LoadDialogueScene());
+            }
+            else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+                     typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
+            {
+                Debug.Log(dialogue.Length - 1);
+                Debug.Log("index before next" + index);
+                NextLine();
+                Debug.Log("index after next" + index);
+            }
+            else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+                     !typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
+            {
+                StopCoroutine("Typing");
+                dialogueText.text = "";
+                dialogueText.text = dialogue[index];
+                typingIsFinished = true;
+            }
+        }            
     }
 
     /// <summary>
@@ -84,9 +94,12 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     /// </summary>
     private void OnDestroy()
     {
-        Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveGameEntity<NPC, NPCData>(world, dungeon, number);
-        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
+            ObjectManager.Instance.RemoveGameEntity<NPC, NPCData>(world, dungeon, number);
+            GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+        }
     }
 
     /// <summary>

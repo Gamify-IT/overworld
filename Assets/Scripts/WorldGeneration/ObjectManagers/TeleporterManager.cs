@@ -10,9 +10,9 @@ public class TeleporterManager : MonoBehaviour
     ///     This function sets up teleporter objects for the data given
     /// </summary>
     /// <param name="teleporterSpots">The data needed for the teleporter</param>
-    public void Setup(AreaInformation area, List<TeleporterSpotData> teleporterSpots)
+    public void Setup(List<TeleporterSpotData> teleporterSpots)
     {
-        ClearTeleporterSpots(area);
+        ClearTeleporterSpots();
         foreach (TeleporterSpotData teleporterSpotData in teleporterSpots)
         {
             CreateTeleporterSpot(teleporterSpotData);
@@ -22,28 +22,11 @@ public class TeleporterManager : MonoBehaviour
     /// <summary>
     ///     This function removes all existing teleporter objects of the given area
     /// </summary>
-    private void ClearTeleporterSpots(AreaInformation area)
+    private void ClearTeleporterSpots()
     {
         foreach (Transform child in transform)
         {
-            Teleporter teleporter = child.GetComponent<Teleporter>();
-            if (teleporter != null)
-            {
-                int worldIndex = area.GetWorldIndex();
-                int dungeonIndex = 0;
-                if (area.IsDungeon())
-                {
-                    dungeonIndex = area.GetDungeonIndex();
-                }
-                if (!(teleporter.GetWorldIndex() == worldIndex && teleporter.GetDungeonIndex() == dungeonIndex))
-                {
-                    Destroy(child.gameObject);
-                }
-            }
-            else
-            {
-                Destroy(child.gameObject);
-            }
+            Destroy(child.gameObject);
         }
     }
 

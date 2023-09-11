@@ -33,16 +33,22 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
 
     private void Awake()
     {
-        ObjectManager.Instance.AddGameEntity<Teleporter, TeleporterData>(gameObject, worldID, dungeonID,
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            ObjectManager.Instance.AddGameEntity<Teleporter, TeleporterData>(gameObject, worldID, dungeonID,
             teleporterNumber);
-        interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
-        GameEvents.current.onKeybindingChange += UpdateKeybindings;
+            interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+            GameEvents.current.onKeybindingChange += UpdateKeybindings;
+        }            
     }
 
     private void OnDestroy()
     {
-        ObjectManager.Instance.RemoveGameEntity<Teleporter, TeleporterData>(worldID, dungeonID, teleporterNumber);
-        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            ObjectManager.Instance.RemoveGameEntity<Teleporter, TeleporterData>(worldID, dungeonID, teleporterNumber);
+            GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+        }            
     }
 
     private void Start()
@@ -55,27 +61,30 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     /// </summary>
     private void Update()
     {
-        if (currentTeleporterCanvas != null && currentTeleporterCanvas.activeInHierarchy &&
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            if (currentTeleporterCanvas != null && currentTeleporterCanvas.activeInHierarchy &&
             Input.GetKeyDown(interact) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
-        {
-            Debug.Log("Close Teleporter UI");
-            CloseTeleporterUI();
-            return;
-        }
-
-        if (inTrigger && interactable && currentTeleporterCanvas == null && !PauseMenu.menuOpen &&
-            !PauseMenu.subMenuOpen)
-        {
-            if (Input.GetKeyDown(interact))
             {
-                Debug.Log("Open Teleporter UI");
-                interactable = false;
-                GameObject newCanvas = Instantiate(teleporterCanvas);
-                teleporterUI = newCanvas.transform.GetChild(0).GetComponent<TeleporterUI>();
-                SetupTeleporterUI(teleporterUI);
-                currentTeleporterCanvas = newCanvas;
+                Debug.Log("Close Teleporter UI");
+                CloseTeleporterUI();
+                return;
             }
-        }
+
+            if (inTrigger && interactable && currentTeleporterCanvas == null && !PauseMenu.menuOpen &&
+                !PauseMenu.subMenuOpen)
+            {
+                if (Input.GetKeyDown(interact))
+                {
+                    Debug.Log("Open Teleporter UI");
+                    interactable = false;
+                    GameObject newCanvas = Instantiate(teleporterCanvas);
+                    teleporterUI = newCanvas.transform.GetChild(0).GetComponent<TeleporterUI>();
+                    SetupTeleporterUI(teleporterUI);
+                    currentTeleporterCanvas = newCanvas;
+                }
+            }
+        }            
     }
 
     /// <summary>

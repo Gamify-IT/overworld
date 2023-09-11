@@ -6,6 +6,7 @@ public static class GameSettings
     #region Attributes
 
     private static readonly string overworldBackendPath = "/overworld/api/v1";
+    private static Gamemode gamemode;
     private static readonly int maxWorld = 4;
     private static readonly int maxMinigames = 12;
     private static readonly int maxNPCs = 10;
@@ -24,6 +25,16 @@ public static class GameSettings
     public static string GetOverworldBackendPath()
     {
         return overworldBackendPath;
+    }
+
+    public static void SetGamemode(Gamemode newGamemode)
+    {
+        gamemode = newGamemode;
+    }
+
+    public static Gamemode GetGamemode()
+    {
+        return gamemode;
     }
 
     /// <summary>

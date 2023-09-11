@@ -14,9 +14,9 @@ public class SceneTransitionManager : MonoBehaviour
     ///     This function sets up scene transition objects for the data given
     /// </summary>
     /// <param name="sceneTransitionSpots">The data needed for the scene transitions</param>
-    public void Setup(AreaInformation area, List<SceneTransitionSpotData> sceneTransitionSpots)
+    public void Setup(List<SceneTransitionSpotData> sceneTransitionSpots)
     {
-        ClearSceneTransitionSpots(area);
+        ClearSceneTransitionSpots();
         MinimapIconManager minimapIconManager = minimapIcons.GetComponent<MinimapIconManager>();
         if (minimapIconManager != null)
         {
@@ -35,28 +35,11 @@ public class SceneTransitionManager : MonoBehaviour
     /// <summary>
     ///     This function removes all existing scene transition objects
     /// </summary>
-    private void ClearSceneTransitionSpots(AreaInformation area)
+    private void ClearSceneTransitionSpots()
     {
         foreach (Transform child in transform)
         {
-            LoadSubScene sceneTransition = child.GetComponent<LoadSubScene>();
-            if (sceneTransition != null)
-            {
-                int worldIndex = area.GetWorldIndex();
-                int dungeonIndex = 0;
-                if (area.IsDungeon())
-                {
-                    dungeonIndex = area.GetDungeonIndex();
-                }
-                if (!(sceneTransition.GetWorldIndex() == worldIndex && sceneTransition.GetDungeonIndex() == dungeonIndex))
-                {
-                    Destroy(child.gameObject);
-                }
-            }
-            else
-            {
-                Destroy(child.gameObject);
-            }
+            Destroy(child.gameObject);
         }
     }
 

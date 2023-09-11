@@ -9,9 +9,6 @@ using System.Runtime.InteropServices;
 /// </summary>
 public class LoadFirstScene : MonoBehaviour
 {
-    [DllImport("__Internal")]
-    private static extern string GetToken(string tokenName);
-
     /// <summary>
     ///     This function is called by Unity before the first frame updates.
     /// </summary>
@@ -23,19 +20,20 @@ public class LoadFirstScene : MonoBehaviour
         {
             case Gamemode.PLAY:
                 Debug.Log("Starting in Play Mode");
+                GameSettings.SetGamemode(Gamemode.PLAY);
                 StartGame();
                 break;
 
             case Gamemode.GENERATOR:
                 Debug.Log("Starting in Generator Mode");
-                string generatorArea = GetArea();
-                StartGenerator(generatorArea);
+                GameSettings.SetGamemode(Gamemode.GENERATOR);
+                StartGenerator();
                 break;
 
             case Gamemode.INSPECT:
                 Debug.Log("Starting in Inspect Mode");
-                string inspectorArea = GetArea();
-                StartGenerator(inspectorArea);
+                GameSettings.SetGamemode(Gamemode.INSPECT);
+                StartGenerator();
                 break;
         }    
     }
@@ -48,7 +46,7 @@ public class LoadFirstScene : MonoBehaviour
     {
         Gamemode gamemode = Gamemode.GENERATOR;
 
-        Optional<string> result = TryToReadVariable("Gamemode");
+        Optional<string> result = BrowserVariable.TryToReadVariable("Gamemode");
         if(result.IsPresent())
         {
             bool success = System.Enum.TryParse<Gamemode>(result.Value(), out gamemode);
@@ -66,45 +64,6 @@ public class LoadFirstScene : MonoBehaviour
             Debug.LogError("No gamemode given");
         }
         return gamemode;
-    }
-
-    /// <summary>
-    ///     This function retrives the area to be loaded
-    /// </summary>
-    /// <returns>The area to be loaded, empty string if nothing is specified</returns>
-    private string GetArea()
-    {
-        Optional<string> result = TryToReadVariable("GeneratorArea");
-        if(result.IsPresent())
-        {
-            return result.Value();
-        }
-        else
-        {
-            Debug.LogError("No area given");
-            return "";
-        }
-    }
-
-
-    /// <summary>
-    ///     This function tries to read the given browser variable
-    /// </summary>
-    /// <param name="browserVariable">The browser variable to be read</param>
-    /// <returns>An optional containing the read value, if the variable exists, an empty optional otherwise</returns>
-    private Optional<string> TryToReadVariable(string browserVariable)
-    {
-        Optional<string> result = new Optional<string>();
-        try
-        {
-            string content = GetToken(browserVariable);
-            result.SetValue(content);
-        }
-        catch (EntryPointNotFoundException e)
-        {
-            Debug.LogError("Browser variable not found: " + browserVariable);
-        }
-        return result;
     }
 
     /// <summary>
@@ -168,13 +127,8 @@ public class LoadFirstScene : MonoBehaviour
     ///     This function starts the GeneratorWorld 
     /// </summary>
     /// <returns></returns>
-    private async UniTask StartGenerator(string areaToLoad)
+    private async UniTask StartGenerator()
     {
-        await SceneManager.LoadSceneAsync("GeneratorWorld");
-        GeneratorManager generator = FindObjectOfType<GeneratorManager>();
-        if(generator != null)
-        {
-            generator.Setup(areaToLoad);
-        }
+        await SceneManager.LoadSceneAsync("AreaGeneratorManager");
     }
 }

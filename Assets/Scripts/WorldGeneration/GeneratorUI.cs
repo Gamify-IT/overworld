@@ -11,7 +11,8 @@ public class GeneratorUI : MonoBehaviour
     //WorldGenerator
     private GeneratorManager generator;
     private AreaInformation currentArea;
-    private WorldMapData worldMapData;
+    private AreaData areaData;
+    private AreaInformationData areaInformation;
 
     //Panels
     [SerializeField] private GameObject generatorPanel;
@@ -43,48 +44,92 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private Button saveAreaButton;
     #endregion
 
-    private void Awake()
-    {
-        currentArea = new AreaInformation(1, new Optional<int>());
-    }
-
     /// <summary>
     ///     This function sets up the generator UI with the given values
     /// </summary>
     /// <param name="generator">The generator object</param>
-    /// <param name="size">The size of the area</param>
-    /// <param name="offset">The offset of the area (only for worlds relevant)</param>
-    /// <param name="style">The style of the area</param>
-    /// <param name="accessability">The percentage of walkable space</param>
-    /// <param name="worldConnections">A list of connection points to other worlds (only for worlds relevant)</param>
-    public void Setup(GeneratorManager generator, WorldMapData worldMapData)
+    /// <param name="areaData">The data of the current area</param>
+    /// <param name="areaInformation">Additional parameters for area generation</param>
+    public void Setup(GeneratorManager generator, AreaData areaData, AreaInformationData areaInformation)
     {
-        this.generator = generator;
-        this.worldMapData = worldMapData;
+        this.generator = generator;        
+        this.areaData = areaData;
+        this.areaInformation = areaInformation;
+        currentArea = areaData.GetArea();
 
         smallGeneratorPanel.SetActive(false);
         areaSettings.SetActive(true);
         content.SetActive(false);
         generatorPanel.SetActive(true);
-        
-        sizeX.text = worldMapData.GetTiles().GetLength(0).ToString();
-        sizeY.text = worldMapData.GetTiles().GetLength(1).ToString();
 
-        offsetX.text = worldMapData.GetOffset().x.ToString();
-        offsetY.text = worldMapData.GetOffset().y.ToString();
+        if(currentArea.IsDungeon())
+        {
+            SetupDungeon();
+        }
+        else
+        {
+            SetupWorld();
+        }
 
         stypeDropdown.ClearOptions();
         List<string> options = System.Enum.GetNames(typeof(WorldStyle)).ToList();
         stypeDropdown.AddOptions(options);
-        stypeDropdown.value = (int) worldMapData.GetWorldStyle();
 
         accessabilitySlider.value = 0.5f;
 
-        amountMinigames.text = worldMapData.GetMinigameSpots().Count.ToString();
-        amountNPCs.text = worldMapData.GetNpcSpots().Count.ToString();
-        amountBooks.text = worldMapData.GetBookSpots().Count.ToString();
-        amountTeleporter.text = worldMapData.GetTeleporterSpots().Count.ToString();
-        amountDungeons.text = worldMapData.GetTeleporterSpots().Count.ToString();
+        if(areaData.IsGeneratedArea())
+        {
+            stypeDropdown.value = (int) areaData.GetAreaMapData().GetWorldStyle();
+
+            amountMinigames.text = areaData.GetAreaMapData().GetMinigameSpots().Count.ToString();
+            amountNPCs.text = areaData.GetAreaMapData().GetNpcSpots().Count.ToString();
+            amountBooks.text = areaData.GetAreaMapData().GetBookSpots().Count.ToString();
+            amountTeleporter.text = areaData.GetAreaMapData().GetTeleporterSpots().Count.ToString();
+            amountDungeons.text = areaData.GetAreaMapData().GetTeleporterSpots().Count.ToString();
+        }
+        else
+        {
+            stypeDropdown.value = (int) WorldStyle.CUSTOM;
+            amountMinigames.text = "";
+            amountNPCs.text = "";
+            amountBooks.text = "";
+            amountTeleporter.text = "";
+            amountDungeons.text = "";
+        }
+    }
+
+    /// <summary>
+    ///     This function sets up the size and offset input fields for a world
+    /// </summary>
+    private void SetupWorld()
+    {
+        sizeX.text = areaInformation.GetSize().x.ToString();
+        sizeY.text = areaInformation.GetSize().y.ToString();
+
+        offsetX.text = areaInformation.GetOffset().x.ToString();
+        offsetY.text = areaInformation.GetOffset().y.ToString();
+
+        sizeX.enabled = false;
+        sizeY.enabled = false;
+        offsetX.enabled = false;
+        offsetY.enabled = false;
+    }
+
+    /// <summary>
+    ///     This function sets up the size and offset input fields for a dungeon
+    /// </summary>
+    private void SetupDungeon()
+    {
+        sizeX.text = areaInformation.GetSize().x.ToString();
+        sizeY.text = areaInformation.GetSize().y.ToString();
+
+        offsetX.text = areaInformation.GetOffset().x.ToString();
+        offsetY.text = areaInformation.GetOffset().y.ToString();
+
+        sizeX.enabled = true;
+        sizeY.enabled = true;
+        offsetX.enabled = false;
+        offsetY.enabled = false;
     }
 
     public void MinimizeButtonPressed()
@@ -111,12 +156,12 @@ public class GeneratorUI : MonoBehaviour
     public void GenerateLayoutButtonPressed()
     {
         Vector2Int size = new Vector2Int(int.Parse(sizeX.text), int.Parse(sizeY.text));
-        Vector2Int offset = new Vector2Int(int.Parse(offsetX.text), int.Parse(offsetY.text));
-        worldMapData.SetOffset(offset);
         WorldStyle style = (WorldStyle) stypeDropdown.value;
-        worldMapData.SetWorldStyle(style);
         float accessability = accessabilitySlider.value;
-        generator.CreateLayout(size, worldMapData, accessability);
+
+        CustomAreaMapData areaMapData = new CustomAreaMapData(style);
+        generator.CreateLayout(size, areaMapData, accessability);
+
         ResetContentPanel();
     }
 
@@ -397,7 +442,11 @@ public class GeneratorUI : MonoBehaviour
     /// </summary>
     private void CheckSaveWorldButtonStatus()
     {
-        if(generator.GetWorldMapData().GetMinigameSpots().Count > 0)
+        if(!generator.GetAreaData().IsGeneratedArea())
+        {
+            saveAreaButton.interactable = false;
+        }
+        else if(generator.GetAreaData().GetAreaMapData().GetMinigameSpots().Count > 0)
         {
             saveAreaButton.interactable = true;
         }

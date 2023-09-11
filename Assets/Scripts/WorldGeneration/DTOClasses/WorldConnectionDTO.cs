@@ -9,13 +9,13 @@ using System;
 [Serializable]
 public class WorldConnectionDTO
 {
-    public Position position;
+    public SerializableVector2Int position;
     public int destinationWorld;
     public string connectionType;
 
     public WorldConnectionDTO() { }
 
-    public WorldConnectionDTO(Position position, int destinationWorld, string connectionType)
+    public WorldConnectionDTO(SerializableVector2Int position, int destinationWorld, string connectionType)
     {
         this.position = position;
         this.destinationWorld = destinationWorld;
@@ -39,7 +39,7 @@ public class WorldConnectionDTO
     /// <returns></returns>
     public static WorldConnectionDTO ConvertDataToDto(WorldConnection worldConnection)
     {
-        Position position = new Position(worldConnection.GetPosition().x, worldConnection.GetPosition().y);
+        SerializableVector2Int position = new SerializableVector2Int(worldConnection.GetPosition().x, worldConnection.GetPosition().y);
         int destinationWorld = worldConnection.GetDestinationWorld();
         string connectionType = worldConnection.GetWorldConnectionType().ToString();
 

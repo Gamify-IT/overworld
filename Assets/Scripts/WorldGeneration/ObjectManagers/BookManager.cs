@@ -10,9 +10,9 @@ public class BookManager : MonoBehaviour
     ///     This function sets up book objects for the data given
     /// </summary>
     /// <param name="bookSpots">The data needed for the books</param>
-    public void Setup(AreaInformation area, List<BookSpotData> bookSpots)
+    public void Setup(List<BookSpotData> bookSpots)
     {
-        ClearBookSpots(area);
+        ClearBookSpots();
         foreach (BookSpotData bookSpotData in bookSpots)
         {
             CreateBookSpot(bookSpotData);
@@ -22,28 +22,11 @@ public class BookManager : MonoBehaviour
     /// <summary>
     ///     This function removes all existing book objects of the given area
     /// </summary>
-    private void ClearBookSpots(AreaInformation area)
+    private void ClearBookSpots()
     {
         foreach (Transform child in transform)
         {
-            Book book = child.GetComponent<Book>();
-            if (book != null)
-            {
-                int worldIndex = area.GetWorldIndex();
-                int dungeonIndex = 0;
-                if (area.IsDungeon())
-                {
-                    dungeonIndex = area.GetDungeonIndex();
-                }
-                if (!(book.GetWorldIndex() == worldIndex && book.GetDungeonIndex() == dungeonIndex))
-                {
-                    Destroy(child.gameObject);
-                }
-            }
-            else
-            {
-                Destroy(child.gameObject);
-            }
+            Destroy(child.gameObject);
         }
     }
 

@@ -1,0 +1,32 @@
+{
+    "area": {
+        "worldIndex": 1,
+        "dungeonIndex": 0
+    },
+    "size": {
+        "x": 200,
+        "y": 168
+    },
+    "offset": {
+        "x": -69,
+        "y": -68
+    },
+    "worldConnections": [
+        {
+            "position": {
+                "x": 0,
+                "y": 112
+            },
+            "destinationWorld": 2,
+            "connectionType": "EXIT"
+        },
+        {
+            "position": {
+                "x": 138,
+                "y": 168
+            },
+            "destinationWorld": 3,
+            "connectionType": "EXIT"
+        }
+    ]
+}

@@ -34,8 +34,11 @@ public class Barrier : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        RegisterToGameManager();
-        UpdateStatus();
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            RegisterToGameManager();
+            UpdateStatus();
+        }   
     }
 
     /// <summary>
@@ -44,8 +47,11 @@ public class Barrier : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
-        Debug.Log("remove " + type + ": " + originWorldIndex + "->" + destinationAreaIndex);
-        ObjectManager.Instance.RemoveBarrier(type, originWorldIndex, destinationAreaIndex);
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            Debug.Log("remove " + type + ": " + originWorldIndex + "->" + destinationAreaIndex);
+            ObjectManager.Instance.RemoveBarrier(type, originWorldIndex, destinationAreaIndex);
+        }            
     }
 
     /// <summary>

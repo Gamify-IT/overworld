@@ -26,9 +26,16 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// </summary>
     private void Awake()
     {
-        RegisterToGameManager();
-        interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
-        GameEvents.current.onKeybindingChange += UpdateKeybindings;
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            RegisterToGameManager();
+            interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+            GameEvents.current.onKeybindingChange += UpdateKeybindings;
+        }
+        else
+        {
+            //Display book icon
+        }
     }
 
     /// <summary>
@@ -36,16 +43,19 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// </summary>
     private void Update()
     {
-        if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByName("Book").isLoaded &&
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByName("Book").isLoaded &&
             !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
-        {
-            StartCoroutine(LoadBookScene());
-        }
-        else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByName("Book").isLoaded &&
-                 !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
-        {
-            SceneManager.UnloadSceneAsync("Book");
-        }
+            {
+                StartCoroutine(LoadBookScene());
+            }
+            else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByName("Book").isLoaded &&
+                     !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
+            {
+                SceneManager.UnloadSceneAsync("Book");
+            }
+        }            
     }
 
     /// <summary>
@@ -53,9 +63,12 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// </summary>
     private void OnDestroy()
     {
-        Debug.Log("remove Book " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveGameEntity<Book, BookData>(world, dungeon, number);
-        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            Debug.Log("remove Book " + world + "-" + dungeon + "-" + number);
+            ObjectManager.Instance.RemoveGameEntity<Book, BookData>(world, dungeon, number);
+            GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+        }            
     }
 
     /// <summary>
