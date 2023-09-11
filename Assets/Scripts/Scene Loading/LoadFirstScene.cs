@@ -35,7 +35,7 @@ public class LoadFirstScene : MonoBehaviour
                 GameSettings.SetGamemode(Gamemode.INSPECT);
                 StartGenerator();
                 break;
-        }    
+        }
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public class LoadFirstScene : MonoBehaviour
     /// <returns>The gamemode specified in the browser variable "Gamemode", PLAY, if not present</returns>
     private Gamemode GetGamemode()
     {
-        Gamemode gamemode = Gamemode.GENERATOR;
+        Gamemode gamemode = Gamemode.PLAY;
 
         Optional<string> result = BrowserVariable.TryToReadVariable("Gamemode");
         if(result.IsPresent())

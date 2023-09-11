@@ -84,9 +84,19 @@ public class LoadingManager : MonoBehaviour
             return;
         }
 
+        if (DataManager.Instance == null)
+        {
+            Debug.Log("Data Manager not online.");
+            return;
+        }
+
         Debug.Log("Start fetching data");
 
-        bool loadingError = await GameManager.Instance.FetchData();
+        bool errorLoadingPlayerData = await GameManager.Instance.FetchData();
+        bool errorLoadingAreaData = await DataManager.Instance.FetchAreaData();
+        Debug.Log("Area loading: " + errorLoadingAreaData);
+        
+        bool loadingError = errorLoadingAreaData | errorLoadingAreaData;
 
         Debug.Log("Finish fetching data");
 

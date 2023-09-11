@@ -112,8 +112,8 @@ public class GeneratorUI : MonoBehaviour
         sizeX.text = areaInformation.GetSize().x.ToString();
         sizeY.text = areaInformation.GetSize().y.ToString();
 
-        offsetX.text = areaInformation.GetOffset().x.ToString();
-        offsetY.text = areaInformation.GetOffset().y.ToString();
+        offsetX.text = areaInformation.GetObjectOffset().x.ToString();
+        offsetY.text = areaInformation.GetObjectOffset().y.ToString();
 
         sizeX.enabled = false;
         sizeY.enabled = false;
@@ -129,8 +129,8 @@ public class GeneratorUI : MonoBehaviour
         sizeX.text = areaInformation.GetSize().x.ToString();
         sizeY.text = areaInformation.GetSize().y.ToString();
 
-        offsetX.text = areaInformation.GetOffset().x.ToString();
-        offsetY.text = areaInformation.GetOffset().y.ToString();
+        offsetX.text = areaInformation.GetObjectOffset().x.ToString();
+        offsetY.text = areaInformation.GetObjectOffset().y.ToString();
 
         sizeX.enabled = true;
         sizeY.enabled = true;

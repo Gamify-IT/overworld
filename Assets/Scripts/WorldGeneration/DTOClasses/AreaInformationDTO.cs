@@ -7,16 +7,18 @@ public class AreaInformationDTO
 {
     public AreaLocationDTO area;
     public SerializableVector2Int size;
-    public SerializableVector2Int offset;
+    public SerializableVector2Int objectOffset;
+    public SerializableVector2Int gridOffset;
     public WorldConnectionDTO[] worldConnections;
 
     public AreaInformationDTO() { }
 
-    public AreaInformationDTO(AreaLocationDTO area, SerializableVector2Int size, SerializableVector2Int offset, WorldConnectionDTO[] worldConnections)
+    public AreaInformationDTO(AreaLocationDTO area, SerializableVector2Int size, SerializableVector2Int objectOffset, SerializableVector2Int gridOffset, WorldConnectionDTO[] worldConnections)
     {
         this.area = area;
         this.size = size;
-        this.offset = offset;
+        this.objectOffset = objectOffset;
+        this.gridOffset = gridOffset;
         this.worldConnections = worldConnections;
     }
 

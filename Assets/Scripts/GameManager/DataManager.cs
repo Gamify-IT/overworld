@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 ///     The <c>DataManager</c> stores all required data to set up the objects in the areas.
@@ -18,6 +19,7 @@ public class DataManager : MonoBehaviour
     private int maxDungeons;
 
     //Data fields
+    private AreaDataManager areaDataManager;
     private WorldData[] worldData;
     private PlayerstatisticDTO playerData;
     private List<AchievementData> achievementData;
@@ -176,7 +178,6 @@ public class DataManager : MonoBehaviour
     {
         worldData[worldIndex].UnlockTeleporter(dungeonIndex, number);
     }
-
 
     /// <summary>
     ///     This function processes the player minigame statistics data returned form backend and stores the needed data in the
@@ -537,6 +538,26 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function triggers the loading of the area data
+    /// </summary>
+    /// <returns>True, if loading was successful, false otherwise</returns>
+    public async UniTask<bool> FetchAreaData()
+    {
+        bool loadingError = await areaDataManager.FetchData();
+        return loadingError;
+    }
+
+    /// <summary>
+    ///     This function returns the area data for the requested area
+    /// </summary>
+    /// <param name="areaInformation">The area identifier</param>
+    /// <returns>An optional containing the <c>AreaData</c>, if present, an empty optional otherwise</returns>
+    public Optional<AreaData> GetAreaData(AreaInformation areaInformation)
+    {
+        return areaDataManager.GetAreaData(areaInformation);
+    }
+
+    /// <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
     ///     deletes the object otherwise
     /// </summary>
@@ -563,6 +584,8 @@ public class DataManager : MonoBehaviour
         maxNPCs = GameSettings.GetMaxNpCs();
         maxBooks = GameSettings.GetMaxBooks();
         maxDungeons = GameSettings.GetMaxDungeons();
+
+        areaDataManager = new AreaDataManager();
 
         worldData = new WorldData[maxWorld + 1];
         playerData = new PlayerstatisticDTO();

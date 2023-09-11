@@ -7,15 +7,17 @@ public class AreaInformationData
     #region Attributes
     private AreaInformation area;
     private Vector2Int size;
-    private Vector2Int offset;
+    private Vector2Int objectOffset;
+    private Vector2Int gridOffset;
     private List<WorldConnection> worldConnections;
     #endregion
 
-    public AreaInformationData(AreaInformation area, Vector2Int size, Vector2Int offset, List<WorldConnection> worldConnections)
+    public AreaInformationData(AreaInformation area, Vector2Int size, Vector2Int objectOffset, Vector2Int gridOffset, List<WorldConnection> worldConnections)
     {
         this.area = area;
         this.size = size;
-        this.offset = offset;
+        this.objectOffset = objectOffset;
+        this.gridOffset = gridOffset;
         this.worldConnections = worldConnections;
     }
 
@@ -35,7 +37,9 @@ public class AreaInformationData
         AreaInformation area = new AreaInformation(worldIndex, dungeonIndex);
 
         Vector2Int size = new Vector2Int(areaInformationDTO.size.x, areaInformationDTO.size.y);
-        Vector2Int offset = new Vector2Int(areaInformationDTO.offset.x, areaInformationDTO.offset.y);
+        Vector2Int objectOffset = new Vector2Int(areaInformationDTO.objectOffset.x, areaInformationDTO.objectOffset.y);
+        Vector2Int gridOffset = new Vector2Int(areaInformationDTO.gridOffset.x, areaInformationDTO.gridOffset.y);
+
         List<WorldConnection> worldConnections = new List<WorldConnection>();
         for(int i=0; i<areaInformationDTO.worldConnections.Length; i++)
         {
@@ -43,7 +47,7 @@ public class AreaInformationData
             worldConnections.Add(worldConnection);
         }
 
-        AreaInformationData data = new AreaInformationData(area, size, offset, worldConnections);
+        AreaInformationData data = new AreaInformationData(area, size, objectOffset, gridOffset, worldConnections);
         return data;
     }
 
@@ -53,9 +57,14 @@ public class AreaInformationData
         return size;
     }
 
-    public Vector2Int GetOffset()
+    public Vector2Int GetObjectOffset()
     {
-        return offset;
+        return objectOffset;
+    }
+
+    public Vector2Int GetGridOffset()
+    {
+        return gridOffset;
     }
 
     public List<WorldConnection> GetWorldConnections()

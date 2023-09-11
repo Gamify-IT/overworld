@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using System;
 
 /// <summary>
@@ -250,7 +251,6 @@ public class ObjectManager : MonoBehaviour
         SetupEntityData<Book,BookData>(0, data);
         SetupEntityData<Teleporter, TeleporterData>(0, data);
     }
-
 
     /// <summary>
     /// This function calls the setup method of all GameEntities given by the generic parameter T.

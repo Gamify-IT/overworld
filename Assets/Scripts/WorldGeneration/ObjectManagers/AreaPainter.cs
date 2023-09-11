@@ -27,12 +27,11 @@ public class AreaPainter : MonoBehaviour
     [SerializeField] private Tile forestWallTile;
 
     //Mapper
-    private Dictionary<string, Tile> tileMapper;
+    private Dictionary<string, Tile> tileMapper = new Dictionary<string, Tile>();
     #endregion
 
     private void Awake()
     {
-        tileMapper = new Dictionary<string, Tile>();
         tileMapper.Add("Overworld-Savanna_0", savannaGroundTile);
         tileMapper.Add("Overworld-Savanna_453", savannaWallTile);
         tileMapper.Add("Overworld_156", beachGroundTile);

@@ -7,6 +7,9 @@ using UnityEngine.Tilemaps;
 public class GeneratorManager : MonoBehaviour
 {
     #region Attributes
+    [SerializeField] private int worldIndex;
+    [SerializeField] private int dungeonIndex;
+
     //UI
     [SerializeField] private GameObject generatorUIPrefab;
     private GeneratorUI ui;
@@ -28,6 +31,30 @@ public class GeneratorManager : MonoBehaviour
     private AreaInformationData areaInformation;
     #endregion
 
+    private void Start()
+    {
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            AreaInformation areaIdentifier = new AreaInformation(worldIndex, new Optional<int>());
+            if(dungeonIndex != 0)
+            {
+                areaIdentifier.SetDungeonIndex(dungeonIndex);
+            }
+
+            Optional<AreaData> areaData = DataManager.Instance.GetAreaData(areaIdentifier);
+            if(areaData.IsPresent())
+            {
+                currentArea = areaData.Value().GetArea();
+                areaInformation = GetAreaInformation();
+
+                if (areaData.Value().IsGeneratedArea())
+                {
+                    SetupGeneratedArea(areaData.Value());
+                }                
+            }
+        }
+    }
+
     /// <summary>
     ///     This function sets up everything for the given area
     /// </summary>
@@ -36,12 +63,12 @@ public class GeneratorManager : MonoBehaviour
     {
         this.areaData = areaData;
         currentArea = areaData.GetArea();
-        cameraMovement = camera;
         areaInformation = GetAreaInformation();
+        cameraMovement = camera;
 
         if(areaData.IsGeneratedArea())
         {
-            SetupGeneratedArea();
+            SetupGeneratedArea(this.areaData);
         }
 
         SetupCamera();
@@ -63,6 +90,7 @@ public class GeneratorManager : MonoBehaviour
         {
             path = "AreaInfo/World" + currentArea.GetWorldIndex();
         }
+        Debug.Log("Path: " + path);
         TextAsset targetFile = Resources.Load<TextAsset>(path);
         string json = targetFile.text;
         AreaInformationDTO areaInformationDTO = AreaInformationDTO.CreateFromJSON(json);
@@ -73,13 +101,13 @@ public class GeneratorManager : MonoBehaviour
     /// <summary>
     ///     This function recreated the generated area
     /// </summary>
-    private void SetupGeneratedArea()
+    public void SetupGeneratedArea(AreaData areaData)
     {
-        Vector2Int offset = areaInformation.GetOffset();
+        Vector2Int gridOffset = areaInformation.GetGridOffset();
         CustomAreaMapData areaMap = areaData.GetAreaMapData();
 
         string[,,] layout = areaMap.GetTiles();
-        areaPainter.Paint(layout, offset);
+        areaPainter.Paint(layout, gridOffset);
 
         minigamesManager.Setup(areaMap.GetMinigameSpots());
         npcManager.Setup(areaMap.GetNpcSpots());
@@ -95,7 +123,7 @@ public class GeneratorManager : MonoBehaviour
     private void SetupCamera()
     {
         Vector2Int size = areaInformation.GetSize();
-        Vector2Int offset = areaInformation.GetOffset();
+        Vector2Int offset = areaInformation.GetObjectOffset();
         Vector3 position = new Vector3((size.x / 2) + offset.x, (size.y / 2) + offset.y, cameraMovement.transform.position.z);
         cameraMovement.transform.position = position;
     }
@@ -131,7 +159,7 @@ public class GeneratorManager : MonoBehaviour
         areaData.SetAreaMapData(areaMap);
 
         ClearContent();
-        Vector2Int offset = areaInformation.GetOffset();
+        Vector2Int offset = areaInformation.GetGridOffset();
         areaPainter.Paint(layout, offset);
     }
 
