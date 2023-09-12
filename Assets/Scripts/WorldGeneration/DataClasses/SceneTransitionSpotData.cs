@@ -11,20 +11,16 @@ public class SceneTransitionSpotData
     private AreaInformation area;
     private Vector2 position;
     private Vector2 size;
-    private string sceneToLoad;
     private AreaInformation areaToLoad;
-    private Vector2 playerPosition;
     private FacingDirection facingDirection;
     #endregion
 
-    public SceneTransitionSpotData(AreaInformation area, Vector2 position, Vector2 size, string sceneToLoad, AreaInformation areaToLoad, Vector2 playerPosition, FacingDirection facingDirection)
+    public SceneTransitionSpotData(AreaInformation area, Vector2 position, Vector2 size, AreaInformation areaToLoad, FacingDirection facingDirection)
     {
         this.area = area;
         this.position = position;
         this.size = size;
-        this.sceneToLoad = sceneToLoad;
         this.areaToLoad = areaToLoad;
-        this.playerPosition = playerPosition;
         this.facingDirection = facingDirection;
     }
 
@@ -42,15 +38,13 @@ public class SceneTransitionSpotData
         }        
         Vector2 position = new Vector2(sceneTransitionSpotDTO.position.x, sceneTransitionSpotDTO.position.y);
         Vector2 size = new Vector2(sceneTransitionSpotDTO.size.x, sceneTransitionSpotDTO.size.y);
-        string sceneToLoad = sceneTransitionSpotDTO.sceneToLoad;
         AreaInformation areaToLoad = new AreaInformation(sceneTransitionSpotDTO.location.worldIndex, new Optional<int>());
         if (sceneTransitionSpotDTO.areaToLoad.dungeonIndex != 0)
         {
             areaToLoad.SetDungeonIndex(sceneTransitionSpotDTO.location.dungeonIndex);
         }
-        Vector2 playerPosition = new Vector2(sceneTransitionSpotDTO.playerPosition.x, sceneTransitionSpotDTO.playerPosition.y);
         FacingDirection facingDirection = (FacingDirection) System.Enum.Parse(typeof(FacingDirection), sceneTransitionSpotDTO.facingDirection);
-        SceneTransitionSpotData data = new SceneTransitionSpotData(area, position, size, sceneToLoad, areaToLoad, playerPosition, facingDirection);
+        SceneTransitionSpotData data = new SceneTransitionSpotData(area, position, size, areaToLoad, facingDirection);
         return data;
     }
 
@@ -85,16 +79,6 @@ public class SceneTransitionSpotData
         return size;
     }
 
-    public void SetSceneToLoad(string sceneToLoad)
-    {
-        this.sceneToLoad = sceneToLoad;
-    }
-
-    public string GetSceneToLoad()
-    {
-        return sceneToLoad;
-    }
-
     public void SetAreaToLoad(AreaInformation areaToLoad)
     {
         this.areaToLoad = areaToLoad;
@@ -103,16 +87,6 @@ public class SceneTransitionSpotData
     public AreaInformation GetAreaToLoad()
     {
         return areaToLoad;
-    }
-
-    public void SetPlayerPosition(Vector2 playerPosition)
-    {
-        this.playerPosition = playerPosition;
-    }
-
-    public Vector2 GetPlayerPosition()
-    {
-        return playerPosition;
     }
 
     public void SetFacingDirection(FacingDirection facingDirection)

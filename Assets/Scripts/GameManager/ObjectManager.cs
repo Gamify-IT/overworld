@@ -260,6 +260,11 @@ public class ObjectManager : MonoBehaviour
     /// <param name="data"></param>
     private void SetupEntityData<T,U>(int worldIndex, IAreaData data) where T : IGameEntity<U> where U : IGameEntityData, new()
     {
+        if(data == null)
+        {
+            Debug.Log("Data is null");
+            return;
+        }
         GameObject[,] entityArray;
         try
         {

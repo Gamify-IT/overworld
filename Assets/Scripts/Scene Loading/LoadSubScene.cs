@@ -15,16 +15,104 @@ public enum FacingDirection
 /// </summary>
 public class LoadSubScene : MonoBehaviour
 {
-    private int worldIndex;
-    private int dungeonIndex;
-    public string sceneToLoad;
+    public static AreaInformation areaExchange = new AreaInformation(1, new Optional<int>());
+    public static bool setupDone = false;
+
+    [SerializeField] private int worldIndex;
+    [SerializeField] private int dungeonIndex;
     public int worldIndexToLoad;
     public int dungeonIndexToLoad;
     public GameObject fadeInPanel;
     public GameObject fadeOutPanel;
     public float loadingTime;
-    public Vector2 playerPosition;
     public FacingDirection facingDirection;
+
+    private void Start()
+    {
+        if(dungeonIndex == 0)
+        {
+            //Scene Transition in world
+            if(areaExchange.IsDungeon())
+            {
+                //was previously in a dungeon
+                if(areaExchange.GetWorldIndex() == worldIndexToLoad && areaExchange.GetDungeonIndex() == dungeonIndexToLoad)
+                {
+                    //was in the dungeon this scene transition points to
+                    areaExchange = new AreaInformation(worldIndex, new Optional<int>());
+
+                    if (facingDirection == FacingDirection.north)
+                    {
+                        PlayerAnimation.Instance.playerAnimator.Play("Idle_Up");
+                        Vector2 playerPosition = this.transform.position + new Vector3(0, 2, 0);
+                        GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+                    }
+
+                    if (facingDirection == FacingDirection.east)
+                    {
+                        PlayerAnimation.Instance.playerAnimator.Play("Idle_Right");
+                        Vector2 playerPosition = this.transform.position + new Vector3(2, 0, 0);
+                        GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+                    }
+
+                    if (facingDirection == FacingDirection.south)
+                    {
+                        PlayerAnimation.Instance.playerAnimator.Play("Idle_Down");
+                        Vector2 playerPosition = this.transform.position + new Vector3(0, -2, 0);
+                        GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+                    }
+
+                    if (facingDirection == FacingDirection.west)
+                    {
+                        PlayerAnimation.Instance.playerAnimator.Play("Idle_Left");
+                        Vector2 playerPosition = this.transform.position + new Vector3(-2, 0, 0);
+                        GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+                    }
+                }
+            }
+        }
+        else
+        {
+            //Scene Transition in dungeon
+
+            Debug.Log("Now in dungeon: " + areaExchange.GetWorldIndex() + "-" + areaExchange.GetDungeonIndex());
+            worldIndex = areaExchange.GetWorldIndex();
+            dungeonIndex = areaExchange.GetDungeonIndex();
+
+            if (facingDirection == FacingDirection.north)
+            {
+                PlayerAnimation.Instance.playerAnimator.Play("Idle_Up");
+                Vector2 playerPosition = this.transform.position + new Vector3(0, 2, 0);
+                GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+            }
+
+            if (facingDirection == FacingDirection.east)
+            {
+                PlayerAnimation.Instance.playerAnimator.Play("Idle_Right");
+                Vector2 playerPosition = this.transform.position + new Vector3(2, 0, 0);
+                GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+            }
+
+            if (facingDirection == FacingDirection.south)
+            {
+                PlayerAnimation.Instance.playerAnimator.Play("Idle_Down");
+                Vector2 playerPosition = this.transform.position + new Vector3(0, -2, 0);
+                GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+            }
+
+            if (facingDirection == FacingDirection.west)
+            {
+                PlayerAnimation.Instance.playerAnimator.Play("Idle_Left");
+                Vector2 playerPosition = this.transform.position + new Vector3(-2, 0, 0);
+                GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+            }
+
+            if(!setupDone)
+            {
+                GameEvents.current.SetupDungeon(areaExchange);
+                setupDone = true;
+            }            
+        }
+    }
 
     /// <summary>
     ///     This function is called when the player enters a dungeon entrance.
@@ -36,6 +124,12 @@ public class LoadSubScene : MonoBehaviour
     {
         if (playerCollision.CompareTag("Player"))
         {
+            if(dungeonIndex == 0)
+            {
+                AreaInformation areaToLoad = new AreaInformation(worldIndexToLoad, new Optional<int>(dungeonIndexToLoad));
+                areaExchange = areaToLoad;
+                setupDone = false;
+            }
             StartCoroutine(FadeCoroutine());
         }
     }
@@ -50,6 +144,17 @@ public class LoadSubScene : MonoBehaviour
     {
         GameObject fadeOutPanelCopy = Instantiate(fadeOutPanel, Vector3.zero, Quaternion.identity);
         yield return new WaitForSeconds(loadingTime);
+
+        string sceneToLoad;
+        if(dungeonIndexToLoad == 0)
+        {
+            sceneToLoad = "World " + worldIndexToLoad;
+        }
+        else
+        {
+            sceneToLoad = "Dungeon";
+        }
+
         AsyncOperation asyncOperationLoad = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
 
         while (!asyncOperationLoad.isDone)
@@ -69,28 +174,7 @@ public class LoadSubScene : MonoBehaviour
             }
         }
 
-        GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
         GameObject panel = Instantiate(fadeInPanel, Vector3.zero, Quaternion.identity);
-
-        if (facingDirection == FacingDirection.north)
-        {
-            PlayerAnimation.Instance.playerAnimator.Play("Idle_Up");
-        }
-
-        if (facingDirection == FacingDirection.east)
-        {
-            PlayerAnimation.Instance.playerAnimator.Play("Idle_Right");
-        }
-
-        if (facingDirection == FacingDirection.south)
-        {
-            PlayerAnimation.Instance.playerAnimator.Play("Idle_Down");
-        }
-
-        if (facingDirection == FacingDirection.west)
-        {
-            PlayerAnimation.Instance.playerAnimator.Play("Idle_Left");
-        }
 
         DestroyImmediate(fadeOutPanelCopy, true);
         Destroy(panel, 1);

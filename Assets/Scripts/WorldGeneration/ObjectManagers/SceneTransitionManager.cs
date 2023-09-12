@@ -80,8 +80,8 @@ public class SceneTransitionManager : MonoBehaviour
             {
                 sceneTransition.dungeonIndexToLoad = 0;
             }
-            sceneTransition.sceneToLoad = data.GetSceneToLoad();
-            sceneTransition.playerPosition = data.GetPlayerPosition();
+            //sceneTransition.sceneToLoad = data.GetSceneToLoad();
+            //sceneTransition.playerPosition = data.GetPlayerPosition();
             sceneTransition.facingDirection = data.GetFacingDirection();
         }
         else

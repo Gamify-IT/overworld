@@ -31,8 +31,16 @@ public class GeneratorManager : MonoBehaviour
     private AreaInformationData areaInformation;
     #endregion
 
-    private void Start()
+    private void Awake()
     {
+        if (dungeonIndex != 0)
+        {
+            GameEvents.current.onDungeonLoad += SetupDungeon;
+        }
+    }  
+
+    private void Start()
+    {       
         if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
             AreaInformation areaIdentifier = new AreaInformation(worldIndex, new Optional<int>());
@@ -53,6 +61,71 @@ public class GeneratorManager : MonoBehaviour
                 }                
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (dungeonIndex != 0)
+        {
+            GameEvents.current.onDungeonLoad -= SetupDungeon;
+        }
+    }
+
+    /// <summary>
+    ///     This function sets up the dungeon with the default objects
+    /// </summary>
+    /// <param name="dungeonInformation"></param>
+    private void SetupDungeon(AreaInformation dungeonInformation)
+    {
+        Debug.Log("Setting up dungeon " + dungeonInformation.GetWorldIndex() + "-" + dungeonInformation.GetDungeonIndex());
+        worldIndex = dungeonInformation.GetWorldIndex();
+        dungeonIndex = dungeonInformation.GetDungeonIndex();
+
+        string path = "AreaInfo/DungeonObjectInfos";
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        CustomAreaMapDTO dto = CustomAreaMapDTO.CreateFromJSON(json);
+        CustomAreaMapData data = CustomAreaMapData.ConvertDtoToData(dto);
+
+        data = SetIndex(data, dungeonInformation);
+        minigamesManager.Setup(data.GetMinigameSpots());
+        npcManager.Setup(data.GetNpcSpots());
+        bookManager.Setup(data.GetBookSpots());
+        teleporterManager.Setup(data.GetTeleporterSpots());
+        sceneTransitionManager.Setup(data.GetSceneTransitionSpots());
+    }
+
+    /// <summary>
+    ///     This function changes the <c>area</c> of all spots to the current one, as well as sets the destinination area of scene transition
+    /// </summary>
+    /// <param name="data">The data to change</param>
+    /// <param name="areaIdenitfier">The area to set</param>
+    /// <returns>The changed <c>CustomAreaMapData</c> object</returns>
+    private CustomAreaMapData SetIndex(CustomAreaMapData data, AreaInformation areaIdenitfier)
+    {
+        foreach(MinigameSpotData minigameSpot in data.GetMinigameSpots())
+        {
+            minigameSpot.SetArea(areaIdenitfier);
+        }
+        foreach(NpcSpotData npcSpot in data.GetNpcSpots())
+        {
+            npcSpot.SetArea(areaIdenitfier);
+        }
+        foreach(BookSpotData bookSpot in data.GetBookSpots())
+        {
+            bookSpot.SetArea(areaIdenitfier);
+        }
+        foreach(TeleporterSpotData teleporterSpot in data.GetTeleporterSpots())
+        {
+            teleporterSpot.SetArea(areaIdenitfier);
+        }
+        foreach(SceneTransitionSpotData sceneTransitionSpot in data.GetSceneTransitionSpots())
+        {
+            sceneTransitionSpot.SetArea(areaIdenitfier);
+            sceneTransitionSpot.SetAreaToLoad(new AreaInformation(worldIndex, new Optional<int>()));
+        }
+
+        return data;
     }
 
     /// <summary>
@@ -84,7 +157,7 @@ public class GeneratorManager : MonoBehaviour
         string path;
         if (currentArea.IsDungeon())
         {
-            path = "AreaInfo/Dungeon" + currentArea.GetWorldIndex() + "-" + currentArea.GetWorldIndex();
+            path = "AreaInfo/Dungeon";
         }
         else
         {
@@ -271,7 +344,7 @@ public class GeneratorManager : MonoBehaviour
         for (int i = 0; i < amount; i++)
         {
             Vector2 position = new Vector2(offset.x + 5 * i, offset.y + 40);
-            SceneTransitionSpotData data = new SceneTransitionSpotData(area, position, new Vector2(1,1), "", new AreaInformation(1, new Optional<int>()), new Vector2(1,1), FacingDirection.south);
+            SceneTransitionSpotData data = new SceneTransitionSpotData(area, position, new Vector2(1,1),  new AreaInformation(1, new Optional<int>()), FacingDirection.south);
             dungeonSpots.Add(data);
         }
         CustomAreaMapData areaMapData = areaData.GetAreaMapData();

@@ -69,8 +69,22 @@ public class Layout
     public static string[,,] ConvertLayoutToArray(Layout layout)
     {
         int thirdDimensionSize = layout.content.secondDimension.Length;
+        if(thirdDimensionSize == 0)
+        {
+            return new string[0, 0, 0];
+        }
+
         int secondDimensionSize = layout.content.secondDimension[0].firstDimension.Length;
+        if (secondDimensionSize == 0)
+        {
+            return new string[0, 0, 0];
+        }
+
         int firstDimensionSize = layout.content.secondDimension[0].firstDimension[0].elements.Length;
+        if (firstDimensionSize == 0)
+        {
+            return new string[0, 0, 0];
+        }
 
         string[,,] array = new string[thirdDimensionSize, secondDimensionSize, firstDimensionSize];
 
