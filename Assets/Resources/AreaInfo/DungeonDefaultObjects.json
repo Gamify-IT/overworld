@@ -1,0 +1,418 @@
+{
+    "layout": {
+        "content": {
+            "secondDimension": []
+        }
+    },
+    "style": "CUSTOM",
+    "minigameSpots": [
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 1,
+            "position": {
+                "x": -42.0,
+                "y": 2.0
+            }
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 2,
+            "position": {
+                "x": -34.0,
+                "y": -20.0
+            }
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 3,
+            "position": {
+                "x": -64.0,
+                "y": -24.0
+            }
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 4,
+            "position": {
+                "x": -55.0,
+                "y": -65.0
+            }
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 5,
+            "position": {
+                "x": -5.0,
+                "y": -78.0
+            }
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 6,
+            "position": {
+                "x": 44.0,
+                "y": -69.0
+            }
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 7,
+            "position": {
+                "x": 8.0,
+                "y": -48.0
+            }
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 8,
+            "position": {
+                "x": 63.0,
+                "y": -71.0
+            }
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 9,
+            "position": {
+                "x": 83.0,
+                "y": -45.0
+            }
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 10,
+            "position": {
+                "x": 51.0,
+                "y": -49.0
+            }
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 11,
+            "position": {
+                "x": 69.0,
+                "y": -13.0
+            }
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 12,
+            "position": {
+                "x": 39.0,
+                "y": 7.0
+            }
+        }
+    ],
+    "npcSpots": [
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 1,
+            "position": {
+                "x": 21.0,
+                "y": -7.0
+            },
+            "name": "",
+            "spriteName": "npc_0",
+            "iconName": "NPCHeads_0"
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 2,
+            "position": {
+                "x": -37.0,
+                "y": -6.0
+            },
+            "name": "",
+            "spriteName": "npc_0",
+            "iconName": "NPCHeads_0"
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 3,
+            "position": {
+                "x": -20.0,
+                "y": -41.0
+            },
+            "name": "",
+            "spriteName": "npc_0",
+            "iconName": "NPCHeads_0"
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 4,
+            "position": {
+                "x": -43.0,
+                "y": -49.0
+            },
+            "name": "",
+            "spriteName": "npc_0",
+            "iconName": "NPCHeads_0"
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 5,
+            "position": {
+                "x": 37.0,
+                "y": -17.0
+            },
+            "name": "",
+            "spriteName": "npc_0",
+            "iconName": "NPCHeads_0"
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 6,
+            "position": {
+                "x": 19.0,
+                "y": -34.0
+            },
+            "name": "",
+            "spriteName": "npc_0",
+            "iconName": "NPCHeads_0"
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 7,
+            "position": {
+                "x": 65.0,
+                "y": -59.0
+            },
+            "name": "",
+            "spriteName": "npc_0",
+            "iconName": "NPCHeads_0"
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 8,
+            "position": {
+                "x": 2.0,
+                "y": -61.0
+            },
+            "name": "",
+            "spriteName": "npc_0",
+            "iconName": "NPCHeads_0"
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 9,
+            "position": {
+                "x": 36.0,
+                "y": -50.0
+            },
+            "name": "",
+            "spriteName": "npc_0",
+            "iconName": "NPCHeads_0"
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 10,
+            "position": {
+                "x": 63.0,
+                "y": -37.0
+            },
+            "name": "",
+            "spriteName": "npc_0",
+            "iconName": "NPCHeads_0"
+        }
+    ],
+    "bookSpots": [
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 1,
+            "position": {
+                "x": -19.0,
+                "y": -19.0
+            },
+            "name": ""
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 2,
+            "position": {
+                "x": -36.0,
+                "y": 4.0
+            },
+            "name": ""
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 3,
+            "position": {
+                "x": -65.0,
+                "y": -27.0
+            },
+            "name": ""
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 4,
+            "position": {
+                "x": 45.0,
+                "y": -65.0
+            },
+            "name": ""
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 5,
+            "position": {
+                "x": 72.0,
+                "y": -23.0
+            },
+            "name": ""
+        }
+    ],
+    "barrierSpots": [],
+    "teleporterSpots": [
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 1,
+            "position": {
+                "x": -4.0,
+                "y": -2.0
+            },
+            "name": "Entrance"
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 2,
+            "position": {
+                "x": 59.0,
+                "y": -47.0
+            },
+            "name": "Ancient Shrine"
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 3,
+            "position": {
+                "x": -3.0,
+                "y": -65.0
+            },
+            "name": "Storage Place"
+        },
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "index": 4,
+            "position": {
+                "x": -52.0,
+                "y": -22.0
+            },
+            "name": "Western Cave"
+        }
+    ],
+    "sceneTransitions": [
+        {
+            "location": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "position": {
+                "x": 0.5,
+                "y": 3.75
+            },
+            "size": {
+                "x": 1.0,
+                "y": 2.0
+            },
+            "areaToLoad": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
+            "facingDirection": "south"
+        }
+    ]
+}

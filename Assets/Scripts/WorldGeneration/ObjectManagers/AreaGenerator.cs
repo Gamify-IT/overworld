@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+///     This class is used to generate a layout
+/// </summary>
 public class AreaGenerator
 {
+    //TODO: move to config json file
     private static int borderThickness = 3;
     private static int worldConnectionWidth = 1;
 
@@ -13,6 +17,7 @@ public class AreaGenerator
     private WorldStyle style;
     private float accessability;
     private List<WorldConnection> worldConnections;
+    private bool[,] accessableTiles;
 
     public AreaGenerator(Vector2Int size, WorldStyle style, float accessability, List<WorldConnection> worldConnections)
     {
@@ -21,14 +26,19 @@ public class AreaGenerator
         this.style = style;
         this.accessability = accessability;
         this.worldConnections = worldConnections;
+        accessableTiles = new bool[size.x, size.y];
     }
 
+    /// <summary>
+    ///     This function initializes the layout array
+    /// </summary>
     private void InitLayout()
     {
         for (int x = 0; x < size.x; x++)
         {
             for (int y = 0; y < size.y; y++)
             {
+                accessableTiles[x, y] = false;
                 for (int z = 0; z < 5; z++)
                 {
                     layout[x, y, z] = "none";
@@ -37,6 +47,9 @@ public class AreaGenerator
         }
     }
 
+    /// <summary>
+    ///     This function generates a layout
+    /// </summary>
     public void GenerateLayout()
     {
         InitLayout();
@@ -61,6 +74,11 @@ public class AreaGenerator
         }        
     }
 
+    /// <summary>
+    ///     This function generates a layout with the given tiles
+    /// </summary>
+    /// <param name="groundTile">The ground tile</param>
+    /// <param name="wallTile">The wall tile</param>
     private void GenerateLayout(string groundTile, string wallTile)
     {
         GenerateBorder(groundTile, wallTile);
@@ -72,6 +90,7 @@ public class AreaGenerator
                 if (Random.Range(0f, 1f) < accessability)
                 {
                     layout[x, y, 0] = groundTile;
+                    accessableTiles[x, y] = true;
                 }
                 else
                 {
@@ -123,6 +142,7 @@ public class AreaGenerator
                     {
                         layout[x, worldConnection.GetPosition().y+offset, 2] = "none";
                         layout[x, worldConnection.GetPosition().y+offset, 0] = groundTile;
+                        accessableTiles[x, worldConnection.GetPosition().y + offset] = true;
                     }
                 }
             }
@@ -136,6 +156,7 @@ public class AreaGenerator
                     {
                         layout[worldConnection.GetPosition().x + offset, y, 2] = "none";
                         layout[worldConnection.GetPosition().x + offset, y, 0] = groundTile;
+                        accessableTiles[worldConnection.GetPosition().x, y] = true;
                     }
                 }
             }
@@ -147,8 +168,9 @@ public class AreaGenerator
                 {
                     for (int offset = -worldConnectionWidth; offset <= worldConnectionWidth; offset++)
                     {
-                        layout[x, worldConnection.GetPosition().y+offset, 2] = "none";
-                        layout[x, worldConnection.GetPosition().y+offset, 0] = groundTile;
+                        layout[x, worldConnection.GetPosition().y + offset, 2] = "none";
+                        layout[x, worldConnection.GetPosition().y + offset, 0] = groundTile;
+                        accessableTiles[x, worldConnection.GetPosition().y + offset] = true;
                     }
                 }
             }
@@ -162,14 +184,28 @@ public class AreaGenerator
                     {
                         layout[worldConnection.GetPosition().x + offset, y, 2] = "none";
                         layout[worldConnection.GetPosition().x + offset, y, 0] = groundTile;
+                        accessableTiles[worldConnection.GetPosition().x, y] = true;
                     }
                 }
             }
         }        
     }
 
+    /// <summary>
+    ///     This function returns the generated layout
+    /// </summary>
+    /// <returns>The generated layout</returns>
     public string[,,] GetLayout()
     {
         return layout;
+    }
+
+    /// <summary>
+    ///     This function returns which tiles area accessable
+    /// </summary>
+    /// <returns>The accessable tiles</returns>
+    public bool[,] GetAccessableTiles()
+    {
+        return accessableTiles;
     }
 }

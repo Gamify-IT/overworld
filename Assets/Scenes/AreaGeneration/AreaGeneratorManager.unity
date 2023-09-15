@@ -429,4 +429,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cd13ad2914f37f4f80b33eccf262043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraMovement: {fileID: 996444125}
+  cameraController: {fileID: 996444125}

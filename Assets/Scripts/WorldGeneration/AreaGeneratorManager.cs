@@ -8,7 +8,7 @@ public class AreaGeneratorManager : MonoBehaviour
 {
     #region Attributes
     //UI
-    [SerializeField] private CameraMovement cameraMovement;
+    [SerializeField] private CameraMovement cameraController;
 
     //Data
     private AreaInformation currentArea;
@@ -130,7 +130,7 @@ public class AreaGeneratorManager : MonoBehaviour
         string path;
         if (currentArea.IsDungeon())
         {
-            path = "Areas/Dungeon" + currentArea.GetWorldIndex() + "-" + currentArea.GetWorldIndex();            
+            path = "Areas/Dungeon" + currentArea.GetWorldIndex() + "-" + currentArea.GetDungeonIndex();            
         }
         else
         {
@@ -141,6 +141,7 @@ public class AreaGeneratorManager : MonoBehaviour
         string json = targetFile.text;
         AreaDTO areaDTO = AreaDTO.CreateFromJSON(json);
         AreaData areaData = AreaData.ConvertDtoToData(areaDTO);
+        areaData.SetArea(currentArea);
         return areaData;
     }
     #endregion
@@ -149,7 +150,7 @@ public class AreaGeneratorManager : MonoBehaviour
     {
         if(currentArea.IsDungeon())
         {
-            await SceneManager.LoadSceneAsync("Dungeon", LoadSceneMode.Additive);
+            await SceneManager.LoadSceneAsync("Dungeon", LoadSceneMode.Additive);            
         }
         else
         {
@@ -157,10 +158,20 @@ public class AreaGeneratorManager : MonoBehaviour
             await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         }
 
-        GeneratorManager generator = FindObjectOfType<GeneratorManager>();
-        if (generator != null)
+        GameObject areaManagerObject = GameObject.FindGameObjectWithTag("AreaManager");
+        if (areaManagerObject == null)
         {
-            generator.Setup(areaData, cameraMovement);
+            Debug.LogError("Area Manager Object not found");
+            return;
         }
+
+        AreaManager areaManager = areaManagerObject.GetComponent<AreaManager>();
+        if (areaManager == null)
+        {
+            Debug.LogError("Area Manager Script not found");
+            return;
+        }
+
+        areaManager.Setup(areaData, currentArea, cameraController);
     }
 }

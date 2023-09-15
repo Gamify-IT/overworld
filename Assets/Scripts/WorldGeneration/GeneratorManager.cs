@@ -33,6 +33,10 @@ public class GeneratorManager : MonoBehaviour
 
     private void Awake()
     {
+        if(GameSettings.GetGamemode() != Gamemode.PLAY)
+        {
+            return;
+        }
         if (dungeonIndex != 0)
         {
             GameEvents.current.onDungeonLoad += SetupDungeon;
@@ -80,19 +84,69 @@ public class GeneratorManager : MonoBehaviour
         Debug.Log("Setting up dungeon " + dungeonInformation.GetWorldIndex() + "-" + dungeonInformation.GetDungeonIndex());
         worldIndex = dungeonInformation.GetWorldIndex();
         dungeonIndex = dungeonInformation.GetDungeonIndex();
+        currentArea = dungeonInformation;
 
-        string path = "AreaInfo/DungeonObjectInfos";
-        TextAsset targetFile = Resources.Load<TextAsset>(path);
-        string json = targetFile.text;
-        CustomAreaMapDTO dto = CustomAreaMapDTO.CreateFromJSON(json);
-        CustomAreaMapData data = CustomAreaMapData.ConvertDtoToData(dto);
+        Optional<AreaData> areaData = DataManager.Instance.GetAreaData(dungeonInformation);
+        if(!areaData.IsPresent())
+        {
+            Debug.LogError("No data found for dungeon " + dungeonInformation.GetWorldIndex() + "-" + dungeonInformation.GetDungeonIndex());
+            return;
+        }
 
-        data = SetIndex(data, dungeonInformation);
-        minigamesManager.Setup(data.GetMinigameSpots());
-        npcManager.Setup(data.GetNpcSpots());
-        bookManager.Setup(data.GetBookSpots());
-        teleporterManager.Setup(data.GetTeleporterSpots());
-        sceneTransitionManager.Setup(data.GetSceneTransitionSpots());
+        if(areaData.Value().IsGeneratedArea())
+        {
+            Debug.Log("Setup generated dungeon");
+            SetupGeneratedArea(areaData.Value());
+        }
+        else
+        {
+            Debug.Log("Setup default dungeon");
+
+            string path = "AreaInfo/DungeonObjectInfos";
+            TextAsset targetFile = Resources.Load<TextAsset>(path);
+            string json = targetFile.text;
+            CustomAreaMapDTO dto = CustomAreaMapDTO.CreateFromJSON(json);
+            CustomAreaMapData data = CustomAreaMapData.ConvertDtoToData(dto);
+
+            data = SetIndex(data, dungeonInformation);
+            minigamesManager.Setup(data.GetMinigameSpots());
+            npcManager.Setup(data.GetNpcSpots());
+            bookManager.Setup(data.GetBookSpots());
+            teleporterManager.Setup(data.GetTeleporterSpots());
+            sceneTransitionManager.Setup(data.GetSceneTransitionSpots());
+        }        
+    }
+
+    public void SetupDungeon(AreaInformation dungeonInformation, AreaData dungeonData)
+    {
+        Debug.Log("Setting up dungeon " + dungeonInformation.GetWorldIndex() + "-" + dungeonInformation.GetDungeonIndex());
+        worldIndex = dungeonInformation.GetWorldIndex();
+        dungeonIndex = dungeonInformation.GetDungeonIndex();
+        currentArea = dungeonInformation;
+        areaData = dungeonData;
+
+        if (areaData.IsGeneratedArea())
+        {
+            Debug.Log("Setup generated dungeon");
+            SetupGeneratedArea(areaData);
+        }
+        else
+        {
+            Debug.Log("Setup default dungeon");
+
+            string path = "AreaInfo/DungeonObjectInfos";
+            TextAsset targetFile = Resources.Load<TextAsset>(path);
+            string json = targetFile.text;
+            CustomAreaMapDTO dto = CustomAreaMapDTO.CreateFromJSON(json);
+            CustomAreaMapData data = CustomAreaMapData.ConvertDtoToData(dto);
+
+            data = SetIndex(data, dungeonInformation);
+            minigamesManager.Setup(data.GetMinigameSpots());
+            npcManager.Setup(data.GetNpcSpots());
+            bookManager.Setup(data.GetBookSpots());
+            teleporterManager.Setup(data.GetTeleporterSpots());
+            sceneTransitionManager.Setup(data.GetSceneTransitionSpots());
+        }
     }
 
     /// <summary>
@@ -208,7 +262,7 @@ public class GeneratorManager : MonoBehaviour
     {
         GameObject uiObject = Instantiate(generatorUIPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         ui = uiObject.GetComponent<GeneratorUI>();
-        ui.Setup(this, areaData, areaInformation);
+        //ui.Setup(this, areaData, areaInformation);
     }
 
     #region Area Settings
@@ -414,21 +468,5 @@ public class GeneratorManager : MonoBehaviour
     public AreaData GetAreaData()
     {
         return areaData;
-    }
-
-    /// <summary>
-    ///     This function enables camera movement
-    /// </summary>
-    public void ActivateCameraMovement()
-    {
-        cameraMovement.Activate();
-    }
-
-    /// <summary>
-    ///     This function disables camera movement
-    /// </summary>
-    public void DeactivateCameraMovement()
-    {
-        cameraMovement.Deactivate();
     }
 }

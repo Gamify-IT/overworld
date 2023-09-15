@@ -1,7 +1,21 @@
 {
-	"area":{
-		"worldIndex": 1,
-		"dungeonIndex": 1
-	},
-	"customArea": false
+    "area": {
+        "worldIndex": 1,
+        "dungeonIndex": 1
+    },
+    "generatedArea": false,
+    "areaMapDTO": {
+        "layout": {
+            "content": {
+                "secondDimension": []
+            }
+        },
+        "style": "",
+        "minigameSpots": [],
+        "npcSpots": [],
+        "bookSpots": [],
+        "barrierSpots": [],
+        "teleporterSpots": [],
+        "sceneTransitions": []
+    }
 }

@@ -41,7 +41,7 @@ public class SceneTransitionSpotData
         AreaInformation areaToLoad = new AreaInformation(sceneTransitionSpotDTO.location.worldIndex, new Optional<int>());
         if (sceneTransitionSpotDTO.areaToLoad.dungeonIndex != 0)
         {
-            areaToLoad.SetDungeonIndex(sceneTransitionSpotDTO.location.dungeonIndex);
+            areaToLoad.SetDungeonIndex(sceneTransitionSpotDTO.areaToLoad.dungeonIndex);
         }
         FacingDirection facingDirection = (FacingDirection) System.Enum.Parse(typeof(FacingDirection), sceneTransitionSpotDTO.facingDirection);
         SceneTransitionSpotData data = new SceneTransitionSpotData(area, position, size, areaToLoad, facingDirection);

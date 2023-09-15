@@ -8,6 +8,7 @@ using UnityEngine;
 public class SceneTransitionManager : MonoBehaviour
 {
     [SerializeField] private GameObject sceneTransitionSpotPrefab;
+    [SerializeField] private GameObject placeholderPrefab;
     [SerializeField] private GameObject minimapIcons;
 
     /// <summary>
@@ -29,6 +30,19 @@ public class SceneTransitionManager : MonoBehaviour
         foreach (SceneTransitionSpotData sceneTransitionSpotData in sceneTransitionSpots)
         {
             CreateSceneTransitionSpot(sceneTransitionSpotData);
+        }
+    }
+
+    /// <summary>
+    ///     This function sets up placeholder scene transition objects for the data given
+    /// </summary>
+    /// <param name="sceneTransitionSpots">The data needed for the scene transitions</param>
+    public void SetupPlaceholder(List<SceneTransitionSpotData> sceneTransitionSpots)
+    {
+        ClearSceneTransitionSpots();
+        foreach (SceneTransitionSpotData sceneTransitionSpotData in sceneTransitionSpots)
+        {
+            CreatePlaceholderSceneTransitionSpot(sceneTransitionSpotData);
         }
     }
 
@@ -74,14 +88,15 @@ public class SceneTransitionManager : MonoBehaviour
             sceneTransition.worldIndexToLoad = data.GetAreaToLoad().GetWorldIndex();
             if (data.GetAreaToLoad().IsDungeon())
             {
+                Debug.Log("Scene to load is a dungeon: " + data.GetAreaToLoad().GetDungeonIndex());
                 sceneTransition.dungeonIndexToLoad = data.GetAreaToLoad().GetDungeonIndex();
             }
             else
             {
+                Debug.Log("Scene to load is a world");
                 sceneTransition.dungeonIndexToLoad = 0;
             }
-            //sceneTransition.sceneToLoad = data.GetSceneToLoad();
-            //sceneTransition.playerPosition = data.GetPlayerPosition();
+
             sceneTransition.facingDirection = data.GetFacingDirection();
         }
         else
@@ -97,6 +112,25 @@ public class SceneTransitionManager : MonoBehaviour
         else
         {
             Debug.LogError("Error creating npc minimap icon - MinimapIconManager not found");
+        }
+    }
+
+    /// <summary>
+    ///     This function creates a placeholder scene transition spot game object and sets it up with the given data
+    /// </summary>
+    /// <param name="data">The data for the scene transition spot</param>
+    private void CreatePlaceholderSceneTransitionSpot(SceneTransitionSpotData data)
+    {
+        Vector3 position = new Vector3(data.GetPosition().x, data.GetPosition().y, 0);
+        GameObject placeholderSpot = Instantiate(placeholderPrefab, position, Quaternion.identity, this.transform) as GameObject;
+        PlaceholderObject placeholder = placeholderSpot.GetComponent<PlaceholderObject>();
+        if (placeholder != null)
+        {
+            placeholder.Setup(PlaceholderType.SCENE_TRANSITION);
+        }
+        else
+        {
+            Debug.LogError("Error creating placeholder scene transition spot");
         }
     }
 }

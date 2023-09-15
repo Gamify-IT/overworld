@@ -9,9 +9,9 @@ public class GeneratorUI : MonoBehaviour
 {
     #region Attributes
     //WorldGenerator
-    private GeneratorManager generator;
-    private AreaInformation currentArea;
-    private AreaData areaData;
+    private GeneratorUIManager uiManager;
+    private AreaInformation areaIdentifier;
+    //private AreaData areaData;
     private AreaInformationData areaInformation;
 
     //Panels
@@ -48,22 +48,23 @@ public class GeneratorUI : MonoBehaviour
     /// <summary>
     ///     This function sets up the generator UI with the given values
     /// </summary>
-    /// <param name="generator">The generator object</param>
+    /// <param name="uiManager">The generator object</param>
     /// <param name="areaData">The data of the current area</param>
     /// <param name="areaInformation">Additional parameters for area generation</param>
-    public void Setup(GeneratorManager generator, AreaData areaData, AreaInformationData areaInformation)
+    public void Setup(GeneratorUIManager uiManager, AreaData areaData, AreaInformationData areaInformation)
     {
-        this.generator = generator;        
-        this.areaData = areaData;
+        this.uiManager = uiManager;        
         this.areaInformation = areaInformation;
-        currentArea = areaData.GetArea();
+        areaIdentifier = areaData.GetArea();
+
+        Debug.Log("CurrentArea: " + areaIdentifier.GetWorldIndex() + "-" + areaIdentifier.GetDungeonIndex());
 
         smallGeneratorPanel.SetActive(false);
         areaSettings.SetActive(true);
         content.SetActive(false);
         generatorPanel.SetActive(true);
 
-        if(currentArea.IsDungeon())
+        if(areaIdentifier.IsDungeon())
         {
             SetupDungeon();
         }
@@ -142,20 +143,20 @@ public class GeneratorUI : MonoBehaviour
     {
         generatorPanel.SetActive(false);
         smallGeneratorPanel.SetActive(true);
-        generator.ActivateCameraMovement();
+        uiManager.ActivateCameraMovement();
     }
 
     public void MaximizeButtonPressed()
     {
         smallGeneratorPanel.SetActive(false);
         generatorPanel.SetActive(true);
-        generator.DeactivateCameraMovement();
+        uiManager.DeactivateCameraMovement();
     }
 
     #region Area Settings Buttons
     public void ResetToCustomButtonPressed()
     {
-        generator.ResetToCustom();
+        uiManager.ResetToDefault();
         stypeDropdown.value = 0;
         continueButton.interactable = false;
     }
@@ -166,8 +167,7 @@ public class GeneratorUI : MonoBehaviour
         WorldStyle style = (WorldStyle) stypeDropdown.value;
         float accessability = accessabilitySlider.value;
 
-        CustomAreaMapData areaMapData = new CustomAreaMapData(style);
-        generator.CreateLayout(size, areaMapData, accessability);
+        uiManager.GenerateLayout(size, style, accessability);
 
         continueButton.interactable = true;
 
@@ -199,7 +199,6 @@ public class GeneratorUI : MonoBehaviour
     #region Generation Buttons
     public void GenerateMinigamesButtonPressed()
     {
-        Vector2Int offset = GetOffset();
         int amount;
         try
         {
@@ -207,15 +206,15 @@ public class GeneratorUI : MonoBehaviour
         }
         catch (System.FormatException e)
         {
+            Debug.LogError(e.ToString());
             amount = 1;
         }
-        generator.GenerateMinigames(amount, currentArea, offset);
+        uiManager.GenerateMinigames(amount);
         CheckSaveWorldButtonStatus();
     }
 
     public void GenerateNpcsButtonPressed()
     {
-        Vector2Int offset = GetOffset();
         int amount;
         try
         {
@@ -223,14 +222,14 @@ public class GeneratorUI : MonoBehaviour
         }
         catch(System.FormatException e)
         {
+            Debug.LogError(e.ToString());
             amount = 0;
         }
-        generator.GenerateNPCs(amount, currentArea, offset);
+        uiManager.GenerateNpcs(amount);
     }
 
     public void GenerateBooksButtonPressed()
     {
-        Vector2Int offset = GetOffset();
         int amount;
         try
         {
@@ -238,14 +237,14 @@ public class GeneratorUI : MonoBehaviour
         }
         catch (System.FormatException e)
         {
+            Debug.LogError(e.ToString());
             amount = 0;
         }
-        generator.GenerateBooks(amount, currentArea, offset);
+        uiManager.GenerateBooks(amount);
     }
 
     public void GenerateTeleporterButtonPressed()
     {
-        Vector2Int offset = GetOffset();
         int amount;
         try
         {
@@ -253,14 +252,14 @@ public class GeneratorUI : MonoBehaviour
         }
         catch (System.FormatException e)
         {
+            Debug.LogError(e.ToString());
             amount = 0;
         }
-        generator.GenerateTeleporter(amount, currentArea, offset);
+        uiManager.GenerateTeleporters(amount);
     }
 
     public void GenerateDungeonsButtonPressed()
     {
-        Vector2Int offset = GetOffset();
         int amount;
         try
         {
@@ -268,9 +267,10 @@ public class GeneratorUI : MonoBehaviour
         }
         catch (System.FormatException e)
         {
+            Debug.LogError(e.ToString());
             amount = 0;
         }
-        generator.GenerateDungeons(amount, currentArea, offset);
+        uiManager.GenerateDungeons(amount);
     }
     #endregion
 
@@ -282,7 +282,6 @@ public class GeneratorUI : MonoBehaviour
 
     public void GenerateAllContentButtonPressed()
     {
-        Vector2Int offset = GetOffset();
         GenerateMinigamesButtonPressed();
         GenerateNpcsButtonPressed();
         GenerateBooksButtonPressed();
@@ -292,7 +291,7 @@ public class GeneratorUI : MonoBehaviour
 
     public void SaveAreaButtonPressed()
     {
-        generator.SaveArea();
+        uiManager.SaveArea();
     }
     #endregion
 
@@ -338,13 +337,13 @@ public class GeneratorUI : MonoBehaviour
             }
             catch (System.FormatException e)
             {
+                Debug.LogError(e.ToString());
                 validAmountOfMinigames = false;
             }
         }
         generateMinigamesButton.interactable = validAmountOfMinigames;
 
         CheckGenerateAllContentButtonStatus();
-        CheckSaveWorldButtonStatus();
     }
 
     /// <summary>
@@ -446,29 +445,13 @@ public class GeneratorUI : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function is called, when the value of the <c>Amount of Minigames</c> input field value is changed and sets the <c>Save Area</c>
+    ///     This function is called, when the amount of Minigames is changed and sets the <c>Save Area</c>
     ///     button active, if at least one minigame exists, or inactive, otherwise
     /// </summary>
     private void CheckSaveWorldButtonStatus()
     {
-        if(!generator.GetAreaData().IsGeneratedArea())
-        {
-            saveAreaButton.interactable = false;
-        }
-        else if(generator.GetAreaData().GetAreaMapData().GetMinigameSpots().Count > 0)
-        {
-            saveAreaButton.interactable = true;
-        }
-        else
-        {
-            saveAreaButton.interactable = false;
-        }
+        bool validArea = uiManager.IsAreaSaveable();
+        saveAreaButton.interactable = validArea;
     }
     #endregion
-
-    private Vector2Int GetOffset()
-    {
-        Vector2Int offset = new Vector2Int(int.Parse(offsetX.text), int.Parse(offsetY.text));
-        return offset;
-    }
 }

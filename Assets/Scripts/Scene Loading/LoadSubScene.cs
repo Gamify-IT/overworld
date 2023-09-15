@@ -29,6 +29,11 @@ public class LoadSubScene : MonoBehaviour
 
     private void Start()
     {
+        if(GameSettings.GetGamemode() != Gamemode.PLAY)
+        {
+            return;
+        }
+
         if(dungeonIndex == 0)
         {
             //Scene Transition in world

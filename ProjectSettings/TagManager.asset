@@ -8,6 +8,7 @@ TagManager:
   - AreaName
   - MinimapIcon
   - MinimapIconsParent
+  - AreaManager
   layers:
   - Default
   - TransparentFX

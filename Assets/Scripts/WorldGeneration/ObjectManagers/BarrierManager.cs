@@ -8,6 +8,7 @@ using UnityEngine;
 public class BarrierManager : MonoBehaviour
 {
     [SerializeField] private GameObject barrierSpotPrefab;
+    [SerializeField] private GameObject placeholderPrefab;
 
     /// <summary>
     ///     This function sets up barrier objects for the data given
@@ -19,6 +20,19 @@ public class BarrierManager : MonoBehaviour
         foreach (BarrierSpotData barrierSpotData in barrierSpots)
         {
             CreateBarrierSpot(barrierSpotData);
+        }
+    }
+
+    /// <summary>
+    ///     This function sets up placeholder barrier objects for the data given
+    /// </summary>
+    /// <param name="barrierSpots">The data needed for the barriers</param>
+    public void SetupPlaceholder(List<BarrierSpotData> barrierSpots)
+    {
+        ClearBarrierSpots();
+        foreach (BarrierSpotData barrierSpotData in barrierSpots)
+        {
+            CreatePlaceholderBarrierSpot(barrierSpotData);
         }
     }
 
@@ -51,6 +65,25 @@ public class BarrierManager : MonoBehaviour
         else
         {
             Debug.LogError("Error creating barrier - script not found");
+        }
+    }
+
+    /// <summary>
+    ///     This function creates a placeholder barrier spot game object and sets it up with the given data
+    /// </summary>
+    /// <param name="data">The data for the barrier spot</param>
+    private void CreatePlaceholderBarrierSpot(BarrierSpotData data)
+    {
+        Vector3 position = new Vector3(data.GetPosition().x, data.GetPosition().y, 0);
+        GameObject placeholderSpot = Instantiate(placeholderPrefab, position, Quaternion.identity, this.transform) as GameObject;
+        PlaceholderObject placeholder = placeholderSpot.GetComponent<PlaceholderObject>();
+        if (placeholder != null)
+        {
+            placeholder.Setup(PlaceholderType.BARRIER);
+        }
+        else
+        {
+            Debug.LogError("Error creating placeholder barrier spot");
         }
     }
 }

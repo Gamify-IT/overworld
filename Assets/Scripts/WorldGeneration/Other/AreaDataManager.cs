@@ -7,11 +7,6 @@ public class AreaDataManager
 {
     #region Attributes
     Dictionary<int, WorldAreas> worldAreas;
-    int maxDungeons = 0;
-    int maxMinigames = 0;
-    int maxNpcs = 0;
-    int maxBooks = 0;
-    int maxTeleporter = 0;
     #endregion
 
     public AreaDataManager()
@@ -33,7 +28,7 @@ public class AreaDataManager
 
         for (int worldIndex = 1; worldIndex <= amountWorlds; worldIndex++)
         {
-            currentArea.SetWorldIndex(worldIndex);
+            currentArea = new AreaInformation(worldIndex, new Optional<int>());
             worldAreas.Add(worldIndex, new WorldAreas());
 
             AreaData worldData = await FetchData(currentArea);
@@ -41,6 +36,7 @@ public class AreaDataManager
             {
                 worldData = LoadLocalData(currentArea);
             }
+            Debug.Log("World " + worldIndex + " generated: " + worldData.IsGeneratedArea());
             worldAreas[worldIndex].AddArea(0, worldData);
 
             int amountDungeons;
@@ -61,6 +57,7 @@ public class AreaDataManager
                 {
                     dungeonData = LoadLocalData(currentArea);
                 }
+                Debug.Log("Dungeon " + worldIndex + "-" + dungeonIndex + " generated: " + dungeonData.IsGeneratedArea());
                 worldAreas[worldIndex].AddArea(dungeonIndex, dungeonData);
             }
         }
@@ -93,7 +90,7 @@ public class AreaDataManager
         string path;
         if (currentArea.IsDungeon())
         {
-            path = "Areas/Dungeon" + currentArea.GetWorldIndex() + "-" + currentArea.GetWorldIndex();
+            path = "Areas/Dungeon" + currentArea.GetWorldIndex() + "-" + currentArea.GetDungeonIndex();
         }
         else
         {
@@ -104,6 +101,7 @@ public class AreaDataManager
         string json = targetFile.text;
         AreaDTO areaDTO = AreaDTO.CreateFromJSON(json);
         AreaData areaData = AreaData.ConvertDtoToData(areaDTO);
+        areaData.SetArea(currentArea);
         return areaData;
     }
 

@@ -40,10 +40,10 @@ public class AreaData
         }
         AreaInformation area = new AreaInformation(worldIndex, dungeonIndex);
 
-        bool customArea = areaDTO.generatedArea;
+        bool generatedArea = areaDTO.generatedArea;
 
         Optional<CustomAreaMapData> areaMapData = new Optional<CustomAreaMapData>();
-        if(customArea)
+        if(generatedArea)
         {
             areaMapData.SetValue(CustomAreaMapData.ConvertDtoToData(areaDTO.areaMapDTO));
         }
@@ -65,6 +65,11 @@ public class AreaData
     public AreaInformation GetArea()
     {
         return area;
+    }
+
+    public void SetArea(AreaInformation area)
+    {
+        this.area = area;
     }
 
     public bool IsGeneratedArea()

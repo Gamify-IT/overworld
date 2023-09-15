@@ -8,6 +8,7 @@ using UnityEngine;
 public class NpcManager : MonoBehaviour
 {
     [SerializeField] private GameObject npcSpotPrefab;
+    [SerializeField] private GameObject placeholderPrefab;
     [SerializeField] private GameObject minimapIcons;
     [SerializeField] private List<Sprite> sprites;
 
@@ -30,6 +31,19 @@ public class NpcManager : MonoBehaviour
         foreach (NpcSpotData npcSpotData in npcSpots)
         {
             CreateNpcSpot(npcSpotData);
+        }
+    }
+
+    /// <summary>
+    ///     This function sets up placeholder npc objects for the data given
+    /// </summary>
+    /// <param name="npcSpots">The data needed for the npcs</param>
+    public void SetupPlaceholder(List<NpcSpotData> npcSpots)
+    {
+        ClearNpcSpots();
+        foreach (NpcSpotData npcSpotData in npcSpots)
+        {
+            CreatePlaceholderNpcSpot(npcSpotData);
         }
     }
 
@@ -129,5 +143,24 @@ public class NpcManager : MonoBehaviour
             }
         }
         return sprite;
+    }
+
+    /// <summary>
+    ///     This function creates a placeholder npc spot game object and sets it up with the given data
+    /// </summary>
+    /// <param name="data">The data for the npc spot</param>
+    private void CreatePlaceholderNpcSpot(NpcSpotData data)
+    {
+        Vector3 position = new Vector3(data.GetPosition().x, data.GetPosition().y, 0);
+        GameObject placeholderSpot = Instantiate(placeholderPrefab, position, Quaternion.identity, this.transform) as GameObject;
+        PlaceholderObject placeholder = placeholderSpot.GetComponent<PlaceholderObject>();
+        if (placeholder != null)
+        {
+            placeholder.Setup(PlaceholderType.NPC);
+        }
+        else
+        {
+            Debug.LogError("Error creating placeholder npc spot");
+        }
     }
 }

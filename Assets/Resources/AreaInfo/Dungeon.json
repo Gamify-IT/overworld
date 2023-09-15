@@ -4,16 +4,16 @@
         "dungeonIndex": 0
     },
     "size": {
-        "x": 200,
-        "y": 168
+        "x": 215,
+        "y": 173
     },
     "objectOffset": {
         "x": -69,
         "y": -68
     },
     "gridOffset": {
-        "x": -69,
-        "y": -68
+        "x": -97,
+        "y": -121
     },
     "worldConnections": []
 }
