@@ -25,7 +25,7 @@ public class AreaManager : MonoBehaviour
     /// <summary>
     ///     This function sets up the area, if the game is in PLAY mode
     /// </summary>
-    private void Awake()
+    private void Start()
     {
         //if not in play mode: do nothing
         if(GameSettings.GetGamemode() != Gamemode.PLAY)
@@ -62,6 +62,7 @@ public class AreaManager : MonoBehaviour
         if(areaData.IsGeneratedArea())
         {
             Debug.Log("Generated Area: " + worldIndex + "-" + dungeonIndex);
+
             //Create layout
             areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetTiles(), areaInformation);
 
@@ -120,8 +121,6 @@ public class AreaManager : MonoBehaviour
     public void Setup(AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController)
     {
         //store infos
-
-        //TEMP:
         worldIndex = areaData.GetArea().GetWorldIndex();
         dungeonIndex = 0;
         if(areaData.GetArea().IsDungeon())
