@@ -44,7 +44,7 @@ public class LoadFirstScene : MonoBehaviour
     /// <returns>The gamemode specified in the browser variable "Gamemode", PLAY, if not present</returns>
     private Gamemode GetGamemode()
     {
-        Gamemode gamemode = Gamemode.PLAY;
+        Gamemode gamemode = Gamemode.GENERATOR;
 
         Optional<string> result = BrowserVariable.TryToReadVariable("Gamemode");
         if(result.IsPresent())

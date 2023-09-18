@@ -14,6 +14,7 @@ public class AreaManager : MonoBehaviour
 
     [SerializeField] private AreaBuilder areaBuilder;
     [SerializeField] private GeneratorUIManager generatorUI;
+    [SerializeField] private InspectorUIManager inspectorUI;
 
     private AreaData areaData;
     private AreaInformation areaIdentifier;
@@ -113,12 +114,38 @@ public class AreaManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function sets up the area with the layout and objects and the inspector UI
+    /// </summary>
+    /// <param name="areaData">The data of the area</param>
+    /// <param name="areaIdentifier">The area identifier</param>
+    /// <param name="cameraController">The camera</param>
+    public void SetupInspector(AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController)
+    {
+        this.areaData = areaData;
+        this.areaIdentifier = areaIdentifier;
+        areaInformation = GetAreaInformation(areaIdentifier);
+
+        CustomAreaMapData areaMapData;
+        if (areaData.IsGeneratedArea())
+        {
+            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetTiles(), areaInformation);
+            areaMapData = areaData.GetAreaMapData();
+        }
+        else
+        {
+            areaMapData = GetDefaultAreaMapData();
+        }
+
+        inspectorUI.Setup(areaMapData, areaInformation, cameraController);
+    }
+
+    /// <summary>
     ///     This function sets up the area with the layout and objects and the generator UI
     /// </summary>
     /// <param name="areaData">The data of the area</param>
     /// <param name="areaIdentifier">The area identifier</param>
     /// <param name="cameraController">The camera</param>
-    public void Setup(AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController)
+    public void SetupGenerator(AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController)
     {
         //store infos
         worldIndex = areaData.GetArea().GetWorldIndex();

@@ -44,6 +44,8 @@ public class AreaPainter : MonoBehaviour
 
     public void Paint(string[,,] layout, Vector2Int offset)
     {
+        ClearTilemaps();
+
         Vector2Int size = new Vector2Int(layout.GetLength(0), layout.GetLength(1));
         for(int x = 0; x < size.x; x++)
         {
@@ -107,5 +109,17 @@ public class AreaPainter : MonoBehaviour
                 }
             }
         }
+    }
+
+    /// <summary>
+    ///     This function removes all tiles of the tilemaps
+    /// </summary>
+    private void ClearTilemaps()
+    {
+        ground.ClearAllTiles();
+        groundDecorations.ClearAllTiles();
+        wall.ClearAllTiles();
+        wallDecorations.ClearAllTiles();
+        objects.ClearAllTiles();
     }
 }

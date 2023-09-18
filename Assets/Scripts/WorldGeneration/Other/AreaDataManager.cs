@@ -7,11 +7,22 @@ public class AreaDataManager
 {
     #region Attributes
     Dictionary<int, WorldAreas> worldAreas;
+
+    private int maxDungeons;
+    private int maxMinigames;
+    private int maxNPCs;
+    private int maxBooks;
+    private int maxTeleporters;
     #endregion
 
     public AreaDataManager()
     {
         worldAreas = new Dictionary<int, WorldAreas>();
+        maxDungeons = 0;
+        maxMinigames = 0;
+        maxNPCs = 0;
+        maxBooks = 0;
+        maxTeleporters = 0;
     }
 
     /// <summary>
@@ -24,45 +35,89 @@ public class AreaDataManager
 
         int amountWorlds = GameSettings.GetMaxWorlds();
 
-        AreaInformation currentArea = new AreaInformation(1, new Optional<int>());
-
         for (int worldIndex = 1; worldIndex <= amountWorlds; worldIndex++)
         {
-            currentArea = new AreaInformation(worldIndex, new Optional<int>());
-            worldAreas.Add(worldIndex, new WorldAreas());
-
-            AreaData worldData = await FetchData(currentArea);
-            if(worldData == null)
+            bool successfulLoading = await FetchWorldData(worldIndex);
+            if(!successfulLoading)
             {
-                worldData = LoadLocalData(currentArea);
-            }
-            Debug.Log("World " + worldIndex + " generated: " + worldData.IsGeneratedArea());
-            worldAreas[worldIndex].AddArea(0, worldData);
-
-            int amountDungeons;
-            if (worldData.IsGeneratedArea())
-            {
-                amountDungeons = worldData.GetAreaMapData().GetSceneTransitionSpots().Count;
-            }
-            else
-            {
-                amountDungeons = 4;
-            }
-
-            for (int dungeonIndex = 1; dungeonIndex <= amountDungeons; dungeonIndex++)
-            {
-                currentArea.SetDungeonIndex(dungeonIndex);
-                AreaData dungeonData = await FetchData(currentArea);
-                if(dungeonData == null)
-                {
-                    dungeonData = LoadLocalData(currentArea);
-                }
-                Debug.Log("Dungeon " + worldIndex + "-" + dungeonIndex + " generated: " + dungeonData.IsGeneratedArea());
-                worldAreas[worldIndex].AddArea(dungeonIndex, dungeonData);
+                loadingError = true;
             }
         }
 
+        //DEBUG:
+        Debug.Log("Max Dungeons: " + maxDungeons);
+        Debug.Log("Max Minigames: " + maxMinigames);
+        Debug.Log("Max NPCs: " + maxNPCs);
+        Debug.Log("Max Books: " + maxBooks);
+        Debug.Log("Max Teleporters: " + maxTeleporters);
+
         return loadingError;
+    }
+
+    /// <summary>
+    ///     This function retrieves the data for the world and all its dungeons
+    /// </summary>
+    /// <param name="worldIndex">The world to fetch the data from</param>
+    /// <returns>True, if everything went fine, false otherwise </returns>
+    private async UniTask<bool> FetchWorldData(int worldIndex)
+    {
+        bool successfulLoading = true;
+
+        AreaInformation currentArea = new AreaInformation(worldIndex, new Optional<int>());
+        worldAreas.Add(worldIndex, new WorldAreas());
+
+        AreaData worldData = await FetchData(currentArea);
+        if (worldData == null)
+        {
+            successfulLoading = false;
+            worldData = LoadLocalData(currentArea);
+        }
+        UpdateMaxObjectCount(worldData);
+        worldAreas[worldIndex].AddArea(0, worldData);
+
+        int amountDungeons;
+        if (worldData.IsGeneratedArea())
+        {
+            amountDungeons = worldData.GetAreaMapData().GetSceneTransitionSpots().Count;
+        }
+        else
+        {
+            amountDungeons = 4;
+        }
+
+        for (int dungeonIndex = 1; dungeonIndex <= amountDungeons; dungeonIndex++)
+        {
+            bool dungeonSuccessful = await FetchDungeonData(worldIndex, dungeonIndex);
+            if(!dungeonSuccessful)
+            {
+                successfulLoading = false;
+            }
+        }
+
+        return successfulLoading;
+    }
+
+    /// <summary>
+    ///     This function retrieves the data for the world and all its dungeons
+    /// </summary>
+    /// <param name="worldIndex">The world the dungeon is in</param>
+    /// <param name="dungeonIndex">The dungeon to fetch the data from</param>
+    /// <returns>True, if everything went fine, false otherwise </returns>
+    private async UniTask<bool> FetchDungeonData(int worldIndex, int dungeonIndex)
+    {
+        bool successfulLoading = true;
+
+        AreaInformation currentArea = new AreaInformation(worldIndex, new Optional<int>(dungeonIndex));
+        AreaData dungeonData = await FetchData(currentArea);
+        if (dungeonData == null)
+        {
+            successfulLoading = false;
+            dungeonData = LoadLocalData(currentArea);
+        }
+        UpdateMaxObjectCount(dungeonData);
+        worldAreas[worldIndex].AddArea(dungeonIndex, dungeonData);
+
+        return successfulLoading;
     }
 
     /// <summary>
@@ -103,6 +158,62 @@ public class AreaDataManager
         AreaData areaData = AreaData.ConvertDtoToData(areaDTO);
         areaData.SetArea(currentArea);
         return areaData;
+    }
+
+    private void UpdateMaxObjectCount(AreaData areaData)
+    {
+        int amountDungeons = 0;
+        int amountMinigames;
+        int amountNpcs;
+        int amountBooks;
+        int amountTeleporters;
+
+        //retrieve values
+        if(areaData.IsGeneratedArea())
+        {
+            if(!areaData.GetArea().IsDungeon())
+            {
+                amountDungeons = areaData.GetAreaMapData().GetSceneTransitionSpots().Count;
+            }
+            amountMinigames = areaData.GetAreaMapData().GetMinigameSpots().Count;
+            amountNpcs = areaData.GetAreaMapData().GetNpcSpots().Count;
+            amountBooks = areaData.GetAreaMapData().GetBookSpots().Count;
+            amountTeleporters = areaData.GetAreaMapData().GetTeleporterSpots().Count;
+        }
+        else
+        {
+            amountDungeons = 4;
+            amountMinigames = 12;
+            amountNpcs = 10;
+            amountBooks = 5;
+            amountTeleporters = 6;
+        }
+
+        //check if higher than current max values
+        if(amountDungeons > maxDungeons)
+        {
+            maxDungeons = amountDungeons;
+        }
+
+        if(amountMinigames > maxMinigames)
+        {
+            maxMinigames = amountMinigames;
+        }
+
+        if(amountNpcs > maxNPCs)
+        {
+            maxNPCs = amountNpcs;
+        }
+
+        if(amountBooks > maxBooks)
+        {
+            maxBooks = amountBooks;
+        }
+
+        if(amountTeleporters > maxTeleporters)
+        {
+            maxTeleporters = amountTeleporters;
+        }
     }
 
     /// <summary>

@@ -172,6 +172,14 @@ public class AreaGeneratorManager : MonoBehaviour
             return;
         }
 
-        areaManager.Setup(areaData, currentArea, cameraController);
+        Gamemode gamemode = GameSettings.GetGamemode();
+        if (gamemode == Gamemode.GENERATOR)
+        {
+            areaManager.SetupGenerator(areaData, currentArea, cameraController);
+        }
+        else if(gamemode == Gamemode.INSPECT)
+        {
+            areaManager.SetupInspector(areaData, currentArea, cameraController);
+        }
     }
 }
