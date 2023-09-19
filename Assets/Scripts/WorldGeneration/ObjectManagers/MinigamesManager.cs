@@ -58,16 +58,7 @@ public class MinigamesManager : MonoBehaviour
         Minigame minigame = minigameSpot.GetComponent<Minigame>();
         if(minigame != null)
         {
-            minigame.SetWorldIndex(data.GetArea().GetWorldIndex());
-            if(data.GetArea().IsDungeon())
-            {
-                minigame.SetDungeonIndex(data.GetArea().GetDungeonIndex());                
-            }
-            else
-            {
-                minigame.SetDungeonIndex(0);
-            }
-            minigame.SetIndex(data.GetIndex());
+            minigame.Initialize(data.GetArea(), data.GetIndex());
         }
         else
         {
@@ -86,7 +77,7 @@ public class MinigamesManager : MonoBehaviour
         PlaceholderObject placeholder = placeholderSpot.GetComponent<PlaceholderObject>();
         if (placeholder != null)
         {
-            placeholder.Setup(PlaceholderType.MINIGAME);
+            placeholder.Setup(PlaceholderType.MINIGAME, data.GetIndex());
         }
         else
         {

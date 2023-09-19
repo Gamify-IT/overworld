@@ -159,6 +159,10 @@ public class AreaManager : MonoBehaviour
         this.areaIdentifier = areaIdentifier;
         areaInformation = GetAreaInformation(areaIdentifier);
         objectGenerator = new ObjectGenerator(areaIdentifier);
+        if(areaData.IsGeneratedArea())
+        {
+            objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetTiles(), areaInformation.GetObjectOffset());
+        }
 
         //setup area
         SetupArea();

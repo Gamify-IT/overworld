@@ -316,8 +316,10 @@ public class ObjectManager : MonoBehaviour
     /// <summary>
     ///     This function initializes the <c>ObjectManager</c>. All arrays are initialized with empty objects.
     /// </summary>
-    private void SetupObjectManager()
+    public void SetupObjectManager()
     {
+        Debug.Log("Reading max object counts");
+
         maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
         maxNPCs = GameSettings.GetMaxNpCs();

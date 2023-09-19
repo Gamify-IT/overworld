@@ -88,21 +88,11 @@ public class NpcManager : MonoBehaviour
         NPC npc = npcSpot.GetComponent<NPC>();
         if(npc != null)
         {
-            npc.SetWorldIndex(data.GetArea().GetWorldIndex());
-            if (data.GetArea().IsDungeon())
-            {
-                npc.SetDungeonIndex(data.GetArea().GetDungeonIndex());                
-            }
-            else
-            {
-                npc.SetDungeonIndex(0);
-            }
-            npc.SetIndex(data.GetIndex());
-            npc.SetName(data.GetName());
+            
             Optional<Sprite> icon = GetSprite(data.GetIconName());
             if(icon.IsPresent())
             {
-                npc.SetSprite(icon.Value());
+                npc.Initialize(data.GetArea(), data.GetIndex(), data.GetName(), icon.Value());
             }
             else
             {
@@ -156,7 +146,7 @@ public class NpcManager : MonoBehaviour
         PlaceholderObject placeholder = placeholderSpot.GetComponent<PlaceholderObject>();
         if (placeholder != null)
         {
-            placeholder.Setup(PlaceholderType.NPC);
+            placeholder.Setup(PlaceholderType.NPC, data.GetIndex());
         }
         else
         {

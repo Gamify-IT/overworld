@@ -47,16 +47,6 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     private void Awake()
     {
         sprites = transform.GetComponent<SpriteRenderer>();
-
-        if(GameSettings.GetGamemode() == Gamemode.PLAY)
-        {
-            RegisterToGameManager();
-            UpdateStatus();
-        }
-        else
-        {
-            //Display minimap icon
-        }
     }
 
     /// <summary>
@@ -69,6 +59,24 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
             Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
             ObjectManager.Instance.RemoveGameEntity<Minigame, MinigameData>(world, dungeon, number);
         }
+    }
+
+    /// <summary>
+    ///     This function initializes the <c>Minigame</c> object
+    /// </summary>
+    /// <param name="areaIdentifier">The area the <c>Minigame</c> is in</param>
+    /// <param name="index">The index of the <c>Minigame</c> in its area</param>
+    public void Initialize(AreaInformation areaIdentifier, int index)
+    {
+        world = areaIdentifier.GetWorldIndex();
+        dungeon = 0;
+        if(areaIdentifier.IsDungeon())
+        {
+            dungeon = areaIdentifier.GetDungeonIndex();
+        }
+        number = index;
+
+        RegisterToGameManager();
     }
 
     /// <summary>
@@ -165,64 +173,6 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         string info = world + "-" + dungeon + "-" + number + ": Game: " + game + ", Config: " + configurationID +
                       ", Status: " + status + ", Highscore: " + highscore;
         return info;
-    }
-
-    #endregion
-
-    #region Getter
-
-    /// <summary>
-    ///     This function returns the world of the minigame.
-    /// </summary>
-    /// <returns>world</returns>
-    public int GetWorldIndex()
-    {
-        return world;
-    }
-
-    /// <summary>
-    ///     This function sets the world to the given value
-    /// </summary>
-    /// <param name="worldIndex">The new world value</param>
-    public void SetWorldIndex(int worldIndex)
-    {
-        world = worldIndex;
-    }
-
-    /// <summary>
-    ///     This function returns the dungeon of the minigame.
-    /// </summary>
-    /// <returns>dungeon</returns>
-    public int GetDungeonIndex()
-    {
-        return dungeon;
-    }
-
-    /// <summary>
-    ///     This function sets the dungeon to the given value
-    /// </summary>
-    /// <param name="dungeonIndex">The new dungeon value</param>
-    public void SetDungeonIndex(int dungeonIndex)
-    {
-        dungeon = dungeonIndex;
-    }
-
-    /// <summary>
-    ///     This function returns the number of the minigame.
-    /// </summary>
-    /// <returns>number</returns>
-    public int GetIndex()
-    {
-        return number;
-    }
-
-    /// <summary>
-    ///     This function sets the index to the given value
-    /// </summary>
-    /// <param name="index">The new index value</param>
-    public void SetIndex(int index)
-    {
-        this.number = index;
     }
 
     #endregion

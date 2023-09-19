@@ -28,20 +28,6 @@ public class Barrier : MonoBehaviour
     #region Setup
 
     /// <summary>
-    ///     The Awake function is called when the object is initialized and sets up the starting values and state of the
-    ///     object.
-    ///     The function registers the barrier at the game manager and sets the barrier to be active on default.
-    /// </summary>
-    private void Awake()
-    {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
-        {
-            RegisterToGameManager();
-            UpdateStatus();
-        }   
-    }
-
-    /// <summary>
     ///     The OnDestroy function is called when the object is deleted.
     ///     The function removes the barrier from the game manager.
     /// </summary>
@@ -52,6 +38,21 @@ public class Barrier : MonoBehaviour
             Debug.Log("remove " + type + ": " + originWorldIndex + "->" + destinationAreaIndex);
             ObjectManager.Instance.RemoveBarrier(type, originWorldIndex, destinationAreaIndex);
         }            
+    }
+
+    /// <summary>
+    ///     This function initializes the <c>Barrier</c> object
+    /// </summary>
+    /// <param name="worldOriginIndex">The world the <c>Barrier</c> is in</param>
+    /// <param name="areaDestinationIndex">The index of the area the <c>Barrier</c> is blocking access to</param>
+    /// <param name="type"></param>
+    public void Initialize(int originWorldIndex, int destinationAreaIndex, BarrierType type)
+    {
+        this.originWorldIndex = originWorldIndex;
+        this.destinationAreaIndex = destinationAreaIndex;
+        this.type = type;
+
+        RegisterToGameManager();
     }
 
     /// <summary>

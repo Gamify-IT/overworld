@@ -56,17 +56,7 @@ public class BookManager : MonoBehaviour
         Book book = bookSpot.GetComponent<Book>();
         if (book != null)
         {
-            book.SetWorldIndex(data.GetArea().GetWorldIndex());
-            if (data.GetArea().IsDungeon())
-            {
-                book.SetDungeonIndex(data.GetArea().GetDungeonIndex());                
-            }
-            else
-            {
-                book.SetDungeonIndex(0);
-            }
-            book.SetIndex(data.GetIndex());
-            book.SetName(data.GetName());
+            book.Initialize(data.GetArea(), data.GetIndex(), data.GetName());
         }
         else
         {
@@ -85,7 +75,7 @@ public class BookManager : MonoBehaviour
         PlaceholderObject placeholder = placeholderSpot.GetComponent<PlaceholderObject>();
         if (placeholder != null)
         {
-            placeholder.Setup(PlaceholderType.BOOK);
+            placeholder.Setup(PlaceholderType.BOOK, data.GetIndex());
         }
         else
         {

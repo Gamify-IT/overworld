@@ -26,16 +26,8 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// </summary>
     private void Awake()
     {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
-        {
-            RegisterToGameManager();
-            interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
-            GameEvents.current.onKeybindingChange += UpdateKeybindings;
-        }
-        else
-        {
-            //Display book icon
-        }
+        interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+        GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
 
     /// <summary>
@@ -69,6 +61,25 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
             ObjectManager.Instance.RemoveGameEntity<Book, BookData>(world, dungeon, number);
             GameEvents.current.onKeybindingChange -= UpdateKeybindings;
         }            
+    }
+
+    /// <summary>
+    ///     This function initializes the <c>Book</c> object
+    /// </summary>
+    /// <param name="areaIdentifier">The area the <c>Book</c> is in</param>
+    /// <param name="index">The index of the <c>Book</c> in its area</param>
+    public void Initialize(AreaInformation areaIdentifier, int index, string name)
+    {
+        world = areaIdentifier.GetWorldIndex();
+        dungeon = 0;
+        if (areaIdentifier.IsDungeon())
+        {
+            dungeon = areaIdentifier.GetDungeonIndex();
+        }
+        number = index;
+        nameOfBook = name;
+
+        RegisterToGameManager();
     }
 
     /// <summary>
@@ -164,54 +175,4 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         }
     }
 
-    #region Getter
-
-    /// <summary>
-    ///     This method returns the world index of the Book.
-    /// </summary>
-    /// <returns>world</returns>
-    public int GetWorldIndex()
-    {
-        return world;
-    }
-
-    public void SetWorldIndex(int worldIndex)
-    {
-        world = worldIndex;
-    }
-
-    /// <summary>
-    ///     This method returns the dungeon index of the Book.
-    /// </summary>
-    /// <returns>dungeon</returns>
-    public int GetDungeonIndex()
-    {
-        return dungeon;
-    }
-
-    public void SetDungeonIndex(int dungeonIndex)
-    {
-        dungeon = dungeonIndex;
-    }
-
-    /// <summary>
-    ///     This method returns the number of the Book.
-    /// </summary>
-    /// <returns>number</returns>
-    public int getIndex()
-    {
-        return number;
-    }
-
-    public void SetIndex(int index)
-    {
-        number = index;
-    }
-
-    public void SetName(string name)
-    {
-        nameOfBook = name;
-    }
-
-    #endregion
 }

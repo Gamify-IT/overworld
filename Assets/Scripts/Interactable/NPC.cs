@@ -39,17 +39,9 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             speechIndicator = child;
         }
 
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
-        {
-            RegisterToGameManager();
-            InitNewStuffSprite();
-            interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
-            GameEvents.current.onKeybindingChange += UpdateKeybindings;
-        }
-        else
-        {
-            //Display npc icon
-        }
+        InitNewStuffSprite();
+        interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+        GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
 
     /// <summary>
@@ -100,6 +92,26 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             ObjectManager.Instance.RemoveGameEntity<NPC, NPCData>(world, dungeon, number);
             GameEvents.current.onKeybindingChange -= UpdateKeybindings;
         }
+    }
+
+    /// <summary>
+    ///     This function initializes the <c>NPC</c> object
+    /// </summary>
+    /// <param name="areaIdentifier">The area the <c>NPC</c> is in</param>
+    /// <param name="index">The index of the <c>NPC</c> in its area</param>
+    public void Initialize(AreaInformation areaIdentifier, int index, string name, Sprite sprite)
+    {
+        world = areaIdentifier.GetWorldIndex();
+        dungeon = 0;
+        if (areaIdentifier.IsDungeon())
+        {
+            dungeon = areaIdentifier.GetDungeonIndex();
+        }
+        number = index;
+        nameOfNPC = name;
+        imageOfNPC = sprite;
+
+        RegisterToGameManager();
     }
 
     /// <summary>
@@ -279,59 +291,4 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         }
     }
 
-    #region Getter
-
-    /// <summary>
-    ///     This method returns the world index of the NPC.
-    /// </summary>
-    /// <returns>world</returns>
-    public int GetWorldIndex()
-    {
-        return world;
-    }
-
-    public void SetWorldIndex(int worldIndex)
-    {
-        world = worldIndex;
-    }
-
-    /// <summary>
-    ///     This method returns the dungeon index of the NPC.
-    /// </summary>
-    /// <returns>dungeon</returns>
-    public int GetDungeonIndex()
-    {
-        return dungeon;
-    }
-
-    public void SetDungeonIndex(int dungeonIndex)
-    {
-        dungeon = dungeonIndex;
-    }
-
-    /// <summary>
-    ///     This method returns the number of the NPC.
-    /// </summary>
-    /// <returns>number</returns>
-    public int getIndex()
-    {
-        return number;
-    }
-
-    public void SetIndex(int index)
-    {
-        this.number = index;
-    }
-
-    public void SetName(string name)
-    {
-        nameOfNPC = name;
-    }
-
-    public void SetSprite(Sprite sprite)
-    {
-        imageOfNPC = sprite;
-    }
-
-    #endregion
 }

@@ -58,9 +58,7 @@ public class BarrierManager : MonoBehaviour
         Barrier barrier = barrierSpot.GetComponent<Barrier>();
         if (barrier != null)
         {
-            barrier.SetWorldOriginIndex(data.GetArea().GetWorldIndex());
-            barrier.SetDestionationAreaIndex(data.GetDestinationAreaIndex());
-            barrier.SetBarrierType(data.GetBarrierType());
+            barrier.Initialize(data.GetArea().GetWorldIndex(), data.GetDestinationAreaIndex(), data.GetBarrierType());
         }
         else
         {
@@ -79,7 +77,7 @@ public class BarrierManager : MonoBehaviour
         PlaceholderObject placeholder = placeholderSpot.GetComponent<PlaceholderObject>();
         if (placeholder != null)
         {
-            placeholder.Setup(PlaceholderType.BARRIER);
+            placeholder.Setup(PlaceholderType.BARRIER, 0);
         }
         else
         {

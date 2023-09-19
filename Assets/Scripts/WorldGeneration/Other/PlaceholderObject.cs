@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public enum PlaceholderType
 {
@@ -15,8 +16,9 @@ public enum PlaceholderType
 
 public class PlaceholderObject : MonoBehaviour
 {
-    [SerializeField] private PlaceholderType type;
-    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private SpriteRenderer iconSpriteRenderer;
+    [SerializeField] private SpriteRenderer tensSpriteRenderer;
+    [SerializeField] private SpriteRenderer onesSpriteRenderer;
 
     [SerializeField] private Sprite minigameSprite;
     [SerializeField] private Sprite npcSprite;
@@ -25,39 +27,51 @@ public class PlaceholderObject : MonoBehaviour
     [SerializeField] private Sprite sceneTransitionSprite;
     [SerializeField] private Sprite barrierSprite;
 
-    public void Setup(PlaceholderType type)
-    {
-        this.type = type;
+    [SerializeField] private List<Sprite> digits;
 
+    public void Setup(PlaceholderType type, int index)
+    {
         switch(type)
         {
             case PlaceholderType.UNSET:
-                spriteRenderer.sprite = null;
+                iconSpriteRenderer.sprite = null;
                 break;
 
             case PlaceholderType.MINIGAME:
-                spriteRenderer.sprite = minigameSprite;
+                iconSpriteRenderer.sprite = minigameSprite;
                 break;
 
             case PlaceholderType.NPC:
-                spriteRenderer.sprite = npcSprite;
+                iconSpriteRenderer.sprite = npcSprite;
                 break;
 
             case PlaceholderType.BOOK:
-                spriteRenderer.sprite = bookSprite;
+                iconSpriteRenderer.sprite = bookSprite;
                 break;
 
             case PlaceholderType.TELEPORTER:
-                spriteRenderer.sprite = teleporterSprite;
+                iconSpriteRenderer.sprite = teleporterSprite;
                 break;
 
             case PlaceholderType.SCENE_TRANSITION:
-                spriteRenderer.sprite = sceneTransitionSprite;
+                iconSpriteRenderer.sprite = sceneTransitionSprite;
                 break;
 
             case PlaceholderType.BARRIER:
-                spriteRenderer.sprite = barrierSprite;
+                iconSpriteRenderer.sprite = barrierSprite;
                 break;
         }
+
+        if(index > 0 && index < 100)
+        {
+            int tens = index / 10;
+            if(tens != 0)
+            {
+                tensSpriteRenderer.sprite = digits[tens];
+            }            
+
+            int ones = index % 10;
+            onesSpriteRenderer.sprite = digits[ones];
+        }        
     }
 }

@@ -5,24 +5,11 @@ using Cysharp.Threading.Tasks;
 
 public class AreaDataManager
 {
-    #region Attributes
     Dictionary<int, WorldAreas> worldAreas;
-
-    private int maxDungeons;
-    private int maxMinigames;
-    private int maxNPCs;
-    private int maxBooks;
-    private int maxTeleporters;
-    #endregion
 
     public AreaDataManager()
     {
         worldAreas = new Dictionary<int, WorldAreas>();
-        maxDungeons = 0;
-        maxMinigames = 0;
-        maxNPCs = 0;
-        maxBooks = 0;
-        maxTeleporters = 0;
     }
 
     /// <summary>
@@ -43,13 +30,6 @@ public class AreaDataManager
                 loadingError = true;
             }
         }
-
-        //DEBUG:
-        Debug.Log("Max Dungeons: " + maxDungeons);
-        Debug.Log("Max Minigames: " + maxMinigames);
-        Debug.Log("Max NPCs: " + maxNPCs);
-        Debug.Log("Max Books: " + maxBooks);
-        Debug.Log("Max Teleporters: " + maxTeleporters);
 
         return loadingError;
     }
@@ -72,7 +52,6 @@ public class AreaDataManager
             successfulLoading = false;
             worldData = LoadLocalData(currentArea);
         }
-        UpdateMaxObjectCount(worldData);
         worldAreas[worldIndex].AddArea(0, worldData);
 
         int amountDungeons;
@@ -114,7 +93,6 @@ public class AreaDataManager
             successfulLoading = false;
             dungeonData = LoadLocalData(currentArea);
         }
-        UpdateMaxObjectCount(dungeonData);
         worldAreas[worldIndex].AddArea(dungeonIndex, dungeonData);
 
         return successfulLoading;
@@ -158,62 +136,6 @@ public class AreaDataManager
         AreaData areaData = AreaData.ConvertDtoToData(areaDTO);
         areaData.SetArea(currentArea);
         return areaData;
-    }
-
-    private void UpdateMaxObjectCount(AreaData areaData)
-    {
-        int amountDungeons = 0;
-        int amountMinigames;
-        int amountNpcs;
-        int amountBooks;
-        int amountTeleporters;
-
-        //retrieve values
-        if(areaData.IsGeneratedArea())
-        {
-            if(!areaData.GetArea().IsDungeon())
-            {
-                amountDungeons = areaData.GetAreaMapData().GetSceneTransitionSpots().Count;
-            }
-            amountMinigames = areaData.GetAreaMapData().GetMinigameSpots().Count;
-            amountNpcs = areaData.GetAreaMapData().GetNpcSpots().Count;
-            amountBooks = areaData.GetAreaMapData().GetBookSpots().Count;
-            amountTeleporters = areaData.GetAreaMapData().GetTeleporterSpots().Count;
-        }
-        else
-        {
-            amountDungeons = 4;
-            amountMinigames = 12;
-            amountNpcs = 10;
-            amountBooks = 5;
-            amountTeleporters = 6;
-        }
-
-        //check if higher than current max values
-        if(amountDungeons > maxDungeons)
-        {
-            maxDungeons = amountDungeons;
-        }
-
-        if(amountMinigames > maxMinigames)
-        {
-            maxMinigames = amountMinigames;
-        }
-
-        if(amountNpcs > maxNPCs)
-        {
-            maxNPCs = amountNpcs;
-        }
-
-        if(amountBooks > maxBooks)
-        {
-            maxBooks = amountBooks;
-        }
-
-        if(amountTeleporters > maxTeleporters)
-        {
-            maxTeleporters = amountTeleporters;
-        }
     }
 
     /// <summary>

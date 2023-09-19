@@ -30,6 +30,44 @@ public class ObjectPositionGenerator
         barrierPositions = new List<Vector2>();
     }
 
+    public ObjectPositionGenerator(string[,,] tiles, Vector2Int offset)
+    {
+        size = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
+        this.offset = offset;
+        accessableTiles = GetAccessableTiles(tiles);
+        minigamePositions = new List<Vector2>();
+        npcPositions = new List<Vector2>();
+        bookPositions = new List<Vector2>();
+        teleporterPositions = new List<Vector2>();
+        sceneTransitionPositions = new List<Vector2>();
+        barrierPositions = new List<Vector2>();
+    }
+
+    /// <summary>
+    ///     This function gets the accessable tiles of a given layout
+    /// </summary>
+    /// <param name="tiles">The layout</param>
+    /// <returns>All accessable tiles</returns>
+    private bool[,] GetAccessableTiles(string[,,] tiles)
+    {
+        bool[,] accessableTiles = new bool[size.x, size.y];
+        for(int x=0; x<size.x; x++)
+        {
+            for(int y=0; y<size.y; y++)
+            {
+                if(tiles[x,y,0].Equals("none"))
+                {
+                    accessableTiles[x, y] = false;
+                }
+                else
+                {
+                    accessableTiles[x, y] = true;
+                }
+            }
+        }
+        return accessableTiles;
+    }
+
     #region Generate Functions
     /// <summary>
     ///     This function generates positions for minigame spots

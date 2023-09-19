@@ -56,17 +56,7 @@ public class TeleporterManager : MonoBehaviour
         Teleporter teleporter = teleporterSpot.GetComponent<Teleporter>();
         if (teleporter != null)
         {
-            teleporter.SetWorldIndex(data.GetArea().GetWorldIndex());
-            if (data.GetArea().IsDungeon())
-            {
-                teleporter.SetDungeonIndex(data.GetArea().GetDungeonIndex());
-            }
-            else
-            {
-                teleporter.SetDungeonIndex(0);
-            }
-            teleporter.SetIndex(data.GetIndex());
-            teleporter.SetName(data.GetName());
+            teleporter.Initialize(data.GetArea(), data.GetIndex(), data.GetName());
         }
         else
         {
@@ -85,7 +75,7 @@ public class TeleporterManager : MonoBehaviour
         PlaceholderObject placeholder = placeholderSpot.GetComponent<PlaceholderObject>();
         if (placeholder != null)
         {
-            placeholder.Setup(PlaceholderType.TELEPORTER);
+            placeholder.Setup(PlaceholderType.TELEPORTER, data.GetIndex());
         }
         else
         {

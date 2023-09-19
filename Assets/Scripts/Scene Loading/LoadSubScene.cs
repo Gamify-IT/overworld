@@ -120,6 +120,31 @@ public class LoadSubScene : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function initializes the <c>SceneTransition</c> object
+    /// </summary>
+    /// <param name="areaIdentifier">The area the <c>SceneTransition</c> is in</param>
+    /// <param name="areaToLoad">The area the <c>SceneTransition</c> is getting the player to</param>
+    /// <param name="facingDirection">The direction of the player is facing (in the current area)</param>
+    public void Initialize(AreaInformation areaIdentifier, AreaInformation areaToLoad, FacingDirection facingDirection)
+    {
+        worldIndex = areaIdentifier.GetWorldIndex();
+        dungeonIndex = 0;
+        if (areaIdentifier.IsDungeon())
+        {
+            dungeonIndex = areaIdentifier.GetDungeonIndex();
+        }
+
+        worldIndexToLoad = areaToLoad.GetWorldIndex();
+        dungeonIndexToLoad = 0;
+        if(areaToLoad.IsDungeon())
+        {
+            dungeonIndexToLoad = areaToLoad.GetDungeonIndex();
+        }
+
+        this.facingDirection = facingDirection;
+    }
+
+    /// <summary>
     ///     This function is called when the player enters a dungeon entrance.
     ///     It loads the dungeon scene and sets the player's position.
     ///     Also it fades in the scene.

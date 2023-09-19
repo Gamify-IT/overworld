@@ -88,6 +88,23 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     }
 
     /// <summary>
+    ///     This function initializes the <c>Teleporter</c> object
+    /// </summary>
+    /// <param name="areaIdentifier">The area the <c>Teleporter</c> is in</param>
+    /// <param name="index">The index of the <c>Teleporter</c> in its area</param>
+    public void Initialize(AreaInformation areaIdentifier, int index, string name)
+    {
+        worldID = areaIdentifier.GetWorldIndex();
+        dungeonID = 0;
+        if (areaIdentifier.IsDungeon())
+        {
+            dungeonID = areaIdentifier.GetDungeonIndex();
+        }
+        teleporterNumber = index;
+        teleporterName = name;
+    }
+
+    /// <summary>
     ///     Recognize the player entering the teleporter. When this is the first time, it unlocks the teleporter and registers
     ///     it in the DataManager
     /// </summary>
@@ -221,54 +238,4 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         }
     }
 
-    #region Getter
-
-    /// <summary>
-    ///     This method returns the world index of the Book.
-    /// </summary>
-    /// <returns>world</returns>
-    public int GetWorldIndex()
-    {
-        return worldID;
-    }
-
-    public void SetWorldIndex(int worldIndex)
-    {
-        worldID = worldIndex;
-    }
-
-    /// <summary>
-    ///     This method returns the dungeon index of the Book.
-    /// </summary>
-    /// <returns>dungeon</returns>
-    public int GetDungeonIndex()
-    {
-        return dungeonID;
-    }
-
-    public void SetDungeonIndex(int dungeonIndex)
-    {
-        dungeonID = dungeonIndex;
-    }
-
-    /// <summary>
-    ///     This method returns the number of the Book.
-    /// </summary>
-    /// <returns>number</returns>
-    public int getIndex()
-    {
-        return teleporterNumber;
-    }
-
-    public void SetIndex(int index)
-    {
-        teleporterNumber = index;
-    }
-
-    public void SetName(string name)
-    {
-        teleporterName = name;
-    }
-
-    #endregion
 }

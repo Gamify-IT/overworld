@@ -75,29 +75,7 @@ public class SceneTransitionManager : MonoBehaviour
         LoadSubScene sceneTransition = sceneTransitionSpot.GetComponent<LoadSubScene>();
         if (sceneTransition != null)
         {
-            sceneTransition.SetWorldIndex(data.GetArea().GetWorldIndex());
-            if(data.GetArea().IsDungeon())
-            {
-                sceneTransition.SetDungeonIndex(data.GetArea().GetDungeonIndex());
-            }
-            else
-            {
-                sceneTransition.SetDungeonIndex(0);
-            }
-
-            sceneTransition.worldIndexToLoad = data.GetAreaToLoad().GetWorldIndex();
-            if (data.GetAreaToLoad().IsDungeon())
-            {
-                Debug.Log("Scene to load is a dungeon: " + data.GetAreaToLoad().GetDungeonIndex());
-                sceneTransition.dungeonIndexToLoad = data.GetAreaToLoad().GetDungeonIndex();
-            }
-            else
-            {
-                Debug.Log("Scene to load is a world");
-                sceneTransition.dungeonIndexToLoad = 0;
-            }
-
-            sceneTransition.facingDirection = data.GetFacingDirection();
+            sceneTransition.Initialize(data.GetArea(), data.GetAreaToLoad(), data.GetFacingDirection());
         }
         else
         {
@@ -126,7 +104,7 @@ public class SceneTransitionManager : MonoBehaviour
         PlaceholderObject placeholder = placeholderSpot.GetComponent<PlaceholderObject>();
         if (placeholder != null)
         {
-            placeholder.Setup(PlaceholderType.SCENE_TRANSITION);
+            placeholder.Setup(PlaceholderType.SCENE_TRANSITION, data.GetAreaToLoad().GetDungeonIndex());
         }
         else
         {
