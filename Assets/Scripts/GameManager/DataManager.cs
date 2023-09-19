@@ -581,7 +581,7 @@ public class DataManager : MonoBehaviour
     {
         maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
-        maxNPCs = GameSettings.GetMaxNpCs();
+        maxNPCs = GameSettings.GetMaxNpcs();
         maxBooks = GameSettings.GetMaxBooks();
         maxDungeons = GameSettings.GetMaxDungeons();
 

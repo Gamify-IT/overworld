@@ -504,7 +504,7 @@ public class GameManager : MonoBehaviour
         overworldBackendPath = GameSettings.GetOverworldBackendPath();
         maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
-        maxNPCs = GameSettings.GetMaxNpCs();
+        maxNPCs = GameSettings.GetMaxNpcs();
         maxBooks = GameSettings.GetMaxBooks();
         maxDungeons = GameSettings.GetMaxDungeons();
     }

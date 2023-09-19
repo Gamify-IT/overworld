@@ -28,16 +28,31 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private Button continueButton;
 
     //Content
-    [SerializeField] private TMP_InputField amountMinigames;
-    [SerializeField] private TMP_InputField amountNPCs;
-    [SerializeField] private TMP_InputField amountBooks;
-    [SerializeField] private TMP_InputField amountTeleporter;
-    [SerializeField] private TMP_InputField amountDungeons;
+    [SerializeField] private Slider amountMinigamesSlider;
+    [SerializeField] private TextMeshProUGUI maxMinigamesText;
+    [SerializeField] private TextMeshProUGUI amountMinigamesText;
     [SerializeField] private Button generateMinigamesButton;
+
+    [SerializeField] private Slider amountNpcsSlider;
+    [SerializeField] private TextMeshProUGUI maxNpcsText;
+    [SerializeField] private TextMeshProUGUI amountNpcsText;
     [SerializeField] private Button generateNpcsButton;
+
+    [SerializeField] private Slider amountBooksSlider;
+    [SerializeField] private TextMeshProUGUI maxBooksText;
+    [SerializeField] private TextMeshProUGUI amountBooksText;
     [SerializeField] private Button generateBooksButton;
+
+    [SerializeField] private Slider amountTeleportersSlider;
+    [SerializeField] private TextMeshProUGUI maxTeleportersText;
+    [SerializeField] private TextMeshProUGUI amountTeleportersText;
     [SerializeField] private Button generateTeleporterButton;
+
+    [SerializeField] private Slider amountDungeonsSlider;
+    [SerializeField] private TextMeshProUGUI maxDungeonsText;
+    [SerializeField] private TextMeshProUGUI amountDungeonsText;
     [SerializeField] private Button generateDungeonsButton;
+
     [SerializeField] private Button generateAllContentButton;
     [SerializeField] private Button saveAreaButton;
     #endregion
@@ -76,17 +91,28 @@ public class GeneratorUI : MonoBehaviour
 
         accessabilitySlider.value = 0.5f;
 
+        SetupMaxValues();
+
         if(areaData.IsGeneratedArea())
         {
             stypeDropdown.value = (int) areaData.GetAreaMapData().GetWorldStyle();
 
             continueButton.interactable = true;
 
-            amountMinigames.text = areaData.GetAreaMapData().GetMinigameSpots().Count.ToString();
-            amountNPCs.text = areaData.GetAreaMapData().GetNpcSpots().Count.ToString();
-            amountBooks.text = areaData.GetAreaMapData().GetBookSpots().Count.ToString();
-            amountTeleporter.text = areaData.GetAreaMapData().GetTeleporterSpots().Count.ToString();
-            amountDungeons.text = areaData.GetAreaMapData().GetTeleporterSpots().Count.ToString();
+            amountMinigamesText.text = areaData.GetAreaMapData().GetMinigameSpots().Count.ToString();
+            amountMinigamesSlider.value = areaData.GetAreaMapData().GetMinigameSpots().Count;
+
+            amountNpcsText.text = areaData.GetAreaMapData().GetNpcSpots().Count.ToString();
+            amountNpcsSlider.value = areaData.GetAreaMapData().GetNpcSpots().Count;
+
+            amountBooksText.text = areaData.GetAreaMapData().GetBookSpots().Count.ToString();
+            amountBooksSlider.value = areaData.GetAreaMapData().GetBookSpots().Count;
+
+            amountTeleportersText.text = areaData.GetAreaMapData().GetTeleporterSpots().Count.ToString();
+            amountTeleportersSlider.value = areaData.GetAreaMapData().GetTeleporterSpots().Count;
+
+            amountDungeonsText.text = areaData.GetAreaMapData().GetTeleporterSpots().Count.ToString();
+            amountDungeonsSlider.value = areaData.GetAreaMapData().GetSceneTransitionSpots().Count;
         }
         else
         {
@@ -94,11 +120,11 @@ public class GeneratorUI : MonoBehaviour
 
             continueButton.interactable = false;
 
-            amountMinigames.text = "";
-            amountNPCs.text = "";
-            amountBooks.text = "";
-            amountTeleporter.text = "";
-            amountDungeons.text = "";
+            amountMinigamesText.text = "";
+            amountNpcsText.text = "";
+            amountBooksText.text = "";
+            amountTeleportersText.text = "";
+            amountDungeonsText.text = "";
         }
     }
 
@@ -125,7 +151,33 @@ public class GeneratorUI : MonoBehaviour
         sizeX.enabled = true;
         sizeY.enabled = true;
 
-        amountDungeons.enabled = false;
+        amountDungeonsSlider.enabled = false;
+    }
+
+    /// <summary>
+    ///     This function sets the max values for all objects
+    /// </summary>
+    private void SetupMaxValues()
+    {
+        int maxMinigames = GameSettings.GetMaxMinigames();
+        amountMinigamesSlider.maxValue = maxMinigames;
+        maxMinigamesText.text = maxMinigames.ToString();
+
+        int maxNpcs = GameSettings.GetMaxNpcs();
+        amountNpcsSlider.maxValue = maxNpcs;
+        maxNpcsText.text = maxNpcs.ToString();
+
+        int maxBooks = GameSettings.GetMaxBooks();
+        amountBooksSlider.maxValue = maxBooks;
+        maxBooksText.text = maxBooks.ToString();
+
+        int maxTeleporter = GameSettings.GetMaxTeleporters();
+        amountTeleportersSlider.maxValue = maxTeleporter;
+        maxTeleportersText.text = maxTeleporter.ToString();
+
+        int maxDungeons = GameSettings.GetMaxDungeons();
+        amountDungeonsSlider.maxValue = maxDungeons;
+        maxDungeonsText.text = maxDungeons.ToString();
     }
 
     public void MinimizeButtonPressed()
@@ -168,19 +220,22 @@ public class GeneratorUI : MonoBehaviour
     /// </summary>
     private void ResetContentPanel()
     {
-        amountMinigames.text = "0";
+        amountMinigamesText.text = "0";
         OnMinigameAmountChange();
-        amountNPCs.text = "0";
-        amountBooks.text = "0";
-        amountTeleporter.text = "0";
-        amountDungeons.text = "0";
+        amountNpcsText.text = "0";
+        amountBooksText.text = "0";
+        amountTeleportersText.text = "0";
+        amountDungeonsText.text = "0";
     }
 
     public void ContinueButtonPressed()
     {
         if(areaIdentifier.IsDungeon())
         {
-            amountDungeons.text = "1";
+            amountDungeonsSlider.maxValue = 1;
+            amountDungeonsSlider.value = 1;
+            amountDungeonsText.text = "1";
+            maxDungeonsText.text = "1";
             GenerateDungeonsButtonPressed();
         }        
 
@@ -194,78 +249,33 @@ public class GeneratorUI : MonoBehaviour
     #region Generation Buttons
     public void GenerateMinigamesButtonPressed()
     {
-        int amount;
-        try
-        {
-            amount = int.Parse(amountMinigames.text);
-        }
-        catch (System.FormatException e)
-        {
-            Debug.LogError(e.ToString());
-            amount = 1;
-        }
-        uiManager.GenerateMinigames(amount);
+        int amountMinigames = (int) amountMinigamesSlider.value;
+        uiManager.GenerateMinigames(amountMinigames);
         CheckSaveWorldButtonStatus();
     }
 
     public void GenerateNpcsButtonPressed()
     {
-        int amount;
-        try
-        {
-            amount = int.Parse(amountNPCs.text);
-        }
-        catch(System.FormatException e)
-        {
-            Debug.LogError(e.ToString());
-            amount = 0;
-        }
-        uiManager.GenerateNpcs(amount);
+        int amountNpcs = (int) amountNpcsSlider.value;
+        uiManager.GenerateNpcs(amountNpcs);
     }
 
     public void GenerateBooksButtonPressed()
     {
-        int amount;
-        try
-        {
-            amount = int.Parse(amountBooks.text);
-        }
-        catch (System.FormatException e)
-        {
-            Debug.LogError(e.ToString());
-            amount = 0;
-        }
-        uiManager.GenerateBooks(amount);
+        int amountBooks = (int) amountBooksSlider.value;
+        uiManager.GenerateBooks(amountBooks);
     }
 
     public void GenerateTeleporterButtonPressed()
     {
-        int amount;
-        try
-        {
-            amount = int.Parse(amountTeleporter.text);
-        }
-        catch (System.FormatException e)
-        {
-            Debug.LogError(e.ToString());
-            amount = 0;
-        }
-        uiManager.GenerateTeleporters(amount);
+        int amountTeleporters = (int) amountTeleportersSlider.value;
+        uiManager.GenerateTeleporters(amountTeleporters);
     }
 
     public void GenerateDungeonsButtonPressed()
     {
-        int amount;
-        try
-        {
-            amount = int.Parse(amountDungeons.text);
-        }
-        catch (System.FormatException e)
-        {
-            Debug.LogError(e.ToString());
-            amount = 0;
-        }
-        uiManager.GenerateDungeons(amount);
+        int amountDungeons = (int) amountDungeonsSlider.value;
+        uiManager.GenerateDungeons(amountDungeons);
     }
     #endregion
 
@@ -309,134 +319,49 @@ public class GeneratorUI : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function is called when the value of the <c>Amount of Minigames</c> input field value is changed and sets the <c>Generate Minigames</c>
+    ///     This function is called when the value of the <c>Amount of Minigames</c> slider is changed and sets the amount text to this value and the <c>Generate Minigames</c>
     ///     button active or inactive, based on the entered value
     /// </summary>
     public void OnMinigameAmountChange()
     {
-        bool validAmountOfMinigames = true;
-        if (amountMinigames.text.Equals(""))
-        {
-            validAmountOfMinigames = false;
-        }
-        else
-        {
-            int amount;
-            try
-            {
-                amount = int.Parse(amountMinigames.text);
-                if (amount == 0)
-                {
-                    validAmountOfMinigames = false;
-                }
-            }
-            catch (System.FormatException e)
-            {
-                Debug.LogError(e.ToString());
-                validAmountOfMinigames = false;
-            }
-        }
-        generateMinigamesButton.interactable = validAmountOfMinigames;
-
-        CheckGenerateAllContentButtonStatus();
+        int amountMinigames = (int) amountMinigamesSlider.value;
+        amountMinigamesText.text = amountMinigames.ToString();
     }
 
     /// <summary>
-    ///     This function is called when the value of the <c>Amount of NPCs</c> input field value is changed and sets the <c>Generate NPCs</c>
-    ///     button active or inactive, based on the entered value
+    ///     This function is called when the value of the <c>Amount of NPCs</c> slider is changed and sets the amount text to this value
     /// </summary>
     public void OnNpcAmountChange()
     {
-        if (amountNPCs.text.Equals(""))
-        {
-            generateNpcsButton.interactable = false;
-        }
-        else
-        {
-            generateNpcsButton.interactable = true;
-        }
-        CheckGenerateAllContentButtonStatus();
+        int amountNpcs = (int) amountNpcsSlider.value;
+        amountNpcsText.text = amountNpcs.ToString();
     }
 
     /// <summary>
-    ///     This function is called when the value of the <c>Amount of Books</c> input field value is changed and sets the <c>Generate Books</c>
-    ///     button active or inactive, based on the entered value
+    ///     This function is called when the value of the <c>Amount of Books</c> slider is changed and sets the amount text to this value
     /// </summary>
     public void OnBookAmountChange()
     {
-        if (amountBooks.text.Equals(""))
-        {
-            generateBooksButton.interactable = false;
-        }
-        else
-        {
-            generateBooksButton.interactable = true;
-        }
-        CheckGenerateAllContentButtonStatus();
+        int amountBooks = (int)amountBooksSlider.value;
+        amountBooksText.text = amountBooks.ToString();
     }
 
     /// <summary>
-    ///     This function is called when the value of the <c>Amount of Teleporter</c> input field value is changed and sets the <c>Generate Teleporter</c>
-    ///     button active or inactive, based on the entered value
+    ///     This function is called when the value of the <c>Amount of Teleporter</c> slider is changed and sets the amount text to this value
     /// </summary>
     public void OnTeleporterAmountChange()
     {
-        if (amountTeleporter.text.Equals(""))
-        {
-            generateTeleporterButton.interactable = false;
-        }
-        else
-        {
-            generateTeleporterButton.interactable = true;
-        }
-        CheckGenerateAllContentButtonStatus();
+        int amountTeleporters = (int)amountTeleportersSlider.value;
+        amountTeleportersText.text = amountTeleporters.ToString();
     }
 
     /// <summary>
-    ///     This function is called when the value of the <c>Amount of Dungeons</c> input field value is changed and sets the <c>Generate Dungeons</c>
-    ///     button active or inactive, based on the entered value
+    ///     This function is called when the value of the <c>Amount of Dungeons</c> slider is changed and sets the amount text to this value
     /// </summary>
     public void OnDungeonsAmountChange()
     {
-        if (amountDungeons.text.Equals(""))
-        {
-            generateDungeonsButton.interactable = false;
-        }
-        else
-        {
-            generateDungeonsButton.interactable = true;
-        }
-        CheckGenerateAllContentButtonStatus();
-    }
-
-    /// <summary>
-    ///     This function is called, when the value of any <c>Amount of content</c> input field value is changed and sets the <c>Generate All Content</c>
-    ///     button active or inactive, based on the entered value
-    /// </summary>
-    private void CheckGenerateAllContentButtonStatus()
-    {
-        bool allValid = true;
-        if(!generateMinigamesButton.IsInteractable())
-        {
-            allValid = false;
-        }
-        if (!generateNpcsButton.IsInteractable())
-        {
-            allValid = false;
-        }
-        if (!generateBooksButton.IsInteractable())
-        {
-            allValid = false;
-        }
-        if (!generateTeleporterButton.IsInteractable())
-        {
-            allValid = false;
-        }
-        if (!generateDungeonsButton.IsInteractable())
-        {
-            allValid = false;
-        }
-        generateAllContentButton.interactable = allValid;
+        int amountDungeons = (int)amountDungeonsSlider.value;
+        amountDungeonsText.text = amountDungeons.ToString();
     }
 
     /// <summary>

@@ -131,6 +131,7 @@ public class LoadFirstScene : MonoBehaviour
     /// <returns></returns>
     private async UniTask StartGenerator()
     {
+        await GameSettings.FetchValues();
         await SceneManager.LoadSceneAsync("AreaGeneratorManager");
     }
 }

@@ -322,7 +322,7 @@ public class ObjectManager : MonoBehaviour
 
         maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
-        maxNPCs = GameSettings.GetMaxNpCs();
+        maxNPCs = GameSettings.GetMaxNpcs();
         maxBooks = GameSettings.GetMaxBooks();
         maxDungeons = GameSettings.GetMaxDungeons();
         maxTeleporters = GameSettings.GetMaxTeleporters();

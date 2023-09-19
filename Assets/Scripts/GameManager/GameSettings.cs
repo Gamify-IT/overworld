@@ -83,7 +83,7 @@ public static class GameSettings
     ///     This function returns the maximum amount of NPCs in an area.
     /// </summary>
     /// <returns>The maximum amount of NPCs in an area</returns>
-    public static int GetMaxNpCs()
+    public static int GetMaxNpcs()
     {
         return maxNPCs;
     }
