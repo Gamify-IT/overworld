@@ -440,7 +440,10 @@ public class GeneratorManager : MonoBehaviour
                 writer.Write(json);
             }
         }
+
+#if UNITY_EDITOR
         UnityEditor.AssetDatabase.Refresh();
+#endif
     }
 
     /// <summary>

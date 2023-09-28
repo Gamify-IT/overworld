@@ -341,7 +341,10 @@ public class AreaManager : MonoBehaviour
                 writer.Write(json);
             }
         }
+
+#if UNITY_EDITOR
         UnityEditor.AssetDatabase.Refresh();
+#endif
     }
     #endregion
 
