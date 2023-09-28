@@ -6,9 +6,10 @@
     "generatedArea": false,
     "areaMapDTO": {
         "layout": {
-            "content": {
-                "secondDimension": []
-            }
+            "sizeX": 0,
+            "sizeY": 0,
+            "layers": 0,
+            "tiles": ""
         },
         "style": "",
         "minigameSpots": [],

@@ -9,14 +9,20 @@ using System;
 [Serializable]
 public class Layout
 {
-    public ThreeDimensionalArray<string> content;
+    public int sizeX;
+    public int sizeY;
+    public int layers;
+    public string tiles;
 
     #region Constructors
     public Layout() { }
 
-    public Layout(ThreeDimensionalArray<string> content)
+    public Layout(int sizeX, int sizeY, int layers, string tiles)
     {
-        this.content = content;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        this.layers = layers;
+        this.tiles = tiles;
     }
     #endregion
 
@@ -37,27 +43,25 @@ public class Layout
     /// <returns>The converted <c>Layout</c> object</returns>
     public static Layout ConvertArrayToLayout(string[,,] array)
     {
-        TwoDimensionalArray<string>[] secondDimension = new TwoDimensionalArray<string>[array.GetLength(0)];
-        for(int thirdDimensionIndex=0; thirdDimensionIndex < array.GetLength(0); thirdDimensionIndex++)
+        int sizeX = array.GetLength(0);
+        int sizeY = array.GetLength(1);
+        int layers = array.GetLength(2);
+        string tiles = "";
+
+        for(int x=0; x<sizeX; x++)
         {
-            OneDimensionalArray<string>[] firstDimension = new OneDimensionalArray<string>[array.GetLength(1)];
-            for(int secondDimensionIndex=0; secondDimensionIndex < array.GetLength(1); secondDimensionIndex++)
+            for(int y=0; y<sizeY; y++)
             {
-                string[] elements = new string[array.GetLength(2)];                
-                for (int firstDimensionIndex = 0; firstDimensionIndex < array.GetLength(2); firstDimensionIndex++)
+                for(int l=0; l<layers; l++)
                 {
-                    elements[firstDimensionIndex] = array[thirdDimensionIndex, secondDimensionIndex, firstDimensionIndex];
+                    tiles += array[x, y, l] + ";";
                 }
-                OneDimensionalArray<string> oneDimensionalArray = new OneDimensionalArray<string>(elements);
-                firstDimension[secondDimensionIndex] = oneDimensionalArray;
             }
-            TwoDimensionalArray<string> twoDimensionalArray = new TwoDimensionalArray<string>(firstDimension);
-            secondDimension[thirdDimensionIndex] = twoDimensionalArray;
         }
+        //remove last ;
+        tiles = tiles.Substring(0, tiles.Length - 1);
 
-        ThreeDimensionalArray<string> thirdDimension = new ThreeDimensionalArray<string>(secondDimension);
-
-        Layout layout = new Layout(thirdDimension);
+        Layout layout = new Layout(sizeX, sizeY, layers, tiles);
         return layout;
     }
 
@@ -68,36 +72,55 @@ public class Layout
     /// <returns>The converted three dimensional string arry</returns>
     public static string[,,] ConvertLayoutToArray(Layout layout)
     {
-        int thirdDimensionSize = layout.content.secondDimension.Length;
-        if(thirdDimensionSize == 0)
+        if(layout == null)
         {
             return new string[0, 0, 0];
         }
 
-        int secondDimensionSize = layout.content.secondDimension[0].firstDimension.Length;
-        if (secondDimensionSize == 0)
+        if (layout.tiles == null)
         {
             return new string[0, 0, 0];
         }
 
-        int firstDimensionSize = layout.content.secondDimension[0].firstDimension[0].elements.Length;
-        if (firstDimensionSize == 0)
+        if (!layout.tiles.Contains(";"))
         {
             return new string[0, 0, 0];
         }
 
-        string[,,] array = new string[thirdDimensionSize, secondDimensionSize, firstDimensionSize];
+        string[,,] tiles = new string[layout.sizeX, layout.sizeY, layout.layers];
 
-        for(int thirdDimensionIndex=0; thirdDimensionIndex<thirdDimensionSize; thirdDimensionIndex++)
+        string[] sprites = layout.tiles.Split(";");
+        int posX = 0;
+        int posY = 0;
+        int layer = 0;
+
+        Debug.Log("Sprites size: " + sprites.Length);
+
+        for(int i=0; i<sprites.Length; i++)
         {
-            for (int secondDimensionIndex = 0; secondDimensionIndex < secondDimensionSize; secondDimensionIndex++)
+            //check current indizes
+            if(posX >= layout.sizeX || posY >= layout.sizeY || layer >= layout.layers)
             {
-                for (int firstDimensionIndex = 0; firstDimensionIndex < firstDimensionSize; firstDimensionIndex++)
+                Debug.LogError("Error converting layout to array");
+            }
+
+            //store tile in array
+            tiles[posX, posY, layer] = sprites[i];
+
+            //get next array position
+            layer++;
+            if(layer >= layout.layers)
+            {
+                layer = 0;
+                posY++;
+                if(posY >= layout.sizeY)
                 {
-                    array[thirdDimensionIndex, secondDimensionIndex, firstDimensionIndex] = layout.content.secondDimension[thirdDimensionIndex].firstDimension[secondDimensionIndex].elements[firstDimensionIndex];
+                    posY = 0;
+                    posX++;
                 }
             }
         }
-        return array;
+
+        return tiles;
     }
 }

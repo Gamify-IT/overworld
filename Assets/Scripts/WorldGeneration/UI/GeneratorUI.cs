@@ -10,6 +10,7 @@ public class GeneratorUI : MonoBehaviour
     #region Attributes
     //WorldGenerator
     private GeneratorUIManager uiManager;
+    private AreaData areaData;
     private AreaInformation areaIdentifier;
     private AreaInformationData areaInformation;
 
@@ -67,6 +68,7 @@ public class GeneratorUI : MonoBehaviour
     {
         this.uiManager = uiManager;        
         this.areaInformation = areaInformation;
+        this.areaData = areaData;
         areaIdentifier = areaData.GetArea();
 
         Debug.Log("CurrentArea: " + areaIdentifier.GetWorldIndex() + "-" + areaIdentifier.GetDungeonIndex());
@@ -145,8 +147,16 @@ public class GeneratorUI : MonoBehaviour
     /// </summary>
     private void SetupDungeon()
     {
-        sizeX.text = areaInformation.GetSize().x.ToString();
-        sizeY.text = areaInformation.GetSize().y.ToString();
+        if(areaData.IsGeneratedArea())
+        {
+            sizeX.text = areaData.GetAreaMapData().GetTiles().GetLength(0).ToString();
+            sizeY.text = areaData.GetAreaMapData().GetTiles().GetLength(1).ToString();
+        }
+        else
+        {
+            sizeX.text = areaInformation.GetSize().x.ToString();
+            sizeY.text = areaInformation.GetSize().y.ToString();
+        }        
 
         sizeX.enabled = true;
         sizeY.enabled = true;

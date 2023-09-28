@@ -60,7 +60,7 @@ public class AreaGeneratorManager : MonoBehaviour
         else
         {            
             Debug.LogError("No area specified, loading world 1 instead");
-            return new AreaInformation(1, new Optional<int>(2));
+            return new AreaInformation(1, new Optional<int>());
         }        
     }
 
