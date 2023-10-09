@@ -10,7 +10,7 @@ using System;
 public class MinigameSpotDTO
 {
     #region Attributes
-    public AreaLocationDTO location;
+    public AreaLocationDTO area;
     public int index;
     public Position position;
     #endregion
@@ -18,9 +18,9 @@ public class MinigameSpotDTO
     #region Constructors
     public MinigameSpotDTO() { }
 
-    public MinigameSpotDTO(AreaLocationDTO location, int index, Position position)
+    public MinigameSpotDTO(AreaLocationDTO area, int index, Position position)
     {
-        this.location = location;
+        this.area = area;
         this.index = index;
         this.position = position;
     }

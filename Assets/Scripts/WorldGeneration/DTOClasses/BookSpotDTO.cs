@@ -10,7 +10,7 @@ using System;
 public class BookSpotDTO
 {
     #region Attributes
-    public AreaLocationDTO location;
+    public AreaLocationDTO area;
     public int index;
     public Position position;
     public string name;
@@ -19,9 +19,9 @@ public class BookSpotDTO
     #region Constructors
     public BookSpotDTO() { }
 
-    public BookSpotDTO(AreaLocationDTO location, int index, Position position, string name)
+    public BookSpotDTO(AreaLocationDTO area, int index, Position position, string name)
     {
-        this.location = location;
+        this.area = area;
         this.index = index;
         this.position = position;
         this.name = name;

@@ -45,7 +45,7 @@ public class AreaData
         Optional<CustomAreaMapData> areaMapData = new Optional<CustomAreaMapData>();
         if(generatedArea)
         {
-            areaMapData.SetValue(CustomAreaMapData.ConvertDtoToData(areaDTO.areaMapDTO));
+            areaMapData.SetValue(CustomAreaMapData.ConvertDtoToData(areaDTO.customAreaMap));
         }
 
         AreaData areaData = new AreaData(area, areaMapData);

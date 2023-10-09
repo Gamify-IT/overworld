@@ -30,10 +30,10 @@ public class BarrierSpotData
     public static BarrierSpotData ConvertDtoToData(BarrierSpotDTO barrierSpotDTO)
     {
         Optional<int> dungeonIndex = new Optional<int>();
-        AreaInformation area = new AreaInformation(barrierSpotDTO.location.worldIndex, dungeonIndex);
-        if (barrierSpotDTO.location.dungeonIndex != 0)
+        AreaInformation area = new AreaInformation(barrierSpotDTO.area.worldIndex, dungeonIndex);
+        if (barrierSpotDTO.area.dungeonIndex != 0)
         {
-            area.SetDungeonIndex(barrierSpotDTO.location.dungeonIndex);
+            area.SetDungeonIndex(barrierSpotDTO.area.dungeonIndex);
         }
         Vector2 position = new Vector2(barrierSpotDTO.position.x, barrierSpotDTO.position.y);
         BarrierType type = (BarrierType)System.Enum.Parse(typeof(BarrierType), barrierSpotDTO.type);

@@ -10,7 +10,7 @@ using System;
 public class SceneTransitionSpotDTO
 {
     #region Attribute
-    public AreaLocationDTO location;
+    public AreaLocationDTO area;
     public Position position;
     public Position size;
     public AreaLocationDTO areaToLoad;
@@ -20,9 +20,9 @@ public class SceneTransitionSpotDTO
     #region Constructors
     public SceneTransitionSpotDTO() { }
 
-    public SceneTransitionSpotDTO(AreaLocationDTO location, Position position, Position size, AreaLocationDTO areaToLoad, string facingDirection)
+    public SceneTransitionSpotDTO(AreaLocationDTO area, Position position, Position size, AreaLocationDTO areaToLoad, string facingDirection)
     {
-        this.location = location;
+        this.area = area;
         this.position = position;
         this.size = size;
         this.areaToLoad = areaToLoad;

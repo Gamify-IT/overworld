@@ -10,7 +10,7 @@ using System;
 public class NpcSpotDTO
 {
     #region Attributes
-    public AreaLocationDTO location;
+    public AreaLocationDTO area;
     public int index;
     public Position position;
     public string name;
@@ -21,9 +21,9 @@ public class NpcSpotDTO
     #region Constructors
     public NpcSpotDTO() { }
 
-    public NpcSpotDTO(AreaLocationDTO location, int index, Position position, string name, string spriteName, string iconName)
+    public NpcSpotDTO(AreaLocationDTO area, int index, Position position, string name, string spriteName, string iconName)
     {
-        this.location = location;
+        this.area = area;
         this.index = index;
         this.position = position;
         this.name = name;

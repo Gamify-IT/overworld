@@ -8,17 +8,17 @@ public class AreaDTO
     #region Attributes
     public AreaLocationDTO area;
     public bool generatedArea;
-    public CustomAreaMapDTO areaMapDTO;
+    public CustomAreaMapDTO customAreaMap;
     #endregion
 
     #region Constructors
     public AreaDTO() { }
 
-    public AreaDTO(AreaLocationDTO area, bool generatedArea, CustomAreaMapDTO areaMapDTO)
+    public AreaDTO(AreaLocationDTO area, bool generatedArea, CustomAreaMapDTO customAreaMap)
     {
         this.area = area;
         this.generatedArea = generatedArea;
-        this.areaMapDTO = areaMapDTO;
+        this.customAreaMap = customAreaMap;
     }
     #endregion
 

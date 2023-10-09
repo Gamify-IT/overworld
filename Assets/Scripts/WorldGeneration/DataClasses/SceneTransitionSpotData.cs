@@ -31,14 +31,14 @@ public class SceneTransitionSpotData
     /// <returns></returns>
     public static SceneTransitionSpotData ConvertDtoToData(SceneTransitionSpotDTO sceneTransitionSpotDTO)
     {
-        AreaInformation area = new AreaInformation(sceneTransitionSpotDTO.location.worldIndex, new Optional<int>());
-        if (sceneTransitionSpotDTO.location.dungeonIndex != 0)
+        AreaInformation area = new AreaInformation(sceneTransitionSpotDTO.area.worldIndex, new Optional<int>());
+        if (sceneTransitionSpotDTO.area.dungeonIndex != 0)
         {
-            area.SetDungeonIndex(sceneTransitionSpotDTO.location.dungeonIndex);
+            area.SetDungeonIndex(sceneTransitionSpotDTO.area.dungeonIndex);
         }        
         Vector2 position = new Vector2(sceneTransitionSpotDTO.position.x, sceneTransitionSpotDTO.position.y);
         Vector2 size = new Vector2(sceneTransitionSpotDTO.size.x, sceneTransitionSpotDTO.size.y);
-        AreaInformation areaToLoad = new AreaInformation(sceneTransitionSpotDTO.location.worldIndex, new Optional<int>());
+        AreaInformation areaToLoad = new AreaInformation(sceneTransitionSpotDTO.area.worldIndex, new Optional<int>());
         if (sceneTransitionSpotDTO.areaToLoad.dungeonIndex != 0)
         {
             areaToLoad.SetDungeonIndex(sceneTransitionSpotDTO.areaToLoad.dungeonIndex);

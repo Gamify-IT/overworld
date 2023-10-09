@@ -17,13 +17,13 @@ public class CustomAreaMapDTO
     public BookSpotDTO[] bookSpots;
     public BarrierSpotDTO[] barrierSpots;
     public TeleporterSpotDTO[] teleporterSpots;
-    public SceneTransitionSpotDTO[] sceneTransitions;
+    public SceneTransitionSpotDTO[] sceneTransitionSpots;
     #endregion
 
     #region Constructors
     public CustomAreaMapDTO() { }
 
-    public CustomAreaMapDTO(Layout layout, string style, MinigameSpotDTO[] minigameSpots, NpcSpotDTO[] npcSpots, BookSpotDTO[] bookSpots, BarrierSpotDTO[] barrierSpots, TeleporterSpotDTO[] teleporterSpots, SceneTransitionSpotDTO[] sceneTransitions)
+    public CustomAreaMapDTO(Layout layout, string style, MinigameSpotDTO[] minigameSpots, NpcSpotDTO[] npcSpots, BookSpotDTO[] bookSpots, BarrierSpotDTO[] barrierSpots, TeleporterSpotDTO[] teleporterSpots, SceneTransitionSpotDTO[] sceneTransitionSpots)
     {
         this.layout = layout;
         this.style = style;
@@ -32,7 +32,7 @@ public class CustomAreaMapDTO
         this.bookSpots = bookSpots;
         this.barrierSpots = barrierSpots;
         this.teleporterSpots = teleporterSpots;
-        this.sceneTransitions = sceneTransitions;
+        this.sceneTransitionSpots = sceneTransitionSpots;
     }
     #endregion
 

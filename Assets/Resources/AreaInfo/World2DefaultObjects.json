@@ -1,13 +1,14 @@
 {
     "layout": {
-        "content": {
-            "secondDimension": []
-        }
+        "sizeX": 1,
+        "sizeY": 1,
+        "layers": 1,
+        "tiles": ""
     },
     "style": "CUSTOM",
     "minigameSpots": [
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -18,7 +19,7 @@
             }
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -29,7 +30,7 @@
             }
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -40,7 +41,7 @@
             }
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -51,7 +52,7 @@
             }
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -62,7 +63,7 @@
             }
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -73,7 +74,7 @@
             }
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -84,7 +85,7 @@
             }
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -95,7 +96,7 @@
             }
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -106,7 +107,7 @@
             }
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -117,7 +118,7 @@
             }
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -128,7 +129,7 @@
             }
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -141,7 +142,7 @@
     ],
     "npcSpots": [
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -155,7 +156,7 @@
             "iconName": "NPCHeads_0"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -169,7 +170,7 @@
             "iconName": "NPCHeads_0"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -183,7 +184,7 @@
             "iconName": "NPCHeads_6"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -197,7 +198,7 @@
             "iconName": "NPCHeads_8"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -211,7 +212,7 @@
             "iconName": "NPCHeads_11"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -225,7 +226,7 @@
             "iconName": "NPCHeads_14"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -239,7 +240,7 @@
             "iconName": "NPCHeads_10"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -253,7 +254,7 @@
             "iconName": "NPCHeads_7"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -267,7 +268,7 @@
             "iconName": "NPCHeads_4"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -283,7 +284,7 @@
     ],
     "bookSpots": [
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -295,7 +296,7 @@
             "name": "Mysterious Book"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -307,7 +308,7 @@
             "name": "Mysterious Book"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -319,7 +320,7 @@
             "name": "Mysterious Book"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -331,7 +332,7 @@
             "name": "Mysterious Book"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -345,7 +346,7 @@
     ],
     "barrierSpots": [
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -357,7 +358,7 @@
             "destinationAreaIndex": "3"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -369,7 +370,7 @@
             "destinationAreaIndex": "1"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -381,7 +382,7 @@
             "destinationAreaIndex": "2"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -393,7 +394,7 @@
             "destinationAreaIndex": "3"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -407,7 +408,7 @@
     ],
     "teleporterSpots": [
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -419,7 +420,7 @@
             "name": "Southern Trail"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -431,7 +432,7 @@
             "name": "Battlefield"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -443,7 +444,7 @@
             "name": "Nothern Park"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -455,7 +456,7 @@
             "name": "Village"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -467,7 +468,7 @@
             "name": "Marketplace"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -479,9 +480,9 @@
             "name": "Beachy Isle"
         }
     ],
-    "sceneTransitions": [
+    "sceneTransitionSpots": [
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -500,7 +501,7 @@
             "facingDirection": "south"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -519,7 +520,7 @@
             "facingDirection": "south"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },
@@ -538,7 +539,7 @@
             "facingDirection": "south"
         },
         {
-            "location": {
+            "area": {
                 "worldIndex": 2,
                 "dungeonIndex": 0
             },

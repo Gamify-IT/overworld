@@ -26,10 +26,10 @@ public class TeleporterSpotData
     /// <returns>A <c>TeleporterSpotData</c> object with the data</returns>
     public static TeleporterSpotData ConvertDtoToData(TeleporterSpotDTO teleporterSpotDTO)
     {
-        AreaInformation area = new AreaInformation(teleporterSpotDTO.location.worldIndex, new Optional<int>());
-        if (teleporterSpotDTO.location.dungeonIndex != 0)
+        AreaInformation area = new AreaInformation(teleporterSpotDTO.area.worldIndex, new Optional<int>());
+        if (teleporterSpotDTO.area.dungeonIndex != 0)
         {
-            area.SetDungeonIndex(teleporterSpotDTO.location.dungeonIndex);
+            area.SetDungeonIndex(teleporterSpotDTO.area.dungeonIndex);
         }
         int index = teleporterSpotDTO.index;
         Vector2 position = new Vector2(teleporterSpotDTO.position.x, teleporterSpotDTO.position.y);

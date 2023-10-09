@@ -27,10 +27,10 @@ public class MinigameSpotData
     /// <returns></returns>
     public static MinigameSpotData ConvertDtoToData(MinigameSpotDTO minigameSpotDTO)
     {
-        AreaInformation area = new AreaInformation(minigameSpotDTO.location.worldIndex, new Optional<int>());
-        if(minigameSpotDTO.location.dungeonIndex != 0)
+        AreaInformation area = new AreaInformation(minigameSpotDTO.area.worldIndex, new Optional<int>());
+        if(minigameSpotDTO.area.dungeonIndex != 0)
         {
-            area.SetDungeonIndex(minigameSpotDTO.location.dungeonIndex);
+            area.SetDungeonIndex(minigameSpotDTO.area.dungeonIndex);
         }
         int index = minigameSpotDTO.index;
         Vector2 position = new Vector2(minigameSpotDTO.position.x, minigameSpotDTO.position.y);

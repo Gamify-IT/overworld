@@ -10,7 +10,7 @@ using System;
 public class BarrierSpotDTO
 {
     #region Attribute
-    public AreaLocationDTO location;
+    public AreaLocationDTO area;
     public Position position;
     public string type;
     public int destinationAreaIndex;
@@ -19,9 +19,9 @@ public class BarrierSpotDTO
     #region Constructors
     public BarrierSpotDTO() { }
 
-    public BarrierSpotDTO(AreaLocationDTO location, Position position, string type, int destinationAreaIndex)
+    public BarrierSpotDTO(AreaLocationDTO area, Position position, string type, int destinationAreaIndex)
     {
-        this.location = location;
+        this.area = area;
         this.position = position;
         this.type = type;
         this.destinationAreaIndex = destinationAreaIndex;

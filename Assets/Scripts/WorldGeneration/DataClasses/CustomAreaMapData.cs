@@ -96,9 +96,9 @@ public class CustomAreaMapData
         }
 
         List<SceneTransitionSpotData> sceneTransitionSpots = new List<SceneTransitionSpotData>();
-        for(int i = 0; i < areaMapDTO.sceneTransitions.Length; i++)
+        for(int i = 0; i < areaMapDTO.sceneTransitionSpots.Length; i++)
         {
-            sceneTransitionSpots.Add(SceneTransitionSpotData.ConvertDtoToData(areaMapDTO.sceneTransitions[i]));
+            sceneTransitionSpots.Add(SceneTransitionSpotData.ConvertDtoToData(areaMapDTO.sceneTransitionSpots[i]));
         }
 
         CustomAreaMapData data = new CustomAreaMapData(tiles, style, minigameSpots, npcSpots, bookSpots, barrierSpots, teleporterSpots, sceneTransitionSpots);

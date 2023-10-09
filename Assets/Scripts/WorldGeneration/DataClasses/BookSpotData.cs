@@ -29,10 +29,10 @@ public class BookSpotData
     /// <returns></returns>
     public static BookSpotData ConvertDtoToData(BookSpotDTO bookSpotDTO)
     {
-        AreaInformation area = new AreaInformation(bookSpotDTO.location.worldIndex, new Optional<int>());
-        if (bookSpotDTO.location.dungeonIndex != 0)
+        AreaInformation area = new AreaInformation(bookSpotDTO.area.worldIndex, new Optional<int>());
+        if (bookSpotDTO.area.dungeonIndex != 0)
         {
-            area.SetDungeonIndex(bookSpotDTO.location.dungeonIndex);
+            area.SetDungeonIndex(bookSpotDTO.area.dungeonIndex);
         }
         int index = bookSpotDTO.index;
         Vector2 position = new Vector2(bookSpotDTO.position.x, bookSpotDTO.position.y);

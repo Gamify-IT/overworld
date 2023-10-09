@@ -33,10 +33,10 @@ public class NpcSpotData
     /// <returns></returns>
     public static NpcSpotData ConvertDtoToData(NpcSpotDTO npcSpotDTO)
     {
-        AreaInformation area = new AreaInformation(npcSpotDTO.location.worldIndex, new Optional<int>());
-        if (npcSpotDTO.location.dungeonIndex != 0)
+        AreaInformation area = new AreaInformation(npcSpotDTO.area.worldIndex, new Optional<int>());
+        if (npcSpotDTO.area.dungeonIndex != 0)
         {
-            area.SetDungeonIndex(npcSpotDTO.location.dungeonIndex);
+            area.SetDungeonIndex(npcSpotDTO.area.dungeonIndex);
         }
         int index = npcSpotDTO.index;
         Vector2 position = new Vector2(npcSpotDTO.position.x, npcSpotDTO.position.y);
