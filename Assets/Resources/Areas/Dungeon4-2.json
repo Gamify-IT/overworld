@@ -1,7 +1,22 @@
 {
-	"area":{
-		"worldIndex": 4,
-		"dungeonIndex": 2
-	},
-	"customArea": false
+    "area": {
+        "worldIndex": 4,
+        "dungeonIndex": 2
+    },
+    "generatedArea": false,
+    "customAreaMap": {
+        "layout": {
+            "sizeX": 0,
+            "sizeY": 0,
+            "layers": 0,
+            "tiles": ""
+        },
+        "style": "",
+        "minigameSpots": [],
+        "npcSpots": [],
+        "bookSpots": [],
+        "barrierSpots": [],
+        "teleporterSpots": [],
+        "sceneTransitionSpots": []
+    }
 }

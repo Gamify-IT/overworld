@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Text;
 
 /// <summary>
 ///     This class is used to allow retrieving a World Map Layout from Get Requests.
@@ -46,20 +47,23 @@ public class Layout
         int sizeX = array.GetLength(0);
         int sizeY = array.GetLength(1);
         int layers = array.GetLength(2);
-        string tiles = "";
-
+        
+        StringBuilder stringBuilder = new StringBuilder();
+        
         for(int x=0; x<sizeX; x++)
         {
             for(int y=0; y<sizeY; y++)
             {
                 for(int l=0; l<layers; l++)
                 {
-                    tiles += array[x, y, l] + ";";
+                    stringBuilder.Append(array[x, y, l] + ";");
                 }
             }
         }
         //remove last ;
-        tiles = tiles.Substring(0, tiles.Length - 1);
+        stringBuilder.Remove(stringBuilder.ToString().Length - 1, 1);
+        string tiles = stringBuilder.ToString();
+        
 
         Layout layout = new Layout(sizeX, sizeY, layers, tiles);
         return layout;

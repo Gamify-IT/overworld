@@ -4,7 +4,7 @@
         "dungeonIndex": 2
     },
     "generatedArea": false,
-    "areaMapDTO": {
+    "customAreaMap": {
         "layout": {
             "sizeX": 0,
             "sizeY": 0,
@@ -17,6 +17,6 @@
         "bookSpots": [],
         "barrierSpots": [],
         "teleporterSpots": [],
-        "sceneTransitions": []
+        "sceneTransitionSpots": []
     }
 }
