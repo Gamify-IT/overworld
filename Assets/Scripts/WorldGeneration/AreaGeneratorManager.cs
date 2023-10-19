@@ -19,9 +19,6 @@ public class AreaGeneratorManager : MonoBehaviour
     {
         currentArea = GetAreInformation();
         areaData = GetAreaData();
-
-
-
         LoadAreaScene();      
     }
 
@@ -33,79 +30,39 @@ public class AreaGeneratorManager : MonoBehaviour
     /// <returns>The converted <c>AreaInformation</c>, if valid, the default world 1 otherwise</returns>
     private AreaInformation GetAreInformation()
     {
-        Optional<string> areaToLoad = BrowserVariable.TryToReadVariable("GeneratorArea");
-        if(areaToLoad.IsPresent())
-        {
-            string area = areaToLoad.Value();
-            Optional<AreaInformation> areaInformation;
-            if (area.Contains("-"))
-            {
-                areaInformation = ConvertDungeon(area);
-            }
-            else
-            {
-                areaInformation = ConvertWorld(area);
-            }
+        //get gamemode parameter of url
+        string urlPart = Application.absoluteURL.Split("/")[^1];
 
-            if (areaInformation.IsPresent())
+        //split in parts
+        string[] areaParts = urlPart.Split("-");
+
+        if(areaParts.Length == 3)
+        {
+            bool successWorldIndex = int.TryParse(areaParts[1], out int worldIndex);
+            bool successDungeonIndex = int.TryParse(areaParts[2], out int dungeonIndex);
+
+            if(successWorldIndex && successDungeonIndex)
             {
-                return areaInformation.Value();
+                Optional<int> optionalDungeonIndex = new Optional<int>();
+                if(dungeonIndex != 0)
+                {
+                    optionalDungeonIndex.SetValue(dungeonIndex);
+                }
+                return new AreaInformation(worldIndex, optionalDungeonIndex);
             }
             else
             {
-                Debug.LogError("Inavlid area specified, loading world 1 instead");
+                Debug.Log("Invalid gamemode provided: " + urlPart + ", loading world 1 instead");
                 return new AreaInformation(1, new Optional<int>());
             }
         }
         else
-        {            
-            Debug.LogError("No area specified, loading world 1 instead");
+        {
+            Debug.Log("Invalid gamemode provided: " + urlPart + ", loading world 1 instead");
             return new AreaInformation(1, new Optional<int>());
-        }        
+        }     
     }
 
-    /// <summary>
-    ///     This function tries to convert a string into a dungeon identifier
-    /// </summary>
-    /// <param name="area">the string to be converted</param>
-    /// <returns>The converted dungeon, if valid, an empty <c>Optional</c> otherwise</returns>
-    private Optional<AreaInformation> ConvertDungeon(string area)
-    {
-        Optional<AreaInformation> optionalAreaInformation = new Optional<AreaInformation>();
-        string[] parts = area.Split("-");
-        if (parts.Length == 2)
-        {
-            bool success = int.TryParse(parts[0], out int worldIndex);
-            if (success)
-            {
-                AreaInformation areaInformation = new AreaInformation(worldIndex, new Optional<int>());
-                success = int.TryParse(parts[1], out int dungeonIndex);
-                if (success)
-                {
-                    areaInformation.SetDungeonIndex(dungeonIndex);
-                    optionalAreaInformation.SetValue(areaInformation);
-                }
-            }
-        }
-        return optionalAreaInformation;
-    }
-
-    /// <summary>
-    ///     This function tries to convert a string into a world identifier
-    /// </summary>
-    /// <param name="area">the string to be converted</param>
-    /// <returns>The converted world, if valid, an empty <c>Optional</c> otherwise</returns>
-    private Optional<AreaInformation> ConvertWorld(string area)
-    {
-        Optional<AreaInformation> optionalAreaInformation = new Optional<AreaInformation>();
-        bool success = int.TryParse(area, out int worldIndex);
-        if (success)
-        {
-            AreaInformation areaInformation = new AreaInformation(worldIndex, new Optional<int>());
-            optionalAreaInformation.SetValue(areaInformation);
-        }
-        return optionalAreaInformation;
-    }
     #endregion
 
     #region GetAreaData

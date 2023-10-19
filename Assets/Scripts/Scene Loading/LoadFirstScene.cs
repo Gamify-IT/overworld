@@ -44,26 +44,25 @@ public class LoadFirstScene : MonoBehaviour
     /// <returns>The gamemode specified in the browser variable "Gamemode", PLAY, if not present</returns>
     private Gamemode GetGamemode()
     {
-        Gamemode gamemode = Gamemode.GENERATOR;
+        //get gamemode parameter of url
+        string urlGamemodePart = Application.absoluteURL.Split("/")[^1];
 
-        Optional<string> result = BrowserVariable.TryToReadVariable("Gamemode");
-        if(result.IsPresent())
+        //get first part
+        string gamemodePart = urlGamemodePart.Split("-")[0];
+
+        //try to parse to valid gamemode
+        bool success = System.Enum.TryParse<Gamemode>(gamemodePart, out Gamemode gamemode);
+        if (success)
         {
-            bool success = System.Enum.TryParse<Gamemode>(result.Value(), out gamemode);
-            if(success)
-            {
-                Debug.Log("Specified gamemode: " + gamemode);
-            }
-            else
-            {
-                Debug.LogError("Incorrect gamemode specified: " + result.Value());
-            }
+            Debug.Log("Specified gamemode: " + gamemode);
+            return gamemode;
         }
         else
         {
-            Debug.LogError("No gamemode given");
+            Gamemode defaultGamemode = Gamemode.GENERATOR;
+            Debug.LogError("Incorrect gamemode specified: " + gamemodePart + ", setting default gamemode: " + defaultGamemode);
+            return defaultGamemode;
         }
-        return gamemode;
     }
 
     /// <summary>

@@ -45,7 +45,14 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public async UniTask<bool> ValidateCourseId()
     {
-        courseId = Application.absoluteURL.Split("/")[^1];
+
+#if UNITY_EDITOR
+        //skip loading in editor mode
+        Debug.Log("Skip loading, due to Unity Editor mode");
+        return false;
+#endif
+        courseId = Application.absoluteURL.Split("/")[^2];
+
         string uri = overworldBackendPath + "/courses/" + courseId;
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
