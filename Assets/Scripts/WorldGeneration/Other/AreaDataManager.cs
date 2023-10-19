@@ -105,12 +105,22 @@ public class AreaDataManager
     /// <returns>The <c>AreaData</c>, if the request was successful, <c>null</c> otherwise</returns>
     private async UniTask<AreaData> FetchData(AreaInformation currentArea)
     {
-        string backendPath = GameSettings.GetOverworldBackendPath();
+        //get specific path
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + GameSettings.GetCourseID() + "/areaMaps/" + currentArea.GetWorldIndex();
 
-        //TODO: add specific path
-        string path = backendPath + "";
+        if(currentArea.IsDungeon())
+        {
+            path += "/dungeon/" + currentArea.GetDungeonIndex();
+        }
 
-        //TODO: add backend calling
+        //fetch area data from backend
+        Optional<AreaDTO> areaDTO = await RestRequest.GetRequest<AreaDTO>(path);
+        if(areaDTO.IsPresent())
+        {
+            AreaData areaData = AreaData.ConvertDtoToData(areaDTO.Value());
+            return areaData;
+        }
+
         return null;
     }
 

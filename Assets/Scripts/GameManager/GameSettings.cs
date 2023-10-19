@@ -13,6 +13,7 @@ public static class GameSettings
 
     private static string overworldBackendPath;
     private static Gamemode gamemode;
+    private static string courseID;
     private static int maxWorld;
     private static int maxMinigames;
     private static int maxNPCs;
@@ -59,6 +60,16 @@ public static class GameSettings
     public static Gamemode GetGamemode()
     {
         return gamemode;
+    }
+
+    public static void SetCourseID(string newCourseID)
+    {
+        courseID = newCourseID;
+    }
+
+    public static string GetCourseID()
+    {
+        return courseID;
     }
 
     /// <summary>

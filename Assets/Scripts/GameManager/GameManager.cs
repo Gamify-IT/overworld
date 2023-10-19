@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
         return false;
 #endif
         courseId = Application.absoluteURL.Split("/")[^2];
+        GameSettings.SetCourseID(courseId);
 
         string uri = overworldBackendPath + "/courses/" + courseId;
 
@@ -76,6 +77,7 @@ public class GameManager : MonoBehaviour
                     Debug.LogError(uri + ": Error: " + webRequest.error);
                     Debug.Log("CourseId " + courseId + " is invalid.");
                     courseId = "";
+                    GameSettings.SetCourseID("");
                     return false;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);

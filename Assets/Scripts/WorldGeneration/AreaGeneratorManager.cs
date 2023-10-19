@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Networking;
 
 public class AreaGeneratorManager : MonoBehaviour
 {
@@ -11,15 +12,27 @@ public class AreaGeneratorManager : MonoBehaviour
     [SerializeField] private CameraMovement cameraController;
 
     //Data
+    private string courseID;
     private AreaInformation currentArea;
     private AreaData areaData;
     #endregion
 
     private void Awake()
     {
-        currentArea = GetAreInformation();
-        areaData = GetAreaData();
-        LoadAreaScene();      
+        Setup();
+    }
+
+    private async void Setup()
+    {
+#if UNITY_EDITOR
+        courseID = "";
+#else
+        courseID = Application.absoluteURL.Split("/")[^2];
+#endif
+
+        currentArea = GetAreaInformation();
+        areaData = await GetAreaData();
+        LoadAreaScene();
     }
 
     #region GetAreaInformation
@@ -28,7 +41,7 @@ public class AreaGeneratorManager : MonoBehaviour
     /// </summary>
     /// <param name="area">The string to be converted</param>
     /// <returns>The converted <c>AreaInformation</c>, if valid, the default world 1 otherwise</returns>
-    private AreaInformation GetAreInformation()
+    private AreaInformation GetAreaInformation()
     {
         //get gamemode parameter of url
         string urlPart = Application.absoluteURL.Split("/")[^1];
@@ -59,7 +72,7 @@ public class AreaGeneratorManager : MonoBehaviour
         else
         {
             Debug.Log("Invalid gamemode provided: " + urlPart + ", loading world 1 instead");
-            return new AreaInformation(1, new Optional<int>());
+            return new AreaInformation(1, new Optional<int>(2));
         }     
     }
 
@@ -70,12 +83,32 @@ public class AreaGeneratorManager : MonoBehaviour
     ///     This function retrieves the needed data from the backend
     /// </summary>
     /// <returns></returns>
-    private AreaData GetAreaData()
+    private async UniTask<AreaData> GetAreaData()
     {
-        //TODO: load data from backend
-
-        //Workaround: use local json files
+#if UNITY_EDITOR
+        //use local files in editor
+        Debug.Log("Load from local files");
         return LoadLocalData();
+#endif
+
+        //load data from backend
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseID + "/areaMaps/" + currentArea.GetWorldIndex();
+        if(currentArea.IsDungeon())
+        {
+            path += "/dungeon/" + currentArea.GetDungeonIndex();
+        }
+
+        Optional<AreaDTO> areaDTO = await RestRequest.GetRequest<AreaDTO>(path);
+        if(areaDTO.IsPresent())
+        {
+            AreaData areaData = AreaData.ConvertDtoToData(areaDTO.Value());
+            return areaData;
+        }
+        else
+        {
+            return null;
+            //TODO: error screen
+        }
     }
 
     /// <summary>
@@ -132,11 +165,11 @@ public class AreaGeneratorManager : MonoBehaviour
         Gamemode gamemode = GameSettings.GetGamemode();
         if (gamemode == Gamemode.GENERATOR)
         {
-            areaManager.SetupGenerator(areaData, currentArea, cameraController);
+            areaManager.SetupGenerator(courseID, areaData, currentArea, cameraController);
         }
         else if(gamemode == Gamemode.INSPECT)
         {
-            areaManager.SetupInspector(areaData, currentArea, cameraController);
+            areaManager.SetupInspector(courseID, areaData, currentArea, cameraController);
         }
     }
 }

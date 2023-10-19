@@ -16,6 +16,7 @@ public class AreaManager : MonoBehaviour
     [SerializeField] private GeneratorUIManager generatorUI;
     [SerializeField] private InspectorUIManager inspectorUI;
 
+    private string courseID;
     private AreaData areaData;
     private AreaInformation areaIdentifier;
     private AreaInformationData areaInformation;
@@ -119,8 +120,9 @@ public class AreaManager : MonoBehaviour
     /// <param name="areaData">The data of the area</param>
     /// <param name="areaIdentifier">The area identifier</param>
     /// <param name="cameraController">The camera</param>
-    public void SetupInspector(AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController)
+    public void SetupInspector(string courseID, AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController)
     {
+        this.courseID = courseID;
         this.areaData = areaData;
         this.areaIdentifier = areaIdentifier;
         areaInformation = GetAreaInformation(areaIdentifier);
@@ -145,9 +147,10 @@ public class AreaManager : MonoBehaviour
     /// <param name="areaData">The data of the area</param>
     /// <param name="areaIdentifier">The area identifier</param>
     /// <param name="cameraController">The camera</param>
-    public void SetupGenerator(AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController)
+    public void SetupGenerator(string courseID, AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController)
     {
         //store infos
+        this.courseID = courseID;
         worldIndex = areaData.GetArea().GetWorldIndex();
         dungeonIndex = 0;
         if(areaData.GetArea().IsDungeon())
@@ -314,12 +317,12 @@ public class AreaManager : MonoBehaviour
     /// </summary>
     public async void SaveArea()
     {
-        //TODO: send world map data to backend
-
-        //Workaround: use local json files
         AreaDTO areaDTO = AreaDTO.ConvertDataToDto(areaData);
         string json = JsonUtility.ToJson(areaDTO, true);
         string path;
+
+#if UNITY_EDITOR
+        //use local files in editor
         if (areaIdentifier.IsDungeon())
         {
             path = "Assets/Resources/Areas/Dungeon" + areaIdentifier.GetWorldIndex() + "-" + areaIdentifier.GetDungeonIndex() + ".json";
@@ -329,6 +332,24 @@ public class AreaManager : MonoBehaviour
             path = "Assets/Resources/Areas/World" + areaIdentifier.GetWorldIndex() + ".json";
         }
         WriteToJsonFile(json, path);
+        return;
+#endif
+        //send area map data to backend
+        path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseID + "/areaMaps/" + areaIdentifier.GetWorldIndex();
+        if(areaIdentifier.IsDungeon())
+        {
+            path += "/dungeon/" + areaIdentifier.GetDungeonIndex();
+        }
+
+        bool success = await RestRequest.PutRequest(path, json);
+        if(success)
+        {
+            //show success message
+        }
+        else
+        {
+            //show error message
+        }
     }
 
     //THIS FUNCTION IS ONLY NEEDED UNTIL BACKEND LOADING AND STORING IS IMPLEMENTED!
