@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 /// <summary>
 ///     This class is used to generate a layout
 /// </summary>
-public class AreaGenerator
+public class AreaGeneratorOld
 {
     //TODO: move to config json file
     private static int borderThickness = 3;
@@ -19,7 +19,7 @@ public class AreaGenerator
     private List<WorldConnection> worldConnections;
     private bool[,] accessableTiles;
 
-    public AreaGenerator(Vector2Int size, WorldStyle style, float accessability, List<WorldConnection> worldConnections)
+    public AreaGeneratorOld(Vector2Int size, WorldStyle style, float accessability, List<WorldConnection> worldConnections)
     {
         layout = new string[size.x, size.y, 5];
         this.size = size;

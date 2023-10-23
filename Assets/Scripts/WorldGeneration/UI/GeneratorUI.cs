@@ -24,6 +24,7 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private TMP_InputField sizeX;    
     [SerializeField] private TMP_InputField sizeY;
     [SerializeField] private TMP_Dropdown stypeDropdown;
+    [SerializeField] private TMP_Dropdown generatorTypeDropdown;
     [SerializeField] private Slider accessabilitySlider;
     [SerializeField] private Button generateLayoutButton;
     [SerializeField] private Button continueButton;
@@ -216,9 +217,10 @@ public class GeneratorUI : MonoBehaviour
     {
         Vector2Int size = new Vector2Int(int.Parse(sizeX.text), int.Parse(sizeY.text));
         WorldStyle style = (WorldStyle) stypeDropdown.value;
+        LayoutGeneratorType layoutGeneratorType = (LayoutGeneratorType) generatorTypeDropdown.value;
         float accessability = accessabilitySlider.value;
 
-        uiManager.GenerateLayout(size, style, accessability);
+        uiManager.GenerateLayout(size, style, layoutGeneratorType, accessability);
 
         continueButton.interactable = true;
 

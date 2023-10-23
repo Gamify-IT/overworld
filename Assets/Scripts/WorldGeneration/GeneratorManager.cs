@@ -278,7 +278,7 @@ public class GeneratorManager : MonoBehaviour
     {        
         WorldStyle style = areaMapData.GetWorldStyle();
         List<WorldConnection> worldConnections = areaInformation.GetWorldConnections();
-        AreaGenerator areaGenerator = new AreaGenerator(size, style, accessability, worldConnections);
+        AreaGeneratorOld areaGenerator = new AreaGeneratorOld(size, style, accessability, worldConnections);
         areaGenerator.GenerateLayout();
         string[,,] layout = areaGenerator.GetLayout();
         

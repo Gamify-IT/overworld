@@ -74,9 +74,9 @@ public class GeneratorUIManager : MonoBehaviour
     /// <param name="size">The size of the layout</param>
     /// <param name="style">The style of the new layout<param>
     /// <param name="accessability">How much area is accessable</param>
-    public void GenerateLayout(Vector2Int size, WorldStyle style, float accessability)
+    public void GenerateLayout(Vector2Int size, WorldStyle style, LayoutGeneratorType layoutGeneratorType, float accessability)
     {
-        areaManager.GenerateLayout(size, style, accessability);
+        areaManager.GenerateLayout(size, style, layoutGeneratorType, accessability);
     }
 
     /// <summary>

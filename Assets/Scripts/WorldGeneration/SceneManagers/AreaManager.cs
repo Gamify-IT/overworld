@@ -20,7 +20,6 @@ public class AreaManager : MonoBehaviour
     private AreaData areaData;
     private AreaInformation areaIdentifier;
     private AreaInformationData areaInformation;
-    private AreaGenerator areaGenerator;
     private ObjectPositionGenerator objectPositionGenerator;
     private ObjectGenerator objectGenerator;
 
@@ -375,15 +374,48 @@ public class AreaManager : MonoBehaviour
     /// </summary>
     /// <param name="size">The size of the layout</param>
     /// <param name="style">The style of the new layout</param>
+    /// <param name="layoutGeneratorType">The type of layout generator to be used</param>
     /// <param name="accessability">How much area is accessable</param>
-    public void GenerateLayout(Vector2Int size, WorldStyle style, float accessability)
+    public void GenerateLayout(Vector2Int size, WorldStyle style, LayoutGeneratorType layoutGeneratorType, float accessability)
     {
         //Setup area generator and object and generate layout
         List<WorldConnection> worldConnections = areaInformation.GetWorldConnections();
-        areaGenerator = new AreaGenerator(size, style, accessability, worldConnections);
-        areaGenerator.GenerateLayout();
-        string[,,] layout = areaGenerator.GetLayout();
-        objectPositionGenerator = new ObjectPositionGenerator(areaGenerator.GetAccessableTiles(), areaInformation.GetObjectOffset());
+
+        //setup layout generator
+        LayoutGenerator layoutGenerator = new CellularAutomataGenerator(size, accessability, worldConnections);
+
+        switch (layoutGeneratorType)
+        {
+            case LayoutGeneratorType.CELLULAR_AUTOMATA:
+                layoutGenerator = new CellularAutomataGenerator(size, accessability, worldConnections);
+                break;
+
+            case LayoutGeneratorType.DRUNKARDS_WALK:
+                layoutGenerator = new DrunkardsWalkGenerator(size, accessability, worldConnections);
+                break;
+
+            case LayoutGeneratorType.ISLAND_CELLULAR_AUTOMATA:
+                layoutGenerator = new IslandsGenerator(size, accessability, RoomGenerator.CELLULAR_AUTOMATA);
+                break;
+
+            case LayoutGeneratorType.ISLAND_DRUNKARDS_WALK:
+                layoutGenerator = new IslandsGenerator(size, accessability, RoomGenerator.DRUNKARDS_WALK);
+                break;
+        }
+
+        //generate layout
+        layoutGenerator.GenerateLayout();
+        bool[,] baseLayout = layoutGenerator.GetLayout();
+
+        //polish layout
+        LayoutPolisher polisher = new LayoutPolisher(style);
+        baseLayout = polisher.Polish(baseLayout);
+
+        //convert layout
+        LayoutConverter converter = new LayoutConverter(style);
+        string[,,] layout = converter.Convert(baseLayout);
+
+        objectPositionGenerator = new ObjectPositionGenerator(baseLayout, areaInformation.GetObjectOffset());
         
         //Update stored data
         CustomAreaMapData areaMapData = new CustomAreaMapData(layout, style);
