@@ -26,7 +26,6 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// </summary>
     private void Awake()
     {
-        RegisterToGameManager();
         interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
@@ -36,16 +35,19 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// </summary>
     private void Update()
     {
-        if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByName("Book").isLoaded &&
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByName("Book").isLoaded &&
             !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
-        {
-            StartCoroutine(LoadBookScene());
-        }
-        else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByName("Book").isLoaded &&
-                 !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
-        {
-            SceneManager.UnloadSceneAsync("Book");
-        }
+            {
+                StartCoroutine(LoadBookScene());
+            }
+            else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByName("Book").isLoaded &&
+                     !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
+            {
+                SceneManager.UnloadSceneAsync("Book");
+            }
+        }            
     }
 
     /// <summary>
@@ -53,9 +55,31 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// </summary>
     private void OnDestroy()
     {
-        Debug.Log("remove Book " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveGameEntity<Book, BookData>(world, dungeon, number);
-        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            Debug.Log("remove Book " + world + "-" + dungeon + "-" + number);
+            ObjectManager.Instance.RemoveGameEntity<Book, BookData>(world, dungeon, number);
+            GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+        }            
+    }
+
+    /// <summary>
+    ///     This function initializes the <c>Book</c> object
+    /// </summary>
+    /// <param name="areaIdentifier">The area the <c>Book</c> is in</param>
+    /// <param name="index">The index of the <c>Book</c> in its area</param>
+    public void Initialize(AreaInformation areaIdentifier, int index, string name)
+    {
+        world = areaIdentifier.GetWorldIndex();
+        dungeon = 0;
+        if (areaIdentifier.IsDungeon())
+        {
+            dungeon = areaIdentifier.GetDungeonIndex();
+        }
+        number = index;
+        nameOfBook = name;
+
+        RegisterToGameManager();
     }
 
     /// <summary>
@@ -151,34 +175,4 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         }
     }
 
-    #region Getter
-
-    /// <summary>
-    ///     This method returns the world index of the Book.
-    /// </summary>
-    /// <returns>world</returns>
-    public int GetWorldIndex()
-    {
-        return world;
-    }
-
-    /// <summary>
-    ///     This method returns the dungeon index of the Book.
-    /// </summary>
-    /// <returns>dungeon</returns>
-    public int GetDungeonIndex()
-    {
-        return dungeon;
-    }
-
-    /// <summary>
-    ///     This method returns the number of the Book.
-    /// </summary>
-    /// <returns>number</returns>
-    public int getIndex()
-    {
-        return number;
-    }
-
-    #endregion
 }

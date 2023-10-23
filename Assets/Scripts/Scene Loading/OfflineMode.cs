@@ -9,9 +9,14 @@ public class OfflineMode : MonoBehaviour
     /// <summary>
     ///     This function loads the offline mode screen.
     /// </summary>
-    public void StartOfflineMode()
+    public async void StartOfflineMode()
     {
         GameManager.Instance.GetDummyData();
+
+        //ersetzen durch get dummy data
+        await DataManager.Instance.FetchAreaData();
+
+
         LoadingManager.Instance.LoadScene();
         SceneManager.UnloadSceneAsync("OfflineMode");
     }

@@ -45,7 +45,15 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public async UniTask<bool> ValidateCourseId()
     {
-        courseId = Application.absoluteURL.Split("/")[^1];
+
+#if UNITY_EDITOR
+        //skip loading in editor mode
+        Debug.Log("Skip loading, due to Unity Editor mode");
+        return false;
+#endif
+        courseId = Application.absoluteURL.Split("/")[^2];
+        GameSettings.SetCourseID(courseId);
+
         string uri = overworldBackendPath + "/courses/" + courseId;
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
@@ -69,6 +77,7 @@ public class GameManager : MonoBehaviour
                     Debug.LogError(uri + ": Error: " + webRequest.error);
                     Debug.Log("CourseId " + courseId + " is invalid.");
                     courseId = "";
+                    GameSettings.SetCourseID("");
                     return false;
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
@@ -504,7 +513,7 @@ public class GameManager : MonoBehaviour
         overworldBackendPath = GameSettings.GetOverworldBackendPath();
         maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
-        maxNPCs = GameSettings.GetMaxNpCs();
+        maxNPCs = GameSettings.GetMaxNpcs();
         maxBooks = GameSettings.GetMaxBooks();
         maxDungeons = GameSettings.GetMaxDungeons();
     }

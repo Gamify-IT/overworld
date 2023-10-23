@@ -1,3 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO;
+using Cysharp.Threading.Tasks;
+
 /// <summary>
 ///     This file stores the game settings.
 /// </summary>
@@ -5,15 +11,35 @@ public static class GameSettings
 {
     #region Attributes
 
-    private static readonly string overworldBackendPath = "/overworld/api/v1";
-    private static readonly int maxWorld = 4;
-    private static readonly int maxMinigames = 12;
-    private static readonly int maxNPCs = 10;
-    private static readonly int maxBooks = 5;
-    private static readonly int maxDungeons = 4;
-    private static readonly int maxTeleporters = 10;
+    private static string overworldBackendPath;
+    private static Gamemode gamemode;
+    private static string courseID;
+    private static int maxWorld;
+    private static int maxMinigames;
+    private static int maxNPCs;
+    private static int maxBooks;
+    private static int maxDungeons;
+    private static int maxTeleporters;
 
     #endregion
+
+    public static async UniTask<bool> FetchValues()
+    {
+        string path = "GameSettings/GameSettings";
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        GameSettingsDTO dto = GameSettingsDTO.CreateFromJSON(json);
+        
+        overworldBackendPath = dto.overworldBackendPath;
+        maxWorld = dto.maxWorld;
+        maxMinigames = dto.maxMinigames;
+        maxNPCs = dto.maxNPCs;
+        maxBooks = dto.maxBooks;
+        maxDungeons = dto.maxDungeons;
+        maxTeleporters = dto.maxTeleporters;
+
+        return true;
+    }
 
     #region GetterAndSetter
 
@@ -24,6 +50,26 @@ public static class GameSettings
     public static string GetOverworldBackendPath()
     {
         return overworldBackendPath;
+    }
+
+    public static void SetGamemode(Gamemode newGamemode)
+    {
+        gamemode = newGamemode;
+    }
+
+    public static Gamemode GetGamemode()
+    {
+        return gamemode;
+    }
+
+    public static void SetCourseID(string newCourseID)
+    {
+        courseID = newCourseID;
+    }
+
+    public static string GetCourseID()
+    {
+        return courseID;
     }
 
     /// <summary>
@@ -48,7 +94,7 @@ public static class GameSettings
     ///     This function returns the maximum amount of NPCs in an area.
     /// </summary>
     /// <returns>The maximum amount of NPCs in an area</returns>
-    public static int GetMaxNpCs()
+    public static int GetMaxNpcs()
     {
         return maxNPCs;
     }

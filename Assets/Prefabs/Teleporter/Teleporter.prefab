@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7412971639986456646}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -99,9 +99,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <teleporterName>k__BackingField: My Teleporter
-  <worldID>k__BackingField: 1
+  <worldID>k__BackingField: 0
   <dungeonID>k__BackingField: 0
-  <teleporterNumber>k__BackingField: 1
+  <teleporterNumber>k__BackingField: 0
   teleporterCanvas: {fileID: 7636015094161461849, guid: f5a85ab3988b91042908794acc6a58ca, type: 3}
   spriteNormal: {fileID: 21300000, guid: f6dd73e64cbe51647aa0d8d0fbd7e097, type: 3}
   spriteHighlight: {fileID: 21300000, guid: 119506f0cd1edf24a9b9e616982dddc3, type: 3}

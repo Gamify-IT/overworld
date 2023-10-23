@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using System;
 
 /// <summary>
@@ -251,7 +252,6 @@ public class ObjectManager : MonoBehaviour
         SetupEntityData<Teleporter, TeleporterData>(0, data);
     }
 
-
     /// <summary>
     /// This function calls the setup method of all GameEntities given by the generic parameter T.
     /// </summary>
@@ -260,6 +260,11 @@ public class ObjectManager : MonoBehaviour
     /// <param name="data"></param>
     private void SetupEntityData<T,U>(int worldIndex, IAreaData data) where T : IGameEntity<U> where U : IGameEntityData, new()
     {
+        if(data == null)
+        {
+            Debug.Log("Data is null");
+            return;
+        }
         GameObject[,] entityArray;
         try
         {
@@ -311,11 +316,13 @@ public class ObjectManager : MonoBehaviour
     /// <summary>
     ///     This function initializes the <c>ObjectManager</c>. All arrays are initialized with empty objects.
     /// </summary>
-    private void SetupObjectManager()
+    public void SetupObjectManager()
     {
+        Debug.Log("Reading max object counts");
+
         maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
-        maxNPCs = GameSettings.GetMaxNpCs();
+        maxNPCs = GameSettings.GetMaxNpcs();
         maxBooks = GameSettings.GetMaxBooks();
         maxDungeons = GameSettings.GetMaxDungeons();
         maxTeleporters = GameSettings.GetMaxTeleporters();

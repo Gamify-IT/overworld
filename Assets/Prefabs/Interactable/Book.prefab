@@ -125,9 +125,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fffd770988817042bc0805ef17de154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  world: 1
+  world: 0
   dungeon: 0
-  number: 1
+  number: 0
   nameOfBook: Mysterious Book
   bookContent: 
 --- !u!70 &2921638665662489538

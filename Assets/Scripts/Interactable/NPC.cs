@@ -39,7 +39,6 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             speechIndicator = child;
         }
 
-        RegisterToGameManager();
         InitNewStuffSprite();
         interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
@@ -51,32 +50,35 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     /// </summary>
     private void Update()
     {
-        if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
             !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
-        {
-            if (!hasBeenTalkedTo)
             {
-                Complete();
-            }
+                if (!hasBeenTalkedTo)
+                {
+                    Complete();
+                }
 
-            StartCoroutine(LoadDialogueScene());
-        }
-        else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
-                 typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
-        {
-            Debug.Log(dialogue.Length - 1);
-            Debug.Log("index before next" + index);
-            NextLine();
-            Debug.Log("index after next" + index);
-        }
-        else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
-                 !typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
-        {
-            StopCoroutine("Typing");
-            dialogueText.text = "";
-            dialogueText.text = dialogue[index];
-            typingIsFinished = true;
-        }
+                StartCoroutine(LoadDialogueScene());
+            }
+            else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+                     typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
+            {
+                Debug.Log(dialogue.Length - 1);
+                Debug.Log("index before next" + index);
+                NextLine();
+                Debug.Log("index after next" + index);
+            }
+            else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+                     !typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
+            {
+                StopCoroutine("Typing");
+                dialogueText.text = "";
+                dialogueText.text = dialogue[index];
+                typingIsFinished = true;
+            }
+        }            
     }
 
     /// <summary>
@@ -84,9 +86,32 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     /// </summary>
     private void OnDestroy()
     {
-        Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveGameEntity<NPC, NPCData>(world, dungeon, number);
-        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
+            ObjectManager.Instance.RemoveGameEntity<NPC, NPCData>(world, dungeon, number);
+            GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+        }
+    }
+
+    /// <summary>
+    ///     This function initializes the <c>NPC</c> object
+    /// </summary>
+    /// <param name="areaIdentifier">The area the <c>NPC</c> is in</param>
+    /// <param name="index">The index of the <c>NPC</c> in its area</param>
+    public void Initialize(AreaInformation areaIdentifier, int index, string name, Sprite sprite)
+    {
+        world = areaIdentifier.GetWorldIndex();
+        dungeon = 0;
+        if (areaIdentifier.IsDungeon())
+        {
+            dungeon = areaIdentifier.GetDungeonIndex();
+        }
+        number = index;
+        nameOfNPC = name;
+        imageOfNPC = sprite;
+
+        RegisterToGameManager();
     }
 
     /// <summary>
@@ -266,34 +291,4 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         }
     }
 
-    #region Getter
-
-    /// <summary>
-    ///     This method returns the world index of the NPC.
-    /// </summary>
-    /// <returns>world</returns>
-    public int GetWorldIndex()
-    {
-        return world;
-    }
-
-    /// <summary>
-    ///     This method returns the dungeon index of the NPC.
-    /// </summary>
-    /// <returns>dungeon</returns>
-    public int GetDungeonIndex()
-    {
-        return dungeon;
-    }
-
-    /// <summary>
-    ///     This method returns the number of the NPC.
-    /// </summary>
-    /// <returns>number</returns>
-    public int getIndex()
-    {
-        return number;
-    }
-
-    #endregion
 }

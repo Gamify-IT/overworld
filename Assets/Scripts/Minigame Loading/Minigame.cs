@@ -47,8 +47,6 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     private void Awake()
     {
         sprites = transform.GetComponent<SpriteRenderer>();
-        RegisterToGameManager();
-        UpdateStatus();
     }
 
     /// <summary>
@@ -56,8 +54,29 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     /// </summary>
     private void OnDestroy()
     {
-        Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
-        ObjectManager.Instance.RemoveGameEntity<Minigame, MinigameData>(world, dungeon, number);
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
+            ObjectManager.Instance.RemoveGameEntity<Minigame, MinigameData>(world, dungeon, number);
+        }
+    }
+
+    /// <summary>
+    ///     This function initializes the <c>Minigame</c> object
+    /// </summary>
+    /// <param name="areaIdentifier">The area the <c>Minigame</c> is in</param>
+    /// <param name="index">The index of the <c>Minigame</c> in its area</param>
+    public void Initialize(AreaInformation areaIdentifier, int index)
+    {
+        world = areaIdentifier.GetWorldIndex();
+        dungeon = 0;
+        if(areaIdentifier.IsDungeon())
+        {
+            dungeon = areaIdentifier.GetDungeonIndex();
+        }
+        number = index;
+
+        RegisterToGameManager();
     }
 
     /// <summary>
@@ -154,37 +173,6 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         string info = world + "-" + dungeon + "-" + number + ": Game: " + game + ", Config: " + configurationID +
                       ", Status: " + status + ", Highscore: " + highscore;
         return info;
-    }
-
-    #endregion
-
-    #region Getter
-
-    /// <summary>
-    ///     This function returns the world of the minigame.
-    /// </summary>
-    /// <returns>world</returns>
-    public int GetWorldIndex()
-    {
-        return world;
-    }
-
-    /// <summary>
-    ///     This function returns the dungeon of the minigame.
-    /// </summary>
-    /// <returns>dungeon</returns>
-    public int GetDungeonIndex()
-    {
-        return dungeon;
-    }
-
-    /// <summary>
-    ///     This function returns the number of the minigame.
-    /// </summary>
-    /// <returns>number</returns>
-    public int GetIndex()
-    {
-        return number;
     }
 
     #endregion

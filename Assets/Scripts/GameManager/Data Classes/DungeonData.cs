@@ -54,7 +54,7 @@ public class DungeonData : IAreaData
             minigames[minigameIndex] = new MinigameData();
         }
 
-        npcs = new NPCData[GameSettings.GetMaxNpCs() + 1];
+        npcs = new NPCData[GameSettings.GetMaxNpcs() + 1];
         for (int npcIndex = 1; npcIndex < npcs.Length; npcIndex++)
         {
             npcs[npcIndex] = new NPCData();
@@ -96,7 +96,7 @@ public class DungeonData : IAreaData
             minigames[minigameDTO.index] = minigameData;
         }
 
-        NPCData[] npcs = new NPCData[GameSettings.GetMaxNpCs() + 1];
+        NPCData[] npcs = new NPCData[GameSettings.GetMaxNpcs() + 1];
         List<NPCDTO> npcDTOs = dto.npcs;
         foreach (NPCDTO npcDTO in npcDTOs)
         {

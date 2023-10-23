@@ -1,6 +1,8 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
+using System.Runtime.InteropServices;
 
 /// <summary>
 ///     This class manages the loading of the game scenes.
@@ -12,7 +14,55 @@ public class LoadFirstScene : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        StartGame();
+        Gamemode gamemode = GetGamemode();
+
+        switch(gamemode)
+        {
+            case Gamemode.PLAY:
+                Debug.Log("Starting in Play Mode");
+                GameSettings.SetGamemode(Gamemode.PLAY);
+                StartGame();
+                break;
+
+            case Gamemode.GENERATOR:
+                Debug.Log("Starting in Generator Mode");
+                GameSettings.SetGamemode(Gamemode.GENERATOR);
+                StartGenerator();
+                break;
+
+            case Gamemode.INSPECT:
+                Debug.Log("Starting in Inspect Mode");
+                GameSettings.SetGamemode(Gamemode.INSPECT);
+                StartGenerator();
+                break;
+        }
+    }
+
+    /// <summary>
+    ///     This function retrieves the current gamemode
+    /// </summary>
+    /// <returns>The gamemode specified in the browser variable "Gamemode", PLAY, if not present</returns>
+    private Gamemode GetGamemode()
+    {
+        //get gamemode parameter of url
+        string urlGamemodePart = Application.absoluteURL.Split("/")[^1];
+
+        //get first part
+        string gamemodePart = urlGamemodePart.Split("-")[0];
+
+        //try to parse to valid gamemode
+        bool success = System.Enum.TryParse<Gamemode>(gamemodePart, out Gamemode gamemode);
+        if (success)
+        {
+            Debug.Log("Specified gamemode: " + gamemode);
+            return gamemode;
+        }
+        else
+        {
+            Gamemode defaultGamemode = Gamemode.GENERATOR;
+            Debug.LogError("Incorrect gamemode specified: " + gamemodePart + ", setting default gamemode: " + defaultGamemode);
+            return defaultGamemode;
+        }
     }
 
     /// <summary>
@@ -21,6 +71,8 @@ public class LoadFirstScene : MonoBehaviour
     /// </summary>
     private async UniTask StartGame()
     {
+        await GameSettings.FetchValues();
+
         var playerPosition = new Vector2(21.5f, 2.5f);
         var worldIndex = 1;
         var dungeonIndex = 0;
@@ -70,5 +122,15 @@ public class LoadFirstScene : MonoBehaviour
         await LoadingManager.Instance.LoadData();
 
         Debug.Log("Finish loading World 1");
+    }
+
+    /// <summary>
+    ///     This function starts the GeneratorWorld 
+    /// </summary>
+    /// <returns></returns>
+    private async UniTask StartGenerator()
+    {
+        await GameSettings.FetchValues();
+        await SceneManager.LoadSceneAsync("AreaGeneratorManager");
     }
 }

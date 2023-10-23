@@ -23,8 +23,15 @@ public class Sign : MonoBehaviour
     {
         SignPanel.SetActive(false);
         signText.text = text;
-        interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
-        GameEvents.current.onKeybindingChange += UpdateKeybindings;
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {            
+            interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+            GameEvents.current.onKeybindingChange += UpdateKeybindings;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
 
@@ -58,17 +65,23 @@ public class Sign : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
-            !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
-            signText.text = text;
-            SignPanel.SetActive(!SignPanel.activeInHierarchy);
-        }
+            if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
+            !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
+            {
+                signText.text = text;
+                SignPanel.SetActive(!SignPanel.activeInHierarchy);
+            }
+        }            
     }
 
     private void OnDestroy()
     {
-        GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            GameEvents.current.onKeybindingChange -= UpdateKeybindings;
+        }            
     }
 
     /// <summary>

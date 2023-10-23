@@ -1,0 +1,19 @@
+{
+    "area": {
+        "worldIndex": 0,
+        "dungeonIndex": 0
+    },
+    "size": {
+        "x": 215,
+        "y": 173
+    },
+    "objectOffset": {
+        "x": -97,
+        "y": -121
+    },
+    "gridOffset": {
+        "x": -97,
+        "y": -121
+    },
+    "worldConnections": []
+}
