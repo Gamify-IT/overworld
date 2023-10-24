@@ -7,18 +7,39 @@ public class IslandsGenerator : LayoutGenerator
     private RoomGenerator roomGenerator;
 
     public IslandsGenerator(
+        string seed,
         Vector2Int size,
-        float accessability,
+        int accessability,
         List<WorldConnection> worldConnections,
         RoomGenerator roomGenerator)
-        : base(size, accessability, worldConnections) 
+        : base(seed, size, accessability, worldConnections) 
     {
         this.roomGenerator = roomGenerator;
     }
 
     public IslandsGenerator(
         Vector2Int size,
-        float accessability,
+        int accessability,
+        List<WorldConnection> worldConnections,
+        RoomGenerator roomGenerator)
+        : base(size, accessability, worldConnections)
+    {
+        this.roomGenerator = roomGenerator;
+    }
+
+    public IslandsGenerator(
+        string seed,
+        Vector2Int size,
+        int accessability,
+        RoomGenerator roomGenerator)
+        : base(seed, size, accessability)
+    {
+        this.roomGenerator = roomGenerator;
+    }
+
+    public IslandsGenerator(
+        Vector2Int size,
+        int accessability,
         RoomGenerator roomGenerator)
         : base(size, accessability)
     {

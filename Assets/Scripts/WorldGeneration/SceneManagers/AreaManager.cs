@@ -376,7 +376,8 @@ public class AreaManager : MonoBehaviour
     /// <param name="style">The style of the new layout</param>
     /// <param name="layoutGeneratorType">The type of layout generator to be used</param>
     /// <param name="accessability">How much area is accessable</param>
-    public void GenerateLayout(Vector2Int size, WorldStyle style, LayoutGeneratorType layoutGeneratorType, float accessability)
+    /// <param name="seed">The seed to be used, if wanted</param>
+    public void GenerateLayout(Vector2Int size, WorldStyle style, LayoutGeneratorType layoutGeneratorType, int accessability, Optional<string> seed)
     {
         //Setup area generator and object and generate layout
         List<WorldConnection> worldConnections = areaInformation.GetWorldConnections();
@@ -387,19 +388,47 @@ public class AreaManager : MonoBehaviour
         switch (layoutGeneratorType)
         {
             case LayoutGeneratorType.CELLULAR_AUTOMATA:
-                layoutGenerator = new CellularAutomataGenerator(size, accessability, worldConnections);
+                if(seed.IsPresent())
+                {
+                    layoutGenerator = new CellularAutomataGenerator(seed.Value(), size, accessability, worldConnections);
+                }
+                else
+                {
+                    layoutGenerator = new CellularAutomataGenerator(size, accessability, worldConnections);
+                } 
                 break;
 
             case LayoutGeneratorType.DRUNKARDS_WALK:
-                layoutGenerator = new DrunkardsWalkGenerator(size, accessability, worldConnections);
+                if (seed.IsPresent())
+                {
+                    layoutGenerator = new DrunkardsWalkGenerator(seed.Value(), size, accessability, worldConnections);
+                }
+                else
+                {
+                    layoutGenerator = new DrunkardsWalkGenerator(size, accessability, worldConnections);
+                }
                 break;
 
             case LayoutGeneratorType.ISLAND_CELLULAR_AUTOMATA:
-                layoutGenerator = new IslandsGenerator(size, accessability, RoomGenerator.CELLULAR_AUTOMATA);
+                if (seed.IsPresent())
+                {
+                    layoutGenerator = new IslandsGenerator(seed.Value(), size, accessability, worldConnections, RoomGenerator.CELLULAR_AUTOMATA);
+                }
+                else
+                {
+                    layoutGenerator = new IslandsGenerator(size, accessability, worldConnections, RoomGenerator.CELLULAR_AUTOMATA);
+                }
                 break;
 
             case LayoutGeneratorType.ISLAND_DRUNKARDS_WALK:
-                layoutGenerator = new IslandsGenerator(size, accessability, RoomGenerator.DRUNKARDS_WALK);
+                if (seed.IsPresent())
+                {
+                    layoutGenerator = new IslandsGenerator(seed.Value(), size, accessability, worldConnections, RoomGenerator.DRUNKARDS_WALK);
+                }
+                else
+                {
+                    layoutGenerator = new IslandsGenerator(size, accessability, worldConnections, RoomGenerator.DRUNKARDS_WALK);
+                }
                 break;
         }
 

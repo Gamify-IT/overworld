@@ -25,7 +25,10 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private TMP_InputField sizeY;
     [SerializeField] private TMP_Dropdown stypeDropdown;
     [SerializeField] private TMP_Dropdown generatorTypeDropdown;
-    [SerializeField] private Slider accessabilitySlider;
+    [SerializeField] private TMP_InputField accessabilityInput;
+    [SerializeField] private TMP_Dropdown randomSeedDropdown;
+    [SerializeField] private TMP_InputField seedInput;
+
     [SerializeField] private Button generateLayoutButton;
     [SerializeField] private Button continueButton;
 
@@ -92,7 +95,7 @@ public class GeneratorUI : MonoBehaviour
         List<string> options = System.Enum.GetNames(typeof(WorldStyle)).ToList();
         stypeDropdown.AddOptions(options);
 
-        accessabilitySlider.value = 0.5f;
+        accessabilityInput.text = "50";
 
         SetupMaxValues();
 
@@ -218,9 +221,15 @@ public class GeneratorUI : MonoBehaviour
         Vector2Int size = new Vector2Int(int.Parse(sizeX.text), int.Parse(sizeY.text));
         WorldStyle style = (WorldStyle) stypeDropdown.value;
         LayoutGeneratorType layoutGeneratorType = (LayoutGeneratorType) generatorTypeDropdown.value;
-        float accessability = accessabilitySlider.value;
+        int accessability = int.Parse(accessabilityInput.text);
 
-        uiManager.GenerateLayout(size, style, layoutGeneratorType, accessability);
+        Optional<string> seed = new Optional<string>();
+        if(randomSeedDropdown.value != 0)
+        {
+            seed.SetValue(seedInput.text);
+        }
+
+        uiManager.GenerateLayout(size, style, layoutGeneratorType, accessability, seed);
 
         continueButton.interactable = true;
 

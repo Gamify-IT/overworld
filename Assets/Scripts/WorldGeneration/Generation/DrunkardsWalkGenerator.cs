@@ -5,14 +5,27 @@ using UnityEngine;
 public class DrunkardsWalkGenerator : LayoutGenerator
 {
     public DrunkardsWalkGenerator(
+        string seed,
         Vector2Int size,
-        float accessability,
+        int accessability,
+        List<WorldConnection> worldConnections)
+        : base(seed, size, accessability, worldConnections) { }
+
+    public DrunkardsWalkGenerator(
+        Vector2Int size,
+        int accessability,
         List<WorldConnection> worldConnections)
         : base(size, accessability, worldConnections) { }
 
     public DrunkardsWalkGenerator(
+        string seed,
         Vector2Int size,
-        float accessability)
+        int accessability)
+        : base(seed, size, accessability) { }
+
+    public DrunkardsWalkGenerator(
+        Vector2Int size,
+        int accessability)
         : base(size, accessability) { }
 
     public override void GenerateLayout()
