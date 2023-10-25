@@ -18,7 +18,7 @@
     "worldConnections": [
         {
             "position": {
-                "x": 253,
+                "x": 252,
                 "y": 49
             },
             "destinationWorld": 1,
@@ -26,7 +26,7 @@
         },
         {
             "position": {
-                "x": 253,
+                "x": 252,
                 "y": 190
             },
             "destinationWorld": 3,

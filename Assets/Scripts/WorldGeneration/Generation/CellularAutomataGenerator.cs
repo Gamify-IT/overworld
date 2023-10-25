@@ -1,11 +1,14 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class CellularAutomataGenerator : LayoutGenerator
 {
-    private static readonly int iterations = 10;
+    private static readonly int borderThickness = 3;
+    private static readonly int worldConnectionWidth = 1;
+    private static readonly int corridorThickness = 4;
+
+    private static readonly int iterations = 15;
     private static readonly int floorNeighborsNeeded = 4;
     private static readonly int floorRoomThreshold = 100;
     private static readonly int wallRoomThreshold = 50;
@@ -51,25 +54,89 @@ public class CellularAutomataGenerator : LayoutGenerator
             CAIteration();
         }
 
-        Debug.Log("Floor threshold: " + floorRoomThreshold);
-        Debug.Log("Wall threshold: " + wallRoomThreshold);
+        //Remove small floor and wall rooms
+        List<Room> floorRooms = RemoveSmallRooms();
 
-        RemoveSmallRooms();
+        //add world connections, if present
+        if(worldConnections.Count > 0)
+        {
+            AddWorldConnections();
+
+            List<Room> worldConnectionRooms = new List<Room>();
+
+            //size of world connection space in border
+            int isolatedWorldConnectionSize = borderThickness * (1 + 2 * worldConnectionWidth);
+
+            foreach(WorldConnection worldConnection in worldConnections)
+            {
+                Room room = GetRoomOfPosition(worldConnection.GetPosition().x, worldConnection.GetPosition().y);
+
+                if(room.GetTiles().Count == isolatedWorldConnectionSize)
+                {
+                    worldConnectionRooms.Add(room);
+                }
+            }
+
+            floorRooms.AddRange(worldConnectionRooms);
+        }
+
+        //Connect remaining floor rooms
+        ConnectRooms(floorRooms);
     }
 
-    #region Iteratins
+    #region Iterations
 
     /// <summary>
-    ///     This function initializes the layout randomly with the stored probability
+    ///     This function initializes the layout randomly with the stored probability and seed
     /// </summary>
     private void InitializeGrid()
     {
+        CreateBorder();
+        CreateRandomCenter();
+    }
+
+    /// <summary>
+    ///     This function creates a border of wall tiles of the stored thickness
+    /// </summary>
+    private void CreateBorder()
+    {
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < borderThickness; y++)
+            {
+                layout[x, y] = false;
+            }
+            for (int y = size.y - borderThickness; y < size.y; y++)
+            {
+                layout[x, y] = false;
+            }
+        }
+
+        for (int y = 0; y < size.y; y++)
+        {
+            for (int x = 0; x < borderThickness; x++)
+            {
+                layout[x, y] = false;
+            }
+            for (int x = size.x - borderThickness; x < size.x; x++)
+            {
+                layout[x, y] = false;
+            }
+        }
+    }
+
+    /// <summary>
+    ///     This function filles the center with the stored seed
+    /// </summary>
+    private void CreateRandomCenter()
+    {
         System.Random pseudoRandomNumberGenerator = new System.Random(seed.GetHashCode());
 
-        for (int x=0; x < size.x; x++)
+        for (int x = borderThickness; x < size.x-borderThickness; x++)
         {
-            for(int y=0; y < size.y; y++)
+            for (int y = borderThickness; y < size.y - borderThickness; y++)
             {
+
                 if (pseudoRandomNumberGenerator.Next(0, 100) <= accessability)
                 {
                     layout[x, y] = true;
@@ -89,9 +156,9 @@ public class CellularAutomataGenerator : LayoutGenerator
     {
         bool[,] newLayout = new bool[size.x, size.y];
 
-        for (int x = 0; x < size.x; x++)
+        for (int x = borderThickness; x < size.x-borderThickness; x++)
         {
-            for(int y=0; y < size.y; y++)
+            for(int y=borderThickness; y < size.y-borderThickness; y++)
             {
                 bool isFloor = GetNewType(x,y);
                 newLayout[x, y] = isFloor;
@@ -137,7 +204,7 @@ public class CellularAutomataGenerator : LayoutGenerator
         {
             for(int y=posY-1; y <= posY+1; y++)
             {
-                if(!PositionIsInRange(x,y))
+                if(!IsInRange(x,y))
                 {
                     //cell is outside border, do nothing
                     continue;
@@ -160,6 +227,63 @@ public class CellularAutomataGenerator : LayoutGenerator
         return floorNeighbors;
     }
 
+    /// <summary>
+    ///     This function creates the world connections in the border
+    /// </summary>
+    private void AddWorldConnections()
+    {
+        foreach (WorldConnection worldConnection in worldConnections)
+        {
+            //connection on left side
+            if (worldConnection.GetPosition().x == 0 && worldConnection.GetPosition().y > (borderThickness + worldConnectionWidth) && worldConnection.GetPosition().y < size.y - (borderThickness + worldConnectionWidth))
+            {
+                for (int x = 0; x < borderThickness; x++)
+                {
+                    for (int offset = -worldConnectionWidth; offset <= worldConnectionWidth; offset++)
+                    {
+                        layout[x, worldConnection.GetPosition().y + offset] = true;
+                    }
+                }
+            }
+
+            //connection on bottom side
+            if (worldConnection.GetPosition().y == 0 && worldConnection.GetPosition().x > (borderThickness + worldConnectionWidth) && worldConnection.GetPosition().x < size.x - (borderThickness + worldConnectionWidth))
+            {
+                for (int y = 0; y < borderThickness; y++)
+                {
+                    for (int offset = -worldConnectionWidth; offset <= worldConnectionWidth; offset++)
+                    {
+                        layout[worldConnection.GetPosition().x + offset, y] = true;
+                    }
+                }
+            }
+
+            //connection on right side
+            if (worldConnection.GetPosition().x == size.x-1 && worldConnection.GetPosition().y > (borderThickness + worldConnectionWidth) && worldConnection.GetPosition().y < size.y - (borderThickness + worldConnectionWidth))
+            {
+                for (int x = size.x - 1; x > size.x - 1 - borderThickness; x--)
+                {
+                    for (int offset = -worldConnectionWidth; offset <= worldConnectionWidth; offset++)
+                    {
+                        layout[x, worldConnection.GetPosition().y + offset] = true;
+                    }
+                }
+            }
+
+            //connection on top side
+            if (worldConnection.GetPosition().y == size.y-1 && worldConnection.GetPosition().x > (borderThickness + worldConnectionWidth) && worldConnection.GetPosition().x < size.x - (borderThickness + worldConnectionWidth))
+            {
+                for (int y = size.y - 1; y > size.y - 1 - borderThickness; y--)
+                {
+                    for (int offset = -worldConnectionWidth; offset <= worldConnectionWidth; offset++)
+                    {
+                        layout[worldConnection.GetPosition().x + offset, y] = true;
+                    }
+                }
+            }
+        }
+    }
+
     #endregion
 
     #region Rooms
@@ -167,7 +291,8 @@ public class CellularAutomataGenerator : LayoutGenerator
     /// <summary>
     ///     This function removes all rooms with size below the threshold
     /// </summary>
-    private void RemoveSmallRooms()
+    /// <returns>A list containing all floor rooms</returns>
+    private List<Room> RemoveSmallRooms()
     {
         //get wall rooms
         List<Room> wallRooms = GetRooms(TileType.WALL);
@@ -177,7 +302,6 @@ public class CellularAutomataGenerator : LayoutGenerator
         {
             if(room.GetTiles().Count < wallRoomThreshold)
             {
-                Debug.Log("Remove wall room");
                 RemoveRoom(room);
             }
         }
@@ -186,14 +310,20 @@ public class CellularAutomataGenerator : LayoutGenerator
         List<Room> floorRooms = GetRooms(TileType.FLOOR);
 
         //remove too small floor rooms
+        List<Room> remainingFloorRoomes = new List<Room>();
         foreach (Room room in floorRooms)
         {
             if (room.GetTiles().Count < floorRoomThreshold)
             {
-                Debug.Log("Remove floor room");
                 RemoveRoom(room);
             }
+            else
+            {
+                remainingFloorRoomes.Add(room);
+            }
         }
+
+        return remainingFloorRoomes;
     }
 
     /// <summary>
@@ -206,9 +336,9 @@ public class CellularAutomataGenerator : LayoutGenerator
         List<Room> rooms = new List<Room>();
         bool[,] flaggedTiles = new bool[size.x, size.y];
 
-        for (int x = 0; x < size.x; x++)
+        for (int x = borderThickness; x < size.x - borderThickness; x++)
         {
-            for (int y = 0; y < size.y; y++)
+            for (int y = borderThickness; y < size.y - borderThickness; y++)
             {
                 if(!flaggedTiles[x,y] && GetTileType(x,y) == roomType)
                 {
@@ -278,7 +408,7 @@ public class CellularAutomataGenerator : LayoutGenerator
                 //get neighbor
                 Vector2Int neighbor = tile + nextNeighbor[i];
 
-                if (PositionIsInRange(neighbor.x, neighbor.y) && !flaggedTiles[neighbor.x, neighbor.y])
+                if (IsInRange(neighbor.x, neighbor.y) && !flaggedTiles[neighbor.x, neighbor.y])
                 {
                     //neighbor is inside the grid and was not visited
                     if(GetTileType(neighbor.x, neighbor.y) == roomType)
@@ -346,15 +476,232 @@ public class CellularAutomataGenerator : LayoutGenerator
 
     #region Connections
 
-    //connect different rooms
+    /// <summary>
+    ///     This function connects all the rooms
+    /// </summary>
+    /// <param name="floorRooms">A list containing all rooms to connect</param>
+    private void ConnectRooms(List<Room> floorRooms)
+    {
+        List<Room> unconnectedRooms = new List<Room>(floorRooms);
+        List<Room> connectedRooms = new List<Room>();
 
-    // 1. define master room (biggest one)
+        //identify biggest room (master room)
+        int maxRoomSize = 0;
+        Room biggestRoom = new Room(TileType.FLOOR);
 
-    // 2. loop, until all rooms connected (#rooms - 1 times)
+        foreach(Room room in floorRooms)
+        {
+            if(room.GetTiles().Count > maxRoomSize)
+            {
+                maxRoomSize = room.GetTiles().Count;
+                biggestRoom = room;
+            }
+        }
+        
+        unconnectedRooms.Remove(biggestRoom);
+        connectedRooms.Add(biggestRoom);
 
-    //   2.1 identify for each room clostest other room
+        //init closest rooms dictionary
+        Dictionary<Room, PossibleRoomConnection> closestRooms = new Dictionary<Room, PossibleRoomConnection>();
 
-    //   2.2 connect clostest two rooms with one not connected to master room (adds one new room)
+        while (unconnectedRooms.Count > 0)
+        {
+            float minDistance = float.MaxValue;
+            Room roomToConnect = biggestRoom;
+
+            foreach(Room room in connectedRooms)
+            {
+                if(!closestRooms.ContainsKey(room) || !unconnectedRooms.Contains(closestRooms[room].GetDestinationRoom()))
+                {
+                    //no closest room yet or closest one is already connected
+
+                    PossibleRoomConnection possibleRoomConnection = GetClosestRoom(room, unconnectedRooms);
+                    
+                    if(closestRooms.ContainsKey(room))
+                    {
+                        closestRooms[room] = possibleRoomConnection;
+                    }
+                    else
+                    {
+                        closestRooms.Add(room, possibleRoomConnection);
+                    }                    
+                }
+
+                if(closestRooms[room].GetDistance() < minDistance)
+                {
+                    //connection is best for now
+
+                    minDistance = closestRooms[room].GetDistance();
+                    roomToConnect = room;
+                }
+            }
+
+            //connect closest two rooms
+            CreateConnection(closestRooms[roomToConnect]);
+
+            //move newly connected room to connect rooms list
+            connectedRooms.Add(closestRooms[roomToConnect].GetDestinationRoom());
+            unconnectedRooms.Remove(closestRooms[roomToConnect].GetDestinationRoom());
+        }
+    }
+
+    /// <summary>
+    ///     This function finds the closest room in the given list for the given room
+    /// </summary>
+    /// <param name="room">The room to find the closest other room to</param>
+    /// <param name="connectedRooms">The possible rooms</param>
+    /// <returns>A <c>PosibleRoomConnection</c> object containing the information about the closest room</returns>
+    private PossibleRoomConnection GetClosestRoom(Room room, List<Room> unconnectedRooms)
+    {
+        Room destinationRoom = room;
+        Vector2Int startTile = new Vector2Int();
+        Vector2Int destinationTile = new Vector2Int();
+        float minDistance = float.MaxValue;
+
+        foreach(Room otherRoom in unconnectedRooms)
+        {
+            foreach(Vector2Int borderDestinationTile in otherRoom.GetBorderTiles())
+            {
+                foreach(Vector2Int borderStartTile in room.GetBorderTiles())
+                {
+                    float distance = Vector2Int.Distance(borderStartTile, borderDestinationTile);
+
+                    if(distance < minDistance)
+                    {
+                        minDistance = distance;
+                        startTile = borderStartTile;
+                        destinationTile = borderDestinationTile;
+                        destinationRoom = otherRoom;
+                    }
+                }
+            }
+        }
+
+        PossibleRoomConnection roomConnection = new PossibleRoomConnection(room, destinationRoom, startTile, destinationTile, minDistance);
+        return roomConnection;
+    }
+
+    /// <summary>
+    ///     This function connects the given rooms at the provided tiles
+    /// </summary>
+    /// <param name="roomConnection">The rooms to connect</param>
+    private void CreateConnection(PossibleRoomConnection roomConnection)
+    {
+        List<Vector2Int> connectionTiles = GetConnectionTiles(roomConnection.GetStartTile(), roomConnection.GetDestinationTile());
+        foreach(Vector2Int tile in connectionTiles)
+        {
+            DrawCircle(tile, corridorThickness);
+        }
+    }
+
+    /// <summary>
+    ///     This function creates a list of tiles connecting the two given tiles
+    /// </summary>
+    /// <param name="startTile">The start position</param>
+    /// <param name="destinationTile">The end position</param>
+    /// <returns>A list containing all tiles to connect the start and end tile</returns>
+    private List<Vector2Int> GetConnectionTiles(Vector2Int startTile, Vector2Int destinationTile)
+    {
+        List<Vector2Int> tiles = new List<Vector2Int>();
+
+        //variables for current tile position
+        int posX = startTile.x;
+        int posY = startTile.y;
+
+        //triangle sides
+        int dx = destinationTile.x - startTile.x;
+        int dy = destinationTile.y - startTile.y;
+
+        //variables for changes each step
+        bool inverted;
+        int step;
+        int gradientStep;
+        int longest;
+        int shortest;
+
+        if (Mathf.Abs(dx) < Mathf.Abs(dy))
+        {
+            //slope > 45 degrees
+            inverted = true;
+            longest = Mathf.Abs(dy);
+            shortest = Mathf.Abs(dx);
+            step = Math.Sign(dy);
+            gradientStep = Math.Sign(dx);
+        }
+        else
+        {
+            //slope < 45 degrees
+            inverted = false;
+            longest = Mathf.Abs(dx);
+            shortest = Mathf.Abs(dy);
+            step = Math.Sign(dx);
+            gradientStep = Math.Sign(dy);
+        }
+
+        int gradientAccumulation = longest / 2;
+
+        for(int i=0; i<longest; i++)
+        {
+            //add tile
+            tiles.Add(new Vector2Int(posX, posY));
+
+            if(inverted)
+            {
+                //next tile in y direction
+                posY += step;
+            }
+            else
+            {
+                //next tile in x direction
+                posX += step;
+            }
+
+            //change other direction, if full tile up
+            gradientAccumulation += shortest;
+            if(gradientAccumulation >= longest)
+            {
+                if(inverted)
+                {
+                    posX += gradientStep;
+                }
+                else
+                {
+                    posY += gradientStep;
+                }
+                gradientAccumulation -= longest;
+            }
+        }
+
+        //add destination tile
+        tiles.Add(destinationTile);
+
+        return tiles;
+    }
+
+    /// <summary>
+    ///     This function marks the given position and all tiles within a circle around it as floor tiles
+    /// </summary>
+    /// <param name="position">The center position</param>
+    /// <param name="radius">The radius of the circle</param>
+    private void DrawCircle(Vector2Int position, int radius)
+    {
+        for (int x = -radius; x <= radius; x++)
+        {
+            for (int y = -radius; y <= radius; y++)
+            {
+                if(x*x + y*y <= radius*radius)
+                {
+                    int tilePosX = position.x + x;
+                    int tilePosY = position.y + y;
+
+                    if(IsInCenter(tilePosX, tilePosY))
+                    {
+                        layout[tilePosX, tilePosY] = true;
+                    }
+                }
+            }
+        }
+    }
 
     #endregion
 
@@ -366,9 +713,20 @@ public class CellularAutomataGenerator : LayoutGenerator
     /// <param name="posX">The x coordinate</param>
     /// <param name="posY">The y coordinate</param>
     /// <returns>True, if in range, false otherwise</returns>
-    private bool PositionIsInRange(int posX, int posY)
+    private bool IsInRange(int posX, int posY)
     {
         return (posX >= 0 && posX < size.x && posY >= 0 && posY < size.y);
+    }
+
+    /// <summary>
+    ///     This function checks, whether a given position is inside of the layout center, so inside the border
+    /// </summary>
+    /// <param name="posX">The x coordinate</param>
+    /// <param name="posY">The y coordinate</param>
+    /// <returns>True, if in range, false otherwise</returns>
+    private bool IsInCenter(int posX, int posY)
+    {
+        return (posX >= borderThickness && posX < size.x-borderThickness && posY >= borderThickness && posY < size.y - borderThickness);
     }
 
     #endregion
