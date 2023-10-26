@@ -82,6 +82,9 @@ public class CellularAutomataGenerator : LayoutGenerator
 
         //Connect remaining floor rooms
         ConnectRooms(floorRooms);
+
+        //remove unwanted structures
+        PostProcess();
     }
 
     #region Iterations
@@ -701,6 +704,43 @@ public class CellularAutomataGenerator : LayoutGenerator
                 }
             }
         }
+    }
+
+    #endregion
+
+    #region Post Processing
+
+    private void PostProcess()
+    {
+        bool changedSomething = true;
+        
+        while(changedSomething)
+        {
+            changedSomething = false;
+
+            for (int x = borderThickness; x < size.x - borderThickness; x++)
+            {
+                for (int y = borderThickness; y < size.y - borderThickness; y++)
+                {
+                    if (GetTileType(x, y) == TileType.WALL)
+                    {
+                        if(!ValidWallTile(x,y))
+                        {
+                            layout[x, y] = true;
+                            changedSomething = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public bool ValidWallTile(int x, int y)
+    {
+        bool horizontalWall = (IsInRange(x - 1, y) && GetTileType(x - 1, y) == TileType.WALL) || (IsInRange(x + 1, y) && GetTileType(x + 1, y) == TileType.WALL);
+        bool verticalWall = (IsInRange(x, y + 1) && GetTileType(x, y + 1) == TileType.WALL) || (IsInRange(x, y - 1) && GetTileType(x, y - 1) == TileType.WALL);
+
+        return horizontalWall && verticalWall;
     }
 
     #endregion
