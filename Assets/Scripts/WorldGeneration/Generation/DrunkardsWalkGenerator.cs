@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DrunkardsWalkGenerator : LayoutGenerator
 {
-    private static readonly int borderThickness = 3;
+    private static readonly int borderSize = 3;
     private static readonly int maxStepsWithoutChanges = 100;
 
     private int iterations;
@@ -136,6 +136,6 @@ public class DrunkardsWalkGenerator : LayoutGenerator
     {
         int posX = position.x;
         int posY = position.y;
-        return (posX >= borderThickness && posX < size.x - borderThickness && posY >= borderThickness && posY < size.y - borderThickness);
+        return (posX >= borderSize && posX < size.x - borderSize && posY >= borderSize && posY < size.y - borderSize);
     }
 }
