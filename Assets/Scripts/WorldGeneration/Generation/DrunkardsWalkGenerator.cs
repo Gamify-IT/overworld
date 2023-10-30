@@ -5,9 +5,12 @@ using UnityEngine;
 public class DrunkardsWalkGenerator : LayoutGenerator
 {
     private static readonly int borderSize = 3;
-    private static readonly int maxStepsWithoutChanges = 100;
+    private static readonly int radius = 2;
+    private static readonly int wallRoomThreshold = 50;
 
     private int iterations;
+    private HashSet<Vector2Int> tiles;
+    private bool canShift;
 
     #region Constructors
 
@@ -19,6 +22,8 @@ public class DrunkardsWalkGenerator : LayoutGenerator
         : base(seed, size, accessability, worldConnections) 
     {
         iterations = size.x * size.y * accessability / 100;
+        tiles = new HashSet<Vector2Int>();
+        canShift = true;
     }
 
     public DrunkardsWalkGenerator(
@@ -28,6 +33,8 @@ public class DrunkardsWalkGenerator : LayoutGenerator
         : base(size, accessability, worldConnections) 
     {
         iterations = size.x * size.y * accessability / 100;
+        tiles = new HashSet<Vector2Int>();
+        canShift = true;
     }
 
     public DrunkardsWalkGenerator(
@@ -37,6 +44,8 @@ public class DrunkardsWalkGenerator : LayoutGenerator
         : base(seed, size, accessability) 
     {
         iterations = size.x * size.y * accessability / 100;
+        tiles = new HashSet<Vector2Int>();
+        canShift = true;
     }
 
     public DrunkardsWalkGenerator(
@@ -45,6 +54,8 @@ public class DrunkardsWalkGenerator : LayoutGenerator
         : base(size, accessability) 
     {
         iterations = size.x * size.y * accessability / 100;
+        tiles = new HashSet<Vector2Int>();
+        canShift = true;
     }
 
     #endregion
@@ -63,7 +74,7 @@ public class DrunkardsWalkGenerator : LayoutGenerator
 
         //Get start position
         Vector2Int previousPosition = new Vector2Int(size.x / 2, size.y / 2);
-        layout[previousPosition.x, previousPosition.y] = true;
+        tiles.Add(previousPosition);
 
         for (int i = 0; i < iterations; i++)
         {
@@ -81,10 +92,52 @@ public class DrunkardsWalkGenerator : LayoutGenerator
                 }
             }
 
-            layout[newPosition.x, newPosition.y] = true;
+            HashSet<Vector2Int> newTiles = DiggCircle(newPosition, radius);
+            tiles.UnionWith(newTiles);
 
-            previousPosition = newPosition;
+            //if new position is too close to border
+            if(canShift && IsToCloseToBorder(newPosition))
+            {
+                //get distance to all borders
+                LayoutDistance distances = GetDistances();
+
+                //shift to center, if possible
+                int xShift = (distances.right - distances.left) / 2;
+                int yShift = (distances.up - distances.down) / 2;
+                if (xShift == 0 && yShift == 0)
+                {
+                    canShift = false;
+                }
+                Shift(xShift, yShift);
+
+                //shift previousPosition variable
+                previousPosition = newPosition + new Vector2Int(xShift, yShift);
+            }
+            else
+            {
+                previousPosition = newPosition;
+            }
         }
+
+        ConvertHashSetToLayout();
+        
+        RoomManager roomManager = new RoomManager(layout);
+
+        roomManager.RemoveSmallRooms(TileType.WALL, wallRoomThreshold);
+
+        //Add world connections, if present
+        if (worldConnections.Count > 0)
+        {
+            roomManager.AddWorldConnections(worldConnections);
+        }
+
+        //Connect rooms
+        roomManager.ConnectRooms(radius);
+
+        //Remove small wall areas that might were created
+        roomManager.RemoveSmallRooms(TileType.WALL, wallRoomThreshold);
+
+        layout = roomManager.GetLayout();        
     }
 
     /// <summary>
@@ -124,6 +177,125 @@ public class DrunkardsWalkGenerator : LayoutGenerator
 
             default:
                 return new Vector2Int(0, 0);
+        }
+    }
+
+    /// <summary>
+    ///     This function marks the given position and all tiles within a circle around it as floor tiles
+    /// </summary>
+    /// <param name="position">The center position</param>
+    /// <param name="radius">The radius of the circle</param>
+    private HashSet<Vector2Int> DiggCircle(Vector2Int position, int radius)
+    {
+        HashSet<Vector2Int> newTiles = new HashSet<Vector2Int>();
+
+        for (int x = -radius; x <= radius; x++)
+        {
+            for (int y = -radius; y <= radius; y++)
+            {
+                if (x * x + y * y <= radius * radius)
+                {                    
+                    int tilePosX = position.x + x;
+                    int tilePosY = position.y + y;
+                    Vector2Int tile = new Vector2Int(tilePosX, tilePosY);
+
+                    if (IsInCenter(tile))
+                    {
+                        newTiles.Add(tile);
+                    }
+                }
+            }
+        }
+
+        return newTiles;
+    }
+
+    /// <summary>
+    ///     This function checks, wether the given position is to close to the border
+    /// </summary>
+    /// <param name="position">The position to check</param>
+    /// <returns>True, if too close to a border, false otherwise</returns>
+    private bool IsToCloseToBorder(Vector2Int position)
+    {
+        int minX = borderSize + 2*radius;
+        int maxX = size.x - (borderSize + 2*radius);
+        int minY = borderSize + 2*radius;
+        int maxY = size.y - (borderSize + 2*radius);
+        return (position.x < minX || position.x > maxX || position.y < minY || position.y > maxY);
+    }
+
+    /// <summary>
+    ///     This function gets the minimum distances of a floor tile to each border
+    /// </summary>
+    /// <returns>A <c>LayoutDistance</c> object containing the minimum distances</returns>
+    private LayoutDistance GetDistances()
+    {
+        int minX = int.MaxValue;
+        int maxX = int.MinValue;
+        int minY = int.MaxValue;
+        int maxY = int.MinValue;
+        
+        foreach(Vector2Int tile in tiles)
+        {
+            if(tile.x < minX)
+            {
+                minX = tile.x;
+            }
+
+            if(tile.x > maxX)
+            {
+                maxX = tile.x;
+            }
+
+            if(tile.y < minY)
+            {
+                minY = tile.y;
+            }
+
+            if(tile.y > maxY)
+            {
+                maxY = tile.y;
+            }
+        }
+
+        int distanceLeft = minX - borderSize;
+        int distanceRight = size.x - 1 - borderSize - maxX;
+        int distanceDown = minY - borderSize;
+        int distanceUp = size.y - 1 - borderSize - maxY;
+
+        LayoutDistance distances = new LayoutDistance(distanceLeft, distanceUp, distanceRight, distanceDown);
+
+        return distances;
+    }
+
+    /// <summary>
+    ///     This function shifts all tiles by the given amount
+    /// </summary>
+    /// <param name="xShift">The shifting in x direction</param>
+    /// <param name="yShift">The shifting in y direction</param>
+    private void Shift(int xShift, int yShift)
+    {
+        Debug.Log("Shifting: " + xShift + " ; " + yShift);
+
+        HashSet<Vector2Int> newTiles = new HashSet<Vector2Int>();
+
+        foreach(Vector2Int tile in tiles)
+        {
+            Vector2Int newTile = new Vector2Int(tile.x + xShift, tile.y + yShift);
+            newTiles.Add(newTile);
+        }
+
+        tiles = newTiles;
+    }
+
+    /// <summary>
+    ///     This function sets the tiles stored in the HashSet into the layout array
+    /// </summary>
+    private void ConvertHashSetToLayout()
+    {
+        foreach(Vector2Int tile in tiles)
+        {
+            layout[tile.x, tile.y] = true;
         }
     }
 
