@@ -1,0 +1,12 @@
+{
+    "borderSize": 3,
+    "corridorSize": 2,
+    "floorRoomThreshold": 50,
+    "wallRoomThreshold": 50,
+    "iterationsCA": 15,
+    "floorThresholdCA": 4,
+    "radiusDW": 1,
+    "innerBorderSize": 2,
+    "minRoomHeight": 20,
+    "minRoomWidth": 20
+}

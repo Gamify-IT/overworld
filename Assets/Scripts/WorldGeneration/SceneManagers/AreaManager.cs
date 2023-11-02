@@ -437,8 +437,8 @@ public class AreaManager : MonoBehaviour
         bool[,] baseLayout = layoutGenerator.GetLayout();
 
         //polish layout
-        LayoutPolisher polisher = new LayoutPolisher(style);
-        baseLayout = polisher.Polish(baseLayout);
+        LayoutPolisher polisher = new LayoutPolisher(style, baseLayout);
+        baseLayout = polisher.Polish();
 
         //convert layout
         LayoutConverter converter = new LayoutConverter(style);

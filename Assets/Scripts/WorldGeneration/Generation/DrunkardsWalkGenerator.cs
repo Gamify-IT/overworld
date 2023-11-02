@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class DrunkardsWalkGenerator : LayoutGenerator
 {
-    private static readonly int borderSize = 3;
-    private static readonly int radius = 2;
-    private static readonly int wallRoomThreshold = 50;
+    private int borderSize;
+    private int radius;
+    private int wallRoomThreshold;
 
     private int iterations;
     private HashSet<Vector2Int> tiles;
@@ -21,6 +21,7 @@ public class DrunkardsWalkGenerator : LayoutGenerator
         List<WorldConnection> worldConnections)
         : base(seed, size, accessability, worldConnections) 
     {
+        GetSettings();
         iterations = size.x * size.y * accessability / 100;
         tiles = new HashSet<Vector2Int>();
         canShift = true;
@@ -32,6 +33,7 @@ public class DrunkardsWalkGenerator : LayoutGenerator
         List<WorldConnection> worldConnections)
         : base(size, accessability, worldConnections) 
     {
+        GetSettings();
         iterations = size.x * size.y * accessability / 100;
         tiles = new HashSet<Vector2Int>();
         canShift = true;
@@ -43,6 +45,7 @@ public class DrunkardsWalkGenerator : LayoutGenerator
         int accessability)
         : base(seed, size, accessability) 
     {
+        GetSettings();
         iterations = size.x * size.y * accessability / 100;
         tiles = new HashSet<Vector2Int>();
         canShift = true;
@@ -53,9 +56,25 @@ public class DrunkardsWalkGenerator : LayoutGenerator
         int accessability)
         : base(size, accessability) 
     {
+        GetSettings();
         iterations = size.x * size.y * accessability / 100;
         tiles = new HashSet<Vector2Int>();
         canShift = true;
+    }
+
+    /// <summary>
+    ///     This function reads to generator settings from the local file and sets up the variables needed
+    /// </summary>
+    private void GetSettings()
+    {
+        string path = "GameSettings/GeneratorSettings";
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        GenerationSettings generationSettings = GenerationSettings.CreateFromJSON(json);
+
+        borderSize = generationSettings.borderSize;
+        radius = generationSettings.radiusDW;
+        wallRoomThreshold = generationSettings.wallRoomThreshold;
     }
 
     #endregion
@@ -275,8 +294,6 @@ public class DrunkardsWalkGenerator : LayoutGenerator
     /// <param name="yShift">The shifting in y direction</param>
     private void Shift(int xShift, int yShift)
     {
-        Debug.Log("Shifting: " + xShift + " ; " + yShift);
-
         HashSet<Vector2Int> newTiles = new HashSet<Vector2Int>();
 
         foreach(Vector2Int tile in tiles)

@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class CellularAutomataGenerator : LayoutGenerator
 {
-    //TODO: move to json
-    private static readonly int borderSize = 3;
-    
-    private static readonly int corridorSize = 4;
-    private static readonly int iterations = 15;
-    private static readonly int floorNeighborsNeeded = 4;
-    private static readonly int floorRoomThreshold = 100;
-    private static readonly int wallRoomThreshold = 50;
+    private int borderSize;    
+    private int corridorSize;
+    private int iterations;
+    private int floorNeighborsNeeded;
+    private int floorRoomThreshold;
+    private int wallRoomThreshold;
 
     #region Constructors
 
@@ -20,24 +18,54 @@ public class CellularAutomataGenerator : LayoutGenerator
         Vector2Int size,
         int accessability, 
         List<WorldConnection> worldConnections) 
-        : base(seed, size, accessability, worldConnections) {}
+        : base(seed, size, accessability, worldConnections) 
+    {
+        GetSettings();
+    }
 
     public CellularAutomataGenerator(
         Vector2Int size,
         int accessability,
         List<WorldConnection> worldConnections)
-        : base(size, accessability, worldConnections) {}
+        : base(size, accessability, worldConnections) 
+    {
+        GetSettings();
+    }
 
     public CellularAutomataGenerator(
         string seed,
         Vector2Int size,
         int accessability)
-        : base(seed, size, accessability) {}
+        : base(seed, size, accessability) 
+    {
+        GetSettings();
+    }
 
     public CellularAutomataGenerator(
         Vector2Int size,
         int accessability)
-        : base(size, accessability) {}
+        : base(size, accessability) 
+    {
+        GetSettings();
+    }
+
+    /// <summary>
+    ///     This function reads to generator settings from the local file and sets up the variables needed
+    /// </summary>
+    private void GetSettings()
+    {
+        string path = "GameSettings/GeneratorSettings";
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        GenerationSettings generationSettings = GenerationSettings.CreateFromJSON(json);
+        
+        borderSize = generationSettings.borderSize;
+        corridorSize = generationSettings.corridorSize;
+        iterations = generationSettings.iterationsCA;
+        floorNeighborsNeeded = generationSettings.floorThresholdCA;
+        floorRoomThreshold = generationSettings.floorRoomThreshold;
+        wallRoomThreshold = generationSettings.wallRoomThreshold;
+    }
 
     #endregion
 
@@ -75,9 +103,6 @@ public class CellularAutomataGenerator : LayoutGenerator
 
         //Retrieve updated layout
         layout = roomManager.GetLayout();
-
-        //remove unwanted structures
-        PostProcess();
     }
 
     #region Iterations
@@ -225,62 +250,7 @@ public class CellularAutomataGenerator : LayoutGenerator
 
     #endregion
 
-    #region Post Processing
-
-    private void PostProcess()
-    {
-        bool changedSomething = true;
-        
-        while(changedSomething)
-        {
-            changedSomething = false;
-
-            for (int x = borderSize; x < size.x - borderSize; x++)
-            {
-                for (int y = borderSize; y < size.y - borderSize; y++)
-                {
-                    if (GetTileType(x, y) == TileType.WALL)
-                    {
-                        if(!ValidWallTile(x,y))
-                        {
-                            layout[x, y] = true;
-                            changedSomething = true;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public bool ValidWallTile(int x, int y)
-    {
-        bool horizontalWall = (IsInRange(x - 1, y) && GetTileType(x - 1, y) == TileType.WALL) || (IsInRange(x + 1, y) && GetTileType(x + 1, y) == TileType.WALL);
-        bool verticalWall = (IsInRange(x, y + 1) && GetTileType(x, y + 1) == TileType.WALL) || (IsInRange(x, y - 1) && GetTileType(x, y - 1) == TileType.WALL);
-
-        return horizontalWall && verticalWall;
-    }
-
-    #endregion
-
     #region General
-
-    /// <summary>
-    ///     This function returns the tile type of the given position
-    /// </summary>
-    /// <param name="posX">The x coordinate</param>
-    /// <param name="posY">The y coordinate</param>
-    /// <returns>The type of the tile</returns>
-    private TileType GetTileType(int posX, int posY)
-    {
-        if (layout[posX, posY])
-        {
-            return TileType.FLOOR;
-        }
-        else
-        {
-            return TileType.WALL;
-        }
-    }
 
     /// <summary>
     ///     This function checks, whether a given position is inside of the layout size
@@ -291,17 +261,6 @@ public class CellularAutomataGenerator : LayoutGenerator
     private bool IsInRange(int posX, int posY)
     {
         return (posX >= 0 && posX < size.x && posY >= 0 && posY < size.y);
-    }
-
-    /// <summary>
-    ///     This function checks, whether a given position is inside of the layout center, so inside the border
-    /// </summary>
-    /// <param name="posX">The x coordinate</param>
-    /// <param name="posY">The y coordinate</param>
-    /// <returns>True, if in range, false otherwise</returns>
-    private bool IsInCenter(int posX, int posY)
-    {
-        return (posX >= borderSize && posX < size.x-borderSize && posY >= borderSize && posY < size.y - borderSize);
     }
 
     #endregion
