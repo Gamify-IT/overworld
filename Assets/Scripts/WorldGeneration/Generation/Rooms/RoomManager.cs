@@ -34,7 +34,7 @@ public class RoomManager
     /// </summary>
     /// <param name="roomType">The type of rooms to check</param>
     /// <param name="threshold">The minimum room size</param>
-    public void RemoveSmallRooms(TileType roomType, int threshold)
+    public void RemoveSmallRooms(CellType roomType, int threshold)
     {
         //get rooms
         List<Room> rooms = GetRooms(roomType);
@@ -54,7 +54,7 @@ public class RoomManager
     /// </summary>
     /// <param name="roomType">The type of the rooms</param>
     /// <returns>A list containing all rooms of the given type</returns>
-    private List<Room> GetRooms(TileType roomType)
+    private List<Room> GetRooms(CellType roomType)
     {
         List<Room> rooms = new List<Room>();
         bool[,] flaggedTiles = new bool[size.x, size.y];
@@ -92,14 +92,14 @@ public class RoomManager
     private Room GetRoomOfPosition(int posX, int posY)
     {
         //get room type
-        TileType roomType;
+        CellType roomType;
         if (layout[posX, posY])
         {
-            roomType = TileType.FLOOR;
+            roomType = CellType.FLOOR;
         }
         else
         {
-            roomType = TileType.WALL;
+            roomType = CellType.WALL;
         }
 
         //setup tile lists and flag grid
@@ -163,15 +163,15 @@ public class RoomManager
     /// <param name="posX">The x coordinate</param>
     /// <param name="posY">The y coordinate</param>
     /// <returns>The type of the tile</returns>
-    private TileType GetTileType(int posX, int posY)
+    private CellType GetTileType(int posX, int posY)
     {
         if (layout[posX, posY])
         {
-            return TileType.FLOOR;
+            return CellType.FLOOR;
         }
         else
         {
-            return TileType.WALL;
+            return CellType.WALL;
         }
     }
 
@@ -181,10 +181,10 @@ public class RoomManager
     /// <param name="room">The room to remove</param>
     private void RemoveRoom(Room room)
     {
-        TileType type = room.GetRoomType();
+        CellType type = room.GetRoomType();
         foreach (Vector2Int tile in room.GetTiles())
         {
-            if (type == TileType.FLOOR)
+            if (type == CellType.FLOOR)
             {
                 layout[tile.x, tile.y] = false;
             }
@@ -276,12 +276,12 @@ public class RoomManager
     /// <param name="corridorSize">The size of the connecting corridors</param>
     public void ConnectRooms(int corridorSize)
     {
-        List<Room> unconnectedRooms = GetRooms(TileType.FLOOR);
+        List<Room> unconnectedRooms = GetRooms(CellType.FLOOR);
         List<Room> connectedRooms = new List<Room>();
 
         //identify biggest room (master room)
         int maxRoomSize = 0;
-        Room biggestRoom = new Room(TileType.FLOOR);
+        Room biggestRoom = new Room(CellType.FLOOR);
 
         foreach (Room room in unconnectedRooms)
         {

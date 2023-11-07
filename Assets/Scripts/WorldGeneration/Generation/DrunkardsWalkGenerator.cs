@@ -28,38 +28,17 @@ public class DrunkardsWalkGenerator : LayoutGenerator
     }
 
     public DrunkardsWalkGenerator(
-        Vector2Int size,
-        int accessability,
-        List<WorldConnection> worldConnections)
-        : base(size, accessability, worldConnections) 
-    {
-        GetSettings();
-        iterations = size.x * size.y * accessability / 100;
-        tiles = new HashSet<Vector2Int>();
-        canShift = true;
-    }
-
-    public DrunkardsWalkGenerator(
         string seed,
         Vector2Int size,
-        int accessability)
+        int accessability,
+        int borderSize)
         : base(seed, size, accessability) 
     {
         GetSettings();
         iterations = size.x * size.y * accessability / 100;
         tiles = new HashSet<Vector2Int>();
         canShift = true;
-    }
-
-    public DrunkardsWalkGenerator(
-        Vector2Int size,
-        int accessability)
-        : base(size, accessability) 
-    {
-        GetSettings();
-        iterations = size.x * size.y * accessability / 100;
-        tiles = new HashSet<Vector2Int>();
-        canShift = true;
+        this.borderSize = borderSize;
     }
 
     /// <summary>
@@ -142,7 +121,7 @@ public class DrunkardsWalkGenerator : LayoutGenerator
         
         RoomManager roomManager = new RoomManager(layout);
 
-        roomManager.RemoveSmallRooms(TileType.WALL, wallRoomThreshold);
+        roomManager.RemoveSmallRooms(CellType.WALL, wallRoomThreshold);
 
         //Add world connections, if present
         if (worldConnections.Count > 0)
@@ -154,7 +133,7 @@ public class DrunkardsWalkGenerator : LayoutGenerator
         roomManager.ConnectRooms(radius);
 
         //Remove small wall areas that might were created
-        roomManager.RemoveSmallRooms(TileType.WALL, wallRoomThreshold);
+        roomManager.RemoveSmallRooms(CellType.WALL, wallRoomThreshold);
 
         layout = roomManager.GetLayout();        
     }

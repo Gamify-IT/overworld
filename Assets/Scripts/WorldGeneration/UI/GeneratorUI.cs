@@ -26,7 +26,6 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private TMP_Dropdown stypeDropdown;
     [SerializeField] private TMP_Dropdown generatorTypeDropdown;
     [SerializeField] private TMP_InputField accessabilityInput;
-    [SerializeField] private TMP_Dropdown randomSeedDropdown;
     [SerializeField] private TMP_InputField seedInput;
 
     [SerializeField] private Button generateLayoutButton;
@@ -97,11 +96,20 @@ public class GeneratorUI : MonoBehaviour
 
         accessabilityInput.text = "50";
 
+        if(areaData.IsGeneratedArea())
+        {
+            seedInput.text = areaData.GetAreaMapData().GetLayout().GetSeed();
+        }
+        else
+        {
+            GenerateSeedButtonPressed();
+        }
+
         SetupMaxValues();
 
         if(areaData.IsGeneratedArea())
         {
-            stypeDropdown.value = (int) areaData.GetAreaMapData().GetWorldStyle();
+            stypeDropdown.value = (int) areaData.GetAreaMapData().GetLayout().GetStyle();
 
             continueButton.interactable = true;
 
@@ -153,8 +161,8 @@ public class GeneratorUI : MonoBehaviour
     {
         if(areaData.IsGeneratedArea())
         {
-            sizeX.text = areaData.GetAreaMapData().GetTiles().GetLength(0).ToString();
-            sizeY.text = areaData.GetAreaMapData().GetTiles().GetLength(1).ToString();
+            sizeX.text = areaData.GetAreaMapData().GetLayout().GetTiles().GetLength(0).ToString();
+            sizeY.text = areaData.GetAreaMapData().GetLayout().GetTiles().GetLength(1).ToString();
         }
         else
         {
@@ -209,6 +217,12 @@ public class GeneratorUI : MonoBehaviour
     }
 
     #region Area Settings Buttons
+    public void GenerateSeedButtonPressed()
+    {
+        string seed = Time.time.ToString();
+        seedInput.text = seed;
+    }
+
     public void ResetToCustomButtonPressed()
     {
         uiManager.ResetToDefault();
@@ -222,12 +236,7 @@ public class GeneratorUI : MonoBehaviour
         WorldStyle style = (WorldStyle) stypeDropdown.value;
         LayoutGeneratorType layoutGeneratorType = (LayoutGeneratorType) generatorTypeDropdown.value;
         int accessability = int.Parse(accessabilityInput.text);
-
-        Optional<string> seed = new Optional<string>();
-        if(randomSeedDropdown.value != 0)
-        {
-            seed.SetValue(seedInput.text);
-        }
+        string seed = seedInput.text;
 
         uiManager.GenerateLayout(size, style, layoutGeneratorType, accessability, seed);
 

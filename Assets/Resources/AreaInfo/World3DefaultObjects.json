@@ -1,11 +1,16 @@
 {
     "layout": {
-        "sizeX": 1,
-        "sizeY": 1,
-        "layers": 1,
-        "tiles": ""
+        "area": {
+            "worldIndex": 3,
+            "dungeonIndex": 0
+        },
+        "sizeX": 0,
+        "sizeY": 0,
+        "generatorType": "CELLULAR_AUTOMATA",
+        "seed": "",
+        "accessability": 0,
+        "style": "CUSTOM"
     },
-    "style": "CUSTOM",
     "minigameSpots": [
         {
             "area": {

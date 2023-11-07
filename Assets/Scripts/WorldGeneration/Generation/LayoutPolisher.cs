@@ -86,7 +86,7 @@ public class LayoutPolisher
             {
                 for (int y = borderSize; y < size.y - borderSize; y++)
                 {
-                    if (GetTileType(x, y) == TileType.WALL)
+                    if (GetTileType(x, y) == CellType.WALL)
                     {
                         Vector2Int tile = new Vector2Int(x, y);
                         if(!EnoughVerticalWalls(tile, minHeight) || !EnoughHorizontalWalls(tile, minWidth))
@@ -106,7 +106,7 @@ public class LayoutPolisher
 
         for(int i=1; i<minHeight; i++)
         {
-            if(IsInRange(tile.x, tile.y + i) && GetTileType(tile.x, tile.y + i) == TileType.WALL)
+            if(IsInRange(tile.x, tile.y + i) && GetTileType(tile.x, tile.y + i) == CellType.WALL)
             {
                 verticalWallTiles++;
             }
@@ -118,7 +118,7 @@ public class LayoutPolisher
 
         for (int i = 1; i < minHeight; i++)
         {
-            if (IsInRange(tile.x, tile.y - i) && GetTileType(tile.x, tile.y - i) == TileType.WALL)
+            if (IsInRange(tile.x, tile.y - i) && GetTileType(tile.x, tile.y - i) == CellType.WALL)
             {
                 verticalWallTiles++;
             }
@@ -137,7 +137,7 @@ public class LayoutPolisher
 
         for (int i = 1; i < minWidth; i++)
         {
-            if (IsInRange(tile.x + i, tile.y) && GetTileType(tile.x + i, tile.y) == TileType.WALL)
+            if (IsInRange(tile.x + i, tile.y) && GetTileType(tile.x + i, tile.y) == CellType.WALL)
             {
                 horizontalWallTiles++;
             }
@@ -149,7 +149,7 @@ public class LayoutPolisher
 
         for (int i = 1; i < minWidth; i++)
         {
-            if (IsInRange(tile.x - i, tile.y) && GetTileType(tile.x - i, tile.y) == TileType.WALL)
+            if (IsInRange(tile.x - i, tile.y) && GetTileType(tile.x - i, tile.y) == CellType.WALL)
             {
                 horizontalWallTiles++;
             }
@@ -172,15 +172,15 @@ public class LayoutPolisher
     /// <param name="posX">The x coordinate</param>
     /// <param name="posY">The y coordinate</param>
     /// <returns>The type of the tile</returns>
-    private TileType GetTileType(int posX, int posY)
+    private CellType GetTileType(int posX, int posY)
     {
         if (layout[posX, posY])
         {
-            return TileType.FLOOR;
+            return CellType.FLOOR;
         }
         else
         {
-            return TileType.WALL;
+            return CellType.WALL;
         }
     }
 

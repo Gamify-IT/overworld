@@ -233,7 +233,7 @@ public class GeneratorManager : MonoBehaviour
         Vector2Int gridOffset = areaInformation.GetGridOffset();
         CustomAreaMapData areaMap = areaData.GetAreaMapData();
 
-        string[,,] layout = areaMap.GetTiles();
+        TileType[,] layout = areaMap.GetLayout().GetTiles();
         areaPainter.Paint(layout, gridOffset);
 
         minigamesManager.Setup(areaMap.GetMinigameSpots());
@@ -276,18 +276,18 @@ public class GeneratorManager : MonoBehaviour
     /// <param name="worldConnections">A list of connection points to other worlds, if the area is a world, empty optional otherwise</param>
     public void CreateLayout(Vector2Int size, CustomAreaMapData areaMapData, float accessability)
     {        
-        WorldStyle style = areaMapData.GetWorldStyle();
+        //WorldStyle style = areaMapData.GetWorldStyle();
         List<WorldConnection> worldConnections = areaInformation.GetWorldConnections();
-        AreaGeneratorOld areaGenerator = new AreaGeneratorOld(size, style, accessability, worldConnections);
-        areaGenerator.GenerateLayout();
-        string[,,] layout = areaGenerator.GetLayout();
+        //AreaGeneratorOld areaGenerator = new AreaGeneratorOld(size, style, accessability, worldConnections);
+        //areaGenerator.GenerateLayout();
+        //string[,,] layout = areaGenerator.GetLayout();
         
-        CustomAreaMapData areaMap = new CustomAreaMapData(layout, style);
-        areaData.SetAreaMapData(areaMap);
+        //CustomAreaMapData areaMap = new CustomAreaMapData(layout, style);
+        //areaData.SetAreaMapData(areaMap);
 
         ClearContent();
         Vector2Int offset = areaInformation.GetGridOffset();
-        areaPainter.Paint(layout, offset);
+        //areaPainter.Paint(layout, offset);
     }
 
     /// <summary>

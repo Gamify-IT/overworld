@@ -23,30 +23,10 @@ public abstract class LayoutGenerator
         this.worldConnections = worldConnections;
     }
 
-    //constructor without seed and with world connections
-    protected LayoutGenerator(Vector2Int size, int accessability, List<WorldConnection> worldConnections)
-    {
-        seed = Time.time.ToString();
-        layout = new bool[size.x, size.y];
-        this.size = size;
-        this.accessability = accessability;
-        this.worldConnections = worldConnections;
-    }
-
     //constructor with seed and without world connections
     protected LayoutGenerator(string seed, Vector2Int size, int accessability)
     {
         this.seed = seed;
-        layout = new bool[size.x, size.y];
-        this.size = size;
-        this.accessability = accessability;
-        this.worldConnections = new List<WorldConnection>();
-    }
-
-    //constructor without seed and world connections
-    protected LayoutGenerator(Vector2Int size, int accessability)
-    {
-        seed = Time.time.ToString();
         layout = new bool[size.x, size.y];
         this.size = size;
         this.accessability = accessability;

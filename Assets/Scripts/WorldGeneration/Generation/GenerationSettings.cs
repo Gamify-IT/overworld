@@ -20,6 +20,7 @@ public class GenerationSettings
 
     //Islands
     public int innerBorderSize;
+    public int connectionSize;
     public int minRoomHeight;
     public int minRoomWidth;
 

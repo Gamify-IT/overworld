@@ -31,41 +31,6 @@ public class IslandsGenerator : LayoutGenerator
         pseudoRandomNumberGenerator = new System.Random(seed.GetHashCode());
     }
 
-    public IslandsGenerator(
-        Vector2Int size,
-        int accessability,
-        List<WorldConnection> worldConnections,
-        RoomGenerator roomGenerator)
-        : base(size, accessability, worldConnections)
-    {
-        GetSettings();
-        this.roomGenerator = roomGenerator;
-        pseudoRandomNumberGenerator = new System.Random(seed.GetHashCode());
-    }
-
-    public IslandsGenerator(
-        string seed,
-        Vector2Int size,
-        int accessability,
-        RoomGenerator roomGenerator)
-        : base(seed, size, accessability)
-    {
-        GetSettings();
-        this.roomGenerator = roomGenerator;
-        pseudoRandomNumberGenerator = new System.Random(seed.GetHashCode());
-    }
-
-    public IslandsGenerator(
-        Vector2Int size,
-        int accessability,
-        RoomGenerator roomGenerator)
-        : base(size, accessability)
-    {
-        GetSettings();
-        this.roomGenerator = roomGenerator;
-        pseudoRandomNumberGenerator = new System.Random(seed.GetHashCode());
-    }
-
     /// <summary>
     ///     This function reads to generator settings from the local file and sets up the variables needed
     /// </summary>
@@ -78,7 +43,7 @@ public class IslandsGenerator : LayoutGenerator
 
         outerBorderSize = generationSettings.borderSize;
         innerBorderSize = generationSettings.innerBorderSize;
-        corridorSize = generationSettings.corridorSize;
+        corridorSize = generationSettings.connectionSize;
         floorRoomThreshold = generationSettings.floorRoomThreshold;
         wallRoomThreshold = generationSettings.wallRoomThreshold;
         minRoomWidth = generationSettings.minRoomWidth;
@@ -111,8 +76,8 @@ public class IslandsGenerator : LayoutGenerator
         RoomManager roomManager = new RoomManager(layout);
 
         //Remove too small areas
-        roomManager.RemoveSmallRooms(TileType.WALL, wallRoomThreshold);
-        roomManager.RemoveSmallRooms(TileType.FLOOR, floorRoomThreshold);
+        roomManager.RemoveSmallRooms(CellType.WALL, wallRoomThreshold);
+        roomManager.RemoveSmallRooms(CellType.FLOOR, floorRoomThreshold);
 
         //Add world connections, if present
         if (worldConnections.Count > 0)
@@ -124,7 +89,7 @@ public class IslandsGenerator : LayoutGenerator
         roomManager.ConnectRooms(corridorSize);
 
         //Remove small wall areas that might were created
-        roomManager.RemoveSmallRooms(TileType.WALL, wallRoomThreshold);
+        roomManager.RemoveSmallRooms(CellType.WALL, wallRoomThreshold);
 
         //Retrieve updated layout
         layout = roomManager.GetLayout();
@@ -158,7 +123,7 @@ public class IslandsGenerator : LayoutGenerator
     {
         string roomSeed = GetNextSeed();
 
-        LayoutGenerator layoutGenerator = new CellularAutomataGenerator(roomSeed, space.size, accessability);
+        LayoutGenerator layoutGenerator = new CellularAutomataGenerator(roomSeed, space.size, accessability, innerBorderSize);
         layoutGenerator.GenerateLayout();
         return layoutGenerator.GetLayout();
     }
@@ -167,7 +132,7 @@ public class IslandsGenerator : LayoutGenerator
     {
         string roomSeed = GetNextSeed();
 
-        LayoutGenerator layoutGenerator = new DrunkardsWalkGenerator(roomSeed, space.size, accessability);
+        LayoutGenerator layoutGenerator = new DrunkardsWalkGenerator(roomSeed, space.size, accessability, innerBorderSize);
         layoutGenerator.GenerateLayout();
         return layoutGenerator.GetLayout();
     }

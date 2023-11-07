@@ -65,7 +65,7 @@ public class AreaManager : MonoBehaviour
             Debug.Log("Generated Area: " + worldIndex + "-" + dungeonIndex);
 
             //Create layout
-            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetTiles(), areaInformation);
+            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTiles(), areaInformation);
 
             //Create objects
             areaBuilder.SetupAreaObjects(areaData.GetAreaMapData());
@@ -129,7 +129,7 @@ public class AreaManager : MonoBehaviour
         CustomAreaMapData areaMapData;
         if (areaData.IsGeneratedArea())
         {
-            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetTiles(), areaInformation);
+            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTiles(), areaInformation);
             areaMapData = areaData.GetAreaMapData();
         }
         else
@@ -163,7 +163,7 @@ public class AreaManager : MonoBehaviour
         objectGenerator = new ObjectGenerator(areaIdentifier);
         if(areaData.IsGeneratedArea())
         {
-            objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetTiles(), areaInformation.GetObjectOffset());
+            objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetLayout().GetTiles(), areaInformation.GetObjectOffset());
         }
 
         //setup area
@@ -205,7 +205,7 @@ public class AreaManager : MonoBehaviour
     {
         if (areaData.IsGeneratedArea())
         {
-            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetTiles(), areaInformation);
+            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTiles(), areaInformation);
             areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
         }
         else
@@ -377,81 +377,54 @@ public class AreaManager : MonoBehaviour
     /// <param name="layoutGeneratorType">The type of layout generator to be used</param>
     /// <param name="accessability">How much area is accessable</param>
     /// <param name="seed">The seed to be used, if wanted</param>
-    public void GenerateLayout(Vector2Int size, WorldStyle style, LayoutGeneratorType layoutGeneratorType, int accessability, Optional<string> seed)
+    public void GenerateLayout(Vector2Int size, WorldStyle style, LayoutGeneratorType layoutGeneratorType, int accessability, string seed)
     {
         //Setup area generator and object and generate layout
         List<WorldConnection> worldConnections = areaInformation.GetWorldConnections();
 
         //setup layout generator
-        LayoutGenerator layoutGenerator = new CellularAutomataGenerator(size, accessability, worldConnections);
+        LayoutGenerator layoutGenerator = new CellularAutomataGenerator(seed, size, accessability, worldConnections);
 
         switch (layoutGeneratorType)
         {
             case LayoutGeneratorType.CELLULAR_AUTOMATA:
-                if(seed.IsPresent())
-                {
-                    layoutGenerator = new CellularAutomataGenerator(seed.Value(), size, accessability, worldConnections);
-                }
-                else
-                {
-                    layoutGenerator = new CellularAutomataGenerator(size, accessability, worldConnections);
-                } 
+                layoutGenerator = new CellularAutomataGenerator(seed, size, accessability, worldConnections);
                 break;
 
             case LayoutGeneratorType.DRUNKARDS_WALK:
-                if (seed.IsPresent())
-                {
-                    layoutGenerator = new DrunkardsWalkGenerator(seed.Value(), size, accessability, worldConnections);
-                }
-                else
-                {
-                    layoutGenerator = new DrunkardsWalkGenerator(size, accessability, worldConnections);
-                }
+                layoutGenerator = new DrunkardsWalkGenerator(seed, size, accessability, worldConnections);
                 break;
 
             case LayoutGeneratorType.ISLAND_CELLULAR_AUTOMATA:
-                if (seed.IsPresent())
-                {
-                    layoutGenerator = new IslandsGenerator(seed.Value(), size, accessability, worldConnections, RoomGenerator.CELLULAR_AUTOMATA);
-                }
-                else
-                {
-                    layoutGenerator = new IslandsGenerator(size, accessability, worldConnections, RoomGenerator.CELLULAR_AUTOMATA);
-                }
+                layoutGenerator = new IslandsGenerator(seed, size, accessability, worldConnections, RoomGenerator.CELLULAR_AUTOMATA);
                 break;
 
             case LayoutGeneratorType.ISLAND_DRUNKARDS_WALK:
-                if (seed.IsPresent())
-                {
-                    layoutGenerator = new IslandsGenerator(seed.Value(), size, accessability, worldConnections, RoomGenerator.DRUNKARDS_WALK);
-                }
-                else
-                {
-                    layoutGenerator = new IslandsGenerator(size, accessability, worldConnections, RoomGenerator.DRUNKARDS_WALK);
-                }
+                layoutGenerator = new IslandsGenerator(seed, size, accessability, worldConnections, RoomGenerator.DRUNKARDS_WALK);
                 break;
         }
 
         //generate layout
         layoutGenerator.GenerateLayout();
         bool[,] baseLayout = layoutGenerator.GetLayout();
-
+        
         //polish layout
         LayoutPolisher polisher = new LayoutPolisher(style, baseLayout);
         baseLayout = polisher.Polish();
-
+        
         //convert layout
         LayoutConverter converter = new LayoutConverter(style);
-        string[,,] layout = converter.Convert(baseLayout);
+        TileType[,] tileLayout = converter.Convert(baseLayout);
 
         objectPositionGenerator = new ObjectPositionGenerator(baseLayout, areaInformation.GetObjectOffset());
-        
+
         //Update stored data
-        CustomAreaMapData areaMapData = new CustomAreaMapData(layout, style);
+        Layout layout = new Layout(areaIdentifier, tileLayout, layoutGeneratorType, seed, accessability, style);
+        CustomAreaMapData areaMapData = new CustomAreaMapData(layout);
         areaData.SetAreaMapData(areaMapData);
 
         //Setup area
-        areaBuilder.SetupAreaLayout(layout, areaInformation);
+        areaBuilder.SetupAreaLayout(tileLayout, areaInformation);
         areaBuilder.SetupPlaceholderObjects(areaMapData);
     }
 

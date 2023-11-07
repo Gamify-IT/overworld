@@ -18,7 +18,7 @@ public class AreaPainter : MonoBehaviour
     [SerializeField] private Tile savannaWallTile;
 
     [SerializeField] private Tile beachGroundTile;
-    [SerializeField] private Tile beachWallTile;
+    [SerializeField] private RuleTile beachWallTile;
 
     [SerializeField] private Tile caveGroundTile;
     [SerializeField] private Tile caveWallTile;
@@ -27,22 +27,22 @@ public class AreaPainter : MonoBehaviour
     [SerializeField] private Tile forestWallTile;
 
     //Mapper
-    private Dictionary<string, Tile> tileMapper = new Dictionary<string, Tile>();
+    private Dictionary<TileType, TileBase> tileMapper = new Dictionary<TileType, TileBase>();
     #endregion
 
     private void Awake()
     {
-        tileMapper.Add("Overworld-Savanna_0", savannaGroundTile);
-        tileMapper.Add("Overworld-Savanna_453", savannaWallTile);
-        tileMapper.Add("Overworld_156", beachGroundTile);
-        tileMapper.Add("Overworld_276", beachWallTile);
-        tileMapper.Add("cave_0", caveGroundTile);
-        tileMapper.Add("cave_12", caveWallTile);
-        tileMapper.Add("Overworld_0", forestGroundTile);
-        tileMapper.Add("Overworld_574", forestWallTile);
+        tileMapper.Add(TileType.SAVANNA_FLOOR, savannaGroundTile);
+        tileMapper.Add(TileType.SAVANNA_WALL, savannaWallTile);
+        tileMapper.Add(TileType.BEACH_FLOOR, beachGroundTile);
+        tileMapper.Add(TileType.BEACH_WATER, beachWallTile);
+        tileMapper.Add(TileType.CAVE_FLOOR, caveGroundTile);
+        tileMapper.Add(TileType.CAVE_WALL, caveWallTile);
+        tileMapper.Add(TileType.FOREST_FLOOR, forestGroundTile);
+        tileMapper.Add(TileType.FOREST_TREE, forestWallTile);
     }
 
-    public void Paint(string[,,] layout, Vector2Int offset)
+    public void Paint(TileType[,] layout, Vector2Int offset)
     {
         ClearTilemaps();
 
@@ -53,60 +53,34 @@ public class AreaPainter : MonoBehaviour
             {
                 Vector3Int position = new Vector3Int(x + offset.x, y + offset.y, 0);
 
-                //paint ground layer
-                if (tileMapper.ContainsKey(layout[x, y, 0]))
+                Tilemap tilemap;
+                
+                switch(layout[x,y])
                 {
-                    Tile tile = tileMapper[layout[x, y, 0]];
-                    ground.SetTile(position, tile);
-                }
-                else
-                {
-                    ground.SetTile(position, null);
+                    case TileType.CAVE_FLOOR:
+                    case TileType.BEACH_FLOOR:
+                    case TileType.BEACH_CONNECTION:
+                    case TileType.FOREST_FLOOR:
+                    case TileType.SAVANNA_FLOOR:
+                        tilemap = ground;
+                        break;
+
+                    case TileType.CAVE_WALL:
+                    case TileType.CAVE_VOID:
+                    case TileType.BEACH_WATER:
+                    case TileType.FOREST_TREE:
+                    case TileType.SAVANNA_WALL:
+                    case TileType.SAVANNA_WATER:
+                        tilemap = wall;
+                        break;
+
+                    default:
+                        tilemap = ground;
+                        break;
                 }
 
-                //paint ground decoration layer
-                if (tileMapper.ContainsKey(layout[x, y, 1]))
-                {
-                    Tile tile = tileMapper[layout[x, y, 1]];
-                    groundDecorations.SetTile(position, tile);
-                }
-                else
-                {
-                    groundDecorations.SetTile(position, null);
-                }
-
-                //paint wall layer
-                if (tileMapper.ContainsKey(layout[x, y, 2]))
-                {
-                    Tile tile = tileMapper[layout[x, y, 2]];
-                    wall.SetTile(position, tile);
-                }
-                else
-                {
-                    wall.SetTile(position, null);
-                }
-
-                //paint wall decoration layer
-                if (tileMapper.ContainsKey(layout[x, y, 3]))
-                {
-                    Tile tile = tileMapper[layout[x, y, 3]];
-                    wallDecorations.SetTile(position, tile);
-                }
-                else
-                {
-                    wallDecorations.SetTile(position, null);
-                }
-
-                //paint objects layer
-                if (tileMapper.ContainsKey(layout[x, y, 4]))
-                {
-                    Tile tile = tileMapper[layout[x, y, 4]];
-                    objects.SetTile(position, tile);
-                }
-                else
-                {
-                    objects.SetTile(position, null);
-                }
+                TileBase tile = tileMapper[layout[x, y]];
+                tilemap.SetTile(position, tile);
             }
         }
     }

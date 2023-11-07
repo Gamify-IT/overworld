@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Room
 {
-    private TileType roomType;
+    private CellType roomType;
     private List<Vector2Int> tiles;
     private List<Vector2Int> borderTiles;
     
-    public Room(TileType roomType)
+    public Room(CellType roomType)
     {
         this.roomType = roomType;
         tiles = new List<Vector2Int>();
@@ -35,7 +35,7 @@ public class Room
         return borderTiles;
     }
 
-    public TileType GetRoomType()
+    public CellType GetRoomType()
     {
         return roomType;
     }

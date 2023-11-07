@@ -30,7 +30,7 @@ public class ObjectPositionGenerator
         barrierPositions = new List<Vector2>();
     }
 
-    public ObjectPositionGenerator(string[,,] tiles, Vector2Int offset)
+    public ObjectPositionGenerator(TileType[,] tiles, Vector2Int offset)
     {
         size = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
         this.offset = offset;
@@ -48,20 +48,21 @@ public class ObjectPositionGenerator
     /// </summary>
     /// <param name="tiles">The layout</param>
     /// <returns>All accessable tiles</returns>
-    private bool[,] GetAccessableTiles(string[,,] tiles)
+    private bool[,] GetAccessableTiles(TileType[,] tiles)
     {
         bool[,] accessableTiles = new bool[size.x, size.y];
         for(int x=0; x<size.x; x++)
         {
             for(int y=0; y<size.y; y++)
             {
-                if(tiles[x,y,0].Equals("none"))
+                switch(tiles[x,y])
                 {
-                    accessableTiles[x, y] = false;
-                }
-                else
-                {
-                    accessableTiles[x, y] = true;
+                    case TileType.CAVE_FLOOR:
+                    case TileType.BEACH_FLOOR:
+                    case TileType.FOREST_FLOOR:
+                    case TileType.SAVANNA_FLOOR:
+                        accessableTiles[x, y] = true;
+                        break;
                 }
             }
         }

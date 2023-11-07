@@ -24,29 +24,14 @@ public class CellularAutomataGenerator : LayoutGenerator
     }
 
     public CellularAutomataGenerator(
-        Vector2Int size,
-        int accessability,
-        List<WorldConnection> worldConnections)
-        : base(size, accessability, worldConnections) 
-    {
-        GetSettings();
-    }
-
-    public CellularAutomataGenerator(
         string seed,
         Vector2Int size,
-        int accessability)
-        : base(seed, size, accessability) 
+        int accessability,
+        int borderSize)
+        : base(seed, size, accessability)
     {
         GetSettings();
-    }
-
-    public CellularAutomataGenerator(
-        Vector2Int size,
-        int accessability)
-        : base(size, accessability) 
-    {
-        GetSettings();
+        this.borderSize = borderSize;
     }
 
     /// <summary>
@@ -86,8 +71,8 @@ public class CellularAutomataGenerator : LayoutGenerator
         RoomManager roomManager = new RoomManager(layout);
 
         //Remove too small areas
-        roomManager.RemoveSmallRooms(TileType.WALL, wallRoomThreshold);
-        roomManager.RemoveSmallRooms(TileType.FLOOR, floorRoomThreshold);
+        roomManager.RemoveSmallRooms(CellType.WALL, wallRoomThreshold);
+        roomManager.RemoveSmallRooms(CellType.FLOOR, floorRoomThreshold);
 
         //Add world connections, if present
         if(worldConnections.Count > 0)
@@ -99,7 +84,7 @@ public class CellularAutomataGenerator : LayoutGenerator
         roomManager.ConnectRooms(corridorSize);
 
         //Remove small wall areas that might were created
-        roomManager.RemoveSmallRooms(TileType.WALL, wallRoomThreshold);
+        roomManager.RemoveSmallRooms(CellType.WALL, wallRoomThreshold);
 
         //Retrieve updated layout
         layout = roomManager.GetLayout();

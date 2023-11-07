@@ -32,7 +32,7 @@ public class InspectorUIManager : MonoBehaviour
 
     private void SetupDisplayAreaMap()
     {
-        displayedMapData = new CustomAreaMapData(areaMapData.GetWorldStyle());
+        displayedMapData = new CustomAreaMapData();
         displayedMapData.SetMinigameSpots(areaMapData.GetMinigameSpots());
         displayedMapData.SetNpcSpots(areaMapData.GetNpcSpots());
         displayedMapData.SetBookSpots(areaMapData.GetBookSpots());
