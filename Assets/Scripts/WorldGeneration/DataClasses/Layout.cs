@@ -5,13 +5,13 @@ using UnityEngine;
 public class Layout
 {
     private AreaInformation area;
-    private TileType[,] tiles;
+    private TileSprite[,] tiles;
     private LayoutGeneratorType generatorType;
     private string seed;
     private int accessability;
     private WorldStyle style;
 
-    public Layout(AreaInformation area, TileType[,] tiles, LayoutGeneratorType generatorType, string seed, int accessability, WorldStyle style)
+    public Layout(AreaInformation area, TileSprite[,] tiles, LayoutGeneratorType generatorType, string seed, int accessability, WorldStyle style)
     {
         this.area = area;
         this.tiles = tiles;
@@ -31,7 +31,7 @@ public class Layout
         if(layoutDTO.sizeX == 0 && layoutDTO.sizeY == 0)
         {
             AreaInformation dummyArea = new AreaInformation(0, new Optional<int>());
-            TileType[,] dummyTiles = new TileType[0, 0];
+            TileSprite[,] dummyTiles = new TileSprite[0, 0];
             LayoutGeneratorType dummyGenerator = LayoutGeneratorType.CELLULAR_AUTOMATA;
             string dummySeed = "";
             int dummyAccessiblity = 0;
@@ -87,10 +87,31 @@ public class Layout
         baseLayout = polisher.Polish();
 
         //convert layout
-        LayoutConverter converter = new LayoutConverter(style);
-        TileType[,] layout = converter.Convert(baseLayout);
+        LayoutConverter converter = new SavannaConverter(baseLayout);
 
-        Layout data = new Layout(area, layout, generatorType, seed, accessability, style);
+        switch (style)
+        {
+            case WorldStyle.SAVANNA:
+                converter = new SavannaConverter(baseLayout);
+                break;
+
+            case WorldStyle.CAVE:
+                converter = new CaveConverter(baseLayout);
+                break;
+
+            case WorldStyle.BEACH:
+                converter = new BeachConverter(baseLayout);
+                break;
+
+            case WorldStyle.FOREST:
+                converter = new ForestConverter(baseLayout);
+                break;
+        }
+
+        converter.Convert();
+        TileSprite[,] tileLayout = converter.GetTileSprites();
+
+        Layout data = new Layout(area, tileLayout, generatorType, seed, accessability, style);
         return data;
     }
 
@@ -122,12 +143,12 @@ public class Layout
         this.area = area;
     }
     
-    public TileType[,] GetTiles()
+    public TileSprite[,] GetTiles()
     {
         return tiles;
     }
 
-    public void SetTiles(TileType[,] tiles)
+    public void SetTiles(TileSprite[,] tiles)
     {
         this.tiles = tiles;
     }

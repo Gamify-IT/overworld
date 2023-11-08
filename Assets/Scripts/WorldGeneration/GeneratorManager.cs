@@ -4,6 +4,9 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// OUTDATED: no longer needed
+/// </summary>
 public class GeneratorManager : MonoBehaviour
 {
     #region Attributes
@@ -233,8 +236,8 @@ public class GeneratorManager : MonoBehaviour
         Vector2Int gridOffset = areaInformation.GetGridOffset();
         CustomAreaMapData areaMap = areaData.GetAreaMapData();
 
-        TileType[,] layout = areaMap.GetLayout().GetTiles();
-        areaPainter.Paint(layout, gridOffset);
+        //TileType[,] layout = areaMap.GetLayout().GetTiles();
+        //areaPainter.Paint(layout, gridOffset);
 
         minigamesManager.Setup(areaMap.GetMinigameSpots());
         npcManager.Setup(areaMap.GetNpcSpots());

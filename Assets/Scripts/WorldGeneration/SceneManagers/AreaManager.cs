@@ -411,10 +411,31 @@ public class AreaManager : MonoBehaviour
         //polish layout
         LayoutPolisher polisher = new LayoutPolisher(style, baseLayout);
         baseLayout = polisher.Polish();
-        
+
         //convert layout
-        LayoutConverter converter = new LayoutConverter(style);
-        TileType[,] tileLayout = converter.Convert(baseLayout);
+        LayoutConverter converter = new SavannaConverter(baseLayout);
+
+        switch (style)
+        {
+            case WorldStyle.SAVANNA:
+                converter = new SavannaConverter(baseLayout);
+                break;
+
+            case WorldStyle.CAVE:
+                converter = new CaveConverter(baseLayout);
+                break;
+
+            case WorldStyle.BEACH:
+                converter = new BeachConverter(baseLayout);
+                break;
+
+            case WorldStyle.FOREST:
+                converter = new ForestConverter(baseLayout);
+                break;
+        }
+
+        converter.Convert();
+        TileSprite[,] tileLayout = converter.GetTileSprites();
 
         objectPositionGenerator = new ObjectPositionGenerator(baseLayout, areaInformation.GetObjectOffset());
 
