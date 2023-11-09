@@ -60,11 +60,11 @@ public class CaveConverter : LayoutConverter
                 }
                 else if (tileTypes[x, y] == TileType.CAVE_WALL)
                 {
-                    tileSprites[x, y] = CheckWallTile(x, y);
+                    tileSprites[x, y] = GetWallSprite(x, y);
                 }
                 else if (tileTypes[x, y] == TileType.CAVE_VOID)
                 {
-                    tileSprites[x, y] = CheckVoidTile(x, y);
+                    tileSprites[x, y] = GetVoidTile(x, y);
                 }
             }
         }
@@ -76,7 +76,7 @@ public class CaveConverter : LayoutConverter
     /// <param name="x">The x coordinate</param>
     /// <param name="y">The y coordinate</param>
     /// <returns>The correct <c>TileSprite</c> to be displayed at the given position</returns>
-    private TileSprite CheckWallTile(int x, int y)
+    private TileSprite GetWallSprite(int x, int y)
     {
         if(IsInRange(x, y-1) && tileTypes[x,y-1] == TileType.CAVE_WALL)
         {
@@ -124,7 +124,7 @@ public class CaveConverter : LayoutConverter
     /// <param name="x">The x coordinate</param>
     /// <param name="y">The y coordinate</param>
     /// <returns>The correct <c>TileSprite</c> to be displayed at the given position</returns>
-    private TileSprite CheckVoidTile(int x, int y)
+    private TileSprite GetVoidTile(int x, int y)
     {
         if(IsInRange(x,y-1) && tileTypes[x, y-1] != TileType.CAVE_VOID)
         {

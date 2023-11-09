@@ -55,14 +55,11 @@ public class ObjectPositionGenerator
         {
             for(int y=0; y<size.y; y++)
             {
-                switch(tiles[x,y])
+                string sprite = tiles[x, y].ToString();
+
+                if (sprite.Contains("FLOOR") || sprite.Contains("CONNECTION"))
                 {
-                    case TileSprite.CAVE_FLOOR:
-                    case TileSprite.BEACH_FLOOR:
-                    case TileSprite.FOREST_FLOOR:
-                    case TileSprite.SAVANNA_FLOOR:
-                        accessableTiles[x, y] = true;
-                        break;
+                    accessableTiles[x, y] = true;
                 }
             }
         }
