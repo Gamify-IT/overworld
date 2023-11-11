@@ -4,65 +4,58 @@ using UnityEngine;
 
 public class ForestConverter : LayoutConverter
 {
-    public ForestConverter(bool[,] baseLayout) : base(baseLayout) { }
+    public ForestConverter(CellType[,] baseLayout) : base(baseLayout) { }
 
     public override void Convert()
     {
-        tileTypes = GetTileTypes();
-        tileSprites = ConvertToTileSprites();
+        GetTileTypes();
+        ConvertToTileSprites();
     }
 
     /// <summary>
     ///     This function converts the given floor / wall layout to the correct tile types
     /// </summary>
-    /// <returns>The converted type layout</returns>
-    private TileType[,] GetTileTypes()
+    private void GetTileTypes()
     {
-        TileType[,] layout = new TileType[baseLayout.GetLength(0), baseLayout.GetLength(1)];
-
-        for (int x = 0; x < baseLayout.GetLength(0); x++)
+        for (int x = 0; x < size.x; x++)
         {
-            for (int y = 0; y < baseLayout.GetLength(1); y++)
+            for (int y = 0; y < size.y; y++)
             {
-                if (baseLayout[x, y])
+                if (baseLayout[x, y] != CellType.WALL)
                 {
                     //position is floor
-                    layout[x, y] = TileType.FOREST_FLOOR;
+                    tileTypes[x, y] = TileType.FOREST_FLOOR;
                 }
                 else
                 {
                     //position in wall
-                    layout[x, y] = TileType.FOREST_FLOOR;
+                    tileTypes[x, y] = TileType.FOREST_TREE;
                 }
             }
         }
-
-        return layout;
     }
 
     /// <summary>
     ///     This function converts the given tile type layout to the correct cave tile sprites
     /// </summary>
-    /// <returns>The converted cave sprite layout</returns>
-    private TileSprite[,] ConvertToTileSprites()
+    private void ConvertToTileSprites()
     {
-        TileSprite[,] layout = new TileSprite[tileTypes.GetLength(0), tileTypes.GetLength(1)];
-
         for (int x = 0; x < tileTypes.GetLength(0); x++)
         {
             for (int y = 0; y < tileTypes.GetLength(1); y++)
             {
-                if (tileTypes[x, y] == TileType.FOREST_FLOOR)
+                if(tileTypes[x, y] == TileType.FOREST_FLOOR)
                 {
-                    layout[x, y] = TileSprite.FOREST_FLOOR;
+                    //floor tile
+                    tileSprites[x, y, 0] = TileSprite.FOREST_GRASS;
                 }
-                else if (tileTypes[x, y] == TileType.FOREST_TREE)
+                else
                 {
-                    layout[x, y] = TileSprite.FOREST_TREE;
+                    //wall tile
+                    tileSprites[x, y, 0] = TileSprite.FOREST_GRASS;
+                    tileSprites[x, y, 4] = TileSprite.FOREST_TREE;
                 }
             }
         }
-
-        return layout;
     }
 }

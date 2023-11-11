@@ -8,9 +8,6 @@ public class IslandsGenerator : LayoutGenerator
 
     private int outerBorderSize;
     private int innerBorderSize;
-    private int corridorSize;
-    private int floorRoomThreshold;
-    private int wallRoomThreshold;
     private int minRoomWidth;
     private int minRoomHeight;
 
@@ -72,32 +69,16 @@ public class IslandsGenerator : LayoutGenerator
             CreateRoom(subspace);
         }
 
-        //Setup room manager
-        RoomManager roomManager = new RoomManager(layout);
-
-        //Remove too small areas
-        roomManager.RemoveSmallRooms(CellType.WALL, wallRoomThreshold);
-        roomManager.RemoveSmallRooms(CellType.FLOOR, floorRoomThreshold);
-
-        //Add world connections, if present
-        if (worldConnections.Count > 0)
-        {
-            roomManager.AddWorldConnections(worldConnections);
-        }
-
-        //Connect rooms
-        roomManager.ConnectRooms(corridorSize);
-
-        //Remove small wall areas that might were created
-        roomManager.RemoveSmallRooms(CellType.WALL, wallRoomThreshold);
-
-        //Retrieve updated layout
-        layout = roomManager.GetLayout();
+        EnsureConnectivity();
     }
 
+    /// <summary>
+    ///     This function creates room of the defined type in the given subspace
+    /// </summary>
+    /// <param name="space">The space to create the room in</param>
     private void CreateRoom(Subspace space)
     {
-        bool[,] roomLayout = new bool[space.size.x, space.size.y];
+        CellType[,] roomLayout = new CellType[space.size.x, space.size.y];
 
         switch(roomGenerator)
         {
@@ -119,7 +100,12 @@ public class IslandsGenerator : LayoutGenerator
         }
     }
 
-    private bool[,] CellularAutomataRoom(Subspace space)
+    /// <summary>
+    ///     This function creates a cellular automata room in the given subspace
+    /// </summary>
+    /// <param name="space">The space to create the room in</param>
+    /// <returns>The created room layout</returns>
+    private CellType[,] CellularAutomataRoom(Subspace space)
     {
         string roomSeed = GetNextSeed();
 
@@ -128,7 +114,12 @@ public class IslandsGenerator : LayoutGenerator
         return layoutGenerator.GetLayout();
     }
 
-    private bool[,] DrunkardsWalkRoom(Subspace space)
+    /// <summary>
+    ///     This function creates a dunkard's walk room in the given subspace
+    /// </summary>
+    /// <param name="space">The space to create the room in</param>
+    /// <returns>The created room layout</returns>
+    private CellType[,] DrunkardsWalkRoom(Subspace space)
     {
         string roomSeed = GetNextSeed();
 
@@ -137,6 +128,10 @@ public class IslandsGenerator : LayoutGenerator
         return layoutGenerator.GetLayout();
     }
 
+    /// <summary>
+    ///     This function creates a seed used for the individual room generators
+    /// </summary>
+    /// <returns></returns>
     private string GetNextSeed()
     {
         int seedPart1 = pseudoRandomNumberGenerator.Next(0, 100);

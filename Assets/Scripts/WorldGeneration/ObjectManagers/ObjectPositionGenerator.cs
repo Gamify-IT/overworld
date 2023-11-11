@@ -17,11 +17,11 @@ public class ObjectPositionGenerator
     private List<Vector2> sceneTransitionPositions;
     private List<Vector2> barrierPositions;
 
-    public ObjectPositionGenerator(bool[,] accessableTiles, Vector2Int offset)
+    public ObjectPositionGenerator(CellType[,] tiles, Vector2Int offset)
     {
-        size = new Vector2Int(accessableTiles.GetLength(0), accessableTiles.GetLength(1));
+        size = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
         this.offset = offset;
-        this.accessableTiles = accessableTiles;
+        accessableTiles = GetAccessableTiles(tiles);
         minigamePositions = new List<Vector2>();
         npcPositions = new List<Vector2>();
         bookPositions = new List<Vector2>();
@@ -30,7 +30,7 @@ public class ObjectPositionGenerator
         barrierPositions = new List<Vector2>();
     }
 
-    public ObjectPositionGenerator(TileSprite[,] tiles, Vector2Int offset)
+    public ObjectPositionGenerator(TileSprite[,,] tiles, Vector2Int offset)
     {
         size = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
         this.offset = offset;
@@ -44,26 +44,57 @@ public class ObjectPositionGenerator
     }
 
     /// <summary>
-    ///     This function gets the accessable tiles of a given layout
+    ///     This function gets the accessable tiles of a given cell type layout
     /// </summary>
     /// <param name="tiles">The layout</param>
     /// <returns>All accessable tiles</returns>
-    private bool[,] GetAccessableTiles(TileSprite[,] tiles)
+    private bool[,] GetAccessableTiles(CellType[,] tiles)
     {
         bool[,] accessableTiles = new bool[size.x, size.y];
-        for(int x=0; x<size.x; x++)
+        for (int x = 0; x < size.x; x++)
         {
-            for(int y=0; y<size.y; y++)
+            for (int y = 0; y < size.y; y++)
             {
-                string sprite = tiles[x, y].ToString();
-
-                if (sprite.Contains("FLOOR") || sprite.Contains("CONNECTION"))
+                if(tiles[x, y] != CellType.WALL)
                 {
                     accessableTiles[x, y] = true;
                 }
             }
         }
         return accessableTiles;
+    }
+
+    /// <summary>
+    ///     This function gets the accessable tiles of a given tile sprite layout
+    /// </summary>
+    /// <param name="tiles">The layout</param>
+    /// <returns>All accessable tiles</returns>
+    private bool[,] GetAccessableTiles(TileSprite[,,] tiles)
+    {
+        bool[,] accessableTiles = new bool[size.x, size.y];
+        for(int x=0; x<size.x; x++)
+        {
+            for(int y=0; y<size.y; y++)
+            {
+                if(TileIsFree(tiles, x, y))
+                {
+                    accessableTiles[x, y] = true;
+                }
+            }
+        }
+        return accessableTiles;
+    }
+
+    /// <summary>
+    ///     This function checks, whether the given position is blocked or not
+    /// </summary>
+    /// <param name="tiles">The sprites in each tile</param>
+    /// <param name="x">The x coordinate</param>
+    /// <param name="y">The y coordinate</param>
+    /// <returns>True, if the tile is free, false if it blocked</returns>
+    private bool TileIsFree(TileSprite[,,] tiles, int x, int y)
+    {
+        return (tiles[x, y, 2] == TileSprite.UNDEFINED && tiles[x, y, 4] == TileSprite.UNDEFINED);
     }
 
     #region Generate Functions

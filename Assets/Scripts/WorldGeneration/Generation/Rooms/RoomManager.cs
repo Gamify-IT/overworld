@@ -6,23 +6,40 @@ using System;
 public class RoomManager
 {
     //TODO: move to json
-    private static readonly int borderSize = 3;
-    private static readonly int worldConnectionWidth = 3;
+    private int borderSize;
+    private int worldConnectionWidth;
+    private int corridorSize;
 
-    private bool[,] layout;
+    private CellType[,] layout;
     private Vector2Int size;
     
-    public RoomManager(bool[,] layout)
+    public RoomManager(CellType[,] layout)
     {
         this.layout = layout;
         size = new Vector2Int(layout.GetLength(0), layout.GetLength(1));
+        GetSettings();
+    }
+
+    /// <summary>
+    ///     This function reads to generator settings from the local file and sets up the variables needed
+    /// </summary>
+    private void GetSettings()
+    {
+        string path = "GameSettings/GeneratorSettings";
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        GenerationSettings generationSettings = GenerationSettings.CreateFromJSON(json);
+
+        borderSize = generationSettings.borderSize;
+        worldConnectionWidth = generationSettings.worldConnectionWidth;
+        corridorSize = generationSettings.corridorSize;
     }
 
     /// <summary>
     ///     This function returns the changed layout
     /// </summary>
     /// <returns>The changed layout</returns>
-    public bool[,] GetLayout()
+    public CellType[,] GetLayout()
     {
         return layout;
     }
@@ -63,7 +80,7 @@ public class RoomManager
         {
             for (int y = 0; y < size.y; y++)
             {
-                if (!flaggedTiles[x, y] && GetTileType(x, y) == roomType)
+                if (!flaggedTiles[x, y] && layout[x, y] == roomType)
                 {
                     //tile has correct type and was not visited yet
 
@@ -92,15 +109,7 @@ public class RoomManager
     private Room GetRoomOfPosition(int posX, int posY)
     {
         //get room type
-        CellType roomType;
-        if (layout[posX, posY])
-        {
-            roomType = CellType.FLOOR;
-        }
-        else
-        {
-            roomType = CellType.WALL;
-        }
+        CellType roomType = layout[posX, posY];
 
         //setup tile lists and flag grid
         List<Vector2Int> tiles = new List<Vector2Int>();
@@ -134,7 +143,7 @@ public class RoomManager
                 if (IsInRange(neighbor.x, neighbor.y) && !flaggedTiles[neighbor.x, neighbor.y])
                 {
                     //neighbor is inside the grid and was not visited
-                    if (GetTileType(neighbor.x, neighbor.y) == roomType)
+                    if(layout[neighbor.x, neighbor.y] == roomType)
                     {
                         //neighbor is same type
                         flaggedTiles[neighbor.x, neighbor.y] = true;
@@ -158,24 +167,6 @@ public class RoomManager
     }
 
     /// <summary>
-    ///     This function returns the tile type of the given position
-    /// </summary>
-    /// <param name="posX">The x coordinate</param>
-    /// <param name="posY">The y coordinate</param>
-    /// <returns>The type of the tile</returns>
-    private CellType GetTileType(int posX, int posY)
-    {
-        if (layout[posX, posY])
-        {
-            return CellType.FLOOR;
-        }
-        else
-        {
-            return CellType.WALL;
-        }
-    }
-
-    /// <summary>
     ///     This function removes the given rooms by changing the type of all tiles
     /// </summary>
     /// <param name="room">The room to remove</param>
@@ -186,11 +177,11 @@ public class RoomManager
         {
             if (type == CellType.FLOOR)
             {
-                layout[tile.x, tile.y] = false;
+                layout[tile.x, tile.y] = CellType.WALL;
             }
             else
             {
-                layout[tile.x, tile.y] = true;
+                layout[tile.x, tile.y] = CellType.FLOOR;
             }
         }
     }
@@ -220,11 +211,11 @@ public class RoomManager
         //connection on left side
         if (worldConnection.GetPosition().x == 0 && worldConnection.GetPosition().y > (borderSize + worldConnectionWidth) && worldConnection.GetPosition().y < size.y - (borderSize + worldConnectionWidth))
         {
-            for (int x = 0; x < borderSize; x++)
+            for (int x = 0; x < borderSize + corridorSize; x++)
             {
                 for (int offset = -worldConnectionWidth/2; offset <= worldConnectionWidth/2; offset++)
                 {
-                    layout[x, worldConnection.GetPosition().y + offset] = true;
+                    layout[x, worldConnection.GetPosition().y + offset] = CellType.FLOOR;
                 }
             }
         }
@@ -232,11 +223,11 @@ public class RoomManager
         //connection on bottom side
         if (worldConnection.GetPosition().y == 0 && worldConnection.GetPosition().x > (borderSize + worldConnectionWidth) && worldConnection.GetPosition().x < size.x - (borderSize + worldConnectionWidth))
         {
-            for (int y = 0; y < borderSize; y++)
+            for (int y = 0; y < borderSize + corridorSize; y++)
             {
                 for (int offset = -worldConnectionWidth/2; offset <= worldConnectionWidth/2; offset++)
                 {
-                    layout[worldConnection.GetPosition().x + offset, y] = true;
+                    layout[worldConnection.GetPosition().x + offset, y] = CellType.FLOOR;
                 }
             }
         }
@@ -244,11 +235,11 @@ public class RoomManager
         //connection on right side
         if (worldConnection.GetPosition().x == size.x - 1 && worldConnection.GetPosition().y > (borderSize + worldConnectionWidth) && worldConnection.GetPosition().y < size.y - (borderSize + worldConnectionWidth))
         {
-            for (int x = size.x - 1; x > size.x - 1 - borderSize; x--)
+            for (int x = size.x - 1; x > size.x - 1 - (borderSize + corridorSize); x--)
             {
                 for (int offset = -worldConnectionWidth/2; offset <= worldConnectionWidth/2; offset++)
                 {
-                    layout[x, worldConnection.GetPosition().y + offset] = true;
+                    layout[x, worldConnection.GetPosition().y + offset] = CellType.FLOOR;
                 }
             }
         }
@@ -256,11 +247,11 @@ public class RoomManager
         //connection on top side
         if (worldConnection.GetPosition().y == size.y - 1 && worldConnection.GetPosition().x > (borderSize + worldConnectionWidth) && worldConnection.GetPosition().x < size.x - (borderSize + worldConnectionWidth))
         {
-            for (int y = size.y - 1; y > size.y - 1 - borderSize; y--)
+            for (int y = size.y - 1; y > size.y - 1 - (borderSize + corridorSize); y--)
             {
                 for (int offset = -worldConnectionWidth/2; offset <= worldConnectionWidth/2; offset++)
                 {
-                    layout[worldConnection.GetPosition().x + offset, y] = true;
+                    layout[worldConnection.GetPosition().x + offset, y] = CellType.FLOOR;
                 }
             }
         }
@@ -491,7 +482,10 @@ public class RoomManager
 
                     if (IsInCenter(tilePosX, tilePosY))
                     {
-                        layout[tilePosX, tilePosY] = true;
+                        if(layout[tilePosX, tilePosY] == CellType.WALL)
+                        {
+                            layout[tilePosX, tilePosY] = CellType.CORRIDOR;
+                        }
                     }
                 }
             }

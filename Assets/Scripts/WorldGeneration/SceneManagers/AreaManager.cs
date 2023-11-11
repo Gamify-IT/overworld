@@ -406,38 +406,38 @@ public class AreaManager : MonoBehaviour
 
         //generate layout
         layoutGenerator.GenerateLayout();
-        bool[,] baseLayout = layoutGenerator.GetLayout();
+        CellType[,] baseLayout = layoutGenerator.GetLayout();
         
         //polish layout
         LayoutPolisher polisher = new LayoutPolisher(style, baseLayout);
-        baseLayout = polisher.Polish();
+        CellType[,] polishedLayout = polisher.Polish();
 
         //convert layout
-        LayoutConverter converter = new SavannaConverter(baseLayout);
+        LayoutConverter converter = new SavannaConverter(polishedLayout);
 
         switch (style)
         {
             case WorldStyle.SAVANNA:
-                converter = new SavannaConverter(baseLayout);
+                converter = new SavannaConverter(polishedLayout);
                 break;
 
             case WorldStyle.CAVE:
-                converter = new CaveConverter(baseLayout);
+                converter = new CaveConverter(polishedLayout);
                 break;
 
             case WorldStyle.BEACH:
-                converter = new BeachConverter(baseLayout);
+                converter = new BeachConverter(polishedLayout);
                 break;
 
             case WorldStyle.FOREST:
-                converter = new ForestConverter(baseLayout);
+                converter = new ForestConverter(polishedLayout);
                 break;
         }
 
         converter.Convert();
-        TileSprite[,] tileLayout = converter.GetTileSprites();
+        TileSprite[,,] tileLayout = converter.GetTileSprites();
 
-        objectPositionGenerator = new ObjectPositionGenerator(baseLayout, areaInformation.GetObjectOffset());
+        objectPositionGenerator = new ObjectPositionGenerator(polishedLayout, areaInformation.GetObjectOffset());
 
         //Update stored data
         Layout layout = new Layout(areaIdentifier, tileLayout, layoutGeneratorType, seed, accessability, style);

@@ -1,5 +1,6 @@
 {
-    "borderSize": 3,
+    "borderSize": 5,
+    "worldConnectionWidth": 5,
     "corridorSize": 2,
     "floorRoomThreshold": 50,
     "wallRoomThreshold": 50,
@@ -8,6 +9,6 @@
     "radiusDW": 1,
     "innerBorderSize": 2,
     "connectionSize": 1,
-    "minRoomHeight": 20,
-    "minRoomWidth": 20
+    "minRoomHeight": 25,
+    "minRoomWidth": 25
 }

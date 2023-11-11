@@ -5,11 +5,8 @@ using UnityEngine;
 public class CellularAutomataGenerator : LayoutGenerator
 {
     private int borderSize;    
-    private int corridorSize;
     private int iterations;
     private int floorNeighborsNeeded;
-    private int floorRoomThreshold;
-    private int wallRoomThreshold;
 
     #region Constructors
 
@@ -45,11 +42,8 @@ public class CellularAutomataGenerator : LayoutGenerator
         GenerationSettings generationSettings = GenerationSettings.CreateFromJSON(json);
         
         borderSize = generationSettings.borderSize;
-        corridorSize = generationSettings.corridorSize;
         iterations = generationSettings.iterationsCA;
         floorNeighborsNeeded = generationSettings.floorThresholdCA;
-        floorRoomThreshold = generationSettings.floorRoomThreshold;
-        wallRoomThreshold = generationSettings.wallRoomThreshold;
     }
 
     #endregion
@@ -67,27 +61,7 @@ public class CellularAutomataGenerator : LayoutGenerator
             CAIteration();
         }
 
-        //Setup room manager
-        RoomManager roomManager = new RoomManager(layout);
-
-        //Remove too small areas
-        roomManager.RemoveSmallRooms(CellType.WALL, wallRoomThreshold);
-        roomManager.RemoveSmallRooms(CellType.FLOOR, floorRoomThreshold);
-
-        //Add world connections, if present
-        if(worldConnections.Count > 0)
-        {
-            roomManager.AddWorldConnections(worldConnections);
-        }
-
-        //Connect rooms
-        roomManager.ConnectRooms(corridorSize);
-
-        //Remove small wall areas that might were created
-        roomManager.RemoveSmallRooms(CellType.WALL, wallRoomThreshold);
-
-        //Retrieve updated layout
-        layout = roomManager.GetLayout();
+        EnsureConnectivity();
     }
 
     #region Iterations
@@ -110,11 +84,11 @@ public class CellularAutomataGenerator : LayoutGenerator
         {
             for (int y = 0; y < borderSize; y++)
             {
-                layout[x, y] = false;
+                layout[x, y] = CellType.WALL;
             }
             for (int y = size.y - borderSize; y < size.y; y++)
             {
-                layout[x, y] = false;
+                layout[x, y] = CellType.WALL;
             }
         }
 
@@ -122,11 +96,11 @@ public class CellularAutomataGenerator : LayoutGenerator
         {
             for (int x = 0; x < borderSize; x++)
             {
-                layout[x, y] = false;
+                layout[x, y] = CellType.WALL;
             }
             for (int x = size.x - borderSize; x < size.x; x++)
             {
-                layout[x, y] = false;
+                layout[x, y] = CellType.WALL;
             }
         }
     }
@@ -145,11 +119,11 @@ public class CellularAutomataGenerator : LayoutGenerator
 
                 if (pseudoRandomNumberGenerator.Next(0, 100) <= accessability)
                 {
-                    layout[x, y] = true;
+                    layout[x, y] = CellType.FLOOR;
                 }
                 else
                 {
-                    layout[x, y] = false;
+                    layout[x, y] = CellType.WALL;
                 }
             }
         }
@@ -160,14 +134,13 @@ public class CellularAutomataGenerator : LayoutGenerator
     /// </summary>
     private void CAIteration()
     {
-        bool[,] newLayout = new bool[size.x, size.y];
+        CellType[,] newLayout = new CellType[size.x, size.y];
 
         for (int x = borderSize; x < size.x-borderSize; x++)
         {
             for(int y=borderSize; y < size.y-borderSize; y++)
             {
-                bool isFloor = GetNewType(x,y);
-                newLayout[x, y] = isFloor;
+                newLayout[x, y] = GetNewType(x, y);
             }
         }
 
@@ -179,20 +152,20 @@ public class CellularAutomataGenerator : LayoutGenerator
     /// </summary>
     /// <param name="posX">X coordinate of the cell</param>
     /// <param name="posY">Y coordinate of the cell</param>
-    /// <returns>True, if cell is now floor, false if it is a wall</returns>
-    private bool GetNewType(int posX, int posY)
+    /// <returns>The new type of the cell</returns>
+    private CellType GetNewType(int posX, int posY)
     {
         int floorNeighbors = GetFloorNeighbors(posX, posY);
 ;
         if(floorNeighbors >= floorNeighborsNeeded)
         {
             //cell now floor
-            return true;
+            return CellType.FLOOR;
         }
         else
         {
             //cell now wall
-            return false;
+            return CellType.WALL;
         }
     }
 
@@ -222,7 +195,7 @@ public class CellularAutomataGenerator : LayoutGenerator
                     continue;
                 }
 
-                if(layout[x, y])
+                if(layout[x, y] == CellType.FLOOR)
                 {
                     //neighboring cell is floor
                     floorNeighbors++;

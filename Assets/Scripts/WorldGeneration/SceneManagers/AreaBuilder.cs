@@ -22,7 +22,7 @@ public class AreaBuilder : MonoBehaviour
     /// </summary>
     /// <param name="layout">The layout to set</param>
     /// <param name="areaInformation">The generic information about the area</param>
-    public void SetupAreaLayout(TileSprite[,] layout, AreaInformationData areaInformation)
+    public void SetupAreaLayout(TileSprite[,,] layout, AreaInformationData areaInformation)
     {
         Debug.Log("Setup layout");
         areaPainter.Paint(layout, areaInformation.GetGridOffset());

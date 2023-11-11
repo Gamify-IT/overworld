@@ -5,13 +5,13 @@ using UnityEngine;
 public class LayoutPolisher
 {
     private WorldStyle areaStyle;
-    private bool[,] layout;
+    private CellType[,] layout;
     private Vector2Int size;
     private int borderSize;
 
     #region Constructor
 
-    public LayoutPolisher(WorldStyle areaStyle, bool[,] layout) 
+    public LayoutPolisher(WorldStyle areaStyle, CellType[,] layout) 
     {
         this.areaStyle = areaStyle;
         this.layout = layout;
@@ -39,36 +39,26 @@ public class LayoutPolisher
     ///     This function polished the given floor / wall layout based on the selected style
     /// </summary>
     /// <returns>The polished layout</returns>
-    public bool[,] Polish()
+    public CellType[,] Polish()
     {
-        int minWidth = 2;
-        int minHeight = 0;
-
         switch(areaStyle)
         {
             case WorldStyle.SAVANNA:
-                minWidth = 2;
-                minHeight = 4;
+                EnsureWallProperties(2, 4);
                 break;
 
             case WorldStyle.CAVE:
-                minWidth = 2;
-                minHeight = 4;
+                EnsureWallProperties(2, 4);
                 break;
 
             case WorldStyle.BEACH:
-                minWidth = 2;
-                minHeight = 2;
+                EnsureGroundProperties();
                 break;
 
             case WorldStyle.FOREST:
-                minWidth = 2; 
-                minHeight = 2;
+                EnsureWallProperties(2, 2);
                 break;
         }
-
-        EnsureWallProperties(minWidth, minHeight);
-
         return layout;
     }
 
@@ -86,12 +76,12 @@ public class LayoutPolisher
             {
                 for (int y = borderSize; y < size.y - borderSize; y++)
                 {
-                    if (GetTileType(x, y) == CellType.WALL)
+                    if (layout[x, y] == CellType.WALL)
                     {
                         Vector2Int tile = new Vector2Int(x, y);
                         if(!EnoughVerticalWalls(tile, minHeight) || !EnoughHorizontalWalls(tile, minWidth))
                         {
-                            layout[x, y] = true;
+                            layout[x, y] = CellType.FLOOR;
                             changedSomething = true;
                         }
                     }
@@ -106,7 +96,7 @@ public class LayoutPolisher
 
         for(int i=1; i<minHeight; i++)
         {
-            if(IsInRange(tile.x, tile.y + i) && GetTileType(tile.x, tile.y + i) == CellType.WALL)
+            if(IsInRange(tile.x, tile.y + i) && layout[tile.x, tile.y + i] == CellType.WALL)
             {
                 verticalWallTiles++;
             }
@@ -118,7 +108,7 @@ public class LayoutPolisher
 
         for (int i = 1; i < minHeight; i++)
         {
-            if (IsInRange(tile.x, tile.y - i) && GetTileType(tile.x, tile.y - i) == CellType.WALL)
+            if (IsInRange(tile.x, tile.y - i) && layout[tile.x, tile.y - i]  == CellType.WALL)
             {
                 verticalWallTiles++;
             }
@@ -137,7 +127,7 @@ public class LayoutPolisher
 
         for (int i = 1; i < minWidth; i++)
         {
-            if (IsInRange(tile.x + i, tile.y) && GetTileType(tile.x + i, tile.y) == CellType.WALL)
+            if (IsInRange(tile.x + i, tile.y) && layout[tile.x + i, tile.y] == CellType.WALL)
             {
                 horizontalWallTiles++;
             }
@@ -149,7 +139,7 @@ public class LayoutPolisher
 
         for (int i = 1; i < minWidth; i++)
         {
-            if (IsInRange(tile.x - i, tile.y) && GetTileType(tile.x - i, tile.y) == CellType.WALL)
+            if (IsInRange(tile.x - i, tile.y) && layout[tile.x - i, tile.y] == CellType.WALL)
             {
                 horizontalWallTiles++;
             }
@@ -162,28 +152,88 @@ public class LayoutPolisher
         return horizontalWallTiles >= minWidth;
     }
 
-    #endregion
-
-    #region General
-
-    /// <summary>
-    ///     This function returns the tile type of the given position
-    /// </summary>
-    /// <param name="posX">The x coordinate</param>
-    /// <param name="posY">The y coordinate</param>
-    /// <returns>The type of the tile</returns>
-    private CellType GetTileType(int posX, int posY)
+    private void EnsureGroundProperties()
     {
-        if (layout[posX, posY])
+        bool changedSomething = true;
+
+        while (changedSomething)
         {
-            return CellType.FLOOR;
+            changedSomething = false;
+
+            for (int x = borderSize; x < size.x - borderSize; x++)
+            {
+                for (int y = borderSize; y < size.y - borderSize; y++)
+                {
+                    if (layout[x, y] != CellType.WALL)
+                    {
+                        if (SingleHorizontalTile(x, y))
+                        {
+                            //try to extent left or right
+                            TryToExtentHorizontally(x, y);
+                        }
+                        else if (SingleVerticalTile(x, y))
+                        {
+                            //try to extent above or below
+                            TryToExtentVertically(x, y);
+                        }
+                    }
+                }
+            }
+        }  
+    }
+
+    private bool SingleHorizontalTile(int x, int y)
+    {
+        return (layout[x - 1, y] == CellType.WALL && layout[x + 1, y] == CellType.WALL);
+    }
+
+    private bool SingleVerticalTile(int x, int y)
+    {
+        return (layout[x, y - 1] == CellType.WALL && layout[x, y + 1] == CellType.WALL);
+    }
+
+    private void TryToExtentHorizontally(int x, int y)
+    {
+        if(layout[x-1, y-1] != CellType.WALL || layout[x - 1, y + 1] != CellType.WALL)
+        {
+            //extend left
+            layout[x - 1, y] = layout[x, y];
+        }
+        else if (layout[x + 1, y - 1] != CellType.WALL || layout[x + 1, y + 1] != CellType.WALL)
+        {
+            //extend right
+            layout[x + 1, y] = layout[x, y];
         }
         else
         {
-            return CellType.WALL;
+            //cannot extend -> turn into wall
+            layout[x, y] = CellType.WALL;
         }
     }
 
+    private void TryToExtentVertically(int x, int y)
+    {
+        if (layout[x - 1, y - 1] != CellType.WALL || layout[x + 1, y - 1] != CellType.WALL)
+        {
+            //extend down
+            layout[x, y - 1] = layout[x, y];
+        }
+        else if (layout[x - 1, y + 1] != CellType.WALL || layout[x + 1, y + 1] != CellType.WALL)
+        {
+            //extend up
+            layout[x, y + 1] = layout[x, y];
+        }
+        else
+        {
+            //cannot extend -> turn into wall
+            layout[x, y] = CellType.WALL;
+        }
+    }
+
+
+    #endregion
+
+    #region General
     /// <summary>
     ///     This function checks, whether a given position is inside of the layout size
     /// </summary>

@@ -5,5 +5,6 @@ using UnityEngine;
 public enum CellType
 {
     WALL,
-    FLOOR
+    FLOOR,
+    CORRIDOR
 }

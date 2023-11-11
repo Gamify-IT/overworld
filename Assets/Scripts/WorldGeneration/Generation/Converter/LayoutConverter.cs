@@ -7,22 +7,22 @@ using UnityEngine;
 /// </summary>
 public abstract class LayoutConverter
 {
-    protected bool[,] baseLayout;
+    protected CellType[,] baseLayout;
     protected Vector2Int size;
     protected TileType[,] tileTypes;
-    protected TileSprite[,] tileSprites;    
+    protected TileSprite[,,] tileSprites;    
 
-    public LayoutConverter(bool[,] baseLayout)
+    public LayoutConverter(CellType[,] baseLayout)
     {
         this.baseLayout = baseLayout;
         size = new Vector2Int(baseLayout.GetLength(0), baseLayout.GetLength(1));
         tileTypes = new TileType[size.x, size.y];
-        tileSprites = new TileSprite[size.x, size.y];
+        tileSprites = new TileSprite[size.x, size.y, 5];
     }
 
     public abstract void Convert();
 
-    public TileSprite[,] GetTileSprites()
+    public TileSprite[,,] GetTileSprites()
     {
         return tileSprites;
     }

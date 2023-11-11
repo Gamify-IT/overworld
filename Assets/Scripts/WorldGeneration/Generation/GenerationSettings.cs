@@ -7,6 +7,7 @@ public class GenerationSettings
 {
     //General
     public int borderSize;
+    public int worldConnectionWidth;
     public int corridorSize;
     public int floorRoomThreshold;
     public int wallRoomThreshold;

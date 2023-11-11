@@ -6,7 +6,6 @@ public class DrunkardsWalkGenerator : LayoutGenerator
 {
     private int borderSize;
     private int radius;
-    private int wallRoomThreshold;
 
     private int iterations;
     private HashSet<Vector2Int> tiles;
@@ -53,7 +52,7 @@ public class DrunkardsWalkGenerator : LayoutGenerator
 
         borderSize = generationSettings.borderSize;
         radius = generationSettings.radiusDW;
-        wallRoomThreshold = generationSettings.wallRoomThreshold;
+        corridorSize = generationSettings.radiusDW;
     }
 
     #endregion
@@ -118,24 +117,8 @@ public class DrunkardsWalkGenerator : LayoutGenerator
         }
 
         ConvertHashSetToLayout();
-        
-        RoomManager roomManager = new RoomManager(layout);
 
-        roomManager.RemoveSmallRooms(CellType.WALL, wallRoomThreshold);
-
-        //Add world connections, if present
-        if (worldConnections.Count > 0)
-        {
-            roomManager.AddWorldConnections(worldConnections);
-        }
-
-        //Connect rooms
-        roomManager.ConnectRooms(radius);
-
-        //Remove small wall areas that might were created
-        roomManager.RemoveSmallRooms(CellType.WALL, wallRoomThreshold);
-
-        layout = roomManager.GetLayout();        
+        EnsureConnectivity();       
     }
 
     /// <summary>
@@ -147,7 +130,7 @@ public class DrunkardsWalkGenerator : LayoutGenerator
         {
             for(int y=0; y < size.y; y++)
             {
-                layout[x, y] = false;
+                layout[x, y] = CellType.WALL;
             }
         }
     }
@@ -291,7 +274,7 @@ public class DrunkardsWalkGenerator : LayoutGenerator
     {
         foreach(Vector2Int tile in tiles)
         {
-            layout[tile.x, tile.y] = true;
+            layout[tile.x, tile.y] = CellType.FLOOR;
         }
     }
 

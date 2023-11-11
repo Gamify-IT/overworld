@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SavannaConverter : LayoutConverter
 {
-    public SavannaConverter(bool[,] baseLayout) : base(baseLayout) { }
+    public SavannaConverter(CellType[,] baseLayout) : base(baseLayout) { }
 
     public override void Convert()
     {
@@ -21,7 +21,7 @@ public class SavannaConverter : LayoutConverter
         {
             for (int y = 0; y < size.y; y++)
             {
-                if (baseLayout[x, y])
+                if (baseLayout[x, y] != CellType.WALL)
                 {
                     //position is floor
                     tileTypes[x, y] = TileType.SAVANNA_FLOOR;
@@ -29,9 +29,9 @@ public class SavannaConverter : LayoutConverter
                 else
                 {
                     //position is wall
-                    if ((IsInRange(x, y + 1) && baseLayout[x, y + 1]) 
-                        || (IsInRange(x, y + 2) && baseLayout[x, y + 2])
-                        || (IsInRange(x, y + 3) && baseLayout[x, y + 3]))
+                    if ((IsInRange(x, y + 1) && baseLayout[x, y + 1] != CellType.WALL) 
+                        || (IsInRange(x, y + 2) && baseLayout[x, y + 2] != CellType.WALL)
+                        || (IsInRange(x, y + 3) && baseLayout[x, y + 3] != CellType.WALL))
                     {
                         //if one, two or three above is floor -> wall
                         tileTypes[x, y] = TileType.SAVANNA_WALL;
@@ -45,7 +45,7 @@ public class SavannaConverter : LayoutConverter
             }
         }
     }
-
+    
     /// <summary>
     ///     This function converts the given tile type layout to the correct cave tile sprites
     /// </summary>
@@ -57,15 +57,15 @@ public class SavannaConverter : LayoutConverter
             {
                 if (tileTypes[x, y] == TileType.SAVANNA_FLOOR)
                 {
-                    tileSprites[x, y] = GetFloorSprite(x,y);
+                    tileSprites[x, y, 0] = GetFloorSprite(x,y);
                 }
                 else if (tileTypes[x, y] == TileType.SAVANNA_WALL)
                 {
-                    tileSprites[x, y] = GetWallSprite(x, y);
+                    tileSprites[x, y, 2] = GetWallSprite(x, y);
                 }
                 else
                 {
-                    tileSprites[x, y] = TileSprite.SAVANNA_WATER;
+                    tileSprites[x, y, 2] = TileSprite.SAVANNA_WATER;
                 }
             }
         }
@@ -200,9 +200,9 @@ public class SavannaConverter : LayoutConverter
         if (IsInRange(x, y - 1) && tileTypes[x, y - 1] == TileType.SAVANNA_WALL)
         {
             //Top Wall tile
-            if (tileSprites[x, y - 1] == TileSprite.SAVANNA_WALL_BOTTOM_LEFT ||
-                tileSprites[x, y - 1] == TileSprite.SAVANNA_WALL_TOP_LEFT_WALL ||
-                tileSprites[x, y - 1] == TileSprite.SAVANNA_WALL_TOP_LEFT_WATER)
+            if (tileSprites[x, y - 1, 2] == TileSprite.SAVANNA_WALL_BOTTOM_LEFT ||
+                tileSprites[x, y - 1, 2] == TileSprite.SAVANNA_WALL_TOP_LEFT_WALL ||
+                tileSprites[x, y - 1, 2] == TileSprite.SAVANNA_WALL_TOP_LEFT_WATER)
             {
                 //left end of wall
                 if(tileTypes[x-1,y] == TileType.SAVANNA_WATER)
@@ -216,9 +216,9 @@ public class SavannaConverter : LayoutConverter
                     return TileSprite.SAVANNA_WALL_TOP_LEFT_WALL;
                 }
             }
-            else if (tileSprites[x, y - 1] == TileSprite.SAVANNA_WALL_BOTTOM_RIGHT ||
-                tileSprites[x, y - 1] == TileSprite.SAVANNA_WALL_TOP_RIGHT_WALL ||
-                tileSprites[x, y - 1] == TileSprite.SAVANNA_WALL_TOP_RIGHT_WATER)
+            else if (tileSprites[x, y - 1, 2] == TileSprite.SAVANNA_WALL_BOTTOM_RIGHT ||
+                tileSprites[x, y - 1, 2] == TileSprite.SAVANNA_WALL_TOP_RIGHT_WALL ||
+                tileSprites[x, y - 1, 2] == TileSprite.SAVANNA_WALL_TOP_RIGHT_WATER)
             {
                 //right end of wall
                 if (tileTypes[x + 1, y] == TileType.SAVANNA_WATER)
