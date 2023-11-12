@@ -160,10 +160,10 @@ public class AreaManager : MonoBehaviour
         this.areaData = areaData;
         this.areaIdentifier = areaIdentifier;
         areaInformation = GetAreaInformation(areaIdentifier);
-        objectGenerator = new ObjectGenerator(areaIdentifier);
+        objectGenerator = new ObjectGenerator(areaIdentifier, areaInformation.GetObjectOffset());
         if(areaData.IsGeneratedArea())
         {
-            objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetLayout().GetTiles(), areaInformation.GetObjectOffset());
+            objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetLayout().GetTiles(), areaInformation.GetWorldConnections());
         }
 
         //setup area
@@ -437,7 +437,7 @@ public class AreaManager : MonoBehaviour
         converter.Convert();
         TileSprite[,,] tileLayout = converter.GetTileSprites();
 
-        objectPositionGenerator = new ObjectPositionGenerator(polishedLayout, areaInformation.GetObjectOffset());
+        objectPositionGenerator = new ObjectPositionGenerator(polishedLayout, worldConnections);
 
         //Update stored data
         Layout layout = new Layout(areaIdentifier, tileLayout, layoutGeneratorType, seed, accessability, style);
@@ -457,7 +457,7 @@ public class AreaManager : MonoBehaviour
     {
         //Generate Positions
         objectPositionGenerator.GenerateMinigamePositions(amount);
-        List<Vector2> minigamePositions = objectPositionGenerator.GetMinigameSpotPositions();
+        List<Vector2Int> minigamePositions = objectPositionGenerator.GetMinigameSpotPositions();
 
         //Generate MinigameSpotData objects
         List<MinigameSpotData> minigameSpots = objectGenerator.GenerateMinigameSpots(minigamePositions);
@@ -475,7 +475,7 @@ public class AreaManager : MonoBehaviour
     {
         //Generate Positions
         objectPositionGenerator.GenerateNpcPositions(amount);
-        List<Vector2> npcPositions = objectPositionGenerator.GetNpcSpotPositions();
+        List<Vector2Int> npcPositions = objectPositionGenerator.GetNpcSpotPositions();
 
         //Generate NpcSpotData objects
         List<NpcSpotData> npcSpots = objectGenerator.GenerateNpcSpots(npcPositions);
@@ -493,7 +493,7 @@ public class AreaManager : MonoBehaviour
     {
         //Generate Positions
         objectPositionGenerator.GenerateBookPositions(amount);
-        List<Vector2> bookPositions = objectPositionGenerator.GetBookSpotPositions();
+        List<Vector2Int> bookPositions = objectPositionGenerator.GetBookSpotPositions();
 
         //Generate BookSpotData objects
         List<BookSpotData> bookSpots = objectGenerator.GenerateBookSpots(bookPositions);
@@ -511,7 +511,7 @@ public class AreaManager : MonoBehaviour
     {
         //Generate Positions
         objectPositionGenerator.GenerateTeleporterPositions(amount);
-        List<Vector2> teleporterPositions = objectPositionGenerator.GetTeleporterSpotPositions();
+        List<Vector2Int> teleporterPositions = objectPositionGenerator.GetTeleporterSpotPositions();
 
         //Generate TeleporterSpotData objects
         List<TeleporterSpotData> teleporterSpots = objectGenerator.GenerateTeleporterSpots(teleporterPositions);
@@ -529,7 +529,7 @@ public class AreaManager : MonoBehaviour
     {
         //Generate Positions
         objectPositionGenerator.GenerateDungeonPositions(amount);
-        List<Vector2> dungeonPositions = objectPositionGenerator.GetDungeonSpotPositions();
+        List<Vector2Int> dungeonPositions = objectPositionGenerator.GetDungeonSpotPositions();
 
         //Generate SceneTransitionSpotData objects
         List<SceneTransitionSpotData> dungeonSpots = objectGenerator.GenerateDungeonSpots(dungeonPositions);
