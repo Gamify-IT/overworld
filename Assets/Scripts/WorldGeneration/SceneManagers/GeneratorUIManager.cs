@@ -81,6 +81,14 @@ public class GeneratorUIManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function resets all objects in the area
+    /// </summary>
+    public void ResetObjects()
+    {
+        areaManager.ResetObjects();
+    }
+
+    /// <summary>
     ///     This function forwards a minigame generation request to the <c>AreaManager</c>
     /// </summary>
     /// <param name="amount">The amount of minigames to generate</param>

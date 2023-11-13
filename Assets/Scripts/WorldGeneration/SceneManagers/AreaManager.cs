@@ -450,6 +450,14 @@ public class AreaManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function removes all generated objects
+    /// </summary>
+    public void ResetObjects()
+    {
+        objectPositionGenerator.ResetObjects();
+    }
+
+    /// <summary>
     ///     This function creates minigame spots
     /// </summary>
     /// <param name="amount">The amount of minigame spots to create</param>

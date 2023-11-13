@@ -317,6 +317,7 @@ public class GeneratorUI : MonoBehaviour
 
     public void GenerateAllContentButtonPressed()
     {
+        uiManager.ResetObjects();
         GenerateMinigamesButtonPressed();
         GenerateNpcsButtonPressed();
         GenerateBooksButtonPressed();

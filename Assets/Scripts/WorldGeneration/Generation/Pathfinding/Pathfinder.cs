@@ -231,6 +231,11 @@ public class Pathfinder
     /// <returns>The cost of the path</returns>
     public int GetDistance(List<Vector2Int> path)
     {
+        if(path.Count < 2)
+        {
+            return 0;
+        }
+
         int distance = 0;
 
         Vector2Int currentPosition = path[0];

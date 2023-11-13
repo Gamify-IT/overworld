@@ -7,14 +7,28 @@ using UnityEngine;
 /// </summary>
 public class ObjectPositionGenerator
 {
+    //Iterations per search spot
     private static readonly int maxIterations = 10;
+
+    //Minimum distance from dungeon spot to world connections
     private static readonly int minDungeonDistance = 75;
-    private static readonly int minObjectDistance = 20;
+
+    //Minimum distance to objects of other types
+    private static readonly int minObjectDistance = 10;
+
+    //Minimum distance to objects of same type
+    private static readonly int minSameObjectDistance = 20;
+
+    //Radius for npcs and books around minigames
+    private static readonly int minigameRadius = 20;
 
     private Pathfinder pathfinder;
 
     private Vector2Int size;
     private bool[,] accessableTiles;
+
+    private List<Vector2Int> objectPositions;
+
     private List<WorldConnection> worldConnections;
     private List<Vector2Int> minigamePositions;
     private List<Vector2Int> npcPositions;
@@ -23,10 +37,15 @@ public class ObjectPositionGenerator
     private List<Vector2Int> dungeonPositions;
     private List<Vector2Int> barrierPositions;
 
+    #region Constructor
+
     public ObjectPositionGenerator(CellType[,] tiles, List<WorldConnection> worldConnections)
     {
         size = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
         accessableTiles = GetAccessableTiles(tiles);
+        
+        objectPositions = GetObjectPositions(tiles);
+
         this.worldConnections = worldConnections;
         minigamePositions = new List<Vector2Int>();
         npcPositions = new List<Vector2Int>();
@@ -38,6 +57,7 @@ public class ObjectPositionGenerator
         pathfinder = new Pathfinder(accessableTiles);
     }
 
+    //TODO: remove
     public ObjectPositionGenerator(TileSprite[,,] tiles, List<WorldConnection> worldConnections)
     {
         size = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
@@ -107,7 +127,41 @@ public class ObjectPositionGenerator
         return (tiles[x, y, 2] == TileSprite.UNDEFINED && tiles[x, y, 4] == TileSprite.UNDEFINED);
     }
 
+    /// <summary>
+    ///     This function creates a hash set containig all positions an object can be placed at
+    /// </summary>
+    /// <param name="tiles">The tile types of the layout</param>
+    /// <returns>A hash set containing all positions an object can be placed at</returns>
+    private List<Vector2Int> GetObjectPositions(CellType[,] tiles)
+    {
+        List<Vector2Int> objectPositions = new List<Vector2Int>();
+
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y; y++)
+            {
+                if(tiles[x, y] == CellType.FLOOR)
+                {
+                    objectPositions.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        return objectPositions;
+    }
+
+    #endregion
+
     #region Generate Functions
+    public void ResetObjects()
+    {
+        minigamePositions = new List<Vector2Int>();
+        npcPositions = new List<Vector2Int>();
+        bookPositions = new List<Vector2Int>();
+        teleporterPositions = new List<Vector2Int>();
+        dungeonPositions = new List<Vector2Int>();
+    }
+
     /// <summary>
     ///     This function generates positions for minigame spots
     /// </summary>
@@ -115,17 +169,27 @@ public class ObjectPositionGenerator
     public void GenerateMinigamePositions(int amount)
     {
         //reset current spots
-        this.minigamePositions = new List<Vector2Int>();
+        minigamePositions = new List<Vector2Int>();
 
-        List<Vector2Int> minigamePositions = new List<Vector2Int>();
-
-        for(int i=0; i<amount; i++)
+        //generate new spots
+        for (int i=0; i<amount; i++)
         {
-            Vector2Int position = GetNewPosition();
+            Vector2Int position = new Vector2Int();
+
+            for (int iteration = 0; iteration < maxIterations; iteration++)
+            {
+                position = GetPosition();
+
+                bool objectToClose = ObjectToClose(position, minSameObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance);
+
+                if (!objectToClose)
+                {
+                    break;
+                }
+            }
+
             minigamePositions.Add(position);
         }
-
-        this.minigamePositions = minigamePositions;
     }
 
     /// <summary>
@@ -135,17 +199,56 @@ public class ObjectPositionGenerator
     public void GenerateNpcPositions(int amount)
     {
         //reset current spots
-        this.npcPositions = new List<Vector2Int>();
+        npcPositions = new List<Vector2Int>();
 
-        List<Vector2Int> npcPositions = new List<Vector2Int>();
-
+        //generate new spots
         for (int i = 0; i < amount; i++)
         {
-            Vector2Int position = GetNewPosition();
+            Vector2Int position = new Vector2Int();
+            if(minigamePositions.Count > i)
+            {
+                Vector2Int minigamePosition = minigamePositions[i];
+
+                for (int iteration = 0; iteration < maxIterations; iteration++)
+                {
+                    position = GetPositionInRange(minigamePosition, minigameRadius);
+
+                    bool objectToClose = ObjectToClose(position, minObjectDistance, minSameObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance);
+
+                    //check if actual distance is valid
+                    bool distanceOk = false;
+
+                    Optional<List<Vector2Int>> path = pathfinder.FindPath(minigamePosition, position);
+                    if(path.IsPresent())
+                    {
+                        int distance = pathfinder.GetDistance(path.Value());
+
+                        distanceOk = (distance <= minigameRadius);
+                    }                    
+
+                    if (!objectToClose && distanceOk)
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (int iteration = 0; iteration < maxIterations; iteration++)
+                {
+                    position = GetPosition();
+
+                    bool objectToClose = ObjectToClose(position, minObjectDistance, minSameObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance);
+
+                    if (!objectToClose)
+                    {
+                        break;
+                    }
+                }
+            }
+            
             npcPositions.Add(position);
         }
-
-        this.npcPositions = npcPositions;
     }
 
     /// <summary>
@@ -155,17 +258,56 @@ public class ObjectPositionGenerator
     public void GenerateBookPositions(int amount)
     {
         //reset current spots
-        this.bookPositions = new List<Vector2Int>();
+        bookPositions = new List<Vector2Int>();
 
-        List<Vector2Int> bookPositions = new List<Vector2Int>();
-
+        //generate new spots
         for (int i = 0; i < amount; i++)
         {
-            Vector2Int position = GetNewPosition();
+            Vector2Int position = new Vector2Int();
+            if (minigamePositions.Count > i)
+            {
+                Vector2Int minigamePosition = minigamePositions[i];
+
+                for (int iteration = 0; iteration < maxIterations; iteration++)
+                {
+                    position = GetPositionInRange(minigamePosition, minigameRadius);
+
+                    bool objectToClose = ObjectToClose(position, minObjectDistance, minObjectDistance, minSameObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance);
+
+                    //check if actual distance is valid
+                    bool distanceOk = false;
+
+                    Optional<List<Vector2Int>> path = pathfinder.FindPath(minigamePosition, position);
+                    if (path.IsPresent())
+                    {
+                        int distance = pathfinder.GetDistance(path.Value());
+
+                        distanceOk = (distance <= minigameRadius);
+                    }
+
+                    if (!objectToClose && distanceOk)
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (int iteration = 0; iteration < maxIterations; iteration++)
+                {
+                    position = GetPosition();
+
+                    bool objectToClose = ObjectToClose(position, minObjectDistance, minObjectDistance, minSameObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance);
+
+                    if (!objectToClose)
+                    {
+                        break;
+                    }
+                }
+            }
+
             bookPositions.Add(position);
         }
-
-        this.bookPositions = bookPositions;
     }
 
     /// <summary>
@@ -175,17 +317,27 @@ public class ObjectPositionGenerator
     public void GenerateTeleporterPositions(int amount)
     {
         //reset current spots
-        this.teleporterPositions = new List<Vector2Int>();
+        teleporterPositions = new List<Vector2Int>();
 
-        List<Vector2Int> teleporterPositions = new List<Vector2Int>();
-
+        //generate new spots
         for (int i = 0; i < amount; i++)
         {
-            Vector2Int position = GetNewPosition();
+            Vector2Int position = new Vector2Int();
+
+            for (int iteration = 0; iteration < maxIterations; iteration++)
+            {
+                position = GetPosition();
+
+                bool objectToClose = ObjectToClose(position, minObjectDistance, minObjectDistance, minObjectDistance, minSameObjectDistance, minObjectDistance, minObjectDistance);
+
+                if (!objectToClose)
+                {
+                    break;
+                }
+            }
+
             teleporterPositions.Add(position);
         }
-
-        this.teleporterPositions = teleporterPositions;
     }
 
     /// <summary>
@@ -195,195 +347,167 @@ public class ObjectPositionGenerator
     public void GenerateDungeonPositions(int amount)
     {
         //reset current spots
-        this.dungeonPositions = new List<Vector2Int>();
+        dungeonPositions = new List<Vector2Int>();
 
-        List<Vector2Int> dungeonPositions = new List<Vector2Int>();
-
+        //generate new spots
         for (int i = 0; i < amount; i++)
         {
             Vector2Int position = new Vector2Int();
 
             for(int iteration = 0; iteration < maxIterations; iteration++)
             {
-                position = GetNewPosition();
+                position = GetPosition();
 
-                bool objectToClose = ObjectToClose(position);
+                bool objectToClose = ObjectToClose(position, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minSameObjectDistance, minDungeonDistance);
 
                 if(!objectToClose)
                 {
-                    Debug.Log("Dungeon Spot found in " + (iteration + 1) + " tries");
                     break;
                 }
             }
 
             dungeonPositions.Add(position);
         }
-
-        this.dungeonPositions = dungeonPositions;
     }
     #endregion
 
+    #region Position finding
     /// <summary>
-    ///     This function returns a new position, where no object is yet
+    ///     This function returns random position an object could be placed on
     /// </summary>
-    /// <returns>A new position</returns>
-    private Vector2Int GetNewPosition()
+    /// <returns>A random position</returns>
+    private Vector2Int GetPosition()
     {
-        bool positionFound = false;
-        Vector2Int position = new Vector2Int();
+        int index = Random.Range(0, objectPositions.Count);
+        return objectPositions[index];
+    }
 
-        while(!positionFound)
+    /// <summary>
+    ///     This function returns a random position in a square around the given center position
+    /// </summary>
+    /// <param name="center">The center of the square</param>
+    /// <param name="size">The size in all directions</param>
+    /// <returns>A random position in the square arount the given center</returns>
+    private Vector2Int GetPositionInRange(Vector2Int center, int size)
+    {
+        int minX = center.x - size;
+        int maxX = center.x + size;
+        int minY = center.y - size;
+        int maxY = center.y + size;
+
+        List<Vector2Int> positionsInRange = new List<Vector2Int>();
+
+        foreach(Vector2Int position in objectPositions)
         {
-            //get position
-            int x = Random.Range(0, size.x - 1);
-            int y = Random.Range(0, size.y - 1);
-
-            position = new Vector2Int(x, y);
-
-            //check if accessable and free
-            if(accessableTiles[x, y] && FreePosition(position))
+            if(position.x >= minX && position.x <= maxX && position.y >= minY && position.y <= maxY)
             {
-                positionFound = true;
+                positionsInRange.Add(position);
             }
         }
 
-        return position;
+        int index = Random.Range(0, positionsInRange.Count);
+        return positionsInRange[index];
     }
 
-    /// <summary>
-    ///     This function checks, whether a given position  is free or not (no other object present there)
-    /// </summary>
-    /// <param name="position">The position to check</param>
-    /// <returns>True, if there is no object in the position, false otherwise</returns>
-    private bool FreePosition(Vector2Int position)
-    {
-        if(minigamePositions.Contains(position) ||
-            npcPositions.Contains(position) ||
-            bookPositions.Contains(position) ||
-            teleporterPositions.Contains(position) ||
-            dungeonPositions.Contains(position) ||
-            barrierPositions.Contains(position))
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
+    #endregion
 
+    #region Distance checking
     /// <summary>
     ///     This function checks, whether a given position is to close to any other object or not
     /// </summary>
-    /// <param name="position">The position to check</param>
+    /// <param name="positionToCheck">The position to check</param>
     /// <returns>True, if any object is too close, false otherwise</returns>
-    private bool ObjectToClose(Vector2Int position)
+    private bool ObjectToClose(Vector2Int positionToCheck, int minMinigameDistance, int minNpcDistance, int minBookDistane, int minTeleporterDistance, int minDungeonDistance, int minWorldConnectionDistance)
     {
         //check world connections
+        List<Vector2Int> worldConnectionPositions = new List<Vector2Int>();
         foreach (WorldConnection worldConnection in worldConnections)
         {
-            int distance = 0;
-            Optional<List<Vector2Int>> path = pathfinder.FindPath(position, worldConnection.GetPosition());
-            if (path.IsPresent())
-            {
-                distance = pathfinder.GetDistance(path.Value());
-            }
-
-            if (distance < minDungeonDistance)
-            {
-                Debug.Log("Potential Spot " + position.ToString() + " too close to world connection (" + worldConnection.GetDestinationWorld() + ") with distance " + distance);
-                return true;
-            }
+            worldConnectionPositions.Add(worldConnection.GetPosition());
+        }
+        if (ObjectToClose(positionToCheck, worldConnectionPositions, minWorldConnectionDistance))
+        {
+            return true;
         }
 
         //check minigames
-        foreach (Vector2Int spot in minigamePositions)
+        if(ObjectToClose(positionToCheck, minigamePositions, minMinigameDistance))
         {
-            int distance = 0;
-            Optional<List<Vector2Int>> path = pathfinder.FindPath(position, spot);
-            if (path.IsPresent())
-            {
-                distance = pathfinder.GetDistance(path.Value());
-            }
-
-            if (distance < minObjectDistance)
-            {
-                Debug.Log("Potential Spot " + position.ToString() + " too close to minigame spot with distance " + distance);
-                return true;
-            }
+            return true;
         }
 
         //check npcs
-        foreach (Vector2Int spot in npcPositions)
+        if (ObjectToClose(positionToCheck, npcPositions, minNpcDistance))
         {
-            int distance = 0;
-            Optional<List<Vector2Int>> path = pathfinder.FindPath(position, spot);
-            if (path.IsPresent())
-            {
-                distance = pathfinder.GetDistance(path.Value());
-            }
-
-            if (distance < minObjectDistance)
-            {
-                Debug.Log("Potential Spot " + position.ToString() + " too close to npc spot with distance " + distance);
-                return true;
-            }
+            return true;
         }
 
         //check books
-        foreach (Vector2Int spot in bookPositions)
+        if (ObjectToClose(positionToCheck, bookPositions, minBookDistane))
         {
-            int distance = 0;
-            Optional<List<Vector2Int>> path = pathfinder.FindPath(position, spot);
-            if (path.IsPresent())
-            {
-                distance = pathfinder.GetDistance(path.Value());
-            }
-
-            if (distance < minObjectDistance)
-            {
-                Debug.Log("Potential Spot " + position.ToString() + " too close to book spot with distance " + distance);
-                return true;
-            }
+            return true;
         }
 
         //check teleporters
-        foreach (Vector2Int spot in teleporterPositions)
+        if (ObjectToClose(positionToCheck, teleporterPositions, minTeleporterDistance))
         {
-            int distance = 0;
-            Optional<List<Vector2Int>> path = pathfinder.FindPath(position, spot);
-            if (path.IsPresent())
-            {
-                distance = pathfinder.GetDistance(path.Value());
-            }
-
-            if (distance < minObjectDistance)
-            {
-                Debug.Log("Potential Spot " + position.ToString() + " too close to teleporter spot with distance " + distance);
-                return true;
-            }
+            return true;
         }
 
         //check dungeons
-        foreach (Vector2Int spot in dungeonPositions)
+        if (ObjectToClose(positionToCheck, dungeonPositions, minDungeonDistance))
         {
-            int distance = 0;
-            Optional<List<Vector2Int>> path = pathfinder.FindPath(position, spot);
-            if (path.IsPresent())
-            {
-                distance = pathfinder.GetDistance(path.Value());
-            }
-
-            if (distance < minObjectDistance)
-            {
-                Debug.Log("Potential Spot " + position.ToString() + " too close to dungeon spot with distance " + distance);
-                return true;
-            }
+            return true;
         }
 
         //no object too close
         return false;
     }
+
+    /// <summary>
+    ///     This function checks, whether a given position is to close to any other object in a given list or not
+    /// </summary>
+    /// <param name="positionToCheck">The position to check</param>
+    /// <param name="spots">The other spots to compare it to</param>
+    /// <param name="minDistance">The minimum allowed distance</param>
+    /// <returns>True, if any object is too close, false otherwise</returns>
+    private bool ObjectToClose(Vector2Int positionToCheck, List<Vector2Int> spots, int minDistance)
+    {
+        foreach (Vector2Int spot in spots)
+        {
+            if(StraightLineDistance(spot, positionToCheck) < minDistance)
+            {
+                int distance = 0;
+                Optional<List<Vector2Int>> path = pathfinder.FindPath(positionToCheck, spot);
+                if (path.IsPresent())
+                {
+                    distance = pathfinder.GetDistance(path.Value());
+                }
+
+                if (distance < minDistance)
+                {
+                    return true;
+                }
+            }            
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    ///     This function calculates the straight line distance between two points
+    /// </summary>
+    /// <param name="pos1">The first position</param>
+    /// <param name="pos2">The second position</param>
+    /// <returns>The straigth line distance between the given positions</returns>
+    private float StraightLineDistance(Vector2Int pos1, Vector2Int pos2)
+    {
+        int deltaX = Mathf.Abs(pos1.x - pos2.x);
+        int deltaY = Mathf.Abs(pos1.y - pos2.y);
+
+        return Mathf.Sqrt(deltaX * deltaX + deltaY * deltaY);
+    }
+    #endregion
 
     #region Getter
     public List<Vector2Int> GetMinigameSpotPositions()
