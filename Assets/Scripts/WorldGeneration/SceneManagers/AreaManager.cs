@@ -65,7 +65,7 @@ public class AreaManager : MonoBehaviour
             Debug.Log("Generated Area: " + worldIndex + "-" + dungeonIndex);
 
             //Create layout
-            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTiles(), areaInformation);
+            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
 
             //Create objects
             areaBuilder.SetupAreaObjects(areaData.GetAreaMapData());
@@ -129,7 +129,7 @@ public class AreaManager : MonoBehaviour
         CustomAreaMapData areaMapData;
         if (areaData.IsGeneratedArea())
         {
-            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTiles(), areaInformation);
+            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
             areaMapData = areaData.GetAreaMapData();
         }
         else
@@ -163,7 +163,7 @@ public class AreaManager : MonoBehaviour
         objectGenerator = new ObjectGenerator(areaIdentifier, areaInformation.GetObjectOffset());
         if(areaData.IsGeneratedArea())
         {
-            objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetLayout().GetTiles(), areaInformation.GetWorldConnections());
+            objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetLayout().GetCellTypes(), areaInformation.GetWorldConnections());
         }
 
         //setup area
@@ -205,7 +205,7 @@ public class AreaManager : MonoBehaviour
     {
         if (areaData.IsGeneratedArea())
         {
-            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTiles(), areaInformation);
+            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
             areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
         }
         else
@@ -440,7 +440,7 @@ public class AreaManager : MonoBehaviour
         objectPositionGenerator = new ObjectPositionGenerator(polishedLayout, worldConnections);
 
         //Update stored data
-        Layout layout = new Layout(areaIdentifier, tileLayout, layoutGeneratorType, seed, accessability, style);
+        Layout layout = new Layout(areaIdentifier, tileLayout, polishedLayout, layoutGeneratorType, seed, accessability, style);
         CustomAreaMapData areaMapData = new CustomAreaMapData(layout);
         areaData.SetAreaMapData(areaMapData);
 
@@ -455,16 +455,28 @@ public class AreaManager : MonoBehaviour
     public void ResetObjects()
     {
         objectPositionGenerator.ResetObjects();
+
+        //Remove object spots
+        areaData.GetAreaMapData().SetMinigameSpots(new List<MinigameSpotData>());
+        areaData.GetAreaMapData().SetNpcSpots(new List<NpcSpotData>());
+        areaData.GetAreaMapData().SetBookSpots(new List<BookSpotData>());
+        areaData.GetAreaMapData().SetTeleporterSpots(new List<TeleporterSpotData>());
+        areaData.GetAreaMapData().SetSceneTransitionSpots(new List<SceneTransitionSpotData>());
+        areaData.GetAreaMapData().SetBarrierSpots(new List<BarrierSpotData>());
+
+        //Remove Placeholders
+        areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
     }
 
     /// <summary>
     ///     This function creates minigame spots
     /// </summary>
     /// <param name="amount">The amount of minigame spots to create</param>
-    public void GenerateMinigames(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateMinigames(int amount)
     {
         //Generate Positions
-        objectPositionGenerator.GenerateMinigamePositions(amount);
+        bool success = objectPositionGenerator.GenerateMinigamePositions(amount);
         List<Vector2Int> minigamePositions = objectPositionGenerator.GetMinigameSpotPositions();
 
         //Generate MinigameSpotData objects
@@ -473,16 +485,19 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+
+        return success;
     }
 
     /// <summary>
     ///     This function creates npc spots
     /// </summary>
     /// <param name="amount">The amount of npc spots to create</param>
-    public void GenerateNPCs(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateNPCs(int amount)
     {
         //Generate Positions
-        objectPositionGenerator.GenerateNpcPositions(amount);
+        bool success = objectPositionGenerator.GenerateNpcPositions(amount);
         List<Vector2Int> npcPositions = objectPositionGenerator.GetNpcSpotPositions();
 
         //Generate NpcSpotData objects
@@ -491,16 +506,19 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+
+        return success;
     }
 
     /// <summary>
     ///     This function creates book spots
     /// </summary>
     /// <param name="amount">The amount of book spots to create</param>
-    public void GenerateBooks(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateBooks(int amount)
     {
         //Generate Positions
-        objectPositionGenerator.GenerateBookPositions(amount);
+        bool success = objectPositionGenerator.GenerateBookPositions(amount);
         List<Vector2Int> bookPositions = objectPositionGenerator.GetBookSpotPositions();
 
         //Generate BookSpotData objects
@@ -509,16 +527,19 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+
+        return success;
     }
 
     /// <summary>
     ///     This function creates teleporter spots
     /// </summary>
     /// <param name="amount">The amount of teleporter spots to create</param>
-    public void GenerateTeleporters(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateTeleporters(int amount)
     {
         //Generate Positions
-        objectPositionGenerator.GenerateTeleporterPositions(amount);
+        bool success = objectPositionGenerator.GenerateTeleporterPositions(amount);
         List<Vector2Int> teleporterPositions = objectPositionGenerator.GetTeleporterSpotPositions();
 
         //Generate TeleporterSpotData objects
@@ -527,16 +548,19 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+
+        return success;
     }
 
     /// <summary>
     ///     This function creates dungeon spots
     /// </summary>
     /// <param name="amount">The amount of dungeon spots to create</param>
-    public void GenerateDungeons(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateDungeons(int amount)
     {
         //Generate Positions
-        objectPositionGenerator.GenerateDungeonPositions(amount);
+        bool success = objectPositionGenerator.GenerateDungeonPositions(amount);
         List<Vector2Int> dungeonPositions = objectPositionGenerator.GetDungeonSpotPositions();
 
         //Generate SceneTransitionSpotData objects
@@ -545,6 +569,8 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+
+        return success;
     }
     #endregion
 

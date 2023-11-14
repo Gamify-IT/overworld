@@ -92,45 +92,50 @@ public class GeneratorUIManager : MonoBehaviour
     ///     This function forwards a minigame generation request to the <c>AreaManager</c>
     /// </summary>
     /// <param name="amount">The amount of minigames to generate</param>
-    public void GenerateMinigames(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateMinigames(int amount)
     {
-        areaManager.GenerateMinigames(amount);
+        return areaManager.GenerateMinigames(amount);
     }
 
     /// <summary>
     ///     This function forwards a npc generation request to the <c>AreaManager</c>
     /// </summary>
     /// <param name="amount">The amount of npcs to generate</param>
-    public void GenerateNpcs(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateNpcs(int amount)
     {
-        areaManager.GenerateNPCs(amount);
+        return areaManager.GenerateNPCs(amount);
     }
 
     /// <summary>
     ///     This function forwards a book generation request to the <c>AreaManager</c>
     /// </summary>
     /// <param name="amount">The amount of books to generate</param>
-    public void GenerateBooks(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateBooks(int amount)
     {
-        areaManager.GenerateBooks(amount);
+        return areaManager.GenerateBooks(amount);
     }
 
     /// <summary>
     ///     This function forwards a teleporter generation request to the <c>AreaManager</c>
     /// </summary>
     /// <param name="amount">The amount of teleporters to generate</param>
-    public void GenerateTeleporters(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateTeleporters(int amount)
     {
-        areaManager.GenerateTeleporters(amount);
+        return areaManager.GenerateTeleporters(amount);
     }
 
     /// <summary>
     ///     This function forwards a dungeons generation request to the <c>AreaManager</c>
     /// </summary>
     /// <param name="amount">The amount of dungeons to generate</param>
-    public void GenerateDungeons(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateDungeons(int amount)
     {
-        areaManager.GenerateDungeons(amount);
+        return areaManager.GenerateDungeons(amount);
     }
 
     /// <summary>

@@ -58,8 +58,8 @@ public class LayoutDTO
         }
         AreaLocationDTO area = new AreaLocationDTO(worldIndex, dungeonIndex);
 
-        int sizeX = layout.GetTiles().GetLength(0);
-        int sizeY = layout.GetTiles().GetLength(1);
+        int sizeX = layout.GetTileSprites().GetLength(0);
+        int sizeY = layout.GetTileSprites().GetLength(1);
         string generatorType = layout.GetGeneratorType().ToString();
         string seed = layout.GetSeed();
         int accessability = layout.GetAccessability();

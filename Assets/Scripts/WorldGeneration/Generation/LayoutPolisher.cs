@@ -44,6 +44,7 @@ public class LayoutPolisher
         switch(areaStyle)
         {
             case WorldStyle.SAVANNA:
+                EnsureGroundProperties();
                 EnsureWallProperties(2, 4);
                 break;
 

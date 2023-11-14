@@ -5,16 +5,18 @@ using UnityEngine;
 public class Layout
 {
     private AreaInformation area;
-    private TileSprite[,,] tiles;
+    private TileSprite[,,] tileSprites;
+    private CellType[,] cellTypes;
     private LayoutGeneratorType generatorType;
     private string seed;
     private int accessability;
     private WorldStyle style;
 
-    public Layout(AreaInformation area, TileSprite[,,] tiles, LayoutGeneratorType generatorType, string seed, int accessability, WorldStyle style)
+    public Layout(AreaInformation area, TileSprite[,,] tileSprites, CellType[,] cellTypes, LayoutGeneratorType generatorType, string seed, int accessability, WorldStyle style)
     {
         this.area = area;
-        this.tiles = tiles;
+        this.tileSprites = tileSprites;
+        this.cellTypes = cellTypes;
         this.generatorType = generatorType;
         this.seed = seed;
         this.accessability = accessability;
@@ -31,13 +33,14 @@ public class Layout
         if(layoutDTO.sizeX == 0 && layoutDTO.sizeY == 0)
         {
             AreaInformation dummyArea = new AreaInformation(0, new Optional<int>());
-            TileSprite[,,] dummyTiles = new TileSprite[0, 0, 0];
+            TileSprite[,,] dummyTilSprites = new TileSprite[0, 0, 0];
+            CellType[,] dummyCellTypes = new CellType[0, 0];
             LayoutGeneratorType dummyGenerator = LayoutGeneratorType.CELLULAR_AUTOMATA;
             string dummySeed = "";
             int dummyAccessiblity = 0;
             WorldStyle dummyStyle = WorldStyle.CUSTOM;
 
-            Layout dummyLayout = new Layout(dummyArea, dummyTiles, dummyGenerator, dummySeed, dummyAccessiblity, dummyStyle);
+            Layout dummyLayout = new Layout(dummyArea, dummyTilSprites, dummyCellTypes, dummyGenerator, dummySeed, dummyAccessiblity, dummyStyle);
             return dummyLayout;
         }
 
@@ -111,7 +114,7 @@ public class Layout
         converter.Convert();
         TileSprite[,,] tileLayout = converter.GetTileSprites();
 
-        Layout data = new Layout(area, tileLayout, generatorType, seed, accessability, style);
+        Layout data = new Layout(area, tileLayout, polishedLayout, generatorType, seed, accessability, style);
         return data;
     }
 
@@ -143,14 +146,24 @@ public class Layout
         this.area = area;
     }
     
-    public TileSprite[,,] GetTiles()
+    public TileSprite[,,] GetTileSprites()
     {
-        return tiles;
+        return tileSprites;
     }
 
-    public void SetTiles(TileSprite[,,] tiles)
+    public void SetTileSprites(TileSprite[,,] tileSprites)
     {
-        this.tiles = tiles;
+        this.tileSprites = tileSprites;
+    }
+
+    public CellType[,] GetCellTypes()
+    {
+        return cellTypes;
+    }
+
+    public void SetTileSprites(CellType[,] cellTypes)
+    {
+        this.cellTypes = cellTypes;
     }
 
     public LayoutGeneratorType GetGeneratorType()

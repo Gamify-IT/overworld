@@ -19,6 +19,7 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private GameObject smallGeneratorPanel;
     [SerializeField] private GameObject areaSettings;
     [SerializeField] private GameObject content;
+    [SerializeField] private GameObject generationFeedbackPanel;
 
     //Area Settings
     [SerializeField] private TMP_InputField sizeX;    
@@ -57,6 +58,9 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI amountDungeonsText;
     [SerializeField] private Button generateDungeonsButton;
 
+    [SerializeField] private TextMeshProUGUI generationFeedbackHeader;
+    [SerializeField] private TextMeshProUGUI generationFeedbackText;
+
     [SerializeField] private Button generateAllContentButton;
     [SerializeField] private Button saveAreaButton;
     #endregion
@@ -80,6 +84,7 @@ public class GeneratorUI : MonoBehaviour
         areaSettings.SetActive(true);
         content.SetActive(false);
         generatorPanel.SetActive(true);
+        generationFeedbackPanel.SetActive(false);
 
         if(areaIdentifier.IsDungeon())
         {
@@ -161,8 +166,8 @@ public class GeneratorUI : MonoBehaviour
     {
         if(areaData.IsGeneratedArea())
         {
-            sizeX.text = areaData.GetAreaMapData().GetLayout().GetTiles().GetLength(0).ToString();
-            sizeY.text = areaData.GetAreaMapData().GetLayout().GetTiles().GetLength(1).ToString();
+            sizeX.text = areaData.GetAreaMapData().GetLayout().GetTileSprites().GetLength(0).ToString();
+            sizeY.text = areaData.GetAreaMapData().GetLayout().GetTileSprites().GetLength(1).ToString();
         }
         else
         {
@@ -279,34 +284,143 @@ public class GeneratorUI : MonoBehaviour
     #region Generation Buttons
     public void GenerateMinigamesButtonPressed()
     {
-        int amountMinigames = (int) amountMinigamesSlider.value;
-        uiManager.GenerateMinigames(amountMinigames);
+        bool success = GenerateMinigames();
         CheckSaveWorldButtonStatus();
+
+        string feedback;
+        if((int)amountMinigamesSlider.value > 0)
+        {
+            feedback = "CREATED: \n" + (int)amountMinigamesSlider.value + " MINIGAME SPOTS";
+        }
+        else
+        {
+            feedback = "REMOVED ALL MINIGAME SPOTS";
+        }        
+
+        DisplayGenerationFeedback(success, feedback);
+    }
+
+    private bool GenerateMinigames()
+    {
+        int amountMinigames = (int)amountMinigamesSlider.value;
+        return uiManager.GenerateMinigames(amountMinigames);
     }
 
     public void GenerateNpcsButtonPressed()
     {
-        int amountNpcs = (int) amountNpcsSlider.value;
-        uiManager.GenerateNpcs(amountNpcs);
+        bool success = GenerateNpcs();
+
+        string feedback;
+        if ((int)amountNpcsSlider.value > 0)
+        {
+            feedback = "CREATED: \n" + (int)amountNpcsSlider.value + " NPC SPOTS";
+        }
+        else
+        {
+            feedback = "REMOVED ALL NPC SPOTS";
+        }
+
+        DisplayGenerationFeedback(success, feedback);
+    }
+
+    private bool GenerateNpcs()
+    {
+        int amountNpcs = (int)amountNpcsSlider.value;
+        return uiManager.GenerateNpcs(amountNpcs);
     }
 
     public void GenerateBooksButtonPressed()
     {
-        int amountBooks = (int) amountBooksSlider.value;
-        uiManager.GenerateBooks(amountBooks);
+        bool success = GenerateBooks();
+
+        string feedback;
+        if ((int)amountBooksSlider.value > 0)
+        {
+            feedback = "CREATED: \n" + (int)amountBooksSlider.value + " BOOK SPOTS";
+        }
+        else
+        {
+            feedback = "REMOVED ALL BOOK SPOTS";
+        }
+
+        DisplayGenerationFeedback(success, feedback);
+    }
+
+    private bool GenerateBooks()
+    {
+        int amountBooks = (int)amountBooksSlider.value;
+        return uiManager.GenerateBooks(amountBooks);
     }
 
     public void GenerateTeleporterButtonPressed()
     {
-        int amountTeleporters = (int) amountTeleportersSlider.value;
-        uiManager.GenerateTeleporters(amountTeleporters);
+        bool success = GenerateTeleporter();
+
+        string feedback;
+        if ((int)amountTeleportersSlider.value > 0)
+        {
+            feedback = "CREATED: \n" + (int)amountTeleportersSlider.value + " TELEPORTER SPOTS";
+        }
+        else
+        {
+            feedback = "REMOVED ALL TELEPORTER SPOTS";
+        }
+
+        DisplayGenerationFeedback(success, feedback);
+    }
+
+    private bool GenerateTeleporter()
+    {
+        int amountTeleporters = (int)amountTeleportersSlider.value;
+        return uiManager.GenerateTeleporters(amountTeleporters);
     }
 
     public void GenerateDungeonsButtonPressed()
     {
-        int amountDungeons = (int) amountDungeonsSlider.value;
-        uiManager.GenerateDungeons(amountDungeons);
+        bool success = GenerateDungeons();
+
+        string feedback;
+        if ((int)amountDungeonsSlider.value > 0)
+        {
+            feedback = "CREATED: \n" + (int)amountDungeonsSlider.value + " DUNGEON SPOTS";
+        }
+        else
+        {
+            feedback = "REMOVED ALL DUNGEON SPOTS";
+        }
+
+        DisplayGenerationFeedback(success, feedback);
     }
+
+    private bool GenerateDungeons()
+    {
+        int amountDungeons = (int)amountDungeonsSlider.value;
+        return uiManager.GenerateDungeons(amountDungeons);
+    }
+    #endregion
+
+    #region Generation Feedback
+
+    public void FeedbackCloseButtonPressed()
+    {
+        generationFeedbackPanel.SetActive(false);
+    }
+
+    private void DisplayGenerationFeedback(bool success, string feedbackText)
+    {
+        if(success)
+        {
+            generationFeedbackHeader.text = "GENERATION SUCCESSFUL";
+            generationFeedbackText.text = feedbackText;
+        }
+        else
+        {
+            generationFeedbackHeader.text = "GENERATION FAILED";
+            generationFeedbackText.text = "COULD NOT CREATE ALL OBJECTS, \n \n PLEASE TRY AGAIN, \n CHANGE THE AMOUNT OF OBJECTS, \n OR \n CREATE ANOTHER LAYOUT";
+        }
+        generationFeedbackPanel.SetActive(true);
+    }
+
     #endregion
 
     public void ReturnButtonPressed()
@@ -317,12 +431,88 @@ public class GeneratorUI : MonoBehaviour
 
     public void GenerateAllContentButtonPressed()
     {
+        bool success = GenerateAllContent();
+        CheckSaveWorldButtonStatus();
+
+        string feedback;
+        if((int)amountMinigamesSlider.value == 0 &&
+            (int)amountNpcsSlider.value == 0 &&
+            (int)amountBooksSlider.value == 0 &&
+            (int)amountTeleportersSlider.value == 0 &&
+            (int)amountDungeonsSlider.value == 0)
+        {
+            feedback = "RESET ALL CONTENT";
+        }
+        else
+        {
+            feedback = "CREATED:";
+            if ((int)amountMinigamesSlider.value > 0)
+            {
+                feedback += "\n " + (int)amountMinigamesSlider.value + " MINIGAME SPOTS";
+            }
+            if ((int)amountNpcsSlider.value > 0)
+            {
+                feedback += "\n " + (int)amountNpcsSlider.value + " NPC SPOTS";
+            }
+            if ((int)amountBooksSlider.value > 0)
+            {
+                feedback += "\n " + (int)amountBooksSlider.value + " BOOK SPOTS";
+            }
+            if ((int)amountTeleportersSlider.value > 0)
+            {
+                feedback += "\n " + (int)amountTeleportersSlider.value + " TELEPORTER SPOTS";
+            }
+            if ((int)amountDungeonsSlider.value > 0)
+            {
+                feedback += "\n " + (int)amountDungeonsSlider.value + " DUNGEON SPOTS";
+            }
+        }        
+
+        DisplayGenerationFeedback(success, feedback);
+    }
+
+    private bool GenerateAllContent()
+    {
         uiManager.ResetObjects();
-        GenerateMinigamesButtonPressed();
-        GenerateNpcsButtonPressed();
-        GenerateBooksButtonPressed();
-        GenerateTeleporterButtonPressed();
-        GenerateDungeonsButtonPressed();
+        CheckSaveWorldButtonStatus();
+
+        if (!GenerateDungeons())
+        {
+            //could not create dungeon spots -> reset all and stop 
+            uiManager.ResetObjects();
+            return false;
+        }
+
+        if (!GenerateMinigames())
+        {
+            //could not create minigame spots -> reset all and stop 
+            uiManager.ResetObjects();
+            return false;
+        }
+
+        if (!GenerateNpcs())
+        {
+            //could not create npc spots -> reset all and stop 
+            uiManager.ResetObjects();
+            return false;
+        }
+
+        if (!GenerateBooks())
+        {
+            //could not create book spots -> reset all and stop 
+            uiManager.ResetObjects();
+            return false;
+        }
+
+        if (!GenerateTeleporter())
+        {
+            //could not create teleporter spots -> reset all and stop 
+            uiManager.ResetObjects();
+            return false;
+        }
+
+        //all spots created
+        return true;
     }
 
     public void SaveAreaButtonPressed()

@@ -104,8 +104,8 @@ public class CustomAreaMapData
     /// <returns>A <c>Vector2Int</c> containing the size of the world</returns>
     public Vector2Int GetSize()
     {
-        int sizeX = layout.GetTiles().GetLength(0);
-        int sizeY = layout.GetTiles().GetLength(1);
+        int sizeX = layout.GetTileSprites().GetLength(0);
+        int sizeY = layout.GetTileSprites().GetLength(1);
 
         return new Vector2Int(sizeX, sizeY);
     }

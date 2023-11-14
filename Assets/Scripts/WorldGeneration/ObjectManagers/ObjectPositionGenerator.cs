@@ -7,6 +7,7 @@ using UnityEngine;
 /// </summary>
 public class ObjectPositionGenerator
 {
+    #region Constants
     //Iterations per search spot
     private static readonly int maxIterations = 10;
 
@@ -21,13 +22,13 @@ public class ObjectPositionGenerator
 
     //Radius for npcs and books around minigames
     private static readonly int minigameRadius = 20;
+    #endregion
 
     private Pathfinder pathfinder;
 
     private Vector2Int size;
-    private bool[,] accessableTiles;
-
     private List<Vector2Int> objectPositions;
+    private CellType[,] tiles;
 
     private List<WorldConnection> worldConnections;
     private List<Vector2Int> minigamePositions;
@@ -42,9 +43,8 @@ public class ObjectPositionGenerator
     public ObjectPositionGenerator(CellType[,] tiles, List<WorldConnection> worldConnections)
     {
         size = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
-        accessableTiles = GetAccessableTiles(tiles);
-        
         objectPositions = GetObjectPositions(tiles);
+        this.tiles = tiles;
 
         this.worldConnections = worldConnections;
         minigamePositions = new List<Vector2Int>();
@@ -54,22 +54,7 @@ public class ObjectPositionGenerator
         dungeonPositions = new List<Vector2Int>();
         barrierPositions = new List<Vector2Int>();
 
-        pathfinder = new Pathfinder(accessableTiles);
-    }
-
-    //TODO: remove
-    public ObjectPositionGenerator(TileSprite[,,] tiles, List<WorldConnection> worldConnections)
-    {
-        size = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
-        accessableTiles = GetAccessableTiles(tiles);
-        this.worldConnections = worldConnections;
-        minigamePositions = new List<Vector2Int>();
-        npcPositions = new List<Vector2Int>();
-        bookPositions = new List<Vector2Int>();
-        teleporterPositions = new List<Vector2Int>();
-        dungeonPositions = new List<Vector2Int>();
-        barrierPositions = new List<Vector2Int>();
-
+        bool[,] accessableTiles = GetAccessableTiles(tiles);
         pathfinder = new Pathfinder(accessableTiles);
     }
 
@@ -92,39 +77,6 @@ public class ObjectPositionGenerator
             }
         }
         return accessableTiles;
-    }
-
-    /// <summary>
-    ///     This function gets the accessable tiles of a given tile sprite layout
-    /// </summary>
-    /// <param name="tiles">The layout</param>
-    /// <returns>All accessable tiles</returns>
-    private bool[,] GetAccessableTiles(TileSprite[,,] tiles)
-    {
-        bool[,] accessableTiles = new bool[size.x, size.y];
-        for(int x=0; x<size.x; x++)
-        {
-            for(int y=0; y<size.y; y++)
-            {
-                if(TileIsFree(tiles, x, y))
-                {
-                    accessableTiles[x, y] = true;
-                }
-            }
-        }
-        return accessableTiles;
-    }
-
-    /// <summary>
-    ///     This function checks, whether the given position is blocked or not
-    /// </summary>
-    /// <param name="tiles">The sprites in each tile</param>
-    /// <param name="x">The x coordinate</param>
-    /// <param name="y">The y coordinate</param>
-    /// <returns>True, if the tile is free, false if it blocked</returns>
-    private bool TileIsFree(TileSprite[,,] tiles, int x, int y)
-    {
-        return (tiles[x, y, 2] == TileSprite.UNDEFINED && tiles[x, y, 4] == TileSprite.UNDEFINED);
     }
 
     /// <summary>
@@ -166,52 +118,74 @@ public class ObjectPositionGenerator
     ///     This function generates positions for minigame spots
     /// </summary>
     /// <param name="amount">The amount of minigame spots to generate</param>
-    public void GenerateMinigamePositions(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateMinigamePositions(int amount)
     {
         //reset current spots
         minigamePositions = new List<Vector2Int>();
 
+        bool success = true;
+
         //generate new spots
         for (int i=0; i<amount; i++)
         {
-            Vector2Int position = new Vector2Int();
+            bool spotCreated = false;
 
             for (int iteration = 0; iteration < maxIterations; iteration++)
             {
-                position = GetPosition();
+                Vector2Int position = GetPosition();
 
                 bool objectToClose = ObjectToClose(position, minSameObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance);
 
                 if (!objectToClose)
                 {
+                    //position found                    
+                    minigamePositions.Add(position);
+                    spotCreated = true;
                     break;
                 }
+            }   
+            
+            if(!spotCreated)
+            {
+                //no position found
+                success = false;
+                break;
             }
-
-            minigamePositions.Add(position);
         }
+
+        if(!success)
+        {
+            minigamePositions = new List<Vector2Int>();
+        }
+
+        return success;
     }
 
     /// <summary>
     ///     This function generates positions for npc spots
     /// </summary>
     /// <param name="amount">The amount of npc spots to generate</param>
-    public void GenerateNpcPositions(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateNpcPositions(int amount)
     {
         //reset current spots
         npcPositions = new List<Vector2Int>();
 
+        bool success = true;
+
         //generate new spots
         for (int i = 0; i < amount; i++)
         {
-            Vector2Int position = new Vector2Int();
+            bool spotCreated = false;
+
             if(minigamePositions.Count > i)
             {
                 Vector2Int minigamePosition = minigamePositions[i];
 
                 for (int iteration = 0; iteration < maxIterations; iteration++)
                 {
-                    position = GetPositionInRange(minigamePosition, minigameRadius);
+                    Vector2Int position = GetPositionInRange(minigamePosition, minigameRadius);
 
                     bool objectToClose = ObjectToClose(position, minObjectDistance, minSameObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance);
 
@@ -228,49 +202,78 @@ public class ObjectPositionGenerator
 
                     if (!objectToClose && distanceOk)
                     {
+                        //position found 
+                        npcPositions.Add(position);
+                        spotCreated = true;
                         break;
                     }
+                }
+
+                if (!spotCreated)
+                {
+                    //no position found
+                    success = false;
+                    break;
                 }
             }
             else
             {
                 for (int iteration = 0; iteration < maxIterations; iteration++)
                 {
-                    position = GetPosition();
+                    Vector2Int position = GetPosition();
 
                     bool objectToClose = ObjectToClose(position, minObjectDistance, minSameObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance);
 
                     if (!objectToClose)
                     {
+                        //position found 
+                        npcPositions.Add(position);
+                        spotCreated = true;
                         break;
                     }
                 }
+
+                if (!spotCreated)
+                {
+                    //no position found
+                    success = false;
+                    break;
+                }
             }
-            
-            npcPositions.Add(position);
         }
+
+        if (!success)
+        {
+            npcPositions = new List<Vector2Int>();
+        }
+
+        return success;
     }
 
     /// <summary>
     ///     This function generates positions for book spots
     /// </summary>
     /// <param name="amount">The amount of book spots to generate</param>
-    public void GenerateBookPositions(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateBookPositions(int amount)
     {
         //reset current spots
         bookPositions = new List<Vector2Int>();
 
+        bool success = true;
+
         //generate new spots
         for (int i = 0; i < amount; i++)
         {
-            Vector2Int position = new Vector2Int();
+            bool spotCreated = false;
+
             if (minigamePositions.Count > i)
             {
                 Vector2Int minigamePosition = minigamePositions[i];
 
                 for (int iteration = 0; iteration < maxIterations; iteration++)
                 {
-                    position = GetPositionInRange(minigamePosition, minigameRadius);
+                    Vector2Int position = GetPositionInRange(minigamePosition, minigameRadius);
 
                     bool objectToClose = ObjectToClose(position, minObjectDistance, minObjectDistance, minSameObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance);
 
@@ -287,87 +290,146 @@ public class ObjectPositionGenerator
 
                     if (!objectToClose && distanceOk)
                     {
+                        //position found 
+                        bookPositions.Add(position);
+                        spotCreated = true;
                         break;
                     }
+                }
+
+                if (!spotCreated)
+                {
+                    //no position found
+                    success = false;
+                    break;
                 }
             }
             else
             {
                 for (int iteration = 0; iteration < maxIterations; iteration++)
                 {
-                    position = GetPosition();
+                    Vector2Int position = GetPosition();
 
                     bool objectToClose = ObjectToClose(position, minObjectDistance, minObjectDistance, minSameObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance);
 
                     if (!objectToClose)
                     {
+                        //position found 
+                        bookPositions.Add(position);
+                        spotCreated = true;
                         break;
                     }
                 }
-            }
 
-            bookPositions.Add(position);
+                if (!spotCreated)
+                {
+                    //no position found
+                    success = false;
+                    break;
+                }
+            }
         }
+
+        if (!success)
+        {
+            bookPositions = new List<Vector2Int>();
+        }
+
+        return success;
     }
 
     /// <summary>
     ///     This function generates positions for teleporter spots
     /// </summary>
     /// <param name="amount">The amount of teleporter spots to generate</param>
-    public void GenerateTeleporterPositions(int amount)
+    public bool GenerateTeleporterPositions(int amount)
     {
         //reset current spots
         teleporterPositions = new List<Vector2Int>();
 
+        bool success = true;
+
         //generate new spots
         for (int i = 0; i < amount; i++)
         {
-            Vector2Int position = new Vector2Int();
+            bool spotCreated = false;
 
             for (int iteration = 0; iteration < maxIterations; iteration++)
             {
-                position = GetPosition();
+                Vector2Int position = GetPosition();
 
                 bool objectToClose = ObjectToClose(position, minObjectDistance, minObjectDistance, minObjectDistance, minSameObjectDistance, minObjectDistance, minObjectDistance);
 
                 if (!objectToClose)
                 {
+                    //position found                    
+                    teleporterPositions.Add(position);
+                    spotCreated = true;
                     break;
                 }
             }
 
-            teleporterPositions.Add(position);
+            if (!spotCreated)
+            {
+                //no position found
+                success = false;
+                break;
+            }
         }
+
+        if (!success)
+        {
+            teleporterPositions = new List<Vector2Int>();
+        }
+
+        return success;
     }
 
     /// <summary>
     ///     This function generates positions for dungeon spots
     /// </summary>
     /// <param name="amount">The amount of dungeon spots to generate</param>
-    public void GenerateDungeonPositions(int amount)
+    public bool GenerateDungeonPositions(int amount)
     {
         //reset current spots
         dungeonPositions = new List<Vector2Int>();
 
+        bool success = true;
+
         //generate new spots
         for (int i = 0; i < amount; i++)
         {
-            Vector2Int position = new Vector2Int();
+            bool spotCreated = false;
 
-            for(int iteration = 0; iteration < maxIterations; iteration++)
+            for (int iteration = 0; iteration < maxIterations; iteration++)
             {
-                position = GetPosition();
+                Vector2Int position = GetPosition();
 
                 bool objectToClose = ObjectToClose(position, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minSameObjectDistance, minDungeonDistance);
 
                 if(!objectToClose)
                 {
+                    //position found                    
+                    dungeonPositions.Add(position);
+                    spotCreated = true;
                     break;
                 }
             }
 
-            dungeonPositions.Add(position);
+            if (!spotCreated)
+            {
+                //no position found
+                success = false;
+                break;
+            }
         }
+
+        if (!success)
+        {
+            dungeonPositions = new List<Vector2Int>();
+        }
+
+        return success;
     }
     #endregion
 
