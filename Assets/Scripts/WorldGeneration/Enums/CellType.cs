@@ -6,5 +6,6 @@ public enum CellType
 {
     WALL,
     FLOOR,
-    CORRIDOR
+    CORRIDOR,
+    OBJECT
 }

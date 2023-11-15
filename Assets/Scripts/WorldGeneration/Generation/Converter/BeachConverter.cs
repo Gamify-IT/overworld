@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BeachConverter : LayoutConverter
 {
+    private static readonly float wavePercentage = 0.05f;
+    private static readonly float waterDecorationPercentage = 0.02f;
+
     public BeachConverter(CellType[,] baseLayout) : base(baseLayout) { }
 
     public override void Convert()
@@ -33,7 +36,6 @@ public class BeachConverter : LayoutConverter
                 }
                 else
                 {
-                    //position in wall
                     tileTypes[x, y] = TileType.BEACH_WATER;
                 }
             }
@@ -59,7 +61,21 @@ public class BeachConverter : LayoutConverter
                 }
                 else if (tileTypes[x, y] == TileType.BEACH_WATER)
                 {
-                    tileSprites[x, y, 2] = TileSprite.BEACH_WATER;
+                    //add random waves
+                    if (Random.Range(0f, 1f) < wavePercentage)
+                    {
+                        tileSprites[x, y, 2] = TileSprite.BEACH_WATER_WAVE;
+                    }
+                    else
+                    {
+                        tileSprites[x, y, 2] = TileSprite.BEACH_WATER;
+
+                        //add random water decoration
+                        if (Random.Range(0f, 1f) < waterDecorationPercentage)
+                        {
+                            tileSprites[x, y, 3] = TileSprite.BEACH_WATER_DECORATION;
+                        }
+                    }
                 }
             }
         }

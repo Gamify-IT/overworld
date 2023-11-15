@@ -98,6 +98,7 @@ public class GeneratorUI : MonoBehaviour
         stypeDropdown.ClearOptions();
         List<string> options = System.Enum.GetNames(typeof(WorldStyle)).ToList();
         stypeDropdown.AddOptions(options);
+        OnStyleChange();
 
         accessabilityInput.text = "50";
 
@@ -271,7 +272,7 @@ public class GeneratorUI : MonoBehaviour
             amountDungeonsSlider.value = 1;
             amountDungeonsText.text = "1";
             maxDungeonsText.text = "1";
-            GenerateDungeonsButtonPressed();
+            GenerateDungeons();
         }        
 
         areaSettings.SetActive(false);

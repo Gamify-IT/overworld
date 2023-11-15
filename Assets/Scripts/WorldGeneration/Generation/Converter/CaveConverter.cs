@@ -5,6 +5,8 @@ using UnityEngine;
 public class CaveConverter : LayoutConverter
 {
 
+    private static readonly float floorDecorationPercentage = 0.05f;
+
     public CaveConverter(CellType[,] baseLayout) : base(baseLayout) { }
 
     public override void Convert()
@@ -26,6 +28,12 @@ public class CaveConverter : LayoutConverter
                 {
                     //position is floor
                     tileTypes[x, y] = TileType.CAVE_FLOOR;
+
+                    //add random floor decoration
+                    if (Random.Range(0f, 1f) < floorDecorationPercentage)
+                    {
+                        tileSprites[x, y, 1] = TileSprite.CAVE_FLOOR_DECORATION;
+                    }
                 }
                 else
                 {

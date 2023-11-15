@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class SavannaConverter : LayoutConverter
 {
+    private static readonly float wavePercentage = 0.05f;
+    private static readonly float floorDecorationPercentage = 0.05f;
+    private static readonly float waterDecorationPercentage = 0.02f;
+
     public SavannaConverter(CellType[,] baseLayout) : base(baseLayout) { }
 
     public override void Convert()
@@ -58,6 +62,12 @@ public class SavannaConverter : LayoutConverter
                 if (tileTypes[x, y] == TileType.SAVANNA_FLOOR)
                 {
                     tileSprites[x, y, 0] = GetFloorSprite(x,y);
+
+                    //add random floor decoration
+                    if (Random.Range(0f, 1f) < floorDecorationPercentage)
+                    {
+                        tileSprites[x, y, 1] = TileSprite.SAVANNA_FLOOR_DECORATION;
+                    }
                 }
                 else if (tileTypes[x, y] == TileType.SAVANNA_WALL)
                 {
@@ -65,7 +75,21 @@ public class SavannaConverter : LayoutConverter
                 }
                 else
                 {
-                    tileSprites[x, y, 2] = TileSprite.SAVANNA_WATER;
+                    //add random waves
+                    if(Random.Range(0f, 1f) < wavePercentage)
+                    {
+                        tileSprites[x, y, 2] = TileSprite.SAVANNA_WATER_WAVE;
+                    }
+                    else
+                    {
+                        tileSprites[x, y, 2] = TileSprite.SAVANNA_WATER;
+
+                        //add random water decoration
+                        if (Random.Range(0f, 1f) < waterDecorationPercentage)
+                        {
+                            tileSprites[x, y, 3] = TileSprite.SAVANNA_WATER_DECORATION;
+                        }
+                    }
                 }
             }
         }

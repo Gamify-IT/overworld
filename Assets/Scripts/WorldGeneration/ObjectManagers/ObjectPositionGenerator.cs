@@ -80,10 +80,10 @@ public class ObjectPositionGenerator
     }
 
     /// <summary>
-    ///     This function creates a hash set containig all positions an object can be placed at
+    ///     This function creates a list containig all positions an object can be placed at
     /// </summary>
     /// <param name="tiles">The tile types of the layout</param>
-    /// <returns>A hash set containing all positions an object can be placed at</returns>
+    /// <returns>A list containing all positions an object can be placed at</returns>
     private List<Vector2Int> GetObjectPositions(CellType[,] tiles)
     {
         List<Vector2Int> objectPositions = new List<Vector2Int>();

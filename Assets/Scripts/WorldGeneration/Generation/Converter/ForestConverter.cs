@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ForestConverter : LayoutConverter
 {
+    private static readonly float floorDecorationPercentage = 0.05f;
+
     public ForestConverter(CellType[,] baseLayout) : base(baseLayout) { }
 
     public override void Convert()
@@ -48,6 +50,12 @@ public class ForestConverter : LayoutConverter
                 {
                     //floor tile
                     tileSprites[x, y, 0] = TileSprite.FOREST_GRASS;
+
+                    //add random floor decoration
+                    if (Random.Range(0f, 1f) < floorDecorationPercentage)
+                    {
+                        tileSprites[x, y, 1] = TileSprite.FOREST_FLOOR_DECORATION;
+                    }
                 }
                 else
                 {

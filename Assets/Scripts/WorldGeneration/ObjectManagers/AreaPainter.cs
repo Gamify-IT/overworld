@@ -7,17 +7,15 @@ public class AreaPainter : MonoBehaviour
 {
     #region Attributes
     [Header("Layers")]
-    [SerializeField] private Tilemap ground;
-    [SerializeField] private Tilemap groundDecorations;
-    [SerializeField] private Tilemap wall;
-    [SerializeField] private Tilemap wallDecorations;
-    [SerializeField] private Tilemap objects;
+    [SerializeField] private Tilemap groundTilemap;
+    [SerializeField] private Tilemap groundDecorationsTilemap;
+    [SerializeField] private Tilemap wallTilemap;
+    [SerializeField] private Tilemap wallDecorationsTilemap;
+    [SerializeField] private Tilemap objectsTilemap;
 
     [Space(10)]
 
-    [Header("Tiles")]
-
-    //Savanna tiles
+    [Header("Savanna Tiles")]
 
     //Floor tiles
     [SerializeField] private Tile savannaFloorBottomLeftWall;
@@ -28,7 +26,7 @@ public class AreaPainter : MonoBehaviour
     [SerializeField] private Tile savannaFloorMidLeftWall;
     [SerializeField] private Tile savannaFloorMidLeftWater;
     [SerializeField] private Tile savannaFloorMidInnerCornerLeft;
-    [SerializeField] private Tile savannaFloorMidMid;
+    [SerializeField] private RuleTile savannaFloorMidMid;
     [SerializeField] private Tile savannaFloorMidInnerCornerRight;
     [SerializeField] private Tile savannaFloorMidRightWall;
     [SerializeField] private Tile savannaFloorMidRightWater;
@@ -48,10 +46,15 @@ public class AreaPainter : MonoBehaviour
 
     //Water tiles
     [SerializeField] private Tile savannaWater;
+    [SerializeField] private RuleTile savannaWaterWave;
+
+    //Decoration
+    [SerializeField] private RuleTile savannaFloorDecoration;
+    [SerializeField] private RuleTile savannaWaterDecoration;
 
     [Space(10)]
 
-    //Beach tiles
+    [Header("Beach Tiles")]
 
     //Floor tiles
     [SerializeField] private Tile beachGroundTopLeft;
@@ -70,6 +73,7 @@ public class AreaPainter : MonoBehaviour
 
     //Water tile
     [SerializeField] private Tile beachWaterTile;
+    [SerializeField] private RuleTile beachWaterWave;
 
     //Connection tiles
     [SerializeField] private Tile beachConnectionTopLeft;
@@ -86,9 +90,12 @@ public class AreaPainter : MonoBehaviour
     [SerializeField] private Tile beachConnectionInnerCornerBottomLeft;
     [SerializeField] private Tile beachConnectionInnerCornerBottomRight;
 
+    //Decoration
+    [SerializeField] private RuleTile beachWaterDecoration;
+
     [Space(10)]
 
-    //Cave tiles
+    [Header("Cave Tiles")]
 
     //Floor tiles
     [SerializeField] private Tile caveGround;
@@ -113,11 +120,36 @@ public class AreaPainter : MonoBehaviour
     [SerializeField] private Tile caveVoidTopMid;
     [SerializeField] private Tile caveVoidTopRight;
 
+    //Decoration
+    [SerializeField] private RuleTile caveFloorDecoration;
+
     [Space(10)]
 
-    //Forest tiles
-    [SerializeField] private Tile forestFloor;
+    [Header("Forest Tiles")]
+
+    [SerializeField] private RuleTile forestFloor;
     [SerializeField] private RuleTile forestTree;
+
+    //Decoration
+    [SerializeField] private RuleTile forestFloorDecoration;
+
+    [Space(10)]
+
+    [Header("Object Tiles")]
+
+    [SerializeField] private RuleTile stoneSmall;
+    [SerializeField] private RuleTile stoneBig;
+    [SerializeField] private RuleTile bush;
+    [SerializeField] private RuleTile savannaBush;
+    [SerializeField] private RuleTile tree;
+    [SerializeField] private RuleTile savannaTree;
+    [SerializeField] private RuleTile treeStump;
+    [SerializeField] private RuleTile fence;
+    [SerializeField] private RuleTile houseSmall;
+    [SerializeField] private RuleTile houseBig;
+    [SerializeField] private RuleTile barrel;
+    [SerializeField] private RuleTile log;
+    [SerializeField] private RuleTile grave;
 
     //Mapper
     private Dictionary<TileSprite, TileBase> tileMapper = new Dictionary<TileSprite, TileBase>();
@@ -152,6 +184,10 @@ public class AreaPainter : MonoBehaviour
         tileMapper.Add(TileSprite.SAVANNA_WALL_TOP_RIGHT_WATER, savannaWallTopRightWater);
 
         tileMapper.Add(TileSprite.SAVANNA_WATER, savannaWater);
+        tileMapper.Add(TileSprite.SAVANNA_WATER_WAVE, savannaWaterWave);
+
+        tileMapper.Add(TileSprite.SAVANNA_FLOOR_DECORATION, savannaFloorDecoration);
+        tileMapper.Add(TileSprite.SAVANNA_WATER_DECORATION, savannaWaterDecoration);
 
         //Beach tiles
         tileMapper.Add(TileSprite.BEACH_FLOOR_BOTTOM_LEFT, beachGroundBottomLeft);
@@ -169,6 +205,7 @@ public class AreaPainter : MonoBehaviour
         tileMapper.Add(TileSprite.BEACH_FLOOR_INNER_CORNER_TOP_RIGHT, beachGroundInnerCornerTopRight);
 
         tileMapper.Add(TileSprite.BEACH_WATER, beachWaterTile);
+        tileMapper.Add(TileSprite.BEACH_WATER_WAVE, beachWaterWave);
 
         tileMapper.Add(TileSprite.BEACH_CONNECTION_BOTTOM_LEFT, beachConnectionBottomLeft);
         tileMapper.Add(TileSprite.BEACH_CONNECTION_BOTTOM_MID, beachConnectionBottomMid);
@@ -184,6 +221,8 @@ public class AreaPainter : MonoBehaviour
         tileMapper.Add(TileSprite.BEACH_CONNECTION_INNER_CORNER_TOP_LEFT, beachConnectionInnerCornerTopLeft);
         tileMapper.Add(TileSprite.BEACH_CONNECTION_INNER_CORNER_TOP_RIGHT, beachConnectionInnerCornerTopRight);
 
+        tileMapper.Add(TileSprite.BEACH_WATER_DECORATION, beachWaterDecoration);
+
         //Cave tiles
         tileMapper.Add(TileSprite.CAVE_FLOOR, caveGround);
 
@@ -196,9 +235,27 @@ public class AreaPainter : MonoBehaviour
 
         tileMapper.Add(TileSprite.CAVE_VOID, caveVoid);
 
+        tileMapper.Add(TileSprite.CAVE_FLOOR_DECORATION, caveFloorDecoration);
+
         //Forest tiles
         tileMapper.Add(TileSprite.FOREST_GRASS, forestFloor);
         tileMapper.Add(TileSprite.FOREST_TREE, forestTree);
+        tileMapper.Add(TileSprite.FOREST_FLOOR_DECORATION, forestFloorDecoration);
+
+        //Object tiles
+        tileMapper.Add(TileSprite.STONE_SMALL, stoneSmall);
+        tileMapper.Add(TileSprite.STONE_BIG, stoneBig);
+        tileMapper.Add(TileSprite.BUSH, bush);
+        tileMapper.Add(TileSprite.SAVANNA_BUSH, savannaBush);
+        tileMapper.Add(TileSprite.TREE, tree);
+        tileMapper.Add(TileSprite.SAVANNA_TREE, savannaTree);
+        tileMapper.Add(TileSprite.TREE_STUMP, treeStump);
+        tileMapper.Add(TileSprite.FENCE, fence);
+        tileMapper.Add(TileSprite.HOUSE_SMALL, houseSmall);
+        tileMapper.Add(TileSprite.HOUSE_BIG, houseBig);
+        tileMapper.Add(TileSprite.BARREL, barrel);
+        tileMapper.Add(TileSprite.LOG, log);
+        tileMapper.Add(TileSprite.GRAVE, grave);
     }
 
     public void Paint(TileSprite[,,] layout, Vector2Int offset)
@@ -216,35 +273,35 @@ public class AreaPainter : MonoBehaviour
                 if(layout[x,y,0] != TileSprite.UNDEFINED)
                 {
                     TileBase floorTile = tileMapper[layout[x, y, 0]];
-                    ground.SetTile(position, floorTile);
+                    groundTilemap.SetTile(position, floorTile);
                 }
 
                 //paint floor decoration
                 if (layout[x, y, 1] != TileSprite.UNDEFINED)
                 {
                     TileBase floorDecorationTile = tileMapper[layout[x, y, 1]];
-                    groundDecorations.SetTile(position, floorDecorationTile);
+                    groundDecorationsTilemap.SetTile(position, floorDecorationTile);
                 }
 
                 //paint wall
                 if (layout[x, y, 2] != TileSprite.UNDEFINED)
                 {
                     TileBase wallTile = tileMapper[layout[x, y, 2]];
-                    wall.SetTile(position, wallTile);
+                    wallTilemap.SetTile(position, wallTile);
                 }
 
                 //paint wall decoration
                 if (layout[x, y, 3] != TileSprite.UNDEFINED)
                 {
                     TileBase wallDecorationTile = tileMapper[layout[x, y, 3]];
-                    wallDecorations.SetTile(position, wallDecorationTile);
+                    wallDecorationsTilemap.SetTile(position, wallDecorationTile);
                 }
 
                 //paint objects
                 if (layout[x, y, 4] != TileSprite.UNDEFINED)
                 {
                     TileBase objectsTile = tileMapper[layout[x, y, 4]];
-                    objects.SetTile(position, objectsTile);
+                    objectsTilemap.SetTile(position, objectsTile);
                 }
             }
         }
@@ -255,10 +312,10 @@ public class AreaPainter : MonoBehaviour
     /// </summary>
     private void ClearTilemaps()
     {
-        ground.ClearAllTiles();
-        groundDecorations.ClearAllTiles();
-        wall.ClearAllTiles();
-        wallDecorations.ClearAllTiles();
-        objects.ClearAllTiles();
+        groundTilemap.ClearAllTiles();
+        groundDecorationsTilemap.ClearAllTiles();
+        wallTilemap.ClearAllTiles();
+        wallDecorationsTilemap.ClearAllTiles();
+        objectsTilemap.ClearAllTiles();
     }
 }

@@ -437,6 +437,13 @@ public class AreaManager : MonoBehaviour
         converter.Convert();
         TileSprite[,,] tileLayout = converter.GetTileSprites();
 
+        //create world objects
+        EnvironmentObjectGenerator environmentObjectGenerator = new EnvironmentObjectGenerator(polishedLayout, tileLayout, style, seed);
+        environmentObjectGenerator.AddObjects();
+        polishedLayout = environmentObjectGenerator.GetCellTypes();
+        tileLayout = environmentObjectGenerator.GetTileSprites();
+
+        //setup object position generator
         objectPositionGenerator = new ObjectPositionGenerator(polishedLayout, worldConnections);
 
         //Update stored data
