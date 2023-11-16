@@ -7,8 +7,13 @@ using UnityEngine;
 /// </summary>
 public class SceneTransitionManager : MonoBehaviour
 {
+    [Header("Prefabs")]
     [SerializeField] private GameObject sceneTransitionSpotPrefab;
     [SerializeField] private GameObject placeholderPrefab;
+
+    [Space(10)]
+
+    [Header("Icons")]
     [SerializeField] private GameObject minimapIcons;
 
     /// <summary>

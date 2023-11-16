@@ -360,7 +360,8 @@
                 "y": 168.0
             },
             "type": "worldBarrier",
-            "destinationAreaIndex": "3"
+            "destinationAreaIndex": "3",
+            "barrierStyle": "TREE"
         },
         {
             "area": {
@@ -372,7 +373,8 @@
                 "y": 126.5
             },
             "type": "dungeonBarrier",
-            "destinationAreaIndex": "1"
+            "destinationAreaIndex": "1",
+            "barrierStyle": "TREE"
         },
         {
             "area": {
@@ -384,7 +386,8 @@
                 "y": 176.0
             },
             "type": "dungeonBarrier",
-            "destinationAreaIndex": "2"
+            "destinationAreaIndex": "2",
+            "barrierStyle": "GATE"
         },
         {
             "area": {
@@ -396,7 +399,8 @@
                 "y": 132.0
             },
             "type": "dungeonBarrier",
-            "destinationAreaIndex": "3"
+            "destinationAreaIndex": "3",
+            "barrierStyle": "IRON_BAR_DOOR"
         },
         {
             "area": {
@@ -408,7 +412,8 @@
                 "y": 127.0
             },
             "type": "dungeonBarrier",
-            "destinationAreaIndex": "4"
+            "destinationAreaIndex": "4",
+            "barrierStyle": "HOUSE"
         }
     ],
     "teleporterSpots": [
@@ -503,7 +508,8 @@
                 "worldIndex": 2,
                 "dungeonIndex": 1
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "CAVE_ENTRANCE"
         },
         {
             "area": {
@@ -522,7 +528,8 @@
                 "worldIndex": 2,
                 "dungeonIndex": 2
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "GATE"
         },
         {
             "area": {
@@ -541,7 +548,8 @@
                 "worldIndex": 2,
                 "dungeonIndex": 3
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "HOUSE"
         },
         {
             "area": {
@@ -560,7 +568,8 @@
                 "worldIndex": 2,
                 "dungeonIndex": 4
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "HOUSE"
         }
     ]
 }

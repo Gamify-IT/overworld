@@ -418,7 +418,8 @@
                 "worldIndex": 0,
                 "dungeonIndex": 0
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "CAVE_ENTRANCE"
         }
     ]
 }

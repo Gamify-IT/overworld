@@ -95,5 +95,11 @@ public enum TileSprite
     HOUSE_BIG,
     BARREL,
     LOG,
-    GRAVE
+    GRAVE,
+
+    //Dungeon Entrance
+    CAVE_ENTRANCE,
+    GATE,
+    TRAPDOOR,
+    HOUSE
 }

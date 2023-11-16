@@ -272,8 +272,9 @@ public class GeneratorUI : MonoBehaviour
             amountDungeonsSlider.value = 1;
             amountDungeonsText.text = "1";
             maxDungeonsText.text = "1";
-            GenerateDungeons();
-        }        
+        }
+
+        GenerateDungeons();
 
         areaSettings.SetActive(false);
         content.SetActive(true);

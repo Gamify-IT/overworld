@@ -7,8 +7,32 @@ using UnityEngine;
 /// </summary>
 public class BarrierManager : MonoBehaviour
 {
+    [Header("Prefabs")]
     [SerializeField] private GameObject barrierSpotPrefab;
     [SerializeField] private GameObject placeholderPrefab;
+
+    [Space(10)]
+
+    [Header("Barrier Sprites")]
+    [SerializeField] private Sprite house;
+    [SerializeField] private Sprite trapdoor;
+    [SerializeField] private Sprite gate;
+    [SerializeField] private Sprite caveEntrance;
+    [SerializeField] private Sprite tree;
+    [SerializeField] private Sprite ironBarDoor;
+
+    private Dictionary<BarrierStyle, Sprite> spriteMapper = new Dictionary<BarrierStyle, Sprite>();
+
+    private void Awake()
+    {
+        spriteMapper.Add(BarrierStyle.HOUSE, house);
+        spriteMapper.Add(BarrierStyle.TRAPDOOR, trapdoor);
+        spriteMapper.Add(BarrierStyle.GATE, gate);
+        spriteMapper.Add(BarrierStyle.CAVE_ENTRANCE, caveEntrance);
+        spriteMapper.Add(BarrierStyle.TREE, tree);
+        spriteMapper.Add(BarrierStyle.IRON_BAR_DOOR, ironBarDoor);
+    }
+
 
     /// <summary>
     ///     This function sets up barrier objects for the data given
@@ -58,7 +82,8 @@ public class BarrierManager : MonoBehaviour
         Barrier barrier = barrierSpot.GetComponent<Barrier>();
         if (barrier != null)
         {
-            barrier.Initialize(data.GetArea().GetWorldIndex(), data.GetDestinationAreaIndex(), data.GetBarrierType());
+            Sprite sprite = spriteMapper[data.GetBarrierStyle()];
+            barrier.Initialize(data.GetArea().GetWorldIndex(), data.GetDestinationAreaIndex(), data.GetBarrierType(), sprite);
         }
         else
         {
@@ -72,6 +97,11 @@ public class BarrierManager : MonoBehaviour
     /// <param name="data">The data for the barrier spot</param>
     private void CreatePlaceholderBarrierSpot(BarrierSpotData data)
     {
+        if(data.GetBarrierType() == BarrierType.dungeonBarrier)
+        {
+            return;
+        }
+
         Vector3 position = new Vector3(data.GetPosition().x, data.GetPosition().y, 0);
         GameObject placeholderSpot = Instantiate(placeholderPrefab, position, Quaternion.identity, this.transform) as GameObject;
         PlaceholderObject placeholder = placeholderSpot.GetComponent<PlaceholderObject>();

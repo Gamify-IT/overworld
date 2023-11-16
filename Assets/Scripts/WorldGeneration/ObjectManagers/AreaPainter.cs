@@ -12,6 +12,7 @@ public class AreaPainter : MonoBehaviour
     [SerializeField] private Tilemap wallTilemap;
     [SerializeField] private Tilemap wallDecorationsTilemap;
     [SerializeField] private Tilemap objectsTilemap;
+    [SerializeField] private List<Tilemap> additionalLayers;
 
     [Space(10)]
 
@@ -110,15 +111,6 @@ public class AreaPainter : MonoBehaviour
 
     //Void tiles
     [SerializeField] private RuleTile caveVoid;
-    [SerializeField] private Tile caveVoidBottomLeft;
-    [SerializeField] private Tile caveVoidBottomMid;
-    [SerializeField] private Tile caveVoidBottomRight;
-    [SerializeField] private Tile caveVoidMidLeft;
-    [SerializeField] private Tile caveVoidMidMid;
-    [SerializeField] private Tile caveVoidMidRight;
-    [SerializeField] private Tile caveVoidTopLeft;
-    [SerializeField] private Tile caveVoidTopMid;
-    [SerializeField] private Tile caveVoidTopRight;
 
     //Decoration
     [SerializeField] private RuleTile caveFloorDecoration;
@@ -150,6 +142,14 @@ public class AreaPainter : MonoBehaviour
     [SerializeField] private RuleTile barrel;
     [SerializeField] private RuleTile log;
     [SerializeField] private RuleTile grave;
+
+    [Space(10)]
+
+    [Header("Dungeon Entrance Tiles")]
+    [SerializeField] private RuleTile caveEntrance;
+    [SerializeField] private RuleTile gate;
+    [SerializeField] private RuleTile trapdoor;
+    [SerializeField] private RuleTile house;
 
     //Mapper
     private Dictionary<TileSprite, TileBase> tileMapper = new Dictionary<TileSprite, TileBase>();
@@ -256,6 +256,12 @@ public class AreaPainter : MonoBehaviour
         tileMapper.Add(TileSprite.BARREL, barrel);
         tileMapper.Add(TileSprite.LOG, log);
         tileMapper.Add(TileSprite.GRAVE, grave);
+
+        //dungeon entrance tiles
+        tileMapper.Add(TileSprite.CAVE_ENTRANCE, caveEntrance);
+        tileMapper.Add(TileSprite.GATE, gate);
+        tileMapper.Add(TileSprite.TRAPDOOR, trapdoor);
+        tileMapper.Add(TileSprite.HOUSE, house);
     }
 
     public void Paint(TileSprite[,,] layout, Vector2Int offset)
@@ -317,5 +323,10 @@ public class AreaPainter : MonoBehaviour
         wallTilemap.ClearAllTiles();
         wallDecorationsTilemap.ClearAllTiles();
         objectsTilemap.ClearAllTiles();
+
+        foreach(Tilemap tilemap in additionalLayers)
+        {
+            tilemap.ClearAllTiles();
+        }
     }
 }

@@ -657,8 +657,8 @@ public class EnvironmentObjectGenerator
 
     #region Helper functions
 
-    //check if square of given size is free including given position
-    //return bottom left, if found, empty optinal otherwise
+    //check if area of given size is free including given position
+    //return bottom left, if found, empty optional otherwise
     private Optional<Vector2Int> FloorArea(Vector2Int position, int width, int height)
     {
         Optional<Vector2Int> bottomLeft = new Optional<Vector2Int>();

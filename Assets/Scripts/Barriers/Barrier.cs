@@ -22,7 +22,7 @@ public class Barrier : MonoBehaviour
     [SerializeField] private bool isActive;
     [SerializeField] private int originWorldIndex;
     [SerializeField] private int destinationAreaIndex;
-
+    [SerializeField] private SpriteRenderer spriteRenderer;
     #endregion
 
     #region Setup
@@ -43,15 +43,16 @@ public class Barrier : MonoBehaviour
     /// <summary>
     ///     This function initializes the <c>Barrier</c> object
     /// </summary>
-    /// <param name="worldOriginIndex">The world the <c>Barrier</c> is in</param>
-    /// <param name="areaDestinationIndex">The index of the area the <c>Barrier</c> is blocking access to</param>
+    /// <param name="originWorldIndex">The world the <c>Barrier</c> is in</param>
+    /// <param name="destinationAreaIndex">The index of the area the <c>Barrier</c> is blocking access to</param>
     /// <param name="type"></param>
-    public void Initialize(int originWorldIndex, int destinationAreaIndex, BarrierType type)
+    /// <param name="sprite">The sprite of the barrier</param>
+    public void Initialize(int originWorldIndex, int destinationAreaIndex, BarrierType type, Sprite sprite)
     {
         this.originWorldIndex = originWorldIndex;
         this.destinationAreaIndex = destinationAreaIndex;
         this.type = type;
-
+        spriteRenderer.sprite = sprite;
         RegisterToGameManager();
     }
 

@@ -9,7 +9,7 @@ public class ObjectPositionGenerator
 {
     #region Constants
     //Iterations per search spot
-    private static readonly int maxIterations = 10;
+    private static readonly int maxIterations = 20;
 
     //Minimum distance from dungeon spot to world connections
     private static readonly int minDungeonDistance = 75;
@@ -28,33 +28,38 @@ public class ObjectPositionGenerator
 
     private Vector2Int size;
     private List<Vector2Int> objectPositions;
-    private CellType[,] tiles;
+    private List<Vector2Int> dungeonWallPositions;
+    private CellType[,] tileType;
+    private WorldStyle style;
 
     private List<WorldConnection> worldConnections;
     private List<Vector2Int> minigamePositions;
     private List<Vector2Int> npcPositions;
     private List<Vector2Int> bookPositions;
     private List<Vector2Int> teleporterPositions;
-    private List<Vector2Int> dungeonPositions;
-    private List<Vector2Int> barrierPositions;
+
+    private List<DungeonSpotPosition> dungeonPositions;
+    private List<BarrierSpotPosition> barrierPositions;
 
     #region Constructor
 
-    public ObjectPositionGenerator(CellType[,] tiles, List<WorldConnection> worldConnections)
+    public ObjectPositionGenerator(CellType[,] tileType, List<WorldConnection> worldConnections, WorldStyle style)
     {
-        size = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
-        objectPositions = GetObjectPositions(tiles);
-        this.tiles = tiles;
+        size = new Vector2Int(tileType.GetLength(0), tileType.GetLength(1));
+        objectPositions = new List<Vector2Int>();
+        dungeonWallPositions = new List<Vector2Int>();            
+        GetObjectPositions(tileType);
+        this.tileType = tileType;
+        this.style = style;
 
         this.worldConnections = worldConnections;
         minigamePositions = new List<Vector2Int>();
         npcPositions = new List<Vector2Int>();
         bookPositions = new List<Vector2Int>();
         teleporterPositions = new List<Vector2Int>();
-        dungeonPositions = new List<Vector2Int>();
-        barrierPositions = new List<Vector2Int>();
+        dungeonPositions = new List<DungeonSpotPosition>();
 
-        bool[,] accessableTiles = GetAccessableTiles(tiles);
+        bool[,] accessableTiles = GetAccessableTiles(tileType);
         pathfinder = new Pathfinder(accessableTiles);
     }
 
@@ -80,14 +85,11 @@ public class ObjectPositionGenerator
     }
 
     /// <summary>
-    ///     This function creates a list containig all positions an object can be placed at
+    ///     This function fills the lists containig all positions an object can be placed at
     /// </summary>
     /// <param name="tiles">The tile types of the layout</param>
-    /// <returns>A list containing all positions an object can be placed at</returns>
-    private List<Vector2Int> GetObjectPositions(CellType[,] tiles)
+    private void GetObjectPositions(CellType[,] tiles)
     {
-        List<Vector2Int> objectPositions = new List<Vector2Int>();
-
         for (int x = 0; x < size.x; x++)
         {
             for (int y = 0; y < size.y; y++)
@@ -96,10 +98,16 @@ public class ObjectPositionGenerator
                 {
                     objectPositions.Add(new Vector2Int(x, y));
                 }
+                else if(tiles[x, y] == CellType.WALL)
+                {
+                    if(IsInRange(x, y-1) && tiles[x, y-1] == CellType.FLOOR)
+                    {
+                        //bottom tile of wall
+                        dungeonWallPositions.Add(new Vector2Int(x, y));
+                    }
+                }
             }
         }
-
-        return objectPositions;
     }
 
     #endregion
@@ -111,7 +119,8 @@ public class ObjectPositionGenerator
         npcPositions = new List<Vector2Int>();
         bookPositions = new List<Vector2Int>();
         teleporterPositions = new List<Vector2Int>();
-        dungeonPositions = new List<Vector2Int>();
+        dungeonPositions = new List<DungeonSpotPosition>();
+        barrierPositions = new List<BarrierSpotPosition>();
     }
 
     /// <summary>
@@ -392,7 +401,7 @@ public class ObjectPositionGenerator
     public bool GenerateDungeonPositions(int amount)
     {
         //reset current spots
-        dungeonPositions = new List<Vector2Int>();
+        dungeonPositions = new List<DungeonSpotPosition>();
 
         bool success = true;
 
@@ -403,14 +412,19 @@ public class ObjectPositionGenerator
 
             for (int iteration = 0; iteration < maxIterations; iteration++)
             {
-                Vector2Int position = GetPosition();
+                DungeonStyle dungeonStyle = GetDungeonStyle();
+                Vector2Int position = GetDungeonPosition(dungeonStyle);
 
                 bool objectToClose = ObjectToClose(position, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minSameObjectDistance, minDungeonDistance);
+                bool validDungeonPosition = IsValidDungeonPosition(position, dungeonStyle);
 
-                if(!objectToClose)
+                if(!objectToClose && validDungeonPosition)
                 {
-                    //position found                    
-                    dungeonPositions.Add(position);
+                    Debug.Log("Dungeon spot found, type: " + dungeonStyle);
+
+                    //position found
+                    DungeonSpotPosition dungeonSpot = new DungeonSpotPosition(position, dungeonStyle);
+                    dungeonPositions.Add(dungeonSpot);
                     spotCreated = true;
                     break;
                 }
@@ -426,11 +440,178 @@ public class ObjectPositionGenerator
 
         if (!success)
         {
-            dungeonPositions = new List<Vector2Int>();
+            dungeonPositions = new List<DungeonSpotPosition>();
         }
 
         return success;
     }
+
+    //create world connection barriers
+    public List<BarrierSpotPosition> GetWorldBarrierSpots()
+    {
+        List<BarrierSpotPosition> barriers = new List<BarrierSpotPosition>();
+
+        foreach(WorldConnection worldConnection in worldConnections)
+        {
+            Debug.Log("Create world connection barrier for world: " + worldConnection.GetDestinationWorld());
+
+            BarrierSpotPosition barrier = new BarrierSpotPosition(worldConnection.GetPosition(), BarrierStyle.TREE, worldConnection.GetDestinationWorld());
+            barriers.Add(barrier);
+        }
+
+        return barriers;
+    }
+
+    #region Dungeon Helper Functions
+
+    //get random dungeon entrance style
+    private DungeonStyle GetDungeonStyle()
+    {
+        if(style == WorldStyle.CAVE)
+        {
+            //gate or cave entrance
+            if(Random.Range(0f, 1f) < 0.5f)
+            {
+                return DungeonStyle.GATE;
+            }
+            else
+            {
+                return DungeonStyle.CAVE_ENTRANCE;
+            }
+        }
+        else
+        {
+            //house or trapdoor
+            if (Random.Range(0f, 1f) < 0.5f)
+            {
+                return DungeonStyle.HOUSE;
+            }
+            else
+            {
+                return DungeonStyle.TRAPDOOR;
+            }
+        }
+    }
+
+    //get position for dungeon spot
+    private Vector2Int GetDungeonPosition(DungeonStyle style)
+    {
+        switch(style)
+        {
+            case DungeonStyle.HOUSE:
+            case DungeonStyle.TRAPDOOR:
+                return GetPosition();
+
+            case DungeonStyle.GATE:
+            case DungeonStyle.CAVE_ENTRANCE:
+                return GetWallPosition();
+        }
+
+        return new Vector2Int();
+    }
+
+    //check if valid dungeon position
+    private bool IsValidDungeonPosition(Vector2Int position, DungeonStyle style)
+    {
+        switch (style)
+        {
+            case DungeonStyle.HOUSE:
+                return ValidHousePosition(position);
+
+            case DungeonStyle.TRAPDOOR:
+                return ValidTrapdoorPosition(position);
+
+            case DungeonStyle.GATE:
+                return ValidGatePosition(position);
+
+            case DungeonStyle.CAVE_ENTRANCE:
+                return ValidCavePosition(position);
+        }
+
+        return false;
+    }
+
+    //check if position valid for trapdoor dungeon
+    private bool ValidTrapdoorPosition(Vector2Int position)
+    { 
+        for(int x = position.x - 1; x <= position.x + 2; x++)
+        {
+            for(int y = position.y - 1; y < position.y + 2; y++)
+            {
+                if(tileType[x, y] != CellType.FLOOR)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    //check if position valid for house dungeon
+    private bool ValidHousePosition(Vector2Int position)
+    {
+        for (int x = position.x - 1; x <= position.x + 5; x++)
+        {
+            for (int y = position.y - 1; y < position.y + 5; y++)
+            {
+                if (tileType[x, y] != CellType.FLOOR)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    //check if position valid for gate dungeon
+    private bool ValidGatePosition(Vector2Int position)
+    {
+        for (int x = position.x; x <= position.x + 3; x++)
+        {
+            if(!IsInRange(x, position.y - 1) || tileType[x, position.y - 1] != CellType.FLOOR)
+            {
+                //no floor below
+                return false;
+            }
+
+            if (!IsInRange(x, position.y) || tileType[x, position.y] != CellType.WALL)
+            {
+                //no wall same height
+                return false;
+            }
+
+            if (!IsInRange(x, position.y + 1) || tileType[x, position.y + 1] != CellType.WALL)
+            {
+                //no wall above
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    //check if position valid for cave dungeon
+    private bool ValidCavePosition(Vector2Int position)
+    {
+        if (!IsInRange(position.x -1 , position.y) || tileType[position.x - 1, position.y] != CellType.WALL)
+        {
+            //no wall left
+            return false;
+        }
+
+        if (!IsInRange(position.x + 1, position.y) || tileType[position.x + 1, position.y] != CellType.WALL)
+        {
+            //no wall right
+            return false;
+        }
+
+        return true;
+    }
+
+    #endregion
+
     #endregion
 
     #region Position finding
@@ -442,6 +623,16 @@ public class ObjectPositionGenerator
     {
         int index = Random.Range(0, objectPositions.Count);
         return objectPositions[index];
+    }
+
+    /// <summary>
+    ///     This function returns random wall position an dungeon spot could be placed on
+    /// </summary>
+    /// <returns>A random wall position</returns>
+    private Vector2Int GetWallPosition()
+    {
+        int index = Random.Range(0, dungeonWallPositions.Count);
+        return dungeonWallPositions[index];
     }
 
     /// <summary>
@@ -472,6 +663,11 @@ public class ObjectPositionGenerator
     }
 
     #endregion
+
+    private bool IsInRange(int posX, int posY)
+    {
+        return (posX >= 0 && posX < size.x && posY >= 0 && posY < size.y);
+    }
 
     #region Distance checking
     /// <summary>
@@ -517,7 +713,12 @@ public class ObjectPositionGenerator
         }
 
         //check dungeons
-        if (ObjectToClose(positionToCheck, dungeonPositions, minDungeonDistance))
+        List<Vector2Int> dungeons = new List<Vector2Int>();
+        foreach(DungeonSpotPosition dungeonSpot in dungeonPositions)
+        {
+            dungeons.Add(dungeonSpot.GetPosition());
+        }
+        if (ObjectToClose(positionToCheck, dungeons, minDungeonDistance))
         {
             return true;
         }
@@ -592,7 +793,7 @@ public class ObjectPositionGenerator
         return teleporterPositions;
     }
 
-    public List<Vector2Int> GetDungeonSpotPositions()
+    public List<DungeonSpotPosition> GetDungeonSpotPositions()
     {
         return dungeonPositions;
     }

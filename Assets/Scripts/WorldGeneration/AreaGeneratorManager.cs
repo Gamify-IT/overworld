@@ -65,14 +65,14 @@ public class AreaGeneratorManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Invalid gamemode provided: " + urlPart + ", loading world 1 instead");
+                Debug.Log("Invalid area provided: " + urlPart + ", loading world 1 instead");
                 return new AreaInformation(1, new Optional<int>());
             }
         }
         else
         {
-            Debug.Log("Invalid gamemode provided: " + urlPart + ", loading world 1 instead");
-            return new AreaInformation(1, new Optional<int>(1));
+            Debug.Log("Invalid area provided: " + urlPart + ", loading world 1 instead");
+            return new AreaInformation(1, new Optional<int>());
         }     
     }
 

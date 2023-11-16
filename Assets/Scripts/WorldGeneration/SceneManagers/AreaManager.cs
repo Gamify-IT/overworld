@@ -65,6 +65,8 @@ public class AreaManager : MonoBehaviour
             Debug.Log("Generated Area: " + worldIndex + "-" + dungeonIndex);
 
             //Create layout
+            List<SceneTransitionSpotData> dungeonSpots = areaData.GetAreaMapData().GetSceneTransitionSpots();
+            areaData.GetAreaMapData().GetLayout().AddDungeonSpots(dungeonSpots, areaInformation.GetObjectOffset());
             areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
 
             //Create objects
@@ -163,7 +165,9 @@ public class AreaManager : MonoBehaviour
         objectGenerator = new ObjectGenerator(areaIdentifier, areaInformation.GetObjectOffset());
         if(areaData.IsGeneratedArea())
         {
-            objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetLayout().GetCellTypes(), areaInformation.GetWorldConnections());
+            objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetLayout().GetCellTypes(),  
+                areaInformation.GetWorldConnections(), 
+                areaData.GetAreaMapData().GetLayout().GetStyle());
         }
 
         //setup area
@@ -444,7 +448,7 @@ public class AreaManager : MonoBehaviour
         tileLayout = environmentObjectGenerator.GetTileSprites();
 
         //setup object position generator
-        objectPositionGenerator = new ObjectPositionGenerator(polishedLayout, worldConnections);
+        objectPositionGenerator = new ObjectPositionGenerator(polishedLayout, worldConnections, style);
 
         //Update stored data
         Layout layout = new Layout(areaIdentifier, tileLayout, polishedLayout, layoutGeneratorType, seed, accessability, style);
@@ -566,13 +570,27 @@ public class AreaManager : MonoBehaviour
     /// <returns>True, if all spots could be created, false otherwise</returns>
     public bool GenerateDungeons(int amount)
     {
-        //Generate Positions
-        bool success = objectPositionGenerator.GenerateDungeonPositions(amount);
-        List<Vector2Int> dungeonPositions = objectPositionGenerator.GetDungeonSpotPositions();
+        //Remove previous positions
+        areaData.GetAreaMapData().GetLayout().RemoveDungeonSpots(areaData.GetAreaMapData().GetSceneTransitionSpots(), areaInformation.GetObjectOffset());
+        areaData.GetAreaMapData().SetBarrierSpots(new List<BarrierSpotData>());
 
-        //Generate SceneTransitionSpotData objects
+        //Generate new positions
+        bool success = objectPositionGenerator.GenerateDungeonPositions(amount);
+        List<DungeonSpotPosition> dungeonPositions = objectPositionGenerator.GetDungeonSpotPositions();
+
+        //Generate SceneTransitionSpotData objects, adapt layout
         List<SceneTransitionSpotData> dungeonSpots = objectGenerator.GenerateDungeonSpots(dungeonPositions);
         areaData.GetAreaMapData().SetSceneTransitionSpots(dungeonSpots);
+        areaData.GetAreaMapData().GetLayout().AddDungeonSpots(dungeonSpots, areaInformation.GetObjectOffset());
+        areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
+
+        //Create barriers for the dungeon spots + add world barriers
+        List<BarrierSpotData> dungeonBarrierSpots = objectGenerator.GenerateBarrierSpots(dungeonPositions);
+        List<BarrierSpotData> worldBarrierSpots = objectGenerator.GenerateBarrierSpots(objectPositionGenerator.GetWorldBarrierSpots()); ;
+        List<BarrierSpotData> barrierSpots = new List<BarrierSpotData>();
+        barrierSpots.AddRange(dungeonBarrierSpots);
+        barrierSpots.AddRange(worldBarrierSpots);
+        areaData.GetAreaMapData().SetBarrierSpots(barrierSpots);
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());

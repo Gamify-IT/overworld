@@ -51,6 +51,7 @@ MonoBehaviour:
   isActive: 0
   originWorldIndex: 0
   destinationAreaIndex: 0
+  spriteRenderer: {fileID: 5903909377719632267}
 --- !u!212 &5903909377719632267
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -91,7 +92,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 458239855
   m_SortingLayer: 1
-  m_SortingOrder: 4
+  m_SortingOrder: 5
   m_Sprite: {fileID: 875766832, guid: eb4b4d6c620c946c2aec968f281e9ec1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

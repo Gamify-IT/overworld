@@ -360,7 +360,8 @@
                 "y": 303.0
             },
             "type": "dungeonBarrier",
-            "destinationAreaIndex": "1"
+            "destinationAreaIndex": "1",
+            "barrierStyle": "GATE"
         },
         {
             "area": {
@@ -372,7 +373,8 @@
                 "y": 438.0
             },
             "type": "dungeonBarrier",
-            "destinationAreaIndex": "2"
+            "destinationAreaIndex": "2",
+            "barrierStyle": "GATE"
         },
         {
             "area": {
@@ -384,7 +386,8 @@
                 "y": 311.0
             },
             "type": "dungeonBarrier",
-            "destinationAreaIndex": "3"
+            "destinationAreaIndex": "3",
+            "barrierStyle": "GATE"
         },
         {
             "area": {
@@ -396,7 +399,8 @@
                 "y": 454.0
             },
             "type": "dungeonBarrier",
-            "destinationAreaIndex": "4"
+            "destinationAreaIndex": "4",
+            "barrierStyle": "GATE"
         }
     ],
     "teleporterSpots": [],
@@ -418,7 +422,8 @@
                 "worldIndex": 4,
                 "dungeonIndex": 1
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "GATE"
         },
         {
             "area": {
@@ -437,7 +442,8 @@
                 "worldIndex": 4,
                 "dungeonIndex": 2
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "GATE"
         },
         {
             "area": {
@@ -456,7 +462,8 @@
                 "worldIndex": 4,
                 "dungeonIndex": 3
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "GATE"
         },
         {
             "area": {
@@ -475,7 +482,8 @@
                 "worldIndex": 4,
                 "dungeonIndex": 4
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "GATE"
         }
     ]
 }

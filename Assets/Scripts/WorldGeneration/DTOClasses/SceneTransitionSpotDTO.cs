@@ -15,18 +15,20 @@ public class SceneTransitionSpotDTO
     public Position size;
     public AreaLocationDTO areaToLoad;
     public string facingDirection;
+    public string style;
     #endregion
 
     #region Constructors
     public SceneTransitionSpotDTO() { }
 
-    public SceneTransitionSpotDTO(AreaLocationDTO area, Position position, Position size, AreaLocationDTO areaToLoad, string facingDirection)
+    public SceneTransitionSpotDTO(AreaLocationDTO area, Position position, Position size, AreaLocationDTO areaToLoad, string facingDirection, string style)
     {
         this.area = area;
         this.position = position;
         this.size = size;
         this.areaToLoad = areaToLoad;
         this.facingDirection = facingDirection;
+        this.style = style;
     }
     #endregion
 
@@ -60,7 +62,8 @@ public class SceneTransitionSpotDTO
             areaToLoad.dungeonIndex = sceneTransitionSpotData.GetAreaToLoad().GetDungeonIndex();
         }
         string facingDirection = sceneTransitionSpotData.GetFacingDirection().ToString();
-        SceneTransitionSpotDTO data = new SceneTransitionSpotDTO(areaLocation, position, size, areaToLoad, facingDirection);
+        string style = sceneTransitionSpotData.GetStyle().ToString();
+        SceneTransitionSpotDTO data = new SceneTransitionSpotDTO(areaLocation, position, size, areaToLoad, facingDirection, style);
         return data;
     }
 }

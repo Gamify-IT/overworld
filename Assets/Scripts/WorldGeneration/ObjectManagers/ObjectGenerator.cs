@@ -128,16 +128,44 @@ public class ObjectGenerator
     /// <summary>
     ///     This function creates <c>SceneTransitionSpotData</c> objects for given positions
     /// </summary>
-    /// <param name="positions">A list of all dungeon positions</param>
+    /// <param name="dungeonSpotPositions">A list of all dungeon positions</param>
     /// <returns>A list of <c>SceneTransitionSpotData</c> objects with the given positions</returns>
-    public List<SceneTransitionSpotData> GenerateDungeonSpots(List<Vector2Int> positions)
+    public List<SceneTransitionSpotData> GenerateDungeonSpots(List<DungeonSpotPosition> dungeonSpotPositions)
     {
         List<SceneTransitionSpotData> dungeonSpots = new List<SceneTransitionSpotData>();
         int index = 1;
 
-        foreach (Vector2Int position in positions)
+        foreach (DungeonSpotPosition dungeonSpotPosition in dungeonSpotPositions)
         {
-            Vector2 size = new Vector2(1.5f, 1.5f);
+            Vector2Int position = dungeonSpotPosition.GetPosition();
+            DungeonStyle style = dungeonSpotPosition.GetStyle();
+
+            Vector2 size = new Vector2();
+            Vector2 shift = new Vector2();
+
+            switch(style)
+            {
+                case DungeonStyle.HOUSE:
+                    size = new Vector2(1.0f, 1.0f);
+                    shift = new Vector2(2.5f, 1f);
+                    break;
+
+                case DungeonStyle.TRAPDOOR:
+                    size = new Vector2(1.5f, 1.0f);
+                    shift = new Vector2(1.0f, 1.0f);
+                    break;
+
+                case DungeonStyle.GATE:
+                    size = new Vector2(1.5f, 1.0f);
+                    shift = new Vector2(2.0f, 1.0f);
+                    break;
+
+                case DungeonStyle.CAVE_ENTRANCE:
+                    size = new Vector2(1.0f, 1.0f);
+                    shift = new Vector2(0.5f, 0.5f);
+                    break;
+            }
+
             AreaInformation areaToLoad = new AreaInformation(areaIdentifier.GetWorldIndex(), new Optional<int>());
             if(!areaIdentifier.IsDungeon())
             {
@@ -147,14 +175,108 @@ public class ObjectGenerator
             FacingDirection facingDirection = FacingDirection.south;
 
             //shift position
-            Vector2 shiftedPosition = position + offset + new Vector2(0.5f, 0.5f);
+            Vector2 shiftedPosition = position + shift + offset;
 
-            //create MinigameSpotData
-            SceneTransitionSpotData dungeonSpot = new SceneTransitionSpotData(areaIdentifier, shiftedPosition, size, areaToLoad, facingDirection);
+            //create DungeonSpotData
+            SceneTransitionSpotData dungeonSpot = new SceneTransitionSpotData(areaIdentifier, shiftedPosition, size, areaToLoad, facingDirection, style);
             dungeonSpots.Add(dungeonSpot);
             index++;
         }
 
         return dungeonSpots;
+    }
+
+    /// <summary>
+    ///     This function creates <c>BarrierSpotData</c> objects for given dungeon positions
+    /// </summary>
+    /// <param name="dungeonSpotPositions">A list of all dungeon positions</param>
+    /// <returns>A list of <c>BarrierSpotData</c> objects with the given positions</returns>
+    public List<BarrierSpotData> GenerateBarrierSpots(List<DungeonSpotPosition> dungeonSpotPositions)
+    {
+        List<BarrierSpotData> barrierSpots = new List<BarrierSpotData>();
+        int index = 1;
+
+        foreach (DungeonSpotPosition dungeonSpotPosition in dungeonSpotPositions)
+        {
+            Vector2Int position = dungeonSpotPosition.GetPosition();
+            BarrierStyle style = BarrierStyle.TREE;
+
+            Vector2 shift = new Vector2();
+
+            switch (dungeonSpotPosition.GetStyle())
+            {
+                case DungeonStyle.HOUSE:
+                    style = BarrierStyle.HOUSE;
+                    shift = new Vector2(2.5f, 1f);
+                    break;
+
+                case DungeonStyle.TRAPDOOR:
+                    style = BarrierStyle.TRAPDOOR;
+                    shift = new Vector2(1.0f, 1.0f);
+                    break;
+
+                case DungeonStyle.GATE:
+                    style = BarrierStyle.GATE;
+                    shift = new Vector2(2.0f, 1.0f);
+                    break;
+
+                case DungeonStyle.CAVE_ENTRANCE:
+                    style = BarrierStyle.TREE;
+                    shift = new Vector2(0.5f, -0.5f);
+                    break;
+            }
+
+            BarrierType type;
+            int destinationAreaIndex;
+            if (areaIdentifier.IsDungeon())
+            {
+                type = BarrierType.worldBarrier;
+                destinationAreaIndex = areaIdentifier.GetWorldIndex();
+                
+            }
+            else
+            {
+                type = BarrierType.dungeonBarrier;
+                destinationAreaIndex = index;
+            }
+
+            //shift position
+            Vector2 shiftedPosition = position + shift + offset;
+
+            //create BarrierSpotData
+            BarrierSpotData barrierSpot = new BarrierSpotData(areaIdentifier, shiftedPosition, type, destinationAreaIndex, style);
+            barrierSpots.Add(barrierSpot);
+            index++;
+        }
+
+        return barrierSpots;
+    }
+
+    /// <summary>
+    ///     This function creates <c>BarrierSpotData</c> objects for given positions
+    /// </summary>
+    /// <param name="barrierSpotPositions">A list of all barrier positions</param>
+    /// <returns>A list of <c>BarrierSpotData</c> objects with the given positions</returns>
+    public List<BarrierSpotData> GenerateBarrierSpots(List<BarrierSpotPosition> barrierSpotPositions)
+    {
+        List<BarrierSpotData> barrierSpots = new List<BarrierSpotData>();
+
+        foreach (BarrierSpotPosition barrierSpotPosition in barrierSpotPositions)
+        {
+            Vector2Int position = barrierSpotPosition.GetPosition();
+            BarrierStyle style = barrierSpotPosition.GetStyle();
+            BarrierType type = BarrierType.worldBarrier; ;
+            int destinationAreaIndex = barrierSpotPosition.GetDestinationWorld();
+
+
+            //shift position
+            Vector2 shiftedPosition = position + offset;
+
+            //create BarrierSpotData
+            BarrierSpotData barrierSpot = new BarrierSpotData(areaIdentifier, shiftedPosition, type, destinationAreaIndex, style);
+            barrierSpots.Add(barrierSpot);
+        }
+
+        return barrierSpots;
     }
 }

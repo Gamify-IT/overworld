@@ -23,6 +23,195 @@ public class Layout
         this.style = style;
     }
 
+    #region Add / Remove dungeon spots
+
+    //add dungeon spots
+    public void AddDungeonSpots(List<SceneTransitionSpotData> dungeonSpots, Vector2Int offset)
+    {
+        foreach(SceneTransitionSpotData dungeonSpot in dungeonSpots)
+        {
+            switch(dungeonSpot.GetStyle())
+            {
+                case DungeonStyle.HOUSE:
+                    AddHouseDungeonSpot(dungeonSpot.GetPosition() - offset);
+                    break;
+
+                case DungeonStyle.TRAPDOOR:
+                    AddTrapdoorDungeonSpot(dungeonSpot.GetPosition() - offset);
+                    break;
+
+                case DungeonStyle.GATE:
+                    AddGateDungeonSpot(dungeonSpot.GetPosition() - offset);
+                    break;
+
+                case DungeonStyle.CAVE_ENTRANCE:
+                    AddCaveEntranceDungeonSpot(dungeonSpot.GetPosition() - offset);
+                    break;
+            }
+        }
+    }
+    
+    //adds house dungeon entrance
+    private void AddHouseDungeonSpot(Vector2 position)
+    {
+        Debug.Log("Creating house dungeon entrance at " + position.ToString());
+        Vector2 bottomLeftCorner = position - new Vector2(2.5f, 0.5f);
+
+        int posX = Mathf.FloorToInt(bottomLeftCorner.x);
+        int posY = Mathf.FloorToInt(bottomLeftCorner.y);
+
+        for (int x = posX; x < posX + 5; x++)
+        {
+            for (int y = posY; y < posY + 5; y++)
+            {
+                tileSprites[x, y, 4] = TileSprite.HOUSE;
+            }
+        }
+    }
+
+    //adds trapdoor dungeon entrance
+    private void AddTrapdoorDungeonSpot(Vector2 position)
+    {
+        Debug.Log("Creating trapdoor dungeon entrance at " + position.ToString());
+        Vector2 bottomLeftCorner = position - new Vector2(1.0f, 0.5f);
+
+        int posX = Mathf.FloorToInt(bottomLeftCorner.x);
+        int posY = Mathf.FloorToInt(bottomLeftCorner.y);
+
+        for (int x = posX; x < posX + 2; x++)
+        {
+            for (int y = posY; y < posY + 2; y++)
+            {
+                tileSprites[x, y, 4] = TileSprite.TRAPDOOR;
+            }
+        }
+    }
+
+    //adds gate dungeon entrance
+    private void AddGateDungeonSpot(Vector2 position)
+    {
+        Debug.Log("Creating gate dungeon entrance at " + position.ToString());
+        Vector2 bottomLeftCorner = position - new Vector2(2.0f, 0.5f);
+
+        int posX = Mathf.FloorToInt(bottomLeftCorner.x);
+        int posY = Mathf.FloorToInt(bottomLeftCorner.y);
+
+        for (int x = posX; x < posX + 4; x++)
+        {
+            for (int y = posY - 1; y < posY + 3; y++)
+            {
+                tileSprites[x, y, 4] = TileSprite.GATE;
+            }
+        }
+    }
+
+    //adds cave entrance dungeon entrance
+    private void AddCaveEntranceDungeonSpot(Vector2 position)
+    {
+        Debug.Log("Creating cave dungeon entrance at " + position.ToString());
+        Vector2 bottomLeftCorner = position - new Vector2(0.5f, 0.5f);
+
+        int posX = Mathf.FloorToInt(bottomLeftCorner.x);
+        int posY = Mathf.FloorToInt(bottomLeftCorner.y);
+
+        tileSprites[posX, posY, 4] = TileSprite.CAVE_ENTRANCE;
+        tileSprites[posX, posY + 1, 4] = TileSprite.CAVE_ENTRANCE;
+    }
+
+    //remove given dungeon spots
+    public void RemoveDungeonSpots(List<SceneTransitionSpotData> dungeonSpots, Vector2Int offset)
+    {
+        foreach (SceneTransitionSpotData dungeonSpot in dungeonSpots)
+        {
+            switch (dungeonSpot.GetStyle())
+            {
+                case DungeonStyle.HOUSE:
+                    RemoveHouseDungeonSpot(dungeonSpot.GetPosition() - offset);
+                    break;
+
+                case DungeonStyle.TRAPDOOR:
+                    RemoveTrapdoorDungeonSpot(dungeonSpot.GetPosition() - offset);
+                    break;
+
+                case DungeonStyle.GATE:
+                    RemoveGateDungeonSpot(dungeonSpot.GetPosition() - offset);
+                    break;
+
+                case DungeonStyle.CAVE_ENTRANCE:
+                    RemoveCaveEntranceDungeonSpot(dungeonSpot.GetPosition() - offset);
+                    break;
+            }
+        }
+    }
+
+    //removes house dungeon entrance
+    private void RemoveHouseDungeonSpot(Vector2 position)
+    {
+        Debug.Log("Removing house dungeon entrance at " + position.ToString());
+        Vector2 bottomLeftCorner = position - new Vector2(2.5f, 0.5f);
+
+        int posX = Mathf.FloorToInt(bottomLeftCorner.x);
+        int posY = Mathf.FloorToInt(bottomLeftCorner.y);
+
+        for (int x = posX; x < posX + 5; x++)
+        {
+            for (int y = posY; y < posY + 5; y++)
+            {
+                tileSprites[x, y, 4] = TileSprite.UNDEFINED;
+            }
+        }
+    }
+
+    //removes trapdoor dungeon entrance
+    private void RemoveTrapdoorDungeonSpot(Vector2 position)
+    {
+        Debug.Log("Removing trapdoor dungeon entrance at " + position.ToString());
+        Vector2 bottomLeftCorner = position - new Vector2(1.0f, 0.5f);
+
+        int posX = Mathf.FloorToInt(bottomLeftCorner.x);
+        int posY = Mathf.FloorToInt(bottomLeftCorner.y);
+
+        for (int x = posX; x < posX + 2; x++)
+        {
+            for (int y = posY; y < posY + 2; y++)
+            {
+                tileSprites[x, y, 4] = TileSprite.UNDEFINED;
+            }
+        }
+    }
+
+    //removes gate dungeon entrance
+    private void RemoveGateDungeonSpot(Vector2 position)
+    {
+        Debug.Log("Removing gate dungeon entrance at " + position.ToString());
+        Vector2 bottomLeftCorner = position - new Vector2(2.0f, 0.5f);
+
+        int posX = Mathf.FloorToInt(bottomLeftCorner.x);
+        int posY = Mathf.FloorToInt(bottomLeftCorner.y);
+
+        for (int x = posX; x < posX + 4; x++)
+        {
+            for (int y = posY - 1; y < posY + 3; y++)
+            {
+                tileSprites[x, y, 4] = TileSprite.UNDEFINED;
+            }
+        }
+    }
+
+    //removes cave entrance dungeon entrance
+    private void RemoveCaveEntranceDungeonSpot(Vector2 position)
+    {
+        Debug.Log("Removing cave dungeon entrance at " + position.ToString());
+        Vector2 bottomLeftCorner = position - new Vector2(0.5f, 0.5f);
+
+        int posX = Mathf.FloorToInt(bottomLeftCorner.x);
+        int posY = Mathf.FloorToInt(bottomLeftCorner.y);
+
+        tileSprites[posX, posY, 4] = TileSprite.UNDEFINED;
+        tileSprites[posX, posY + 1, 4] = TileSprite.UNDEFINED;
+    }
+    #endregion
+
     /// <summary>
     ///     This function converts a <c>LayoutDTO</c> object into a <c>Layout</c> instance
     /// </summary>
