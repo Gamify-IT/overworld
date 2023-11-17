@@ -7,7 +7,6 @@ public enum BarrierStyle
     HOUSE,
     TRAPDOOR,
     GATE,
-    CAVE_ENTRANCE,
     TREE,
     IRON_BAR_DOOR
 }

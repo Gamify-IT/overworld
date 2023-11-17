@@ -19,7 +19,7 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private GameObject smallGeneratorPanel;
     [SerializeField] private GameObject areaSettings;
     [SerializeField] private GameObject content;
-    [SerializeField] private GameObject generationFeedbackPanel;
+    [SerializeField] private GameObject feedbackPanel;
 
     //Area Settings
     [SerializeField] private TMP_InputField sizeX;    
@@ -58,11 +58,13 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI amountDungeonsText;
     [SerializeField] private Button generateDungeonsButton;
 
-    [SerializeField] private TextMeshProUGUI generationFeedbackHeader;
-    [SerializeField] private TextMeshProUGUI generationFeedbackText;
-
     [SerializeField] private Button generateAllContentButton;
     [SerializeField] private Button saveAreaButton;
+
+    //Feedback
+    [SerializeField] private TextMeshProUGUI feedbackHeader;
+    [SerializeField] private TextMeshProUGUI feedbackContent;
+    [SerializeField] private Button feedbackCloseButton;
     #endregion
 
     /// <summary>
@@ -84,7 +86,7 @@ public class GeneratorUI : MonoBehaviour
         areaSettings.SetActive(true);
         content.SetActive(false);
         generatorPanel.SetActive(true);
-        generationFeedbackPanel.SetActive(false);
+        feedbackPanel.SetActive(false);
 
         if(areaIdentifier.IsDungeon())
         {
@@ -231,13 +233,32 @@ public class GeneratorUI : MonoBehaviour
 
     public void ResetToCustomButtonPressed()
     {
-        uiManager.ResetToDefault();
+        ResetArea();        
+    }
+
+    private async void ResetArea()
+    {
+        DisplayFeedback("RESETING AREA...", "RESETING THE AREA TO DEFAULT ...", false);
+
         stypeDropdown.value = 0;
         continueButton.interactable = false;
+
+        bool success = await uiManager.ResetToDefault();
+
+        if(success)
+        {
+            DisplayFeedback("AREA RESET", "RESET THE CURRENT AREA TO DEFAULT", true);
+        }
+        else
+        {
+            DisplayFeedback("RESET", "COULD NOT RESET THE CURRENT AREA TO DEFAULT", true);
+        }
     }
 
     public void GenerateLayoutButtonPressed()
     {
+        DisplayFeedback("GENERATION LAYOUT...", "BLUB", false);
+
         Vector2Int size = new Vector2Int(int.Parse(sizeX.text), int.Parse(sizeY.text));
         WorldStyle style = (WorldStyle) stypeDropdown.value;
         LayoutGeneratorType layoutGeneratorType = (LayoutGeneratorType) generatorTypeDropdown.value;
@@ -249,6 +270,8 @@ public class GeneratorUI : MonoBehaviour
         continueButton.interactable = true;
 
         ResetContentPanel();
+
+        DisplayFeedback("LAYOUT GENERATED", "SUCCESSFULLY GENERATED A LAYOUT", true);
     }
 
     /// <summary>
@@ -275,6 +298,7 @@ public class GeneratorUI : MonoBehaviour
         }
 
         GenerateDungeons();
+        CheckSaveWorldButtonStatus();
 
         areaSettings.SetActive(false);
         content.SetActive(true);
@@ -399,30 +423,24 @@ public class GeneratorUI : MonoBehaviour
         int amountDungeons = (int)amountDungeonsSlider.value;
         return uiManager.GenerateDungeons(amountDungeons);
     }
-    #endregion
-
-    #region Generation Feedback
-
-    public void FeedbackCloseButtonPressed()
-    {
-        generationFeedbackPanel.SetActive(false);
-    }
 
     private void DisplayGenerationFeedback(bool success, string feedbackText)
     {
-        if(success)
+        string header;
+        string content;
+
+        if (success)
         {
-            generationFeedbackHeader.text = "GENERATION SUCCESSFUL";
-            generationFeedbackText.text = feedbackText;
+            header = "GENERATION SUCCESSFUL";
+            content = feedbackText;
         }
         else
         {
-            generationFeedbackHeader.text = "GENERATION FAILED";
-            generationFeedbackText.text = "COULD NOT CREATE ALL OBJECTS, \n \n PLEASE TRY AGAIN, \n CHANGE THE AMOUNT OF OBJECTS, \n OR \n CREATE ANOTHER LAYOUT";
+            header = "GENERATION FAILED";
+            content = "COULD NOT CREATE ALL OBJECTS, \n \n PLEASE TRY AGAIN, \n CHANGE THE AMOUNT OF OBJECTS, \n OR \n CREATE ANOTHER LAYOUT";
         }
-        generationFeedbackPanel.SetActive(true);
+        DisplayFeedback(header, content, true);
     }
-
     #endregion
 
     public void ReturnButtonPressed()
@@ -519,7 +537,39 @@ public class GeneratorUI : MonoBehaviour
 
     public void SaveAreaButtonPressed()
     {
-        uiManager.SaveArea();
+        SaveArea();
+    }
+
+    private async void SaveArea()
+    {
+        DisplayFeedback("SAVING...", "SAVING THE CURRENT AREA...", false);
+
+        bool success = await uiManager.SaveArea();
+
+        if(success)
+        {
+            DisplayFeedback("AREA SAVED", "SAVED THE CURRENT AREA", true);
+        }
+        else
+        {
+            DisplayFeedback("AREA NOT SAVED", "COULD NOT SAVE THE CURRENT AREA", true);
+        }        
+    }
+    #endregion
+
+    #region Feedback
+    public void FeedbackCloseButtonPressed()
+    {
+        feedbackPanel.SetActive(false);
+    }
+
+    private void DisplayFeedback(string header, string content, bool closeable)
+    {
+        feedbackHeader.text = header;
+        feedbackContent.text = content;
+        feedbackCloseButton.gameObject.SetActive(closeable);
+
+        feedbackPanel.SetActive(true);
     }
     #endregion
 

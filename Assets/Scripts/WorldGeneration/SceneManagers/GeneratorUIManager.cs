@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 ///     This class sets up and manages the <c>Generator UI</c> and forwards all changes to the <c>AreaManager</c>
@@ -63,9 +64,10 @@ public class GeneratorUIManager : MonoBehaviour
     /// <summary>
     ///     This function calls the <c>AreaManager</c> to reset the area to the default, manually created one
     /// </summary>
-    public void ResetToDefault()
+    public async UniTask<bool> ResetToDefault()
     {
-        areaManager.ResetArea();
+        bool success = await areaManager.ResetArea();
+        return success;
     }
 
     /// <summary>
@@ -150,8 +152,9 @@ public class GeneratorUIManager : MonoBehaviour
     /// <summary>
     ///     This function forwards a save request to the <c>AreaManager</c>
     /// </summary>
-    public void SaveArea()
+    public async UniTask<bool> SaveArea()
     {
-        areaManager.SaveArea();
+        bool success = await areaManager.SaveArea();
+        return success;
     }
 }

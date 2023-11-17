@@ -100,7 +100,15 @@ public class Layout
         {
             for (int y = posY - 1; y < posY + 3; y++)
             {
-                tileSprites[x, y, 4] = TileSprite.GATE;
+                tileSprites[x, y, 3] = TileSprite.GATE;
+            }
+        }
+
+        for (int x = posX + 1; x < posX + 3; x++)
+        {
+            for (int y = posY; y < posY + 2; y++)
+            {
+                tileSprites[x, y, 2] = TileSprite.UNDEFINED;
             }
         }
     }
@@ -114,8 +122,14 @@ public class Layout
         int posX = Mathf.FloorToInt(bottomLeftCorner.x);
         int posY = Mathf.FloorToInt(bottomLeftCorner.y);
 
-        tileSprites[posX, posY, 4] = TileSprite.CAVE_ENTRANCE;
-        tileSprites[posX, posY + 1, 4] = TileSprite.CAVE_ENTRANCE;
+        //add cave entrance tiles
+        tileSprites[posX, posY, 0] = TileSprite.CAVE_FLOOR;
+        tileSprites[posX, posY, 3] = TileSprite.CAVE_ENTRANCE;
+        tileSprites[posX, posY + 1, 3] = TileSprite.CAVE_ENTRANCE;
+
+        //remove wall tiles (for colliders)
+        tileSprites[posX, posY, 2] = TileSprite.UNDEFINED;
+        tileSprites[posX, posY + 1, 2] = TileSprite.UNDEFINED;
     }
 
     //remove given dungeon spots
@@ -193,7 +207,22 @@ public class Layout
         {
             for (int y = posY - 1; y < posY + 3; y++)
             {
-                tileSprites[x, y, 4] = TileSprite.UNDEFINED;
+                tileSprites[x, y, 3] = TileSprite.UNDEFINED;
+            }
+        }
+
+        for (int x = posX + 1; x < posX + 3; x++)
+        {
+            for (int y = posY; y < posY + 2; y++)
+            {
+                if(y == posY)
+                {
+                    tileSprites[x, y, 2] = TileSprite.CAVE_WALL_BOTTOM_MID;
+                }
+                else
+                {
+                    tileSprites[x, y, 2] = TileSprite.CAVE_WALL_TOP_MID;
+                }                
             }
         }
     }
@@ -207,8 +236,13 @@ public class Layout
         int posX = Mathf.FloorToInt(bottomLeftCorner.x);
         int posY = Mathf.FloorToInt(bottomLeftCorner.y);
 
-        tileSprites[posX, posY, 4] = TileSprite.UNDEFINED;
-        tileSprites[posX, posY + 1, 4] = TileSprite.UNDEFINED;
+        //remove cave entrance tiles
+        tileSprites[posX, posY, 3] = TileSprite.UNDEFINED;
+        tileSprites[posX, posY + 1, 3] = TileSprite.UNDEFINED;
+
+        //add wall
+        tileSprites[posX, posY, 2] = TileSprite.CAVE_WALL_BOTTOM_MID;
+        tileSprites[posX, posY + 1, 2] = TileSprite.CAVE_WALL_TOP_MID;
     }
     #endregion
 

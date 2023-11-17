@@ -17,7 +17,6 @@ public class BarrierManager : MonoBehaviour
     [SerializeField] private Sprite house;
     [SerializeField] private Sprite trapdoor;
     [SerializeField] private Sprite gate;
-    [SerializeField] private Sprite caveEntrance;
     [SerializeField] private Sprite tree;
     [SerializeField] private Sprite ironBarDoor;
 
@@ -28,7 +27,6 @@ public class BarrierManager : MonoBehaviour
         spriteMapper.Add(BarrierStyle.HOUSE, house);
         spriteMapper.Add(BarrierStyle.TRAPDOOR, trapdoor);
         spriteMapper.Add(BarrierStyle.GATE, gate);
-        spriteMapper.Add(BarrierStyle.CAVE_ENTRANCE, caveEntrance);
         spriteMapper.Add(BarrierStyle.TREE, tree);
         spriteMapper.Add(BarrierStyle.IRON_BAR_DOOR, ironBarDoor);
     }

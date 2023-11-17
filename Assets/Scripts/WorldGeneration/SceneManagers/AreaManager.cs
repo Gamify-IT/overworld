@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 ///     This class manages the generation and setup of the area
@@ -286,10 +287,11 @@ public class AreaManager : MonoBehaviour
     /// <summary>
     ///     This function resets the area to the default, manually created one
     /// </summary>
-    public void ResetArea()
+    public async UniTask<bool> ResetArea()
     {
         areaData.Reset();
-        SaveArea();
+        bool success = await SaveArea();
+        return success;
     }
 
     /// <summary>
@@ -318,7 +320,7 @@ public class AreaManager : MonoBehaviour
     /// <summary>
     ///     This function saves the current area data to the backend
     /// </summary>
-    public async void SaveArea()
+    public async UniTask<bool> SaveArea()
     {
         AreaDTO areaDTO = AreaDTO.ConvertDataToDto(areaData);
         string json = JsonUtility.ToJson(areaDTO, true);
@@ -335,7 +337,7 @@ public class AreaManager : MonoBehaviour
             path = "Assets/Resources/Areas/World" + areaIdentifier.GetWorldIndex() + ".json";
         }
         WriteToJsonFile(json, path);
-        return;
+        return true;
 #endif
         //send area map data to backend
         path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseID + "/areaMaps/" + areaIdentifier.GetWorldIndex();
@@ -345,17 +347,10 @@ public class AreaManager : MonoBehaviour
         }
 
         bool success = await RestRequest.PutRequest(path, json);
-        if(success)
-        {
-            //show success message
-        }
-        else
-        {
-            //show error message
-        }
+        return success;
     }
 
-    //THIS FUNCTION IS ONLY NEEDED UNTIL BACKEND LOADING AND STORING IS IMPLEMENTED!
+    //writes json to local file at given path
     private void WriteToJsonFile(string json, string path)
     {
         using (FileStream fs = File.Create(path))
