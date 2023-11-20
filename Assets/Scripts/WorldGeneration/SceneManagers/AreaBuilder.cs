@@ -55,4 +55,58 @@ public class AreaBuilder : MonoBehaviour
         sceneTransitionManager.SetupPlaceholder(areaData.GetSceneTransitionSpots());
         barrierManager.SetupPlaceholder(areaData.GetBarrierSpots());
     }
+
+    /// <summary>
+    ///     This function enables or disables the minigame icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the minigame icons should be shown</param>
+    public void DisplayMinigames(bool active)
+    {
+        minigamesManager.gameObject.SetActive(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the npc icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the npc icons should be shown</param>
+    public void DisplayNpcs(bool active)
+    {
+        npcManager.gameObject.SetActive(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the book icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the book icons should be shown</param>
+    public void DisplayBooks(bool active)
+    {
+        bookManager.gameObject.SetActive(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the teleporter icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the teleporter icons should be shown</param>
+    public void DisplayTeleporter(bool active)
+    {
+        teleporterManager.gameObject.SetActive(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the dungeon icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the dungeon icons should be shown</param>
+    public void DisplayDungeons(bool active)
+    {
+        sceneTransitionManager.gameObject.SetActive(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the barrier icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the barrier icons should be shown</param>
+    public void DisplayBarriers(bool active)
+    {
+        barrierManager.gameObject.SetActive(active);
+    }
 }

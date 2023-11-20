@@ -37,26 +37,31 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI maxMinigamesText;
     [SerializeField] private TextMeshProUGUI amountMinigamesText;
     [SerializeField] private Button generateMinigamesButton;
+    [SerializeField] private Toggle minigamesToggle;
 
     [SerializeField] private Slider amountNpcsSlider;
     [SerializeField] private TextMeshProUGUI maxNpcsText;
     [SerializeField] private TextMeshProUGUI amountNpcsText;
     [SerializeField] private Button generateNpcsButton;
+    [SerializeField] private Toggle npcsToggle;
 
     [SerializeField] private Slider amountBooksSlider;
     [SerializeField] private TextMeshProUGUI maxBooksText;
     [SerializeField] private TextMeshProUGUI amountBooksText;
     [SerializeField] private Button generateBooksButton;
+    [SerializeField] private Toggle booksToggle;
 
     [SerializeField] private Slider amountTeleportersSlider;
     [SerializeField] private TextMeshProUGUI maxTeleportersText;
     [SerializeField] private TextMeshProUGUI amountTeleportersText;
     [SerializeField] private Button generateTeleporterButton;
+    [SerializeField] private Toggle teleporterToggle;
 
     [SerializeField] private Slider amountDungeonsSlider;
     [SerializeField] private TextMeshProUGUI maxDungeonsText;
     [SerializeField] private TextMeshProUGUI amountDungeonsText;
     [SerializeField] private Button generateDungeonsButton;
+    [SerializeField] private Toggle dungeonsToggle;
 
     [SerializeField] private Button generateAllContentButton;
     [SerializeField] private Button saveAreaButton;
@@ -66,6 +71,8 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI feedbackContent;
     [SerializeField] private Button feedbackCloseButton;
     #endregion
+
+    #region Setup
 
     /// <summary>
     ///     This function sets up the generator UI with the given values
@@ -82,11 +89,7 @@ public class GeneratorUI : MonoBehaviour
 
         Debug.Log("CurrentArea: " + areaIdentifier.GetWorldIndex() + "-" + areaIdentifier.GetDungeonIndex());
 
-        smallGeneratorPanel.SetActive(false);
-        areaSettings.SetActive(true);
-        content.SetActive(false);
-        generatorPanel.SetActive(true);
-        feedbackPanel.SetActive(false);
+        SetupPanels();
 
         if(areaIdentifier.IsDungeon())
         {
@@ -151,6 +154,18 @@ public class GeneratorUI : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function sets the initiale state of each panel
+    /// </summary>
+    private void SetupPanels()
+    {
+        smallGeneratorPanel.SetActive(false);
+        areaSettings.SetActive(true);
+        content.SetActive(false);
+        generatorPanel.SetActive(true);
+        feedbackPanel.SetActive(false);
+    }
+
+    /// <summary>
     ///     This function sets up the size and offset input fields for a world
     /// </summary>
     private void SetupWorld()
@@ -209,6 +224,8 @@ public class GeneratorUI : MonoBehaviour
         amountDungeonsSlider.maxValue = maxDungeons;
         maxDungeonsText.text = maxDungeons.ToString();
     }
+
+    #endregion
 
     public void MinimizeButtonPressed()
     {
@@ -571,6 +588,35 @@ public class GeneratorUI : MonoBehaviour
 
         feedbackPanel.SetActive(true);
     }
+    #endregion
+
+    #region Content Toggle
+
+    public void ToggleMinigames()
+    {
+        uiManager.DisplayMinigames(minigamesToggle.isOn);
+    }
+
+    public void ToggleNpcs()
+    {
+        uiManager.DisplayNpcs(npcsToggle.isOn);
+    }
+
+    public void ToggleBooks()
+    {
+        uiManager.DisplayBooks(booksToggle.isOn);
+    }
+
+    public void ToggleTeleporter()
+    {
+        uiManager.DisplayTeleporter(teleporterToggle.isOn);
+    }
+
+    public void ToggleDungeons()
+    {
+        uiManager.DisplayDungeons(dungeonsToggle.isOn);
+    }
+
     #endregion
 
     #region ButtonStatusManagement

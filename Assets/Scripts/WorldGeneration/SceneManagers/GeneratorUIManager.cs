@@ -157,4 +157,49 @@ public class GeneratorUIManager : MonoBehaviour
         bool success = await areaManager.SaveArea();
         return success;
     }
+
+    /// <summary>
+    ///     This function enables or disables the minigame icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the minigame icons should be shown</param>
+    public void DisplayMinigames(bool active)
+    {
+        areaManager.DisplayMinigames(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the npc icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the npc icons should be shown</param>
+    public void DisplayNpcs(bool active)
+    {
+        areaManager.DisplayNpcs(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the book icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the book icons should be shown</param>
+    public void DisplayBooks(bool active)
+    {
+        areaManager.DisplayBooks(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the teleporter icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the teleporter icons should be shown</param>
+    public void DisplayTeleporter(bool active)
+    {
+        areaManager.DisplayTeleporter(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the dungeon icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the dungeon icons should be shown</param>
+    public void DisplayDungeons(bool active)
+    {
+        areaManager.DisplayDungeons(active);
+    }
 }
