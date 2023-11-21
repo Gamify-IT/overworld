@@ -538,7 +538,7 @@ public class ObjectPositionGenerator
         {
             for(int y = position.y - 1; y < position.y + 2; y++)
             {
-                if(tileType[x, y] != CellType.FLOOR)
+                if(!IsInRange(x, y) || tileType[x, y] != CellType.FLOOR)
                 {
                     return false;
                 }
@@ -555,7 +555,7 @@ public class ObjectPositionGenerator
         {
             for (int y = position.y - 1; y < position.y + 5; y++)
             {
-                if (tileType[x, y] != CellType.FLOOR)
+                if (!IsInRange(x, y) || tileType[x, y] != CellType.FLOOR)
                 {
                     return false;
                 }

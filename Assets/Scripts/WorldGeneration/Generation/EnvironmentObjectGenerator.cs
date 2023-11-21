@@ -70,6 +70,7 @@ public class EnvironmentObjectGenerator
     #endregion
 
     //Attributes
+    private int borderSize;
     private Vector2Int size;
     private CellType[,] cellTypes;
     private TileSprite[,,] tileSprites;
@@ -84,6 +85,21 @@ public class EnvironmentObjectGenerator
         this.tileSprites = tileSprites;
         this.style = style;
         pseudoRandomNumberGenerator = new System.Random(seed.GetHashCode());
+
+        GetSettings();
+    }
+
+    /// <summary>
+    ///     This function reads to generator settings from the local file and sets up the variables needed
+    /// </summary>
+    private void GetSettings()
+    {
+        string path = "GameSettings/GeneratorSettings";
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        GenerationSettings generationSettings = GenerationSettings.CreateFromJSON(json);
+
+        borderSize = generationSettings.borderSize;
     }
 
     //adds environment objects to the layout
@@ -163,9 +179,9 @@ public class EnvironmentObjectGenerator
     {
         List<Vector2Int> objectPositions = new List<Vector2Int>();
 
-        for (int x = 0; x < size.x; x++)
+        for (int x = borderSize; x < size.x - borderSize; x++)
         {
-            for (int y = 0; y < size.y; y++)
+            for (int y = borderSize; y < size.y - borderSize; y++)
             {
                 if (cellTypes[x, y] == CellType.FLOOR)
                 {

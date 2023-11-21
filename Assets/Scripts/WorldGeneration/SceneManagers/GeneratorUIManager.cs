@@ -82,6 +82,12 @@ public class GeneratorUIManager : MonoBehaviour
         areaManager.GenerateLayout(size, style, layoutGeneratorType, accessability, seed);
     }
 
+    //try to add world connection barriers, if not already set
+    public void AddWorldConnectionBarriers()
+    {
+        areaManager.AddWorldConnectionBarriers();
+    }
+
     /// <summary>
     ///     This function resets all objects in the area
     /// </summary>

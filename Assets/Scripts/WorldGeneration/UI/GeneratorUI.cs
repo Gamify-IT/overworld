@@ -314,11 +314,17 @@ public class GeneratorUI : MonoBehaviour
             maxDungeonsText.text = "1";
         }
 
-        GenerateDungeons();
+        AddWorldConnectionBarriers();
         CheckSaveWorldButtonStatus();
 
         areaSettings.SetActive(false);
         content.SetActive(true);
+    }
+
+    //try to add world connection barriers, if not already set
+    private void AddWorldConnectionBarriers()
+    {
+        uiManager.AddWorldConnectionBarriers();
     }
     #endregion
 

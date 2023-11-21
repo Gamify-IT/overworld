@@ -5,18 +5,21 @@ using System;
 
 public class RoomManager
 {
-    //TODO: move to json
     private int borderSize;
     private int worldConnectionWidth;
     private int corridorSize;
 
     private CellType[,] layout;
     private Vector2Int size;
-    
-    public RoomManager(CellType[,] layout)
+    private string seed;
+    System.Random pseudoRandomNumberGenerator;
+
+    public RoomManager(CellType[,] layout, string seed)
     {
         this.layout = layout;
         size = new Vector2Int(layout.GetLength(0), layout.GetLength(1));
+        this.seed = seed;
+        pseudoRandomNumberGenerator = new System.Random(seed.GetHashCode());
         GetSettings();
     }
 
@@ -338,10 +341,9 @@ public class RoomManager
     /// <returns>A <c>PosibleRoomConnection</c> object containing the information about the closest room</returns>
     private PossibleRoomConnection GetClosestRoom(Room room, List<Room> unconnectedRooms)
     {
-        Room destinationRoom = room;
-        Vector2Int startTile = new Vector2Int();
-        Vector2Int destinationTile = new Vector2Int();
         float minDistance = float.MaxValue;
+
+        List<PossibleRoomConnection> shortestConnections = new List<PossibleRoomConnection>();
 
         foreach (Room otherRoom in unconnectedRooms)
         {
@@ -354,16 +356,21 @@ public class RoomManager
                     if (distance < minDistance)
                     {
                         minDistance = distance;
-                        startTile = borderStartTile;
-                        destinationTile = borderDestinationTile;
-                        destinationRoom = otherRoom;
+                        PossibleRoomConnection shortestConnection = new PossibleRoomConnection(room, otherRoom, borderStartTile, borderDestinationTile, distance);
+                        shortestConnections = new List<PossibleRoomConnection> { shortestConnection };
+
+                    }
+                    else if(distance == minDistance)
+                    {
+                        PossibleRoomConnection shortestConnection = new PossibleRoomConnection(room, otherRoom, borderStartTile, borderDestinationTile, distance);
+                        shortestConnections.Add(shortestConnection);
                     }
                 }
             }
         }
 
-        PossibleRoomConnection roomConnection = new PossibleRoomConnection(room, destinationRoom, startTile, destinationTile, minDistance);
-        return roomConnection;
+        int connectionIndex = pseudoRandomNumberGenerator.Next(0, shortestConnections.Count);
+        return shortestConnections[connectionIndex];
     }
 
     /// <summary>

@@ -23,6 +23,7 @@ public class AreaManager : MonoBehaviour
     private AreaInformationData areaInformation;
     private ObjectPositionGenerator objectPositionGenerator;
     private ObjectGenerator objectGenerator;
+    private List<BarrierSpotData> worldConnectionBarriers;
 
     /// <summary>
     ///     This function sets up the area, if the game is in PLAY mode
@@ -164,6 +165,7 @@ public class AreaManager : MonoBehaviour
         this.areaIdentifier = areaIdentifier;
         areaInformation = GetAreaInformation(areaIdentifier);
         objectGenerator = new ObjectGenerator(areaIdentifier, areaInformation.GetObjectOffset());
+        worldConnectionBarriers = new List<BarrierSpotData>();
         if(areaData.IsGeneratedArea())
         {
             objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetLayout().GetCellTypes(),  
@@ -455,6 +457,22 @@ public class AreaManager : MonoBehaviour
         areaBuilder.SetupPlaceholderObjects(areaMapData);
     }
 
+    //try to add world connection barriers, if not already set
+    public void AddWorldConnectionBarriers()
+    {
+        if(!areaData.IsGeneratedArea())
+        {
+            return;
+        }
+
+        if (areaData.GetAreaMapData().GetBarrierSpots().Count == 0)
+        {
+            worldConnectionBarriers = objectGenerator.GenerateBarrierSpots(objectPositionGenerator.GetWorldBarrierSpots());
+            areaData.GetAreaMapData().SetBarrierSpots(worldConnectionBarriers);
+            areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+        }
+    }
+
     /// <summary>
     ///     This function removes all generated objects
     /// </summary>
@@ -581,7 +599,7 @@ public class AreaManager : MonoBehaviour
 
         //Create barriers for the dungeon spots + add world barriers
         List<BarrierSpotData> dungeonBarrierSpots = objectGenerator.GenerateBarrierSpots(dungeonPositions);
-        List<BarrierSpotData> worldBarrierSpots = objectGenerator.GenerateBarrierSpots(objectPositionGenerator.GetWorldBarrierSpots()); ;
+        List<BarrierSpotData> worldBarrierSpots = worldConnectionBarriers;
         List<BarrierSpotData> barrierSpots = new List<BarrierSpotData>();
         barrierSpots.AddRange(dungeonBarrierSpots);
         barrierSpots.AddRange(worldBarrierSpots);

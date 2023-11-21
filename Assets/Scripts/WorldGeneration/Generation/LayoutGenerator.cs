@@ -76,7 +76,7 @@ public abstract class LayoutGenerator
     protected void EnsureConnectivity()
     {
         //Setup room manager
-        RoomManager roomManager = new RoomManager(layout);
+        RoomManager roomManager = new RoomManager(layout, seed);
 
         //Remove too small areas
         roomManager.RemoveSmallRooms(CellType.WALL, wallRoomThreshold);
