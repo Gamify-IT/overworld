@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] float minCameraSize;
     [SerializeField] float maxCameraSize;
 
-    private bool active = true;
+    private bool active = false;
     private Vector3 dragOrigin;
 
     // Update is called once per frame
