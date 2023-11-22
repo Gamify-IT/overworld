@@ -16,6 +16,7 @@ public class AreaBuilder : MonoBehaviour
     [SerializeField] private SceneTransitionManager sceneTransitionManager;
     [SerializeField] private BarrierManager barrierManager;
     [SerializeField] private MinimapIconManager minimapIconsManager;
+    [SerializeField] private List<GameObject> additionalObjects;
 
     /// <summary>
     ///     This function creates the layout
@@ -108,5 +109,16 @@ public class AreaBuilder : MonoBehaviour
     public void DisplayBarriers(bool active)
     {
         barrierManager.gameObject.SetActive(active);
+    }
+
+    /// <summary>
+    ///     This function removes the additional objects
+    /// </summary>
+    public void RemoveAdditionalObjects()
+    {
+        foreach(GameObject gameObject in additionalObjects)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

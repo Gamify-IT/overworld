@@ -14,7 +14,7 @@ public class OfflineMode : MonoBehaviour
         GameManager.Instance.GetDummyData();
 
         //ersetzen durch get dummy data
-        await DataManager.Instance.FetchAreaData();
+        DataManager.Instance.GetDummyAreaData();
 
 
         LoadingManager.Instance.LoadScene();

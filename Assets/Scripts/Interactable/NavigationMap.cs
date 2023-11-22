@@ -24,10 +24,6 @@ public class NavigationMap : MonoBehaviour
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
             GameEvents.current.onKeybindingChange += UpdateKeybindings;
         }
-        else
-        {
-            Destroy(gameObject);
-        }
     }
 
 

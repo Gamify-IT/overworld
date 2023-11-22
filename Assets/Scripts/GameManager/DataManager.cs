@@ -540,11 +540,19 @@ public class DataManager : MonoBehaviour
     /// <summary>
     ///     This function triggers the loading of the area data
     /// </summary>
-    /// <returns>True, if loading was successful, false otherwise</returns>
+    /// <returns>False, if loading was successful, true otherwise</returns>
     public async UniTask<bool> FetchAreaData()
     {
         bool loadingError = await areaDataManager.FetchData();
         return loadingError;
+    }
+
+    /// <summary>
+    ///     This function gets the local stored area data as dummy data
+    /// </summary>
+    public void GetDummyAreaData()
+    {
+        areaDataManager.GetDummyData();
     }
 
     /// <summary>

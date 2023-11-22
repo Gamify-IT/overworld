@@ -70,6 +70,7 @@ public class AreaManager : MonoBehaviour
             List<SceneTransitionSpotData> dungeonSpots = areaData.GetAreaMapData().GetSceneTransitionSpots();
             areaData.GetAreaMapData().GetLayout().AddDungeonSpots(dungeonSpots, areaInformation.GetObjectOffset());
             areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
+            areaBuilder.RemoveAdditionalObjects();
 
             //Create objects
             areaBuilder.SetupAreaObjects(areaData.GetAreaMapData());
@@ -134,6 +135,7 @@ public class AreaManager : MonoBehaviour
         if (areaData.IsGeneratedArea())
         {
             areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
+            areaBuilder.RemoveAdditionalObjects();
             areaMapData = areaData.GetAreaMapData();
         }
         else
@@ -214,6 +216,7 @@ public class AreaManager : MonoBehaviour
         {
             areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
             areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+            areaBuilder.RemoveAdditionalObjects();
         }
         else
         {
@@ -455,6 +458,7 @@ public class AreaManager : MonoBehaviour
         //Setup area
         areaBuilder.SetupAreaLayout(tileLayout, areaInformation);
         areaBuilder.SetupPlaceholderObjects(areaMapData);
+        areaBuilder.RemoveAdditionalObjects();
     }
 
     //try to add world connection barriers, if not already set

@@ -18,7 +18,6 @@ public class AreaDataManager
     public async UniTask<bool> FetchData()
     {
         Debug.Log("Loading area data");
-        bool loadingError = false;
 
         int amountWorlds = GameSettings.GetMaxWorlds();
 
@@ -27,11 +26,11 @@ public class AreaDataManager
             bool successfulLoading = await FetchWorldData(worldIndex);
             if(!successfulLoading)
             {
-                loadingError = true;
+                return true;
             }
         }
 
-        return loadingError;
+        return false;
     }
 
     /// <summary>
@@ -41,16 +40,13 @@ public class AreaDataManager
     /// <returns>True, if everything went fine, false otherwise </returns>
     private async UniTask<bool> FetchWorldData(int worldIndex)
     {
-        bool successfulLoading = true;
-
         AreaInformation currentArea = new AreaInformation(worldIndex, new Optional<int>());
         worldAreas.Add(worldIndex, new WorldAreas());
 
         AreaData worldData = await FetchData(currentArea);
         if (worldData == null)
         {
-            successfulLoading = false;
-            worldData = LoadLocalData(currentArea);
+            return false;
         }
         worldAreas[worldIndex].AddArea(0, worldData);
 
@@ -69,11 +65,11 @@ public class AreaDataManager
             bool dungeonSuccessful = await FetchDungeonData(worldIndex, dungeonIndex);
             if(!dungeonSuccessful)
             {
-                successfulLoading = false;
+                return false;
             }
         }
 
-        return successfulLoading;
+        return true;
     }
 
     /// <summary>
@@ -84,18 +80,15 @@ public class AreaDataManager
     /// <returns>True, if everything went fine, false otherwise </returns>
     private async UniTask<bool> FetchDungeonData(int worldIndex, int dungeonIndex)
     {
-        bool successfulLoading = true;
-
         AreaInformation currentArea = new AreaInformation(worldIndex, new Optional<int>(dungeonIndex));
         AreaData dungeonData = await FetchData(currentArea);
         if (dungeonData == null)
         {
-            successfulLoading = false;
-            dungeonData = LoadLocalData(currentArea);
+            return false;
         }
         worldAreas[worldIndex].AddArea(dungeonIndex, dungeonData);
 
-        return successfulLoading;
+        return true;
     }
 
     /// <summary>
@@ -122,6 +115,47 @@ public class AreaDataManager
         }
 
         return null;
+    }
+
+    /// <summary>
+    ///     This function gets the local stored area data as dummy data
+    /// </summary>
+    public void GetDummyData()
+    {
+        worldAreas = new Dictionary<int, WorldAreas>();
+
+        int amountWorlds = GameSettings.GetMaxWorlds();
+
+        for (int worldIndex = 1; worldIndex <= amountWorlds; worldIndex++)
+        {
+            Debug.Log("Loading local world: " + worldIndex);
+            AreaInformation currentArea = new AreaInformation(worldIndex, new Optional<int>());
+            worldAreas.Add(worldIndex, new WorldAreas());
+
+            //get world data
+            AreaData worldData = LoadLocalData(currentArea);
+            worldAreas[worldIndex].AddArea(0, worldData);
+
+            //get amount of dungeons
+            int amountDungeons;
+            if (worldData.IsGeneratedArea())
+            {
+                amountDungeons = worldData.GetAreaMapData().GetSceneTransitionSpots().Count;
+            }
+            else
+            {
+                amountDungeons = 4;
+            }
+
+            //get dungeon data
+            for (int dungeonIndex = 1; dungeonIndex <= amountDungeons; dungeonIndex++)
+            {
+                Debug.Log("Loading local dungeon: " + worldIndex + "-" + dungeonIndex);
+                currentArea = new AreaInformation(worldIndex, new Optional<int>(dungeonIndex));
+                AreaData dungeonData = LoadLocalData(currentArea);
+                worldAreas[worldIndex].AddArea(dungeonIndex, dungeonData);
+            }
+        }
     }
 
     /// <summary>
