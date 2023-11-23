@@ -11,6 +11,9 @@ public class EnvironmentObjectGenerator
     private static readonly int maxIterationsPerObject = 10;
     private static readonly int minDistance = 10;
 
+    private static readonly float spawnChance = 0.5f;
+    private static readonly int spawnDistance = 3;
+
     private static readonly float bigStoneExpandChance = 0.7f;
 
     private static readonly float bushExpandChance = 0.8f;
@@ -133,7 +136,7 @@ public class EnvironmentObjectGenerator
         //get all possible positions
         List<Vector2Int> possiblePositions = GetPossiblePositions();
 
-        //sample at max 1% of the positions
+        //sample maxObjectPercentage of the positions
         int floorPositions = possiblePositions.Count;
         int maxObjects = Mathf.RoundToInt(maxObjectPercentage * floorPositions);
 
@@ -243,6 +246,39 @@ public class EnvironmentObjectGenerator
         return Mathf.Sqrt(deltaX * deltaX + deltaY * deltaY);
     }
 
+    //get free positions near positions in the list
+    private List<Vector2Int> GetPossiblePositionsNearby(List<Vector2Int> positions)
+    {
+        HashSet<Vector2Int> possiblePositions = new HashSet<Vector2Int>();
+
+        foreach(Vector2Int position in positions)
+        {
+            possiblePositions.UnionWith(CheckForNearbyPositions(position));
+        }
+
+        return possiblePositions.ToList();
+    }
+
+    //check area around for free positions
+    private HashSet<Vector2Int> CheckForNearbyPositions(Vector2Int position)
+    {
+        HashSet<Vector2Int> positions = new HashSet<Vector2Int>();
+
+        for(int x = position.x - spawnDistance; x <= position.x + spawnDistance; x++)
+        {
+            for (int y = position.y - spawnDistance; y <= position.y + spawnDistance; y++)
+            {
+                Vector2Int potentialPosition = new Vector2Int(x, y);
+                if (SurroundedByFloor(potentialPosition))
+                {
+                    positions.Add(potentialPosition);
+                }
+            }
+        }
+
+        return positions;
+    }
+
     #endregion
 
     //get all allowed objects
@@ -336,6 +372,8 @@ public class EnvironmentObjectGenerator
     //places small stone object
     private void PlaceSmallStone(Vector2Int position)
     {
+        List<Vector2Int> tiles = new List<Vector2Int>();
+
         //if expandable to 2x2: 50 - 50 chance, else 1x1
         Optional<Vector2Int> canExpand = FloorArea(position, 2, 2);
         if(canExpand.IsPresent())
@@ -344,11 +382,17 @@ public class EnvironmentObjectGenerator
             if (objectSize == 1)
             {
                 //place 2x2 stone
+                tiles.Add(canExpand.Value());
+                tiles.Add(canExpand.Value() + Vector2Int.right);
+                tiles.Add(canExpand.Value() + Vector2Int.up);
+                tiles.Add(canExpand.Value() + new Vector2Int(1, 1));
+
                 PlaceSpriteAtArea(canExpand.Value(), 2, 2, TileSprite.STONE_SMALL);
             }
             else
             {
                 //place 1x1 stone
+                tiles.Add(position);
                 cellTypes[position.x, position.y] = CellType.OBJECT;
                 tileSprites[position.x, position.y, 4] = TileSprite.STONE_SMALL;
             }
@@ -356,8 +400,25 @@ public class EnvironmentObjectGenerator
         else
         {
             //place 1x1 stone
+            tiles.Add(position);
             cellTypes[position.x, position.y] = CellType.OBJECT;
             tileSprites[position.x, position.y, 4] = TileSprite.STONE_SMALL;
+        }
+
+        //try to create other small stone nearby
+        int spawn = pseudoRandomNumberGenerator.Next(0, 100);
+        if(spawn < spawnChance * 100)
+        {
+            List<Vector2Int> possiblePositions = GetPossiblePositionsNearby(tiles);
+            if(possiblePositions.Count > 0)
+            {
+                int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
+                Vector2Int spawnPosition = possiblePositions[spawnIndex];
+
+                Debug.Log("Small Stone from " + position.ToString() + " spawn new small stone at " + spawnPosition.ToString());
+
+                PlaceSmallStone(spawnPosition);
+            }            
         }
     }
 
@@ -371,7 +432,7 @@ public class EnvironmentObjectGenerator
             return;
         }
 
-        List<Vector2Int> currentTiles = GetStartPosition(startPosition.Value(), 2, 2);
+        List<Vector2Int> tiles = GetStartPosition(startPosition.Value(), 2, 2);
 
         bool placedSomething = true;
 
@@ -380,7 +441,7 @@ public class EnvironmentObjectGenerator
             placedSomething = false;
 
             //get all extention points
-            List<Vector2Int> expandPoints = GetBigExpandOptions(currentTiles);
+            List<Vector2Int> expandPoints = GetBigExpandOptions(tiles);
 
             if (expandPoints.Count > 0)
             {
@@ -396,26 +457,26 @@ public class EnvironmentObjectGenerator
 
                     if(expandPoints.Contains(expandPosition + Vector2Int.left))
                     {
-                        currentTiles.Add(expandPosition);
-                        currentTiles.Add(expandPosition + Vector2Int.left);
+                        tiles.Add(expandPosition);
+                        tiles.Add(expandPosition + Vector2Int.left);
                         placedSomething = true;
                     }
                     else if (expandPoints.Contains(expandPosition + Vector2Int.up))
                     {
-                        currentTiles.Add(expandPosition);
-                        currentTiles.Add(expandPosition + Vector2Int.up);
+                        tiles.Add(expandPosition);
+                        tiles.Add(expandPosition + Vector2Int.up);
                         placedSomething = true;
                     }
                     else if (expandPoints.Contains(expandPosition + Vector2Int.right))
                     {
-                        currentTiles.Add(expandPosition);
-                        currentTiles.Add(expandPosition + Vector2Int.right);
+                        tiles.Add(expandPosition);
+                        tiles.Add(expandPosition + Vector2Int.right);
                         placedSomething = true;
                     }
                     else if (expandPoints.Contains(expandPosition + Vector2Int.down))
                     {
-                        currentTiles.Add(expandPosition);
-                        currentTiles.Add(expandPosition + Vector2Int.down);
+                        tiles.Add(expandPosition);
+                        tiles.Add(expandPosition + Vector2Int.down);
                         placedSomething = true;
                     }
                 }
@@ -423,17 +484,33 @@ public class EnvironmentObjectGenerator
         }
 
         //place sprites and mark as object
-        foreach (Vector2Int tile in currentTiles)
+        foreach (Vector2Int tile in tiles)
         {
             tileSprites[tile.x, tile.y, 4] = TileSprite.STONE_BIG;
             cellTypes[tile.x, tile.y] = CellType.OBJECT;
+        }
+
+        //try to create small stone nearby
+        int spawn = pseudoRandomNumberGenerator.Next(0, 100);
+        if (spawn < spawnChance * 100)
+        {
+            List<Vector2Int> possiblePositions = GetPossiblePositionsNearby(tiles);
+            if (possiblePositions.Count > 0)
+            {
+                int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
+                Vector2Int spawnPosition = possiblePositions[spawnIndex];
+
+                Debug.Log("Big Stone from " + position.ToString() + " spawn new small stone at " + spawnPosition.ToString());
+
+                PlaceSmallStone(spawnPosition);
+            }
         }
     }
 
     //places bush object
     private void PlaceBush(Vector2Int position, TileSprite sprite)
     {
-        List<Vector2Int> currentTiles = new List<Vector2Int> { position };
+        List<Vector2Int> tiles = new List<Vector2Int> { position };
 
         bool placedSomething = true;
 
@@ -442,7 +519,7 @@ public class EnvironmentObjectGenerator
             placedSomething = false;
 
             //get all extention points
-            List<Vector2Int> expandPoints = GetExpandOptions(currentTiles);
+            List<Vector2Int> expandPoints = GetExpandOptions(tiles);
 
             if(expandPoints.Count > 0)
             {
@@ -453,17 +530,33 @@ public class EnvironmentObjectGenerator
                     //choose where to expand
                     int expandIndex = pseudoRandomNumberGenerator.Next(0, expandPoints.Count);
                     Vector2Int expandPosition = expandPoints[expandIndex];
-                    currentTiles.Add(expandPosition);
+                    tiles.Add(expandPosition);
                     placedSomething = true;
                 }
             }            
         }
 
         //place sprites and mark as object
-        foreach (Vector2Int tile in currentTiles)
+        foreach (Vector2Int tile in tiles)
         {
             tileSprites[tile.x, tile.y, 4] = sprite;
             cellTypes[tile.x, tile.y] = CellType.OBJECT;
+        }
+
+        //try to create other bush nearby
+        int spawn = pseudoRandomNumberGenerator.Next(0, 100);
+        if (spawn < spawnChance * 100)
+        {
+            List<Vector2Int> possiblePositions = GetPossiblePositionsNearby(tiles);
+            if (possiblePositions.Count > 0)
+            {
+                int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
+                Vector2Int spawnPosition = possiblePositions[spawnIndex];
+
+                Debug.Log("Bush from " + position.ToString() + " spawn new bush at " + spawnPosition.ToString());
+
+                PlaceBush(spawnPosition, sprite);
+            }
         }
     }
 
@@ -549,7 +642,7 @@ public class EnvironmentObjectGenerator
     //place fence object
     private void PlaceFence(Vector2Int position)
     {
-        List<Vector2Int> currentTiles = new List<Vector2Int> { position };
+        List<Vector2Int> tiles = new List<Vector2Int> { position };
 
         bool placedSomething = true;
 
@@ -558,7 +651,7 @@ public class EnvironmentObjectGenerator
             placedSomething = false;
 
             //get all extention points
-            List<Vector2Int> expandPoints = GetExpandOptions(currentTiles);
+            List<Vector2Int> expandPoints = GetExpandOptions(tiles);
 
             if (expandPoints.Count > 0)
             {
@@ -569,21 +662,37 @@ public class EnvironmentObjectGenerator
                     //choose where to expand
                     int expandIndex = pseudoRandomNumberGenerator.Next(0, expandPoints.Count);
                     Vector2Int expandPosition = expandPoints[expandIndex];
-                    currentTiles.Add(expandPosition);
+                    tiles.Add(expandPosition);
                     placedSomething = true;
                 }
             }
         }
 
         //place sprites and mark as object
-        if(currentTiles.Count > 1)
+        if(tiles.Count > 1)
         {
-            foreach (Vector2Int tile in currentTiles)
+            foreach (Vector2Int tile in tiles)
             {
                 tileSprites[tile.x, tile.y, 4] = TileSprite.FENCE;
                 cellTypes[tile.x, tile.y] = CellType.OBJECT;
             }
-        }        
+        }
+
+        //try to create other fence nearby
+        int spawn = pseudoRandomNumberGenerator.Next(0, 100);
+        if (spawn < spawnChance * 100)
+        {
+            List<Vector2Int> possiblePositions = GetPossiblePositionsNearby(tiles);
+            if (possiblePositions.Count > 0)
+            {
+                int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
+                Vector2Int spawnPosition = possiblePositions[spawnIndex];
+
+                Debug.Log("Fence from " + position.ToString() + " spawn new fence at " + spawnPosition.ToString());
+
+                PlaceFence(spawnPosition);
+            }
+        }
     }
 
     //place small house object
@@ -609,22 +718,45 @@ public class EnvironmentObjectGenerator
     //place barrel object
     private void PlaceBarrel(Vector2Int position)
     {
+        List<Vector2Int> tiles = new List<Vector2Int>();
+
         if(SurroundedByFloor(position + Vector2Int.up))
         {
             //expand upwards
             PlaceSpriteAtArea(position, 1, 2, TileSprite.BARREL);
+            tiles.Add(position);
+            tiles.Add(position + Vector2Int.up);
         }
         else if(SurroundedByFloor(position + Vector2Int.down))
         {
             //expand downwards
             PlaceSpriteAtArea(position + Vector2Int.down, 1, 2, TileSprite.BARREL);
+
+            tiles.Add(position);
+            tiles.Add(position + Vector2Int.down);
+        }
+
+        //try to create other barrel nearby
+        int spawn = pseudoRandomNumberGenerator.Next(0, 100);
+        if (spawn < spawnChance * 100)
+        {
+            List<Vector2Int> possiblePositions = GetPossiblePositionsNearby(tiles);
+            if (possiblePositions.Count > 0)
+            {
+                int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
+                Vector2Int spawnPosition = possiblePositions[spawnIndex];
+
+                Debug.Log("Barrel from " + position.ToString() + " spawn new barrel at " + spawnPosition.ToString());
+
+                PlaceBarrel(spawnPosition);
+            }
         }
     }
 
     //place log object
     private void PlaceLog(Vector2Int position)
     {
-        List<Vector2Int> currentTiles = new List<Vector2Int> { position };
+        List<Vector2Int> tiles = new List<Vector2Int> { position };
 
         bool placedSomething = true;
 
@@ -633,30 +765,46 @@ public class EnvironmentObjectGenerator
             placedSomething = false;
 
             //get all extention points
-            List<Vector2Int> expandPoints = GetHorizontalExpandOptions(currentTiles);
+            List<Vector2Int> expandPoints = GetHorizontalExpandOptions(tiles);
 
             if(expandPoints.Count > 0)
             {
                 //expand by log expand chance
                 int expand = pseudoRandomNumberGenerator.Next(0, 100);
-                if (currentTiles.Count < maxLogSize && expand < logExpandChance * 100)
+                if (tiles.Count < maxLogSize && expand < logExpandChance * 100)
                 {
                     //choose where to expand
                     int expandIndex = pseudoRandomNumberGenerator.Next(0, expandPoints.Count);
                     Vector2Int expandPosition = expandPoints[expandIndex];
-                    currentTiles.Add(expandPosition);
+                    tiles.Add(expandPosition);
                     placedSomething = true;
                 }
             }                 
         }
 
         //place sprites and mark as object
-        if(currentTiles.Count > 1)
+        if(tiles.Count > 1)
         {
-            foreach(Vector2Int tile in currentTiles)
+            foreach(Vector2Int tile in tiles)
             {
                 tileSprites[tile.x, tile.y, 4] = TileSprite.LOG;
                 cellTypes[tile.x, tile.y] = CellType.OBJECT;
+            }
+        }
+
+        //try to create other log nearby
+        int spawn = pseudoRandomNumberGenerator.Next(0, 100);
+        if (spawn < spawnChance * 100)
+        {
+            List<Vector2Int> possiblePositions = GetPossiblePositionsNearby(tiles);
+            if (possiblePositions.Count > 0)
+            {
+                int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
+                Vector2Int spawnPosition = possiblePositions[spawnIndex];
+
+                Debug.Log("Log from " + position.ToString() + " spawn new log at " + spawnPosition.ToString());
+
+                PlaceLog(spawnPosition);
             }
         }
     }
@@ -664,10 +812,32 @@ public class EnvironmentObjectGenerator
     //place grave object
     private void PlaceGrave(Vector2Int position)
     {
+        List<Vector2Int> tiles = new List<Vector2Int>();
+
         Optional<Vector2Int> spot = FloorArea(position, 2, 2);
         if (spot.IsPresent())
         {
+            tiles.Add(spot.Value());
+            tiles.Add(spot.Value() + Vector2Int.right);
+            tiles.Add(spot.Value() + Vector2Int.up);
+            tiles.Add(spot.Value() + new Vector2Int(1, 1));
             PlaceSpriteAtArea(spot.Value(), 2, 2, TileSprite.GRAVE);
+        }
+
+        //try to create other grave nearby
+        int spawn = pseudoRandomNumberGenerator.Next(0, 100);
+        if (spawn < spawnChance * 100)
+        {
+            List<Vector2Int> possiblePositions = GetPossiblePositionsNearby(tiles);
+            if (possiblePositions.Count > 0)
+            {
+                int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
+                Vector2Int spawnPosition = possiblePositions[spawnIndex];
+
+                Debug.Log("Grave from " + position.ToString() + " spawn new grave at " + spawnPosition.ToString());
+
+                PlaceGrave(spawnPosition);
+            }
         }
     }
 

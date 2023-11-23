@@ -50,12 +50,12 @@ MonoBehaviour:
   iconSpriteRenderer: {fileID: 499526876257192271}
   tensSpriteRenderer: {fileID: 5244716583658141839}
   onesSpriteRenderer: {fileID: 680285206146653472}
-  minigameSprite: {fileID: -1133208779, guid: 816c3e1783cd4184c97879a6305f0c25, type: 3}
-  npcSprite: {fileID: -1558026428, guid: 816c3e1783cd4184c97879a6305f0c25, type: 3}
-  bookSprite: {fileID: -709031591, guid: 816c3e1783cd4184c97879a6305f0c25, type: 3}
-  teleporterSprite: {fileID: 77235769, guid: 816c3e1783cd4184c97879a6305f0c25, type: 3}
-  sceneTransitionSprite: {fileID: 1750837494, guid: 816c3e1783cd4184c97879a6305f0c25, type: 3}
-  barrierSprite: {fileID: -1499184187, guid: 816c3e1783cd4184c97879a6305f0c25, type: 3}
+  minigameSprite: {fileID: -508562252, guid: e11173052c8207846854701b8a9aae40, type: 3}
+  npcSprite: {fileID: 1493723929, guid: e11173052c8207846854701b8a9aae40, type: 3}
+  bookSprite: {fileID: -377038410, guid: e11173052c8207846854701b8a9aae40, type: 3}
+  teleporterSprite: {fileID: -1097088555, guid: e11173052c8207846854701b8a9aae40, type: 3}
+  sceneTransitionSprite: {fileID: 1529868982, guid: e11173052c8207846854701b8a9aae40, type: 3}
+  barrierSprite: {fileID: 1641237275, guid: e11173052c8207846854701b8a9aae40, type: 3}
   digits:
   - {fileID: 853485237, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}
   - {fileID: 66343316, guid: 926e9b44ee2d8b34dbe5d7557f66048b, type: 3}

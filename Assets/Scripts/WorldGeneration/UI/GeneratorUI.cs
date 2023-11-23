@@ -657,6 +657,7 @@ public class GeneratorUI : MonoBehaviour
     public void GenerateDungeonsButtonPressed()
     {
         bool success = GenerateDungeons();
+        CheckSaveWorldButtonStatus();
 
         string feedback;
         if ((int)amountDungeonsSlider.value > 0)

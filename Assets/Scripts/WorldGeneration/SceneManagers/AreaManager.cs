@@ -300,26 +300,30 @@ public class AreaManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function checks, whether the current area can be saved (at least one minigame spot needed)
+    ///     This function checks, whether the current area can be saved (at least one minigame spot needed, for dungeons exactly one dungeon spot)
     /// </summary>
     /// <returns>True, if the area can be saved, false otherwise</returns>
     public bool IsAreaSaveable()
     {
-        if(areaData.IsGeneratedArea())
+        if(!areaData.IsGeneratedArea())
         {
-            if(areaData.GetAreaMapData().GetMinigameSpots().Count > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
+            //no generated area
             return false;
         }
+
+        if (areaIdentifier.IsDungeon() && areaData.GetAreaMapData().GetSceneTransitionSpots().Count == 0)
+        {
+            //dungeon withouth exit cannot be saved
+            return false;
+        }
+
+        if (areaData.GetAreaMapData().GetMinigameSpots().Count == 0)
+        {
+            //area without minigames cannot be saved
+            return false;
+        }
+
+        return true;
     }
 
     /// <summary>
