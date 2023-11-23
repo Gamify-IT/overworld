@@ -136,6 +136,7 @@ public class AreaGeneratorManager : MonoBehaviour
     }
     #endregion
 
+    //load selected area
     private async void LoadAreaScene()
     {
         if(currentArea.IsDungeon())
@@ -165,11 +166,47 @@ public class AreaGeneratorManager : MonoBehaviour
         Gamemode gamemode = GameSettings.GetGamemode();
         if (gamemode == Gamemode.GENERATOR)
         {
-            areaManager.SetupGenerator(courseID, areaData, currentArea, cameraController);
+            areaManager.SetupGenerator(courseID, this, areaData, currentArea, cameraController, true);
         }
         else if(gamemode == Gamemode.INSPECT)
         {
             areaManager.SetupInspector(courseID, areaData, currentArea, cameraController);
+        }
+    }
+
+    //reload current area
+    public async void ReloadArea(AreaData areaData)
+    {
+        if (currentArea.IsDungeon())
+        {
+            await SceneManager.UnloadSceneAsync("Dungeon");
+            await SceneManager.LoadSceneAsync("Dungeon", LoadSceneMode.Additive);
+        }
+        else
+        {
+            string sceneName = "World " + currentArea.GetWorldIndex();
+            await SceneManager.UnloadSceneAsync(sceneName);
+            await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        }
+
+        GameObject areaManagerObject = GameObject.FindGameObjectWithTag("AreaManager");
+        if (areaManagerObject == null)
+        {
+            Debug.LogError("Area Manager Object not found");
+            return;
+        }
+
+        AreaManager areaManager = areaManagerObject.GetComponent<AreaManager>();
+        if (areaManager == null)
+        {
+            Debug.LogError("Area Manager Script not found");
+            return;
+        }
+
+        Gamemode gamemode = GameSettings.GetGamemode();
+        if (gamemode == Gamemode.GENERATOR)
+        {
+            areaManager.SetupGenerator(courseID, this, areaData, currentArea, cameraController, false);
         }
     }
 }

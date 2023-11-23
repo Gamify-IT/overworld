@@ -337,6 +337,12 @@ public class Layout
         converter.Convert();
         TileSprite[,,] tileLayout = converter.GetTileSprites();
 
+        //create world objects
+        EnvironmentObjectGenerator environmentObjectGenerator = new EnvironmentObjectGenerator(polishedLayout, tileLayout, style, seed);
+        environmentObjectGenerator.AddObjects();
+        polishedLayout = environmentObjectGenerator.GetCellTypes();
+        tileLayout = environmentObjectGenerator.GetTileSprites();
+
         Layout data = new Layout(area, tileLayout, polishedLayout, generatorType, seed, accessability, style);
         return data;
     }

@@ -171,11 +171,13 @@ public class LayoutPolisher
                         {
                             //try to extent left or right
                             TryToExtentHorizontally(x, y);
+                            changedSomething = true;
                         }
                         else if (SingleVerticalTile(x, y))
                         {
                             //try to extent above or below
                             TryToExtentVertically(x, y);
+                            changedSomething = true;
                         }
                     }
                 }

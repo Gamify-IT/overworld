@@ -18,6 +18,7 @@ public class AreaManager : MonoBehaviour
     [SerializeField] private InspectorUIManager inspectorUI;
 
     private string courseID;
+    private AreaGeneratorManager areaGeneratorManager;
     private AreaData areaData;
     private AreaInformation areaIdentifier;
     private AreaInformationData areaInformation;
@@ -152,10 +153,11 @@ public class AreaManager : MonoBehaviour
     /// <param name="areaData">The data of the area</param>
     /// <param name="areaIdentifier">The area identifier</param>
     /// <param name="cameraController">The camera</param>
-    public void SetupGenerator(string courseID, AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController)
+    public void SetupGenerator(string courseID, AreaGeneratorManager areaGeneratorManager, AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController, bool setupUI)
     {
         //store infos
         this.courseID = courseID;
+        this.areaGeneratorManager = areaGeneratorManager;
         worldIndex = areaData.GetArea().GetWorldIndex();
         dungeonIndex = 0;
         if(areaData.GetArea().IsDungeon())
@@ -179,7 +181,10 @@ public class AreaManager : MonoBehaviour
         SetupArea();
 
         //setup ui
-        generatorUI.SetupUI(areaData, areaInformation, cameraController);
+        if(setupUI)
+        {
+            generatorUI.SetupUI(areaData, areaInformation, cameraController);
+        }        
     }
 
     #region Setup Functions
@@ -294,8 +299,20 @@ public class AreaManager : MonoBehaviour
     /// </summary>
     public async UniTask<bool> ResetArea()
     {
-        areaData.Reset();
+        AreaData backup = areaData;
+        areaData = new AreaData(areaIdentifier, new Optional<CustomAreaMapData>());
         bool success = await SaveArea();
+
+        if(success)
+        {
+            //reload scene
+            areaGeneratorManager.ReloadArea(areaData);
+        }
+        else
+        {
+            areaData = backup;
+        }
+
         return success;
     }
 

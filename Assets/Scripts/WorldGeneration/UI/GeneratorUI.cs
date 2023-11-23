@@ -253,13 +253,12 @@ public class GeneratorUI : MonoBehaviour
     {
         infoUI.DisplayInfo("RESETING AREA...", "RESETING THE AREA TO DEFAULT ...", false);
 
-        stypeDropdown.value = 0;
-        continueButton.interactable = false;
-
         bool success = await uiManager.ResetToDefault();
 
         if(success)
         {
+            stypeDropdown.value = 0;
+            continueButton.interactable = false;
             infoUI.DisplayInfo("AREA RESET", "RESET THE CURRENT AREA TO DEFAULT", true);
         }
         else
