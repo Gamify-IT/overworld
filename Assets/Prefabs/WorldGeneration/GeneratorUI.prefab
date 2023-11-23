@@ -175,9 +175,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8029990853094629851}
-        m_TargetAssemblyTypeName: GeneratorUI, Assembly-CSharp
-        m_MethodName: MinigamesInfoButtonPressed
+      - m_Target: {fileID: 556957820042915776}
+        m_TargetAssemblyTypeName: InterfaceInfo, Assembly-CSharp
+        m_MethodName: MinigamesGenerationInfoButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1793,9 +1793,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8029990853094629851}
-        m_TargetAssemblyTypeName: GeneratorUI, Assembly-CSharp
-        m_MethodName: FeedbackCloseButtonPressed
+      - m_Target: {fileID: 556957820042915776}
+        m_TargetAssemblyTypeName: InterfaceInfo, Assembly-CSharp
+        m_MethodName: InfoCloseButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2442,9 +2442,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8029990853094629851}
-        m_TargetAssemblyTypeName: GeneratorUI, Assembly-CSharp
-        m_MethodName: DungeonsInfoButtonPressed
+      - m_Target: {fileID: 556957820042915776}
+        m_TargetAssemblyTypeName: InterfaceInfo, Assembly-CSharp
+        m_MethodName: DungeonsGenerationInfoButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2622,7 +2622,7 @@ GameObject:
   - component: {fileID: 4321931889148001739}
   - component: {fileID: 5649183725257462954}
   m_Layer: 0
-  m_Name: Feedback Header
+  m_Name: Info Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2867,9 +2867,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8029990853094629851}
-        m_TargetAssemblyTypeName: GeneratorUI, Assembly-CSharp
-        m_MethodName: NpcsInfoButtonPressed
+      - m_Target: {fileID: 556957820042915776}
+        m_TargetAssemblyTypeName: InterfaceInfo, Assembly-CSharp
+        m_MethodName: NpcsGenerationInfoButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3716,7 +3716,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5570,7 +5570,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6187,8 +6187,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8029990853094629851}
-        m_TargetAssemblyTypeName: GeneratorUI, Assembly-CSharp
+      - m_Target: {fileID: 556957820042915776}
+        m_TargetAssemblyTypeName: InterfaceInfo, Assembly-CSharp
         m_MethodName: StyleInfoButtonPressed
         m_Mode: 1
         m_Arguments:
@@ -6233,7 +6233,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6873,8 +6873,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8029990853094629851}
-        m_TargetAssemblyTypeName: GeneratorUI, Assembly-CSharp
+      - m_Target: {fileID: 556957820042915776}
+        m_TargetAssemblyTypeName: InterfaceInfo, Assembly-CSharp
         m_MethodName: TypeInfoButtonPressed
         m_Mode: 1
         m_Arguments:
@@ -7693,9 +7693,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8029990853094629851}
-        m_TargetAssemblyTypeName: GeneratorUI, Assembly-CSharp
-        m_MethodName: TeleporterInfoButtonPressed
+      - m_Target: {fileID: 556957820042915776}
+        m_TargetAssemblyTypeName: InterfaceInfo, Assembly-CSharp
+        m_MethodName: TeleporterGenerationInfoButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7903,8 +7903,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8029990853094629851}
-        m_TargetAssemblyTypeName: GeneratorUI, Assembly-CSharp
+      - m_Target: {fileID: 556957820042915776}
+        m_TargetAssemblyTypeName: InterfaceInfo, Assembly-CSharp
         m_MethodName: AccessableInfoButtonPressed
         m_Mode: 1
         m_Arguments:
@@ -8236,7 +8236,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -8476,9 +8476,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8029990853094629851}
-        m_TargetAssemblyTypeName: GeneratorUI, Assembly-CSharp
-        m_MethodName: HelpButtonPressed
+      - m_Target: {fileID: 556957820042915776}
+        m_TargetAssemblyTypeName: InterfaceInfo, Assembly-CSharp
+        m_MethodName: GeneratorHelpButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10279,8 +10279,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8029990853094629851}
-        m_TargetAssemblyTypeName: GeneratorUI, Assembly-CSharp
+      - m_Target: {fileID: 556957820042915776}
+        m_TargetAssemblyTypeName: InterfaceInfo, Assembly-CSharp
         m_MethodName: SizeInfoButtonPressed
         m_Mode: 1
         m_Arguments:
@@ -10857,8 +10857,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8029990853094629851}
-        m_TargetAssemblyTypeName: GeneratorUI, Assembly-CSharp
+      - m_Target: {fileID: 556957820042915776}
+        m_TargetAssemblyTypeName: InterfaceInfo, Assembly-CSharp
         m_MethodName: SeedInfoButtonPressed
         m_Mode: 1
         m_Arguments:
@@ -11017,7 +11017,7 @@ GameObject:
   - component: {fileID: 7912829325039035830}
   - component: {fileID: 5775749905122427270}
   m_Layer: 0
-  m_Name: Feedback Details Scrollview
+  m_Name: Info Details Scrollview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11451,9 +11451,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8029990853094629851}
-        m_TargetAssemblyTypeName: GeneratorUI, Assembly-CSharp
-        m_MethodName: BooksInfoButtonPressed
+      - m_Target: {fileID: 556957820042915776}
+        m_TargetAssemblyTypeName: InterfaceInfo, Assembly-CSharp
+        m_MethodName: BooksGenerationInfoButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11574,7 +11574,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -11650,7 +11650,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -12860,7 +12860,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -14254,7 +14254,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -15251,6 +15251,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8209161385048594255}
   - component: {fileID: 8029990853094629851}
+  - component: {fileID: 556957820042915776}
   m_Layer: 0
   m_Name: GeneratorUI
   m_TagString: Untagged
@@ -15286,11 +15287,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f6931d1b1559594dbffea12cfd52d50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  infoUI: {fileID: 556957820042915776}
   generatorPanel: {fileID: 8209161386245796573}
   smallGeneratorPanel: {fileID: 8209161384708857262}
   areaSettings: {fileID: 8209161385992091884}
   content: {fileID: 8209161386167864149}
-  feedbackPanel: {fileID: 8505690546830715872}
   sizeX: {fileID: 8209161386128204596}
   sizeY: {fileID: 8209161384502579017}
   stypeDropdown: {fileID: 8209161384491205266}
@@ -15326,10 +15327,23 @@ MonoBehaviour:
   dungeonsToggle: {fileID: 4663192982590117921}
   generateAllContentButton: {fileID: 3576160372127395064}
   saveAreaButton: {fileID: 8209161384904866043}
-  feedbackHeader: {fileID: 5649183725257462954}
-  feedbackScrollRect: {fileID: 5775749905122427270}
-  feedbackContent: {fileID: 9145510894085314256}
-  feedbackCloseButton: {fileID: 1767925910708731659}
+--- !u!114 &556957820042915776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8209161385048594254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ed15d2a35e99524ca4c87b01434d73e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoPanel: {fileID: 8505690546830715872}
+  infoHeader: {fileID: 5649183725257462954}
+  infoScrollRect: {fileID: 5775749905122427270}
+  infoContent: {fileID: 9145510894085314256}
+  infoCloseButton: {fileID: 1767925910708731659}
 --- !u!1 &8209161385152861470
 GameObject:
   m_ObjectHideFlags: 0
@@ -15780,8 +15794,8 @@ RectTransform:
   m_Father: {fileID: 8209161386349478833}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -17759,7 +17773,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8209161385992091885
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18531,7 +18545,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8209161386167864150
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20224,7 +20238,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -20347,7 +20361,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -20477,7 +20491,7 @@ GameObject:
   - component: {fileID: 4306310014583069591}
   - component: {fileID: 4765106990454621586}
   m_Layer: 0
-  m_Name: Feedback
+  m_Name: Info
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20963,7 +20977,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
