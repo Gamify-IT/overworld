@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Linq;
+using System;
 
 public class GeneratorUI : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class GeneratorUI : MonoBehaviour
     private AreaData areaData;
     private AreaInformation areaIdentifier;
     private AreaInformationData areaInformation;
+    private AccessabilitySettings accessabilitySettings;
 
     [SerializeField] InterfaceInfo infoUI;
 
@@ -27,7 +29,7 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private TMP_InputField sizeY;
     [SerializeField] private TMP_Dropdown stypeDropdown;
     [SerializeField] private TMP_Dropdown generatorTypeDropdown;
-    [SerializeField] private TMP_InputField accessabilityInput;
+    [SerializeField] private Slider accessabilitySlider;
     [SerializeField] private TMP_InputField seedInput;
 
     [SerializeField] private Button generateLayoutButton;
@@ -102,7 +104,10 @@ public class GeneratorUI : MonoBehaviour
         stypeDropdown.AddOptions(options);
         OnStyleChange();
 
-        accessabilityInput.text = "50";
+        accessabilitySlider.minValue = 0;
+        accessabilitySlider.maxValue = Enum.GetNames(typeof(Accessability)).Length - 1;
+        accessabilitySlider.value = (int) Accessability.NORMAL;
+        accessabilitySettings = GetAccessabilitySettings();
 
         if(areaData.IsGeneratedArea())
         {
@@ -195,6 +200,16 @@ public class GeneratorUI : MonoBehaviour
         amountDungeonsSlider.enabled = false;
     }
 
+    //get accessability settings
+    private AccessabilitySettings GetAccessabilitySettings()
+    {
+        string path = "GameSettings/AccessabilitySettings";
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        AccessabilitySettings accessabilitySettings = AccessabilitySettings.CreateFromJSON(json);
+        return accessabilitySettings;
+    }
+
     /// <summary>
     ///     This function sets the max values for all objects
     /// </summary>
@@ -269,12 +284,12 @@ public class GeneratorUI : MonoBehaviour
 
     public void GenerateLayoutButtonPressed()
     {
-        infoUI.DisplayInfo("GENERATION LAYOUT...", "BLUB", false);
+        infoUI.DisplayInfo("GENERATING LAYOUT...", "", false);
 
         Vector2Int size = new Vector2Int(int.Parse(sizeX.text), int.Parse(sizeY.text));
         WorldStyle style = (WorldStyle) stypeDropdown.value;
         LayoutGeneratorType layoutGeneratorType = (LayoutGeneratorType) generatorTypeDropdown.value;
-        int accessability = int.Parse(accessabilityInput.text);
+        int accessability = ParseAccessability(layoutGeneratorType, size);
         string seed = seedInput.text;
 
         uiManager.GenerateLayout(size, style, layoutGeneratorType, accessability, seed);
@@ -286,17 +301,157 @@ public class GeneratorUI : MonoBehaviour
         infoUI.DisplayInfo("LAYOUT GENERATED", "SUCCESSFULLY GENERATED A LAYOUT", true);
     }
 
+    //get correct accessability value for selected generator type
+    private int ParseAccessability(LayoutGeneratorType layoutGeneratorType, Vector2Int size)
+    {
+        switch(layoutGeneratorType)
+        {
+            case LayoutGeneratorType.CELLULAR_AUTOMATA:
+                return ParseCellularAutomataAccessability();
+
+            case LayoutGeneratorType.DRUNKARDS_WALK:
+                return ParseDrunkardsWalkAccessability(size);
+
+            case LayoutGeneratorType.ISLAND_CELLULAR_AUTOMATA:
+                return ParseIslandsCAAccessability();
+
+            case LayoutGeneratorType.ISLAND_DRUNKARDS_WALK:
+                return ParseIslandsDWAccessability();
+
+            default:
+                return 0;
+        }
+    }
+
+    //get correct accessability value for CA
+    private int ParseCellularAutomataAccessability()
+    {
+        Accessability accessability = (Accessability) accessabilitySlider.value;
+
+        switch(accessability)
+        {
+            case Accessability.VERY_SMALL:
+                return accessabilitySettings.verySmallCA;
+
+            case Accessability.SMALL:
+                return accessabilitySettings.smallCA;
+
+            case Accessability.NORMAL:
+                return accessabilitySettings.normalCA;
+
+            case Accessability.BIG:
+                return accessabilitySettings.bigCA;
+
+            case Accessability.VERY_BIG:
+                return accessabilitySettings.veryBigCA;
+        }
+
+        return 0;
+    }
+
+    //get correct accessability value for DW
+    private int ParseDrunkardsWalkAccessability(Vector2Int size)
+    {
+        Accessability accessability = (Accessability)accessabilitySlider.value;
+
+        float xFactor = (size.x / 100f);
+        float yFactor = (size.y / 100f);
+
+        float sizeFactor = 0.5f * (xFactor + yFactor);
+        Debug.Log("Size factor: " + sizeFactor);
+
+        switch (accessability)
+        {
+            case Accessability.VERY_SMALL:
+                return Mathf.RoundToInt(accessabilitySettings.verySmallDW * sizeFactor);
+
+            case Accessability.SMALL:
+                return Mathf.RoundToInt(accessabilitySettings.smallDW * sizeFactor);
+
+            case Accessability.NORMAL:
+                return Mathf.RoundToInt(accessabilitySettings.normalDW * sizeFactor);
+
+            case Accessability.BIG:
+                return Mathf.RoundToInt(accessabilitySettings.bigDW * sizeFactor);
+
+            case Accessability.VERY_BIG:
+                return Mathf.RoundToInt(accessabilitySettings.veryBigDW * sizeFactor);
+        }
+
+        return 0;
+    }
+
+    //get correct accessability value for Islands-CA
+    private int ParseIslandsCAAccessability()
+    {
+        Accessability accessability = (Accessability)accessabilitySlider.value;
+
+        switch (accessability)
+        {
+            case Accessability.VERY_SMALL:
+                return accessabilitySettings.verySmallIslandCA;
+
+            case Accessability.SMALL:
+                return accessabilitySettings.smallIslandCA;
+
+            case Accessability.NORMAL:
+                return accessabilitySettings.normalIslandCA;
+
+            case Accessability.BIG:
+                return accessabilitySettings.bigIslandCA;
+
+            case Accessability.VERY_BIG:
+                return accessabilitySettings.veryBigIslandCA;
+        }
+
+        return 0;
+    }
+
+    //get correct accessability value for Islands-DW
+    private int ParseIslandsDWAccessability()
+    {
+        Accessability accessability = (Accessability)accessabilitySlider.value;
+
+        switch (accessability)
+        {
+            case Accessability.VERY_SMALL:
+                return accessabilitySettings.verySmallIslandDW;
+
+            case Accessability.SMALL:
+                return accessabilitySettings.smallIslandDW;
+
+            case Accessability.NORMAL:
+                return accessabilitySettings.normalIslandDW;
+
+            case Accessability.BIG:
+                return accessabilitySettings.bigIslandDW;
+
+            case Accessability.VERY_BIG:
+                return accessabilitySettings.veryBigIslandDW;
+        }
+
+        return 0;
+    }
+
     /// <summary>
     ///     This function resets the content panel
     /// </summary>
     private void ResetContentPanel()
     {
-        amountMinigamesText.text = "0";
+        amountMinigamesSlider.value = 0;
         OnMinigameAmountChange();
-        amountNpcsText.text = "0";
-        amountBooksText.text = "0";
-        amountTeleportersText.text = "0";
-        amountDungeonsText.text = "0";
+
+        amountNpcsSlider.value = 0;
+        OnNpcAmountChange();
+
+        amountBooksSlider.value = 0;
+        OnBookAmountChange();
+
+        amountTeleportersSlider.value = 0;
+        OnTeleporterAmountChange();
+
+        amountDungeonsSlider.value = 0;
+        OnDungeonsAmountChange();
     }
 
     public void ContinueButtonPressed()
