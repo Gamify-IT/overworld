@@ -6,25 +6,6 @@ using System.Linq;
 public class EnvironmentObjectGenerator
 {
     #region Settings
-    //Settings
-    private static readonly float maxObjectPercentage = 0.02f;
-    private static readonly int maxIterationsPerObject = 10;
-    private static readonly int minDistance = 10;
-
-    private static readonly float spawnChance = 0.5f;
-    private static readonly int spawnDistance = 3;
-
-    private static readonly float bigStoneExpandChance = 0.7f;
-
-    private static readonly float bushExpandChance = 0.8f;
-
-    private static readonly float treeExpandChance = 0.8f;
-
-    private static readonly float fenceExpandChance = 0.85f;
-
-    private static readonly int maxLogSize = 4;
-    private static readonly float logExpandChance = 0.66f;
-
     //Object lists
     private static List<EnvironmentObject> caveObjects = new List<EnvironmentObject> {
         EnvironmentObject.STONE_SMALL,
@@ -72,6 +53,7 @@ public class EnvironmentObjectGenerator
     };
     #endregion
 
+    #region Attributes
     //Attributes
     private int borderSize;
     private Vector2Int size;
@@ -80,6 +62,19 @@ public class EnvironmentObjectGenerator
     private WorldStyle style;
     private System.Random pseudoRandomNumberGenerator;
 
+    //Settings
+    private float maxObjectPercentage;
+    private int maxIterationsPerObject;
+    private int minDistance;
+    private float spawnChance;
+    private int spawnDistance;
+    private float bigStoneExpandChance;
+    private float bushExpandChance;
+    private float treeExpandChance;
+    private float fenceExpandChance;
+    private int maxLogSize;
+    private float logExpandChance;
+    #endregion
 
     public EnvironmentObjectGenerator(CellType[,] cellTypes, TileSprite[,,] tileSprites, WorldStyle style, string seed)
     {
@@ -103,6 +98,23 @@ public class EnvironmentObjectGenerator
         GenerationSettings generationSettings = GenerationSettings.CreateFromJSON(json);
 
         borderSize = generationSettings.borderSize;
+
+        path = "GameSettings/EnvironmentObjectsSettings";
+        targetFile = Resources.Load<TextAsset>(path);
+        json = targetFile.text;
+        EnvironmentObjectsSettings environmentObjectsSettings = EnvironmentObjectsSettings.CreateFromJSON(json);
+
+        maxObjectPercentage = environmentObjectsSettings.maxObjectPercentage;
+        maxIterationsPerObject = environmentObjectsSettings.maxIterationsPerObject;
+        minDistance = environmentObjectsSettings.minDistance;
+        spawnChance = environmentObjectsSettings.spawnChance;
+        spawnDistance = environmentObjectsSettings.spawnDistance;
+        bigStoneExpandChance = environmentObjectsSettings.bigStoneExpandChance;
+        bushExpandChance = environmentObjectsSettings.bushExpandChance;
+        treeExpandChance = environmentObjectsSettings.treeExpandChance;
+        fenceExpandChance = environmentObjectsSettings.fenceExpandChance;
+        maxLogSize = environmentObjectsSettings.maxLogSize;
+        logExpandChance = environmentObjectsSettings.logExpandChance;
     }
 
     //adds environment objects to the layout
@@ -414,9 +426,6 @@ public class EnvironmentObjectGenerator
             {
                 int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
                 Vector2Int spawnPosition = possiblePositions[spawnIndex];
-
-                Debug.Log("Small Stone from " + position.ToString() + " spawn new small stone at " + spawnPosition.ToString());
-
                 PlaceSmallStone(spawnPosition);
             }            
         }
@@ -499,9 +508,6 @@ public class EnvironmentObjectGenerator
             {
                 int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
                 Vector2Int spawnPosition = possiblePositions[spawnIndex];
-
-                Debug.Log("Big Stone from " + position.ToString() + " spawn new small stone at " + spawnPosition.ToString());
-
                 PlaceSmallStone(spawnPosition);
             }
         }
@@ -552,9 +558,6 @@ public class EnvironmentObjectGenerator
             {
                 int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
                 Vector2Int spawnPosition = possiblePositions[spawnIndex];
-
-                Debug.Log("Bush from " + position.ToString() + " spawn new bush at " + spawnPosition.ToString());
-
                 PlaceBush(spawnPosition, sprite);
             }
         }
@@ -687,9 +690,6 @@ public class EnvironmentObjectGenerator
             {
                 int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
                 Vector2Int spawnPosition = possiblePositions[spawnIndex];
-
-                Debug.Log("Fence from " + position.ToString() + " spawn new fence at " + spawnPosition.ToString());
-
                 PlaceFence(spawnPosition);
             }
         }
@@ -745,9 +745,6 @@ public class EnvironmentObjectGenerator
             {
                 int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
                 Vector2Int spawnPosition = possiblePositions[spawnIndex];
-
-                Debug.Log("Barrel from " + position.ToString() + " spawn new barrel at " + spawnPosition.ToString());
-
                 PlaceBarrel(spawnPosition);
             }
         }
@@ -801,9 +798,6 @@ public class EnvironmentObjectGenerator
             {
                 int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
                 Vector2Int spawnPosition = possiblePositions[spawnIndex];
-
-                Debug.Log("Log from " + position.ToString() + " spawn new log at " + spawnPosition.ToString());
-
                 PlaceLog(spawnPosition);
             }
         }

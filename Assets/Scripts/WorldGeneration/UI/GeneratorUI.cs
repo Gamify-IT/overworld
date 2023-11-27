@@ -99,15 +99,11 @@ public class GeneratorUI : MonoBehaviour
             SetupWorld();
         }
 
-        stypeDropdown.ClearOptions();
-        List<string> options = System.Enum.GetNames(typeof(WorldStyle)).ToList();
-        stypeDropdown.AddOptions(options);
-        OnStyleChange();
+        SetupStyleDrowdown();
 
-        accessabilitySlider.minValue = 0;
-        accessabilitySlider.maxValue = Enum.GetNames(typeof(Accessability)).Length - 1;
-        accessabilitySlider.value = (int) Accessability.NORMAL;
-        accessabilitySettings = GetAccessabilitySettings();
+        SetupGeneratorTypeDrowdown();
+
+        SetupAccessabilitySlider();       
 
         if(areaData.IsGeneratedArea())
         {
@@ -120,39 +116,7 @@ public class GeneratorUI : MonoBehaviour
 
         SetupMaxValues();
 
-        if(areaData.IsGeneratedArea())
-        {
-            stypeDropdown.value = (int) areaData.GetAreaMapData().GetLayout().GetStyle();
-
-            continueButton.interactable = true;
-
-            amountMinigamesText.text = areaData.GetAreaMapData().GetMinigameSpots().Count.ToString();
-            amountMinigamesSlider.value = areaData.GetAreaMapData().GetMinigameSpots().Count;
-
-            amountNpcsText.text = areaData.GetAreaMapData().GetNpcSpots().Count.ToString();
-            amountNpcsSlider.value = areaData.GetAreaMapData().GetNpcSpots().Count;
-
-            amountBooksText.text = areaData.GetAreaMapData().GetBookSpots().Count.ToString();
-            amountBooksSlider.value = areaData.GetAreaMapData().GetBookSpots().Count;
-
-            amountTeleportersText.text = areaData.GetAreaMapData().GetTeleporterSpots().Count.ToString();
-            amountTeleportersSlider.value = areaData.GetAreaMapData().GetTeleporterSpots().Count;
-
-            amountDungeonsText.text = areaData.GetAreaMapData().GetTeleporterSpots().Count.ToString();
-            amountDungeonsSlider.value = areaData.GetAreaMapData().GetSceneTransitionSpots().Count;
-        }
-        else
-        {
-            stypeDropdown.value = (int) WorldStyle.CUSTOM;
-
-            continueButton.interactable = false;
-
-            amountMinigamesText.text = "";
-            amountNpcsText.text = "";
-            amountBooksText.text = "";
-            amountTeleportersText.text = "";
-            amountDungeonsText.text = "";
-        }
+        SetupObjectSliders();      
     }
 
     /// <summary>
@@ -200,7 +164,147 @@ public class GeneratorUI : MonoBehaviour
         amountDungeonsSlider.enabled = false;
     }
 
-    //get accessability settings
+    /// <summary>
+    ///     This function sets up the style dropdown menu
+    /// </summary>
+    private void SetupStyleDrowdown()
+    {
+        stypeDropdown.ClearOptions();
+        List<string> styleOptions = System.Enum.GetNames(typeof(WorldStyle)).ToList();
+        stypeDropdown.AddOptions(styleOptions);
+        OnStyleChange();
+    }
+
+    /// <summary>
+    ///     This function sets up the generator type dropdown menu
+    /// </summary>
+    private void SetupGeneratorTypeDrowdown()
+    {
+        generatorTypeDropdown.ClearOptions();
+        List<string> generatorTypeOptions = System.Enum.GetNames(typeof(LayoutGeneratorType)).ToList();
+        generatorTypeDropdown.AddOptions(generatorTypeOptions);
+        if (areaData.IsGeneratedArea())
+        {
+            generatorTypeDropdown.value = (int)areaData.GetAreaMapData().GetLayout().GetGeneratorType();
+        }
+    }
+
+    /// <summary>
+    ///     This function sets up the accessability slider menu
+    /// </summary>
+    private void SetupAccessabilitySlider()
+    {
+        accessabilitySlider.minValue = 0;
+        accessabilitySlider.maxValue = Enum.GetNames(typeof(Accessability)).Length - 1;
+        accessabilitySettings = GetAccessabilitySettings();
+        if (areaData.IsGeneratedArea())
+        {
+            int accessability = areaData.GetAreaMapData().GetLayout().GetAccessability();
+            switch (areaData.GetAreaMapData().GetLayout().GetGeneratorType())
+            {
+                case LayoutGeneratorType.CELLULAR_AUTOMATA:
+                    if (accessability == accessabilitySettings.verySmallCA)
+                    {
+                        accessabilitySlider.value = (int)Accessability.VERY_SMALL;
+                    }
+                    else if (accessability == accessabilitySettings.smallCA)
+                    {
+                        accessabilitySlider.value = (int)Accessability.SMALL;
+                    }
+                    else if (accessability == accessabilitySettings.normalCA)
+                    {
+                        accessabilitySlider.value = (int)Accessability.NORMAL;
+                    }
+                    else if (accessability == accessabilitySettings.bigCA)
+                    {
+                        accessabilitySlider.value = (int)Accessability.BIG;
+                    }
+                    else if (accessability == accessabilitySettings.veryBigCA)
+                    {
+                        accessabilitySlider.value = (int)Accessability.VERY_BIG;
+                    }
+                    break;
+
+                case LayoutGeneratorType.DRUNKARDS_WALK:
+                    if (accessability == accessabilitySettings.verySmallDW)
+                    {
+                        accessabilitySlider.value = (int)Accessability.VERY_SMALL;
+                    }
+                    else if (accessability == accessabilitySettings.smallDW)
+                    {
+                        accessabilitySlider.value = (int)Accessability.SMALL;
+                    }
+                    else if (accessability == accessabilitySettings.normalDW)
+                    {
+                        accessabilitySlider.value = (int)Accessability.NORMAL;
+                    }
+                    else if (accessability == accessabilitySettings.bigDW)
+                    {
+                        accessabilitySlider.value = (int)Accessability.BIG;
+                    }
+                    else if (accessability == accessabilitySettings.veryBigDW)
+                    {
+                        accessabilitySlider.value = (int)Accessability.VERY_BIG;
+                    }
+                    break;
+
+                case LayoutGeneratorType.ISLAND_CELLULAR_AUTOMATA:
+                    if (accessability == accessabilitySettings.verySmallIslandCA)
+                    {
+                        accessabilitySlider.value = (int)Accessability.VERY_SMALL;
+                    }
+                    else if (accessability == accessabilitySettings.smallIslandCA)
+                    {
+                        accessabilitySlider.value = (int)Accessability.SMALL;
+                    }
+                    else if (accessability == accessabilitySettings.normalIslandCA)
+                    {
+                        accessabilitySlider.value = (int)Accessability.NORMAL;
+                    }
+                    else if (accessability == accessabilitySettings.bigIslandCA)
+                    {
+                        accessabilitySlider.value = (int)Accessability.BIG;
+                    }
+                    else if (accessability == accessabilitySettings.veryBigIslandCA)
+                    {
+                        accessabilitySlider.value = (int)Accessability.VERY_BIG;
+                    }
+                    break;
+
+                case LayoutGeneratorType.ISLAND_DRUNKARDS_WALK:
+                    if (accessability == accessabilitySettings.verySmallIslandDW)
+                    {
+                        accessabilitySlider.value = (int)Accessability.VERY_SMALL;
+                    }
+                    else if (accessability == accessabilitySettings.smallIslandDW)
+                    {
+                        accessabilitySlider.value = (int)Accessability.SMALL;
+                    }
+                    else if (accessability == accessabilitySettings.normalIslandDW)
+                    {
+                        accessabilitySlider.value = (int)Accessability.NORMAL;
+                    }
+                    else if (accessability == accessabilitySettings.bigIslandDW)
+                    {
+                        accessabilitySlider.value = (int)Accessability.BIG;
+                    }
+                    else if (accessability == accessabilitySettings.veryBigIslandDW)
+                    {
+                        accessabilitySlider.value = (int)Accessability.VERY_BIG;
+                    }
+                    break;
+            }
+        }
+        else
+        {
+            accessabilitySlider.value = (int)Accessability.NORMAL;
+        }
+    }
+
+    /// <summary>
+    ///     This function fetches the accessability settings from the local json file
+    /// </summary>
+    /// <returns>The accessability Settings</returns>
     private AccessabilitySettings GetAccessabilitySettings()
     {
         string path = "GameSettings/AccessabilitySettings";
@@ -234,6 +338,46 @@ public class GeneratorUI : MonoBehaviour
         int maxDungeons = GameSettings.GetMaxDungeons();
         amountDungeonsSlider.maxValue = maxDungeons;
         maxDungeonsText.text = maxDungeons.ToString();
+    }
+
+    /// <summary>
+    ///     This function sets up the object slider and texts
+    /// </summary>
+    private void SetupObjectSliders()
+    {
+        if (areaData.IsGeneratedArea())
+        {
+            stypeDropdown.value = (int)areaData.GetAreaMapData().GetLayout().GetStyle();
+
+            continueButton.interactable = true;
+
+            amountMinigamesText.text = areaData.GetAreaMapData().GetMinigameSpots().Count.ToString();
+            amountMinigamesSlider.value = areaData.GetAreaMapData().GetMinigameSpots().Count;
+
+            amountNpcsText.text = areaData.GetAreaMapData().GetNpcSpots().Count.ToString();
+            amountNpcsSlider.value = areaData.GetAreaMapData().GetNpcSpots().Count;
+
+            amountBooksText.text = areaData.GetAreaMapData().GetBookSpots().Count.ToString();
+            amountBooksSlider.value = areaData.GetAreaMapData().GetBookSpots().Count;
+
+            amountTeleportersText.text = areaData.GetAreaMapData().GetTeleporterSpots().Count.ToString();
+            amountTeleportersSlider.value = areaData.GetAreaMapData().GetTeleporterSpots().Count;
+
+            amountDungeonsText.text = areaData.GetAreaMapData().GetTeleporterSpots().Count.ToString();
+            amountDungeonsSlider.value = areaData.GetAreaMapData().GetSceneTransitionSpots().Count;
+        }
+        else
+        {
+            stypeDropdown.value = (int)WorldStyle.CUSTOM;
+
+            continueButton.interactable = false;
+
+            amountMinigamesText.text = "";
+            amountNpcsText.text = "";
+            amountBooksText.text = "";
+            amountTeleportersText.text = "";
+            amountDungeonsText.text = "";
+        }
     }
 
     #endregion
@@ -284,11 +428,23 @@ public class GeneratorUI : MonoBehaviour
 
     public void GenerateLayoutButtonPressed()
     {
+        StartCoroutine(GenerateLayoutCoroutine());
+    }
+
+    private IEnumerator GenerateLayoutCoroutine()
+    {
         infoUI.DisplayInfo("GENERATING LAYOUT...", "", false);
 
-        Vector2Int size = new Vector2Int(int.Parse(sizeX.text), int.Parse(sizeY.text));
-        WorldStyle style = (WorldStyle) stypeDropdown.value;
-        LayoutGeneratorType layoutGeneratorType = (LayoutGeneratorType) generatorTypeDropdown.value;
+        yield return null;
+
+        GenerateLayout();
+    }
+
+    private void GenerateLayout()
+    {
+         Vector2Int size = new Vector2Int(int.Parse(sizeX.text), int.Parse(sizeY.text));
+        WorldStyle style = (WorldStyle)stypeDropdown.value;
+        LayoutGeneratorType layoutGeneratorType = (LayoutGeneratorType)generatorTypeDropdown.value;
         int accessability = ParseAccessability(layoutGeneratorType, size);
         string seed = seedInput.text;
 
@@ -483,18 +639,35 @@ public class GeneratorUI : MonoBehaviour
     #region Generation Buttons
     public void GenerateMinigamesButtonPressed()
     {
+        StartCoroutine(GenerateMinigamesCoroutine());
+    }
+
+    private IEnumerator GenerateMinigamesCoroutine()
+    {
+        int amountMinigames = (int)amountMinigamesSlider.value;
+        if(amountMinigames > 0)
+        {
+            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountMinigames + " MINIGAMES", false);
+        }
+        else
+        {
+            infoUI.DisplayInfo("REMOVING ALL MINIGAMES ...", "", false);
+        }        
+
+        yield return null;
+
         bool success = GenerateMinigames();
         CheckSaveWorldButtonStatus();
 
         string feedback;
-        if((int)amountMinigamesSlider.value > 0)
+        if (amountMinigames > 0)
         {
-            feedback = "CREATED: \n" + (int)amountMinigamesSlider.value + " MINIGAME SPOTS";
+            feedback = "CREATED: \n" + amountMinigames + " MINIGAME SPOTS";
         }
         else
         {
             feedback = "REMOVED ALL MINIGAME SPOTS";
-        }        
+        }
 
         DisplayGenerationFeedback(success, feedback);
     }
@@ -507,12 +680,29 @@ public class GeneratorUI : MonoBehaviour
 
     public void GenerateNpcsButtonPressed()
     {
+        StartCoroutine(GenerateNpcsCoroutine());
+    }
+
+    private IEnumerator GenerateNpcsCoroutine()
+    {
+        int amountNpcs = (int)amountNpcsSlider.value;
+        if (amountNpcs > 0)
+        {
+            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountNpcs + " NPCS", false);
+        }
+        else
+        {
+            infoUI.DisplayInfo("REMOVING ALL NPCS ...", "", false);
+        }
+
+        yield return null;
+
         bool success = GenerateNpcs();
 
         string feedback;
-        if ((int)amountNpcsSlider.value > 0)
+        if (amountNpcs > 0)
         {
-            feedback = "CREATED: \n" + (int)amountNpcsSlider.value + " NPC SPOTS";
+            feedback = "CREATED: \n" + amountNpcs + " NPC SPOTS";
         }
         else
         {
@@ -530,12 +720,29 @@ public class GeneratorUI : MonoBehaviour
 
     public void GenerateBooksButtonPressed()
     {
+        StartCoroutine(GenerateBooksCoroutine());
+    }
+
+    private IEnumerator GenerateBooksCoroutine()
+    {
+        int amountBooks = (int)amountBooksSlider.value;
+        if (amountBooks > 0)
+        {
+            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountBooks + " BOOKS", false);
+        }
+        else
+        {
+            infoUI.DisplayInfo("REMOVING ALL BOOKS ...", "", false);
+        }
+
+        yield return null;
+
         bool success = GenerateBooks();
 
         string feedback;
-        if ((int)amountBooksSlider.value > 0)
+        if (amountBooks > 0)
         {
-            feedback = "CREATED: \n" + (int)amountBooksSlider.value + " BOOK SPOTS";
+            feedback = "CREATED: \n" + amountBooks + " BOOK SPOTS";
         }
         else
         {
@@ -553,12 +760,29 @@ public class GeneratorUI : MonoBehaviour
 
     public void GenerateTeleporterButtonPressed()
     {
+        StartCoroutine(GenerateTeleporterCoroutine());
+    }
+
+    private IEnumerator GenerateTeleporterCoroutine()
+    {
+        int amountTeleporter = (int)amountTeleportersSlider.value;
+        if (amountTeleporter > 0)
+        {
+            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountTeleporter + " TELEPORTER", false);
+        }
+        else
+        {
+            infoUI.DisplayInfo("REMOVING ALL TELEPORTER ...", "", false);
+        }
+
+        yield return null;
+
         bool success = GenerateTeleporter();
 
         string feedback;
-        if ((int)amountTeleportersSlider.value > 0)
+        if (amountTeleporter > 0)
         {
-            feedback = "CREATED: \n" + (int)amountTeleportersSlider.value + " TELEPORTER SPOTS";
+            feedback = "CREATED: \n" + amountTeleporter + " TELEPORTER SPOTS";
         }
         else
         {
@@ -576,17 +800,33 @@ public class GeneratorUI : MonoBehaviour
 
     public void GenerateDungeonsButtonPressed()
     {
-        bool success = GenerateDungeons();
-        CheckSaveWorldButtonStatus();
+        StartCoroutine(GenerateDungeonsCoroutine());
+    }
 
-        string feedback;
-        if ((int)amountDungeonsSlider.value > 0)
+    private IEnumerator GenerateDungeonsCoroutine()
+    {
+        int amountDungeons = (int)amountDungeonsSlider.value;
+        if (amountDungeons > 0)
         {
-            feedback = "CREATED: \n" + (int)amountDungeonsSlider.value + " DUNGEON SPOTS";
+            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountDungeons + " DUNGEONS", false);
         }
         else
         {
-            feedback = "REMOVED ALL DUNGEON SPOTS";
+            infoUI.DisplayInfo("REMOVING ALL DUNGEONS ...", "", false);
+        }
+
+        yield return null;
+
+        bool success = GenerateDungeons();
+
+        string feedback;
+        if (amountDungeons > 0)
+        {
+            feedback = "CREATED: \n" + amountDungeons + " DUNGEONS SPOTS";
+        }
+        else
+        {
+            feedback = "REMOVED ALL DUNGEONS SPOTS";
         }
 
         DisplayGenerationFeedback(success, feedback);
@@ -625,44 +865,77 @@ public class GeneratorUI : MonoBehaviour
 
     public void GenerateAllContentButtonPressed()
     {
-        bool success = GenerateAllContent();
-        CheckSaveWorldButtonStatus();
+        StartCoroutine(GenerateAllContentCoroutine());
+    }
 
-        string feedback;
-        if((int)amountMinigamesSlider.value == 0 &&
-            (int)amountNpcsSlider.value == 0 &&
-            (int)amountBooksSlider.value == 0 &&
-            (int)amountTeleportersSlider.value == 0 &&
-            (int)amountDungeonsSlider.value == 0)
+    private IEnumerator GenerateAllContentCoroutine()
+    {
+        string header = "GENERATING CONTENT ...";
+        string contentHeader = "CREATING";
+        string content = "";
+
+        int amountMinigames = (int)amountMinigamesSlider.value;
+        int amountNpcs = (int)amountNpcsSlider.value;
+        int amountBooks = (int)amountBooksSlider.value;
+        int amountTeleporter = (int)amountTeleportersSlider.value;
+        int amountDungeons = (int)amountDungeonsSlider.value;
+
+        if (amountMinigames == 0 &&
+            amountNpcs == 0 &&
+            amountBooks == 0 &&
+            amountTeleporter == 0 &&
+            amountDungeons == 0)
         {
-            feedback = "RESET ALL CONTENT";
+            header = "RESETING ALL CONTENT ...";
+            contentHeader = "";
+            content = "";
         }
         else
         {
-            feedback = "CREATED:";
-            if ((int)amountMinigamesSlider.value > 0)
+            if (amountMinigames > 0)
             {
-                feedback += "\n " + (int)amountMinigamesSlider.value + " MINIGAME SPOTS";
+                content += "\n " + (int)amountMinigamesSlider.value + " MINIGAME SPOTS";
             }
-            if ((int)amountNpcsSlider.value > 0)
+            if (amountNpcs > 0)
             {
-                feedback += "\n " + (int)amountNpcsSlider.value + " NPC SPOTS";
+                content += "\n " + (int)amountNpcsSlider.value + " NPC SPOTS";
             }
-            if ((int)amountBooksSlider.value > 0)
+            if (amountBooks > 0)
             {
-                feedback += "\n " + (int)amountBooksSlider.value + " BOOK SPOTS";
+                content += "\n " + (int)amountBooksSlider.value + " BOOK SPOTS";
             }
-            if ((int)amountTeleportersSlider.value > 0)
+            if (amountTeleporter > 0)
             {
-                feedback += "\n " + (int)amountTeleportersSlider.value + " TELEPORTER SPOTS";
+                content += "\n " + (int)amountTeleportersSlider.value + " TELEPORTER SPOTS";
             }
-            if ((int)amountDungeonsSlider.value > 0)
+            if (amountDungeons > 0)
             {
-                feedback += "\n " + (int)amountDungeonsSlider.value + " DUNGEON SPOTS";
+                content += "\n " + (int)amountDungeonsSlider.value + " DUNGEON SPOTS";
             }
-        }        
+        }
 
-        DisplayGenerationFeedback(success, feedback);
+        infoUI.DisplayInfo(header, contentHeader + content, false);
+
+        yield return null;
+
+        bool success = GenerateAllContent();
+        CheckSaveWorldButtonStatus();
+
+        if (amountMinigames == 0 &&
+           amountNpcs == 0 &&
+           amountBooks == 0 &&
+           amountTeleporter == 0 &&
+           amountDungeons == 0)
+        {
+            contentHeader = "REMOVED ALL CONTENT";
+            content = "";
+        }
+        else
+        {
+            contentHeader = "CREATED";
+        }
+
+        DisplayGenerationFeedback(success, contentHeader + content);
     }
 
     private bool GenerateAllContent()

@@ -1,0 +1,13 @@
+{
+    "maxObjectPercentage": 0.08,
+    "maxIterationsPerObject": 10,
+    "minDistance": 10,
+    "spawnChance": 0.75,
+    "spawnDistance": 4,
+    "bigStoneExpandChance": 0.85,
+    "bushExpandChance": 0.65,
+    "treeExpandChance": 0.85,
+    "fenceExpandChance": 0.65,
+    "maxLogSize": 4,
+    "logExpandChance": 0.66
+}

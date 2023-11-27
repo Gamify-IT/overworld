@@ -14,6 +14,9 @@ public class ObjectPositionGenerator
     //Minimum distance from dungeon spot to world connections
     private static readonly int minDungeonDistance = 75;
 
+    //Distance minigames spots start to be at most apart from each other
+    private static readonly int minigameDistanceStartingFactor = 5;
+
     //Minimum distance to objects of other types
     private static readonly int minObjectDistance = 10;
 
@@ -138,13 +141,14 @@ public class ObjectPositionGenerator
         //generate new spots
         for (int i=0; i<amount; i++)
         {
+            int minDistance = minigameDistanceStartingFactor * minSameObjectDistance;
             bool spotCreated = false;
 
             for (int iteration = 0; iteration < maxIterations; iteration++)
             {
                 Vector2Int position = GetPosition();
 
-                bool objectToClose = ObjectToClose(position, minSameObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance);
+                bool objectToClose = ObjectToClose(position, minDistance, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance, minObjectDistance);
 
                 if (!objectToClose)
                 {
@@ -153,7 +157,12 @@ public class ObjectPositionGenerator
                     spotCreated = true;
                     break;
                 }
-            }   
+                else
+                {
+                    int newMinDistance = Mathf.FloorToInt(0.75f * minDistance);
+                    minDistance = Mathf.Max(minSameObjectDistance, newMinDistance);
+                }
+            }
             
             if(!spotCreated)
             {
@@ -772,10 +781,24 @@ public class ObjectPositionGenerator
     }
     #endregion
 
-    #region Getter
+    #region Getter And Setter
     public List<Vector2Int> GetMinigameSpotPositions()
     {
         return minigamePositions;
+    }
+
+    public void SetMinigameSpots(List<MinigameSpotData> minigames, Vector2Int offset)
+    {
+        List<Vector2Int> minigamePositions = new List<Vector2Int>();
+
+        foreach(MinigameSpotData minigame in minigames)
+        {
+            int posX = Mathf.FloorToInt(minigame.GetPosition().x);
+            int posY = Mathf.FloorToInt(minigame.GetPosition().y);
+            minigamePositions.Add(new Vector2Int(posX, posY) - offset);
+        }
+
+        this.minigamePositions = minigamePositions;
     }
 
     public List<Vector2Int> GetNpcSpotPositions()
@@ -783,9 +806,37 @@ public class ObjectPositionGenerator
         return npcPositions;
     }
 
+    public void SetNpcSpots(List<NpcSpotData> npcs, Vector2Int offset)
+    {
+        List<Vector2Int> npcPositions = new List<Vector2Int>();
+
+        foreach (NpcSpotData npc in npcs)
+        {
+            int posX = Mathf.FloorToInt(npc.GetPosition().x);
+            int posY = Mathf.FloorToInt(npc.GetPosition().y);
+            npcPositions.Add(new Vector2Int(posX, posY) - offset);
+        }
+
+        this.npcPositions = npcPositions;
+    }
+
     public List<Vector2Int> GetBookSpotPositions()
     {
         return bookPositions;
+    }
+
+    public void SetBookSpots(List<BookSpotData> books, Vector2Int offset)
+    {
+        List<Vector2Int> bookPositions = new List<Vector2Int>();
+
+        foreach (BookSpotData book in books)
+        {
+            int posX = Mathf.FloorToInt(book.GetPosition().x);
+            int posY = Mathf.FloorToInt(book.GetPosition().y);
+            bookPositions.Add(new Vector2Int(posX, posY) - offset);
+        }
+
+        this.bookPositions = bookPositions;
     }
 
     public List<Vector2Int> GetTeleporterSpotPositions()
@@ -793,9 +844,38 @@ public class ObjectPositionGenerator
         return teleporterPositions;
     }
 
+    public void SetTeleporterSpots(List<TeleporterSpotData> teleporters, Vector2Int offset)
+    {
+        List<Vector2Int> teleporterPositions = new List<Vector2Int>();
+
+        foreach (TeleporterSpotData teleporter in teleporters)
+        {
+            int posX = Mathf.FloorToInt(teleporter.GetPosition().x);
+            int posY = Mathf.FloorToInt(teleporter.GetPosition().y);
+            teleporterPositions.Add(new Vector2Int(posX, posY) - offset);
+        }
+
+        this.teleporterPositions = teleporterPositions;
+    }
+
     public List<DungeonSpotPosition> GetDungeonSpotPositions()
     {
         return dungeonPositions;
+    }
+
+    public void SetDungeonSpots(List<SceneTransitionSpotData> dungeons, Vector2Int offset)
+    {
+        List<DungeonSpotPosition> dungeonPositions = new List<DungeonSpotPosition>();
+
+        foreach (SceneTransitionSpotData dungeon in dungeons)
+        {
+            int posX = Mathf.FloorToInt(dungeon.GetPosition().x);
+            int posY = Mathf.FloorToInt(dungeon.GetPosition().y);
+            DungeonSpotPosition dungeonPosition = new DungeonSpotPosition(new Vector2Int(posX, posY) - offset, dungeon.GetStyle());
+            dungeonPositions.Add(dungeonPosition);
+        }
+
+        this.dungeonPositions = dungeonPositions;
     }
     #endregion
 }

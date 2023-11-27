@@ -9,7 +9,6 @@ using Cysharp.Threading.Tasks;
 /// </summary>
 public class AreaManager : MonoBehaviour
 {
-    //TEMP
     [SerializeField] private int worldIndex;
     [SerializeField] private int dungeonIndex;
 
@@ -175,6 +174,12 @@ public class AreaManager : MonoBehaviour
             objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetLayout().GetCellTypes(),  
                 areaInformation.GetWorldConnections(), 
                 areaData.GetAreaMapData().GetLayout().GetStyle());
+
+            objectPositionGenerator.SetMinigameSpots(areaData.GetAreaMapData().GetMinigameSpots(), areaInformation.GetObjectOffset());
+            objectPositionGenerator.SetNpcSpots(areaData.GetAreaMapData().GetNpcSpots(), areaInformation.GetObjectOffset());
+            objectPositionGenerator.SetBookSpots(areaData.GetAreaMapData().GetBookSpots(), areaInformation.GetObjectOffset());
+            objectPositionGenerator.SetTeleporterSpots(areaData.GetAreaMapData().GetTeleporterSpots(), areaInformation.GetObjectOffset());
+            objectPositionGenerator.SetDungeonSpots(areaData.GetAreaMapData().GetSceneTransitionSpots(), areaInformation.GetObjectOffset());
         }
 
         //setup area
@@ -622,13 +627,16 @@ public class AreaManager : MonoBehaviour
         areaData.GetAreaMapData().GetLayout().AddDungeonSpots(dungeonSpots, areaInformation.GetObjectOffset());
         areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
 
-        //Create barriers for the dungeon spots + add world barriers
-        List<BarrierSpotData> dungeonBarrierSpots = objectGenerator.GenerateBarrierSpots(dungeonPositions);
-        List<BarrierSpotData> worldBarrierSpots = worldConnectionBarriers;
-        List<BarrierSpotData> barrierSpots = new List<BarrierSpotData>();
-        barrierSpots.AddRange(dungeonBarrierSpots);
-        barrierSpots.AddRange(worldBarrierSpots);
-        areaData.GetAreaMapData().SetBarrierSpots(barrierSpots);
+        //Create barriers for the dungeon spots + add world barriers, if area is a world (no barriers in dungeons)
+        if(!areaIdentifier.IsDungeon())
+        {
+            List<BarrierSpotData> dungeonBarrierSpots = objectGenerator.GenerateBarrierSpots(dungeonPositions);
+            List<BarrierSpotData> worldBarrierSpots = worldConnectionBarriers;
+            List<BarrierSpotData> barrierSpots = new List<BarrierSpotData>();
+            barrierSpots.AddRange(dungeonBarrierSpots);
+            barrierSpots.AddRange(worldBarrierSpots);
+            areaData.GetAreaMapData().SetBarrierSpots(barrierSpots);
+        }        
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
