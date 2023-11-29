@@ -9,6 +9,8 @@ using Cysharp.Threading.Tasks;
 /// </summary>
 public class AreaManager : MonoBehaviour
 {
+    private static bool logAreas = false;
+
     [SerializeField] private int worldIndex;
     [SerializeField] private int dungeonIndex;
 
@@ -186,10 +188,7 @@ public class AreaManager : MonoBehaviour
         SetupArea();
 
         //setup ui
-        if(setupUI)
-        {
-            generatorUI.SetupUI(areaData, areaInformation, cameraController);
-        }        
+        generatorUI.SetupUI(areaData, areaInformation, cameraController, setupUI);
     }
 
     #region Setup Functions
@@ -485,6 +484,12 @@ public class AreaManager : MonoBehaviour
         areaBuilder.SetupAreaLayout(tileLayout, areaInformation);
         areaBuilder.SetupPlaceholderObjects(areaMapData);
         areaBuilder.RemoveAdditionalObjects();
+
+        //log area
+        if(logAreas)
+        {
+            SeedLogger.LogArea(areaData.GetAreaMapData());
+        }        
     }
 
     //try to add world connection barriers, if not already set
@@ -540,6 +545,12 @@ public class AreaManager : MonoBehaviour
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
 
+        //log area
+        if (logAreas)
+        {
+            SeedLogger.LogArea(areaData.GetAreaMapData());
+        }
+
         return success;
     }
 
@@ -560,6 +571,12 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+
+        //log area
+        if (logAreas)
+        {
+            SeedLogger.LogArea(areaData.GetAreaMapData());
+        }
 
         return success;
     }
@@ -582,6 +599,12 @@ public class AreaManager : MonoBehaviour
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
 
+        //log area
+        if (logAreas)
+        {
+            SeedLogger.LogArea(areaData.GetAreaMapData());
+        }
+
         return success;
     }
 
@@ -602,6 +625,12 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+
+        //log area
+        if (logAreas)
+        {
+            SeedLogger.LogArea(areaData.GetAreaMapData());
+        }
 
         return success;
     }
@@ -640,6 +669,12 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+
+        //log area
+        if (logAreas)
+        {
+            SeedLogger.LogArea(areaData.GetAreaMapData());
+        }
 
         return success;
     }

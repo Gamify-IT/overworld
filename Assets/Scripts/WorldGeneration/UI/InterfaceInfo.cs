@@ -11,6 +11,7 @@ public class InterfaceInfo : MonoBehaviour
     [SerializeField] private ScrollRect infoScrollRect;
     [SerializeField] private TextMeshProUGUI infoContent;
     [SerializeField] private Button infoCloseButton;
+    [SerializeField] private Button infoCloseAndViewButton;
 
     private void Awake()
     {
@@ -29,7 +30,7 @@ public class InterfaceInfo : MonoBehaviour
         {
             string header = "AREA GENERATION - INFORMATION";
             string body = "INSPECT AREA: \n " +
-                "To inspect the current area use the 'GENERATOR MAP' Button in the to right corner. To get back, simply click the same button again. \n " +
+                "To inspect the current area use the 'SHOW MAP' Button in the to right corner. To get back, simply click the same button again. \n " +
                 "\n" +
                 "CAMERA MOVEMENT: \n " +
                 "To move the camera, hold down the left mouse botton and drag the map around with the mouse. To zoom in and out, use the mouse wheel. \n" +
@@ -46,7 +47,7 @@ public class InterfaceInfo : MonoBehaviour
                 "Next, you can select the amount of object-type you want and add them with the respective 'GENERATE' button, or all of them at once with the 'GENERATE ALL' button, located in the bottom middle. \n" +
                 "You will receive feedback, whether or not the objects could be placed or not. In case they could not, you can either try again, change the values or go back and generate another layout using the 'RETURN' button. \n " +
                 "If you placed at least one minigame, and in a dungeon exactly one dungeon exit, you can save the area with the 'SAVE AREA' button. ";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -61,7 +62,7 @@ public class InterfaceInfo : MonoBehaviour
             string header = "SIZE SETTING";
             string body = "With the size setting, you can specifiy the dimensions of the generated area, with the 'X' input defining the width, the 'Y' input the height. \n " +
                 "You can only change the size of a dungeon area, a world area must have a fixed size.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -83,7 +84,7 @@ public class InterfaceInfo : MonoBehaviour
                 "'BEACH': A collection of sandy islands surrounded by the sea, connected with pathways in shallow water \n" +
                 "\n" +
                 "'FOREST': A forest with pathways and clearings";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -105,7 +106,7 @@ public class InterfaceInfo : MonoBehaviour
                 "'ISLANDS - CA': This generator results in many smaller, well shaped islands, connected with narrow pathways \n" +
                 "\n" +
                 "'ISLANDS _ DW': This generator results in many smaller, chaoticly shaped islands, connected with narrow pathways";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -119,7 +120,7 @@ public class InterfaceInfo : MonoBehaviour
         {
             string header = "ACCESSABLE SETTING";
             string body = "The accessable setting defines, how much area the player will be able to explore. A higher value translates to more exploreable space.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -137,7 +138,7 @@ public class InterfaceInfo : MonoBehaviour
                 "You can change the 'style' setting, to see the layout in different themes with only very slight adjustments. \n" +
                 "\n" +
                 "In case you want to use the same layout in another course, you can copy the seed and use it there with the same settings to effectively copy the layout.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -156,7 +157,7 @@ public class InterfaceInfo : MonoBehaviour
                 "To remove all minigame spots, simply set the slider to '0' and press the 'GENERATE' button. \n" +
                 "\n" +
                 "To enable or disable the icons on the layout, use the respective checkbox.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -178,7 +179,7 @@ public class InterfaceInfo : MonoBehaviour
                 "To remove all npc spots, simply set the slider to '0' and press the 'GENERATE' button. \n" +
                 "\n" +
                 "To enable or disable the icons on the layout, use the respective checkbox.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -198,7 +199,7 @@ public class InterfaceInfo : MonoBehaviour
                 "To remove all book spots, simply set the slider to '0' and press the 'GENERATE' button. \n" +
                 "\n" +
                 "To enable or disable the icons on the layout, use the respective checkbox.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -218,7 +219,7 @@ public class InterfaceInfo : MonoBehaviour
                 "To remove all teleporter spots, simply set the slider to '0' and press the 'GENERATE' button. \n" +
                 "\n" +
                 "To enable or disable the icons on the layout, use the respective checkbox.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -240,7 +241,7 @@ public class InterfaceInfo : MonoBehaviour
                 "\n" +
                 "A world area can have multiple dungeon spots, but is also allowed to have none at all. \n" +
                 "Each dungeon is required to have exactly one dungeon spot, which is the exit. Therefore, in a dungeon area, the amount of dungeon spots cannot be changed, but the position can still be changed using the 'GENERATE' button.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -258,14 +259,14 @@ public class InterfaceInfo : MonoBehaviour
         {
             string header = "AREA INSPECTION - INFORMATION";
             string body = "INSPECT AREA: \n " +
-                "To inspect the current area use the 'INSPECTOR MAP' Button in the to right corner. To get back, simply click the same button again. \n " +
+                "To inspect the current area use the 'SHOW MAP' Button in the to right corner. To get back, simply click the same button again. \n " +
                 "\n" +
                 "CAMERA MOVEMENT: \n " +
                 "To move the camera, hold down the left mouse botton and drag the map around with the mouse. To zoom in and out, use the mouse wheel. \n" +
                 "\n" +
                 "FEATURES: \n" +
                 "You can switch the icons of an object type on or off by using the respective checkbox.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -281,7 +282,7 @@ public class InterfaceInfo : MonoBehaviour
             string body = "A minigame spot represents a position for a minigame. There, students can enter a game focused on a part of the content of the lecture. \n" +
                 "\n" +
                 "To enable or disable the icons on the layout, use the respective checkbox.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -299,7 +300,7 @@ public class InterfaceInfo : MonoBehaviour
                 "The npcs are meant to provide additional information about the content required in a minigame, therefore, they are usually placed near their corresponding minigame. \n " +
                 "\n" +
                 "To enable or disable the icons on the layout, use the respective checkbox.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -316,7 +317,7 @@ public class InterfaceInfo : MonoBehaviour
                 "They are also, like npcs, placed near their corresponding minigame. \n" +
                 "\n" +
                 "To enable or disable the icons on the layout, use the respective checkbox.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -333,7 +334,7 @@ public class InterfaceInfo : MonoBehaviour
                 "That helps to get around the area faster and reduce walking times. \n " +
                 "\n " +
                 "To enable or disable the icons on the layout, use the respective checkbox.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -349,7 +350,7 @@ public class InterfaceInfo : MonoBehaviour
             string body = "A dungeon spot represents a position for a dungeon entrance. There, students can enter or leave a dungeon. \n" +
                 "\n" +
                 "To enable or disable the icons on the layout, use the respective checkbox. \n ";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -369,7 +370,7 @@ public class InterfaceInfo : MonoBehaviour
                 "A dungeon does not contain any barriers. \n" +
                 "\n" +
                 "To enable or disable the icons on the layout, use the respective checkbox.";
-            DisplayInfo(header, body, true);
+            DisplayInfo(header, body, true, false);
         }
     }
 
@@ -380,12 +381,13 @@ public class InterfaceInfo : MonoBehaviour
         infoPanel.SetActive(false);
     }
 
-    public void DisplayInfo(string header, string content, bool closeable)
+    public void DisplayInfo(string header, string content, bool closeable, bool closeAndView)
     {
         infoHeader.text = header;
         infoContent.text = content;
         infoScrollRect.verticalNormalizedPosition = 1f;
         infoCloseButton.gameObject.SetActive(closeable);
+        infoCloseAndViewButton.gameObject.SetActive(closeAndView);
 
         infoPanel.SetActive(true);
     }

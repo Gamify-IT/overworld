@@ -10,7 +10,7 @@ public class GeneratorUI : MonoBehaviour
 {
     #region Attributes
     //WorldGenerator
-    private GeneratorUIManager uiManager;
+    [SerializeField] private GeneratorUIManager uiManager;
     private AreaData areaData;
     private AreaInformation areaIdentifier;
     private AreaInformationData areaInformation;
@@ -117,6 +117,15 @@ public class GeneratorUI : MonoBehaviour
         SetupMaxValues();
 
         SetupObjectSliders();      
+    }
+
+    /// <summary>
+    ///     This function sets the reference to the <c>GeneratorUIManager</c> component
+    /// </summary>
+    /// <param name="uiManager">The new reference</param>
+    public void SetUIManager(GeneratorUIManager uiManager)
+    {
+        this.uiManager = uiManager;
     }
 
     /// <summary>
@@ -410,7 +419,7 @@ public class GeneratorUI : MonoBehaviour
 
     private async void ResetArea()
     {
-        infoUI.DisplayInfo("RESETING AREA...", "RESETING THE AREA TO DEFAULT ...", false);
+        infoUI.DisplayInfo("RESETING AREA...", "RESETING THE AREA TO DEFAULT ...", false, false);
 
         bool success = await uiManager.ResetToDefault();
 
@@ -418,11 +427,11 @@ public class GeneratorUI : MonoBehaviour
         {
             stypeDropdown.value = 0;
             continueButton.interactable = false;
-            infoUI.DisplayInfo("AREA RESET", "RESET THE CURRENT AREA TO DEFAULT", true);
+            infoUI.DisplayInfo("AREA RESET", "RESET THE CURRENT AREA TO DEFAULT", true, false);
         }
         else
         {
-            infoUI.DisplayInfo("RESET", "COULD NOT RESET THE CURRENT AREA TO DEFAULT", true);
+            infoUI.DisplayInfo("RESET", "COULD NOT RESET THE CURRENT AREA TO DEFAULT", true, false);
         }
     }
 
@@ -433,7 +442,7 @@ public class GeneratorUI : MonoBehaviour
 
     private IEnumerator GenerateLayoutCoroutine()
     {
-        infoUI.DisplayInfo("GENERATING LAYOUT...", "", false);
+        infoUI.DisplayInfo("GENERATING LAYOUT...", "", false, false);
 
         yield return null;
 
@@ -442,7 +451,7 @@ public class GeneratorUI : MonoBehaviour
 
     private void GenerateLayout()
     {
-         Vector2Int size = new Vector2Int(int.Parse(sizeX.text), int.Parse(sizeY.text));
+        Vector2Int size = new Vector2Int(int.Parse(sizeX.text), int.Parse(sizeY.text));
         WorldStyle style = (WorldStyle)stypeDropdown.value;
         LayoutGeneratorType layoutGeneratorType = (LayoutGeneratorType)generatorTypeDropdown.value;
         int accessability = ParseAccessability(layoutGeneratorType, size);
@@ -454,7 +463,7 @@ public class GeneratorUI : MonoBehaviour
 
         ResetContentPanel();
 
-        infoUI.DisplayInfo("LAYOUT GENERATED", "SUCCESSFULLY GENERATED A LAYOUT", true);
+        infoUI.DisplayInfo("LAYOUT GENERATED", "SUCCESSFULLY GENERATED A LAYOUT", true, true);
     }
 
     //get correct accessability value for selected generator type
@@ -647,11 +656,11 @@ public class GeneratorUI : MonoBehaviour
         int amountMinigames = (int)amountMinigamesSlider.value;
         if(amountMinigames > 0)
         {
-            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountMinigames + " MINIGAMES", false);
+            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountMinigames + " MINIGAMES", false, false);
         }
         else
         {
-            infoUI.DisplayInfo("REMOVING ALL MINIGAMES ...", "", false);
+            infoUI.DisplayInfo("REMOVING ALL MINIGAMES ...", "", false, false);
         }        
 
         yield return null;
@@ -688,11 +697,11 @@ public class GeneratorUI : MonoBehaviour
         int amountNpcs = (int)amountNpcsSlider.value;
         if (amountNpcs > 0)
         {
-            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountNpcs + " NPCS", false);
+            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountNpcs + " NPCS", false, false);
         }
         else
         {
-            infoUI.DisplayInfo("REMOVING ALL NPCS ...", "", false);
+            infoUI.DisplayInfo("REMOVING ALL NPCS ...", "", false, false);
         }
 
         yield return null;
@@ -728,11 +737,11 @@ public class GeneratorUI : MonoBehaviour
         int amountBooks = (int)amountBooksSlider.value;
         if (amountBooks > 0)
         {
-            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountBooks + " BOOKS", false);
+            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountBooks + " BOOKS", false, false);
         }
         else
         {
-            infoUI.DisplayInfo("REMOVING ALL BOOKS ...", "", false);
+            infoUI.DisplayInfo("REMOVING ALL BOOKS ...", "", false, false);
         }
 
         yield return null;
@@ -768,11 +777,11 @@ public class GeneratorUI : MonoBehaviour
         int amountTeleporter = (int)amountTeleportersSlider.value;
         if (amountTeleporter > 0)
         {
-            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountTeleporter + " TELEPORTER", false);
+            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountTeleporter + " TELEPORTER", false, false);
         }
         else
         {
-            infoUI.DisplayInfo("REMOVING ALL TELEPORTER ...", "", false);
+            infoUI.DisplayInfo("REMOVING ALL TELEPORTER ...", "", false, false);
         }
 
         yield return null;
@@ -808,11 +817,11 @@ public class GeneratorUI : MonoBehaviour
         int amountDungeons = (int)amountDungeonsSlider.value;
         if (amountDungeons > 0)
         {
-            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountDungeons + " DUNGEONS", false);
+            infoUI.DisplayInfo("GENERATING CONTENT ...", "TRYING TO GENERATE " + amountDungeons + " DUNGEONS", false, false);
         }
         else
         {
-            infoUI.DisplayInfo("REMOVING ALL DUNGEONS ...", "", false);
+            infoUI.DisplayInfo("REMOVING ALL DUNGEONS ...", "", false, false);
         }
 
         yield return null;
@@ -853,7 +862,7 @@ public class GeneratorUI : MonoBehaviour
             header = "GENERATION FAILED";
             content = "COULD NOT CREATE ALL OBJECTS, \n \n PLEASE TRY AGAIN, \n CHANGE THE AMOUNT OF OBJECTS, \n OR \n CREATE ANOTHER LAYOUT";
         }
-        infoUI.DisplayInfo(header, content, true);
+        infoUI.DisplayInfo(header, content, true, false);
     }
     #endregion
 
@@ -914,7 +923,7 @@ public class GeneratorUI : MonoBehaviour
             }
         }
 
-        infoUI.DisplayInfo(header, contentHeader + content, false);
+        infoUI.DisplayInfo(header, contentHeader + content, false, false);
 
         yield return null;
 
@@ -989,17 +998,17 @@ public class GeneratorUI : MonoBehaviour
 
     private async void SaveArea()
     {
-        infoUI.DisplayInfo("SAVING...", "SAVING THE CURRENT AREA...", false);
+        infoUI.DisplayInfo("SAVING...", "SAVING THE CURRENT AREA...", false, false);
 
         bool success = await uiManager.SaveArea();
 
         if(success)
         {
-            infoUI.DisplayInfo("AREA SAVED", "SAVED THE CURRENT AREA", true);
+            infoUI.DisplayInfo("AREA SAVED", "SAVED THE CURRENT AREA", true, false);
         }
         else
         {
-            infoUI.DisplayInfo("AREA NOT SAVED", "COULD NOT SAVE THE CURRENT AREA", true);
+            infoUI.DisplayInfo("AREA NOT SAVED", "COULD NOT SAVE THE CURRENT AREA", true, false);
         }        
     }
     #endregion

@@ -18,18 +18,49 @@ public class GeneratorUIManager : MonoBehaviour
     ///     This function instantiates the <c>GeneratorUI</c> and sets all needed values
     /// </summary>
     /// <param name="areaInformation">The information relevant for the UI</param>
-    public void SetupUI(AreaData areaData, AreaInformationData areaInformation, CameraMovement cameraController)
+    public void SetupUI(AreaData areaData, AreaInformationData areaInformation, CameraMovement cameraController, bool setupUI)
     {
         //store infos
         this.areaInformation = areaInformation;
         this.cameraController = cameraController;
 
         //create and set up UI
-        GameObject uiObject = Instantiate(generatorUIPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        GeneratorUI ui = uiObject.GetComponent<GeneratorUI>();
-        ui.Setup(this, areaData, areaInformation);
+        if(setupUI)
+        {
+            Debug.Log("Creating generator UI");
+            GameObject uiObject = Instantiate(generatorUIPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            GeneratorUI ui = uiObject.GetComponent<GeneratorUI>();
+            ui.Setup(this, areaData, areaInformation);
+        }
+        else
+        {
+            RefreshUI();
+        }
 
         SetupCamera();
+    }
+
+    /// <summary>
+    ///     This function refreshes the UI reference after a scene reload
+    /// </summary>
+    private void RefreshUI()
+    {
+        GameObject uiObject = GameObject.FindGameObjectWithTag("GeneratorUI");
+        if(uiObject == null)
+        {
+            Debug.LogError("Generator UI Object not found");
+            return;
+        }
+
+        GeneratorUI ui = uiObject.GetComponent<GeneratorUI>();
+        if(ui == null)
+        {
+            Debug.LogError("Generator UI Script not found");
+            return;
+        }
+
+        Debug.Log("Refresh ui reference");
+        ui.SetUIManager(this);
     }
 
     /// <summary>

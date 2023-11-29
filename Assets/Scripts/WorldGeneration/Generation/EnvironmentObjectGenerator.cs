@@ -65,6 +65,7 @@ public class EnvironmentObjectGenerator
     //Settings
     private float maxObjectPercentage;
     private int maxIterationsPerObject;
+    private int objectTriesPerPosition = 3;
     private int minDistance;
     private float spawnChance;
     private int spawnDistance;
@@ -126,16 +127,28 @@ public class EnvironmentObjectGenerator
         //get possible objects
         List<EnvironmentObject> objects = GetPossibleObjects();
 
+        int objectsPlaced = 0;
+
         //for each point:
         foreach (Vector2Int objectPosition in objectPositions)
         {
-            //  decide type
-            int objectIndex = pseudoRandomNumberGenerator.Next(0, objects.Count);
-            EnvironmentObject objectType = objects[objectIndex];
+            for(int i = 0; i < objectTriesPerPosition; i++)
+            {
+                //decide type
+                int objectIndex = pseudoRandomNumberGenerator.Next(0, objects.Count);
+                EnvironmentObject objectType = objects[objectIndex];
 
-            //  place if possible
-            TryPlaceObject(objectPosition, objectType);
+                //place if possible
+                if(TryPlaceObject(objectPosition, objectType))
+                {
+                    //object placed, no more tries needed
+                    objectsPlaced++;
+                    break;
+                }
+            }            
         }
+
+        Debug.Log("Objects placed " + objectsPlaced + " / " + objectPositions.Count);
     }
 
     #region Get Positinos
@@ -147,10 +160,12 @@ public class EnvironmentObjectGenerator
 
         //get all possible positions
         List<Vector2Int> possiblePositions = GetPossiblePositions();
+        Debug.Log("Possible Positions Found: " + possiblePositions.Count);
 
         //sample maxObjectPercentage of the positions
         int floorPositions = possiblePositions.Count;
         int maxObjects = Mathf.RoundToInt(maxObjectPercentage * floorPositions);
+        Debug.Log("Try to return " + maxObjects + " object spots");
 
         for(int objectIndex=0; objectIndex < maxObjects; objectIndex++)
         {
@@ -198,7 +213,7 @@ public class EnvironmentObjectGenerator
         {
             for (int y = borderSize; y < size.y - borderSize; y++)
             {
-                if (cellTypes[x, y] == CellType.FLOOR)
+                if (cellTypes[x, y] == CellType.FLOOR && SurroundedByFloor(new Vector2Int(x, y)))
                 {
                     objectPositions.Add(new Vector2Int(x, y));
                 }
@@ -323,66 +338,56 @@ public class EnvironmentObjectGenerator
     #region Object Placement
 
     //tries to place an object of given type at given position
-    private void TryPlaceObject(Vector2Int position, EnvironmentObject type)
+    private bool TryPlaceObject(Vector2Int position, EnvironmentObject type)
     {
         switch(type)
         {
             case EnvironmentObject.STONE_SMALL:
-                PlaceSmallStone(position);
-                break;
+                return PlaceSmallStone(position);
 
             case EnvironmentObject.STONE_BIG:
-                PlaceBigStone(position);
-                break;
+                return PlaceBigStone(position);
 
             case EnvironmentObject.BUSH:
-                PlaceBush(position, TileSprite.BUSH);
-                break;
+                return PlaceBush(position, TileSprite.BUSH);
 
             case EnvironmentObject.SAVANNA_BUSH:
-                PlaceBush(position, TileSprite.SAVANNA_BUSH);
-                break;
+                return PlaceBush(position, TileSprite.SAVANNA_BUSH);
 
             case EnvironmentObject.TREE:
-                PlaceTree(position, TileSprite.TREE);
-                break;
+                return PlaceTree(position, TileSprite.TREE);
 
             case EnvironmentObject.SAVANNA_TREE:
-                PlaceTree(position, TileSprite.SAVANNA_TREE);
-                break;
+                return PlaceTree(position, TileSprite.SAVANNA_TREE);
 
             case EnvironmentObject.TREE_STUMP:
-                PlaceTreeStump(position);
-                break;
+                return PlaceTreeStump(position);
 
             case EnvironmentObject.FENCE:
-                PlaceFence(position);
-                break;
+                return PlaceFence(position);
 
             case EnvironmentObject.HOUSE_SMALL:
-                PlaceSmallHouse(position);
-                break;
+                return PlaceSmallHouse(position);
 
             case EnvironmentObject.HOUSE_BIG:
-                PlaceBigHouse(position);
-                break;
+                return PlaceBigHouse(position);
 
             case EnvironmentObject.BARREL:
-                PlaceBarrel(position);
-                break;
+                return PlaceBarrel(position);
 
             case EnvironmentObject.LOG:
-                PlaceLog(position);
-                break;
+                return PlaceLog(position);
 
             case EnvironmentObject.GRAVE:
-                PlaceGrave(position);
-                break;
+                return PlaceGrave(position);
+
+            default:
+                return false;
         }
     }
 
     //places small stone object
-    private void PlaceSmallStone(Vector2Int position)
+    private bool PlaceSmallStone(Vector2Int position)
     {
         List<Vector2Int> tiles = new List<Vector2Int>();
 
@@ -429,16 +434,18 @@ public class EnvironmentObjectGenerator
                 PlaceSmallStone(spawnPosition);
             }            
         }
+
+        return true;
     }
 
     //places big stone object
-    private void PlaceBigStone(Vector2Int position)
+    private bool PlaceBigStone(Vector2Int position)
     {
         Optional<Vector2Int> startPosition = FloorArea(position, 2, 2);
 
         if (!startPosition.IsPresent())
         {
-            return;
+            return false;
         }
 
         List<Vector2Int> tiles = GetStartPosition(startPosition.Value(), 2, 2);
@@ -511,10 +518,12 @@ public class EnvironmentObjectGenerator
                 PlaceSmallStone(spawnPosition);
             }
         }
+
+        return true;
     }
 
     //places bush object
-    private void PlaceBush(Vector2Int position, TileSprite sprite)
+    private bool PlaceBush(Vector2Int position, TileSprite sprite)
     {
         List<Vector2Int> tiles = new List<Vector2Int> { position };
 
@@ -561,16 +570,18 @@ public class EnvironmentObjectGenerator
                 PlaceBush(spawnPosition, sprite);
             }
         }
+
+        return true;
     }
 
     //place tree object
-    private void PlaceTree(Vector2Int position, TileSprite sprite)
+    private bool PlaceTree(Vector2Int position, TileSprite sprite)
     {
         Optional<Vector2Int> startPosition = FloorArea(position, 2, 2);
 
         if (!startPosition.IsPresent())
         {
-            return;
+            return false;
         }
 
         List<Vector2Int> currentTiles = GetStartPosition(startPosition.Value(), 2, 2);
@@ -630,21 +641,26 @@ public class EnvironmentObjectGenerator
             tileSprites[tile.x, tile.y, 4] = sprite;
             cellTypes[tile.x, tile.y] = CellType.OBJECT;
         }
+
+        return true;
     }
 
     //place tree stump object
-    private void PlaceTreeStump(Vector2Int position)
+    private bool PlaceTreeStump(Vector2Int position)
     {
         Optional<Vector2Int> spot = FloorArea(position, 2, 2);
         if (spot.IsPresent())
         {
             PlaceSpriteAtArea(spot.Value(), 2, 2, TileSprite.TREE_STUMP);
+            return true;
         }
+        return false;
     }
 
     //place fence object
-    private void PlaceFence(Vector2Int position)
+    private bool PlaceFence(Vector2Int position)
     {
+        bool success = false;
         List<Vector2Int> tiles = new List<Vector2Int> { position };
 
         bool placedSomething = true;
@@ -674,6 +690,7 @@ public class EnvironmentObjectGenerator
         //place sprites and mark as object
         if(tiles.Count > 1)
         {
+            success = true;
             foreach (Vector2Int tile in tiles)
             {
                 tileSprites[tile.x, tile.y, 4] = TileSprite.FENCE;
@@ -693,36 +710,44 @@ public class EnvironmentObjectGenerator
                 PlaceFence(spawnPosition);
             }
         }
+
+        return success;
     }
 
     //place small house object
-    private void PlaceSmallHouse(Vector2Int position)
+    private bool PlaceSmallHouse(Vector2Int position)
     {
         Optional<Vector2Int> spot = FloorArea(position, 2, 3);
         if (spot.IsPresent())
         {
             PlaceSpriteAtArea(spot.Value(), 2, 3, TileSprite.HOUSE_SMALL);
+            return true;
         }
+        return false;
     }
 
     //place big house object
-    private void PlaceBigHouse(Vector2Int position)
+    private bool PlaceBigHouse(Vector2Int position)
     {
         Optional<Vector2Int> spot = FloorArea(position, 5, 5);
         if (spot.IsPresent())
         {
             PlaceSpriteAtArea(spot.Value(), 5, 5, TileSprite.HOUSE_BIG);
+            return true;
         }
+        return false;
     }
 
     //place barrel object
-    private void PlaceBarrel(Vector2Int position)
+    private bool PlaceBarrel(Vector2Int position)
     {
+        bool success = false;
         List<Vector2Int> tiles = new List<Vector2Int>();
 
         if(SurroundedByFloor(position + Vector2Int.up))
         {
             //expand upwards
+            success = true;
             PlaceSpriteAtArea(position, 1, 2, TileSprite.BARREL);
             tiles.Add(position);
             tiles.Add(position + Vector2Int.up);
@@ -730,8 +755,8 @@ public class EnvironmentObjectGenerator
         else if(SurroundedByFloor(position + Vector2Int.down))
         {
             //expand downwards
+            success = true;
             PlaceSpriteAtArea(position + Vector2Int.down, 1, 2, TileSprite.BARREL);
-
             tiles.Add(position);
             tiles.Add(position + Vector2Int.down);
         }
@@ -748,11 +773,14 @@ public class EnvironmentObjectGenerator
                 PlaceBarrel(spawnPosition);
             }
         }
+
+        return success;
     }
 
     //place log object
-    private void PlaceLog(Vector2Int position)
+    private bool PlaceLog(Vector2Int position)
     {
+        bool success = false;
         List<Vector2Int> tiles = new List<Vector2Int> { position };
 
         bool placedSomething = true;
@@ -782,6 +810,7 @@ public class EnvironmentObjectGenerator
         //place sprites and mark as object
         if(tiles.Count > 1)
         {
+            success = true;
             foreach(Vector2Int tile in tiles)
             {
                 tileSprites[tile.x, tile.y, 4] = TileSprite.LOG;
@@ -801,16 +830,20 @@ public class EnvironmentObjectGenerator
                 PlaceLog(spawnPosition);
             }
         }
+
+        return success;
     }
 
     //place grave object
-    private void PlaceGrave(Vector2Int position)
+    private bool PlaceGrave(Vector2Int position)
     {
+        bool success = false;
         List<Vector2Int> tiles = new List<Vector2Int>();
 
         Optional<Vector2Int> spot = FloorArea(position, 2, 2);
         if (spot.IsPresent())
         {
+            success = true;
             tiles.Add(spot.Value());
             tiles.Add(spot.Value() + Vector2Int.right);
             tiles.Add(spot.Value() + Vector2Int.up);
@@ -827,12 +860,11 @@ public class EnvironmentObjectGenerator
             {
                 int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
                 Vector2Int spawnPosition = possiblePositions[spawnIndex];
-
-                Debug.Log("Grave from " + position.ToString() + " spawn new grave at " + spawnPosition.ToString());
-
                 PlaceGrave(spawnPosition);
             }
         }
+
+        return success;
     }
 
     #region Helper functions
