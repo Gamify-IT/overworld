@@ -387,7 +387,11 @@ public class InterfaceInfo : MonoBehaviour
         infoContent.text = content;
         infoScrollRect.verticalNormalizedPosition = 1f;
         infoCloseButton.gameObject.SetActive(closeable);
-        infoCloseAndViewButton.gameObject.SetActive(closeAndView);
+
+        if(infoCloseAndViewButton != null)
+        {
+            infoCloseAndViewButton.gameObject.SetActive(closeAndView);
+        }        
 
         infoPanel.SetActive(true);
     }
