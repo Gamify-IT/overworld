@@ -6130,14 +6130,9 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: -8, y: -6}
-        - {x: -8, y: -2}
-        - {x: -7, y: -2}
-        - {x: -7, y: -6}
-      - - {x: 7, y: -6}
-        - {x: 7, y: -2}
-        - {x: 8, y: -2}
-        - {x: 8, y: -6}
+      - - {x: 8, y: -8}
+        - {x: 8, y: -8}
+        - {x: 8, y: -8}
       tessellationDetail: 0
       bones: []
       spriteID: a7efbd406435d6a4592edfef76604a63
@@ -7233,19 +7228,9 @@ TextureImporter:
         - {x: -8, y: 8}
         - {x: -8, y: 8}
         - {x: -8, y: 8}
-      - - {x: 2, y: 7}
-        - {x: 2, y: 8}
-        - {x: 5, y: 8}
-        - {x: 5, y: 7}
       - - {x: 1, y: -8}
-        - {x: 1, y: -7}
-        - {x: 2, y: -7}
-        - {x: 2, y: -6}
-        - {x: 5, y: -6}
-        - {x: 5, y: -7}
-        - {x: 6, y: -7}
-        - {x: 6, y: -8}
-        - {x: 7, y: -8}
+        - {x: 1, y: -8}
+        - {x: 1, y: -8}
       tessellationDetail: 0
       bones: []
       spriteID: 3fb8ae39add130e46b614f8100243d93
@@ -7296,17 +7281,8 @@ TextureImporter:
         - {x: -8, y: 8}
         - {x: -8, y: 8}
         - {x: -8, y: 8}
-      - - {x: -5, y: 7}
-        - {x: -5, y: 8}
-        - {x: -2, y: 8}
-        - {x: -2, y: 7}
-      - - {x: -6, y: -8}
-        - {x: -6, y: -7}
-        - {x: -4, y: -7}
-        - {x: -4, y: -6}
-        - {x: -2, y: -6}
-        - {x: -2, y: -7}
-        - {x: -1, y: -7}
+      - - {x: -1, y: -8}
+        - {x: -1, y: -8}
         - {x: -1, y: -8}
       tessellationDetail: 0
       bones: []
@@ -8104,14 +8080,9 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: -8, y: 1}
-        - {x: -8, y: 5}
-        - {x: -7, y: 5}
-        - {x: -7, y: 1}
-      - - {x: 7, y: 1}
-        - {x: 7, y: 5}
-        - {x: 8, y: 5}
-        - {x: 8, y: 1}
+      - - {x: 8, y: 8}
+        - {x: 8, y: 8}
+        - {x: 8, y: 8}
       tessellationDetail: 0
       bones: []
       spriteID: 11fc2a9d0657370478b1bdcced25cd49
@@ -25869,10 +25840,10 @@ TextureImporter:
       Overworld-Savanna_619: -1161090432
       Overworld-Savanna_605: 674721142
       Overworld-Savanna_1011: -1273286871
-      Overworld-Savanna_155: -1081850894
-      Overworld-Savanna_219: -1497855851
-      Overworld-Savanna_543: -402382518
       Overworld-Savanna_760: 2118579212
+      Overworld-Savanna_543: -402382518
+      Overworld-Savanna_219: -1497855851
+      Overworld-Savanna_155: -1081850894
       Overworld-Savanna_154: 1494039382
       Overworld-Savanna_99: -1820344552
       Overworld-Savanna_489: 202642716
