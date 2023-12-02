@@ -1,6 +1,6 @@
 {
-    "borderSize": 5,
-    "worldConnectionWidth": 5,
+    "borderSize": 15,
+    "worldConnectionWidth": 3,
     "corridorSize": 2,
     "floorRoomThreshold": 50,
     "wallRoomThreshold": 50,
