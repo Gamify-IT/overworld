@@ -1,5 +1,5 @@
 {
-    "area": "/overworld/api/v1",
+    "overworldBackendPath": "/overworld/api/v1",
     "maxWorld": 4,
     "maxMinigames": 15,
     "maxNPCs": 10,

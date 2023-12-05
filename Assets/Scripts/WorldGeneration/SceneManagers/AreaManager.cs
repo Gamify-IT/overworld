@@ -502,7 +502,7 @@ public class AreaManager : MonoBehaviour
 
         if (areaData.GetAreaMapData().GetBarrierSpots().Count == 0)
         {
-            worldConnectionBarriers = objectGenerator.GenerateBarrierSpots(objectPositionGenerator.GetWorldBarrierSpots());
+            worldConnectionBarriers = objectGenerator.GenerateBarrierSpots(objectPositionGenerator.GetWorldBarrierSpots(areaIdentifier));
             areaData.GetAreaMapData().SetBarrierSpots(worldConnectionBarriers);
             areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
         }

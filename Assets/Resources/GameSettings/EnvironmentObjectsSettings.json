@@ -4,7 +4,7 @@
     "minDistance": 8,
     "spawnChance": 0.6,
     "spawnDistance": 10,
-    "bigStoneExpandChance": 0.9,
+    "bigStoneExpandChance": 0.7,
     "bushExpandChance": 0.8,
     "treeExpandChance": 0.9,
     "fenceExpandChance": 0.65,

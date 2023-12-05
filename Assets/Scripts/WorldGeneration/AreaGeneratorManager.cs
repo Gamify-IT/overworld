@@ -72,7 +72,7 @@ public class AreaGeneratorManager : MonoBehaviour
         else
         {
             Debug.Log("Invalid area provided: " + urlPart + ", loading world 1 instead");
-            return new AreaInformation(1, new Optional<int>(2));
+            return new AreaInformation(1, new Optional<int>(1));
         }     
     }
 

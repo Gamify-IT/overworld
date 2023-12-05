@@ -48,12 +48,12 @@ public class ObjectPositionGenerator
 
     public ObjectPositionGenerator(CellType[,] tileType, List<WorldConnection> worldConnections, WorldStyle style)
     {
+        this.tileType = tileType;
+        this.style = style;
         size = new Vector2Int(tileType.GetLength(0), tileType.GetLength(1));
         objectPositions = new List<Vector2Int>();
         dungeonWallPositions = new List<Vector2Int>();            
-        GetObjectPositions(tileType);
-        this.tileType = tileType;
-        this.style = style;
+        GetObjectPositions();
 
         this.worldConnections = worldConnections;
         minigamePositions = new List<Vector2Int>();
@@ -62,7 +62,7 @@ public class ObjectPositionGenerator
         teleporterPositions = new List<Vector2Int>();
         dungeonPositions = new List<DungeonSpotPosition>();
 
-        bool[,] accessableTiles = GetAccessableTiles(tileType);
+        bool[,] accessableTiles = GetAccessableTiles();
         pathfinder = new Pathfinder(accessableTiles);
     }
 
@@ -71,14 +71,14 @@ public class ObjectPositionGenerator
     /// </summary>
     /// <param name="tiles">The layout</param>
     /// <returns>All accessable tiles</returns>
-    private bool[,] GetAccessableTiles(CellType[,] tiles)
+    private bool[,] GetAccessableTiles()
     {
         bool[,] accessableTiles = new bool[size.x, size.y];
         for (int x = 0; x < size.x; x++)
         {
             for (int y = 0; y < size.y; y++)
             {
-                if(tiles[x, y] != CellType.WALL)
+                if(tileType[x, y] != CellType.WALL)
                 {
                     accessableTiles[x, y] = true;
                 }
@@ -91,19 +91,19 @@ public class ObjectPositionGenerator
     ///     This function fills the lists containig all positions an object can be placed at
     /// </summary>
     /// <param name="tiles">The tile types of the layout</param>
-    private void GetObjectPositions(CellType[,] tiles)
+    private void GetObjectPositions()
     {
         for (int x = 0; x < size.x; x++)
         {
             for (int y = 0; y < size.y; y++)
             {
-                if(tiles[x, y] == CellType.FLOOR)
+                if(tileType[x, y] == CellType.FLOOR && SurroundedByFloor(x, y))
                 {
                     objectPositions.Add(new Vector2Int(x, y));
                 }
-                else if(tiles[x, y] == CellType.WALL)
+                else if(tileType[x, y] == CellType.WALL)
                 {
-                    if(IsInRange(x, y-1) && tiles[x, y-1] == CellType.FLOOR)
+                    if(IsInRange(x, y-1) && tileType[x, y-1] == CellType.FLOOR)
                     {
                         //bottom tile of wall
                         dungeonWallPositions.Add(new Vector2Int(x, y));
@@ -111,6 +111,28 @@ public class ObjectPositionGenerator
                 }
             }
         }
+    }
+
+    /// <summary>
+    ///     This function checks, if the three-by-three-grid around the given position is all floor tiles
+    /// </summary>
+    /// <param name="posX">The x coordinate</param>
+    /// <param name="posY">The y coordinate</param>
+    /// <returns>True, if all cells of the grid are floor tiles, false otherwise</returns>
+    private bool SurroundedByFloor(int posX, int posY)
+    {
+        for (int x = posX - 1; x <= posX + 1; x++)
+        {
+            for (int y = posY - 1; y <= posY + 1; y++)
+            {
+                if (!IsInRange(x, y) || tileType[x, y] != CellType.FLOOR)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     #endregion
@@ -456,16 +478,19 @@ public class ObjectPositionGenerator
     }
 
     //create world connection barriers
-    public List<BarrierSpotPosition> GetWorldBarrierSpots()
+    public List<BarrierSpotPosition> GetWorldBarrierSpots(AreaInformation areaIdentifier)
     {
         List<BarrierSpotPosition> barriers = new List<BarrierSpotPosition>();
 
         foreach(WorldConnection worldConnection in worldConnections)
         {
-            Debug.Log("Create world connection barrier for world: " + worldConnection.GetDestinationWorld());
+            if(worldConnection.GetDestinationWorld() > areaIdentifier.GetWorldIndex())
+            {
+                Debug.Log("Create world connection barrier for world: " + worldConnection.GetDestinationWorld());
 
-            BarrierSpotPosition barrier = new BarrierSpotPosition(worldConnection.GetPosition(), BarrierStyle.TREE, worldConnection.GetDestinationWorld());
-            barriers.Add(barrier);
+                BarrierSpotPosition barrier = new BarrierSpotPosition(worldConnection.GetPosition(), BarrierStyle.TREE, worldConnection.GetDestinationWorld());
+                barriers.Add(barrier);
+            }            
         }
 
         return barriers;

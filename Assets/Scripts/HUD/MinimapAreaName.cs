@@ -9,6 +9,7 @@ using UnityEngine;
 public class MinimapAreaName : MonoBehaviour
 {
     public string areaName;
+    public bool dungeonArea;
 
     /// <summary>
     /// This function sets the name of the area on the minimap
@@ -18,6 +19,10 @@ public class MinimapAreaName : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if(dungeonArea)
+            {
+                areaName = "Dungeon " + LoadSubScene.areaExchange.GetWorldIndex() + "-" + LoadSubScene.areaExchange.GetDungeonIndex();
+            }
             ZoomScript.areaName = areaName;
         }
     }

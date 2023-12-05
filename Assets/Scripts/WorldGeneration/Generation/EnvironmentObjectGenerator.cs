@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class EnvironmentObjectGenerator
 {
@@ -448,7 +449,8 @@ public class EnvironmentObjectGenerator
             return false;
         }
 
-        List<Vector2Int> tiles = GetStartPosition(startPosition.Value(), 2, 2);
+        List<Vector2Int> startTiles = GetStartPosition(startPosition.Value(), 2, 2);
+        HashSet<Vector2Int> currentTiles = new HashSet<Vector2Int>(startTiles);
 
         bool placedSomething = true;
 
@@ -456,51 +458,32 @@ public class EnvironmentObjectGenerator
         {
             placedSomething = false;
 
-            //get all extention points
-            List<Vector2Int> expandPoints = GetBigExpandOptions(tiles);
+            //get all extention options
+            List<Tuple<Vector2Int, Vector2Int>> expandOptions = GetBigExpandOptions(currentTiles);
 
-            if (expandPoints.Count > 0)
+            if (expandOptions.Count > 0)
             {
                 //expand by bush expand chance
                 int expand = pseudoRandomNumberGenerator.Next(0, 100);
                 if (expand < bigStoneExpandChance * 100)
                 {
+                    placedSomething = true;
+
                     //choose where to expand
-                    int expandIndex = pseudoRandomNumberGenerator.Next(0, expandPoints.Count);
+                    int expandIndex = pseudoRandomNumberGenerator.Next(0, expandOptions.Count);
 
-                    //pick two tiles to expand
-                    Vector2Int expandPosition = expandPoints[expandIndex];
+                    //pick the tuple to expand
+                    Tuple<Vector2Int, Vector2Int> expandPositions = expandOptions[expandIndex];
 
-                    if(expandPoints.Contains(expandPosition + Vector2Int.left))
-                    {
-                        tiles.Add(expandPosition);
-                        tiles.Add(expandPosition + Vector2Int.left);
-                        placedSomething = true;
-                    }
-                    else if (expandPoints.Contains(expandPosition + Vector2Int.up))
-                    {
-                        tiles.Add(expandPosition);
-                        tiles.Add(expandPosition + Vector2Int.up);
-                        placedSomething = true;
-                    }
-                    else if (expandPoints.Contains(expandPosition + Vector2Int.right))
-                    {
-                        tiles.Add(expandPosition);
-                        tiles.Add(expandPosition + Vector2Int.right);
-                        placedSomething = true;
-                    }
-                    else if (expandPoints.Contains(expandPosition + Vector2Int.down))
-                    {
-                        tiles.Add(expandPosition);
-                        tiles.Add(expandPosition + Vector2Int.down);
-                        placedSomething = true;
-                    }
+                    //add positions to hash set
+                    currentTiles.Add(expandPositions.Item1);
+                    currentTiles.Add(expandPositions.Item2);
                 }
             }
         }
 
         //place sprites and mark as object
-        foreach (Vector2Int tile in tiles)
+        foreach (Vector2Int tile in currentTiles)
         {
             tileSprites[tile.x, tile.y, 4] = TileSprite.STONE_BIG;
             cellTypes[tile.x, tile.y] = CellType.OBJECT;
@@ -510,7 +493,7 @@ public class EnvironmentObjectGenerator
         int spawn = pseudoRandomNumberGenerator.Next(0, 100);
         if (spawn < spawnChance * 100)
         {
-            List<Vector2Int> possiblePositions = GetPossiblePositionsNearby(tiles);
+            List<Vector2Int> possiblePositions = GetPossiblePositionsNearby(currentTiles.ToList());
             if (possiblePositions.Count > 0)
             {
                 int spawnIndex = pseudoRandomNumberGenerator.Next(0, possiblePositions.Count);
@@ -526,6 +509,7 @@ public class EnvironmentObjectGenerator
     private bool PlaceBush(Vector2Int position, TileSprite sprite)
     {
         List<Vector2Int> tiles = new List<Vector2Int> { position };
+        List<Vector2Int> edgeTiles = new List<Vector2Int> { position };
 
         bool placedSomething = true;
 
@@ -534,7 +518,7 @@ public class EnvironmentObjectGenerator
             placedSomething = false;
 
             //get all extention points
-            List<Vector2Int> expandPoints = GetExpandOptions(tiles);
+            List<Tuple<Vector2Int, Vector2Int>> expandPoints = GetExpandOptions(tiles, edgeTiles);
 
             if(expandPoints.Count > 0)
             {
@@ -544,8 +528,13 @@ public class EnvironmentObjectGenerator
                 {
                     //choose where to expand
                     int expandIndex = pseudoRandomNumberGenerator.Next(0, expandPoints.Count);
-                    Vector2Int expandPosition = expandPoints[expandIndex];
-                    tiles.Add(expandPosition);
+                    Tuple<Vector2Int, Vector2Int> expandPosition = expandPoints[expandIndex];
+                    tiles.Add(expandPosition.Item2);
+
+                    //update edge tiles
+                    edgeTiles.Remove(expandPosition.Item1);
+                    edgeTiles.Add(expandPosition.Item2);
+
                     placedSomething = true;
                 }
             }            
@@ -584,7 +573,8 @@ public class EnvironmentObjectGenerator
             return false;
         }
 
-        List<Vector2Int> currentTiles = GetStartPosition(startPosition.Value(), 2, 2);
+        List<Vector2Int> startTiles = GetStartPosition(startPosition.Value(), 2, 2);
+        HashSet<Vector2Int> currentTiles = new HashSet<Vector2Int>(startTiles);
 
         bool placedSomething = true;
 
@@ -593,44 +583,25 @@ public class EnvironmentObjectGenerator
             placedSomething = false;
 
             //get all extention points
-            List<Vector2Int> expandPoints = GetBigExpandOptions(currentTiles);
+            List<Tuple<Vector2Int, Vector2Int>> expandOptions = GetBigExpandOptions(currentTiles);
 
-            if (expandPoints.Count > 0)
+            if (expandOptions.Count > 0)
             {
                 //expand by bush expand chance
                 int expand = pseudoRandomNumberGenerator.Next(0, 100);
                 if (expand < treeExpandChance * 100)
                 {
+                    placedSomething = true;
+
                     //choose where to expand
-                    int expandIndex = pseudoRandomNumberGenerator.Next(0, expandPoints.Count);
+                    int expandIndex = pseudoRandomNumberGenerator.Next(0, expandOptions.Count);
 
-                    //pick two tiles to expand
-                    Vector2Int expandPosition = expandPoints[expandIndex];
+                    //pick the tuple to expand
+                    Tuple<Vector2Int, Vector2Int> expandPositions = expandOptions[expandIndex];
 
-                    if (expandPoints.Contains(expandPosition + Vector2Int.left))
-                    {
-                        currentTiles.Add(expandPosition);
-                        currentTiles.Add(expandPosition + Vector2Int.left);
-                        placedSomething = true;
-                    }
-                    else if (expandPoints.Contains(expandPosition + Vector2Int.up))
-                    {
-                        currentTiles.Add(expandPosition);
-                        currentTiles.Add(expandPosition + Vector2Int.up);
-                        placedSomething = true;
-                    }
-                    else if (expandPoints.Contains(expandPosition + Vector2Int.right))
-                    {
-                        currentTiles.Add(expandPosition);
-                        currentTiles.Add(expandPosition + Vector2Int.right);
-                        placedSomething = true;
-                    }
-                    else if (expandPoints.Contains(expandPosition + Vector2Int.down))
-                    {
-                        currentTiles.Add(expandPosition);
-                        currentTiles.Add(expandPosition + Vector2Int.down);
-                        placedSomething = true;
-                    }
+                    //add positions to hash set
+                    currentTiles.Add(expandPositions.Item1);
+                    currentTiles.Add(expandPositions.Item2);
                 }
             }
         }
@@ -662,6 +633,7 @@ public class EnvironmentObjectGenerator
     {
         bool success = false;
         List<Vector2Int> tiles = new List<Vector2Int> { position };
+        List<Vector2Int> edgeTiles = new List<Vector2Int> { position };
 
         bool placedSomething = true;
 
@@ -670,7 +642,7 @@ public class EnvironmentObjectGenerator
             placedSomething = false;
 
             //get all extention points
-            List<Vector2Int> expandPoints = GetExpandOptions(tiles);
+            List<Tuple<Vector2Int, Vector2Int>> expandPoints = GetExpandOptions(tiles, edgeTiles);
 
             if (expandPoints.Count > 0)
             {
@@ -680,8 +652,13 @@ public class EnvironmentObjectGenerator
                 {
                     //choose where to expand
                     int expandIndex = pseudoRandomNumberGenerator.Next(0, expandPoints.Count);
-                    Vector2Int expandPosition = expandPoints[expandIndex];
-                    tiles.Add(expandPosition);
+                    Tuple<Vector2Int, Vector2Int> expandPosition = expandPoints[expandIndex];
+                    tiles.Add(expandPosition.Item2);
+
+                    //update edge tiles
+                    edgeTiles.Remove(expandPosition.Item1);
+                    edgeTiles.Add(expandPosition.Item2);
+
                     placedSomething = true;
                 }
             }
@@ -942,35 +919,39 @@ public class EnvironmentObjectGenerator
         return expandOptions;
     }
 
-    //gets free tiles in all four directions
-    private List<Vector2Int> GetExpandOptions(List<Vector2Int> positions)
+    //gets free tiles in all four directions, first entry of return tuple: position that gets expanded, second entry: newly added position
+    private List<Tuple<Vector2Int, Vector2Int>> GetExpandOptions(List<Vector2Int> positions, List<Vector2Int> edgePositions)
     {
-        HashSet<Vector2Int> expandOptions = new HashSet<Vector2Int>();
+        HashSet<Tuple<Vector2Int, Vector2Int>> expandOptions = new HashSet<Tuple<Vector2Int, Vector2Int>>();
 
-        foreach (Vector2Int position in positions)
+        foreach (Vector2Int position in edgePositions)
         {
             //check left
             if (CanExpand(positions, position, position + Vector2Int.left))
             {
-                expandOptions.Add(position + Vector2Int.left);
+                Tuple<Vector2Int, Vector2Int> expandOption = new Tuple<Vector2Int, Vector2Int>(position, position + Vector2Int.left);
+                expandOptions.Add(expandOption);
             }
 
             //check up
             if (CanExpand(positions, position, position + Vector2Int.up))
             {
-                expandOptions.Add(position + Vector2Int.up);
+                Tuple<Vector2Int, Vector2Int> expandOption = new Tuple<Vector2Int, Vector2Int>(position, position + Vector2Int.up);
+                expandOptions.Add(expandOption);
             }
 
             //check right
             if (CanExpand(positions, position, position + Vector2Int.right))
             {
-                expandOptions.Add(position + Vector2Int.right);
+                Tuple<Vector2Int, Vector2Int> expandOption = new Tuple<Vector2Int, Vector2Int>(position, position + Vector2Int.right);
+                expandOptions.Add(expandOption);
             }
 
             //check down
             if (CanExpand(positions, position, position + Vector2Int.down))
             {
-                expandOptions.Add(position + Vector2Int.down);
+                Tuple<Vector2Int, Vector2Int> expandOption = new Tuple<Vector2Int, Vector2Int>(position, position + Vector2Int.down);
+                expandOptions.Add(expandOption);
             }
         }
 
@@ -1045,117 +1026,86 @@ public class EnvironmentObjectGenerator
     }
 
     //gets free tiles in all four directions, at least two tiles
-    private List<Vector2Int> GetBigExpandOptions(List<Vector2Int> positions)
+    private List<Tuple<Vector2Int, Vector2Int>> GetBigExpandOptions(HashSet<Vector2Int> positions)
     {
-        HashSet<Vector2Int> expandOptions = new HashSet<Vector2Int>();
+        HashSet<Tuple<Vector2Int, Vector2Int>> expandOptions = new HashSet<Tuple<Vector2Int, Vector2Int>>();
 
         foreach (Vector2Int position in positions)
         {
             //check left
-            if (CanBigExpand(positions, position, position + Vector2Int.left))
+            if(!positions.Contains(position + Vector2Int.left) && SurroundedByFloor(position + Vector2Int.left))
             {
-                expandOptions.Add(position + Vector2Int.left);
-            }
+                if(positions.Contains(position + Vector2Int.up) && SurroundedByFloor(position + new Vector2Int(-1, 1)))
+                {
+                    //can expand left and left-up
+                    Tuple<Vector2Int, Vector2Int> expandOption = new Tuple<Vector2Int, Vector2Int>(position + Vector2Int.left, position + new Vector2Int(-1, 1));
+                    expandOptions.Add(expandOption);
+                }
 
-            //check up
-            if (CanBigExpand(positions, position, position + Vector2Int.up))
-            {
-                expandOptions.Add(position + Vector2Int.up);
+                if (positions.Contains(position + Vector2Int.down) && SurroundedByFloor(position + new Vector2Int(-1, -1)))
+                {
+                    //can expand left and left-down
+                    Tuple<Vector2Int, Vector2Int> expandOption = new Tuple<Vector2Int, Vector2Int>(position + Vector2Int.left, position + new Vector2Int(-1, -1));
+                    expandOptions.Add(expandOption);
+                }
             }
 
             //check right
-            if (CanBigExpand(positions, position, position + Vector2Int.right))
+            if (!positions.Contains(position + Vector2Int.right) && SurroundedByFloor(position + Vector2Int.right))
             {
-                expandOptions.Add(position + Vector2Int.right);
+                if (positions.Contains(position + Vector2Int.up) && SurroundedByFloor(position + new Vector2Int(1, 1)))
+                {
+                    //can expand right and right-up
+                    Tuple<Vector2Int, Vector2Int> expandOption = new Tuple<Vector2Int, Vector2Int>(position + Vector2Int.right, position + new Vector2Int(1, 1));
+                    expandOptions.Add(expandOption);
+                }
+
+                if (positions.Contains(position + Vector2Int.down) && SurroundedByFloor(position + new Vector2Int(1, -1)))
+                {
+                    //can expand right and right-down
+                    Tuple<Vector2Int, Vector2Int> expandOption = new Tuple<Vector2Int, Vector2Int>(position + Vector2Int.right, position + new Vector2Int(1, -1));
+                    expandOptions.Add(expandOption);
+                }
+            }
+
+            //check up
+            if (!positions.Contains(position + Vector2Int.up) && SurroundedByFloor(position + Vector2Int.up))
+            {
+                if (positions.Contains(position + Vector2Int.left) && SurroundedByFloor(position + new Vector2Int(-1, 1)))
+                {
+                    //can expand up and up-left
+                    Tuple<Vector2Int, Vector2Int> expandOption = new Tuple<Vector2Int, Vector2Int>(position + Vector2Int.up, position + new Vector2Int(-1, 1));
+                    expandOptions.Add(expandOption);
+                }
+
+                if (positions.Contains(position + Vector2Int.right) && SurroundedByFloor(position + new Vector2Int(1, 1)))
+                {
+                    //can expand up and up-right
+                    Tuple<Vector2Int, Vector2Int> expandOption = new Tuple<Vector2Int, Vector2Int>(position + Vector2Int.up, position + new Vector2Int(1, 1));
+                    expandOptions.Add(expandOption);
+                }
             }
 
             //check down
-            if (CanBigExpand(positions, position, position + Vector2Int.down))
+            if (!positions.Contains(position + Vector2Int.down) && SurroundedByFloor(position + Vector2Int.down))
             {
-                expandOptions.Add(position + Vector2Int.down);
+                if (positions.Contains(position + Vector2Int.left) && SurroundedByFloor(position + new Vector2Int(-1, -1)))
+                {
+                    //can expand down and down-left
+                    Tuple<Vector2Int, Vector2Int> expandOption = new Tuple<Vector2Int, Vector2Int>(position + Vector2Int.down, position + new Vector2Int(-1, -1));
+                    expandOptions.Add(expandOption);
+                }
+
+                if (positions.Contains(position + Vector2Int.right) && SurroundedByFloor(position + new Vector2Int(1, -1)))
+                {
+                    //can expand down and down-right
+                    Tuple<Vector2Int, Vector2Int> expandOption = new Tuple<Vector2Int, Vector2Int>(position + Vector2Int.down, position + new Vector2Int(1, -1));
+                    expandOptions.Add(expandOption);
+                }
             }
         }
 
         return expandOptions.ToList();
-    }
-
-    //checks if expansionPoint can be expanded by newPosition
-    private bool CanBigExpand(List<Vector2Int> positions, Vector2Int expansionPoint, Vector2Int newPosition)
-    {
-        if(positions.Contains(newPosition))
-        {
-            return false;
-        }
-
-        if (!SurroundedByFloor(newPosition))
-        {
-            return false;
-        }
-
-        if (expansionPoint.x == newPosition.x)
-        {
-            //try expand up / down
-            if(!positions.Contains(newPosition + Vector2Int.left) 
-                && IsNeighbor(positions, newPosition + Vector2Int.left)
-                && SurroundedByFloor(newPosition + Vector2Int.left))
-            {
-                //tile left of newPosition is free and not in list, but neighbor -> can expand
-                return true;
-            }
-            if (!positions.Contains(newPosition + Vector2Int.right)
-                && IsNeighbor(positions, newPosition + Vector2Int.right)
-                && SurroundedByFloor(newPosition + Vector2Int.right))
-            {
-                //tile right of newPosition is free and not in list, but neighbor -> can expand
-                return true;
-            }
-        }
-        else
-        {
-            //try expand left / right
-            if (!positions.Contains(newPosition + Vector2Int.up)
-                && IsNeighbor(positions, newPosition + Vector2Int.up)
-                && SurroundedByFloor(newPosition + Vector2Int.up))
-            {
-                //tile above of newPosition is free and not in list, but neighbor -> can expand
-                return true;
-            }
-            if (!positions.Contains(newPosition + Vector2Int.down)
-                && IsNeighbor(positions, newPosition + Vector2Int.down)
-                && SurroundedByFloor(newPosition + Vector2Int.down))
-            {
-                //tile below of newPosition is free and not in list, but neighbor -> can expand
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    //check, if any neighbor is in list
-    private bool IsNeighbor(List<Vector2Int> positions, Vector2Int newPosition)
-    {
-        if(positions.Contains(newPosition + Vector2Int.left))
-        {
-            return true;
-        }
-
-        if (positions.Contains(newPosition + Vector2Int.up))
-        {
-            return true;
-        }
-
-        if (positions.Contains(newPosition + Vector2Int.right))
-        {
-            return true;
-        }
-
-        if (positions.Contains(newPosition + Vector2Int.down))
-        {
-            return true;
-        }
-
-        return false;
     }
 
     #endregion
