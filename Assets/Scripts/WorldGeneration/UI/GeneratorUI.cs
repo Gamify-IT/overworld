@@ -827,6 +827,7 @@ public class GeneratorUI : MonoBehaviour
         yield return null;
 
         bool success = GenerateDungeons();
+        CheckSaveWorldButtonStatus();
 
         string feedback;
         if (amountDungeons > 0)
