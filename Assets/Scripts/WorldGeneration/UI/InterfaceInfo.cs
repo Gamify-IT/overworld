@@ -103,9 +103,9 @@ public class InterfaceInfo : MonoBehaviour
                 "\n" +
                 "'DRUNKARDS WALK': This generator results in few bigger areas connected by pathways \n" +
                 "\n" +
-                "'ISLANDS - CA': This generator results in many smaller, well shaped islands, connected with narrow pathways \n" +
+                "'ISLANDS - CELLULAR AUTOMATA': This generator results in many smaller, well shaped islands, connected with narrow pathways \n" +
                 "\n" +
-                "'ISLANDS _ DW': This generator results in many smaller, chaoticly shaped islands, connected with narrow pathways";
+                "'ISLANDS - DRUNKARDS WALK': This generator results in many smaller, chaoticly shaped islands, connected with narrow pathways";
             DisplayInfo(header, body, true, false);
         }
     }

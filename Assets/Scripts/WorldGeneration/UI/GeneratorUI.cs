@@ -61,6 +61,8 @@ public class GeneratorUI : MonoBehaviour
     [SerializeField] private Toggle teleporterToggle;
 
     [SerializeField] private Slider amountDungeonsSlider;
+    [SerializeField] private Image dungeonSliderKnob;
+    [SerializeField] private Image dungeonSliderFill;
     [SerializeField] private TextMeshProUGUI maxDungeonsText;
     [SerializeField] private TextMeshProUGUI amountDungeonsText;
     [SerializeField] private Button generateDungeonsButton;
@@ -191,7 +193,14 @@ public class GeneratorUI : MonoBehaviour
     {
         generatorTypeDropdown.ClearOptions();
         List<string> generatorTypeOptions = System.Enum.GetNames(typeof(LayoutGeneratorType)).ToList();
-        generatorTypeDropdown.AddOptions(generatorTypeOptions);
+        List<string> formattedOptions = new List<string>();
+
+        foreach (string style in generatorTypeOptions)
+        {
+            formattedOptions.Add(style.Replace("_", " "));
+        }
+        generatorTypeDropdown.AddOptions(formattedOptions);
+
         if (areaData.IsGeneratedArea())
         {
             generatorTypeDropdown.value = (int)areaData.GetAreaMapData().GetLayout().GetGeneratorType();
@@ -624,7 +633,11 @@ public class GeneratorUI : MonoBehaviour
         if(areaIdentifier.IsDungeon())
         {
             amountDungeonsSlider.maxValue = 1;
-            amountDungeonsSlider.value = 1;
+            amountDungeonsSlider.direction = Slider.Direction.RightToLeft;
+            dungeonSliderKnob.color = new Color32(150, 150, 150, 255);
+            dungeonSliderFill.color = new Color32(150, 150, 150, 255);
+            amountDungeonsSlider.interactable = false;
+
             amountDungeonsText.text = "1";
             maxDungeonsText.text = "1";
         }
@@ -863,7 +876,7 @@ public class GeneratorUI : MonoBehaviour
             header = "GENERATION FAILED";
             content = "COULD NOT CREATE ALL OBJECTS, \n \n PLEASE TRY AGAIN, \n CHANGE THE AMOUNT OF OBJECTS, \n OR \n CREATE ANOTHER LAYOUT";
         }
-        infoUI.DisplayInfo(header, content, true, false);
+        infoUI.DisplayInfo(header, content, true, true);
     }
     #endregion
 
@@ -928,27 +941,38 @@ public class GeneratorUI : MonoBehaviour
 
         yield return null;
 
-        bool success = GenerateAllContent();
+        Tuple<bool, string> result = GenerateAllContent();
+        bool success = result.Item1;
         CheckSaveWorldButtonStatus();
 
-        if (amountMinigames == 0 &&
-           amountNpcs == 0 &&
-           amountBooks == 0 &&
-           amountTeleporter == 0 &&
-           amountDungeons == 0)
+        if (success)
         {
-            contentHeader = "REMOVED ALL CONTENT";
-            content = "";
+            header = "GENERATION SUCCESSFUL";
+            if (amountMinigames == 0 &&
+                amountNpcs == 0 &&
+                amountBooks == 0 &&
+                amountTeleporter == 0 &&
+                amountDungeons == 0)
+            {
+                contentHeader = "REMOVED ALL CONTENT";
+                content = "";
+            }
+            else
+            {
+                contentHeader = "CREATED";
+            }
         }
         else
         {
-            contentHeader = "CREATED";
+            header = "GENERATION FAILED";
+            contentHeader = result.Item2;
+            content = "";
         }
 
-        DisplayGenerationFeedback(success, contentHeader + content);
+        infoUI.DisplayInfo(header, contentHeader + content, true, success);
     }
 
-    private bool GenerateAllContent()
+    private Tuple<bool, string> GenerateAllContent()
     {
         uiManager.ResetObjects();
         CheckSaveWorldButtonStatus();
@@ -957,39 +981,39 @@ public class GeneratorUI : MonoBehaviour
         {
             //could not create dungeon spots -> reset all and stop 
             uiManager.ResetObjects();
-            return false;
+            return new Tuple<bool, string>(false, "COULD NOT CREATE ALL DUNGEONS");
         }
 
         if (!GenerateMinigames())
         {
             //could not create minigame spots -> reset all and stop 
             uiManager.ResetObjects();
-            return false;
+            return new Tuple<bool, string>(false, "COULD NOT CREATE ALL MINIGAMES");
         }
 
         if (!GenerateNpcs())
         {
             //could not create npc spots -> reset all and stop 
             uiManager.ResetObjects();
-            return false;
+            return new Tuple<bool, string>(false, "COULD NOT CREATE ALL NPCS");
         }
 
         if (!GenerateBooks())
         {
             //could not create book spots -> reset all and stop 
             uiManager.ResetObjects();
-            return false;
+            return new Tuple<bool, string>(false, "COULD NOT CREATE ALL BOOKS");
         }
 
         if (!GenerateTeleporter())
         {
             //could not create teleporter spots -> reset all and stop 
             uiManager.ResetObjects();
-            return false;
+            return new Tuple<bool, string>(false, "COULD NOT CREATE ALL TELEPORTER");
         }
 
         //all spots created
-        return true;
+        return new Tuple<bool, string>(true, ""); ;
     }
 
     public void SaveAreaButtonPressed()

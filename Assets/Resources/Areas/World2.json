@@ -59,7 +59,7 @@
                 "index": 4,
                 "position": {
                     "x": -192.5,
-                    "y": 173.5
+                    "y": 174.5
                 }
             },
             {
@@ -69,8 +69,8 @@
                 },
                 "index": 5,
                 "position": {
-                    "x": -302.5,
-                    "y": 151.5
+                    "x": -301.5,
+                    "y": 152.5
                 }
             },
             {
@@ -147,7 +147,7 @@
                 "index": 12,
                 "position": {
                     "x": -90.5,
-                    "y": 24.5
+                    "y": 23.5
                 }
             },
             {
@@ -157,8 +157,8 @@
                 },
                 "index": 13,
                 "position": {
-                    "x": -288.5,
-                    "y": 112.5
+                    "x": -287.5,
+                    "y": 113.5
                 }
             },
             {
@@ -192,8 +192,8 @@
                 },
                 "index": 1,
                 "position": {
-                    "x": -228.5,
-                    "y": 89.5
+                    "x": -227.5,
+                    "y": 90.5
                 },
                 "name": "Fred",
                 "spriteName": "npc_1",
@@ -248,8 +248,8 @@
                 },
                 "index": 5,
                 "position": {
-                    "x": -295.5,
-                    "y": 134.5
+                    "x": -294.5,
+                    "y": 133.5
                 },
                 "name": "Martin",
                 "spriteName": "npc_16",
@@ -304,7 +304,7 @@
                 },
                 "index": 9,
                 "position": {
-                    "x": -166.5,
+                    "x": -165.5,
                     "y": 118.5
                 },
                 "name": "Fred",
@@ -318,7 +318,7 @@
                 },
                 "index": 10,
                 "position": {
-                    "x": -178.5,
+                    "x": -180.5,
                     "y": 137.5
                 },
                 "name": "Fred",
@@ -346,7 +346,7 @@
                 },
                 "index": 2,
                 "position": {
-                    "x": -119.5,
+                    "x": -120.5,
                     "y": 141.5
                 },
                 "name": "Mysterious Book 2"
@@ -358,7 +358,7 @@
                 },
                 "index": 3,
                 "position": {
-                    "x": -169.5,
+                    "x": -168.5,
                     "y": 61.5
                 },
                 "name": "Mysterious Book 3"
@@ -382,26 +382,13 @@
                 },
                 "index": 5,
                 "position": {
-                    "x": -287.5,
+                    "x": -286.5,
                     "y": 165.5
                 },
                 "name": "Mysterious Book 5"
             }
         ],
         "barrierSpots": [
-            {
-                "area": {
-                    "worldIndex": 2,
-                    "dungeonIndex": 0
-                },
-                "position": {
-                    "x": -70.0,
-                    "y": 44.0
-                },
-                "type": "worldBarrier",
-                "destinationAreaIndex": 1,
-                "barrierStyle": "TREE"
-            },
             {
                 "area": {
                     "worldIndex": 2,
@@ -448,7 +435,7 @@
                 },
                 "index": 3,
                 "position": {
-                    "x": -248.5,
+                    "x": -247.5,
                     "y": 115.5
                 },
                 "name": "Teleporter 3"
@@ -461,7 +448,7 @@
                 "index": 4,
                 "position": {
                     "x": -233.5,
-                    "y": 78.5
+                    "y": 79.5
                 },
                 "name": "Teleporter 4"
             },
@@ -472,7 +459,7 @@
                 },
                 "index": 5,
                 "position": {
-                    "x": -227.5,
+                    "x": -228.5,
                     "y": 167.5
                 },
                 "name": "Teleporter 5"
@@ -497,7 +484,7 @@
                 "index": 7,
                 "position": {
                     "x": -225.5,
-                    "y": 136.5
+                    "y": 137.5
                 },
                 "name": "Teleporter 7"
             },
@@ -508,8 +495,8 @@
                 },
                 "index": 8,
                 "position": {
-                    "x": -299.5,
-                    "y": 100.5
+                    "x": -298.5,
+                    "y": 98.5
                 },
                 "name": "Teleporter 8"
             },
@@ -532,8 +519,8 @@
                 },
                 "index": 10,
                 "position": {
-                    "x": -135.5,
-                    "y": 95.5
+                    "x": -136.5,
+                    "y": 96.5
                 },
                 "name": "Teleporter 10"
             }

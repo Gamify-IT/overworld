@@ -224,7 +224,7 @@ MonoBehaviour:
   cameraObject: {fileID: 996444127}
   zoomSpeed: 0.1
   minCameraSize: 10
-  maxCameraSize: 100
+  maxCameraSize: 150
 --- !u!81 &996444126
 AudioListener:
   m_ObjectHideFlags: 0

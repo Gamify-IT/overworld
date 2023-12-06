@@ -136,6 +136,8 @@ public class AreaManager : MonoBehaviour
         CustomAreaMapData areaMapData;
         if (areaData.IsGeneratedArea())
         {
+            List<SceneTransitionSpotData> dungeonSpots = areaData.GetAreaMapData().GetSceneTransitionSpots();
+            this.areaData.GetAreaMapData().GetLayout().AddDungeonSpots(dungeonSpots, areaInformation.GetObjectOffset());
             areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
             areaBuilder.RemoveAdditionalObjects();
             areaMapData = areaData.GetAreaMapData();
@@ -173,6 +175,9 @@ public class AreaManager : MonoBehaviour
         worldConnectionBarriers = new List<BarrierSpotData>();
         if(areaData.IsGeneratedArea())
         {
+            List<SceneTransitionSpotData> dungeonSpots = areaData.GetAreaMapData().GetSceneTransitionSpots();
+            this.areaData.GetAreaMapData().GetLayout().AddDungeonSpots(dungeonSpots, areaInformation.GetObjectOffset());
+
             objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetLayout().GetCellTypes(),  
                 areaInformation.GetWorldConnections(), 
                 areaData.GetAreaMapData().GetLayout().GetStyle());
@@ -520,11 +525,16 @@ public class AreaManager : MonoBehaviour
         areaData.GetAreaMapData().SetNpcSpots(new List<NpcSpotData>());
         areaData.GetAreaMapData().SetBookSpots(new List<BookSpotData>());
         areaData.GetAreaMapData().SetTeleporterSpots(new List<TeleporterSpotData>());
+
+        //remove dungeon entrance / exit tiles from layout
+        areaData.GetAreaMapData().GetLayout().RemoveDungeonSpots(areaData.GetAreaMapData().GetSceneTransitionSpots(), areaInformation.GetObjectOffset());
         areaData.GetAreaMapData().SetSceneTransitionSpots(new List<SceneTransitionSpotData>());
+
         areaData.GetAreaMapData().SetBarrierSpots(new List<BarrierSpotData>());
 
         //Remove Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+        areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
     }
 
     /// <summary>
