@@ -147,7 +147,7 @@ public class AreaManager : MonoBehaviour
             areaMapData = GetDefaultAreaMapData();
         }
 
-        inspectorUI.Setup(areaMapData, areaInformation, cameraController);
+        inspectorUI.Setup(areaMapData, areaInformation, cameraController, areaData.GetArea());
     }
 
     /// <summary>

@@ -395,8 +395,8 @@
                     "dungeonIndex": 0
                 },
                 "position": {
-                    "x": -70.0,
-                    "y": 185.0
+                    "x": -70.5,
+                    "y": 185.5
                 },
                 "type": "worldBarrier",
                 "destinationAreaIndex": 3,

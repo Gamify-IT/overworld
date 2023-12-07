@@ -268,9 +268,8 @@ public class ObjectGenerator
             BarrierType type = BarrierType.worldBarrier; ;
             int destinationAreaIndex = barrierSpotPosition.GetDestinationWorld();
 
-
             //shift position
-            Vector2 shiftedPosition = position + offset;
+            Vector2 shiftedPosition = position + offset + new Vector2(0.5f, 0.5f);
 
             //create BarrierSpotData
             BarrierSpotData barrierSpot = new BarrierSpotData(areaIdentifier, shiftedPosition, type, destinationAreaIndex, style);

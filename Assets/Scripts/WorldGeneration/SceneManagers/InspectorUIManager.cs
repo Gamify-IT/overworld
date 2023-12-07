@@ -13,7 +13,7 @@ public class InspectorUIManager : MonoBehaviour
     private CustomAreaMapData displayedMapData;
     #endregion
 
-    public void Setup(CustomAreaMapData areaMapData, AreaInformationData areaInformation, CameraMovement cameraController)
+    public void Setup(CustomAreaMapData areaMapData, AreaInformationData areaInformation, CameraMovement cameraController, AreaInformation areaIdentifier)
     {
         this.areaMapData = areaMapData;
         this.cameraController = cameraController;
@@ -25,7 +25,7 @@ public class InspectorUIManager : MonoBehaviour
         //create and set up UI
         GameObject uiObject = Instantiate(inspectorUIPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         InspectorUI ui = uiObject.GetComponent<InspectorUI>();
-        ui.Setup(this);
+        ui.Setup(this, areaIdentifier);
 
         SetupCamera(areaInformation);
     }

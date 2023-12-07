@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class InspectorUI : MonoBehaviour
 {
     #region Attributes
     InspectorUIManager uiManager;
+
+    //Area
+    [SerializeField] private TextMeshProUGUI areaText;
 
     //Panels
     [SerializeField] private GameObject inspectorPanel;
@@ -21,9 +25,18 @@ public class InspectorUI : MonoBehaviour
     [SerializeField] private Toggle barriersToggle;
     #endregion
 
-    public void Setup(InspectorUIManager uiManager)
+    public void Setup(InspectorUIManager uiManager, AreaInformation area)
     {
         this.uiManager = uiManager;
+
+        if (area.IsDungeon())
+        {
+            areaText.text = "DUNGEON " + area.GetWorldIndex() + "-" + area.GetDungeonIndex();
+        }
+        else
+        {
+            areaText.text = "WORLD " + area.GetWorldIndex();
+        }
 
         minigamesToggle.isOn = true;
         npcsToggle.isOn = true;

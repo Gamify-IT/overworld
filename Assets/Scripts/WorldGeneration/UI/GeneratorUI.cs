@@ -18,6 +18,9 @@ public class GeneratorUI : MonoBehaviour
 
     [SerializeField] InterfaceInfo infoUI;
 
+    //Area
+    [SerializeField] private TextMeshProUGUI areaText;
+
     //Panels
     [SerializeField] private GameObject generatorPanel;
     [SerializeField] private GameObject smallGeneratorPanel;
@@ -94,10 +97,12 @@ public class GeneratorUI : MonoBehaviour
 
         if(areaIdentifier.IsDungeon())
         {
+            areaText.text = "DUNGEON " + areaIdentifier.GetWorldIndex() + "-" + areaIdentifier.GetDungeonIndex();
             SetupDungeon();
         }
         else
         {
+            areaText.text = "WORLD " + areaIdentifier.GetWorldIndex();
             SetupWorld();
         }
 

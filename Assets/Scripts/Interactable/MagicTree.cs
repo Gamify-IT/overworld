@@ -24,6 +24,11 @@ public class MagicTree : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        if(GameSettings.GetGamemode() != Gamemode.PLAY)
+        {
+            Destroy(this);
+        }
+
         spriteRenderer = GetComponent<SpriteRenderer>();
         player = FindObjectOfType<PlayerAnimation>().transform;
     }
