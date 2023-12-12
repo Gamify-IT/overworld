@@ -1,5 +1,7 @@
 {
     "borderSize": 15,
+    "minAreaSize": 50,
+    "maxAreaSize": 300,
     "worldConnectionWidth": 3,
     "corridorSize": 2,
     "floorRoomThreshold": 50,

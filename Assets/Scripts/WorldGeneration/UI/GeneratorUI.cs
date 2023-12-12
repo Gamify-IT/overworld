@@ -16,6 +16,9 @@ public class GeneratorUI : MonoBehaviour
     private static extern void CloseOverworld();
 
     #region Attributes
+    //Settings 
+    GenerationSettings generationSettings;
+
     //WorldGenerator
     [SerializeField] private GeneratorUIManager uiManager;
     private AreaData areaData;
@@ -130,7 +133,9 @@ public class GeneratorUI : MonoBehaviour
 
         SetupMaxValues();
 
-        SetupObjectSliders();      
+        SetupObjectSliders();
+
+        GetSettings();
     }
 
     /// <summary>
@@ -408,6 +413,17 @@ public class GeneratorUI : MonoBehaviour
             amountTeleportersText.text = "";
             amountDungeonsText.text = "";
         }
+    }
+
+    /// <summary>
+    ///     This function reads to generator settings from the local file and sets up the variables needed
+    /// </summary>
+    private void GetSettings()
+    {
+        string path = "GameSettings/GeneratorSettings";
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        generationSettings = GenerationSettings.CreateFromJSON(json);
     }
 
     #endregion
@@ -1087,19 +1103,57 @@ public class GeneratorUI : MonoBehaviour
 
     #region ButtonStatusManagement
     /// <summary>
-    ///     This function is called when the <c>Style Dropdown</c> value is changed and sets the <c>Generate Layout</c> button active or inactive,
-    ///     based on the selected value
+    ///     This function is called when the <c>Style Dropdown</c> value is changed and adapts the <c>Generate Layout</c> status accordingly
     /// </summary>
     public void OnStyleChange()
+    {
+        CheckGenerateLayoutButtonStatus();
+    }
+
+    /// <summary>
+    ///     This function is called when the <c>Size</c> value is changed and adapts the <c>Generate Layout</c> status accordingly
+    /// </summary>
+    public void OnSizeChange()
+    {
+        CheckGenerateLayoutButtonStatus();
+    }
+
+    /// <summary>
+    ///     This function is called when the <c>Size</c> or <c>Style</c> input changes and sets the <c>Generate Layout</c>
+    ///     button active, the selected values are within range, or inactive, otherwise
+    /// </summary>
+    public void CheckGenerateLayoutButtonStatus()
     {
         WorldStyle style = (WorldStyle)stypeDropdown.value;
         if (style == WorldStyle.CUSTOM)
         {
+            //invalid style
             generateLayoutButton.interactable = false;
+            return;
+        }
+
+        if (int.TryParse(sizeX.text, out int width) && int.TryParse(sizeY.text, out int height))
+        {
+            if (width < generationSettings.minAreaSize || width > generationSettings.maxAreaSize)
+            {
+                //width not in range
+                generateLayoutButton.interactable = false;
+            }
+            else if(height < generationSettings.minAreaSize || height > generationSettings.maxAreaSize)
+            {
+                //height not in range
+                generateLayoutButton.interactable = false;
+            }
+            else
+            {
+                //all fine
+                generateLayoutButton.interactable = true;
+            }
         }
         else
         {
-            generateLayoutButton.interactable = true;
+            //size inputs no numbers
+            generateLayoutButton.interactable = false;
         }
     }
 

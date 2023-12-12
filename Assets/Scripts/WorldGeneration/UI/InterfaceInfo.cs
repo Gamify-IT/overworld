@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class InterfaceInfo : MonoBehaviour
 {
@@ -59,11 +60,26 @@ public class InterfaceInfo : MonoBehaviour
         }
         else
         {
+            Tuple<int, int> sizeLimit = GetSizeLimits();
+
             string header = "SIZE SETTING";
             string body = "With the size setting, you can specifiy the dimensions of the generated area, with the 'X' input defining the width, the 'Y' input the height. \n " +
-                "You can only change the size of a dungeon area, a world area must have a fixed size.";
+                "You can only change the size of a dungeon area, a world area must have a fixed size. An area need to be at between " + sizeLimit.Item1 + " and " + sizeLimit.Item2 + " tiles in width and height.";
             DisplayInfo(header, body, true, false);
         }
+    }
+
+    /// <summary>
+    ///     This function reads to generator settings from the local file and sets up the variables needed
+    /// </summary>
+    private Tuple<int, int> GetSizeLimits()
+    {
+        string path = "GameSettings/GeneratorSettings";
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        GenerationSettings generationSettings = GenerationSettings.CreateFromJSON(json);
+
+        return new Tuple<int, int>(generationSettings.minAreaSize, generationSettings.maxAreaSize);
     }
 
     public void StyleInfoButtonPressed()
