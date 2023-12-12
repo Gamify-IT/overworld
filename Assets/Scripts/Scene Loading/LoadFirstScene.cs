@@ -30,9 +30,9 @@ public class LoadFirstScene : MonoBehaviour
                 StartGenerator();
                 break;
 
-            case Gamemode.INSPECT:
+            case Gamemode.INSPECTOR:
                 Debug.Log("Starting in Inspect Mode");
-                GameSettings.SetGamemode(Gamemode.INSPECT);
+                GameSettings.SetGamemode(Gamemode.INSPECTOR);
                 StartGenerator();
                 break;
         }
@@ -49,6 +49,7 @@ public class LoadFirstScene : MonoBehaviour
 
         //get first part
         string gamemodePart = urlGamemodePart.Split("-")[0];
+        gamemodePart = gamemodePart.ToUpper();
 
         //try to parse to valid gamemode
         bool success = System.Enum.TryParse<Gamemode>(gamemodePart, out Gamemode gamemode);

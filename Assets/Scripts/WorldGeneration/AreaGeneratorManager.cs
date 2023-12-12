@@ -168,7 +168,7 @@ public class AreaGeneratorManager : MonoBehaviour
         {
             areaManager.SetupGenerator(courseID, this, areaData, currentArea, cameraController, true);
         }
-        else if(gamemode == Gamemode.INSPECT)
+        else if(gamemode == Gamemode.INSPECTOR)
         {
             areaManager.SetupInspector(courseID, areaData, currentArea, cameraController);
         }

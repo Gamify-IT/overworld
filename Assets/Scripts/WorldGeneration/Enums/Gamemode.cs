@@ -6,5 +6,5 @@ public enum Gamemode
 {
     PLAY,
     GENERATOR,
-    INSPECT
+    INSPECTOR
 }

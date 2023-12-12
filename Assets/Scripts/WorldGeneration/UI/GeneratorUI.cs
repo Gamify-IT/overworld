@@ -5,9 +5,16 @@ using TMPro;
 using UnityEngine.UI;
 using System.Linq;
 using System;
+using System.Runtime.InteropServices;
 
 public class GeneratorUI : MonoBehaviour
 {
+    /// <summary>
+    ///     Import of the overworld close methode
+    /// </summary>
+    [DllImport("__Internal")]
+    private static extern void CloseOverworld();
+
     #region Attributes
     //WorldGenerator
     [SerializeField] private GeneratorUIManager uiManager;
@@ -419,6 +426,11 @@ public class GeneratorUI : MonoBehaviour
         uiManager.DeactivateCameraMovement();
     }
 
+    public void QuitButtonPressed()
+    {
+        CloseOverworld();
+    }
+
     #region Area Settings Buttons
     public void GenerateSeedButtonPressed()
     {
@@ -642,6 +654,7 @@ public class GeneratorUI : MonoBehaviour
             dungeonSliderKnob.color = new Color32(150, 150, 150, 255);
             dungeonSliderFill.color = new Color32(150, 150, 150, 255);
             amountDungeonsSlider.interactable = false;
+            amountDungeonsSlider.value = 1;
 
             amountDungeonsText.text = "1";
             maxDungeonsText.text = "1";

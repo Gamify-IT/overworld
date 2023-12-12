@@ -1,11 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class InspectorUI : MonoBehaviour
 {
+    /// <summary>
+    ///     Import of the overworld close methode
+    /// </summary>
+    [DllImport("__Internal")]
+    private static extern void CloseOverworld();
+
     #region Attributes
     InspectorUIManager uiManager;
 
@@ -92,4 +99,9 @@ public class InspectorUI : MonoBehaviour
         uiManager.DeactivateCameraMovement();
     }
     #endregion
+
+    public void QuitButtonPressed()
+    {
+        CloseOverworld();
+    }
 }
