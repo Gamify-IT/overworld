@@ -96,7 +96,7 @@ public class LoadingManager : MonoBehaviour
         bool errorLoadingAreaData = await DataManager.Instance.FetchAreaData();
         Debug.Log("Area loading: " + errorLoadingAreaData);
         
-        bool loadingError = errorLoadingAreaData | errorLoadingAreaData;
+        bool loadingError = errorLoadingPlayerData | errorLoadingAreaData;
 
         Debug.Log("Finish fetching data");
 
@@ -152,6 +152,12 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("Set player position");
 
+        AreaData world1 = DataManager.Instance.GetAreaData(new AreaInformation(1, new Optional<int>())).Value();
+        if (world1.IsGeneratedArea())
+        {
+            playerPosition = FindStartingPosition(world1);
+        }
+
         GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
 
         slider.value = 1;
@@ -165,6 +171,43 @@ public class LoadingManager : MonoBehaviour
         await SceneManager.UnloadSceneAsync("LoadingScreen");
 
         Debug.Log("Finish unloading loading Manager");
+    }
+
+    /// <summary>
+    ///     This function finds a valid starting position, if world 1 is a generated area
+    /// </summary>
+    /// <param name="areaData">The data of World 1</param>
+    /// <returns>A valid starting position</returns>
+    private Vector2 FindStartingPosition(AreaData areaData)
+    {
+        CellType[,] tiles = areaData.GetAreaMapData().GetLayout().GetCellTypes();
+
+        for(int y=0; y<tiles.GetLength(1); y++)
+        {
+            for(int x=0; x<tiles.GetLength(0); x++)
+            {
+                if(tiles[x,y] == CellType.FLOOR)
+                {
+                    return new Vector2(x, y) + GetOffset() + new Vector2(0.5f, 0.5f);
+                }
+            }
+        }
+
+        return new Vector2(0, 0);
+    }
+
+    /// <summary>
+    ///     This function returns the grid offset of world 1
+    /// </summary>
+    /// <returns>The grid offset of world 1</returns>
+    private Vector2Int GetOffset()
+    {
+        string path = "AreaInfo/World1";
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        AreaInformationDTO areaInformationDTO = AreaInformationDTO.CreateFromJSON(json);
+        AreaInformationData areaInformation = AreaInformationData.ConvertDtoToData(areaInformationDTO);
+        return areaInformation.GetGridOffset();
     }
 
     /// <summary>

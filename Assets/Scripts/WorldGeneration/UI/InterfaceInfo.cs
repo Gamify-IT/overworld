@@ -63,7 +63,7 @@ public class InterfaceInfo : MonoBehaviour
             Tuple<int, int> sizeLimit = GetSizeLimits();
 
             string header = "SIZE SETTING";
-            string body = "With the size setting, you can specifiy the dimensions of the generated area, with the 'X' input defining the width, the 'Y' input the height. \n " +
+            string body = "With the size setting, you can specifiy the dimensions of the generated area, with the 'X' input defining the width, the 'Y' input the height, measured in tiles. \n " +
                 "You can only change the size of a dungeon area, a world area must have a fixed size. An area need to be at between " + sizeLimit.Item1 + " and " + sizeLimit.Item2 + " tiles in width and height.";
             DisplayInfo(header, body, true, false);
         }

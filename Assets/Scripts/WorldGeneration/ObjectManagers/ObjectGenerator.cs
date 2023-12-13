@@ -13,11 +13,26 @@ public class ObjectGenerator
         this.areaIdentifier = areaIdentifier;
         this.offset = offset;
 
-        //TODO: read from json list
-        npcNames = new List<string>();
-        npcNames.Add("Bob");
-        npcNames.Add("Martin");
-        npcNames.Add("Fred");
+        npcNames = GetNamesList();
+    }
+
+    /// <summary>
+    ///     This function reads the NPC names from the local json file
+    /// </summary>
+    /// <returns>A list containing all NPC names</returns>
+    private List<string> GetNamesList()
+    {
+        string path = "GameSettings/NPCNames";
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        NPCNames npcNamesArray = NPCNames.CreateFromJSON(json);
+
+        List<string> npcNames = new List<string>();
+        foreach (string name in npcNamesArray.names)
+        {
+            npcNames.Add(name);
+        }
+        return npcNames;
     }
 
     /// <summary>
