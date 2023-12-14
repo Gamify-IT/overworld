@@ -53,10 +53,12 @@ public class AreaDataManager
         int amountDungeons;
         if (worldData.IsGeneratedArea())
         {
+            UpdateTeleporters(currentArea, worldData.GetAreaMapData().GetTeleporterSpots());
             amountDungeons = worldData.GetAreaMapData().GetSceneTransitionSpots().Count;
         }
         else
         {
+            UpdateTeleporters(currentArea);
             amountDungeons = 4;
         }
 
@@ -87,6 +89,15 @@ public class AreaDataManager
             return false;
         }
         worldAreas[worldIndex].AddArea(dungeonIndex, dungeonData);
+
+        if(dungeonData.IsGeneratedArea())
+        {
+            UpdateTeleporters(currentArea, dungeonData.GetAreaMapData().GetTeleporterSpots());
+        }
+        else
+        {
+            UpdateTeleporters(currentArea);
+        }
 
         return true;
     }
@@ -140,10 +151,12 @@ public class AreaDataManager
             int amountDungeons;
             if (worldData.IsGeneratedArea())
             {
+                UpdateTeleporters(currentArea, worldData.GetAreaMapData().GetTeleporterSpots());
                 amountDungeons = worldData.GetAreaMapData().GetSceneTransitionSpots().Count;
             }
             else
             {
+                UpdateTeleporters(currentArea);
                 amountDungeons = 4;
             }
 
@@ -154,6 +167,15 @@ public class AreaDataManager
                 currentArea = new AreaInformation(worldIndex, new Optional<int>(dungeonIndex));
                 AreaData dungeonData = LoadLocalData(currentArea);
                 worldAreas[worldIndex].AddArea(dungeonIndex, dungeonData);
+
+                if(dungeonData.IsGeneratedArea())
+                {
+                    UpdateTeleporters(currentArea, dungeonData.GetAreaMapData().GetTeleporterSpots());
+                }
+                else
+                {
+                    UpdateTeleporters(currentArea);
+                }
             }
         }
     }
@@ -197,5 +219,69 @@ public class AreaDataManager
         }
 
         return worldAreas[area.GetWorldIndex()].GetArea(dungeonIndex);
+    }
+
+    /// <summary>
+    ///     This function updates the position and unlocked flag of the given teleporter spots
+    /// </summary>
+    /// <param name="areaIdentifier">The area the teleports are in</param>
+    /// <param name="teleporters">The teleport spots</param>
+    private void UpdateTeleporters(AreaInformation areaIdentifier, List<TeleporterSpotData> teleporters)
+    {
+        Debug.Log("Update teleports of " + areaIdentifier.GetWorldIndex() + "-" + areaIdentifier.GetDungeonIndex());
+        foreach (TeleporterSpotData spot in teleporters)
+        {
+            string name = spot.GetName();
+            int worldId = spot.GetArea().GetWorldIndex();
+            int dungeonId = 0;
+            if(spot.GetArea().IsDungeon())
+            {
+                dungeonId = spot.GetArea().GetDungeonIndex();
+            }
+            int number = spot.GetIndex();
+            Vector2 position = spot.GetPosition();
+            TeleporterData data = new TeleporterData(name, worldId, dungeonId, number, position, false);
+            DataManager.Instance.AddTeleporterInformation(areaIdentifier, number, data);
+        }
+    }
+
+    /// <summary>
+    ///     This function updates the position and unlocked flag with the default teleporters
+    /// </summary>
+    /// <param name="areaIdentifier">The area the teleports are in</param>
+    private void UpdateTeleporters(AreaInformation areaIdentifier)
+    {
+        List<TeleporterSpotData> teleporterSpots = GetDefaultTeleporters(areaIdentifier);
+        UpdateTeleporters(areaIdentifier, teleporterSpots);
+    }
+
+    /// <summary>
+    ///     This function retrieves the default teleporters for the given area
+    /// </summary>
+    /// <param name="areaIdentifier">The area to get the default teleporters from</param>
+    /// <returns>A list containing the default teleporters</returns>
+    private List<TeleporterSpotData> GetDefaultTeleporters(AreaInformation areaIdentifier)
+    {
+        string path;
+        if (areaIdentifier.IsDungeon())
+        {
+            path = "AreaInfo/DungeonDefaultObjects";
+        }
+        else
+        {
+            path = "AreaInfo/World" + areaIdentifier.GetWorldIndex() + "DefaultObjects";
+        }
+
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        CustomAreaMapDTO dto = CustomAreaMapDTO.CreateFromJSON(json);
+        CustomAreaMapData data = CustomAreaMapData.ConvertDtoToData(dto);
+
+        foreach (TeleporterSpotData teleporterSpot in data.GetTeleporterSpots())
+        {
+            teleporterSpot.SetArea(areaIdentifier);
+        }
+
+        return data.GetTeleporterSpots();
     }
 }

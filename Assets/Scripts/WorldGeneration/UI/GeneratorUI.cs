@@ -105,7 +105,9 @@ public class GeneratorUI : MonoBehaviour
 
         SetupPanels();
 
-        if(areaIdentifier.IsDungeon())
+        GetSettings();
+
+        if (areaIdentifier.IsDungeon())
         {
             areaText.text = "DUNGEON " + areaIdentifier.GetWorldIndex() + "-" + areaIdentifier.GetDungeonIndex();
             SetupDungeon();
@@ -134,8 +136,6 @@ public class GeneratorUI : MonoBehaviour
         SetupMaxValues();
 
         SetupObjectSliders();
-
-        GetSettings();
     }
 
     /// <summary>

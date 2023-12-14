@@ -178,7 +178,17 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     /// <param name="worldIndex"></param>
     public void TeleportPlayerTo(Vector2 position, int worldID, int dungeonID)
     {
+        //setup scene transition exchange
+        LoadSubScene.transitionBlocked = true;
+        Optional<int> dungeonIndex = new Optional<int>();
+        if(dungeonID != 0)
+        {
+            dungeonIndex.SetValue(dungeonID);
+        }
+        LoadSubScene.areaExchange = new AreaInformation(worldID, dungeonIndex);
+
         Debug.Log("TeleportPlayerTo start");
+        Debug.Log("Teleport to: " + worldID + "-" + dungeonID + position.ToString());
 
         Destroy(currentTeleporterCanvas);
         finalTargetPosition = position;
@@ -216,6 +226,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         }
         Animation animation = player.GetComponent<Animation>();
         animation.Play("UfoArrival");
+        LoadSubScene.transitionBlocked = false;
     }
 
 

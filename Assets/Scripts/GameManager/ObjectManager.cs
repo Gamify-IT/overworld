@@ -246,6 +246,7 @@ public class ObjectManager : MonoBehaviour
         {
             return;
         }
+
         SetupEntityData<Minigame,MinigameData>(0, data);
         SetupEntityData<NPC,NPCData>(0, data);
         SetupEntityData<Book,BookData>(0, data);

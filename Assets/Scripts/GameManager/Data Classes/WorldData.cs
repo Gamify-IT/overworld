@@ -364,6 +364,23 @@ public class WorldData : IAreaData
         }
     }
 
+    //Updates 
+    public void SetTeleporterData(int index, TeleporterData data)
+    {
+        if (index >= 0 && index < teleporters.Length)
+        {
+            teleporters[index] = data;
+        }
+    }
+
+    public void SetTeleporterData(int dungeonIndex, int index, TeleporterData data)
+    {
+        if(dungeonIndex >= 0 && dungeonIndex < dungeons.Length)
+        {
+            dungeons[dungeonIndex].SetTeleporterData(index, data);
+        }
+    }
+
     public TeleporterData GetTeleporterData(int dungeonID, int index)
     {
         if (dungeonID != 0)

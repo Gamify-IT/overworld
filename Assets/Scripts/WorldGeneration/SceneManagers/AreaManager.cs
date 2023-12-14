@@ -88,7 +88,9 @@ public class AreaManager : MonoBehaviour
 
             //Create objects
             areaBuilder.SetupAreaObjects(areaMapData);
-        }      
+        }
+
+        GameManager.Instance.SetData(worldIndex, dungeonIndex);
     }
 
     /// <summary>

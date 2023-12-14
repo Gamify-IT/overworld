@@ -218,7 +218,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            sceneName = "Dungeon " + minigameWorldIndex + "-" + minigameDungeonIndex;
+            sceneName = "Dungeon";
         }
 
         Debug.Log(sceneName);
@@ -573,7 +573,7 @@ public class GameManager : MonoBehaviour
         //worldDTO dummy data
         for (int worldIndex = 0; worldIndex < maxWorld; worldIndex++)
         {
-            DataManager.Instance.SetWorldData(worldIndex, new WorldDTO());
+            DataManager.Instance.SetWorldData(worldIndex, new WorldData());
         }
 
         DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());

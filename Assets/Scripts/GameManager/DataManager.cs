@@ -565,6 +565,35 @@ public class DataManager : MonoBehaviour
         return areaDataManager.GetAreaData(areaInformation);
     }
 
+    public void AddTeleporterInformation(AreaInformation areaIdentifier, int number, TeleporterData data)
+    {
+        //get teleporter status
+        int worldIndex = data.worldID;
+        int dungeonIndex = data.dungeonID;
+
+        foreach(TeleporterDTO unlockedTeleporter in playerData.unlockedTeleporters)
+        {
+            if(unlockedTeleporter.area.worldIndex == worldIndex &&
+                unlockedTeleporter.area.dungeonIndex == dungeonIndex &&
+                unlockedTeleporter.index == number)
+            {
+                data.isUnlocked = true;
+            }
+        }
+
+        Debug.Log("Update teleporter " + worldIndex + "-" + dungeonIndex + "-" + number + ": unlocked: " + data.isUnlocked);
+
+        //save information
+        if(areaIdentifier.IsDungeon())
+        {
+            worldData[worldIndex].SetTeleporterData(dungeonIndex, number, data);
+        }
+        else
+        {
+            worldData[worldIndex].SetTeleporterData(number, data);
+        }
+    }
+
     /// <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
     ///     deletes the object otherwise
