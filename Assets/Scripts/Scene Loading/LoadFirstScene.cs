@@ -103,6 +103,7 @@ public class LoadFirstScene : MonoBehaviour
         if (!validCourseId)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+            OfflineMode.Instance.DisplayInfo("INVALID COURSE ID");
             return;
         }
 
@@ -113,6 +114,7 @@ public class LoadFirstScene : MonoBehaviour
         if (!validPlayerId)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+            OfflineMode.Instance.DisplayInfo("INVALID PLAYER ID");
             return;
         }
 
@@ -126,7 +128,7 @@ public class LoadFirstScene : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function starts the GeneratorWorld 
+    ///     This function starts the GeneratorWorld for the Generator or Inspector
     /// </summary>
     /// <returns></returns>
     private async UniTask StartGenerator()

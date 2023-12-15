@@ -104,6 +104,18 @@ public class LoadingManager : MonoBehaviour
         if (loadingError)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+
+            //display correct error message
+            string info = "AN ERROR OCCURRED WHILE LOADING THE REQUIRED DATA... \n COULD NOT LOAD:";
+            if(errorLoadingPlayerData)
+            {
+                info += "\n - PLAYER DATA";
+            }
+            if(errorLoadingAreaData)
+            {
+                info += "\n - AREA DATA";
+            }
+            OfflineMode.Instance.DisplayInfo(info);
         }
         else
         {

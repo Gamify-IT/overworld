@@ -19,6 +19,7 @@ public class AreaManager : MonoBehaviour
     [SerializeField] private InspectorUIManager inspectorUI;
 
     private string courseID;
+    private bool demoMode;
     private AreaGeneratorManager areaGeneratorManager;
     private AreaData areaData;
     private AreaInformation areaIdentifier;
@@ -128,9 +129,10 @@ public class AreaManager : MonoBehaviour
     /// <param name="areaData">The data of the area</param>
     /// <param name="areaIdentifier">The area identifier</param>
     /// <param name="cameraController">The camera</param>
-    public void SetupInspector(string courseID, AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController)
+    public void SetupInspector(string courseID, AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController, bool demoMode)
     {
         this.courseID = courseID;
+        this.demoMode = demoMode;
         this.areaData = areaData;
         this.areaIdentifier = areaIdentifier;
         areaInformation = GetAreaInformation(areaIdentifier);
@@ -158,10 +160,11 @@ public class AreaManager : MonoBehaviour
     /// <param name="areaData">The data of the area</param>
     /// <param name="areaIdentifier">The area identifier</param>
     /// <param name="cameraController">The camera</param>
-    public void SetupGenerator(string courseID, AreaGeneratorManager areaGeneratorManager, AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController, bool setupUI)
+    public void SetupGenerator(string courseID, AreaGeneratorManager areaGeneratorManager, AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController, bool setupUI, bool demoMode)
     {
         //store infos
         this.courseID = courseID;
+        this.demoMode = demoMode;
         this.areaGeneratorManager = areaGeneratorManager;
         worldIndex = areaData.GetArea().GetWorldIndex();
         dungeonIndex = 0;
@@ -291,6 +294,8 @@ public class AreaManager : MonoBehaviour
         foreach (TeleporterSpotData teleporterSpot in data.GetTeleporterSpots())
         {
             teleporterSpot.SetArea(areaIdentifier);
+            string teleporterName = "Dungeon " + areaIdentifier.GetWorldIndex() + "-" + areaIdentifier.GetDungeonIndex() + " " + teleporterSpot.GetName();
+            teleporterSpot.SetName(teleporterName);
         }
         foreach (SceneTransitionSpotData sceneTransitionSpot in data.GetSceneTransitionSpots())
         {
@@ -359,6 +364,11 @@ public class AreaManager : MonoBehaviour
     /// </summary>
     public async UniTask<bool> SaveArea()
     {
+        if(demoMode)
+        {
+            return true;
+        }
+
         AreaDTO areaDTO = AreaDTO.ConvertDataToDto(areaData);
         string json = JsonUtility.ToJson(areaDTO, true);
         string path;

@@ -280,6 +280,12 @@ public class AreaDataManager
         foreach (TeleporterSpotData teleporterSpot in data.GetTeleporterSpots())
         {
             teleporterSpot.SetArea(areaIdentifier);
+
+            if (areaIdentifier.IsDungeon())
+            {
+                string teleporterName = "Dungeon " + areaIdentifier.GetWorldIndex() + "-" + areaIdentifier.GetDungeonIndex() + " " + teleporterSpot.GetName();
+                teleporterSpot.SetName(teleporterName);
+            }
         }
 
         return data.GetTeleporterSpots();

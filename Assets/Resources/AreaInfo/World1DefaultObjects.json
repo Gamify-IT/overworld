@@ -440,7 +440,7 @@
                 "x": 65.0,
                 "y": 41.0
             },
-            "name": "Park"
+            "name": "World 1 - Park"
         },
         {
             "area": {
@@ -452,7 +452,7 @@
                 "x": 6.0,
                 "y": 12.0
             },
-            "name": "Market"
+            "name": "World 1 - Market"
         },
         {
             "area": {
@@ -464,7 +464,7 @@
                 "x": -2.0,
                 "y": 54.0
             },
-            "name": "Graveyard"
+            "name": "World 1 - Graveyard"
         }
     ],
     "sceneTransitionSpots": [

@@ -125,6 +125,15 @@ public class ObjectGenerator
     {
         List<TeleporterSpotData> teleporterSpots = new List<TeleporterSpotData>();
         int index = 1;
+        string area;
+        if(areaIdentifier.IsDungeon())
+        {
+            area = "Dungeon " + areaIdentifier.GetWorldIndex() + "-" + areaIdentifier.GetDungeonIndex();
+        }
+        else
+        {
+            area = "World " + areaIdentifier.GetWorldIndex();
+        }
 
         foreach (Vector2Int position in positions)
         {
@@ -132,7 +141,7 @@ public class ObjectGenerator
             Vector2 shiftedPosition = position + offset + new Vector2(0.5f, 0.5f);
 
             //create TeleporterSpotData
-            TeleporterSpotData teleporterSpot = new TeleporterSpotData(areaIdentifier, index, shiftedPosition, "Teleporter " + index);
+            TeleporterSpotData teleporterSpot = new TeleporterSpotData(areaIdentifier, index, shiftedPosition, area + " Teleporter " + index);
             teleporterSpots.Add(teleporterSpot);
             index++;
         }
