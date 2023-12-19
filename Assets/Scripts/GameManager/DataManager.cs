@@ -540,11 +540,19 @@ public class DataManager : MonoBehaviour
     /// <summary>
     ///     This function triggers the loading of the area data
     /// </summary>
-    /// <returns>True, if loading was successful, false otherwise</returns>
+    /// <returns>False, if loading was successful, true otherwise</returns>
     public async UniTask<bool> FetchAreaData()
     {
         bool loadingError = await areaDataManager.FetchData();
         return loadingError;
+    }
+
+    /// <summary>
+    ///     This function gets the local stored area data as dummy data
+    /// </summary>
+    public void GetDummyAreaData()
+    {
+        areaDataManager.GetDummyData();
     }
 
     /// <summary>
@@ -555,6 +563,35 @@ public class DataManager : MonoBehaviour
     public Optional<AreaData> GetAreaData(AreaInformation areaInformation)
     {
         return areaDataManager.GetAreaData(areaInformation);
+    }
+
+    public void AddTeleporterInformation(AreaInformation areaIdentifier, int number, TeleporterData data)
+    {
+        //get teleporter status
+        int worldIndex = data.worldID;
+        int dungeonIndex = data.dungeonID;
+
+        foreach(TeleporterDTO unlockedTeleporter in playerData.unlockedTeleporters)
+        {
+            if(unlockedTeleporter.area.worldIndex == worldIndex &&
+                unlockedTeleporter.area.dungeonIndex == dungeonIndex &&
+                unlockedTeleporter.index == number)
+            {
+                data.isUnlocked = true;
+            }
+        }
+
+        Debug.Log("Update teleporter " + worldIndex + "-" + dungeonIndex + "-" + number + ": unlocked: " + data.isUnlocked);
+
+        //save information
+        if(areaIdentifier.IsDungeon())
+        {
+            worldData[worldIndex].SetTeleporterData(dungeonIndex, number, data);
+        }
+        else
+        {
+            worldData[worldIndex].SetTeleporterData(number, data);
+        }
     }
 
     /// <summary>

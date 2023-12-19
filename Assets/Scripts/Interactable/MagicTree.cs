@@ -22,8 +22,14 @@ public class MagicTree : MonoBehaviour
     /// <summary>
     ///     This function initializes the component.
     /// </summary>
-    private void Start()
+    private void Awake()
     {
+        if(GameSettings.GetGamemode() != Gamemode.PLAY)
+        {
+            Destroy(this);
+            return;
+        }
+
         spriteRenderer = GetComponent<SpriteRenderer>();
         player = FindObjectOfType<PlayerAnimation>().transform;
     }

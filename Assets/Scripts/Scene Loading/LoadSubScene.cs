@@ -16,6 +16,7 @@ public enum FacingDirection
 public class LoadSubScene : MonoBehaviour
 {
     public static AreaInformation areaExchange = new AreaInformation(1, new Optional<int>());
+    public static bool transitionBlocked = false;
     public static bool setupDone = false;
 
     [SerializeField] private int worldIndex;
@@ -30,6 +31,11 @@ public class LoadSubScene : MonoBehaviour
     private void Start()
     {
         if(GameSettings.GetGamemode() != Gamemode.PLAY)
+        {
+            return;
+        }
+
+        if(transitionBlocked)
         {
             return;
         }

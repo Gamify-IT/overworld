@@ -1,18 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
-using UnityEngine.Networking;
+using TMPro;
+using UnityEngine.UI;
+using System.Runtime.InteropServices;
 
+/// <summary>
+///     This class manages the generator and inspector modes and sets up the correct scenes
+/// </summary>
 public class AreaGeneratorManager : MonoBehaviour
 {
+    /// <summary>
+    ///     Import of the overworld close methode
+    /// </summary>
+    [DllImport("__Internal")]
+    private static extern void CloseOverworld();
+
     #region Attributes
     //UI
     [SerializeField] private CameraMovement cameraController;
 
+    [SerializeField] private GameObject panel;
+    [SerializeField] private TextMeshProUGUI infoText;
+    [SerializeField] private Button demoButton;
+    [SerializeField] private Button quitButton;
+
     //Data
     private string courseID;
+    private bool demoMode;
     private AreaInformation currentArea;
     private AreaData areaData;
     #endregion
@@ -29,20 +44,83 @@ public class AreaGeneratorManager : MonoBehaviour
 #else
         courseID = Application.absoluteURL.Split("/")[^2];
 #endif
+        SetupUI();
+        demoMode = false;
 
-        currentArea = GetAreaInformation();
-        areaData = await GetAreaData();
+        Optional<AreaInformation> areaIdentifier = GetAreaInformation();
+        if(areaIdentifier.IsPresent())
+        {
+            currentArea = areaIdentifier.Value();
+        }
+        else
+        {
+            //Show error screen
+            infoText.text = "INVALID AREA PROVIDED";
+            demoButton.gameObject.SetActive(false);
+            quitButton.gameObject.SetActive(true);
+            return;
+        }
+
+        Optional<AreaData> result = await GetAreaData();
+        if(result.IsPresent())
+        {
+            areaData = result.Value();
+            LoadAreaScene();
+        }
+        else
+        {
+            //Show error screen
+            infoText.text = "COULD NOT GET THE AREA DATA";
+            demoButton.gameObject.SetActive(true);
+            quitButton.gameObject.SetActive(true);
+        }
+    }
+
+    #region UI
+
+    /// <summary>
+    ///     This function sets up the initial state of the UI elements
+    /// </summary>
+    private void SetupUI()
+    {
+        panel.SetActive(true);
+        infoText.text = "LOADING AREA DATA AND SETTING UP " + GameSettings.GetGamemode().ToString();
+        demoButton.gameObject.SetActive(false);
+        quitButton.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    ///     This function is called by the <c>PLAY DEMO</c> button and loads the default area map for the selected area
+    /// </summary>
+    public void DemoButtonPressed()
+    {
+        areaData = new AreaData(currentArea, new Optional<CustomAreaMapData>());
+        demoMode = true;
         LoadAreaScene();
     }
 
+    /// <summary>
+    ///     This function is called by the <c>QUIT</c> button and closes the Overworld
+    /// </summary>
+    public void QuitButtonPressed()
+    {
+        CloseOverworld();
+    }
+
+    #endregion
+
     #region GetAreaInformation
     /// <summary>
-    ///     This function converts a given string to an <c>AreaInformation</c>
+    ///     This function retrieves the area to edit / view from the URL
     /// </summary>
-    /// <param name="area">The string to be converted</param>
-    /// <returns>The converted <c>AreaInformation</c>, if valid, the default world 1 otherwise</returns>
-    private AreaInformation GetAreaInformation()
+    /// <returns>An optional containing the provided <c>AreaInformation</c>, if valid, an empty optional otherwise</returns>
+    private Optional<AreaInformation> GetAreaInformation()
     {
+#if UNITY_EDITOR
+        //skipping area retrieval in editor, using area 1-1 instead
+        return new Optional<AreaInformation>(new AreaInformation(1, new Optional<int>(1)));
+#endif
+
         //get gamemode parameter of url
         string urlPart = Application.absoluteURL.Split("/")[^1];
 
@@ -61,18 +139,18 @@ public class AreaGeneratorManager : MonoBehaviour
                 {
                     optionalDungeonIndex.SetValue(dungeonIndex);
                 }
-                return new AreaInformation(worldIndex, optionalDungeonIndex);
+                return new Optional<AreaInformation>(new AreaInformation(worldIndex, optionalDungeonIndex));
             }
             else
             {
-                Debug.Log("Invalid gamemode provided: " + urlPart + ", loading world 1 instead");
-                return new AreaInformation(1, new Optional<int>());
+                Debug.Log("Invalid area provided: " + urlPart);
+                return new Optional<AreaInformation>();
             }
         }
         else
         {
-            Debug.Log("Invalid gamemode provided: " + urlPart + ", loading world 1 instead");
-            return new AreaInformation(1, new Optional<int>(2));
+            Debug.Log("Invalid area provided: " + urlPart);
+            return new Optional<AreaInformation>();
         }     
     }
 
@@ -83,12 +161,12 @@ public class AreaGeneratorManager : MonoBehaviour
     ///     This function retrieves the needed data from the backend
     /// </summary>
     /// <returns></returns>
-    private async UniTask<AreaData> GetAreaData()
+    private async UniTask<Optional<AreaData>> GetAreaData()
     {
 #if UNITY_EDITOR
         //use local files in editor
         Debug.Log("Load from local files");
-        return LoadLocalData();
+        return new Optional<AreaData>(LoadLocalData());
 #endif
 
         //load data from backend
@@ -102,12 +180,12 @@ public class AreaGeneratorManager : MonoBehaviour
         if(areaDTO.IsPresent())
         {
             AreaData areaData = AreaData.ConvertDtoToData(areaDTO.Value());
-            return areaData;
+            return new Optional<AreaData>(areaData);
         }
         else
         {
-            return null;
-            //TODO: error screen
+            Debug.LogError("Error loading area map");
+            return new Optional<AreaData>();
         }
     }
 
@@ -136,6 +214,9 @@ public class AreaGeneratorManager : MonoBehaviour
     }
     #endregion
 
+    /// <summary>
+    ///     This function start the correct scene and sets it up
+    /// </summary>
     private async void LoadAreaScene()
     {
         if(currentArea.IsDungeon())
@@ -145,6 +226,57 @@ public class AreaGeneratorManager : MonoBehaviour
         else
         {
             string sceneName = "World " + currentArea.GetWorldIndex();
+            await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        }
+
+        GameObject areaManagerObject = GameObject.FindGameObjectWithTag("AreaManager");
+        if (areaManagerObject == null)
+        {
+            infoText.text = "Something went wrong :(";
+            demoButton.gameObject.SetActive(false);
+
+            Debug.LogError("Area Manager Object not found");
+            return;
+        }
+
+        AreaManager areaManager = areaManagerObject.GetComponent<AreaManager>();
+        if (areaManager == null)
+        {
+            infoText.text = "Something went wrong :(";
+            demoButton.gameObject.SetActive(false);
+
+            Debug.LogError("Area Manager Script not found");
+            return;
+        }
+
+        panel.SetActive(false);
+
+        Gamemode gamemode = GameSettings.GetGamemode();
+        if (gamemode == Gamemode.GENERATOR)
+        {
+            areaManager.SetupGenerator(courseID, this, areaData, currentArea, cameraController, true, demoMode);
+        }
+        else if(gamemode == Gamemode.INSPECTOR)
+        {
+            areaManager.SetupInspector(courseID, areaData, currentArea, cameraController, demoMode);
+        }
+    }
+
+    /// <summary>
+    ///     This function reload the correct scene to reset the layout
+    /// </summary>
+    /// <param name="areaData">The data to set up the area with</param>
+    public async void ReloadArea(AreaData areaData)
+    {
+        if (currentArea.IsDungeon())
+        {
+            await SceneManager.UnloadSceneAsync("Dungeon");
+            await SceneManager.LoadSceneAsync("Dungeon", LoadSceneMode.Additive);
+        }
+        else
+        {
+            string sceneName = "World " + currentArea.GetWorldIndex();
+            await SceneManager.UnloadSceneAsync(sceneName);
             await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         }
 
@@ -165,11 +297,7 @@ public class AreaGeneratorManager : MonoBehaviour
         Gamemode gamemode = GameSettings.GetGamemode();
         if (gamemode == Gamemode.GENERATOR)
         {
-            areaManager.SetupGenerator(courseID, areaData, currentArea, cameraController);
-        }
-        else if(gamemode == Gamemode.INSPECT)
-        {
-            areaManager.SetupInspector(courseID, areaData, currentArea, cameraController);
+            areaManager.SetupGenerator(courseID, this, areaData, currentArea, cameraController, false, demoMode);
         }
     }
 }

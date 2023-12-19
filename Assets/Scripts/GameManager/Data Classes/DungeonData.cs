@@ -252,5 +252,13 @@ public class DungeonData : IAreaData
         teleporters[config.index] = new TeleporterData(config.name, config.worldID, config.dungeonID, config.index, new Vector2(config.x, config.y), isUnlocked);
     }
 
+    public void SetTeleporterData(int index, TeleporterData data)
+    {
+        if (index >= 0 && index < teleporters.Length)
+        {
+            teleporters[index] = data;
+        }
+    }
+
     #endregion
 }

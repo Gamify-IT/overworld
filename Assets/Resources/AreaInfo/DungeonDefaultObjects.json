@@ -1,11 +1,16 @@
 {
     "layout": {
-        "sizeX": 1,
-        "sizeY": 1,
-        "layers": 1,
-        "tiles": ""
+        "area": {
+            "worldIndex": 0,
+            "dungeonIndex": 0
+        },
+        "sizeX": 0,
+        "sizeY": 0,
+        "generatorType": "CELLULAR_AUTOMATA",
+        "seed": "",
+        "accessability": 0,
+        "style": "CUSTOM"
     },
-    "style": "CUSTOM",
     "minigameSpots": [
         {
             "area": {
@@ -413,7 +418,8 @@
                 "worldIndex": 0,
                 "dungeonIndex": 0
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "CAVE_ENTRANCE"
         }
     ]
 }

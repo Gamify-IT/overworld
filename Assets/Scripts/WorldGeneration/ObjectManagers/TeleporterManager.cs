@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This classes manages the creation of teleporter objects and placeholder icons
+/// </summary>
 public class TeleporterManager : MonoBehaviour
 {
     [SerializeField] private GameObject teleporterSpotPrefab;

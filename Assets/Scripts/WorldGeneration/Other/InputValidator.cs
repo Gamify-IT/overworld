@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+///     This class is used to allow inly positive number as the input of an input field
+/// </summary>
 public class InputValidator : MonoBehaviour
 {
     private TMP_InputField inputField;
@@ -15,8 +16,6 @@ public class InputValidator : MonoBehaviour
 
     public char ValidateInput(string text, int charIndex, char addedChar)
     {
-        char output = addedChar;
-
         if (addedChar != '1'
             && addedChar != '2'
             && addedChar != '3'
@@ -28,10 +27,11 @@ public class InputValidator : MonoBehaviour
             && addedChar != '9'
             && addedChar != '0')
         {
-            //return a null character
-            output = '\0';
+            //input not a number -> return a null character
+            return '\0';
         }
 
-        return output;
+        //return added char
+        return addedChar;
     }
 }

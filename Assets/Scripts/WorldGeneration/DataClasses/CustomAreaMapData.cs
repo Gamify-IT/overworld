@@ -1,15 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-///     This class contains all data to manage a world map
+///     This class contains all data to manage a generated area, including the layout and object spots
 /// </summary>
 public class CustomAreaMapData
 {
     #region Attributes
-    private string[,,] tiles;
-    private WorldStyle style;
+    private Layout layout;
     private List<MinigameSpotData> minigameSpots;
     private List<NpcSpotData> npcSpots;
     private List<BookSpotData> bookSpots;
@@ -18,10 +16,8 @@ public class CustomAreaMapData
     private List<SceneTransitionSpotData> sceneTransitionSpots;
     #endregion
 
-    public CustomAreaMapData(WorldStyle style)
+    public CustomAreaMapData()
     {
-        tiles = new string[0,0,0];
-        this.style = style;
         minigameSpots = new List<MinigameSpotData>();
         npcSpots = new List<NpcSpotData>();
         bookSpots = new List<BookSpotData>();
@@ -30,10 +26,9 @@ public class CustomAreaMapData
         sceneTransitionSpots = new List<SceneTransitionSpotData>();
     }
 
-    public CustomAreaMapData(string[,,] tiles, WorldStyle style)
+    public CustomAreaMapData(Layout layout)
     {
-        this.tiles = tiles;
-        this.style = style;
+        this.layout = layout;
         minigameSpots = new List<MinigameSpotData>();
         npcSpots = new List<NpcSpotData>();
         bookSpots = new List<BookSpotData>();
@@ -42,10 +37,9 @@ public class CustomAreaMapData
         sceneTransitionSpots = new List<SceneTransitionSpotData>();
     }
 
-    public CustomAreaMapData(string[,,] tiles, WorldStyle style, List<MinigameSpotData> minigameSpots, List<NpcSpotData> npcSpots, List<BookSpotData> bookSpots, List<BarrierSpotData> barrierSpots, List<TeleporterSpotData> teleporterSpots, List<SceneTransitionSpotData> sceneTransitionSpots)
+    public CustomAreaMapData(Layout layout, List<MinigameSpotData> minigameSpots, List<NpcSpotData> npcSpots, List<BookSpotData> bookSpots, List<BarrierSpotData> barrierSpots, List<TeleporterSpotData> teleporterSpots, List<SceneTransitionSpotData> sceneTransitionSpots)
     {
-        this.tiles = tiles;
-        this.style = style;
+        this.layout = layout;
         this.minigameSpots = minigameSpots;
         this.npcSpots = npcSpots;
         this.bookSpots = bookSpots;
@@ -61,9 +55,7 @@ public class CustomAreaMapData
     /// <returns></returns>
     public static CustomAreaMapData ConvertDtoToData(CustomAreaMapDTO areaMapDTO)
     {
-        string[,,] tiles = Layout.ConvertLayoutToArray(areaMapDTO.layout);
-
-        WorldStyle style = (WorldStyle) System.Enum.Parse(typeof(WorldStyle) , areaMapDTO.style);
+        Layout layout = Layout.ConvertDtoToData(areaMapDTO.layout);
 
         List<MinigameSpotData> minigameSpots = new List<MinigameSpotData>();
         for(int i = 0; i  <areaMapDTO.minigameSpots.Length; i++)
@@ -101,7 +93,7 @@ public class CustomAreaMapData
             sceneTransitionSpots.Add(SceneTransitionSpotData.ConvertDtoToData(areaMapDTO.sceneTransitionSpots[i]));
         }
 
-        CustomAreaMapData data = new CustomAreaMapData(tiles, style, minigameSpots, npcSpots, bookSpots, barrierSpots, teleporterSpots, sceneTransitionSpots);
+        CustomAreaMapData data = new CustomAreaMapData(layout, minigameSpots, npcSpots, bookSpots, barrierSpots, teleporterSpots, sceneTransitionSpots);
         return data;
     }
 
@@ -111,28 +103,21 @@ public class CustomAreaMapData
     /// <returns>A <c>Vector2Int</c> containing the size of the world</returns>
     public Vector2Int GetSize()
     {
-        return new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
+        int sizeX = layout.GetTileSprites().GetLength(0);
+        int sizeY = layout.GetTileSprites().GetLength(1);
+
+        return new Vector2Int(sizeX, sizeY);
     }
 
     #region GetterAndSetter
-    public string[,,] GetTiles()
+    public Layout GetLayout()
     {
-        return tiles;
+        return layout;
     }
 
-    public void SetTiles(string[,,] tiles)
+    public void SetLayout(Layout layout)
     {
-        this.tiles = tiles;
-    }
-
-    public WorldStyle GetWorldStyle()
-    {
-        return style;
-    }
-
-    public void SetWorldStyle(WorldStyle style)
-    {
-        this.style = style;
+        this.layout = layout;
     }
 
     public List<MinigameSpotData> GetMinigameSpots()

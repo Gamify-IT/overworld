@@ -51,6 +51,7 @@ MonoBehaviour:
   isActive: 0
   originWorldIndex: 0
   destinationAreaIndex: 0
+  spriteRenderer: {fileID: 5903909377719632267}
 --- !u!212 &5903909377719632267
 SpriteRenderer:
   m_ObjectHideFlags: 0

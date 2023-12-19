@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+/// <summary>
+///     This enum contains all available gamemodes
+/// </summary>
 public enum Gamemode
 {
     PLAY,
     GENERATOR,
-    INSPECT
+    INSPECTOR
 }

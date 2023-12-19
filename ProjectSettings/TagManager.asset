@@ -9,6 +9,7 @@ TagManager:
   - MinimapIcon
   - MinimapIconsParent
   - AreaManager
+  - GeneratorUI
   layers:
   - Default
   - TransparentFX

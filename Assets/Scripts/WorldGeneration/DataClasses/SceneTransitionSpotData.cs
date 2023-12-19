@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -13,15 +11,17 @@ public class SceneTransitionSpotData
     private Vector2 size;
     private AreaInformation areaToLoad;
     private FacingDirection facingDirection;
+    private DungeonStyle style;
     #endregion
 
-    public SceneTransitionSpotData(AreaInformation area, Vector2 position, Vector2 size, AreaInformation areaToLoad, FacingDirection facingDirection)
+    public SceneTransitionSpotData(AreaInformation area, Vector2 position, Vector2 size, AreaInformation areaToLoad, FacingDirection facingDirection, DungeonStyle style)
     {
         this.area = area;
         this.position = position;
         this.size = size;
         this.areaToLoad = areaToLoad;
         this.facingDirection = facingDirection;
+        this.style = style;
     }
 
     /// <summary>
@@ -44,7 +44,8 @@ public class SceneTransitionSpotData
             areaToLoad.SetDungeonIndex(sceneTransitionSpotDTO.areaToLoad.dungeonIndex);
         }
         FacingDirection facingDirection = (FacingDirection) System.Enum.Parse(typeof(FacingDirection), sceneTransitionSpotDTO.facingDirection);
-        SceneTransitionSpotData data = new SceneTransitionSpotData(area, position, size, areaToLoad, facingDirection);
+        DungeonStyle style = (DungeonStyle)System.Enum.Parse(typeof(DungeonStyle), sceneTransitionSpotDTO.style);
+        SceneTransitionSpotData data = new SceneTransitionSpotData(area, position, size, areaToLoad, facingDirection, style);
         return data;
     }
 
@@ -97,6 +98,16 @@ public class SceneTransitionSpotData
     public FacingDirection GetFacingDirection()
     {
         return facingDirection;
+    }
+
+    public void SetStyle(DungeonStyle style)
+    {
+        this.style = style;
+    }
+
+    public DungeonStyle GetStyle()
+    {
+        return style;
     }
     #endregion
 }

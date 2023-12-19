@@ -1,0 +1,16 @@
+{
+    "borderSize": 15,
+    "minAreaSize": 50,
+    "maxAreaSize": 300,
+    "worldConnectionWidth": 3,
+    "corridorSize": 2,
+    "floorRoomThreshold": 50,
+    "wallRoomThreshold": 50,
+    "iterationsCA": 15,
+    "floorThresholdCA": 4,
+    "radiusDW": 1,
+    "innerBorderSize": 2,
+    "connectionSize": 1,
+    "minRoomHeight": 25,
+    "minRoomWidth": 25
+}

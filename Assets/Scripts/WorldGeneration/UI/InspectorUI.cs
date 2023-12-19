@@ -1,12 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
+/// <summary>
+///     This class manages the UI elements of the inspector
+/// </summary>
 public class InspectorUI : MonoBehaviour
 {
+    /// <summary>
+    ///     Import of the overworld close methode
+    /// </summary>
+    [DllImport("__Internal")]
+    private static extern void CloseOverworld();
+
     #region Attributes
     InspectorUIManager uiManager;
+
+    //Area
+    [SerializeField] private TextMeshProUGUI areaText;
 
     //Panels
     [SerializeField] private GameObject inspectorPanel;
@@ -21,9 +33,23 @@ public class InspectorUI : MonoBehaviour
     [SerializeField] private Toggle barriersToggle;
     #endregion
 
-    public void Setup(InspectorUIManager uiManager)
+    /// <summary>
+    ///     This function sets up the inscpector UI with the given values
+    /// </summary>
+    /// <param name="uiManager">The ui manager</param>
+    /// <param name="area">The index of the area</param>
+    public void Setup(InspectorUIManager uiManager, AreaInformation area)
     {
         this.uiManager = uiManager;
+
+        if (area.IsDungeon())
+        {
+            areaText.text = "DUNGEON " + area.GetWorldIndex() + "-" + area.GetDungeonIndex();
+        }
+        else
+        {
+            areaText.text = "WORLD " + area.GetWorldIndex();
+        }
 
         minigamesToggle.isOn = true;
         npcsToggle.isOn = true;
@@ -65,6 +91,9 @@ public class InspectorUI : MonoBehaviour
     #endregion
 
     #region Minimize / Maximize
+    /// <summary>
+    ///     This function is called by the minimize button and closes the generator ui
+    /// </summary>
     public void MinimizeButtonPressed()
     {
         inspectorPanel.SetActive(false);
@@ -72,6 +101,9 @@ public class InspectorUI : MonoBehaviour
         uiManager.ActivateCameraMovement();
     }
 
+    /// <summary>
+    ///     This function is called by the maximize button and opens the generator ui
+    /// </summary>
     public void MaximizeButtonPressed()
     {
         smallInspectorPanel.SetActive(false);
@@ -79,4 +111,12 @@ public class InspectorUI : MonoBehaviour
         uiManager.DeactivateCameraMovement();
     }
     #endregion
+
+    /// <summary>
+    ///     This function is called by the quit button and closes the overworld application
+    /// </summary>
+    public void QuitButtonPressed()
+    {
+        CloseOverworld();
+    }
 }

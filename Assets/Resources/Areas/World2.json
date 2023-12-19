@@ -6,12 +6,17 @@
     "generatedArea": false,
     "customAreaMap": {
         "layout": {
+            "area": {
+                "worldIndex": 0,
+                "dungeonIndex": 0
+            },
             "sizeX": 0,
             "sizeY": 0,
-            "layers": 0,
-            "tiles": ""
+            "generatorType": "",
+            "seed": "",
+            "accessability": 0,
+            "style": ""
         },
-        "style": "",
         "minigameSpots": [],
         "npcSpots": [],
         "bookSpots": [],

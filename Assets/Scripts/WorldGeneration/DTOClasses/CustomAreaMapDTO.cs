@@ -1,17 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 /// <summary>
-///     This class is used to retrieve world map data from Get Requests.
+///     This class is used to transfer a <c>CustomAreaMapData</c> from and to the overworld backend
 /// </summary>
 [Serializable]
 public class CustomAreaMapDTO
 {
     #region Attributes
-    public Layout layout;
-    public string style;
+    public LayoutDTO layout;
     public MinigameSpotDTO[] minigameSpots;
     public NpcSpotDTO[] npcSpots;
     public BookSpotDTO[] bookSpots;
@@ -23,10 +21,9 @@ public class CustomAreaMapDTO
     #region Constructors
     public CustomAreaMapDTO() { }
 
-    public CustomAreaMapDTO(Layout layout, string style, MinigameSpotDTO[] minigameSpots, NpcSpotDTO[] npcSpots, BookSpotDTO[] bookSpots, BarrierSpotDTO[] barrierSpots, TeleporterSpotDTO[] teleporterSpots, SceneTransitionSpotDTO[] sceneTransitionSpots)
+    public CustomAreaMapDTO(LayoutDTO layout, MinigameSpotDTO[] minigameSpots, NpcSpotDTO[] npcSpots, BookSpotDTO[] bookSpots, BarrierSpotDTO[] barrierSpots, TeleporterSpotDTO[] teleporterSpots, SceneTransitionSpotDTO[] sceneTransitionSpots)
     {
         this.layout = layout;
-        this.style = style;
         this.minigameSpots = minigameSpots;
         this.npcSpots = npcSpots;
         this.bookSpots = bookSpots;
@@ -53,10 +50,7 @@ public class CustomAreaMapDTO
     /// <returns></returns>
     public static CustomAreaMapDTO ConvertDataToDto(CustomAreaMapData areaMapData)
     {
-        string[,,] tiles = areaMapData.GetTiles();
-        Layout layout = Layout.ConvertArrayToLayout(tiles);
-
-        string style = areaMapData.GetWorldStyle().ToString();
+        LayoutDTO layout = LayoutDTO.ConvertDataToDto(areaMapData.GetLayout());
 
         List<MinigameSpotDTO> minigameSpotDtos = new List<MinigameSpotDTO>();
         foreach(MinigameSpotData minigameSpotData in areaMapData.GetMinigameSpots())
@@ -100,7 +94,7 @@ public class CustomAreaMapDTO
         }
         SceneTransitionSpotDTO[] sceneTransitionSpots = sceneTransitionSpotDtos.ToArray();
 
-        CustomAreaMapDTO data = new CustomAreaMapDTO(layout, style, minigameSpots, npcSpots, bookSpots, barrierSpots, teleporterSpots, sceneTransitionSpots);
+        CustomAreaMapDTO data = new CustomAreaMapDTO(layout, minigameSpots, npcSpots, bookSpots, barrierSpots, teleporterSpots, sceneTransitionSpots);
         return data;
     }
 }

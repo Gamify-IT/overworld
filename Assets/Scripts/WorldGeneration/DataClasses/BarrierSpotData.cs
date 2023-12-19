@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -12,14 +10,16 @@ public class BarrierSpotData
     private Vector2 position;
     private BarrierType type;
     private int destinationAreaIndex;
+    private BarrierStyle barrierStyle;
     #endregion
 
-    public BarrierSpotData(AreaInformation area, Vector2 position, BarrierType type, int destinationAreaIndex)
+    public BarrierSpotData(AreaInformation area, Vector2 position, BarrierType type, int destinationAreaIndex, BarrierStyle barrierStyle)
     {
         this.area = area;
         this.position = position;
         this.type = type;
         this.destinationAreaIndex = destinationAreaIndex;
+        this.barrierStyle = barrierStyle;
     }
 
     /// <summary>
@@ -38,7 +38,8 @@ public class BarrierSpotData
         Vector2 position = new Vector2(barrierSpotDTO.position.x, barrierSpotDTO.position.y);
         BarrierType type = (BarrierType)System.Enum.Parse(typeof(BarrierType), barrierSpotDTO.type);
         int destinationAreaIndex = barrierSpotDTO.destinationAreaIndex;
-        BarrierSpotData data = new BarrierSpotData(area, position, type, destinationAreaIndex);
+        BarrierStyle style = (BarrierStyle)System.Enum.Parse(typeof(BarrierStyle), barrierSpotDTO.barrierStyle);
+        BarrierSpotData data = new BarrierSpotData(area, position, type, destinationAreaIndex, style);
         return data;
     }
 
@@ -82,6 +83,16 @@ public class BarrierSpotData
     public int GetDestinationAreaIndex()
     {
         return destinationAreaIndex;
+    }
+
+    public void SetBarrierStyle(BarrierStyle barrierStyle)
+    {
+        this.barrierStyle = barrierStyle;
+    }
+
+    public BarrierStyle GetBarrierStyle()
+    {
+        return barrierStyle;
     }
     #endregion
 }

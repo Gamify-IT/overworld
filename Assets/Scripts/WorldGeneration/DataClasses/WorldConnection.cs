@@ -1,13 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This enum is used to represent whether an world connection is an entry (leads to earlier world) or an exit (leads to higher world)
+/// </summary>
 public enum WorldConnectionType
 {
     ENTRY,
     EXIT
 }
 
+/// <summary>
+///     This function contains all information of a world connection
+/// </summary>
 public class WorldConnection
 {
     private Vector2Int position;

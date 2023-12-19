@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 /// <summary>
-///     This class is used to retrieve barrier spot data from Get Requests.
+///     This class is used to transfer a <c>BarrierSpotData</c> from and to the overworld backend
 /// </summary>
 [Serializable]
 public class BarrierSpotDTO
@@ -14,17 +12,19 @@ public class BarrierSpotDTO
     public Position position;
     public string type;
     public int destinationAreaIndex;
+    public string barrierStyle;
     #endregion
 
     #region Constructors
     public BarrierSpotDTO() { }
 
-    public BarrierSpotDTO(AreaLocationDTO area, Position position, string type, int destinationAreaIndex)
+    public BarrierSpotDTO(AreaLocationDTO area, Position position, string type, int destinationAreaIndex, string barrierStyle)
     {
         this.area = area;
         this.position = position;
         this.type = type;
         this.destinationAreaIndex = destinationAreaIndex;
+        this.barrierStyle = barrierStyle;
     }
     #endregion
 
@@ -53,7 +53,8 @@ public class BarrierSpotDTO
         Position position = new Position(barrierSpotData.GetPosition().x, barrierSpotData.GetPosition().y);
         string type = barrierSpotData.GetBarrierType().ToString();
         int destinationWorldIndex = barrierSpotData.GetDestinationAreaIndex();
-        BarrierSpotDTO data = new BarrierSpotDTO(areaLocation, position, type, destinationWorldIndex);
+        string barrierStyle = barrierSpotData.GetBarrierStyle().ToString();
+        BarrierSpotDTO data = new BarrierSpotDTO(areaLocation, position, type, destinationWorldIndex, barrierStyle);
         return data;
     }
 }

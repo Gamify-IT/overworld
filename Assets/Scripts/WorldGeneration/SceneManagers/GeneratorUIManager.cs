@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 ///     This class sets up and manages the <c>Generator UI</c> and forwards all changes to the <c>AreaManager</c>
@@ -17,26 +16,56 @@ public class GeneratorUIManager : MonoBehaviour
     ///     This function instantiates the <c>GeneratorUI</c> and sets all needed values
     /// </summary>
     /// <param name="areaInformation">The information relevant for the UI</param>
-    public void SetupUI(AreaData areaData, AreaInformationData areaInformation, CameraMovement cameraController)
+    public void SetupUI(AreaData areaData, AreaInformationData areaInformation, CameraMovement cameraController, bool setupUI)
     {
         //store infos
         this.areaInformation = areaInformation;
         this.cameraController = cameraController;
 
         //create and set up UI
-        GameObject uiObject = Instantiate(generatorUIPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        GeneratorUI ui = uiObject.GetComponent<GeneratorUI>();
-        ui.Setup(this, areaData, areaInformation);
+        if(setupUI)
+        {
+            Debug.Log("Creating generator UI");
+            GameObject uiObject = Instantiate(generatorUIPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            GeneratorUI ui = uiObject.GetComponent<GeneratorUI>();
+            ui.Setup(this, areaData, areaInformation);
+        }
+        else
+        {
+            RefreshUI();
+        }
 
-        SetupCamera();
+        SetupCamera(areaInformation.GetSize());
+    }
+
+    /// <summary>
+    ///     This function refreshes the UI reference after a scene reload
+    /// </summary>
+    private void RefreshUI()
+    {
+        GameObject uiObject = GameObject.FindGameObjectWithTag("GeneratorUI");
+        if(uiObject == null)
+        {
+            Debug.LogError("Generator UI Object not found");
+            return;
+        }
+
+        GeneratorUI ui = uiObject.GetComponent<GeneratorUI>();
+        if(ui == null)
+        {
+            Debug.LogError("Generator UI Script not found");
+            return;
+        }
+
+        Debug.Log("Refresh ui reference");
+        ui.SetUIManager(this);
     }
 
     /// <summary>
     ///     This function sets up the camera to be in the center of the area
     /// </summary>
-    private void SetupCamera()
+    private void SetupCamera(Vector2Int size)
     {
-        Vector2Int size = areaInformation.GetSize();
         Vector2Int offset = areaInformation.GetObjectOffset();
         Vector3 position = new Vector3((size.x / 2) + offset.x, (size.y / 2) + offset.y, cameraController.transform.position.z);
         cameraController.transform.position = position;
@@ -63,9 +92,10 @@ public class GeneratorUIManager : MonoBehaviour
     /// <summary>
     ///     This function calls the <c>AreaManager</c> to reset the area to the default, manually created one
     /// </summary>
-    public void ResetToDefault()
+    public async UniTask<bool> ResetToDefault()
     {
-        areaManager.ResetArea();
+        bool success = await areaManager.ResetArea();
+        return success;
     }
 
     /// <summary>
@@ -74,54 +104,77 @@ public class GeneratorUIManager : MonoBehaviour
     /// <param name="size">The size of the layout</param>
     /// <param name="style">The style of the new layout<param>
     /// <param name="accessability">How much area is accessable</param>
-    public void GenerateLayout(Vector2Int size, WorldStyle style, float accessability)
+    /// <param name="seed"/>The seed to be used</param>
+    public void GenerateLayout(Vector2Int size, WorldStyle style, LayoutGeneratorType layoutGeneratorType, int accessability, string seed)
     {
-        areaManager.GenerateLayout(size, style, accessability);
+        areaManager.GenerateLayout(size, style, layoutGeneratorType, accessability, seed);
+        SetupCamera(size);
+    }
+
+    /// <summary>
+    ///     This function adds the world connection barriers, unless the area is a dungeon or the world connection barriers are already added
+    /// </summary>
+    public void AddWorldConnectionBarriers()
+    {
+        areaManager.AddWorldConnectionBarriers();
+    }
+
+    /// <summary>
+    ///     This function resets all objects in the area
+    /// </summary>
+    public void ResetObjects()
+    {
+        areaManager.ResetObjects();
     }
 
     /// <summary>
     ///     This function forwards a minigame generation request to the <c>AreaManager</c>
     /// </summary>
     /// <param name="amount">The amount of minigames to generate</param>
-    public void GenerateMinigames(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateMinigames(int amount)
     {
-        areaManager.GenerateMinigames(amount);
+        return areaManager.GenerateMinigames(amount);
     }
 
     /// <summary>
     ///     This function forwards a npc generation request to the <c>AreaManager</c>
     /// </summary>
     /// <param name="amount">The amount of npcs to generate</param>
-    public void GenerateNpcs(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateNpcs(int amount)
     {
-        areaManager.GenerateNPCs(amount);
+        return areaManager.GenerateNPCs(amount);
     }
 
     /// <summary>
     ///     This function forwards a book generation request to the <c>AreaManager</c>
     /// </summary>
     /// <param name="amount">The amount of books to generate</param>
-    public void GenerateBooks(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateBooks(int amount)
     {
-        areaManager.GenerateBooks(amount);
+        return areaManager.GenerateBooks(amount);
     }
 
     /// <summary>
     ///     This function forwards a teleporter generation request to the <c>AreaManager</c>
     /// </summary>
     /// <param name="amount">The amount of teleporters to generate</param>
-    public void GenerateTeleporters(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateTeleporters(int amount)
     {
-        areaManager.GenerateTeleporters(amount);
+        return areaManager.GenerateTeleporters(amount);
     }
 
     /// <summary>
     ///     This function forwards a dungeons generation request to the <c>AreaManager</c>
     /// </summary>
     /// <param name="amount">The amount of dungeons to generate</param>
-    public void GenerateDungeons(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateDungeons(int amount)
     {
-        areaManager.GenerateDungeons(amount);
+        return areaManager.GenerateDungeons(amount);
     }
 
     /// <summary>
@@ -136,8 +189,54 @@ public class GeneratorUIManager : MonoBehaviour
     /// <summary>
     ///     This function forwards a save request to the <c>AreaManager</c>
     /// </summary>
-    public void SaveArea()
+    public async UniTask<bool> SaveArea()
     {
-        areaManager.SaveArea();
+        bool success = await areaManager.SaveArea();
+        return success;
+    }
+
+    /// <summary>
+    ///     This function enables or disables the minigame icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the minigame icons should be shown</param>
+    public void DisplayMinigames(bool active)
+    {
+        areaManager.DisplayMinigames(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the npc icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the npc icons should be shown</param>
+    public void DisplayNpcs(bool active)
+    {
+        areaManager.DisplayNpcs(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the book icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the book icons should be shown</param>
+    public void DisplayBooks(bool active)
+    {
+        areaManager.DisplayBooks(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the teleporter icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the teleporter icons should be shown</param>
+    public void DisplayTeleporter(bool active)
+    {
+        areaManager.DisplayTeleporter(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the dungeon icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the dungeon icons should be shown</param>
+    public void DisplayDungeons(bool active)
+    {
+        areaManager.DisplayDungeons(active);
     }
 }

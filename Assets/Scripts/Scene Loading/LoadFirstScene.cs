@@ -1,8 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System;
-using System.Runtime.InteropServices;
 
 /// <summary>
 ///     This class manages the loading of the game scenes.
@@ -30,9 +28,9 @@ public class LoadFirstScene : MonoBehaviour
                 StartGenerator();
                 break;
 
-            case Gamemode.INSPECT:
+            case Gamemode.INSPECTOR:
                 Debug.Log("Starting in Inspect Mode");
-                GameSettings.SetGamemode(Gamemode.INSPECT);
+                GameSettings.SetGamemode(Gamemode.INSPECTOR);
                 StartGenerator();
                 break;
         }
@@ -49,6 +47,7 @@ public class LoadFirstScene : MonoBehaviour
 
         //get first part
         string gamemodePart = urlGamemodePart.Split("-")[0];
+        gamemodePart = gamemodePart.ToUpper();
 
         //try to parse to valid gamemode
         bool success = System.Enum.TryParse<Gamemode>(gamemodePart, out Gamemode gamemode);
@@ -59,7 +58,7 @@ public class LoadFirstScene : MonoBehaviour
         }
         else
         {
-            Gamemode defaultGamemode = Gamemode.GENERATOR;
+            Gamemode defaultGamemode = Gamemode.PLAY;
             Debug.LogError("Incorrect gamemode specified: " + gamemodePart + ", setting default gamemode: " + defaultGamemode);
             return defaultGamemode;
         }
@@ -102,6 +101,7 @@ public class LoadFirstScene : MonoBehaviour
         if (!validCourseId)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+            OfflineMode.Instance.DisplayInfo("INVALID COURSE ID");
             return;
         }
 
@@ -112,6 +112,7 @@ public class LoadFirstScene : MonoBehaviour
         if (!validPlayerId)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+            OfflineMode.Instance.DisplayInfo("INVALID PLAYER ID");
             return;
         }
 
@@ -125,7 +126,7 @@ public class LoadFirstScene : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function starts the GeneratorWorld 
+    ///     This function starts the GeneratorWorld for the Generator or Inspector
     /// </summary>
     /// <returns></returns>
     private async UniTask StartGenerator()

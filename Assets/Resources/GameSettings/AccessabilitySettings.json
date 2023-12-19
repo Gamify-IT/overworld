@@ -1,0 +1,25 @@
+{
+    "verySmallCA": 32,
+    "smallCA": 33,
+    "normalCA": 34,
+    "bigCA": 35,
+    "veryBigCA": 36,
+
+    "verySmallDW": 10,
+    "smallDW": 18,
+    "normalDW": 25,
+    "bigDW": 38,
+    "veryBigDW": 50,
+
+    "verySmallIslandCA": 34,
+    "smallIslandCA": 36,
+    "normalIslandCA": 38,
+    "bigIslandCA": 40,
+    "veryBigIslandCA": 42,
+
+    "verySmallIslandDW": 50,
+    "smallIslandDW": 75,
+    "normalIslandDW": 100,
+    "bigIslandDW": 125,
+    "veryBigIslandDW": 150
+}

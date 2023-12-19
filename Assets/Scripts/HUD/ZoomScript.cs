@@ -10,7 +10,7 @@ public class ZoomScript : MonoBehaviour
     //minigame Zoomlevels
     public int zoomLevel = -40;
     private int maxZoomLevel = -30;
-    private int minZoomLevel = -60;
+    private int minZoomLevel = -200;
 
     //normal camera zoom levels
     private readonly int[] gameZoomLevelX = { 320, 355, 425 };

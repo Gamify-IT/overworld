@@ -1,8 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
+/// <summary>
+///     This class manages the <c>AreaData</c> for all areas in the play mode
+/// </summary>
 public class AreaDataManager
 {
     Dictionary<int, WorldAreas> worldAreas;
@@ -18,7 +20,6 @@ public class AreaDataManager
     public async UniTask<bool> FetchData()
     {
         Debug.Log("Loading area data");
-        bool loadingError = false;
 
         int amountWorlds = GameSettings.GetMaxWorlds();
 
@@ -27,11 +28,11 @@ public class AreaDataManager
             bool successfulLoading = await FetchWorldData(worldIndex);
             if(!successfulLoading)
             {
-                loadingError = true;
+                return true;
             }
         }
 
-        return loadingError;
+        return false;
     }
 
     /// <summary>
@@ -41,26 +42,25 @@ public class AreaDataManager
     /// <returns>True, if everything went fine, false otherwise </returns>
     private async UniTask<bool> FetchWorldData(int worldIndex)
     {
-        bool successfulLoading = true;
-
         AreaInformation currentArea = new AreaInformation(worldIndex, new Optional<int>());
         worldAreas.Add(worldIndex, new WorldAreas());
 
         AreaData worldData = await FetchData(currentArea);
         if (worldData == null)
         {
-            successfulLoading = false;
-            worldData = LoadLocalData(currentArea);
+            return false;
         }
         worldAreas[worldIndex].AddArea(0, worldData);
 
         int amountDungeons;
         if (worldData.IsGeneratedArea())
         {
+            UpdateTeleporters(currentArea, worldData.GetAreaMapData().GetTeleporterSpots());
             amountDungeons = worldData.GetAreaMapData().GetSceneTransitionSpots().Count;
         }
         else
         {
+            UpdateTeleporters(currentArea);
             amountDungeons = 4;
         }
 
@@ -69,11 +69,11 @@ public class AreaDataManager
             bool dungeonSuccessful = await FetchDungeonData(worldIndex, dungeonIndex);
             if(!dungeonSuccessful)
             {
-                successfulLoading = false;
+                return false;
             }
         }
 
-        return successfulLoading;
+        return true;
     }
 
     /// <summary>
@@ -84,18 +84,24 @@ public class AreaDataManager
     /// <returns>True, if everything went fine, false otherwise </returns>
     private async UniTask<bool> FetchDungeonData(int worldIndex, int dungeonIndex)
     {
-        bool successfulLoading = true;
-
         AreaInformation currentArea = new AreaInformation(worldIndex, new Optional<int>(dungeonIndex));
         AreaData dungeonData = await FetchData(currentArea);
         if (dungeonData == null)
         {
-            successfulLoading = false;
-            dungeonData = LoadLocalData(currentArea);
+            return false;
         }
         worldAreas[worldIndex].AddArea(dungeonIndex, dungeonData);
 
-        return successfulLoading;
+        if(dungeonData.IsGeneratedArea())
+        {
+            UpdateTeleporters(currentArea, dungeonData.GetAreaMapData().GetTeleporterSpots());
+        }
+        else
+        {
+            UpdateTeleporters(currentArea);
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -122,6 +128,58 @@ public class AreaDataManager
         }
 
         return null;
+    }
+
+    /// <summary>
+    ///     This function gets the local stored area data as dummy data
+    /// </summary>
+    public void GetDummyData()
+    {
+        worldAreas = new Dictionary<int, WorldAreas>();
+
+        int amountWorlds = GameSettings.GetMaxWorlds();
+
+        for (int worldIndex = 1; worldIndex <= amountWorlds; worldIndex++)
+        {
+            Debug.Log("Loading local world: " + worldIndex);
+            AreaInformation currentArea = new AreaInformation(worldIndex, new Optional<int>());
+            worldAreas.Add(worldIndex, new WorldAreas());
+
+            //get world data
+            AreaData worldData = LoadLocalData(currentArea);
+            worldAreas[worldIndex].AddArea(0, worldData);
+
+            //get amount of dungeons
+            int amountDungeons;
+            if (worldData.IsGeneratedArea())
+            {
+                UpdateTeleporters(currentArea, worldData.GetAreaMapData().GetTeleporterSpots());
+                amountDungeons = worldData.GetAreaMapData().GetSceneTransitionSpots().Count;
+            }
+            else
+            {
+                UpdateTeleporters(currentArea);
+                amountDungeons = 4;
+            }
+
+            //get dungeon data
+            for (int dungeonIndex = 1; dungeonIndex <= amountDungeons; dungeonIndex++)
+            {
+                Debug.Log("Loading local dungeon: " + worldIndex + "-" + dungeonIndex);
+                currentArea = new AreaInformation(worldIndex, new Optional<int>(dungeonIndex));
+                AreaData dungeonData = LoadLocalData(currentArea);
+                worldAreas[worldIndex].AddArea(dungeonIndex, dungeonData);
+
+                if(dungeonData.IsGeneratedArea())
+                {
+                    UpdateTeleporters(currentArea, dungeonData.GetAreaMapData().GetTeleporterSpots());
+                }
+                else
+                {
+                    UpdateTeleporters(currentArea);
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -163,5 +221,75 @@ public class AreaDataManager
         }
 
         return worldAreas[area.GetWorldIndex()].GetArea(dungeonIndex);
+    }
+
+    /// <summary>
+    ///     This function updates the position and unlocked flag of the given teleporter spots
+    /// </summary>
+    /// <param name="areaIdentifier">The area the teleports are in</param>
+    /// <param name="teleporters">The teleport spots</param>
+    private void UpdateTeleporters(AreaInformation areaIdentifier, List<TeleporterSpotData> teleporters)
+    {
+        Debug.Log("Update teleports of " + areaIdentifier.GetWorldIndex() + "-" + areaIdentifier.GetDungeonIndex());
+        foreach (TeleporterSpotData spot in teleporters)
+        {
+            string name = spot.GetName();
+            int worldId = spot.GetArea().GetWorldIndex();
+            int dungeonId = 0;
+            if(spot.GetArea().IsDungeon())
+            {
+                dungeonId = spot.GetArea().GetDungeonIndex();
+            }
+            int number = spot.GetIndex();
+            Vector2 position = spot.GetPosition();
+            TeleporterData data = new TeleporterData(name, worldId, dungeonId, number, position, false);
+            DataManager.Instance.AddTeleporterInformation(areaIdentifier, number, data);
+        }
+    }
+
+    /// <summary>
+    ///     This function updates the position and unlocked flag with the default teleporters
+    /// </summary>
+    /// <param name="areaIdentifier">The area the teleports are in</param>
+    private void UpdateTeleporters(AreaInformation areaIdentifier)
+    {
+        List<TeleporterSpotData> teleporterSpots = GetDefaultTeleporters(areaIdentifier);
+        UpdateTeleporters(areaIdentifier, teleporterSpots);
+    }
+
+    /// <summary>
+    ///     This function retrieves the default teleporters for the given area
+    /// </summary>
+    /// <param name="areaIdentifier">The area to get the default teleporters from</param>
+    /// <returns>A list containing the default teleporters</returns>
+    private List<TeleporterSpotData> GetDefaultTeleporters(AreaInformation areaIdentifier)
+    {
+        string path;
+        if (areaIdentifier.IsDungeon())
+        {
+            path = "AreaInfo/DungeonDefaultObjects";
+        }
+        else
+        {
+            path = "AreaInfo/World" + areaIdentifier.GetWorldIndex() + "DefaultObjects";
+        }
+
+        TextAsset targetFile = Resources.Load<TextAsset>(path);
+        string json = targetFile.text;
+        CustomAreaMapDTO dto = CustomAreaMapDTO.CreateFromJSON(json);
+        CustomAreaMapData data = CustomAreaMapData.ConvertDtoToData(dto);
+
+        foreach (TeleporterSpotData teleporterSpot in data.GetTeleporterSpots())
+        {
+            teleporterSpot.SetArea(areaIdentifier);
+
+            if (areaIdentifier.IsDungeon())
+            {
+                string teleporterName = "Dungeon " + areaIdentifier.GetWorldIndex() + "-" + areaIdentifier.GetDungeonIndex() + " " + teleporterSpot.GetName();
+                teleporterSpot.SetName(teleporterName);
+            }
+        }
+
+        return data.GetTeleporterSpots();
     }
 }

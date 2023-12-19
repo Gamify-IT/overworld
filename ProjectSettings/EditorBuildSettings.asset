@@ -111,9 +111,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Player HUD/Book.unity
     guid: 3fe4170a8634f99448d06508f3ad9937
   - enabled: 1
-    path: Assets/Scenes/Worlds/GeneratorWorld.unity
-    guid: 7a175ce109e71aa40ba380f311e02ff3
-  - enabled: 1
     path: Assets/Scenes/AreaGeneration/AreaGeneratorManager.unity
     guid: c732de4885a1f0947bd942ffe70d74a1
   - enabled: 1

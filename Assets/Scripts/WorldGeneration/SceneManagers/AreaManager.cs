@@ -1,14 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 ///     This class manages the generation and setup of the area
 /// </summary>
 public class AreaManager : MonoBehaviour
 {
-    //TEMP
     [SerializeField] private int worldIndex;
     [SerializeField] private int dungeonIndex;
 
@@ -17,12 +16,14 @@ public class AreaManager : MonoBehaviour
     [SerializeField] private InspectorUIManager inspectorUI;
 
     private string courseID;
+    private bool demoMode;
+    private AreaGeneratorManager areaGeneratorManager;
     private AreaData areaData;
     private AreaInformation areaIdentifier;
     private AreaInformationData areaInformation;
-    private AreaGenerator areaGenerator;
     private ObjectPositionGenerator objectPositionGenerator;
     private ObjectGenerator objectGenerator;
+    private List<BarrierSpotData> worldConnectionBarriers;
 
     /// <summary>
     ///     This function sets up the area, if the game is in PLAY mode
@@ -66,7 +67,10 @@ public class AreaManager : MonoBehaviour
             Debug.Log("Generated Area: " + worldIndex + "-" + dungeonIndex);
 
             //Create layout
-            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetTiles(), areaInformation);
+            List<SceneTransitionSpotData> dungeonSpots = areaData.GetAreaMapData().GetSceneTransitionSpots();
+            areaData.GetAreaMapData().GetLayout().AddDungeonSpots(dungeonSpots, areaInformation.GetObjectOffset());
+            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
+            areaBuilder.RemoveAdditionalObjects();
 
             //Create objects
             areaBuilder.SetupAreaObjects(areaData.GetAreaMapData());
@@ -82,7 +86,9 @@ public class AreaManager : MonoBehaviour
 
             //Create objects
             areaBuilder.SetupAreaObjects(areaMapData);
-        }      
+        }
+
+        GameManager.Instance.SetData(worldIndex, dungeonIndex);
     }
 
     /// <summary>
@@ -120,9 +126,10 @@ public class AreaManager : MonoBehaviour
     /// <param name="areaData">The data of the area</param>
     /// <param name="areaIdentifier">The area identifier</param>
     /// <param name="cameraController">The camera</param>
-    public void SetupInspector(string courseID, AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController)
+    public void SetupInspector(string courseID, AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController, bool demoMode)
     {
         this.courseID = courseID;
+        this.demoMode = demoMode;
         this.areaData = areaData;
         this.areaIdentifier = areaIdentifier;
         areaInformation = GetAreaInformation(areaIdentifier);
@@ -130,7 +137,10 @@ public class AreaManager : MonoBehaviour
         CustomAreaMapData areaMapData;
         if (areaData.IsGeneratedArea())
         {
-            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetTiles(), areaInformation);
+            List<SceneTransitionSpotData> dungeonSpots = areaData.GetAreaMapData().GetSceneTransitionSpots();
+            this.areaData.GetAreaMapData().GetLayout().AddDungeonSpots(dungeonSpots, areaInformation.GetObjectOffset());
+            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
+            areaBuilder.RemoveAdditionalObjects();
             areaMapData = areaData.GetAreaMapData();
         }
         else
@@ -138,7 +148,7 @@ public class AreaManager : MonoBehaviour
             areaMapData = GetDefaultAreaMapData();
         }
 
-        inspectorUI.Setup(areaMapData, areaInformation, cameraController);
+        inspectorUI.Setup(areaMapData, areaInformation, cameraController, areaData.GetArea());
     }
 
     /// <summary>
@@ -147,10 +157,12 @@ public class AreaManager : MonoBehaviour
     /// <param name="areaData">The data of the area</param>
     /// <param name="areaIdentifier">The area identifier</param>
     /// <param name="cameraController">The camera</param>
-    public void SetupGenerator(string courseID, AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController)
+    public void SetupGenerator(string courseID, AreaGeneratorManager areaGeneratorManager, AreaData areaData, AreaInformation areaIdentifier, CameraMovement cameraController, bool setupUI, bool demoMode)
     {
         //store infos
         this.courseID = courseID;
+        this.demoMode = demoMode;
+        this.areaGeneratorManager = areaGeneratorManager;
         worldIndex = areaData.GetArea().GetWorldIndex();
         dungeonIndex = 0;
         if(areaData.GetArea().IsDungeon())
@@ -161,17 +173,29 @@ public class AreaManager : MonoBehaviour
         this.areaData = areaData;
         this.areaIdentifier = areaIdentifier;
         areaInformation = GetAreaInformation(areaIdentifier);
-        objectGenerator = new ObjectGenerator(areaIdentifier);
+        objectGenerator = new ObjectGenerator(areaIdentifier, areaInformation.GetObjectOffset());
+        worldConnectionBarriers = new List<BarrierSpotData>();
         if(areaData.IsGeneratedArea())
         {
-            objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetTiles(), areaInformation.GetObjectOffset());
+            List<SceneTransitionSpotData> dungeonSpots = areaData.GetAreaMapData().GetSceneTransitionSpots();
+            this.areaData.GetAreaMapData().GetLayout().AddDungeonSpots(dungeonSpots, areaInformation.GetObjectOffset());
+
+            objectPositionGenerator = new ObjectPositionGenerator(areaData.GetAreaMapData().GetLayout().GetCellTypes(),  
+                areaInformation.GetWorldConnections(), 
+                areaData.GetAreaMapData().GetLayout().GetStyle());
+
+            objectPositionGenerator.SetMinigameSpots(areaData.GetAreaMapData().GetMinigameSpots(), areaInformation.GetObjectOffset());
+            objectPositionGenerator.SetNpcSpots(areaData.GetAreaMapData().GetNpcSpots(), areaInformation.GetObjectOffset());
+            objectPositionGenerator.SetBookSpots(areaData.GetAreaMapData().GetBookSpots(), areaInformation.GetObjectOffset());
+            objectPositionGenerator.SetTeleporterSpots(areaData.GetAreaMapData().GetTeleporterSpots(), areaInformation.GetObjectOffset());
+            objectPositionGenerator.SetDungeonSpots(areaData.GetAreaMapData().GetSceneTransitionSpots(), areaInformation.GetObjectOffset());
         }
 
         //setup area
         SetupArea();
 
         //setup ui
-        generatorUI.SetupUI(areaData, areaInformation, cameraController);
+        generatorUI.SetupUI(areaData, areaInformation, cameraController, setupUI);
     }
 
     #region Setup Functions
@@ -206,8 +230,9 @@ public class AreaManager : MonoBehaviour
     {
         if (areaData.IsGeneratedArea())
         {
-            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetTiles(), areaInformation);
+            areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
             areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+            areaBuilder.RemoveAdditionalObjects();
         }
         else
         {
@@ -266,6 +291,8 @@ public class AreaManager : MonoBehaviour
         foreach (TeleporterSpotData teleporterSpot in data.GetTeleporterSpots())
         {
             teleporterSpot.SetArea(areaIdentifier);
+            string teleporterName = "Dungeon " + areaIdentifier.GetWorldIndex() + "-" + areaIdentifier.GetDungeonIndex() + " " + teleporterSpot.GetName();
+            teleporterSpot.SetName(teleporterName);
         }
         foreach (SceneTransitionSpotData sceneTransitionSpot in data.GetSceneTransitionSpots())
         {
@@ -283,40 +310,62 @@ public class AreaManager : MonoBehaviour
     /// <summary>
     ///     This function resets the area to the default, manually created one
     /// </summary>
-    public void ResetArea()
+    public async UniTask<bool> ResetArea()
     {
-        areaData.Reset();
-        SaveArea();
+        AreaData backup = areaData;
+        areaData = new AreaData(areaIdentifier, new Optional<CustomAreaMapData>());
+        bool success = await SaveArea();
+
+        if(success)
+        {
+            //reload scene
+            areaGeneratorManager.ReloadArea(areaData);
+        }
+        else
+        {
+            areaData = backup;
+        }
+
+        return success;
     }
 
     /// <summary>
-    ///     This function checks, whether the current area can be saved (at least one minigame spot needed)
+    ///     This function checks, whether the current area can be saved (at least one minigame spot needed, for dungeons exactly one dungeon spot)
     /// </summary>
     /// <returns>True, if the area can be saved, false otherwise</returns>
     public bool IsAreaSaveable()
     {
-        if(areaData.IsGeneratedArea())
+        if(!areaData.IsGeneratedArea())
         {
-            if(areaData.GetAreaMapData().GetMinigameSpots().Count > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
+            //no generated area
             return false;
         }
+
+        if (areaIdentifier.IsDungeon() && areaData.GetAreaMapData().GetSceneTransitionSpots().Count == 0)
+        {
+            //dungeon withouth exit cannot be saved
+            return false;
+        }
+
+        if (areaData.GetAreaMapData().GetMinigameSpots().Count == 0)
+        {
+            //area without minigames cannot be saved
+            return false;
+        }
+
+        return true;
     }
 
     /// <summary>
     ///     This function saves the current area data to the backend
     /// </summary>
-    public async void SaveArea()
+    public async UniTask<bool> SaveArea()
     {
+        if(demoMode)
+        {
+            return true;
+        }
+
         AreaDTO areaDTO = AreaDTO.ConvertDataToDto(areaData);
         string json = JsonUtility.ToJson(areaDTO, true);
         string path;
@@ -332,7 +381,7 @@ public class AreaManager : MonoBehaviour
             path = "Assets/Resources/Areas/World" + areaIdentifier.GetWorldIndex() + ".json";
         }
         WriteToJsonFile(json, path);
-        return;
+        return true;
 #endif
         //send area map data to backend
         path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseID + "/areaMaps/" + areaIdentifier.GetWorldIndex();
@@ -342,17 +391,14 @@ public class AreaManager : MonoBehaviour
         }
 
         bool success = await RestRequest.PutRequest(path, json);
-        if(success)
-        {
-            //show success message
-        }
-        else
-        {
-            //show error message
-        }
+        return success;
     }
 
-    //THIS FUNCTION IS ONLY NEEDED UNTIL BACKEND LOADING AND STORING IS IMPLEMENTED!
+    /// <summary>
+    ///     This function writes the given json in a file at the given path
+    /// </summary>
+    /// <param name="json">The json to write</param>
+    /// <param name="path">The path of the file to write to</param>
     private void WriteToJsonFile(string json, string path)
     {
         using (FileStream fs = File.Create(path))
@@ -375,34 +421,141 @@ public class AreaManager : MonoBehaviour
     /// </summary>
     /// <param name="size">The size of the layout</param>
     /// <param name="style">The style of the new layout</param>
+    /// <param name="layoutGeneratorType">The type of layout generator to be used</param>
     /// <param name="accessability">How much area is accessable</param>
-    public void GenerateLayout(Vector2Int size, WorldStyle style, float accessability)
+    /// <param name="seed">The seed to be used, if wanted</param>
+    public void GenerateLayout(Vector2Int size, WorldStyle style, LayoutGeneratorType layoutGeneratorType, int accessability, string seed)
     {
         //Setup area generator and object and generate layout
         List<WorldConnection> worldConnections = areaInformation.GetWorldConnections();
-        areaGenerator = new AreaGenerator(size, style, accessability, worldConnections);
-        areaGenerator.GenerateLayout();
-        string[,,] layout = areaGenerator.GetLayout();
-        objectPositionGenerator = new ObjectPositionGenerator(areaGenerator.GetAccessableTiles(), areaInformation.GetObjectOffset());
+
+        //setup layout generator
+        LayoutGenerator layoutGenerator = new CellularAutomataGenerator(seed, size, accessability, worldConnections);
+
+        switch (layoutGeneratorType)
+        {
+            case LayoutGeneratorType.CELLULAR_AUTOMATA:
+                layoutGenerator = new CellularAutomataGenerator(seed, size, accessability, worldConnections);
+                break;
+
+            case LayoutGeneratorType.DRUNKARDS_WALK:
+                layoutGenerator = new DrunkardsWalkGenerator(seed, size, accessability, worldConnections);
+                break;
+
+            case LayoutGeneratorType.ISLAND_CELLULAR_AUTOMATA:
+                layoutGenerator = new IslandsGenerator(seed, size, accessability, worldConnections, RoomGenerator.CELLULAR_AUTOMATA);
+                break;
+
+            case LayoutGeneratorType.ISLAND_DRUNKARDS_WALK:
+                layoutGenerator = new IslandsGenerator(seed, size, accessability, worldConnections, RoomGenerator.DRUNKARDS_WALK);
+                break;
+        }
+
+        //generate layout
+        layoutGenerator.GenerateLayout();
+        CellType[,] baseLayout = layoutGenerator.GetLayout();
         
+        //polish layout
+        LayoutPolisher polisher = new LayoutPolisher(style, baseLayout);
+        CellType[,] polishedLayout = polisher.Polish();
+
+        //convert layout
+        LayoutConverter converter = new SavannaConverter(polishedLayout);
+
+        switch (style)
+        {
+            case WorldStyle.SAVANNA:
+                converter = new SavannaConverter(polishedLayout);
+                break;
+
+            case WorldStyle.CAVE:
+                converter = new CaveConverter(polishedLayout);
+                break;
+
+            case WorldStyle.BEACH:
+                converter = new BeachConverter(polishedLayout);
+                break;
+
+            case WorldStyle.FOREST:
+                converter = new ForestConverter(polishedLayout);
+                break;
+        }
+
+        converter.Convert();
+        TileSprite[,,] tileLayout = converter.GetTileSprites();
+
+        //create world objects
+        EnvironmentObjectGenerator environmentObjectGenerator = new EnvironmentObjectGenerator(polishedLayout, tileLayout, style, seed);
+        environmentObjectGenerator.AddObjects();
+        polishedLayout = environmentObjectGenerator.GetCellTypes();
+        tileLayout = environmentObjectGenerator.GetTileSprites();
+
+        //setup object position generator
+        objectPositionGenerator = new ObjectPositionGenerator(polishedLayout, worldConnections, style);
+
         //Update stored data
-        CustomAreaMapData areaMapData = new CustomAreaMapData(layout, style);
+        Layout layout = new Layout(areaIdentifier, tileLayout, polishedLayout, layoutGeneratorType, seed, accessability, style);
+        CustomAreaMapData areaMapData = new CustomAreaMapData(layout);
         areaData.SetAreaMapData(areaMapData);
 
         //Setup area
-        areaBuilder.SetupAreaLayout(layout, areaInformation);
+        areaBuilder.SetupAreaLayout(tileLayout, areaInformation);
         areaBuilder.SetupPlaceholderObjects(areaMapData);
+        areaBuilder.RemoveAdditionalObjects();        
+    }
+
+    /// <summary>
+    ///     This function adds the world connections barriers, unless the area is a dungeon or the world connections are already set
+    /// </summary>
+    public void AddWorldConnectionBarriers()
+    {
+        if(!areaData.IsGeneratedArea())
+        {
+            return;
+        }
+
+        if (areaData.GetAreaMapData().GetBarrierSpots().Count == 0)
+        {
+            worldConnectionBarriers = objectGenerator.GenerateWorldBarrierSpots(objectPositionGenerator.GetWorldBarrierSpots(areaIdentifier));
+            areaData.GetAreaMapData().SetBarrierSpots(worldConnectionBarriers);
+            areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+        }
+    }
+
+    /// <summary>
+    ///     This function removes all generated objects
+    /// </summary>
+    public void ResetObjects()
+    {
+        objectPositionGenerator.ResetObjects();
+
+        //Remove object spots
+        areaData.GetAreaMapData().SetMinigameSpots(new List<MinigameSpotData>());
+        areaData.GetAreaMapData().SetNpcSpots(new List<NpcSpotData>());
+        areaData.GetAreaMapData().SetBookSpots(new List<BookSpotData>());
+        areaData.GetAreaMapData().SetTeleporterSpots(new List<TeleporterSpotData>());
+
+        //remove dungeon entrance / exit tiles from layout
+        areaData.GetAreaMapData().GetLayout().RemoveDungeonSpots(areaData.GetAreaMapData().GetSceneTransitionSpots(), areaInformation.GetObjectOffset());
+        areaData.GetAreaMapData().SetSceneTransitionSpots(new List<SceneTransitionSpotData>());
+
+        areaData.GetAreaMapData().SetBarrierSpots(new List<BarrierSpotData>());
+
+        //Remove Placeholders
+        areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+        areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
     }
 
     /// <summary>
     ///     This function creates minigame spots
     /// </summary>
     /// <param name="amount">The amount of minigame spots to create</param>
-    public void GenerateMinigames(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateMinigames(int amount)
     {
         //Generate Positions
-        objectPositionGenerator.GenerateMinigamePositions(amount);
-        List<Vector2> minigamePositions = objectPositionGenerator.GetMinigameSpotPositions();
+        bool success = objectPositionGenerator.GenerateMinigamePositions(amount);
+        List<Vector2Int> minigamePositions = objectPositionGenerator.GetMinigameSpotPositions();
 
         //Generate MinigameSpotData objects
         List<MinigameSpotData> minigameSpots = objectGenerator.GenerateMinigameSpots(minigamePositions);
@@ -410,17 +563,20 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+
+        return success;
     }
 
     /// <summary>
     ///     This function creates npc spots
     /// </summary>
     /// <param name="amount">The amount of npc spots to create</param>
-    public void GenerateNPCs(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateNPCs(int amount)
     {
         //Generate Positions
-        objectPositionGenerator.GenerateNpcPositions(amount);
-        List<Vector2> npcPositions = objectPositionGenerator.GetNpcSpotPositions();
+        bool success = objectPositionGenerator.GenerateNpcPositions(amount);
+        List<Vector2Int> npcPositions = objectPositionGenerator.GetNpcSpotPositions();
 
         //Generate NpcSpotData objects
         List<NpcSpotData> npcSpots = objectGenerator.GenerateNpcSpots(npcPositions);
@@ -428,17 +584,20 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+
+        return success;
     }
 
     /// <summary>
     ///     This function creates book spots
     /// </summary>
     /// <param name="amount">The amount of book spots to create</param>
-    public void GenerateBooks(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateBooks(int amount)
     {
         //Generate Positions
-        objectPositionGenerator.GenerateBookPositions(amount);
-        List<Vector2> bookPositions = objectPositionGenerator.GetBookSpotPositions();
+        bool success = objectPositionGenerator.GenerateBookPositions(amount);
+        List<Vector2Int> bookPositions = objectPositionGenerator.GetBookSpotPositions();
 
         //Generate BookSpotData objects
         List<BookSpotData> bookSpots = objectGenerator.GenerateBookSpots(bookPositions);
@@ -446,17 +605,20 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+
+        return success;
     }
 
     /// <summary>
     ///     This function creates teleporter spots
     /// </summary>
     /// <param name="amount">The amount of teleporter spots to create</param>
-    public void GenerateTeleporters(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateTeleporters(int amount)
     {
         //Generate Positions
-        objectPositionGenerator.GenerateTeleporterPositions(amount);
-        List<Vector2> teleporterPositions = objectPositionGenerator.GetTeleporterSpotPositions();
+        bool success = objectPositionGenerator.GenerateTeleporterPositions(amount);
+        List<Vector2Int> teleporterPositions = objectPositionGenerator.GetTeleporterSpotPositions();
 
         //Generate TeleporterSpotData objects
         List<TeleporterSpotData> teleporterSpots = objectGenerator.GenerateTeleporterSpots(teleporterPositions);
@@ -464,26 +626,98 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+
+        return success;
     }
 
     /// <summary>
     ///     This function creates dungeon spots
     /// </summary>
     /// <param name="amount">The amount of dungeon spots to create</param>
-    public void GenerateDungeons(int amount)
+    /// <returns>True, if all spots could be created, false otherwise</returns>
+    public bool GenerateDungeons(int amount)
     {
-        //Generate Positions
-        objectPositionGenerator.GenerateDungeonPositions(amount);
-        List<Vector2> dungeonPositions = objectPositionGenerator.GetDungeonSpotPositions();
+        //Remove previous positions
+        areaData.GetAreaMapData().GetLayout().RemoveDungeonSpots(areaData.GetAreaMapData().GetSceneTransitionSpots(), areaInformation.GetObjectOffset());
+        areaData.GetAreaMapData().SetBarrierSpots(new List<BarrierSpotData>());
 
-        //Generate SceneTransitionSpotData objects
+        //Generate new positions
+        bool success = objectPositionGenerator.GenerateDungeonPositions(amount);
+        List<DungeonSpotPosition> dungeonPositions = objectPositionGenerator.GetDungeonSpotPositions();
+
+        //Generate SceneTransitionSpotData objects, adapt layout
         List<SceneTransitionSpotData> dungeonSpots = objectGenerator.GenerateDungeonSpots(dungeonPositions);
         areaData.GetAreaMapData().SetSceneTransitionSpots(dungeonSpots);
+        areaData.GetAreaMapData().GetLayout().AddDungeonSpots(dungeonSpots, areaInformation.GetObjectOffset());
+        areaBuilder.SetupAreaLayout(areaData.GetAreaMapData().GetLayout().GetTileSprites(), areaInformation);
+
+        //Create barriers for the dungeon spots + add world barriers, if area is a world (no barriers in dungeons)
+        if(!areaIdentifier.IsDungeon())
+        {
+            List<BarrierSpotData> dungeonBarrierSpots = objectGenerator.GenerateDungeonBarrierSpots(dungeonPositions);
+            List<BarrierSpotData> worldBarrierSpots = worldConnectionBarriers;
+            List<BarrierSpotData> barrierSpots = new List<BarrierSpotData>();
+            barrierSpots.AddRange(dungeonBarrierSpots);
+            barrierSpots.AddRange(worldBarrierSpots);
+            areaData.GetAreaMapData().SetBarrierSpots(barrierSpots);
+        }        
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
+
+        return success;
     }
     #endregion
+
+    #endregion
+
+    #region Object toggle
+
+    /// <summary>
+    ///     This function enables or disables the minigame icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the minigame icons should be shown</param>
+    public void DisplayMinigames(bool active)
+    {
+        areaBuilder.DisplayMinigames(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the npc icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the npc icons should be shown</param>
+    public void DisplayNpcs(bool active)
+    {
+        areaBuilder.DisplayNpcs(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the book icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the book icons should be shown</param>
+    public void DisplayBooks(bool active)
+    {
+        areaBuilder.DisplayBooks(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the teleporter icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the teleporter icons should be shown</param>
+    public void DisplayTeleporter(bool active)
+    {
+        areaBuilder.DisplayTeleporter(active);
+    }
+
+    /// <summary>
+    ///     This function enables or disables the dungeon icons, based on the given value
+    /// </summary>
+    /// <param name="active">Whether or not the dungeon icons should be shown</param>
+    public void DisplayDungeons(bool active)
+    {
+        areaBuilder.DisplayDungeons(active);
+        areaBuilder.DisplayBarriers(active);
+    }
 
     #endregion
 }

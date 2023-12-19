@@ -1,11 +1,16 @@
 {
     "layout": {
-        "sizeX": 1,
-        "sizeY": 1,
-        "layers": 1,
-        "tiles": ""
+        "area": {
+            "worldIndex": 1,
+            "dungeonIndex": 0
+        },
+        "sizeX": 0,
+        "sizeY": 0,
+        "generatorType": "CELLULAR_AUTOMATA",
+        "seed": "",
+        "accessability": 0,
+        "style": "CUSTOM"
     },
-    "style": "CUSTOM",
     "minigameSpots": [
         {
             "area": {
@@ -355,7 +360,8 @@
                 "y": 22.0
             },
             "type": "worldBarrier",
-            "destinationAreaIndex": "2"
+            "destinationAreaIndex": "2",
+            "barrierStyle": "TREE"
         },
         {
             "area": {
@@ -367,7 +373,8 @@
                 "y": 62.0
             },
             "type": "worldBarrier",
-            "destinationAreaIndex": "3"
+            "destinationAreaIndex": "3",
+            "barrierStyle": "TREE"
         },
         {
             "area": {
@@ -379,7 +386,8 @@
                 "y": 50.0
             },
             "type": "dungeonBarrier",
-            "destinationAreaIndex": "1"
+            "destinationAreaIndex": "1",
+            "barrierStyle": "TREE"
         },
         {
             "area": {
@@ -391,7 +399,8 @@
                 "y": 44.0
             },
             "type": "dungeonBarrier",
-            "destinationAreaIndex": "2"
+            "destinationAreaIndex": "2",
+            "barrierStyle": "GATE"
         },
         {
             "area": {
@@ -403,7 +412,8 @@
                 "y": 19.0
             },
             "type": "dungeonBarrier",
-            "destinationAreaIndex": "3"
+            "destinationAreaIndex": "3",
+            "barrierStyle": "HOUSE"
         },
         {
             "area": {
@@ -415,7 +425,8 @@
                 "y": 49.0
             },
             "type": "dungeonBarrier",
-            "destinationAreaIndex": "4"
+            "destinationAreaIndex": "4",
+            "barrierStyle": "IRON_BAR_DOOR"
         }
     ],
     "teleporterSpots": [
@@ -429,7 +440,7 @@
                 "x": 65.0,
                 "y": 41.0
             },
-            "name": "Park"
+            "name": "World 1 - Park"
         },
         {
             "area": {
@@ -441,7 +452,7 @@
                 "x": 6.0,
                 "y": 12.0
             },
-            "name": "Market"
+            "name": "World 1 - Market"
         },
         {
             "area": {
@@ -453,7 +464,7 @@
                 "x": -2.0,
                 "y": 54.0
             },
-            "name": "Graveyard"
+            "name": "World 1 - Graveyard"
         }
     ],
     "sceneTransitionSpots": [
@@ -474,7 +485,8 @@
                 "worldIndex": 1,
                 "dungeonIndex": 1
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "CAVE_ENTRANCE" 
         },
         {
             "area": {
@@ -493,7 +505,8 @@
                 "worldIndex": 1,
                 "dungeonIndex": 2
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "GATE"
         },
         {
             "area": {
@@ -512,7 +525,8 @@
                 "worldIndex": 1,
                 "dungeonIndex": 3
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "HOUSE"
         },
         {
             "area": {
@@ -531,7 +545,8 @@
                 "worldIndex": 1,
                 "dungeonIndex": 4
             },
-            "facingDirection": "south"
+            "facingDirection": "south",
+            "style": "HOUSE"
         }
     ]
 }

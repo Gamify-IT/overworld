@@ -4195,6 +4195,7 @@ SpriteAtlas:
   - {fileID: -2087682978, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 149388052, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: -1758140343, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
+  - {fileID: 1812458994, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 509697893, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 529022606, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
   - {fileID: 1917079920, guid: 5f65e398fe76cf54f9e481f896d24ef2, type: 3}
@@ -9474,6 +9475,7 @@ SpriteAtlas:
   - Overworld-Savanna_421
   - Overworld-Savanna_451
   - Overworld-Savanna_445
+  - Overworld-Savanna_Trapdoor
   - Overworld-Savanna_735
   - Overworld-Savanna_785
   - Overworld-Savanna_436

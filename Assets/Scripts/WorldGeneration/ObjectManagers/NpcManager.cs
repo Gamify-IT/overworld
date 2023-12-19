@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-///     This class manages the creation and setup of npc spot at world loading
+///     This classes manages the creation of npc objects and placeholder icons
 /// </summary>
 public class NpcManager : MonoBehaviour
 {
