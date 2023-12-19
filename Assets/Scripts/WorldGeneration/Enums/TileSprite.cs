@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+/// <summary>
+///     This enum contains the precise sprite for a tile for each area style, environmental object and dungeon design
+/// </summary>
 public enum TileSprite
 {
     UNDEFINED,

@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class defines an implementation of a binary space partitioner, used by the <c>IslandsGenerator</c>
+/// </summary>
 public class BinarySpacePartitioner : SpacePartitioner
 {
     private int minWidth;
@@ -15,6 +17,11 @@ public class BinarySpacePartitioner : SpacePartitioner
         pseudoRandomNumberGenerator = new System.Random(seed.GetHashCode());
     }
 
+    /// <summary>
+    ///     This function partitions the given space
+    /// </summary>
+    /// <param name="spaceToPartition">The space to be partitioned</param>
+    /// <returns>A list containing all created subspaces</returns>
     public override List<Subspace> Partition(Subspace spaceToPartition)
     {
         return BinarySplit(spaceToPartition);

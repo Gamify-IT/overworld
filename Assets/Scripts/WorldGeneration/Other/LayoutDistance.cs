@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+/// <summary>
+///     This class is used by the <c>DrunkardsWalkGenerator</c> for shifting the layout and contains the distances of the layout structure to each border
+/// </summary>
 public class LayoutDistance
 {
     public int left;

@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class is used to transfer an two dimensional vector of ints from and to the overworld backend
+/// </summary>
 [System.Serializable]
 public class SerializableVector2Int
 {

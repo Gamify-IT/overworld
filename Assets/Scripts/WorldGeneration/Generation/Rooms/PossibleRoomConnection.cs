@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class contains all information for a connection between two rooms used to connect all rooms in the <c>RoomManager</c>
+/// </summary>
 public class PossibleRoomConnection
 {
     private Room startRoom;

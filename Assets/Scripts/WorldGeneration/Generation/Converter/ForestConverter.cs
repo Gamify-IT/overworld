@@ -1,13 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class defines a Layout Converter for the forest area style
+/// </summary>
 public class ForestConverter : LayoutConverter
 {
     private static readonly float floorDecorationPercentage = 0.05f;
 
     public ForestConverter(CellType[,] baseLayout) : base(baseLayout) { }
 
+    /// <summary>
+    ///     This function converts the stored layout according to the rules for a forest layout
+    /// </summary>
     public override void Convert()
     {
         GetTileTypes();
@@ -38,7 +42,7 @@ public class ForestConverter : LayoutConverter
     }
 
     /// <summary>
-    ///     This function converts the given tile type layout to the correct cave tile sprites
+    ///     This function converts the given tile type layout to the correct forest sprites
     /// </summary>
     private void ConvertToTileSprites()
     {

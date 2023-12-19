@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 /// <summary>
-///     This class is used to retrieve scene transition spot data from Get Requests.
+///     This class is used to transfer a <c>SceneTransitionSpotData</c> from and to the overworld backend
 /// </summary>
 [Serializable]
 public class SceneTransitionSpotDTO

@@ -1,13 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
-using UnityEngine.Networking;
 using TMPro;
 using UnityEngine.UI;
 using System.Runtime.InteropServices;
 
+/// <summary>
+///     This class manages the generator and inspector modes and sets up the correct scenes
+/// </summary>
 public class AreaGeneratorManager : MonoBehaviour
 {
     /// <summary>
@@ -118,7 +118,6 @@ public class AreaGeneratorManager : MonoBehaviour
     {
 #if UNITY_EDITOR
         //skipping area retrieval in editor, using area 1-1 instead
-        Debug.Log("Skipping area retrieval in editor, using area 1-1 instead");
         return new Optional<AreaInformation>(new AreaInformation(1, new Optional<int>(1)));
 #endif
 
@@ -215,7 +214,9 @@ public class AreaGeneratorManager : MonoBehaviour
     }
     #endregion
 
-    //load selected area
+    /// <summary>
+    ///     This function start the correct scene and sets it up
+    /// </summary>
     private async void LoadAreaScene()
     {
         if(currentArea.IsDungeon())
@@ -261,7 +262,10 @@ public class AreaGeneratorManager : MonoBehaviour
         }
     }
 
-    //reload current area
+    /// <summary>
+    ///     This function reload the correct scene to reset the layout
+    /// </summary>
+    /// <param name="areaData">The data to set up the area with</param>
     public async void ReloadArea(AreaData areaData)
     {
         if (currentArea.IsDungeon())

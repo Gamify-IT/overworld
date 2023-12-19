@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class represents a node in the graph of the a* pathfinder
+/// </summary>
 public class PathNode
 {
     public Vector2Int position;
@@ -23,6 +24,9 @@ public class PathNode
         parent = null;
     }
 
+    /// <summary>
+    ///     This function resets all stored values to the inital states
+    /// </summary>
     public void ResetValues()
     {
         parent = null;
@@ -31,6 +35,9 @@ public class PathNode
         CalculateFCost();
     }
 
+    /// <summary>
+    ///     This function calculates the expected cost based on the cost to get to this node and the heuristic for the rest of the way
+    /// </summary>
     public void CalculateFCost()
     {
         fCost = hCost + gCost;

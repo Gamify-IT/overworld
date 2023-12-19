@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
@@ -37,7 +35,7 @@ public class GeneratorUIManager : MonoBehaviour
             RefreshUI();
         }
 
-        SetupCamera();
+        SetupCamera(areaInformation.GetSize());
     }
 
     /// <summary>
@@ -66,9 +64,8 @@ public class GeneratorUIManager : MonoBehaviour
     /// <summary>
     ///     This function sets up the camera to be in the center of the area
     /// </summary>
-    private void SetupCamera()
+    private void SetupCamera(Vector2Int size)
     {
-        Vector2Int size = areaInformation.GetSize();
         Vector2Int offset = areaInformation.GetObjectOffset();
         Vector3 position = new Vector3((size.x / 2) + offset.x, (size.y / 2) + offset.y, cameraController.transform.position.z);
         cameraController.transform.position = position;
@@ -111,9 +108,12 @@ public class GeneratorUIManager : MonoBehaviour
     public void GenerateLayout(Vector2Int size, WorldStyle style, LayoutGeneratorType layoutGeneratorType, int accessability, string seed)
     {
         areaManager.GenerateLayout(size, style, layoutGeneratorType, accessability, seed);
+        SetupCamera(size);
     }
 
-    //try to add world connection barriers, if not already set
+    /// <summary>
+    ///     This function adds the world connection barriers, unless the area is a dungeon or the world connection barriers are already added
+    /// </summary>
     public void AddWorldConnectionBarriers()
     {
         areaManager.AddWorldConnectionBarriers();

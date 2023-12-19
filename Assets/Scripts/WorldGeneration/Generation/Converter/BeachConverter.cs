@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class defines a Layout Converter for the beach area style
+/// </summary>
 public class BeachConverter : LayoutConverter
 {
     private static readonly float wavePercentage = 0.05f;
@@ -9,6 +10,9 @@ public class BeachConverter : LayoutConverter
 
     public BeachConverter(CellType[,] baseLayout) : base(baseLayout) { }
 
+    /// <summary>
+    ///     This function converts the stored layout according to the rules for a beach layout
+    /// </summary>
     public override void Convert()
     {
         GetTileTypes();
@@ -16,7 +20,7 @@ public class BeachConverter : LayoutConverter
     }
 
     /// <summary>
-    ///     This function converts the given floor / wall layout to the correct tile types
+    ///     This function converts the given floor / wall layout to the correct tile types (floor, connection, wall)
     /// </summary>
     private void GetTileTypes()
     {
@@ -43,7 +47,7 @@ public class BeachConverter : LayoutConverter
     }
 
     /// <summary>
-    ///     This function converts the given tile type layout to the correct cave tile sprites
+    ///     This function converts the given tile type layout to the correct beach tile sprites
     /// </summary>
     private void ConvertToTileSprites()
     {

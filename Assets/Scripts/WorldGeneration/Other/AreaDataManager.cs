@@ -1,8 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
+/// <summary>
+///     This class manages the <c>AreaData</c> for all areas in the play mode
+/// </summary>
 public class AreaDataManager
 {
     Dictionary<int, WorldAreas> worldAreas;

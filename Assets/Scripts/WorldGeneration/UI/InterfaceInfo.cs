@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
 
+/// <summary>
+///     This class handles the UI elements of the help sections
+/// </summary>
 public class InterfaceInfo : MonoBehaviour
 {
     [SerializeField] private GameObject infoPanel;
@@ -135,7 +136,7 @@ public class InterfaceInfo : MonoBehaviour
         else
         {
             string header = "ACCESSABLE SETTING";
-            string body = "The accessable setting defines, how much area the player will be able to explore. A higher value translates to more exploreable space.";
+            string body = "The accessable setting defines how much area the player will be able to explore. A higher value translates to more exploreable space.";
             DisplayInfo(header, body, true, false);
         }
     }
@@ -392,11 +393,21 @@ public class InterfaceInfo : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    ///     This function closes the help panel
+    /// </summary>
     public void InfoCloseButtonPressed()
     {
         infoPanel.SetActive(false);
     }
 
+    /// <summary>
+    ///     This function displays the provided content and enables / disables the closing buttons
+    /// </summary>
+    /// <param name="header">The header of the information</param>
+    /// <param name="content">The information provided</param>
+    /// <param name="closeable">If the info panel can be closed</param>
+    /// <param name="closeAndView">If the info panel can be closed together with the generator / inspector UI</param>
     public void DisplayInfo(string header, string content, bool closeable, bool closeAndView)
     {
         infoHeader.text = header;

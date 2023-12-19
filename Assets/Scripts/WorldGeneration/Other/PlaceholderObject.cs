@@ -1,8 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
+/// <summary>
+///     This enum contains all possible placeholder icon types
+/// </summary>
 public enum PlaceholderType
 {
     UNSET,
@@ -14,6 +15,9 @@ public enum PlaceholderType
     BARRIER
 }
 
+/// <summary>
+///     This class describes an placeholder icon used in the generator and inspector modes
+/// </summary>
 public class PlaceholderObject : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer iconSpriteRenderer;
@@ -29,6 +33,11 @@ public class PlaceholderObject : MonoBehaviour
 
     [SerializeField] private List<Sprite> digits;
 
+    /// <summary>
+    ///     This function sets up the placeholder icon with the given type and index
+    /// </summary>
+    /// <param name="type">The type of the placeholder icon</param>
+    /// <param name="index">The index of the placeholder icon</param>
     public void Setup(PlaceholderType type, int index)
     {
         switch(type)

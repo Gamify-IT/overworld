@@ -1,8 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+///     This class is used to paint a layout by placing the provided sprites at the respective tilemap
+/// </summary>
 public class AreaPainter : MonoBehaviour
 {
     #region Attributes
@@ -264,6 +266,11 @@ public class AreaPainter : MonoBehaviour
         tileMapper.Add(TileSprite.HOUSE, house);
     }
 
+    /// <summary>
+    ///     This function paints the given layout at the tilemaps, with the given offset
+    /// </summary>
+    /// <param name="layout">The layout to paint</param>
+    /// <param name="offset">The offset in the tilemap</param>
     public void Paint(TileSprite[,,] layout, Vector2Int offset)
     {
         ClearTilemaps();

@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class defines a Layout Converter for the savanna area style
+/// </summary>
 public class SavannaConverter : LayoutConverter
 {
     private static readonly float wavePercentage = 0.05f;
@@ -10,6 +11,9 @@ public class SavannaConverter : LayoutConverter
 
     public SavannaConverter(CellType[,] baseLayout) : base(baseLayout) { }
 
+    /// <summary>
+    ///     This function converts the stored layout according to the rules for a savanna layout
+    /// </summary>
     public override void Convert()
     {
         GetTileTypes();
@@ -17,7 +21,7 @@ public class SavannaConverter : LayoutConverter
     }
 
     /// <summary>
-    ///     This function converts the given floor / wall layout to the correct tile types (floor, wall, void)
+    ///     This function converts the given floor / wall layout to the correct tile types (floor, wall, water)
     /// </summary>
     private void GetTileTypes()
     {
@@ -51,7 +55,7 @@ public class SavannaConverter : LayoutConverter
     }
     
     /// <summary>
-    ///     This function converts the given tile type layout to the correct cave tile sprites
+    ///     This function converts the given tile type layout to the correct savanna sprites
     /// </summary>
     private void ConvertToTileSprites()
     {

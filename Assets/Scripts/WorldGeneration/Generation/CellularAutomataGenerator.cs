@@ -1,7 +1,9 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class defines an Cellular Automata Generator using a state automaton to create randomized layout structures
+/// </summary>
 public class CellularAutomataGenerator : LayoutGenerator
 {
     private int borderSize;    
@@ -48,6 +50,9 @@ public class CellularAutomataGenerator : LayoutGenerator
 
     #endregion
 
+    /// <summary>
+    ///     This funciton generates a layout based on the local variables of the generator
+    /// </summary>
     public override void GenerateLayout()
     {
         Debug.Log("Cellular Automata layout generator" + "\n" + 

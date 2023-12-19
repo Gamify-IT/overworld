@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+/// <summary>
+///     This enum contains all available environmental objects, with different versions regarding the design
+/// </summary>
 public enum EnvironmentObject
 {
     STONE_SMALL,

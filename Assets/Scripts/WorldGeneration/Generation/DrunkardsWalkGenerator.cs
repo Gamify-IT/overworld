@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class defines an Drunkards Walk Generator using an agent to create randomized layout structures
+/// </summary>
 public class DrunkardsWalkGenerator : LayoutGenerator
 {
     private int borderSize;
@@ -57,6 +59,9 @@ public class DrunkardsWalkGenerator : LayoutGenerator
 
     #endregion
 
+    /// <summary>
+    ///     This funciton generates a layout based on the local variables of the generator
+    /// </summary>
     public override void GenerateLayout()
     {
         Debug.Log("Drunkard's Walk layout generator" + "\n" +

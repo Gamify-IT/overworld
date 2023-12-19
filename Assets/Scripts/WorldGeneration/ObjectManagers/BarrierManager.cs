@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-///     This class manages the creation and setup of barrier spot at world loading
+///     This classes manages the creation of barrier objects and placeholder icons
 /// </summary>
 public class BarrierManager : MonoBehaviour
 {
@@ -19,6 +18,7 @@ public class BarrierManager : MonoBehaviour
     [SerializeField] private Sprite gate;
     [SerializeField] private Sprite tree;
     [SerializeField] private Sprite ironBarDoor;
+    [SerializeField] private Sprite stone;
 
     private Dictionary<BarrierStyle, Sprite> spriteMapper = new Dictionary<BarrierStyle, Sprite>();
 
@@ -29,8 +29,8 @@ public class BarrierManager : MonoBehaviour
         spriteMapper.Add(BarrierStyle.GATE, gate);
         spriteMapper.Add(BarrierStyle.TREE, tree);
         spriteMapper.Add(BarrierStyle.IRON_BAR_DOOR, ironBarDoor);
+        spriteMapper.Add(BarrierStyle.STONE, stone);
     }
-
 
     /// <summary>
     ///     This function sets up barrier objects for the data given

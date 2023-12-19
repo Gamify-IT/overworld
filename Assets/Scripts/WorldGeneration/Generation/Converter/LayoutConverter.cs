@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-///     This class defines an Layout Converter. It is used to inherit for specific converter implementation.
+///     This class defines a Layout Converter. It is used to inherit for specific converter implementation.
 /// </summary>
 public abstract class LayoutConverter
 {
@@ -20,8 +18,15 @@ public abstract class LayoutConverter
         tileSprites = new TileSprite[size.x, size.y, 5];
     }
 
+    /// <summary>
+    ///     This function converts the stored layout according to the specified rules
+    /// </summary>
     public abstract void Convert();
 
+    /// <summary>
+    ///     This function returns the converted sprites
+    /// </summary>
+    /// <returns>An array containing the exact sprite for each position and layer</returns>
     public TileSprite[,,] GetTileSprites()
     {
         return tileSprites;

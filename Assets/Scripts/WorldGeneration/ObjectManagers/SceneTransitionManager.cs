@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-///     This class manages the creation and setup of scene transition spot at world loading
+///     This classes manages the creation of scene transition objects and placeholder icons
 /// </summary>
 public class SceneTransitionManager : MonoBehaviour
 {

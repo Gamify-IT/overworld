@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-//used to transfer position and style of barrier spot position
+/// <summary>
+///     This class contains all information for a position of a barrier spot and is used to transfer this data from the <c>ObjectPositionGenerator</c> to the <c>ObjectGenerator</c>
+/// </summary>
 public class BarrierSpotPosition
 {
     private Vector2Int position;

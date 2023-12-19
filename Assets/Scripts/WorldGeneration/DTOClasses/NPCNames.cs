@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This function is used to load a list of possible NPC names from a local json file
+/// </summary>
 [System.Serializable]
 public class NPCNames 
 {

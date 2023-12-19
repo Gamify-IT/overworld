@@ -7,6 +7,9 @@ using System.Linq;
 using System;
 using System.Runtime.InteropServices;
 
+/// <summary>
+///     This class manages the UI elements of the generator
+/// </summary>
 public class GeneratorUI : MonoBehaviour
 {
     /// <summary>
@@ -91,7 +94,7 @@ public class GeneratorUI : MonoBehaviour
     /// <summary>
     ///     This function sets up the generator UI with the given values
     /// </summary>
-    /// <param name="uiManager">The generator object</param>
+    /// <param name="uiManager">The ui manager</param>
     /// <param name="areaData">The data of the current area</param>
     /// <param name="areaInformation">Additional parameters for area generation</param>
     public void Setup(GeneratorUIManager uiManager, AreaData areaData, AreaInformationData areaInformation)
@@ -428,6 +431,9 @@ public class GeneratorUI : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    ///     This function is called by the minimize button and closes the generator ui
+    /// </summary>
     public void MinimizeButtonPressed()
     {
         generatorPanel.SetActive(false);
@@ -435,6 +441,9 @@ public class GeneratorUI : MonoBehaviour
         uiManager.ActivateCameraMovement();
     }
 
+    /// <summary>
+    ///     This function is called by the maximize button and opens the generator ui
+    /// </summary>
     public void MaximizeButtonPressed()
     {
         smallGeneratorPanel.SetActive(false);
@@ -442,23 +451,35 @@ public class GeneratorUI : MonoBehaviour
         uiManager.DeactivateCameraMovement();
     }
 
+    /// <summary>
+    ///     This function is called by the quit button and closes the overworld application
+    /// </summary>
     public void QuitButtonPressed()
     {
         CloseOverworld();
     }
 
     #region Area Settings Buttons
+    /// <summary>
+    ///     This function is called by the generate seed button and generates a new seed
+    /// </summary>
     public void GenerateSeedButtonPressed()
     {
         string seed = Time.time.ToString();
         seedInput.text = seed;
     }
 
+    /// <summary>
+    ///     This function is called by the reset button and resets the area to the custom one
+    /// </summary>
     public void ResetToCustomButtonPressed()
     {
         ResetArea();        
     }
 
+    /// <summary>
+    ///     This function resets the area to the custom one
+    /// </summary>
     private async void ResetArea()
     {
         infoUI.DisplayInfo("RESETING AREA...", "RESETING THE AREA TO DEFAULT ...", false, false);
@@ -477,11 +498,18 @@ public class GeneratorUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///         This function is called by the generate layout button and starts the layout generation process
+    /// </summary>
     public void GenerateLayoutButtonPressed()
     {
         StartCoroutine(GenerateLayoutCoroutine());
     }
 
+    /// <summary>
+    ///     This coroutine handles the generation process
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator GenerateLayoutCoroutine()
     {
         infoUI.DisplayInfo("GENERATING LAYOUT...", "", false, false);
@@ -491,6 +519,9 @@ public class GeneratorUI : MonoBehaviour
         GenerateLayout();
     }
 
+    /// <summary>
+    ///     This function generates the layout
+    /// </summary>
     private void GenerateLayout()
     {
         Vector2Int size = new Vector2Int(int.Parse(sizeX.text), int.Parse(sizeY.text));
@@ -508,7 +539,12 @@ public class GeneratorUI : MonoBehaviour
         infoUI.DisplayInfo("LAYOUT GENERATED", "SUCCESSFULLY GENERATED A LAYOUT", true, true);
     }
 
-    //get correct accessability value for selected generator type
+    /// <summary>
+    ///     This function gets the correct accessibility value for the generator type and area size
+    /// </summary>
+    /// <param name="layoutGeneratorType">The generator used</param>
+    /// <param name="size">The size of the area</param>
+    /// <returns>The correct accessibility value</returns>
     private int ParseAccessability(LayoutGeneratorType layoutGeneratorType, Vector2Int size)
     {
         switch(layoutGeneratorType)
@@ -530,7 +566,10 @@ public class GeneratorUI : MonoBehaviour
         }
     }
 
-    //get correct accessability value for CA
+    /// <summary>
+    ///     This function gets the correct accessibility value for the cellular automata generator
+    /// </summary>
+    /// <returns>The correct accessibility value</returns>
     private int ParseCellularAutomataAccessability()
     {
         Accessability accessability = (Accessability) accessabilitySlider.value;
@@ -556,7 +595,11 @@ public class GeneratorUI : MonoBehaviour
         return 0;
     }
 
-    //get correct accessability value for DW
+    /// <summary>
+    ///     This function gets the correct accessibility value for the drunkards walk generator
+    /// </summary>
+    /// <param name="size">The size of the area</param>
+    /// <returns>The correct accessibility value</returns>
     private int ParseDrunkardsWalkAccessability(Vector2Int size)
     {
         Accessability accessability = (Accessability)accessabilitySlider.value;
@@ -588,7 +631,10 @@ public class GeneratorUI : MonoBehaviour
         return 0;
     }
 
-    //get correct accessability value for Islands-CA
+    /// <summary>
+    ///     This function gets the correct accessibility value for the islands - cellular automata generator
+    /// </summary>
+    /// <returns>The correct accessibility value</returns>
     private int ParseIslandsCAAccessability()
     {
         Accessability accessability = (Accessability)accessabilitySlider.value;
@@ -614,7 +660,10 @@ public class GeneratorUI : MonoBehaviour
         return 0;
     }
 
-    //get correct accessability value for Islands-DW
+    /// <summary>
+    ///     This function gets the correct accessibility value for the islands - drunkards walk generator
+    /// </summary>
+    /// <returns>The correct accessibility value</returns>
     private int ParseIslandsDWAccessability()
     {
         Accessability accessability = (Accessability)accessabilitySlider.value;
@@ -661,6 +710,9 @@ public class GeneratorUI : MonoBehaviour
         OnDungeonsAmountChange();
     }
 
+    /// <summary>
+    ///     This function is called by the continue button and opens the content placement panel
+    /// </summary>
     public void ContinueButtonPressed()
     {
         if(areaIdentifier.IsDungeon())
@@ -683,7 +735,9 @@ public class GeneratorUI : MonoBehaviour
         content.SetActive(true);
     }
 
-    //try to add world connection barriers, if not already set
+    /// <summary>
+    ///     This function adds the world barrier connections
+    /// </summary>
     private void AddWorldConnectionBarriers()
     {
         uiManager.AddWorldConnectionBarriers();
@@ -914,17 +968,27 @@ public class GeneratorUI : MonoBehaviour
     }
     #endregion
 
+    /// <summary>
+    ///     This function is called by the return button and closes the content placement panel and opens the layout generation panel
+    /// </summary>
     public void ReturnButtonPressed()
     {
         content.SetActive(false);
         areaSettings.SetActive(true);
     }
 
+    /// <summary>
+    ///     This function is called by the generate all button and calls all generation functions
+    /// </summary>
     public void GenerateAllContentButtonPressed()
     {
         StartCoroutine(GenerateAllContentCoroutine());
     }
 
+    /// <summary>
+    ///     This coroutine handles the generation of all content
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator GenerateAllContentCoroutine()
     {
         string header = "GENERATING CONTENT ...";
@@ -1006,6 +1070,10 @@ public class GeneratorUI : MonoBehaviour
         infoUI.DisplayInfo(header, contentHeader + content, true, success);
     }
 
+    /// <summary>
+    ///     This function generates the selected content one after the other
+    /// </summary>
+    /// <returns>A tuple containing a flag if the generation was successful and an error message, if it failed</returns>
     private Tuple<bool, string> GenerateAllContent()
     {
         uiManager.ResetObjects();
@@ -1050,11 +1118,17 @@ public class GeneratorUI : MonoBehaviour
         return new Tuple<bool, string>(true, ""); ;
     }
 
+    /// <summary>
+    ///     This function is called by the save area button and saves the current area
+    /// </summary>
     public void SaveAreaButtonPressed()
     {
         SaveArea();
     }
 
+    /// <summary>
+    ///     This function saves the current area
+    /// </summary>
     private async void SaveArea()
     {
         infoUI.DisplayInfo("SAVING...", "SAVING THE CURRENT AREA...", false, false);

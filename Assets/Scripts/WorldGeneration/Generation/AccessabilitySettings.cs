@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class is used to get the configuration for the accessible setting in the generation process
+/// </summary>
 [System.Serializable]
 public class AccessabilitySettings
 {

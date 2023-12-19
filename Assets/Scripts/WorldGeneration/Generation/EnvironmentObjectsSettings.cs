@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class is used to load the configuration of the <c>EnvironmentalObjectGenerator</c> from a local json file
+/// </summary>
 [System.Serializable]
 public class EnvironmentObjectsSettings
 {

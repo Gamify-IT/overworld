@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+/// <summary>
+///     This enum contains all available states of a tile
+/// </summary>
 public enum CellType
 {
     WALL,

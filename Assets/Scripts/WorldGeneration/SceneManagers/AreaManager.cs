@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -9,8 +8,6 @@ using Cysharp.Threading.Tasks;
 /// </summary>
 public class AreaManager : MonoBehaviour
 {
-    private static bool logAreas = false;
-
     [SerializeField] private int worldIndex;
     [SerializeField] private int dungeonIndex;
 
@@ -397,7 +394,11 @@ public class AreaManager : MonoBehaviour
         return success;
     }
 
-    //writes json to local file at given path
+    /// <summary>
+    ///     This function writes the given json in a file at the given path
+    /// </summary>
+    /// <param name="json">The json to write</param>
+    /// <param name="path">The path of the file to write to</param>
     private void WriteToJsonFile(string json, string path)
     {
         using (FileStream fs = File.Create(path))
@@ -500,16 +501,12 @@ public class AreaManager : MonoBehaviour
         //Setup area
         areaBuilder.SetupAreaLayout(tileLayout, areaInformation);
         areaBuilder.SetupPlaceholderObjects(areaMapData);
-        areaBuilder.RemoveAdditionalObjects();
-
-        //log area
-        if(logAreas)
-        {
-            SeedLogger.LogArea(areaData.GetAreaMapData());
-        }        
+        areaBuilder.RemoveAdditionalObjects();        
     }
 
-    //try to add world connection barriers, if not already set
+    /// <summary>
+    ///     This function adds the world connections barriers, unless the area is a dungeon or the world connections are already set
+    /// </summary>
     public void AddWorldConnectionBarriers()
     {
         if(!areaData.IsGeneratedArea())
@@ -519,7 +516,7 @@ public class AreaManager : MonoBehaviour
 
         if (areaData.GetAreaMapData().GetBarrierSpots().Count == 0)
         {
-            worldConnectionBarriers = objectGenerator.GenerateBarrierSpots(objectPositionGenerator.GetWorldBarrierSpots(areaIdentifier));
+            worldConnectionBarriers = objectGenerator.GenerateWorldBarrierSpots(objectPositionGenerator.GetWorldBarrierSpots(areaIdentifier));
             areaData.GetAreaMapData().SetBarrierSpots(worldConnectionBarriers);
             areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
         }
@@ -567,12 +564,6 @@ public class AreaManager : MonoBehaviour
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
 
-        //log area
-        if (logAreas)
-        {
-            SeedLogger.LogArea(areaData.GetAreaMapData());
-        }
-
         return success;
     }
 
@@ -593,12 +584,6 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
-
-        //log area
-        if (logAreas)
-        {
-            SeedLogger.LogArea(areaData.GetAreaMapData());
-        }
 
         return success;
     }
@@ -621,12 +606,6 @@ public class AreaManager : MonoBehaviour
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
 
-        //log area
-        if (logAreas)
-        {
-            SeedLogger.LogArea(areaData.GetAreaMapData());
-        }
-
         return success;
     }
 
@@ -647,12 +626,6 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
-
-        //log area
-        if (logAreas)
-        {
-            SeedLogger.LogArea(areaData.GetAreaMapData());
-        }
 
         return success;
     }
@@ -681,7 +654,7 @@ public class AreaManager : MonoBehaviour
         //Create barriers for the dungeon spots + add world barriers, if area is a world (no barriers in dungeons)
         if(!areaIdentifier.IsDungeon())
         {
-            List<BarrierSpotData> dungeonBarrierSpots = objectGenerator.GenerateBarrierSpots(dungeonPositions);
+            List<BarrierSpotData> dungeonBarrierSpots = objectGenerator.GenerateDungeonBarrierSpots(dungeonPositions);
             List<BarrierSpotData> worldBarrierSpots = worldConnectionBarriers;
             List<BarrierSpotData> barrierSpots = new List<BarrierSpotData>();
             barrierSpots.AddRange(dungeonBarrierSpots);
@@ -691,12 +664,6 @@ public class AreaManager : MonoBehaviour
 
         //Create Placeholders
         areaBuilder.SetupPlaceholderObjects(areaData.GetAreaMapData());
-
-        //log area
-        if (logAreas)
-        {
-            SeedLogger.LogArea(areaData.GetAreaMapData());
-        }
 
         return success;
     }

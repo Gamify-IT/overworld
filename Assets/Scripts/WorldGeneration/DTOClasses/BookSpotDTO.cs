@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 /// <summary>
-///     This class is used to retrieve book spot data from Get Requests.
+///     This class is used to transfer an <c>BookSpotData</c> from and to the overworld backend
 /// </summary>
 [Serializable]
 public class BookSpotDTO

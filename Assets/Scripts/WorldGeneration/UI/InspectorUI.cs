@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+///     This class manages the UI elements of the inspector
+/// </summary>
 public class InspectorUI : MonoBehaviour
 {
     /// <summary>
@@ -32,6 +33,11 @@ public class InspectorUI : MonoBehaviour
     [SerializeField] private Toggle barriersToggle;
     #endregion
 
+    /// <summary>
+    ///     This function sets up the inscpector UI with the given values
+    /// </summary>
+    /// <param name="uiManager">The ui manager</param>
+    /// <param name="area">The index of the area</param>
     public void Setup(InspectorUIManager uiManager, AreaInformation area)
     {
         this.uiManager = uiManager;
@@ -85,6 +91,9 @@ public class InspectorUI : MonoBehaviour
     #endregion
 
     #region Minimize / Maximize
+    /// <summary>
+    ///     This function is called by the minimize button and closes the generator ui
+    /// </summary>
     public void MinimizeButtonPressed()
     {
         inspectorPanel.SetActive(false);
@@ -92,6 +101,9 @@ public class InspectorUI : MonoBehaviour
         uiManager.ActivateCameraMovement();
     }
 
+    /// <summary>
+    ///     This function is called by the maximize button and opens the generator ui
+    /// </summary>
     public void MaximizeButtonPressed()
     {
         smallInspectorPanel.SetActive(false);
@@ -100,6 +112,9 @@ public class InspectorUI : MonoBehaviour
     }
     #endregion
 
+    /// <summary>
+    ///     This function is called by the quit button and closes the overworld application
+    /// </summary>
     public void QuitButtonPressed()
     {
         CloseOverworld();

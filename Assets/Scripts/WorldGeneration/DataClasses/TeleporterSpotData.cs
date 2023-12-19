@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class contains all data to manage a teleporter spot
+/// </summary>
 public class TeleporterSpotData
 {
     #region Attributes

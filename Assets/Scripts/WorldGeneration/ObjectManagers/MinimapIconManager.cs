@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum MinimapIconType
@@ -10,6 +8,9 @@ public enum MinimapIconType
     NPC
 }
 
+/// <summary>
+///     This class manages the creation and removal of minimap icons
+/// </summary>
 public class MinimapIconManager : MonoBehaviour
 {
     [SerializeField] private GameObject minimapIconPrefab;

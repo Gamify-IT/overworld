@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class contains all information for the layout of an area, including the exact sprites and settings for the generator to recreate the area
+/// </summary>
 public class Layout
 {
     private AreaInformation area;
@@ -347,6 +349,11 @@ public class Layout
         return data;
     }
 
+    /// <summary>
+    ///     This function gets the world connections for the given area
+    /// </summary>
+    /// <param name="area">The area to get the world connections from</param>
+    /// <returns>A list containing all world connections for the given area, an empty list for dungeon areas</returns>
     private static List<WorldConnection> GetWorldConnections(AreaInformation area)
     {
         List<WorldConnection> worldConnections = new List<WorldConnection>();

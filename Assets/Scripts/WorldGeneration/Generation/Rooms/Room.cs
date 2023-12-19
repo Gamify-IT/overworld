@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This function represents a room and is used by the <c>RoomManager</c>
+/// </summary>
 public class Room
 {
     private CellType roomType;

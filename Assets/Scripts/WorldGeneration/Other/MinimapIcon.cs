@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class describs a minimap icon
+/// </summary>
 public class MinimapIcon : MonoBehaviour
 {
     [SerializeField] private MinimapIconType type;
@@ -28,6 +29,9 @@ public class MinimapIcon : MonoBehaviour
         return type;
     }
 
+    /// <summary>
+    ///     This function sets the correct sprite, based on the type of the minimap icon
+    /// </summary>
     private void UpdateSprite()
     {
         switch (type)

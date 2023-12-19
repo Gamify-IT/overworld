@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+/// <summary>
+///     This function represents the different sprite types for a tile for the different area styles
+/// </summary>
 public enum TileType
 {
     UNDEFINED,

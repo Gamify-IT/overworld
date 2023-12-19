@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+///     This function contains all information about an area map regarding the layout and object spots
+/// </summary>
 public class AreaData
 {
     #region Attributes
@@ -53,7 +53,7 @@ public class AreaData
     }
 
     /// <summary>
-    ///     This function resets the area map data
+    ///     This function resets the area map data to resemble a default area
     /// </summary>
     public void Reset()
     {

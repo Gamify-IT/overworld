@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class converts object positions from the <c>ObjectPositionGenerator</c> into the actual content objects
+/// </summary>
 public class ObjectGenerator
 {
     private AreaInformation areaIdentifier;
@@ -215,7 +217,7 @@ public class ObjectGenerator
     /// </summary>
     /// <param name="dungeonSpotPositions">A list of all dungeon positions</param>
     /// <returns>A list of <c>BarrierSpotData</c> objects with the given positions</returns>
-    public List<BarrierSpotData> GenerateBarrierSpots(List<DungeonSpotPosition> dungeonSpotPositions)
+    public List<BarrierSpotData> GenerateDungeonBarrierSpots(List<DungeonSpotPosition> dungeonSpotPositions)
     {
         List<BarrierSpotData> barrierSpots = new List<BarrierSpotData>();
         int index = 1;
@@ -245,24 +247,13 @@ public class ObjectGenerator
                     break;
 
                 case DungeonStyle.CAVE_ENTRANCE:
-                    style = BarrierStyle.TREE;
+                    style = BarrierStyle.STONE;
                     shift = new Vector2(0.5f, -0.5f);
                     break;
             }
 
-            BarrierType type;
-            int destinationAreaIndex;
-            if (areaIdentifier.IsDungeon())
-            {
-                type = BarrierType.worldBarrier;
-                destinationAreaIndex = areaIdentifier.GetWorldIndex();
-                
-            }
-            else
-            {
-                type = BarrierType.dungeonBarrier;
-                destinationAreaIndex = index;
-            }
+            BarrierType type = BarrierType.dungeonBarrier;
+            int destinationAreaIndex = index;
 
             //shift position
             Vector2 shiftedPosition = position + shift + offset;
@@ -277,11 +268,11 @@ public class ObjectGenerator
     }
 
     /// <summary>
-    ///     This function creates <c>BarrierSpotData</c> objects for given positions
+    ///     This function creates <c>BarrierSpotData</c> objects for given world barrier positions
     /// </summary>
-    /// <param name="barrierSpotPositions">A list of all barrier positions</param>
+    /// <param name="barrierSpotPositions">A list of all world barrier positions</param>
     /// <returns>A list of <c>BarrierSpotData</c> objects with the given positions</returns>
-    public List<BarrierSpotData> GenerateBarrierSpots(List<BarrierSpotPosition> barrierSpotPositions)
+    public List<BarrierSpotData> GenerateWorldBarrierSpots(List<BarrierSpotPosition> barrierSpotPositions)
     {
         List<BarrierSpotData> barrierSpots = new List<BarrierSpotData>();
 
@@ -289,7 +280,7 @@ public class ObjectGenerator
         {
             Vector2Int position = barrierSpotPosition.GetPosition();
             BarrierStyle style = barrierSpotPosition.GetStyle();
-            BarrierType type = BarrierType.worldBarrier; ;
+            BarrierType type = BarrierType.worldBarrier;
             int destinationAreaIndex = barrierSpotPosition.GetDestinationWorld();
 
             //shift position

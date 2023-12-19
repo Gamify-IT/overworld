@@ -1,8 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/// <summary>
+///     This class is used to connect and remove rooms in a given layout structure
+/// </summary>
 public class RoomManager
 {
     private int borderSize;
@@ -11,14 +13,12 @@ public class RoomManager
 
     private CellType[,] layout;
     private Vector2Int size;
-    private string seed;
     System.Random pseudoRandomNumberGenerator;
 
     public RoomManager(CellType[,] layout, string seed)
     {
         this.layout = layout;
         size = new Vector2Int(layout.GetLength(0), layout.GetLength(1));
-        this.seed = seed;
         pseudoRandomNumberGenerator = new System.Random(seed.GetHashCode());
         GetSettings();
     }

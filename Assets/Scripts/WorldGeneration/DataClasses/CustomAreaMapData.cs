@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-///     This class contains all data to manage a world map
+///     This class contains all data to manage a generated area, including the layout and object spots
 /// </summary>
 public class CustomAreaMapData
 {

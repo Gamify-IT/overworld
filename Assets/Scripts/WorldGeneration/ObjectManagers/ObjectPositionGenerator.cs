@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -138,6 +137,9 @@ public class ObjectPositionGenerator
     #endregion
 
     #region Generate Functions
+    /// <summary>
+    ///     This function removes all stored object positions
+    /// </summary>
     public void ResetObjects()
     {
         minigamePositions = new List<Vector2Int>();
@@ -477,7 +479,11 @@ public class ObjectPositionGenerator
         return success;
     }
 
-    //create world connection barriers
+    /// <summary>
+    ///     This function creates a list of world connection barrier position for the given area
+    /// </summary>
+    /// <param name="areaIdentifier">The area to get the world connection positions for</param>
+    /// <returns>A list containing all world connections for the given area</returns>
     public List<BarrierSpotPosition> GetWorldBarrierSpots(AreaInformation areaIdentifier)
     {
         List<BarrierSpotPosition> barriers = new List<BarrierSpotPosition>();
@@ -498,7 +504,10 @@ public class ObjectPositionGenerator
 
     #region Dungeon Helper Functions
 
-    //get random dungeon entrance style
+    /// <summary>
+    ///     This function selects a dungeon spot type, based on the area style
+    /// </summary>
+    /// <returns>A dungeon spot type</returns>
     private DungeonStyle GetDungeonStyle()
     {
         if(style == WorldStyle.CAVE)
@@ -527,7 +536,11 @@ public class ObjectPositionGenerator
         }
     }
 
-    //get position for dungeon spot
+    /// <summary>
+    ///     This function returns a potential dungeon spot position for the given dungeon style
+    /// </summary>
+    /// <param name="style">The dungeon style</param>
+    /// <returns>A potential position</returns>
     private Vector2Int GetDungeonPosition(DungeonStyle style)
     {
         switch(style)
@@ -544,7 +557,12 @@ public class ObjectPositionGenerator
         return new Vector2Int();
     }
 
-    //check if valid dungeon position
+    /// <summary>
+    ///     This function checks, if the given position is valid for the given dungeon style
+    /// </summary>
+    /// <param name="position">The position to check</param>
+    /// <param name="style">The style of the dungeon spot</param>
+    /// <returns>True, if the position is valid, false otherwise</returns>
     private bool IsValidDungeonPosition(Vector2Int position, DungeonStyle style)
     {
         switch (style)
@@ -565,7 +583,11 @@ public class ObjectPositionGenerator
         return false;
     }
 
-    //check if position valid for trapdoor dungeon
+    /// <summary>
+    ///     This function checks, if the position is valid for a trapdoor dungeon spot
+    /// </summary>
+    /// <param name="position">The position to check</param>
+    /// <returns>True, if the position is valid, false otherwise</returns>
     private bool ValidTrapdoorPosition(Vector2Int position)
     { 
         for(int x = position.x - 1; x <= position.x + 2; x++)
@@ -582,7 +604,11 @@ public class ObjectPositionGenerator
         return true;
     }
 
-    //check if position valid for house dungeon
+    /// <summary>
+    ///     This function checks, if the position is valid for a house dungeon spot
+    /// </summary>
+    /// <param name="position">The position to check</param>
+    /// <returns>True, if the position is valid, false otherwise</returns>
     private bool ValidHousePosition(Vector2Int position)
     {
         for (int x = position.x - 1; x <= position.x + 5; x++)
@@ -599,7 +625,11 @@ public class ObjectPositionGenerator
         return true;
     }
 
-    //check if position valid for gate dungeon
+    /// <summary>
+    ///     This function checks, if the position is valid for a gate dungeon spot
+    /// </summary>
+    /// <param name="position">The position to check</param>
+    /// <returns>True, if the position is valid, false otherwise</returns>
     private bool ValidGatePosition(Vector2Int position)
     {
         for (int x = position.x; x <= position.x + 3; x++)
@@ -626,7 +656,11 @@ public class ObjectPositionGenerator
         return true;
     }
 
-    //check if position valid for cave dungeon
+    /// <summary>
+    ///     This function checks, if the position is valid for a cave dungeon spot
+    /// </summary>
+    /// <param name="position">The position to check</param>
+    /// <returns>True, if the position is valid, false otherwise</returns>
     private bool ValidCavePosition(Vector2Int position)
     {
         if (!IsInRange(position.x -1 , position.y) || tileType[position.x - 1, position.y] != CellType.WALL)
@@ -698,6 +732,12 @@ public class ObjectPositionGenerator
 
     #endregion
 
+    /// <summary>
+    ///     This function checks, if the given position is within the area size
+    /// </summary>
+    /// <param name="posX">The x coordinate of the position</param>
+    /// <param name="posY">The y coordinate of the position</param>
+    /// <returns>True, if the position is inside the area, false otherwise</returns>
     private bool IsInRange(int posX, int posY)
     {
         return (posX >= 0 && posX < size.x && posY >= 0 && posY < size.y);

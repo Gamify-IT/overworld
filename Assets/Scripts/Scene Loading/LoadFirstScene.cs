@@ -1,8 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System;
-using System.Runtime.InteropServices;
 
 /// <summary>
 ///     This class manages the loading of the game scenes.
@@ -60,7 +58,7 @@ public class LoadFirstScene : MonoBehaviour
         }
         else
         {
-            Gamemode defaultGamemode = Gamemode.GENERATOR;
+            Gamemode defaultGamemode = Gamemode.PLAY;
             Debug.LogError("Incorrect gamemode specified: " + gamemodePart + ", setting default gamemode: " + defaultGamemode);
             return defaultGamemode;
         }

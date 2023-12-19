@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class defines a Layout Converter for the cave area style
+/// </summary>
 public class CaveConverter : LayoutConverter
 {
 
@@ -9,6 +10,9 @@ public class CaveConverter : LayoutConverter
 
     public CaveConverter(CellType[,] baseLayout) : base(baseLayout) { }
 
+    /// <summary>
+    ///     This function converts the stored layout according to the rules for a cave layout
+    /// </summary>
     public override void Convert()
     {
         GetTileTypes();

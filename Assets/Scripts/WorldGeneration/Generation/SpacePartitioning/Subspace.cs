@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class contains the data of a subspace and is used in the space partitioning process of <c>SpacePartitioner</c> classes
+/// </summary>
 public class Subspace
 {
     public Vector2Int offset;

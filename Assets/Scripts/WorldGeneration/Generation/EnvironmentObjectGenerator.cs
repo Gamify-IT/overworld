@@ -1,13 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
 
+/// <summary>
+///     This class adds environmental objects to a given layout
+/// </summary>
 public class EnvironmentObjectGenerator
 {
     #region Settings
-    //Object lists
+    //Object lists for the area styles
     private static List<EnvironmentObject> caveObjects = new List<EnvironmentObject> {
         EnvironmentObject.STONE_SMALL,
         EnvironmentObject.STONE_BIG,
@@ -119,7 +121,9 @@ public class EnvironmentObjectGenerator
         logExpandChance = environmentObjectsSettings.logExpandChance;
     }
 
-    //adds environment objects to the layout
+    /// <summary>
+    ///     This function adds environmental objects to the layout
+    /// </summary>
     public void AddObjects()
     {
         //sample points
@@ -154,7 +158,10 @@ public class EnvironmentObjectGenerator
 
     #region Get Positinos
 
-    //return object positions
+    /// <summary>
+    ///     This function gets a list of positions to place an object at
+    /// </summary>
+    /// <returns>A list containing positions to place environmental objects at</returns>
     private List<Vector2Int> GetObjectPositions()
     {
         List<Vector2Int> objectPositions = new List<Vector2Int>();
@@ -224,7 +231,12 @@ public class EnvironmentObjectGenerator
         return objectPositions;
     }
 
-    //checks if any position is to close
+    /// <summary>
+    ///     This funciton checks, if a given position is valid and far enough away from a list of positions
+    /// </summary>
+    /// <param name="objectPositions">The position to check the distance to</param>
+    /// <param name="newPosition">The position ot check</param>
+    /// <returns>True, if the position is not at a wall and is far enough away from all positions in the list, false otherwise</returns>
     private bool ValidPosition(List<Vector2Int> objectPositions, Vector2Int newPosition)
     {
         if(!SurroundedByFloor(newPosition))
@@ -243,7 +255,11 @@ public class EnvironmentObjectGenerator
         return true;
     }
 
-    //true, if all floor tiles around, false otherwise
+    /// <summary>
+    ///     This function checks, if a given position is touching a wall or not
+    /// </summary>
+    /// <param name="position">The position to check</param>
+    /// <returns>True, if no wall is touched, false otherwise</returns>
     private bool SurroundedByFloor(Vector2Int position)
     {
         for(int x = position.x - 1; x <= position.x + 1; x++)
@@ -274,7 +290,11 @@ public class EnvironmentObjectGenerator
         return Mathf.Sqrt(deltaX * deltaX + deltaY * deltaY);
     }
 
-    //get free positions near positions in the list
+    /// <summary>
+    ///     This funciton returns a list of valid positions near a given list of positions
+    /// </summary>
+    /// <param name="positions">The positions to find a new vaid position nearby</param>
+    /// <returns>A list containing all valid positions nearby at least one of the given positions</returns>
     private List<Vector2Int> GetPossiblePositionsNearby(List<Vector2Int> positions)
     {
         HashSet<Vector2Int> possiblePositions = new HashSet<Vector2Int>();
@@ -287,7 +307,11 @@ public class EnvironmentObjectGenerator
         return possiblePositions.ToList();
     }
 
-    //check area around for free positions
+    /// <summary>
+    ///     This function gets all valid positions near the given position
+    /// </summary>
+    /// <param name="position">The position to check</param>
+    /// <returns>A hash set containing all valid positions nearby the given one</returns>
     private HashSet<Vector2Int> CheckForNearbyPositions(Vector2Int position)
     {
         HashSet<Vector2Int> positions = new HashSet<Vector2Int>();
@@ -309,7 +333,10 @@ public class EnvironmentObjectGenerator
 
     #endregion
 
-    //get all allowed objects
+    /// <summary>
+    ///     This function returns all suitable object types
+    /// </summary>
+    /// <returns>A list containing all suitable object types for the area style</returns>
     private List<EnvironmentObject> GetPossibleObjects()
     {
         List<EnvironmentObject> objects = new List<EnvironmentObject>();
@@ -338,7 +365,12 @@ public class EnvironmentObjectGenerator
 
     #region Object Placement
 
-    //tries to place an object of given type at given position
+    /// <summary>
+    ///     This function tries to place a given object type at the given position
+    /// </summary>
+    /// <param name="position">The position to place the object on</param>
+    /// <param name="type">The type of object to place</param>
+    /// <returns>True, if the placement was successful, false otherwise</returns>
     private bool TryPlaceObject(Vector2Int position, EnvironmentObject type)
     {
         switch(type)
@@ -387,7 +419,11 @@ public class EnvironmentObjectGenerator
         }
     }
 
-    //places small stone object
+    /// <summary>
+    ///     This function tries to place a small stone object at the given position
+    /// </summary>
+    /// <param name="position">The position to place the object on</param>
+    /// <returns>True, if the placement was successful, false otherwise</returns>
     private bool PlaceSmallStone(Vector2Int position)
     {
         List<Vector2Int> tiles = new List<Vector2Int>();
@@ -439,7 +475,11 @@ public class EnvironmentObjectGenerator
         return true;
     }
 
-    //places big stone object
+    /// <summary>
+    ///     This function tries to place a big stone object at the given position
+    /// </summary>
+    /// <param name="position">The position to place the object on</param>
+    /// <returns>True, if the placement was successful, false otherwise</returns>
     private bool PlaceBigStone(Vector2Int position)
     {
         Optional<Vector2Int> startPosition = FloorArea(position, 2, 2);
@@ -505,7 +545,11 @@ public class EnvironmentObjectGenerator
         return true;
     }
 
-    //places bush object
+    /// <summary>
+    ///     This function tries to place a bush object at the given position
+    /// </summary>
+    /// <param name="position">The position to place the object on</param>
+    /// <returns>True, if the placement was successful, false otherwise</returns>
     private bool PlaceBush(Vector2Int position, TileSprite sprite)
     {
         List<Vector2Int> tiles = new List<Vector2Int> { position };
@@ -563,7 +607,11 @@ public class EnvironmentObjectGenerator
         return true;
     }
 
-    //place tree object
+    /// <summary>
+    ///     This function tries to place a tree object at the given position
+    /// </summary>
+    /// <param name="position">The position to place the object on</param>
+    /// <returns>True, if the placement was successful, false otherwise</returns>
     private bool PlaceTree(Vector2Int position, TileSprite sprite)
     {
         Optional<Vector2Int> startPosition = FloorArea(position, 2, 2);
@@ -616,7 +664,11 @@ public class EnvironmentObjectGenerator
         return true;
     }
 
-    //place tree stump object
+    /// <summary>
+    ///     This function tries to place a tree stump object at the given position
+    /// </summary>
+    /// <param name="position">The position to place the object on</param>
+    /// <returns>True, if the placement was successful, false otherwise</returns>
     private bool PlaceTreeStump(Vector2Int position)
     {
         Optional<Vector2Int> spot = FloorArea(position, 2, 2);
@@ -628,7 +680,11 @@ public class EnvironmentObjectGenerator
         return false;
     }
 
-    //place fence object
+    /// <summary>
+    ///     This function tries to place a fence object at the given position
+    /// </summary>
+    /// <param name="position">The position to place the object on</param>
+    /// <returns>True, if the placement was successful, false otherwise</returns>
     private bool PlaceFence(Vector2Int position)
     {
         bool success = false;
@@ -691,7 +747,11 @@ public class EnvironmentObjectGenerator
         return success;
     }
 
-    //place small house object
+    /// <summary>
+    ///     This function tries to place a small house object at the given position
+    /// </summary>
+    /// <param name="position">The position to place the object on</param>
+    /// <returns>True, if the placement was successful, false otherwise</returns>
     private bool PlaceSmallHouse(Vector2Int position)
     {
         Optional<Vector2Int> spot = FloorArea(position, 2, 3);
@@ -703,7 +763,11 @@ public class EnvironmentObjectGenerator
         return false;
     }
 
-    //place big house object
+    /// <summary>
+    ///     This function tries to place a big house object at the given position
+    /// </summary>
+    /// <param name="position">The position to place the object on</param>
+    /// <returns>True, if the placement was successful, false otherwise</returns>
     private bool PlaceBigHouse(Vector2Int position)
     {
         Optional<Vector2Int> spot = FloorArea(position, 5, 5);
@@ -715,7 +779,11 @@ public class EnvironmentObjectGenerator
         return false;
     }
 
-    //place barrel object
+    /// <summary>
+    ///     This function tries to place a barrel object at the given position
+    /// </summary>
+    /// <param name="position">The position to place the object on</param>
+    /// <returns>True, if the placement was successful, false otherwise</returns>
     private bool PlaceBarrel(Vector2Int position)
     {
         bool success = false;
@@ -754,7 +822,11 @@ public class EnvironmentObjectGenerator
         return success;
     }
 
-    //place log object
+    /// <summary>
+    ///     This function tries to place a log object at the given position
+    /// </summary>
+    /// <param name="position">The position to place the object on</param>
+    /// <returns>True, if the placement was successful, false otherwise</returns>
     private bool PlaceLog(Vector2Int position)
     {
         bool success = false;
@@ -811,7 +883,11 @@ public class EnvironmentObjectGenerator
         return success;
     }
 
-    //place grave object
+    /// <summary>
+    ///     This function tries to place a gravestone object at the given position
+    /// </summary>
+    /// <param name="position">The position to place the object on</param>
+    /// <returns>True, if the placement was successful, false otherwise</returns>
     private bool PlaceGrave(Vector2Int position)
     {
         bool success = false;
@@ -846,8 +922,13 @@ public class EnvironmentObjectGenerator
 
     #region Helper functions
 
-    //check if area of given size is free including given position
-    //return bottom left, if found, empty optional otherwise
+    /// <summary>
+    ///     This function checks, if their is a valid area of given width and height containing the given position
+    /// </summary>
+    /// <param name="position">The position to check</param>
+    /// <param name="width">The width of the free area</param>
+    /// <param name="height">The height of the free area</param>
+    /// <returns>An optinal containing the bottom left of the valid area, if a valid area is found, an empty optional otherwise</returns>
     private Optional<Vector2Int> FloorArea(Vector2Int position, int width, int height)
     {
         Optional<Vector2Int> bottomLeft = new Optional<Vector2Int>();
@@ -868,7 +949,13 @@ public class EnvironmentObjectGenerator
         return bottomLeft;
     }
 
-    //check if given area and 1 tile around is floor
+    /// <summary>
+    ///     This function checks, if the area from the given position and dimensions is free
+    /// </summary>
+    /// <param name="bottomLeft">The bottom left corner of the area</param>
+    /// <param name="width">The width of the area</param>
+    /// <param name="height">The height of the area</param>
+    /// <returns>True, if the area is free, false otherwise</returns>
     private bool FreeFloorArea(Vector2Int bottomLeft, int width, int height)
     {
         for (int x = bottomLeft.x - 1; x <= bottomLeft.x + width + 1; x++)
@@ -885,7 +972,13 @@ public class EnvironmentObjectGenerator
         return true;
     }
 
-    //places given sprite at all tiles in given square
+    /// <summary>
+    ///     This function places a given sprite at all positions in a given area
+    /// </summary>
+    /// <param name="bottomLeft">The bottom left corner of the area</param>
+    /// <param name="width">The width of the area</param>
+    /// <param name="height">The height of the area</param>
+    /// <param name="sprite">The sprite to place</param>
     private void PlaceSpriteAtArea(Vector2Int bottomLeft, int width, int height, TileSprite sprite)
     {
         for(int x = bottomLeft.x; x < bottomLeft.x + width; x++)
@@ -898,7 +991,11 @@ public class EnvironmentObjectGenerator
         }
     }
 
-    //gets free tiles on left and right
+    /// <summary>
+    ///     This function gets all horizontal expansion options for a given list of positions
+    /// </summary>
+    /// <param name="positions">The position to check</param>
+    /// <returns>A list containing all horizontal expansion options</returns>
     private List<Vector2Int> GetHorizontalExpandOptions(List<Vector2Int> positions)
     {
         List<Vector2Int> expandOptions = new List<Vector2Int>();
@@ -919,7 +1016,12 @@ public class EnvironmentObjectGenerator
         return expandOptions;
     }
 
-    //gets free tiles in all four directions, first entry of return tuple: position that gets expanded, second entry: newly added position
+    /// <summary>
+    ///     This function get all possible expansion for the given edge positions, without conflicts with the given positions
+    /// </summary>
+    /// <param name="positions">The positions to not conflict with</param>
+    /// <param name="edgePositions">The edge positions to check for possible expansions</param>
+    /// <returns>A list containing tuples of positions and where they can be expanded to</returns>
     private List<Tuple<Vector2Int, Vector2Int>> GetExpandOptions(List<Vector2Int> positions, List<Vector2Int> edgePositions)
     {
         HashSet<Tuple<Vector2Int, Vector2Int>> expandOptions = new HashSet<Tuple<Vector2Int, Vector2Int>>();
@@ -958,7 +1060,13 @@ public class EnvironmentObjectGenerator
         return expandOptions.ToList();
     }
 
-    //checks if expansionPoint can be expanded by newPosition
+    /// <summary>
+    ///     This function checks, if a given position can be expanded in a given direction, without conflicting with any of a given list of positions
+    /// </summary>
+    /// <param name="positions">The positions to not conflict with</param>
+    /// <param name="expansionPoint">The position to expand</param>
+    /// <param name="newPosition">The position to expand to</param>
+    /// <returns>True, if the position can be expanded, false otherwise</returns>
     private bool CanExpand(List<Vector2Int> positions, Vector2Int expansionPoint, Vector2Int newPosition)
     {
         if (!SurroundedByFloor(newPosition))
@@ -981,7 +1089,12 @@ public class EnvironmentObjectGenerator
         return true;
     }
 
-    //count neighbors in list
+    /// <summary>
+    ///     This function counts the amount of neighbors a given position has in a given list
+    /// </summary>
+    /// <param name="positions">The positions to check</param>
+    /// <param name="newPosition">The position to count the neighbors of</param>
+    /// <returns>The amount of neighbors contained in the given list</returns>
     private int GetAmountNeighbors(List<Vector2Int> positions, Vector2Int newPosition)
     {
         int neighbors = 0;
@@ -1009,7 +1122,13 @@ public class EnvironmentObjectGenerator
         return neighbors;
     }
 
-    //return list of vectors of given position and size
+    /// <summary>
+    ///     This function returns a list containing all positions in an area of given width and height, starting at a given position
+    /// </summary>
+    /// <param name="bottomLeft">The bottom left corner of the area</param>
+    /// <param name="width">The width of the area</param>
+    /// <param name="height">The height of the area</param>
+    /// <returns>A list containing all positions in the area</returns>
     private List<Vector2Int> GetStartPosition(Vector2Int bottomLeft, int width, int height)
     {
         List<Vector2Int> positions = new List<Vector2Int>();
@@ -1025,7 +1144,11 @@ public class EnvironmentObjectGenerator
         return positions;
     }
 
-    //gets free tiles in all four directions, at least two tiles
+    /// <summary>
+    ///     This function gets all options to expand a given list of positions to have at least one vertical and one horizontal neighbor in the given list of positions
+    /// </summary>
+    /// <param name="positions">The list of positions</param>
+    /// <returns>A list of expansion options</returns>
     private List<Tuple<Vector2Int, Vector2Int>> GetBigExpandOptions(HashSet<Vector2Int> positions)
     {
         HashSet<Tuple<Vector2Int, Vector2Int>> expandOptions = new HashSet<Tuple<Vector2Int, Vector2Int>>();

@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This function contains all information for the positioning of the layout and objects of an area
+/// </summary>
 public class AreaInformationData
 {
     #region Attributes

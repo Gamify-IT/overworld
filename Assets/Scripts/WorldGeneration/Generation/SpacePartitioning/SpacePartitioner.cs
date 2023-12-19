@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 /// <summary>
 ///     This class defines an Space Partitioner. It is used to inherit for specific partitioner implementation.

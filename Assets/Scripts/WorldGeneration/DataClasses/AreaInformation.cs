@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+///     This function contains the information required to identify an area
+/// </summary>
 public class AreaInformation
 {
     #region Attributes

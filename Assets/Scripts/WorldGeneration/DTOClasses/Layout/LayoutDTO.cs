@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Text;
 
 /// <summary>
-///     This class is used to allow retrieving a World Map Layout from Get Requests.
+///     This class is used to transfer a <c>Layout</c> from and to the overworld backend
 /// </summary>
 [Serializable]
 public class LayoutDTO

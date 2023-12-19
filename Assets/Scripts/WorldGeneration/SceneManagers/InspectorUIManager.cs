@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class manages the inspector ui and forwards actions to the <c>AreaBuilder</c>
+/// </summary>
 public class InspectorUIManager : MonoBehaviour
 {
     #region Attributes
@@ -13,6 +15,13 @@ public class InspectorUIManager : MonoBehaviour
     private CustomAreaMapData displayedMapData;
     #endregion
 
+    /// <summary>
+    ///     This function sets up the initial values of the inspector ui manager
+    /// </summary>
+    /// <param name="areaMapData">The area map data of the current area</param>
+    /// <param name="areaInformation">The information required to display the area data correctly</param>
+    /// <param name="cameraController">The camera</param>
+    /// <param name="areaIdentifier">The index of the area</param>
     public void Setup(CustomAreaMapData areaMapData, AreaInformationData areaInformation, CameraMovement cameraController, AreaInformation areaIdentifier)
     {
         this.areaMapData = areaMapData;
@@ -30,6 +39,9 @@ public class InspectorUIManager : MonoBehaviour
         SetupCamera(areaInformation);
     }
 
+    /// <summary>
+    ///     This function initializes the displayed area map data
+    /// </summary>
     private void SetupDisplayAreaMap()
     {
         displayedMapData = new CustomAreaMapData();
@@ -52,11 +64,18 @@ public class InspectorUIManager : MonoBehaviour
         cameraController.transform.position = position;
     }
 
+    /// <summary>
+    ///     This function updates the displayed objects
+    /// </summary>
     private void UpdateObjects()
     {
         areaBuilder.SetupPlaceholderObjects(displayedMapData);
     }
 
+    /// <summary>
+    ///     This function enables or disables the minigame placeholder icons
+    /// </summary>
+    /// <param name="active">The state of the icons</param>
     public void SetMinigames(bool active)
     {
         if(active)
@@ -71,6 +90,10 @@ public class InspectorUIManager : MonoBehaviour
         UpdateObjects();
     }
 
+    /// <summary>
+    ///     This function enables or disables the npc placeholder icons
+    /// </summary>
+    /// <param name="active">The state of the icons</param>
     public void SetNpcs(bool active)
     {
         if (active)
@@ -85,6 +108,10 @@ public class InspectorUIManager : MonoBehaviour
         UpdateObjects();
     }
 
+    /// <summary>
+    ///     This function enables or disables the book placeholder icons
+    /// </summary>
+    /// <param name="active">The state of the icons</param>
     public void SetBooks(bool active)
     {
         if (active)
@@ -99,6 +126,10 @@ public class InspectorUIManager : MonoBehaviour
         UpdateObjects();
     }
 
+    /// <summary>
+    ///     This function enables or disables the teleporter placeholder icons
+    /// </summary>
+    /// <param name="active">The state of the icons</param>
     public void SetTeleporters(bool active)
     {
         if (active)
@@ -113,6 +144,10 @@ public class InspectorUIManager : MonoBehaviour
         UpdateObjects();
     }
 
+    /// <summary>
+    ///     This function enables or disables the dungeon placeholder icons
+    /// </summary>
+    /// <param name="active">The state of the icons</param>
     public void SetDungeons(bool active)
     {
         if (active)
@@ -127,6 +162,10 @@ public class InspectorUIManager : MonoBehaviour
         UpdateObjects();
     }
 
+    /// <summary>
+    ///     This function enables or disables the barrier placeholder icons
+    /// </summary>
+    /// <param name="active">The state of the icons</param>
     public void SetBarriers(bool active)
     {
         if (active)

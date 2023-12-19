@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +7,6 @@ using UnityEngine;
 public abstract class LayoutGenerator
 {
     protected string seed;
-    //protected bool[,] layout;
     protected CellType[,] layout;
     protected Vector2Int size;
     protected int accessability;

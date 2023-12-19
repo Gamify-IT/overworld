@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class is an implementation of the a* pathfinding algorithmus for a grid based structure
+/// </summary>
 public class Pathfinder
 {
     private static readonly int moveStraightCost = 10;

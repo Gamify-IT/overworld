@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class is used to polish a layout structure to fit the requirements of the selected area style
+/// </summary>
 public class LayoutPolisher
 {
     private WorldStyle areaStyle;
@@ -65,6 +66,11 @@ public class LayoutPolisher
 
     #region Polishing
 
+    /// <summary>
+    ///     This function ensures that each wall tile has the given amount of vertically and horizontally connected wall tiles
+    /// </summary>
+    /// <param name="minWidth">The minimum amount of horizontally connected wall tiles</param>
+    /// <param name="minHeight">The minimum amount of vertically connected wall tiles</param>
     private void EnsureWallProperties(int minWidth, int minHeight)
     {
         bool changedSomething = true;
@@ -91,6 +97,12 @@ public class LayoutPolisher
         }
     }
 
+    /// <summary>
+    ///     This function checks, if the given tile has enough vertically connected wall tiles
+    /// </summary>
+    /// <param name="tile">The tile to check</param>
+    /// <param name="minHeight">The amount of vertically connected wall tiles needed</param>
+    /// <returns>True, if the amount of wall tiles is greater or equal than required, false otherwise</returns>
     private bool EnoughVerticalWalls(Vector2Int tile, int minHeight)
     {
         int verticalWallTiles = 1;
@@ -122,6 +134,12 @@ public class LayoutPolisher
         return verticalWallTiles >= minHeight;
     }
 
+    /// <summary>
+    ///     This function checks, if the given tile has enough horizontally connected wall tiles
+    /// </summary>
+    /// <param name="tile">The tile to check</param>
+    /// <param name="minWidth">The amount of horizontally connected wall tiles needed</param>
+    /// <returns>True, if the amount of wall tiles is greater or equal than required, false otherwise</returns>
     private bool EnoughHorizontalWalls(Vector2Int tile, int minWidth)
     {
         int horizontalWallTiles = 1;
@@ -153,6 +171,9 @@ public class LayoutPolisher
         return horizontalWallTiles >= minWidth;
     }
 
+    /// <summary>
+    ///     This function ensures that each ground tile (either floor or connector) has at least one horizontal and one vertical neighbor
+    /// </summary>
     private void EnsureGroundProperties()
     {
         bool changedSomething = true;
@@ -185,16 +206,33 @@ public class LayoutPolisher
         }  
     }
 
+    /// <summary>
+    ///     This function checks, if the given position has no horizonal ground neighbors
+    /// </summary>
+    /// <param name="x">The x coordinate of the position to check</param>
+    /// <param name="y">The y coordinate of the position to check</param>
+    /// <returns>True, if there are no horizontal ground neighbors, false otherwise</returns>
     private bool SingleHorizontalTile(int x, int y)
     {
         return (layout[x - 1, y] == CellType.WALL && layout[x + 1, y] == CellType.WALL);
     }
 
+    /// <summary>
+    ///     This function checks, if the given position has no vertical ground neighbors
+    /// </summary>
+    /// <param name="x">The x coordinate of the position to check</param>
+    /// <param name="y">The y coordinate of the position to check</param>
+    /// <returns>True, if there are no vertical ground neighbors, false otherwise</returns>
     private bool SingleVerticalTile(int x, int y)
     {
         return (layout[x, y - 1] == CellType.WALL && layout[x, y + 1] == CellType.WALL);
     }
 
+    /// <summary>
+    ///     This function adds a horizontal ground neighboor, if possible, otherwise it turn the given tile to a wall tile
+    /// </summary>
+    /// <param name="x">The x coordinate of the position to check</param>
+    /// <param name="y">The y coordinate of the position to check</param>
     private void TryToExtentHorizontally(int x, int y)
     {
         if(layout[x-1, y-1] != CellType.WALL || layout[x - 1, y + 1] != CellType.WALL)
@@ -214,6 +252,11 @@ public class LayoutPolisher
         }
     }
 
+    /// <summary>
+    ///     This function adds a vertical ground neighboor, if possible, otherwise it turn the given tile to a wall tile
+    /// </summary>
+    /// <param name="x">The x coordinate of the position to check</param>
+    /// <param name="y">The y coordinate of the position to check</param>
     private void TryToExtentVertically(int x, int y)
     {
         if (layout[x - 1, y - 1] != CellType.WALL || layout[x + 1, y - 1] != CellType.WALL)

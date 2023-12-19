@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+/// <summary>
+///     This enum contains the directions for the drunkards walk generator
+/// </summary>
 public enum Direction
 {
     LEFT, 

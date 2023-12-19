@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     This class defines an Island Generator creating smaller rooms with narrow pathways connecting them
+/// </summary>
 public class IslandsGenerator : LayoutGenerator
 {
     private RoomGenerator roomGenerator;
@@ -49,6 +51,9 @@ public class IslandsGenerator : LayoutGenerator
 
     #endregion
 
+    /// <summary>
+    ///     This funciton generates a layout based on the local variables of the generator
+    /// </summary>
     public override void GenerateLayout()
     {
         Debug.Log("Island layout generator with rooms: " + roomGenerator.ToString() + "\n" +
