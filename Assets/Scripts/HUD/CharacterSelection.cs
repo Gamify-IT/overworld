@@ -18,6 +18,8 @@ public class CharacterSelection : MonoBehaviour
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
         //get confirm button
         confirmButton = GameObject.Find("Confirm Button");
+
+        confirmButton.GetComponent<Button>().onClick.AddListener(ConfirmButton);
     }
 
     /// <summary>
@@ -28,16 +30,7 @@ public class CharacterSelection : MonoBehaviour
     {
         character = Resources.Load<Sprite>("characters/character" + counter);
         characterImage.sprite = character;
-        //enable confirm button for character 1
-        if (counter == 1)
-        {
-            confirmButton.SetActive(true);
-        }
-        //disable for all other characters since they are not implemented into the game
-        else
-        {
-            confirmButton.SetActive(false);
-        }
+        
     }
 
     /// <summary>
@@ -73,6 +66,8 @@ public class CharacterSelection : MonoBehaviour
     public void ConfirmButton()
     {
         //TODO: implement character selection
-        //  -> not part of this project
+        GameManager.Instance.SelectCharacter(character);
+        Debug.Log(character);
+
     }
 }

@@ -2,16 +2,22 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 /// <summary>
 ///     This class manages the loading of the game scenes.
 /// </summary>
 public class LoadFirstScene : MonoBehaviour
 {
+    
     /// <summary>
     ///     This function is called by Unity before the first frame updates.
     /// </summary>
     private void Start()
     {
+
+        // Lade den ausgewählten Charakter aus dem GameManager
+        
+
         Gamemode gamemode = GetGamemode();
 
         switch(gamemode)

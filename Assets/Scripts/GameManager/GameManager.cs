@@ -495,13 +495,22 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            SetupGameManager();
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
     }
+
+    public Sprite SelectedCharacter { get; private set; }
+    public GameObject SelectedCharacterPrefab { get; set; }
+    public void SelectCharacter(Sprite character)
+    {
+        SelectedCharacter = character;
+        
+    }
+
 
     /// <summary>
     ///     This function initializes the <c>GameManager</c>. All arrays are initialized with empty objects.
