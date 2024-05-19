@@ -291,7 +291,7 @@ GameObject:
   - component: {fileID: 5603177028076193777}
   - component: {fileID: 3873712879849344729}
   m_Layer: 0
-  m_Name: Animated Player
+  m_Name: character1
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

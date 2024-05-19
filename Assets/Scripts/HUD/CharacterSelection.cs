@@ -8,6 +8,8 @@ public class CharacterSelection : MonoBehaviour
     private GameObject confirmButton;
     private int counter = 1;
 
+    public GameObject[] characterPrefabs;
+
     /// <summary>
     /// The <c>Start</c> function is called after the object is initialized.
     /// This function sets up the references of the object.
@@ -65,9 +67,15 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void ConfirmButton()
     {
-        //TODO: implement character selection
-        GameManager.Instance.SelectCharacter(character);
-        Debug.Log(character);
-
+        int prefabIndex = counter - 1; // Reduziere den Counter um 1, um den richtigen Index zu erhalten
+        if (prefabIndex >= 0 && prefabIndex < characterPrefabs.Length)
+        {
+            GameManager.Instance.SelectCharacter(characterPrefabs[prefabIndex]);
+            Debug.Log("Selected character: " + characterPrefabs[prefabIndex].name);
+        }
+        else
+        {
+            Debug.LogError("Invalid character index: " + counter);
+        }
     }
 }

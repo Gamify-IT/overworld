@@ -503,11 +503,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    // übergibt chracterprefab bei character selection
     public Sprite SelectedCharacter { get; private set; }
     public GameObject SelectedCharacterPrefab { get; set; }
-    public void SelectCharacter(Sprite character)
+    public void SelectCharacter(GameObject character)
     {
-        SelectedCharacter = character;
+        SelectedCharacterPrefab = character;
         
     }
 
