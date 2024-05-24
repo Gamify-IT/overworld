@@ -28,6 +28,9 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     private bool inTrigger;
     private bool interactable = true;
 
+    public AudioClip teleporterOpeningSound;
+    private AudioSource audioSource;
+
     //KeyCodes
     private KeyCode interact;
 
@@ -39,6 +42,14 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             teleporterNumber);
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
             GameEvents.current.onKeybindingChange += UpdateKeybindings;
+
+            //add AudioSource component
+            audioSource = gameObject.AddComponent<AudioSource>();
+
+            //Load the sound from Resources folder
+            teleporterOpeningSound = Resources.Load<AudioClip>("Music/teleporter_opening");
+            //set audio clip
+            audioSource.clip = teleporterOpeningSound;
         }            
     }
 
@@ -54,6 +65,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     private void Start()
     {
         SetUnLockedState(isUnlocked);
+
     }
 
     /// <summary>
@@ -82,9 +94,10 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
                     teleporterUI = newCanvas.transform.GetChild(0).GetComponent<TeleporterUI>();
                     SetupTeleporterUI(teleporterUI);
                     currentTeleporterCanvas = newCanvas;
+                    PlayTeleporterOpeningSoundSound();
                 }
             }
-        }            
+        }         
     }
 
     /// <summary>
@@ -110,6 +123,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     /// </summary>
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        PlayTeleporterOpeningSoundSound();
         if (collision.CompareTag("Player"))
         {
             player = collision.transform;
@@ -249,4 +263,14 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         }
     }
 
+    /// <summary>
+    /// This function plays the teleporter opening sound.
+    /// </summary>
+    private void PlayTeleporterOpeningSoundSound()
+    {
+        if (teleporterOpeningSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(teleporterOpeningSound);
+        }
+    }
 }

@@ -8,6 +8,9 @@ public class CharacterSelection : MonoBehaviour
     private GameObject confirmButton;
     private int counter = 1;
 
+    public AudioClip clickSound;
+    private AudioSource audioSource;
+
     /// <summary>
     /// The <c>Start</c> function is called after the object is initialized.
     /// This function sets up the references of the object.
@@ -18,6 +21,16 @@ public class CharacterSelection : MonoBehaviour
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
         //get confirm button
         confirmButton = GameObject.Find("Confirm Button");
+
+        //get AudioSource component
+        audioSource=GetComponent<AudioSource>();
+        //add AudioSource component if necessary
+        if(audioSource == null)
+        {
+            audioSource=gameObject.AddComponent<AudioSource>();
+        }
+        //set audio clip
+        audioSource.clip=clickSound;
     }
 
     /// <summary>
@@ -51,6 +64,7 @@ public class CharacterSelection : MonoBehaviour
         {
             counter = 4;
         }
+        PlayClickSound();
     }
 
     /// <summary>
@@ -64,6 +78,7 @@ public class CharacterSelection : MonoBehaviour
         {
             counter = 1;
         }
+        PlayClickSound();
     }
 
     /// <summary>
@@ -72,7 +87,21 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void ConfirmButton()
     {
+        PlayClickSound();
         //TODO: implement character selection
         //  -> not part of this project
+    }
+
+
+    /// <summary>
+    /// This function is called by the <c>Navigation Buttons</c>.
+    /// This function plays the click sound.
+    /// </summary>
+    private void PlayClickSound()
+    {
+        if (clickSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
     }
 }

@@ -3,7 +3,11 @@ guid: cf004dea68fc7bd44acdfd2a72980355
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - teleporterCanvas: {instanceID: 0}
+  - spriteNormal: {instanceID: 0}
+  - spriteHighlight: {instanceID: 0}
+  - clickSound: {fileID: 8300000, guid: 7fae101f9b4cf9845811667b32ad29a8, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -445,6 +445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdfdbb4fa184c3c478cf632db506b501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clickSound: {fileID: 8300000, guid: 7565c07c03948d2448b7897577b7c1f0, type: 3}
 --- !u!114 &796368250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,7 +542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21233805df61c3f49a3cc9edd0956df5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characters: []
+  clickSound: {fileID: 8300000, guid: 7565c07c03948d2448b7897577b7c1f0, type: 3}
 --- !u!1 &946046130
 GameObject:
   m_ObjectHideFlags: 0

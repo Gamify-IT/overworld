@@ -1242,6 +1242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdfdbb4fa184c3c478cf632db506b501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clickSound: {fileID: 8300000, guid: 7565c07c03948d2448b7897577b7c1f0, type: 3}
 --- !u!114 &1108062199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1257,6 +1258,7 @@ MonoBehaviour:
   keybindingPrefab: {fileID: 8736629390583445025, guid: 9ed104c1ae40d3a4892a285f2949104f, type: 3}
   content: {fileID: 1597790133}
   confirmationCanvas: {fileID: 918020607}
+  clickSound: {fileID: 8300000, guid: 7565c07c03948d2448b7897577b7c1f0, type: 3}
 --- !u!1 &1386258752
 GameObject:
   m_ObjectHideFlags: 0
@@ -2169,7 +2171,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1386258754}
   m_HandleRect: {fileID: 1386258753}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
