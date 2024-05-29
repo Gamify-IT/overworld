@@ -29,15 +29,7 @@ public class CharacterSelection : MonoBehaviour
         character = Resources.Load<Sprite>("characters/character" + counter);
         characterImage.sprite = character;
         //enable confirm button for character 1
-        if (counter == 1)
-        {
-            confirmButton.SetActive(true);
-        }
-        //disable for all other characters since they are not implemented into the game
-        else
-        {
-            confirmButton.SetActive(false);
-        }
+       
     }
 
     /// <summary>
