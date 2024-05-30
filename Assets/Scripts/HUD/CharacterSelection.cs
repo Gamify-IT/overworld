@@ -20,8 +20,6 @@ public class CharacterSelection : MonoBehaviour
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
         //get confirm button
         confirmButton = GameObject.Find("Confirm Button");
-
-        confirmButton.GetComponent<Button>().onClick.AddListener(ConfirmButton);
     }
 
     /// <summary>
@@ -71,7 +69,9 @@ public class CharacterSelection : MonoBehaviour
         if (prefabIndex >= 0 && prefabIndex < characterPrefabs.Length)
         {
             GameManager.Instance.SelectCharacter(characterPrefabs[prefabIndex]);
-            Debug.Log("Selected character: " + characterPrefabs[prefabIndex].name);
+            //prüfen ob richtiger character gewählt wurde
+            GameObject selectedCharacter = GameManager.Instance.GetSelectedCharacter();
+            Debug.Log("Selected character: " + selectedCharacter);
         }
         else
         {

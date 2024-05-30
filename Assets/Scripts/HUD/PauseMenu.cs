@@ -56,10 +56,10 @@ public class PauseMenu : MonoBehaviour
         //add option to go back out of a submenu into the normal pause menu again (instead of clicking the back button)
         else
         {
-            if(!buttonName.Equals("Keybindings"))
+            if (!buttonName.Equals("Keybindings"))
             {
                 CloseSubMenu();
-            }         
+            }
         }
     }
 
@@ -71,6 +71,8 @@ public class PauseMenu : MonoBehaviour
         SceneManager.UnloadScene("Menu");
         menuOpen = false;
         Time.timeScale = 1f;
+        //wenn menü verlasen wird soll character geupdated werden
+        UpdateCharacterInGame();
     }
 
     /// <summary>
@@ -130,4 +132,38 @@ public class PauseMenu : MonoBehaviour
             cancel = GameManager.Instance.GetKeyCode(Binding.CANCEL);
         }
     }
-}
+
+
+    private void UpdateCharacterInGame()
+    {
+        GameObject selectedCharacter = GameManager.Instance.GetSelectedCharacter();
+        if (selectedCharacter != null)
+        {
+            
+            
+            GameObject currentPlayer = GameObject.FindWithTag("Player");
+            if (currentPlayer != null)
+            {
+                // neuer wird in passender position gespawnt
+                Vector2 position = currentPlayer.transform.position;
+                Quaternion rotation = currentPlayer.transform.rotation;
+                //alten durch neuen ersetzen
+                Destroy(currentPlayer);
+                GameObject newPlayer = Instantiate(selectedCharacter, position, rotation);
+                newPlayer.tag = "Player";
+
+            }
+            else
+            {
+                Debug.Log("No current player found in the scene.");
+            }
+        }
+        else
+        {
+            Debug.Log("Selected character prefab is null.");
+        }
+
+        //Der Player wird aus der Player Scene gelöscht, aber es wird kein neuer Player übergeben
+        // die debug nachrichten werden beide nicht angezeigt
+    }
+    }
