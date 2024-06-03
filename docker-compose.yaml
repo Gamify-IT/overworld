@@ -126,7 +126,7 @@ services:
 
   overworld:
     container_name: overworld
-    image: ghcr.io/gamify-it/overworld:development
+    image: ghcr.io/gamify-it/overworld:main
     restart: always
     pull_policy: always
     volumes:
