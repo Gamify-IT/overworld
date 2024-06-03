@@ -1,14 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class CharacterSelection : MonoBehaviour
 {
     private Image characterImage;
     private Sprite character;
     private GameObject confirmButton;
-    private int counter = 1;
-
-    public GameObject[] characterPrefabs;
+    private int numberOfCharacters = 3;
+    private int characterPrefabIndex = 0;
+    [SerializeField] private GameObject[] characterPrefabs;
 
     /// <summary>
     /// The <c>Start</c> function is called after the object is initialized.
@@ -28,7 +29,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     void Update()
     {
-        character = Resources.Load<Sprite>("characters/character" + counter);
+        character = Resources.Load<Sprite>("characters/character" + (characterPrefabIndex + 1));
         characterImage.sprite = character;
         
     }
@@ -39,11 +40,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void PreviousCharacter()
     {
-        counter -= 1;
-        if (counter < 1)
-        {
-            counter = 4;
-        }
+        characterPrefabIndex = (characterPrefabIndex - 1) % numberOfCharacters;
     }
 
     /// <summary>
@@ -52,11 +49,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void NextCharacter()
     {
-        counter += 1;
-        if (counter > 4)
-        {
-            counter = 1;
-        }
+        characterPrefabIndex = (characterPrefabIndex + 1) % numberOfCharacters;
     }
 
     /// <summary>
@@ -65,17 +58,25 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void ConfirmButton()
     {
-        int prefabIndex = counter - 1; // Reduziere den Counter um 1, um den richtigen Index zu erhalten
-        if (prefabIndex >= 0 && prefabIndex < characterPrefabs.Length)
-        {
-            GameManager.Instance.SelectCharacter(characterPrefabs[prefabIndex]);
-            //prüfen ob richtiger character gewählt wurde
-            GameObject selectedCharacter = GameManager.Instance.GetSelectedCharacter();
-            Debug.Log("Selected character: " + selectedCharacter);
-        }
-        else
-        {
-            Debug.LogError("Invalid character index: " + counter);
-        }
+        // current player properties 
+        GameObject currentPlayer = GameObject.FindGameObjectWithTag("Player");
+        Vector3 position = currentPlayer.transform.position;
+        Quaternion rotation = currentPlayer.transform.rotation;
+        GameObject miniMapCamera = GameObject.Find("Minimap Camera");
+        GameObject currentFace = GameObject.Find("Player " + characterPrefabIndex + " Face");
+        Debug.Log("Player " + characterPrefabIndex + " Face");
+        // reset current character, instance and face
+        Destroy(currentPlayer);
+        PlayerAnimation.Instance.ResetInstance();
+        //currentFace.SetActive(false);
+        // create new character in player scene 
+        GameObject newPlayer = Instantiate(characterPrefabs[characterPrefabIndex], position, rotation);
+        SceneManager.MoveGameObjectToScene(newPlayer, SceneManager.GetSceneByName("Player"));
+        // add minimap camera to new character 
+        miniMapCamera.transform.parent = newPlayer.transform;
+        // change minimap face
+        GameObject newFace = GameObject.Find("Player " + (characterPrefabIndex + 1) + " Face");
+        Debug.Log("Player " + (characterPrefabIndex + 1) + " Face");
+        //newFace.SetActive(true);
     }
 }

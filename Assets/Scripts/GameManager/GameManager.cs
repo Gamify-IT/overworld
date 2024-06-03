@@ -495,7 +495,8 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
+            SetupGameManager();
         }
         else
         {
@@ -504,7 +505,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    // übergibt chracterprefab bei character selection
+    // ï¿½bergibt chracterprefab bei character selection
    
     public GameObject SelectedCharacterPrefab { get; set; }
     public void SelectCharacter(GameObject character)

@@ -71,8 +71,6 @@ public class PauseMenu : MonoBehaviour
         SceneManager.UnloadScene("Menu");
         menuOpen = false;
         Time.timeScale = 1f;
-        //wenn menü verlasen wird soll character geupdated werden
-        UpdateCharacterInGame();
     }
 
     /// <summary>
@@ -163,7 +161,7 @@ public class PauseMenu : MonoBehaviour
             Debug.Log("Selected character prefab is null.");
         }
 
-        //Der Player wird aus der Player Scene gelöscht, aber es wird kein neuer Player übergeben
+        //Der Player wird aus der Player Scene gelï¿½scht, aber es wird kein neuer Player ï¿½bergeben
         // die debug nachrichten werden beide nicht angezeigt
     }
     }
