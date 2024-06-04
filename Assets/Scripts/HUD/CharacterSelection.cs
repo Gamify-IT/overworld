@@ -20,8 +20,6 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     void Start()
     {
-        // get current character index
-        string playerName = GameObject.FindGameObjectWithTag("Player").name;
         //get image component
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
         //get confirm button
