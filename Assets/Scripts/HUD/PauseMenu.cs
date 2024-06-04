@@ -131,37 +131,4 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-
-    private void UpdateCharacterInGame()
-    {
-        GameObject selectedCharacter = GameManager.Instance.GetSelectedCharacter();
-        if (selectedCharacter != null)
-        {
-            
-            
-            GameObject currentPlayer = GameObject.FindWithTag("Player");
-            if (currentPlayer != null)
-            {
-                // neuer wird in passender position gespawnt
-                Vector2 position = currentPlayer.transform.position;
-                Quaternion rotation = currentPlayer.transform.rotation;
-                //alten durch neuen ersetzen
-                Destroy(currentPlayer);
-                GameObject newPlayer = Instantiate(selectedCharacter, position, rotation);
-                newPlayer.tag = "Player";
-
-            }
-            else
-            {
-                Debug.Log("No current player found in the scene.");
-            }
-        }
-        else
-        {
-            Debug.Log("Selected character prefab is null.");
-        }
-
-        //Der Player wird aus der Player Scene gel�scht, aber es wird kein neuer Player �bergeben
-        // die debug nachrichten werden beide nicht angezeigt
-    }
-    }
+}

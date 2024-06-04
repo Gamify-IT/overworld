@@ -504,22 +504,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-    // �bergibt chracterprefab bei character selection
-   
-    public GameObject SelectedCharacterPrefab { get; set; }
-    public void SelectCharacter(GameObject character)
-    {
-        SelectedCharacterPrefab = character;
-        
-    }
-
-    public GameObject GetSelectedCharacter()
-    {
-        return SelectedCharacterPrefab;
-    }
-
-
     /// <summary>
     ///     This function initializes the <c>GameManager</c>. All arrays are initialized with empty objects.
     /// </summary>

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class CharacterSelection : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     void Start()
     {
+        // get current character index
+        string playerName = GameObject.FindGameObjectWithTag("Player").name;
         //get image component
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
         //get confirm button
@@ -33,7 +36,6 @@ public class CharacterSelection : MonoBehaviour
     {
         character = Resources.Load<Sprite>("characters/character" + (characterIndex + 1));
         characterImage.sprite = character;
-        
     }
 
     /// <summary>
@@ -78,8 +80,5 @@ public class CharacterSelection : MonoBehaviour
 
         // add minimap camera to new character 
         miniMapCamera.transform.parent = newPlayer.transform;
-
-        // change minimap face
-        GameObject newFace = GameObject.Find("Player " + (characterIndex + 1) + " Face");
     }
 }
