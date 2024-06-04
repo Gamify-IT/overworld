@@ -8,8 +8,10 @@ public class CharacterSelection : MonoBehaviour
     private Sprite character;
     private GameObject confirmButton;
     private int numberOfCharacters = 3;
-    private int characterPrefabIndex = 0;
+    private int characterIndex = 0;
     [SerializeField] private GameObject[] characterPrefabs;
+    [SerializeField] private Sprite[] playerFaces;
+    
 
     /// <summary>
     /// The <c>Start</c> function is called after the object is initialized.
@@ -29,7 +31,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     void Update()
     {
-        character = Resources.Load<Sprite>("characters/character" + (characterPrefabIndex + 1));
+        character = Resources.Load<Sprite>("characters/character" + (characterIndex + 1));
         characterImage.sprite = character;
         
     }
@@ -40,7 +42,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void PreviousCharacter()
     {
-        characterPrefabIndex = (characterPrefabIndex - 1) % numberOfCharacters;
+        characterIndex = (characterIndex - 1) % numberOfCharacters;
     }
 
     /// <summary>
@@ -49,7 +51,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void NextCharacter()
     {
-        characterPrefabIndex = (characterPrefabIndex + 1) % numberOfCharacters;
+        characterIndex = (characterIndex + 1) % numberOfCharacters;
     }
 
     /// <summary>
@@ -63,20 +65,25 @@ public class CharacterSelection : MonoBehaviour
         Vector3 position = currentPlayer.transform.position;
         Quaternion rotation = currentPlayer.transform.rotation;
         GameObject miniMapCamera = GameObject.Find("Minimap Camera");
-        GameObject currentFace = GameObject.Find("Player " + characterPrefabIndex + " Face");
-        Debug.Log("Player " + characterPrefabIndex + " Face");
+        Image playerFace = GameObject.Find("Player Face").GetComponent<Image>();
+        //Debug.Log("Player " + characterIndex + " Face");
+        
         // reset current character, instance and face
         Destroy(currentPlayer);
         PlayerAnimation.Instance.ResetInstance();
         //currentFace.SetActive(false);
+        playerFace.sprite = playerFaces[characterIndex];
+
         // create new character in player scene 
-        GameObject newPlayer = Instantiate(characterPrefabs[characterPrefabIndex], position, rotation);
+        GameObject newPlayer = Instantiate(characterPrefabs[characterIndex], position, rotation);
         SceneManager.MoveGameObjectToScene(newPlayer, SceneManager.GetSceneByName("Player"));
+
         // add minimap camera to new character 
         miniMapCamera.transform.parent = newPlayer.transform;
+
         // change minimap face
-        GameObject newFace = GameObject.Find("Player " + (characterPrefabIndex + 1) + " Face");
-        Debug.Log("Player " + (characterPrefabIndex + 1) + " Face");
+        GameObject newFace = GameObject.Find("Player " + (characterIndex + 1) + " Face");
+        //Debug.Log("Player " + (characterIndex + 1) + " Face");
         //newFace.SetActive(true);
     }
 }
