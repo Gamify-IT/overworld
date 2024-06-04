@@ -56,7 +56,7 @@ public class CharacterSelection : MonoBehaviour
 
     /// <summary>
     /// This function is called by the <c>Select Character Button</c>.
-    /// This function switches to selected character.
+    /// This function switches to the selected character.
     /// </summary>
     public void ConfirmButton()
     {
@@ -66,12 +66,10 @@ public class CharacterSelection : MonoBehaviour
         Quaternion rotation = currentPlayer.transform.rotation;
         GameObject miniMapCamera = GameObject.Find("Minimap Camera");
         Image playerFace = GameObject.Find("Player Face").GetComponent<Image>();
-        //Debug.Log("Player " + characterIndex + " Face");
-        
+
         // reset current character, instance and face
         Destroy(currentPlayer);
         PlayerAnimation.Instance.ResetInstance();
-        //currentFace.SetActive(false);
         playerFace.sprite = playerFaces[characterIndex];
 
         // create new character in player scene 
@@ -83,7 +81,5 @@ public class CharacterSelection : MonoBehaviour
 
         // change minimap face
         GameObject newFace = GameObject.Find("Player " + (characterIndex + 1) + " Face");
-        //Debug.Log("Player " + (characterIndex + 1) + " Face");
-        //newFace.SetActive(true);
     }
 }
