@@ -292,7 +292,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     }
 
     /// <summary>
-    /// This function plays the ufo sound.
+    /// This function plays the ufo sound when it picks up the player.
     /// </summary>
     private void PlayUfoTakesSound()
     {
@@ -303,7 +303,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     }
 
     /// <summary>
-    /// This function plays the ufo sound.
+    /// This function plays the ufo sound when it returns the player.
     /// </summary>
     private void PlayUfoReturnsSound()
     {
