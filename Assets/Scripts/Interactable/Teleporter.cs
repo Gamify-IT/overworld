@@ -29,7 +29,11 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     private bool interactable = true;
 
     public AudioClip teleporterOpeningSound;
-    private AudioSource audioSource;
+    public AudioClip ufoTakesSound;
+    public AudioClip ufoReturnsSound;
+    private AudioSource audioSourceTeleport;
+    private AudioSource audioSourceUfoTakes;
+    private AudioSource audioSourceUfoReturns;
 
     //KeyCodes
     private KeyCode interact;
@@ -44,12 +48,24 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             GameEvents.current.onKeybindingChange += UpdateKeybindings;
 
             //add AudioSource component
-            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSourceTeleport = gameObject.AddComponent<AudioSource>();
+            audioSourceUfoTakes = gameObject.AddComponent<AudioSource>();
+            audioSourceUfoReturns = gameObject.AddComponent<AudioSource>();
 
             //Load the sound from Resources folder
             teleporterOpeningSound = Resources.Load<AudioClip>("Music/teleporter_opening");
             //set audio clip
-            audioSource.clip = teleporterOpeningSound;
+            audioSourceTeleport.clip = teleporterOpeningSound;
+
+            //Load the sound from Resources folder
+            ufoTakesSound = Resources.Load<AudioClip>("Music/ufo_takes_the_player");
+            //set audio clip
+            audioSourceUfoTakes.clip = ufoTakesSound;
+
+            //Load the sound from Resources folder
+            ufoReturnsSound = Resources.Load<AudioClip>("Music/ufo_returns_the_player");
+            //set audio clip
+            audioSourceUfoReturns.clip = ufoTakesSound;
         }            
     }
 
@@ -94,7 +110,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
                     teleporterUI = newCanvas.transform.GetChild(0).GetComponent<TeleporterUI>();
                     SetupTeleporterUI(teleporterUI);
                     currentTeleporterCanvas = newCanvas;
-                    PlayTeleporterOpeningSoundSound();
+                    PlayTeleporterOpeningSound();
                 }
             }
         }         
@@ -123,7 +139,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     /// </summary>
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        PlayTeleporterOpeningSoundSound();
+        PlayTeleporterOpeningSound();
         if (collision.CompareTag("Player"))
         {
             player = collision.transform;
@@ -212,7 +228,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         player.GetComponent<PlayerAnimation>().DisableMovement();
         interactable = false;
         ufoAnimation.Play("UfoDeparture");
-
+        PlayUfoTakesSound();
         Debug.Log("Animation length: " + ufoAnimation.clip.length);
         Invoke("FinishTeleportation", ufoAnimation.clip.length);
     }
@@ -240,6 +256,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         }
         Animation animation = player.GetComponent<Animation>();
         animation.Play("UfoArrival");
+        PlayUfoReturnsSound();
         LoadSubScene.transitionBlocked = false;
     }
 
@@ -266,11 +283,33 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     /// <summary>
     /// This function plays the teleporter opening sound.
     /// </summary>
-    private void PlayTeleporterOpeningSoundSound()
+    private void PlayTeleporterOpeningSound()
     {
-        if (teleporterOpeningSound != null && audioSource != null)
+        if (teleporterOpeningSound != null && audioSourceTeleport != null)
         {
-            audioSource.PlayOneShot(teleporterOpeningSound);
+            audioSourceTeleport.PlayOneShot(teleporterOpeningSound);
+        }
+    }
+
+    /// <summary>
+    /// This function plays the ufo sound.
+    /// </summary>
+    private void PlayUfoTakesSound()
+    {
+        if (ufoTakesSound != null && audioSourceUfoTakes != null)
+        {
+            audioSourceUfoTakes.PlayOneShot(ufoTakesSound);
+        }
+    }
+
+    /// <summary>
+    /// This function plays the ufo sound.
+    /// </summary>
+    private void PlayUfoReturnsSound()
+    {
+        if (ufoReturnsSound != null && audioSourceUfoReturns != null)
+        {
+            audioSourceUfoReturns.PlayOneShot(ufoReturnsSound);
         }
     }
 }
