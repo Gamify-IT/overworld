@@ -32,7 +32,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     void Update()
     {
-        character = Resources.Load<Sprite>("characters/character" + (characterIndex + 1));
+        character = Resources.Load<Sprite>("characters/character" + (characterIndex % numberOfCharacters));
         characterImage.sprite = character;
     }
 
@@ -42,7 +42,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void PreviousCharacter()
     {
-        characterIndex = (characterIndex - 1) % numberOfCharacters;
+        characterIndex = Modulo(characterIndex - 1, numberOfCharacters);
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void NextCharacter()
     {
-        characterIndex = (characterIndex + 1) % numberOfCharacters;
+        characterIndex = Modulo(characterIndex + 1, numberOfCharacters);
     }
 
     /// <summary>
@@ -78,5 +78,17 @@ public class CharacterSelection : MonoBehaviour
 
         // add minimap camera to new character 
         miniMapCamera.transform.parent = newPlayer.transform;
+    }
+
+    /// <summary>
+    ///     This method realizes the modulo operator from modular arithmetic.
+    /// </summary>
+    /// <param name="a">arbitrary number</param>
+    /// <param name="b">modulus</param>
+    /// <returns>positive remainder</returns>
+    private int Modulo(int a, int b)
+    {
+        int r = a % b;
+        return r < 0 ? r + b : r;
     }
 }
