@@ -78,6 +78,7 @@ public class CharacterSelection : MonoBehaviour
 
         // add minimap camera to new character 
         miniMapCamera.transform.parent = newPlayer.transform;
+        miniMapCamera.GetComponent<Camera>().enabled = true;
     }
 
     /// <summary>
