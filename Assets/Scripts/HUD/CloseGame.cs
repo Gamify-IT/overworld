@@ -27,11 +27,19 @@ public class CloseGame : MonoBehaviour
     public async void CloseButtonPressed()
     {
         InitCanvas();
-        bool success = await GameManager.Instance.SaveAchievements();
-        if(success)
+        bool achievementsSuccess = await GameManager.Instance.SaveAchievements();
+        bool logoutSuccess = await GameManager.Instance.SaveLogoutData();
+        if(achievementsSuccess && logoutSuccess)
         {
             Debug.Log("Saved all achievement progress");
+            Debug.Log("Saved all player position");
             CloseOverworld();
+        } else if (!logoutSuccess)
+        {
+            Debug.Log("Could not save player position");
+            savingText.text = "YOUR CURRENT POSITION COULD NOT BE SAVED, DO YOU WANT TO LEAVE AND RISK LOOSING YOUR CURRENT POSITION?";
+            confirmButton.gameObject.SetActive(true);
+            cancelButton.gameObject.SetActive(true);
         }
         else
         {
