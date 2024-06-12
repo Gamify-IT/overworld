@@ -23,17 +23,19 @@ public class PlayerTaskStatisticDTO
     public int highscore;
     public bool completed;
     public MinigameTaskDTO minigameTask;
+    public int rewards;
 
     #endregion
 
     #region Constructors
 
-    public PlayerTaskStatisticDTO(string id, int highscore, bool completed, MinigameTaskDTO minigameTask)
+    public PlayerTaskStatisticDTO(string id, int highscore, bool completed, MinigameTaskDTO minigameTask, int rewards)
     {
         this.id = id;
         this.highscore = highscore;
         this.completed = completed;
         this.minigameTask = minigameTask;
+        this.rewards = rewards;
     }
 
     public PlayerTaskStatisticDTO()

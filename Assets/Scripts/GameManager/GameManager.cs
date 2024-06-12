@@ -145,6 +145,13 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
+        Optional<Dictionary<string, Dictionary<string, int>>> playerLeagues =
+           await RestRequest.GetRequest<Dictionary<string, Dictionary<string, int>>>(path + "/playerstatistics/leagues");
+        if (!playerLeagues.IsPresent())
+        {
+            loadingError = true;
+        }
+
         Optional<PlayerTaskStatisticDTO[]> minigameStatistics =
             await RestRequest.GetArrayRequest<PlayerTaskStatisticDTO>(path +
                                                                       "/playerstatistics/player-task-statistics");

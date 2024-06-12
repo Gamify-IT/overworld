@@ -24,6 +24,7 @@ public class DataManager : MonoBehaviour
     private PlayerstatisticDTO playerData;
     private List<AchievementData> achievementData;
     private Dictionary<Binding, KeyCode> keybindings;
+    private Optional<Dictionary<string, Dictionary<string, int>>> playerLeagues;
 
     /// <summary>
     ///     This function sets given data for the specified world
@@ -220,6 +221,16 @@ public class DataManager : MonoBehaviour
             worldData[worldIndex].setMinigameStatus(dungeonIndex, index, status);
             worldData[worldIndex].setMinigameHighscore(dungeonIndex, index, highscore);
         }
+    }
+
+    public void SetPlayerLeaguesData(Optional<Dictionary<string, Dictionary<string, int>>> leagues)
+    {
+        playerLeagues = leagues;
+    }
+
+    public Optional<Dictionary<string, Dictionary<string, int>>> GetPlayerLeaguesData()
+    {
+        return playerLeagues;
     }
 
     /// <summary>
