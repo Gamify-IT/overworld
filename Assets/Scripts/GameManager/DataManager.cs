@@ -243,7 +243,7 @@ public class DataManager : MonoBehaviour
         
     }
 
-    public List<String, int> wandererList()
+    public Dictionary<String, int> wandererList()
     {
         return wanderer;
     }
