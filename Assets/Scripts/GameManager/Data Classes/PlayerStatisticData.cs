@@ -5,28 +5,26 @@ using System;
 
 public class PlayerStatisticData 
 {
-
+    private readonly string id;
     private readonly List<AreaLocationDTO> unlockedAreas;
     private readonly List<AreaLocationDTO> completedDungeons;
     private readonly HashSet<TeleporterDTO> unlockedTeleporters;
     private readonly AreaLocationDTO currentArea;
     private readonly string userId;
     private readonly string username;
-    private readonly DateTime created;
-    private readonly DateTime lastActive;
     private readonly long knowledge;
     private readonly int rewards;
 
-    public PlayerStatisticData(List<AreaLocationDTO> unlockedAreas, List<AreaLocationDTO> completedDungeons, HashSet<TeleporterDTO> unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username, LocalDateTime created, LocalDateTime lastActive, long knowledge, int rewards)
+    public PlayerStatisticData(String id, List<AreaLocationDTO> unlockedAreas, List<AreaLocationDTO> completedDungeons, HashSet<TeleporterDTO> unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  long knowledge, int rewards)
     {
+        this.id = id;
         this.unlockedAreas = unlockedAreas;
         this.completedDungeons = completedDungeons;
         this.unlockedTeleporters = unlockedTeleporters;
         this.currentArea = currentArea;
         this.userId = userId;
         this.username = username;
-        this.created = created;
-        this.lastActive = lastActive;
+        
         this.knowledge = knowledge;
         this.rewards = rewards;
     }
@@ -38,17 +36,17 @@ public class PlayerStatisticData
         string username = statistic.username;
         long knowledge = statistic.knowledge;
         int rewards = statistic.rewards;
-        DateTime created = statistic.created;
-        DateTime lastActive = statistic.lastActive;
+        string id = statistic.id;
+       
         List<AreaLocationDTO> unlockedAreas = new List<AreaLocationDTO>();
         List<AreaLocationDTO> completedDungeons = new List<AreaLocationDTO>();
-        Set<TeleporterDTO> unlockedTeleporters = new HashSet<TeleporterDTO>();
+        HashSet<TeleporterDTO> unlockedTeleporters = new HashSet<TeleporterDTO>();
 
         foreach (AreaLocationDTO unlockedArea in statistic.unlockedAreas)
         {
             unlockedAreas.Add(unlockedArea);
         }
-        foreach (AreaLocationDTO completedDungeon in statistic.completedDungeons)
+        foreach (AreaLocationDTO completedDungeon in statistic.unlockedDungeons)
         {
             completedDungeons.Add(completedDungeon);
         }
@@ -59,7 +57,7 @@ public class PlayerStatisticData
 
 
 
-        PlayerStatisticData data = new PlayerStatisticData(unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username, created, lastActive, knowledge,  knowledge, rewards);
+        PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username,  knowledge, rewards);
         return data;
     }
 
