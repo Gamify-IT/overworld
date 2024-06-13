@@ -23,6 +23,7 @@ public class DataManager : MonoBehaviour
     private WorldData[] worldData;
     private PlayerstatisticDTO playerData;
     private List<AchievementData> achievementData;
+    private List<PlayerStatisticData> allPlayerStatisticsData;
     private Dictionary<Binding, KeyCode> keybindings;
     private Dictionary<String, int> wanderer;
     private Dictionary<String, int> explorer;
@@ -315,7 +316,7 @@ public class DataManager : MonoBehaviour
         }
         Debug.Log("Process " + allPlayerStatistics.Length + "player statistics");
 
-        foreach (PlayerStatisticDTO statistic in allPlayerStatistics)
+        foreach (PlayerstatisticDTO statistic in allPlayerStatistics)
         {
             PlayerStatisticData playerStatistic= PlayerStatisticData.ConvertFromPlayerStatisticDTO(statistic);
             PlayerStatisticData.Add(playerStatistic);
