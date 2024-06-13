@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerStatisticData 
 {
@@ -11,8 +12,8 @@ public class PlayerStatisticData
     private readonly AreaLocationDTO currentArea;
     private readonly string userId;
     private readonly string username;
-    private readonly LocalDateTime created;
-    private readonly LocalDateTime lastActive;
+    private readonly DateTime created;
+    private readonly DateTime lastActive;
     private readonly long knowledge;
     private readonly int rewards;
 
@@ -37,8 +38,8 @@ public class PlayerStatisticData
         string username = statistic.username;
         long knowledge = statistic.knowledge;
         int rewards = statistic.rewards;
-        LocalDateTime created = statistic.created;
-        LocalDateTime lastActive = statistic.lastActive;
+        DateTime created = statistic.created;
+        DateTime lastActive = statistic.lastActive;
         List<AreaLocationDTO> unlockedAreas = new List<AreaLocationDTO>();
         List<AreaLocationDTO> completedDungeons = new List<AreaLocationDTO>();
         Set<TeleporterDTO> unlockedTeleporters = new HashSet<TeleporterDTO>();
