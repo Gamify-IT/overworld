@@ -24,7 +24,13 @@ public class DataManager : MonoBehaviour
     private PlayerstatisticDTO playerData;
     private List<AchievementData> achievementData;
     private Dictionary<Binding, KeyCode> keybindings;
-    private Optional<Dictionary<string, Dictionary<string, int>>> playerLeagues;
+    private Dictionary<String, int> wanderer;
+    private Dictionary<String, int> explorer;
+    private Dictionary<String, int> pathfinder;
+    private Dictionary<String, int> trailblazer;
+
+
+
 
     /// <summary>
     ///     This function sets given data for the specified world
@@ -223,15 +229,26 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void SetPlayerLeaguesData(Optional<Dictionary<string, Dictionary<string, int>>> leagues)
+
+    public void ProcessallPlayerStatistics(PlayerstatisticDTO[] playerStatisticDTOs)
     {
-        playerLeagues = leagues;
+        
+            foreach (PlayerstatisticDTO playerDTO in playerStatisticDTOs)
+            {
+                if (playerDTO.rewards >= 0 && playerDTO.rewards <= 100)
+                {
+                    wanderer.Add(playerDTO.username, playerDTO.rewards);
+                }
+            }
+        
     }
 
-    public Optional<Dictionary<string, Dictionary<string, int>>> GetPlayerLeaguesData()
+    public List<String, int> wandererList()
     {
-        return playerLeagues;
+        return wanderer;
     }
+
+    
 
     /// <summary>
     ///     This function processes the player npc statistcs data returned from the backend and stores the needed data in the

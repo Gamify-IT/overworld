@@ -138,6 +138,9 @@ public class GameManager : MonoBehaviour
             }
         }
 
+
+              
+
         Optional<PlayerstatisticDTO> playerStatistics =
             await RestRequest.GetRequest<PlayerstatisticDTO>(path + "/playerstatistics/");
         if (!playerStatistics.IsPresent())
@@ -145,12 +148,6 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
-        Optional<Dictionary<string, Dictionary<string, int>>> playerLeagues =
-           await RestRequest.GetRequest<Dictionary<string, Dictionary<string, int>>>(path + "/playerstatistics/leagues");
-        if (!playerLeagues.IsPresent())
-        {
-            loadingError = true;
-        }
 
         Optional<PlayerTaskStatisticDTO[]> minigameStatistics =
             await RestRequest.GetArrayRequest<PlayerTaskStatisticDTO>(path +
@@ -159,6 +156,15 @@ public class GameManager : MonoBehaviour
         {
             loadingError = true;
         }
+
+        Optional<PlayerstatisticDTO[]> allPlayerStatistics =
+            await RestRequest.GetArrayRequest<PlayerstatisticDTO>(path +
+                                                                      "/playerstatistics/allPlayerStatistics");
+        if (!allPlayerStatistics.IsPresent())
+        {
+            loadingError = true;
+        }
+
 
         Optional<PlayerNPCStatisticDTO[]> npcStatistics =
             await RestRequest.GetArrayRequest<PlayerNPCStatisticDTO>(path + "/playerstatistics/player-npc-statistics");
@@ -194,6 +200,10 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
             DataManager.Instance.ProcessKeybindings(keybindings.Value());
+            DataManager.Instance.ProcessallPlayerStatistics(allPlayerStatistics.Value());
+
+
+
         }
 
         Debug.Log("Everything set up");
