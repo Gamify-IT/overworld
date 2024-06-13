@@ -54,18 +54,18 @@ public class PlayerAnimation : MonoBehaviour
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
 
         //get AudioSource component
-        audioSource=GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
         //add AudioSource component if necessary
         if(audioSource == null)
         {
-            audioSource=gameObject.AddComponent<AudioSource>();
+            audioSource = gameObject.AddComponent<AudioSource>();
         }
         //set audio clip
-        audioSource.clip=moveSound;
+        audioSource.clip = moveSound;
         //set AudioSource to loop
-        audioSource.loop=true;
+        audioSource.loop = true;
         //AudioSource does not start playing automatically when the GameObject awakens
-        audioSource.playOnAwake=false;
+        audioSource.playOnAwake = false;
     }
 
 
@@ -76,31 +76,31 @@ public class PlayerAnimation : MonoBehaviour
     {
         if (canMove)
         {
-            isMoving=false;
+            isMoving = false;
             movement.x = 0;
             movement.y = 0;
             if (Input.GetKey(moveLeft))
             {
                 movement.x -= 1;
-                isMoving=true;
+                isMoving = true;
             }
 
             if (Input.GetKey(moveRight))
             {
                 movement.x += 1;
-                isMoving=true;
+                isMoving = true;
             }
 
             if (Input.GetKey(moveDown))
             {
                 movement.y -= 1;
-                isMoving=true;
+                isMoving = true;
             }
 
             if (Input.GetKey(moveUp))
             {
                 movement.y += 1;
-                isMoving=true;
+                isMoving = true;
             }
 
             movement = movement.normalized;
@@ -109,12 +109,14 @@ public class PlayerAnimation : MonoBehaviour
             {
                 targetSpeed = movementSpeed + sprintingSpeed;
                 playerAnimator.speed = 2;
+                audioSource.pitch = 1.75f;
             }
 
             if (Input.GetKeyUp(sprint))
             {
                 targetSpeed = movementSpeed;
                 playerAnimator.speed = 1;
+                audioSource.pitch = 1f;
             }
 
             // dev keybindings

@@ -11,10 +11,17 @@ public class MinigameStarting : MonoBehaviour
     //KeyCodes
     private KeyCode cancel;
 
+    public AudioClip clickSound;
+    private AudioSource audioSource;
+
     private void Start()
     {
         cancel = GameManager.Instance.GetKeyCode(Binding.CANCEL);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
+
+        audioSource = gameObject.AddComponent<AudioSource>();
+        clickSound = Resources.Load<AudioClip>("Music/click");
+        audioSource.clip = clickSound;
     }
 
     /// <summary>
@@ -81,6 +88,7 @@ public class MinigameStarting : MonoBehaviour
     /// </summary>
     public void StartButtonPressed()
     {
+        PlayClickSound();
         LoadMinigameInIframe(game, configurationId);
         QuitMinigame();
     }
@@ -90,6 +98,7 @@ public class MinigameStarting : MonoBehaviour
     /// </summary>
     public void QuitButtonPressed()
     {
+        PlayClickSound();
         QuitMinigame();
     }
 
@@ -115,6 +124,13 @@ public class MinigameStarting : MonoBehaviour
         {
             cancel = GameManager.Instance.GetKeyCode(Binding.CANCEL);
         }
+    }
+    /// <summary>
+    ///     This function plays click sound when the button is clicked.
+    /// </summary>
+    private void PlayClickSound()
+    {
+        audioSource.PlayOneShot(clickSound);
     }
 
     #region Singleton
