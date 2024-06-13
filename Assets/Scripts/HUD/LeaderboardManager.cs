@@ -58,7 +58,7 @@ public class LeaderboardManager : MonoBehaviour
             
             SceneManager.LoadScene("Rewards", LoadSceneMode.Additive);
             isLeaderboardOpen = true;
-            Time.timeScale = 0f; // Zeit anhalten
+            Time.timeScale = 0f; 
         }
     }
 
@@ -68,7 +68,7 @@ public class LeaderboardManager : MonoBehaviour
         {
             SceneManager.UnloadSceneAsync("Rewards");
             isLeaderboardOpen = false;
-            Time.timeScale = 1f; // Zeit fortsetzen
+            Time.timeScale = 1f; 
         }
     }
 

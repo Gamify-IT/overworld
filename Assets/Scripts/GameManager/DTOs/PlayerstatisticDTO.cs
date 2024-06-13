@@ -27,13 +27,14 @@ public class PlayerstatisticDTO
     public string userId;
     public string username;
     public int knowledge;
+    public int rewards;
 
     #endregion
 
     #region Constructors
 
     public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
-        AreaLocationDTO currentArea, string userId, string username, int knowledge)
+        AreaLocationDTO currentArea, string userId, string username, int knowledge, int rewards)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -43,6 +44,7 @@ public class PlayerstatisticDTO
         this.userId = userId;
         this.username = username;
         this.knowledge = knowledge;
+        this.rewards = rewards;
     }
 
     public PlayerstatisticDTO()
@@ -59,6 +61,7 @@ public class PlayerstatisticDTO
         userId = "";
         username = "";
         knowledge = 0;
+        rewards = 0;
     }
 
     #endregion
