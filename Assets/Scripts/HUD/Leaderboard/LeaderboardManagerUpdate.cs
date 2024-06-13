@@ -188,6 +188,33 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         return valid;
     }
+    private void DisplayHighscores(List<PlayerstatisticDTO> highscoresToDisplay)
+    {
+        foreach (PlayerstatisticDTO rank in highscoresToDisplay)
+        {
+            DisplayHighscore(rank);
+        }
+    }
+    private void DisplayHighscore(PlayerstatisticDTO rank)
+    {
+        GameObject achievementObject = Instantiate(leaderboardPrefab, content.transform, false);
+
+        /*  AchievementUIElement achievementUIElement = achievementObject.GetComponent<AchievementUIElement>();
+         if (achievementUIElement != null)
+        {
+             string title = achievement.GetTitle();
+             string description = achievement.GetDescription();
+             Sprite image = achievement.GetImage();
+             int progress = achievement.GetProgress();
+             int amountRequired = achievement.GetAmountRequired();
+             bool completed = achievement.IsCompleted();
+             achievementUIElement.Setup(title, description, image, progress, amountRequired, completed);
+         }
+         else
+         {
+             Destroy(achievementObject);
+         }*/
+    }
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
