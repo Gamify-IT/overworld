@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -64,5 +65,24 @@ public class PlayerstatisticDTO
         rewards = 0;
     }
 
+    #endregion
+
+    #region Getter
+
+    //league muss noch definiert werden?
+    public List<string> GetLeagues()
+    {
+        return null;
+    }
+
+    public List<string> GetWorlds()
+    {
+        return null;
+    }
+
+    public List<string> GetMinigames()
+    {
+        return null;
+    }
     #endregion
 }

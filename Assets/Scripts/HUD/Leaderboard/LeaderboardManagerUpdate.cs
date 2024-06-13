@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LeaderboardManager : MonoBehaviour
+public class LeaderboardManagerUpdate : MonoBehaviour
 {
     [SerializeField] private GameObject content;
     [SerializeField] private GameObject leaderboardPrefab;
@@ -71,7 +71,7 @@ public class LeaderboardManager : MonoBehaviour
     private void UpdateUI()
     {
         ResetUI();
-        List<PlayerTaskDTO> highscoresToDisplay = FilterHighscores();
+        List<PlayerstatisticDTO> highscoresToDisplay = FilterHighscores();
         DisplayHighscores(highscoresToDisplay);
     }
     private void ResetUI()
@@ -83,18 +83,110 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
-      private List<PlayerstatisticDTO> FilterHighscores()
+    private List<string> GetLeagues()
     {
-        List<PlayerstatisticDTO> highscoresToDisplay = new List<PlayerstatisticDTO>();
-        foreach (AchievementData achievement in achievements)
+        List<string> leagues = new()
         {
-            if (CheckCategory(achievement) && CheckStatus(achievement) && CheckFilter(achievement))
+            "Filter by..."
+        };
+        foreach (PlayerstatisticDTO rank in ranking)
+        {
+            foreach (string league in rank.GetLeagues())
             {
-                achievementsToDisplay.Add(achievement);
+                if (!leagues.Contains(league))
+                {
+                    leagues.Add(league);
+                }
             }
         }
 
-        return achievementsToDisplay;
+        return leagues;
+    }
+
+    private List<string> GetWorlds()
+    {
+        List<string> worlds = new()
+        {
+            "Filter by..."
+        };
+        foreach (PlayerstatisticDTO rank in ranking)
+        {
+            foreach (string world in rank.GetWorlds())
+            {
+                if (!worlds.Contains(world))
+                {
+                    worlds.Add(world);
+                }
+            }
+        }
+
+        return worlds;
+    }
+
+    private List<string> GetMinigames()
+    {
+        List<string> minigames = new()
+        {
+            "Filter by..."
+        };
+        foreach (PlayerstatisticDTO rank in ranking)
+        {
+            foreach (string minigame in rank.GetWorlds())
+            {
+                if (!minigames.Contains(minigame))
+                {
+                    minigames.Add(minigame);
+                }
+            }
+        }
+
+        return minigames;
+    }
+
+    private List<PlayerstatisticDTO> FilterHighscores()
+    {
+        List<PlayerstatisticDTO> highscoresToDisplay = new List<PlayerstatisticDTO>();
+        foreach (PlayerstatisticDTO ranking in ranking)
+        {
+            if (CheckLeague(ranking) && CheckWorld(ranking) && CheckMinigame(ranking))
+            {
+                highscoresToDisplay.Add(ranking);
+            }
+        }
+
+        return highscoresToDisplay;
+    }
+    private bool CheckLeague(PlayerstatisticDTO ranking)
+    {
+        bool valid = false;
+        if (league.Equals("Filter by...") || ranking.GetLeagues().Contains(league))
+        {
+            valid = true;
+        }
+
+        return valid;
+    }
+
+    private bool CheckWorld(PlayerstatisticDTO ranking)
+    {
+        bool valid = false;
+        if (world.Equals("Filter by...") || ranking.GetWorlds().Contains(world))
+        {
+            valid = true;
+        }
+
+        return valid;
+    }
+
+    private bool CheckMinigame(PlayerstatisticDTO ranking)
+    {
+        bool valid = false;
+        if (minigame.Equals("Filter by ...") || ranking.GetMinigames().Contains(minigame))
+        {
+            valid = true;
+        }
+
+        return valid;
     }
     private void OnEnable()
     {
