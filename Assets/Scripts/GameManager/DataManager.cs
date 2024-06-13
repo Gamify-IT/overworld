@@ -230,23 +230,7 @@ public class DataManager : MonoBehaviour
     }
 
 
-    public void ProcessallPlayerStatistics(PlayerstatisticDTO[] playerStatisticDTOs)
-    {
-        
-            foreach (PlayerstatisticDTO playerDTO in playerStatisticDTOs)
-            {
-                if (playerDTO.rewards >= 0 && playerDTO.rewards <= 100)
-                {
-                    wanderer.Add(playerDTO.username, playerDTO.rewards);
-                }
-            }
-        
-    }
-
-    public Dictionary<String, int> wandererList()
-    {
-        return wanderer;
-    }
+   
 
     
 
@@ -314,6 +298,30 @@ public class DataManager : MonoBehaviour
             achievementData.Add(achievement);
         }
     }
+
+
+    /// <summary>
+    ///     This function processes the playerStatistic statistics data returned from the backend and stores the needed data in the
+    ///     <c>DataManager</c>
+    /// </summary>
+    /// <param name="allPlayerStatistics">The player statistic data returned from the backend</param>
+    public void ProcessAllPlayerStatistics(PlayerstatisticDTO[] allPlayerStatistics)
+    {
+        allPlayerStatisticsData = new List<PlayerStatisticData>();
+        if (allPlayerStatistics == null)
+        {
+            Debug.Log("allPlayerStatistics list is null");
+            return;
+        }
+        Debug.Log("Process " + allPlayerStatistics.Length + "player statistics");
+
+        foreach (PlayerStatisticDTO statistic in allPlayerStatistics)
+        {
+            PlayerStatisticData playerStatistic= PlayerStatisticData.ConvertFromPlayerStatisticDTO(statistic);
+            PlayerStatisticData.Add(playerStatistic);
+        }
+    }
+
 
     /// <summary>
     ///     This function checks for a given array of <c>KeycodeDTO</c>s whether they are valid or not.

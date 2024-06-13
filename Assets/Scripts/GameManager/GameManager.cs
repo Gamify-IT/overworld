@@ -200,7 +200,7 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
             DataManager.Instance.ProcessKeybindings(keybindings.Value());
-            DataManager.Instance.ProcessallPlayerStatistics(allPlayerStatistics.Value());
+            DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());
 
 
 
