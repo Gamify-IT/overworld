@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// überall DTO zu DATA ändern 
+/// anstatt highscores -> rewards
+/// </summary>
+
 public class LeaderboardManagerUpdate : MonoBehaviour
 {
     [SerializeField] private GameObject content;
@@ -14,11 +19,13 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private string league;
     private string world;
     private string minigame;
+    // PlayerStatisticData anstatt PlayerstatisticDTO
     private List<PlayerstatisticDTO> ranking;
     private bool filterActive;
 
     public Button openButton; 
-    private Button closeButton; 
+    private Button closeButton;
+    public TMP_Text visibilityButton;
 
     private bool isLeaderboardOpen = false;
 
@@ -31,12 +38,34 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         if (openButton != null)
         {
-            
             openButton.onClick.AddListener(OpenLeaderboardScene);
         }
         else
         {
             Debug.LogError("Open Button is not assigned in the Inspector.");
+        }
+
+        if (visibilityButton != null)
+        {
+            
+            visibilityButton.transform.parent.GetComponent<Button>().onClick.AddListener(ToggleButtonText);
+        }
+        else
+        {
+            Debug.LogError("Visibility Button is not assigned in the Inspector.");
+        }
+
+    }
+
+    private void ToggleButtonText()
+    {
+        if (visibilityButton.text == "hide me")
+        {
+            visibilityButton.text = "show me";
+        }
+        else
+        {
+            visibilityButton.text = "hide me";
         }
     }
 
