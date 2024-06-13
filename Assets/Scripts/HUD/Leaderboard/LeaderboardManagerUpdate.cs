@@ -68,7 +68,7 @@ public class LeaderboardManager : MonoBehaviour
         UpdateUI();
     }
 
-   /* private void UpdateUI()
+    private void UpdateUI()
     {
         ResetUI();
         List<PlayerTaskDTO> highscoresToDisplay = FilterHighscores();
@@ -95,7 +95,7 @@ public class LeaderboardManager : MonoBehaviour
         }
 
         return achievementsToDisplay;
-    }*/
+    }
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
