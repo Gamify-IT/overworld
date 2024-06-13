@@ -7,7 +7,9 @@ MonoImporter:
   - teleporterCanvas: {instanceID: 0}
   - spriteNormal: {instanceID: 0}
   - spriteHighlight: {instanceID: 0}
-  - clickSound: {fileID: 8300000, guid: 7fae101f9b4cf9845811667b32ad29a8, type: 3}
+  - teleporterOpeningSound: {instanceID: 0}
+  - ufoTakesSound: {instanceID: 0}
+  - ufoReturnsSound: {fileID: 8300000, guid: 37ff7a67f2c1c864c83c0e9a5900711c, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
