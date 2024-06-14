@@ -67,22 +67,5 @@ public class PlayerstatisticDTO
 
     #endregion
 
-    #region Getter
-
-    //league muss noch definiert werden?
-    public List<string> GetLeagues()
-    {
-        return null;
-    }
-
-    public List<string> GetWorlds()
-    {
-        return null;
-    }
-
-    public List<string> GetMinigames()
-    {
-        return null;
-    }
-    #endregion
+   
 }

@@ -323,13 +323,34 @@ public class DataManager : MonoBehaviour
         }
     }
 
-
     /// <summary>
-    ///     This function checks for a given array of <c>KeycodeDTO</c>s whether they are valid or not.
-    ///     If so, they are set as the bindings, otherwise the default bindings are set.
+    ///     This function returns all stored player statistics
     /// </summary>
-    /// <param name="keybindingDTOs"></param>
-    public void ProcessKeybindings(KeybindingDTO[] keybindingDTOs)
+    /// <returns>A list containing all statistics</returns>
+    public List<PlayerStatisticData> GetAllPlayerStatistics()
+    {
+        Debug.Log("Data Manager, statistics: " + allPlayerStatisticsData.Count);
+        return allPlayerStatisticsData;
+    }
+
+    public Dictionary<string,int> GetAllPlayerRewards()
+    {
+        Dictionary<string, int> allPlayerRewards = new Dictionary<string, int>();
+        foreach (PlayerStatisticData statistic in allPlayerStatisticsData)
+        {
+            string username = statistic.GetUsername();
+            int rewards = statistic.GetRewards();
+            allPlayerRewards.Add(username, rewards);
+        }
+        return allPlayerRewards;
+    }
+
+        /// <summary>
+        ///     This function checks for a given array of <c>KeycodeDTO</c>s whether they are valid or not.
+        ///     If so, they are set as the bindings, otherwise the default bindings are set.
+        /// </summary>
+        /// <param name="keybindingDTOs"></param>
+        public void ProcessKeybindings(KeybindingDTO[] keybindingDTOs)
     {
         List<Keybinding> keybindings = ConvertKeybindings(keybindingDTOs);
         if (ValidKeybindings(keybindings))
@@ -462,6 +483,9 @@ public class DataManager : MonoBehaviour
         Debug.Log("UnlockedTPs in World " + worldIndex + ": " + dataList.Count);
         return dataList;
     }
+
+
+    
 
     /// <summary>
     ///     This function returns all stored achievements

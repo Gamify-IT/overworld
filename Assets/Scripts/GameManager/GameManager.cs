@@ -137,9 +137,7 @@ public class GameManager : MonoBehaviour
                 loadingError = true;
             }
         }
-
-
-              
+                      
 
         Optional<PlayerstatisticDTO> playerStatistics =
             await RestRequest.GetRequest<PlayerstatisticDTO>(path + "/playerstatistics/");

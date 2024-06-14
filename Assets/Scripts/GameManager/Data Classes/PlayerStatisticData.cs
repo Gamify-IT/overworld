@@ -60,6 +60,36 @@ public class PlayerStatisticData
         PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username,  knowledge, rewards);
         return data;
     }
+    #region Getter
 
+
+    public int GetRewards()
+    {
+        return rewards;
+    }
+
+    public string GetUsername()
+    {
+        return username;
+    }
+
+    // GetWorlds und GetMinigames werden nicht aus playerStatistic geholt sondern playerTaskStatistic für das Filtern der Welten und Minigames (lasse es erstmal hier, bis zur Findung einer Lösung)
+
+    //league muss noch definiert werden?
+    public List<string> GetLeagues()
+    {
+        return null;
+    }
+
+    public List<string> GetWorlds()
+    {
+        return null;
+    }
+
+    public List<string> GetMinigames()
+    {
+        return null;
+    }
+    #endregion
 
 }

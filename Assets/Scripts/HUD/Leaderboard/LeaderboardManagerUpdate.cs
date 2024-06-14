@@ -5,9 +5,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// überall DTO zu DATA ändern 
-/// anstatt highscores -> rewards
-/// hide & show me wert speichern
+/// überall DTO zu DATA ändern (check)
+/// anstatt highscores -> rewards (check)
 /// </summary>
 
 public class LeaderboardManagerUpdate : MonoBehaviour
@@ -21,8 +20,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private string league;
     private string world;
     private string minigame;
-    // PlayerStatisticData anstatt PlayerstatisticDTO
-    private List<PlayerstatisticDTO> ranking;
+    private List<PlayerStatisticData> ranking;
     private bool filterActive;
 
     public Button openButton;
@@ -99,7 +97,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
         else
         {
-            visibilityButton.text = "hide me"; // Default state
+            visibilityButton.text = "hide me"; 
         }
     }
 
@@ -134,8 +132,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private void UpdateUI()
     {
         ResetUI();
-        List<PlayerstatisticDTO> highscoresToDisplay = FilterHighscores();
-        DisplayHighscores(highscoresToDisplay);
+        List<PlayerStatisticData> rewardsToDisplay = FilterRewards();
+        DisplayRewards(rewardsToDisplay);
     }
     private void ResetUI()
     {
@@ -152,7 +150,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             "Filter by..."
         };
-        foreach (PlayerstatisticDTO rank in ranking)
+        foreach (PlayerStatisticData rank in ranking)
         {
             foreach (string league in rank.GetLeagues())
             {
@@ -172,7 +170,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             "Filter by..."
         };
-        foreach (PlayerstatisticDTO rank in ranking)
+        foreach (PlayerStatisticData rank in ranking)
         {
             foreach (string world in rank.GetWorlds())
             {
@@ -192,7 +190,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             "Filter by..."
         };
-        foreach (PlayerstatisticDTO rank in ranking)
+        foreach (PlayerStatisticData rank in ranking)
         {
             foreach (string minigame in rank.GetWorlds())
             {
@@ -206,20 +204,20 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         return minigames;
     }
 
-    private List<PlayerstatisticDTO> FilterHighscores()
+    private List<PlayerStatisticData> FilterRewards()
     {
-        List<PlayerstatisticDTO> highscoresToDisplay = new List<PlayerstatisticDTO>();
-        foreach (PlayerstatisticDTO ranking in ranking)
+        List<PlayerStatisticData> rewardsToDisplay = new List<PlayerStatisticData>();
+        foreach (PlayerStatisticData ranking in ranking)
         {
             if (CheckLeague(ranking) && CheckWorld(ranking) && CheckMinigame(ranking))
             {
-                highscoresToDisplay.Add(ranking);
+                rewardsToDisplay.Add(ranking);
             }
         }
 
-        return highscoresToDisplay;
+        return rewardsToDisplay;
     }
-    private bool CheckLeague(PlayerstatisticDTO ranking)
+    private bool CheckLeague(PlayerStatisticData ranking)
     {
         bool valid = false;
         if (league.Equals("Filter by...") || ranking.GetLeagues().Contains(league))
@@ -230,7 +228,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         return valid;
     }
 
-    private bool CheckWorld(PlayerstatisticDTO ranking)
+    private bool CheckWorld(PlayerStatisticData ranking)
     {
         bool valid = false;
         if (world.Equals("Filter by...") || ranking.GetWorlds().Contains(world))
@@ -241,7 +239,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         return valid;
     }
 
-    private bool CheckMinigame(PlayerstatisticDTO ranking)
+    private bool CheckMinigame(PlayerStatisticData ranking)
     {
         bool valid = false;
         if (minigame.Equals("Filter by ...") || ranking.GetMinigames().Contains(minigame))
@@ -251,14 +249,14 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         return valid;
     }
-    private void DisplayHighscores(List<PlayerstatisticDTO> highscoresToDisplay)
+    private void DisplayRewards(List<PlayerStatisticData> rewardsToDisplay)
     {
-        foreach (PlayerstatisticDTO rank in highscoresToDisplay)
+        foreach (PlayerStatisticData rank in rewardsToDisplay)
         {
             DisplayHighscore(rank);
         }
     }
-    private void DisplayHighscore(PlayerstatisticDTO rank)
+    private void DisplayHighscore(PlayerStatisticData rank)
     {
         GameObject achievementObject = Instantiate(leaderboardPrefab, content.transform, false);
 
@@ -335,7 +333,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && distributionPanel != null && distributionPanel.activeSelf)
+        if (Input.GetKeyDown(KeyCode.Return) && distributionPanel != null && distributionPanel.activeSelf)
         {
             CloseDistributionPanel();
         }
