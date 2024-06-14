@@ -7,6 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// überall DTO zu DATA ändern 
 /// anstatt highscores -> rewards
+/// hide & show me wert speichern
 /// </summary>
 
 public class LeaderboardManagerUpdate : MonoBehaviour
@@ -49,6 +50,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             
             visibilityButton.transform.parent.GetComponent<Button>().onClick.AddListener(ToggleButtonText);
+            LoadVisibilityState();
+
         }
         else
         {
@@ -66,6 +69,26 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         else
         {
             visibilityButton.text = "hide me";
+        }
+        SaveVisibilityState();
+
+    }
+
+    private void SaveVisibilityState()
+    {
+        PlayerPrefs.SetString("VisibilityState", visibilityButton.text);
+        PlayerPrefs.Save();
+    }
+
+    private void LoadVisibilityState()
+    {
+        if (PlayerPrefs.HasKey("VisibilityState"))
+        {
+            visibilityButton.text = PlayerPrefs.GetString("VisibilityState");
+        }
+        else
+        {
+            visibilityButton.text = "hide me"; // Default state
         }
     }
 
