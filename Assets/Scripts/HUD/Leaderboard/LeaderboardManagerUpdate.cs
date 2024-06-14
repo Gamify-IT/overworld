@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 /// <summary>
@@ -12,17 +14,19 @@ using UnityEngine.UI;
 public class LeaderboardManagerUpdate : MonoBehaviour
 {
     [SerializeField] private GameObject content;
+    [SerializeField] private GameObject rewardObject;
     [SerializeField] private GameObject leaderboardPrefab;
     [SerializeField] private TMP_Dropdown leagueDropdown;
     [SerializeField] private TMP_Dropdown worldDropdown;
     [SerializeField] private TMP_Dropdown minigameDropdown;
     [SerializeField] private GameObject distributionPanel;
     [SerializeField] private WorldData worldNames;
+    [SerializeField] private LeagueDefiner leagues;
     private string league;
     private string world;
     private string minigame;
     private List<PlayerStatisticData> ranking;
-    private LeagueDefiner leagues;
+    
     private bool filterActive;
 
     public Button openButton;
@@ -144,47 +148,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Destroy(child.gameObject);
 
         }
-    }
-
-  // Hole Ligen aus neuer LigaKlasse mit der Methode GetLeagues
-    private List<string> GetAllLeagues()
-    {
-        List<string> allLeagues = new()
-        {
-            "Filter by..."
-        };
-       
-            foreach (string league in leagues.GetLeagues())
-            {
-                if (!allLeagues.Contains(league))
-                {
-                    allLeagues.Add(league);
-                }
-            }
-        
-
-        return allLeagues;
-    }
-
-
-    // Hole namen aus neuer NameMethode aus WorldData
-    private List<string> GetWorldNames()
-    {
-        List<string> worlds = new()
-        {
-            "Filter by..."
-        };
-       
-            foreach (string world in worldNames.GetWorldNames())
-            {
-                if (!worlds.Contains(world))
-                {
-                    worlds.Add(world);
-                }
-            }
-        
-
-        return worlds;
     }
 
     private List<string> GetLeagues()
@@ -310,21 +273,20 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     {
         GameObject achievementObject = Instantiate(leaderboardPrefab, content.transform, false);
 
-        /*  AchievementUIElement achievementUIElement = achievementObject.GetComponent<AchievementUIElement>();
-         if (achievementUIElement != null)
+         RewardElement rewardElement = rewardObject.GetComponent<RewardElement>();
+         if (rewardElement != null)
         {
-             string title = achievement.GetTitle();
-             string description = achievement.GetDescription();
-             Sprite image = achievement.GetImage();
-             int progress = achievement.GetProgress();
-             int amountRequired = achievement.GetAmountRequired();
-             bool completed = achievement.IsCompleted();
-             achievementUIElement.Setup(title, description, image, progress, amountRequired, completed);
-         }
-         else
+             string playername = rank.GetUsername();
+             int reward = rank.GetRewards();
+             
+            int place = 0; //hier mit der Platzierung aus der ranking sortierung ersetzen
+            
+            rewardElement.Setup(playername, reward, place);
+        }
+        else
          {
              Destroy(achievementObject);
-         }*/
+         }
     }
     private void OnEnable()
     {

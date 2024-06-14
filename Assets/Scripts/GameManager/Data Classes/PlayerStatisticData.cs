@@ -14,6 +14,11 @@ public class PlayerStatisticData
     private readonly string username;
     private readonly long knowledge;
     private readonly int rewards;
+    private string Wanderer;
+    private string Explorer;
+    private string Pathfinder;
+    private string Trailblazer;
+    List<string> leagues;
 
     public PlayerStatisticData(String id, List<AreaLocationDTO> unlockedAreas, List<AreaLocationDTO> completedDungeons, HashSet<TeleporterDTO> unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  long knowledge, int rewards)
     {
@@ -60,6 +65,7 @@ public class PlayerStatisticData
         PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username,  knowledge, rewards);
         return data;
     }
+    
     #region Getter
 
 
@@ -77,8 +83,25 @@ public class PlayerStatisticData
     //league muss noch definiert werden?
     public List<string> GetLeagues()
     {
-        return null;
+        leagues.Add(Wanderer);
+        leagues.Add(Explorer);
+        leagues.Add(Pathfinder);
+        leagues.Add(Trailblazer);
+
+        return leagues;
     }
+
+    public List<string> GetWorldNames()
+    {
+        List<string> worldNames = new List<string>();
+        worldNames.Add("World 1");
+        worldNames.Add("World 2");
+        worldNames.Add("World 3");
+        worldNames.Add("World 4");
+
+        return worldNames;
+    }
+
 
     public List<string> GetWorlds()
     {
