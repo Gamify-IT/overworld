@@ -17,6 +17,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     [SerializeField] private TMP_Dropdown leagueDropdown;
     [SerializeField] private TMP_Dropdown worldDropdown;
     [SerializeField] private TMP_Dropdown minigameDropdown;
+    [SerializeField] private GameObject distributionPanel;
     private string league;
     private string world;
     private string minigame;
@@ -24,9 +25,10 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private List<PlayerstatisticDTO> ranking;
     private bool filterActive;
 
-    public Button openButton; 
+    public Button openButton;
     private Button closeButton;
     public TMP_Text visibilityButton;
+    public Button distributionButton;
 
     private bool isLeaderboardOpen = false;
 
@@ -46,9 +48,18 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Debug.LogError("Open Button is not assigned in the Inspector.");
         }
 
+        if (distributionButton != null) 
+        {
+            distributionButton.onClick.AddListener(OpenDistributionPanel);
+        }
+        else
+        {
+            Debug.LogError("Distribution Button is not assigned in the Inspector.");
+        }
+
         if (visibilityButton != null)
         {
-            
+
             visibilityButton.transform.parent.GetComponent<Button>().onClick.AddListener(ToggleButtonText);
             LoadVisibilityState();
 
@@ -116,7 +127,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     public void ResetFilter()
     {
         filterActive = false;
-        
+
         UpdateUI();
     }
 
@@ -131,7 +142,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         foreach (Transform child in content.transform)
         {
             Destroy(child.gameObject);
-            
+
         }
     }
 
@@ -281,7 +292,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     {
         if (scene.name == "Rewards")
         {
-            
+
             closeButton = GameObject.Find("CloseButton").GetComponent<Button>();
             if (closeButton != null)
             {
@@ -296,10 +307,10 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     public void OpenLeaderboardScene()
     {
-       
+
         if (!isLeaderboardOpen)
         {
-            
+
             SceneManager.LoadScene("Rewards", LoadSceneMode.Additive);
             isLeaderboardOpen = true;
             Time.timeScale = 0f; // Zeit anhalten
@@ -321,7 +332,37 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && isLeaderboardOpen)
         {
             CloseLeaderboardScene();
-            
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && distributionPanel != null && distributionPanel.activeSelf)
+        {
+            CloseDistributionPanel();
         }
     }
+
+    private void OpenDistributionPanel()
+    {
+        if (distributionPanel != null)
+        {
+            distributionPanel.SetActive(true);
+            Debug.Log("Distribution Panel opened.");
+
+        }
+        else
+        {
+            Debug.LogError("Distribution Panel is not assigned in the Inspector.");
+        }
+    }
+
+    private void CloseDistributionPanel()
+    {
+        if (distributionPanel != null)
+        {
+            distributionPanel.SetActive(false);
+            Debug.Log("Distribution Panel closed.");
+        }
+    }
+
+
 }
