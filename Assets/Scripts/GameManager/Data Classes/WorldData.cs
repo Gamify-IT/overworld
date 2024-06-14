@@ -390,5 +390,18 @@ public class WorldData : IAreaData
         return teleporters[index];
     }
 
+
+    // Neue Methode um die Namen zu holen
+    public List<string> GetWorldNames()
+    {
+        List<string> worldNames = new List<string>();
+        worldNames.Add("World 1");
+        worldNames.Add("World 2");
+        worldNames.Add("World 3");
+        worldNames.Add("World 4");
+
+        return worldNames;
+    }
+
     #endregion
 }

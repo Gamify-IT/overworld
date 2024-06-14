@@ -23,7 +23,10 @@ public class PlayerTaskStatisticDTO
     public int highscore;
     public bool completed;
     public MinigameTaskDTO minigameTask;
+
+
     public int rewards;
+    public int totalRewards;
 
     #endregion
 
