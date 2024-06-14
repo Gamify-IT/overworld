@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -263,13 +264,18 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     
     private void DisplayRewards(List<PlayerStatisticData> rewardsToDisplay)
     {
-        foreach (PlayerStatisticData rank in rewardsToDisplay)
+        // Ordnung des Leaderboards
+        var sortedRewards = rewardsToDisplay.OrderByDescending(rank => rank.GetRewards()).ToList();
+
+        int place = 1; 
+        foreach (PlayerStatisticData rank in sortedRewards)
         {
-            DisplayRewards(rank);
+            DisplayRewards(rank, place);
+            place++;
         }
     }
 
-    private void DisplayRewards(PlayerStatisticData rank)
+    private void DisplayRewards(PlayerStatisticData rank, int place)
     {
         GameObject achievementObject = Instantiate(leaderboardPrefab, content.transform, false);
 
@@ -278,8 +284,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
              string playername = rank.GetUsername();
              int reward = rank.GetRewards();
-             
-            int place = 0; //hier mit der Platzierung aus der ranking sortierung ersetzen
             
             rewardElement.Setup(playername, reward, place);
         }
