@@ -17,10 +17,12 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     [SerializeField] private TMP_Dropdown worldDropdown;
     [SerializeField] private TMP_Dropdown minigameDropdown;
     [SerializeField] private GameObject distributionPanel;
+    [SerializeField] private WorldData worldNames;
     private string league;
     private string world;
     private string minigame;
     private List<PlayerStatisticData> ranking;
+    private LeagueDefiner leagues;
     private bool filterActive;
 
     public Button openButton;
@@ -144,6 +146,47 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
+  // Hole Ligen aus neuer LigaKlasse mit der Methode GetLeagues
+    private List<string> GetAllLeagues()
+    {
+        List<string> allLeagues = new()
+        {
+            "Filter by..."
+        };
+       
+            foreach (string league in leagues.GetLeagues())
+            {
+                if (!allLeagues.Contains(league))
+                {
+                    allLeagues.Add(league);
+                }
+            }
+        
+
+        return allLeagues;
+    }
+
+
+    // Hole namen aus neuer NameMethode aus WorldData
+    private List<string> GetWorldNames()
+    {
+        List<string> worlds = new()
+        {
+            "Filter by..."
+        };
+       
+            foreach (string world in worldNames.GetWorldNames())
+            {
+                if (!worlds.Contains(world))
+                {
+                    worlds.Add(world);
+                }
+            }
+        
+
+        return worlds;
+    }
+
     private List<string> GetLeagues()
     {
         List<string> leagues = new()
@@ -164,6 +207,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         return leagues;
     }
 
+
+
     private List<string> GetWorlds()
     {
         List<string> worlds = new()
@@ -183,6 +228,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         return worlds;
     }
+
 
     private List<string> GetMinigames()
     {
@@ -217,6 +263,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         return rewardsToDisplay;
     }
+
+
     private bool CheckLeague(PlayerStatisticData ranking)
     {
         bool valid = false;
@@ -249,14 +297,16 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         return valid;
     }
+    
     private void DisplayRewards(List<PlayerStatisticData> rewardsToDisplay)
     {
         foreach (PlayerStatisticData rank in rewardsToDisplay)
         {
-            DisplayHighscore(rank);
+            DisplayRewards(rank);
         }
     }
-    private void DisplayHighscore(PlayerStatisticData rank)
+
+    private void DisplayRewards(PlayerStatisticData rank)
     {
         GameObject achievementObject = Instantiate(leaderboardPrefab, content.transform, false);
 

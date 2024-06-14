@@ -73,7 +73,6 @@ public class PlayerStatisticData
         return username;
     }
 
-    // GetWorlds und GetMinigames werden nicht aus playerStatistic geholt sondern playerTaskStatistic für das Filtern der Welten und Minigames (lasse es erstmal hier, bis zur Findung einer Lösung)
 
     //league muss noch definiert werden?
     public List<string> GetLeagues()

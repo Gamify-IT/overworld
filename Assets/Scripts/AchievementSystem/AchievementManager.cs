@@ -17,6 +17,7 @@ public class AchievementManager : MonoBehaviour
     private string filterText;
     private bool filterActive;
     private List<AchievementData> achievements;
+    
 
     /// <summary>
     ///     This function is called by the categoryDropdown and updates the selected category filter
