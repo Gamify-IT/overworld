@@ -47,9 +47,11 @@ public class OfflineMode : MonoBehaviour
         GameManager.Instance.GetDummyData();
 
         DataManager.Instance.GetDummyAreaData();
-
+        DataManager.Instance.GetDummyDataRewards();
         LoadingManager.Instance.LoadScene();
         SceneManager.UnloadSceneAsync("OfflineMode");
+
+        
     }
 
     /// <summary>

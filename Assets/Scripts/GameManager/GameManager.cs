@@ -611,4 +611,10 @@ public class GameManager : MonoBehaviour
         statistcs[1] = achievementStatistic2;
         return statistcs;
     }
+
+    
+    
+
+
+   
 }

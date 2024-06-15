@@ -6,25 +6,25 @@ using System;
 public class PlayerStatisticData 
 {
     private readonly string id;
-    private readonly List<AreaLocationDTO> unlockedAreas;
-    private readonly List<AreaLocationDTO> completedDungeons;
-    private readonly HashSet<TeleporterDTO> unlockedTeleporters;
+    public AreaLocationDTO[] unlockedAreas;
+    public AreaLocationDTO[] unlockedDungeons;
+    public TeleporterDTO[] unlockedTeleporters;
     private readonly AreaLocationDTO currentArea;
     private readonly string userId;
     private readonly string username;
     private readonly long knowledge;
     private readonly int rewards;
-    private string Wanderer;
-    private string Explorer;
-    private string Pathfinder;
-    private string Trailblazer;
-    List<string> leagues;
 
-    public PlayerStatisticData(String id, List<AreaLocationDTO> unlockedAreas, List<AreaLocationDTO> completedDungeons, HashSet<TeleporterDTO> unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  long knowledge, int rewards)
+    
+
+    private string leagueOfPlayer;
+   
+
+    public PlayerStatisticData(String id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  long knowledge, int rewards)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
-        this.completedDungeons = completedDungeons;
+        this.unlockedDungeons = completedDungeons;
         this.unlockedTeleporters = unlockedTeleporters;
         this.currentArea = currentArea;
         this.userId = userId;
@@ -32,6 +32,8 @@ public class PlayerStatisticData
         
         this.knowledge = knowledge;
         this.rewards = rewards;
+        this.leagueOfPlayer = calculateLeagueOfPlayer(rewards);
+        
     }
 
     public static PlayerStatisticData ConvertFromPlayerStatisticDTO(PlayerstatisticDTO statistic)
@@ -42,30 +44,53 @@ public class PlayerStatisticData
         long knowledge = statistic.knowledge;
         int rewards = statistic.rewards;
         string id = statistic.id;
-       
-        List<AreaLocationDTO> unlockedAreas = new List<AreaLocationDTO>();
-        List<AreaLocationDTO> completedDungeons = new List<AreaLocationDTO>();
-        HashSet<TeleporterDTO> unlockedTeleporters = new HashSet<TeleporterDTO>();
 
-        foreach (AreaLocationDTO unlockedArea in statistic.unlockedAreas)
+        AreaLocationDTO[] unlockedAreas = new AreaLocationDTO[statistic.unlockedAreas.Length];
+        AreaLocationDTO[] completedDungeons = new AreaLocationDTO[statistic.unlockedDungeons.Length];
+        TeleporterDTO[] unlockedTeleporters = new TeleporterDTO[statistic.unlockedTeleporters.Length];
+
+        for (int i = 0; i < statistic.unlockedAreas.Length; i++)
         {
-            unlockedAreas.Add(unlockedArea);
-        }
-        foreach (AreaLocationDTO completedDungeon in statistic.unlockedDungeons)
-        {
-            completedDungeons.Add(completedDungeon);
-        }
-        foreach (TeleporterDTO unlockedTeleporter in statistic.unlockedTeleporters)
-        {
-            unlockedTeleporters.Add(unlockedTeleporter);
+            unlockedAreas[i] = statistic.unlockedAreas[i];
         }
 
+        for (int i = 0; i < statistic.unlockedDungeons.Length; i++)
+        {
+            completedDungeons[i] = statistic.unlockedDungeons[i];
+        }
 
+        for (int i = 0; i < statistic.unlockedTeleporters.Length; i++)
+        {
+            unlockedTeleporters[i] = statistic.unlockedTeleporters[i];
+        }
 
-        PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username,  knowledge, rewards);
+     
+    PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username,  knowledge, rewards);
         return data;
     }
     
+
+    public string calculateLeagueOfPlayer(int rewards)
+    {
+        if(rewards < 100)
+        {
+            return "Wanderer";
+        }else if (rewards < 200)
+        {
+            return "Explorer";
+        }else if (rewards < 300)
+        {
+            return "Pathfinder";
+        }
+        else
+        {
+            return "Trailblazer";
+        }
+
+        return "-";
+
+    }
+
     #region Getter
 
 
@@ -80,38 +105,50 @@ public class PlayerStatisticData
     }
 
 
-    //league muss noch definiert werden?
-    public List<string> GetLeagues()
-    {
-        leagues.Add(Wanderer);
-        leagues.Add(Explorer);
-        leagues.Add(Pathfinder);
-        leagues.Add(Trailblazer);
+    // iteriert durch jedes einzelne Objekt in der DataListe und führt für jedes Objekt da drin die GetLeagues() auf (sehr unnötig, Lösung wird gesucht)
 
-        return leagues;
+    public string GetLeague()
+    {
+
+        return this.leagueOfPlayer;
     }
 
-    public List<string> GetWorldNames()
+    public string GetWorld()
     {
-        List<string> worldNames = new List<string>();
-        worldNames.Add("World 1");
-        worldNames.Add("World 2");
-        worldNames.Add("World 3");
-        worldNames.Add("World 4");
+        int index = this.currentArea.worldIndex;
 
-        return worldNames;
+        switch (index)
+        {
+            case 1:
+                return "World 1";
+            case 2:
+                return "World 2";
+            case 3:
+                return "World 3";
+            case 4:
+                return "World 4";
+            default:
+                return "Error Text"; 
+        }
     }
 
 
-    public List<string> GetWorlds()
-    {
-        return null;
-    }
 
-    public List<string> GetMinigames()
-    {
-        return null;
-    }
+
+   // public List<string> GetMinigames()
+    //{
+      //  List<string> minigames = new List<string>();
+
+       //minigames.Add("Bugfinder");
+       //minigames.Add("Chickenshock");
+       //minigames.Add("Crosswordpuzzle");
+       //minigames.Add("Finitequiz");
+       //minigames.Add("Memory");
+       //minigames.Add("Towercrush");
+
+
+       // return minigames;
+   // }
     #endregion
 
 }

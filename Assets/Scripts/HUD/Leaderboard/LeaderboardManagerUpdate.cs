@@ -16,10 +16,9 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 {
     [SerializeField] private GameObject content;
     [SerializeField] private GameObject rewardObject;
-    [SerializeField] private GameObject leaderboardPrefab;
-    [SerializeField] private TMP_Dropdown leagueDropdown;
-    [SerializeField] private TMP_Dropdown worldDropdown;
-    [SerializeField] private TMP_Dropdown minigameDropdown;
+    [SerializeField] public TMP_Dropdown LeagueDropdown;
+    [SerializeField] public TMP_Dropdown WorldDropdown;
+    //[SerializeField] public TMP_Dropdown MinigameDropdown;
     [SerializeField] private GameObject distributionPanel;
     [SerializeField] private WorldData worldNames;
     [SerializeField] private LeagueDefiner leagues;
@@ -37,12 +36,23 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private bool isLeaderboardOpen = false;
 
+    public void SetLeague()
+    {
+        int option = LeagueDropdown.value;
+        league = LeagueDropdown.options[option].text;
+        UpdateUI();
+    }
+
+    public void SetWorld()
+    {
+        int option = WorldDropdown.value;
+        world = WorldDropdown.options[option].text;
+        UpdateUI();
+    }
+
     private void Start()
     {
-
-        /*achievements = DataManager.Instance.GetAchievements();
-        Setup();
-        UpdateUI();*/
+      
 
         if (openButton != null)
         {
@@ -74,7 +84,63 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Debug.LogError("Visibility Button is not assigned in the Inspector.");
         }
 
+        if (LeagueDropdown == null)
+        {
+            Debug.LogError("LeagueDropdown is not assigned in the Inspector.");
+        }
+        else
+        {
+            Debug.Log("LeagueDropdown is assigned: " + LeagueDropdown.gameObject.name);
+        }
+
+        if (WorldDropdown == null)
+        {
+            Debug.LogError("WorldDropdown is not assigned in the Inspector.");
+        }
+        else
+        {
+            Debug.Log("WorldDropdown is assigned: " + WorldDropdown.gameObject.name);
+        }
+
+
+        ranking = DataManager.Instance.GetDummyDataRewards();
+
+
+        foreach (var playerData in ranking)
+        {
+            Debug.Log($"Player added to display: {playerData.GetUsername()},Rewards: {playerData.GetRewards()}, League: {playerData.GetLeague()}, World: {playerData.GetWorld()}");
+        }
+
+        Setup();
+        UpdateUI();
+
+
     }
+
+    private void Setup()
+    {
+        SetupDropdowns();
+        league = "Filter by..";
+        world = "Filter by..";
+        
+        filterActive = false;
+    }
+
+    private void SetupDropdowns()
+    {
+        List<string> leagues = GetLeague();
+        LeagueDropdown.ClearOptions();
+        LeagueDropdown.AddOptions(leagues);
+
+        List<string> worlds = GetWorld();
+        WorldDropdown.ClearOptions();
+        WorldDropdown.AddOptions(worlds);
+
+    }
+
+
+
+
 
     private void ToggleButtonText()
     {
@@ -108,26 +174,14 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
-    public void SetLeague()
-    {
-        int option = leagueDropdown.value;
-        league = leagueDropdown.options[option].text;
-        UpdateUI();
-    }
+  
 
-    public void SetWorld()
-    {
-        int option = worldDropdown.value;
-        world = worldDropdown.options[option].text;
-        UpdateUI();
-    }
-
-    public void SetMinigame()
-    {
-        int option = minigameDropdown.value;
-        minigame = minigameDropdown.options[option].text;
-        UpdateUI();
-    }
+   // public void SetMinigame()
+    //{
+      //  int option = MinigameDropdown.value;
+      //  minigame = MinigameDropdown.options[option].text;
+       // UpdateUI();
+    //}
 
     public void ResetFilter()
     {
@@ -138,10 +192,11 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private void UpdateUI()
     {
-        ResetUI();
+        
         List<PlayerStatisticData> rewardsToDisplay = FilterRewards();
         DisplayRewards(rewardsToDisplay);
     }
+
     private void ResetUI()
     {
         foreach (Transform child in content.transform)
@@ -151,7 +206,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
-    private List<string> GetLeagues()
+    private List<string> GetLeague()
     {
         List<string> leagues = new()
         {
@@ -159,13 +214,13 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         };
         foreach (PlayerStatisticData rank in ranking)
         {
-            foreach (string league in rank.GetLeagues())
-            {
-                if (!leagues.Contains(league))
-                {
-                    leagues.Add(league);
-                }
-            }
+            string league = rank.GetLeague();
+            
+            if (!leagues.Contains(league))
+              {
+                  leagues.Add(league);
+              }
+            
         }
 
         return leagues;
@@ -173,7 +228,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
 
 
-    private List<string> GetWorlds()
+    private List<string> GetWorld()
     {
         List<string> worlds = new()
         {
@@ -181,47 +236,62 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         };
         foreach (PlayerStatisticData rank in ranking)
         {
-            foreach (string world in rank.GetWorlds())
-            {
+            string world = rank.GetWorld();
                 if (!worlds.Contains(world))
                 {
                     worlds.Add(world);
                 }
-            }
+            
         }
 
         return worlds;
     }
 
 
-    private List<string> GetMinigames()
+  //  private List<string> GetMinigames()
+    //{
+      //  List<string> minigames = new()
+       // {
+         //   "Filter by..."
+        //};
+        //foreach (PlayerStatisticData rank in ranking)
+       // {
+         //   foreach (string minigame in rank.GetWorld())
+           // {
+            //    if (!minigames.Contains(minigame))
+              //  {
+                //    minigames.Add(minigame);
+                //}
+            //}
+        //}
+
+//        return minigames;
+  //  }
+
+    private List<PlayerStatisticData> FilterReward()
     {
-        List<string> minigames = new()
+        List<PlayerStatisticData> rewardsToDisplay = new List<PlayerStatisticData>();
+        foreach (PlayerStatisticData ranking in ranking)
         {
-            "Filter by..."
-        };
-        foreach (PlayerStatisticData rank in ranking)
-        {
-            foreach (string minigame in rank.GetWorlds())
+            if (CheckLeague(ranking) && CheckWorld(ranking) ) //&& CheckMinigame(ranking))
             {
-                if (!minigames.Contains(minigame))
-                {
-                    minigames.Add(minigame);
-                }
+                rewardsToDisplay.Add(ranking);
             }
         }
 
-        return minigames;
+        return rewardsToDisplay;
     }
 
     private List<PlayerStatisticData> FilterRewards()
     {
         List<PlayerStatisticData> rewardsToDisplay = new List<PlayerStatisticData>();
-        foreach (PlayerStatisticData ranking in ranking)
+        foreach (PlayerStatisticData rank in ranking)
         {
-            if (CheckLeague(ranking) && CheckWorld(ranking) && CheckMinigame(ranking))
+            if (CheckLeague(rank)) // && CheckWorld(rank) && CheckMinigame(rank))
             {
-                rewardsToDisplay.Add(ranking);
+                rewardsToDisplay.Add(rank);
+                Debug.Log($"Player added to display: {rank.GetLeague()}");
+
             }
         }
 
@@ -232,7 +302,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private bool CheckLeague(PlayerStatisticData ranking)
     {
         bool valid = false;
-        if (league.Equals("Filter by...") || ranking.GetLeagues().Contains(league))
+        if (league.Equals("Filter by...") || ranking.GetLeague().Equals(league))
         {
             valid = true;
         }
@@ -243,7 +313,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private bool CheckWorld(PlayerStatisticData ranking)
     {
         bool valid = false;
-        if (world.Equals("Filter by...") || ranking.GetWorlds().Contains(world))
+        if (world.Equals("Filter by...") || ranking.GetWorld().Equals(world))
         {
             valid = true;
         }
@@ -251,33 +321,31 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         return valid;
     }
 
-    private bool CheckMinigame(PlayerStatisticData ranking)
-    {
-        bool valid = false;
-        if (minigame.Equals("Filter by ...") || ranking.GetMinigames().Contains(minigame))
-        {
-            valid = true;
-        }
+    //private bool CheckMinigame(PlayerStatisticData ranking)
+    //{
+      //  bool valid = false;
+        //if (minigame.Equals("Filter by ...") || ranking.GetMinigames().Contains(minigame))
+        //{
+          //  valid = true;
+        //}
 
-        return valid;
-    }
+        //return valid;
+    //}
     
     private void DisplayRewards(List<PlayerStatisticData> rewardsToDisplay)
     {
         // Ordnung des Leaderboards
-        var sortedRewards = rewardsToDisplay.OrderByDescending(rank => rank.GetRewards()).ToList();
+        //var sortedRewards = rewardsToDisplay.OrderByDescending(rank => rank.GetRewards()).ToList();
 
-        int place = 1; 
-        foreach (PlayerStatisticData rank in sortedRewards)
+        foreach (PlayerStatisticData rank in rewardsToDisplay)
         {
-            DisplayRewards(rank, place);
-            place++;
+            DisplayRewards(rank);
         }
     }
 
-    private void DisplayRewards(PlayerStatisticData rank, int place)
+    private void DisplayRewards(PlayerStatisticData rank)
     {
-        GameObject achievementObject = Instantiate(leaderboardPrefab, content.transform, false);
+        GameObject achievementObject = Instantiate(rewardObject, content.transform, false);
 
          RewardElement rewardElement = rewardObject.GetComponent<RewardElement>();
          if (rewardElement != null)
@@ -285,7 +353,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
              string playername = rank.GetUsername();
              int reward = rank.GetRewards();
             
-            rewardElement.Setup(playername, reward, place);
+            rewardElement.Setup(playername, reward);
         }
         else
          {

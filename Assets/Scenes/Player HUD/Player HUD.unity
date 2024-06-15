@@ -1785,7 +1785,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e754900fbe199f40ab2782ac1088481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  content: {fileID: 0}
+  rewardObject: {fileID: 0}
+  leaderboardPrefab: {fileID: 0}
+  leagueDropdown: {fileID: 0}
+  worldDropdown: {fileID: 0}
+  minigameDropdown: {fileID: 0}
+  distributionPanel: {fileID: 0}
   openButton: {fileID: 142743606}
+  visibilityButton: {fileID: 0}
+  distributionButton: {fileID: 0}
 --- !u!1 &2054061605
 GameObject:
   m_ObjectHideFlags: 0
