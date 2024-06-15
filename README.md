@@ -1,4 +1,4 @@
-# overworld
+# Overworld
 
 ## Disclaimer
 
@@ -7,11 +7,11 @@ It may contain bugs, and is not licensed for external use.
 
 ## Getting started
 
-#### Run with Docker-compose
+### Run with Docker-compose
 
 Start all dependencies with our docker-compose files.
 Check the [manual for docker-compose](https://github.com/Gamify-IT/docs/blob/main/dev-manuals/languages/docker/docker-compose.md).
 
-To run the main branch with minimal dependencies use the `docker-compose.yaml` file.\
-To run the latest changes on any other branch than `main` use the `docker-compose-dev.yaml` file.
-
+Note: This repositorys `docker-compose-dev.yaml` doesn't work in the same way as in the other repositories.
+Here this file pulls the main docker image from GitHub instead of not pulling any image and enabling you to run the 
+project locally.
