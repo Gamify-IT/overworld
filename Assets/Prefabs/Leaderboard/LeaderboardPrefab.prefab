@@ -280,7 +280,8 @@ GameObject:
   m_Component:
   - component: {fileID: 566498462177396334}
   - component: {fileID: 1809392072512641093}
-  m_Layer: 0
+  - component: {fileID: 6130799465342925192}
+  m_Layer: 5
   m_Name: LeaderboardPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -335,3 +336,17 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &6130799465342925192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5708516710113676659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcf39769b295ae74b98fd15fee5a3a97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playername: {fileID: 7094227720819953662}
+  reward: {fileID: 7091146625176839061}
