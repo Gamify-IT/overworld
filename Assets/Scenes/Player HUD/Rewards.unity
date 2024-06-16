@@ -4108,7 +4108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   content: {fileID: 225447719}
-  rewardObject: {fileID: 1533147137}
+  rewardObject: {fileID: 5708516710113676659, guid: 9e3b81a0b10dfc641a71017f0c55ac17, type: 3}
   LeagueDropdown: {fileID: 39812055}
   WorldDropdown: {fileID: 851026552}
   distributionPanel: {fileID: 2068971160}
@@ -5564,11 +5564,6 @@ PrefabInstance:
 --- !u!224 &1533147136 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 566498462177396334, guid: 9e3b81a0b10dfc641a71017f0c55ac17, type: 3}
-  m_PrefabInstance: {fileID: 1533147135}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1533147137 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5708516710113676659, guid: 9e3b81a0b10dfc641a71017f0c55ac17, type: 3}
   m_PrefabInstance: {fileID: 1533147135}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1572550128

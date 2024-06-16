@@ -39,6 +39,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     {
         int option = LeagueDropdown.value;
         league = LeagueDropdown.options[option].text;
+        Debug.Log($"Selected league: {league}");
+
         UpdateUI();
     }
 
@@ -50,8 +52,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     }
 
     private void Start()
-    {
-      
+    {    
 
       
 
@@ -95,7 +96,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
 
 
-        ranking = DataManager.Instance.GetDummyDataRewards();
+        ranking = DataManager.Instance.GetAllPlayerStatistics();
 
 
         foreach (var playerData in ranking)
@@ -104,6 +105,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
 
         Setup();
+
+        
         UpdateUI();
 
 
@@ -112,8 +115,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private void Setup()
     {
         SetupDropdowns();
-        league = "Filter by..";
-        world = "Filter by..";
+        league = "Filter by...";
+        world = "Filter by...";
         
         filterActive = false;
     }
@@ -265,16 +268,17 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         List<PlayerStatisticData> rewardsToDisplay = new List<PlayerStatisticData>();
         foreach (PlayerStatisticData ranking in ranking)
         {
-            if (CheckLeague(ranking) && CheckWorld(ranking) ) //&& CheckMinigame(ranking))
+            if (CheckLeague(ranking)) // && CheckWorld(ranking) ) //&& CheckMinigame(ranking))
             {
                 rewardsToDisplay.Add(ranking);
             }
         }
-
         return rewardsToDisplay;
+
+
     }
 
-    private List<PlayerStatisticData> FilterRewards()
+    private List<PlayerStatisticData> FilterRewardso()
     {
         List<PlayerStatisticData> rewardsToDisplay = new List<PlayerStatisticData>();
         foreach (PlayerStatisticData rank in ranking)
@@ -284,6 +288,22 @@ public class LeaderboardManagerUpdate : MonoBehaviour
                 rewardsToDisplay.Add(rank);
                 Debug.Log($"Player added to display: {rank.GetLeague()}");
 
+            }
+        }
+
+        return rewardsToDisplay;
+    }
+
+    private List<PlayerStatisticData> FilterRewards()
+    {
+        List<PlayerStatisticData> rewardsToDisplay = new List<PlayerStatisticData>();
+
+        foreach (PlayerStatisticData rank in ranking)
+        { 
+            if (CheckLeague(rank))
+            {
+                rewardsToDisplay.Add(rank);
+                Debug.Log($"Player added to display: {rank.GetUsername()}, League: {rank.GetLeague()}"); // wird angezeigt
             }
         }
 
@@ -339,18 +359,19 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     {
         GameObject achievementObject = Instantiate(rewardObject, content.transform, false);
 
-         RewardElement rewardElement = rewardObject.GetComponent<RewardElement>();
-         if (rewardElement != null)
+        RewardElement rewardElement = achievementObject.GetComponent<RewardElement>(); // Hier wird das korrekte Component geholt
+
+        if (rewardElement != null)
         {
-             string playername = rank.GetUsername();
-             int reward = rank.GetRewards();
-            
-            rewardElement.Setup(playername, reward);
+            string playername = rank.GetUsername();
+            int reward = rank.GetRewards();
+
+            rewardElement.Setup(playername, reward); // Setup wird auf rewardElement aufgerufen, nicht auf rewardObject
         }
         else
-         {
-             Destroy(achievementObject);
-         }
+        {
+            Destroy(achievementObject);
+        }
     }
     private void OnEnable()
     {

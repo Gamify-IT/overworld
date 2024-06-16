@@ -593,7 +593,9 @@ public class GameManager : MonoBehaviour
 
         DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
         AchievementStatistic[] achivements = GetDummyAchievements();
+        PlayerstatisticDTO[] rewards = GetDummyDataRewards();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
+        DataManager.Instance.ProcessAllPlayerStatistics(rewards);
         ResetKeybindings();
     }
 
@@ -612,9 +614,27 @@ public class GameManager : MonoBehaviour
         return statistcs;
     }
 
-    
-    
+    public PlayerstatisticDTO[] GetDummyDataRewards()
+    {
+        PlayerstatisticDTO[] allStatistics = new PlayerstatisticDTO[2];
+
+        AreaLocationDTO currentArea = new AreaLocationDTO(1, 1);
+        AreaLocationDTO[] unlockedAreas = { currentArea };
+        AreaLocationDTO[] unlockedDungeons = { currentArea };
+
+        TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
+        TeleporterDTO[] unlockedTeleporters = { teleporter };
+
+        PlayerstatisticDTO player1 = new PlayerstatisticDTO("1", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id1", "Suyane", 200, 250);
+        PlayerstatisticDTO player2 = new PlayerstatisticDTO("2", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id2", "Duygu", 100, 50);
+
+        allStatistics[0] = player1;
+        allStatistics[1] = player2;
+
+        return allStatistics;
+    }
 
 
-   
+
+
 }
