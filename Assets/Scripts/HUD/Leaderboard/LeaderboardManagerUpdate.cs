@@ -29,7 +29,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     
     private bool filterActive;
 
-    public Button openButton;
     private Button closeButton;
     public TMP_Text visibilityButton;
     public Button distributionButton;
@@ -54,14 +53,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     {
       
 
-        if (openButton != null)
-        {
-            openButton.onClick.AddListener(OpenLeaderboardScene);
-        }
-        else
-        {
-            Debug.LogError("Open Button is not assigned in the Inspector.");
-        }
+      
 
         if (distributionButton != null) 
         {

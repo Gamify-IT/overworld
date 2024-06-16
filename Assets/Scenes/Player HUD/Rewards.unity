@@ -4112,7 +4112,6 @@ MonoBehaviour:
   LeagueDropdown: {fileID: 39812055}
   WorldDropdown: {fileID: 851026552}
   distributionPanel: {fileID: 2068971160}
-  openButton: {fileID: 0}
   visibilityButton: {fileID: 1140657392}
   distributionButton: {fileID: 462397261}
 --- !u!1 &1140657390
@@ -7430,9 +7429,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: CloseSubMenu
+      - m_Target: {fileID: 1108062198}
+        m_TargetAssemblyTypeName: LeaderboardManagerUpdate, Assembly-CSharp
+        m_MethodName: Resume
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

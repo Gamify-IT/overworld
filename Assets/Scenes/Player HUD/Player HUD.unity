@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 50301453}
   - component: {fileID: 50301457}
   - component: {fileID: 50301458}
+  - component: {fileID: 50301459}
   m_Layer: 5
   m_Name: HUD Canvas
   m_TagString: Untagged
@@ -251,6 +252,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d14d029d79df8354dbb13b55d91d4aea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &50301459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50301452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 227cd1fe23092ce45b87347923e4460c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &118720418
@@ -372,7 +385,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 142743607}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 50301459}
+        m_TargetAssemblyTypeName: OpenLeaderboard, Assembly-CSharp
+        m_MethodName: Pause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &142743607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1690,7 +1715,6 @@ GameObject:
   - component: {fileID: 1652307033}
   - component: {fileID: 1652307032}
   - component: {fileID: 1652307034}
-  - component: {fileID: 1652307035}
   m_Layer: 5
   m_Name: Level
   m_TagString: Untagged
@@ -1773,28 +1797,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 1319406727}
   unlockedAreaText: {fileID: 1648503685}
---- !u!114 &1652307035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1652307030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e754900fbe199f40ab2782ac1088481, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  content: {fileID: 0}
-  rewardObject: {fileID: 0}
-  leaderboardPrefab: {fileID: 0}
-  leagueDropdown: {fileID: 0}
-  worldDropdown: {fileID: 0}
-  minigameDropdown: {fileID: 0}
-  distributionPanel: {fileID: 0}
-  openButton: {fileID: 142743606}
-  visibilityButton: {fileID: 0}
-  distributionButton: {fileID: 0}
 --- !u!1 &2054061605
 GameObject:
   m_ObjectHideFlags: 0
