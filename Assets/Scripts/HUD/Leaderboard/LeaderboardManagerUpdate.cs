@@ -340,15 +340,16 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private void DisplayRewards(List<PlayerStatisticData> rewardsToDisplay)
     {
         // Ordnung des Leaderboards
-        //var sortedRewards = rewardsToDisplay.OrderByDescending(rank => rank.GetRewards()).ToList();
+        var sortedRewards = rewardsToDisplay.OrderByDescending(rank => rank.GetRewards()).ToList();
 
-        foreach (PlayerStatisticData rank in rewardsToDisplay)
+        for (int i = 0; i < sortedRewards.Count; i++)
         {
-            DisplayRewards(rank);
+            // Pass the rank and its place in the sorted list
+            DisplayRewards(sortedRewards[i], i + 1);
         }
     }
 
-    private void DisplayRewards(PlayerStatisticData rank)
+    private void DisplayRewards(PlayerStatisticData rank, int place)
     {
         GameObject achievementObject = Instantiate(rewardObject, content.transform, false);
 
@@ -359,7 +360,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             string playername = rank.GetUsername();
             int reward = rank.GetRewards();
 
-            rewardElement.Setup(playername, reward); // Setup wird auf rewardElement aufgerufen, nicht auf rewardObject
+            rewardElement.Setup(playername, reward, place); // Setup wird auf rewardElement aufgerufen, nicht auf rewardObject
         }
         else
         {
