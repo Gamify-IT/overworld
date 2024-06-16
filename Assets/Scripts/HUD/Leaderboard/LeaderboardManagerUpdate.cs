@@ -33,7 +33,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     public TMP_Text visibilityButton;
     public Button distributionButton;
 
-    private bool isLeaderboardOpen = false;
+    private bool isLeaderboardOpen = true;
 
     public void SetLeague()
     {
@@ -132,10 +132,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         WorldDropdown.AddOptions(worlds);
 
     }
-
-
-
-
 
     private void ToggleButtonText()
     {
@@ -400,17 +396,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
-    public void OpenLeaderboardScene()
-    {
-
-        if (!isLeaderboardOpen)
-        {
-
-            SceneManager.LoadScene("Rewards", LoadSceneMode.Additive);
-            isLeaderboardOpen = true;
-            Time.timeScale = 0f; // Zeit anhalten
-        }
-    }
+   
 
     public void CloseLeaderboardScene()
     {
@@ -459,5 +445,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
+   
 
 }
