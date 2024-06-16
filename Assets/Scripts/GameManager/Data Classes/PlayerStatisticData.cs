@@ -68,7 +68,7 @@ public class PlayerStatisticData
     PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username,  knowledge, rewards);
         return data;
     }
-    
+
 
     public string calculateLeagueOfPlayer(int rewards)
     {

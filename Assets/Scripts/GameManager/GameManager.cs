@@ -628,6 +628,7 @@ public class GameManager : MonoBehaviour
         PlayerstatisticDTO player1 = new PlayerstatisticDTO("1", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id1", "Suyane", 200, 250);
         PlayerstatisticDTO player2 = new PlayerstatisticDTO("2", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id2", "Duygu", 100, 50);
 
+
         allStatistics[0] = player1;
         allStatistics[1] = player2;
 

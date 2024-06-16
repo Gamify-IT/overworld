@@ -65,6 +65,7 @@ public class AchievementManager : MonoBehaviour
         achievements = DataManager.Instance.GetAchievements();
         Setup();
         UpdateUI();
+        
     }
 
     /// <summary>
