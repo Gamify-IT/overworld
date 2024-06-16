@@ -7,10 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
-/// <summary>
-/// überall DTO zu DATA ändern (check)
-/// anstatt highscores -> rewards (check)
-/// </summary>
+
 
 public class LeaderboardManagerUpdate : MonoBehaviour
 {
