@@ -14,7 +14,7 @@ public class RewardElement : MonoBehaviour
     public void Setup(string playername,  int reward)
     {
         this.playername.text = playername.Replace("_", " ");
-        this.reward.text = reward + "/" ; //int kann ansonsten nicht als string gespeichert werden
+        this.reward.text = reward + "" ; //int kann ansonsten nicht als string gespeichert werden
        // this.place.text = place + "/" ;
     }
 }
