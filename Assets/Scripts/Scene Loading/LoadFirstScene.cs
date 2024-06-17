@@ -13,6 +13,7 @@ public class LoadFirstScene : MonoBehaviour
     private void Start()
     {
         Gamemode gamemode = Gamemode.PLAY;
+        StartGame();
 
         switch(gamemode)
         {
