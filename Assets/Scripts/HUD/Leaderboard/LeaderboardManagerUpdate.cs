@@ -180,7 +180,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private void UpdateUI()
     {
-        
+        ResetUI();
         List<PlayerStatisticData> rewardsToDisplay = FilterRewards();
         DisplayRewards(rewardsToDisplay);
     }
