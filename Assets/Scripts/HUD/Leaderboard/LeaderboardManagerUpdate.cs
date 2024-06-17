@@ -15,7 +15,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     [SerializeField] private GameObject rewardObject;
     [SerializeField] public TMP_Dropdown LeagueDropdown;
     [SerializeField] public TMP_Dropdown WorldDropdown;
-    //[SerializeField] public TMP_Dropdown MinigameDropdown;
+    [SerializeField] public TMP_Dropdown MinigameDropdown;
     [SerializeField] private GameObject distributionPanel;
     [SerializeField] private WorldData worldNames;
     [SerializeField] private LeagueDefiner leagues;
@@ -164,12 +164,12 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
   
 
-   // public void SetMinigame()
-    //{
-      //  int option = MinigameDropdown.value;
-      //  minigame = MinigameDropdown.options[option].text;
-       // UpdateUI();
-    //}
+  public void SetMinigame()
+    {
+        int option = MinigameDropdown.value;
+        minigame = MinigameDropdown.options[option].text;
+        UpdateUI();
+    }
 
     public void ResetFilter()
     {
@@ -236,32 +236,32 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     }
 
 
-  //  private List<string> GetMinigames()
-    //{
-      //  List<string> minigames = new()
-       // {
-         //   "Filter by..."
-        //};
-        //foreach (PlayerStatisticData rank in ranking)
-       // {
-         //   foreach (string minigame in rank.GetWorld())
-           // {
-            //    if (!minigames.Contains(minigame))
-              //  {
-                //    minigames.Add(minigame);
-                //}
-            //}
-        //}
+   /*private List<string> GetMinigames()
+    {
+       List<string> minigames = new()
+       {
+           "Filter by..."
+        };
+        foreach (PlayerStatisticData rank in ranking)
+       {
+            foreach (string minigame in rank.GetWorld())
+            {
+               if (!minigames.Contains(minigame))
+               {
+                   minigames.Add(minigame);
+                }
+            }
+        }
 
-//        return minigames;
-  //  }
+       return minigames;
+   }*/
 
     private List<PlayerStatisticData> FilterReward()
     {
         List<PlayerStatisticData> rewardsToDisplay = new List<PlayerStatisticData>();
         foreach (PlayerStatisticData ranking in ranking)
         {
-            if (CheckLeague(ranking)) // && CheckWorld(ranking) ) //&& CheckMinigame(ranking))
+            if (CheckLeague(ranking)  && CheckWorld(ranking))// && CheckMinigame(ranking))
             {
                 rewardsToDisplay.Add(ranking);
             }
@@ -276,7 +276,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         List<PlayerStatisticData> rewardsToDisplay = new List<PlayerStatisticData>();
         foreach (PlayerStatisticData rank in ranking)
         {
-            if (CheckLeague(rank)) // && CheckWorld(rank) && CheckMinigame(rank))
+            if (CheckLeague(rank)   && CheckWorld(rank)) // && CheckMinigame(rank))
             {
                 rewardsToDisplay.Add(rank);
                 Debug.Log($"Player added to display: {rank.GetLeague()}");
@@ -344,7 +344,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         for (int i = 0; i < sortedRewards.Count; i++)
         {
-            // Pass the rank and its place in the sorted list
+            // Platzierung
             DisplayRewards(sortedRewards[i], i + 1);
         }
     }
