@@ -12,10 +12,10 @@ public class LoadFirstScene : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        Gamemode gamemode = Gamemode.PLAY;
+        //Gamemode gamemode = Gamemode.PLAY;
         StartGame();
 
-        switch(gamemode)
+        /*switch(gamemode)
         {
             case Gamemode.PLAY:
                 Debug.Log("Starting in Play Mode");
@@ -34,7 +34,7 @@ public class LoadFirstScene : MonoBehaviour
                 GameSettings.SetGamemode(Gamemode.INSPECTOR);
                 StartGenerator();
                 break;
-        }
+        }*/
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public class LoadFirstScene : MonoBehaviour
     /// </summary>
     private async UniTask StartGame()
     {
-        await GameSettings.FetchValues();
+        //await GameSettings.FetchValues();
 
         var playerPosition = new Vector2(21.5f, 2.5f);
         var worldIndex = 1;
