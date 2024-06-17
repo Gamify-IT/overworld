@@ -616,7 +616,7 @@ public class GameManager : MonoBehaviour
 
     public PlayerstatisticDTO[] GetDummyDataRewards()
     {
-        PlayerstatisticDTO[] allStatistics = new PlayerstatisticDTO[2];
+        PlayerstatisticDTO[] allStatistics = new PlayerstatisticDTO[3];
 
         AreaLocationDTO currentArea = new AreaLocationDTO(1, 1);
         AreaLocationDTO[] unlockedAreas = { currentArea };
@@ -632,7 +632,8 @@ public class GameManager : MonoBehaviour
 
         allStatistics[0] = player1;
         allStatistics[1] = player2;
-        
+        allStatistics[2] = player3;
+
 
         return allStatistics;
     }
