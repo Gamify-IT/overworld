@@ -23,7 +23,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private string world;
     private string minigame;
     private List<PlayerStatisticData> ranking;
-    
+    private PlayerStatisticData ownData;
     private bool filterActive;
 
     private Button closeButton;
@@ -93,6 +93,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
 
 
+        ownData = DataManager.Instance.GetOwnStatisticData();
         ranking = DataManager.Instance.GetAllPlayerStatistics();
 
 

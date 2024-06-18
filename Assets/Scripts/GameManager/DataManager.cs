@@ -21,7 +21,8 @@ public class DataManager : MonoBehaviour
     //Data fields
     private AreaDataManager areaDataManager;
     private WorldData[] worldData;
-    private PlayerstatisticDTO playerData;
+    private PlayerstatisticDTO playerData;    
+    private PlayerStatisticData ownPlayerData;
     private List<AchievementData> achievementData;
     private List<PlayerStatisticData> allPlayerStatisticsData;
     private Dictionary<Binding, KeyCode> keybindings;
@@ -321,6 +322,12 @@ public class DataManager : MonoBehaviour
             PlayerStatisticData playerStatistic= PlayerStatisticData.ConvertFromPlayerStatisticDTO(statistic);
             allPlayerStatisticsData.Add(playerStatistic);
         }
+    }
+
+    public PlayerStatisticData GetOwnStatisticData()
+    {
+        ownPlayerData = PlayerStatisticData.ConvertFromPlayerStatisticDTO(playerData);
+        return ownPlayerData;
     }
 
     /// <summary>
