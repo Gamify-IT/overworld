@@ -12,10 +12,9 @@ public class LoadFirstScene : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        //Gamemode gamemode = Gamemode.PLAY;
-        StartGame();
+        Gamemode gamemode = Gamemode.PLAY;
 
-        /*switch(gamemode)
+        switch(gamemode)
         {
             case Gamemode.PLAY:
                 Debug.Log("Starting in Play Mode");
@@ -34,7 +33,7 @@ public class LoadFirstScene : MonoBehaviour
                 GameSettings.SetGamemode(Gamemode.INSPECTOR);
                 StartGenerator();
                 break;
-        }*/
+        }
     }
 
     /// <summary>
