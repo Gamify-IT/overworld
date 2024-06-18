@@ -39,11 +39,11 @@ public class AreaGeneratorManager : MonoBehaviour
 
     private async void Setup()
     {
-//#if UNITY_EDITOR
-        //courseID = "";
-//#else
+#if UNITY_EDITOR
+        courseID = "";
+#else
         courseID = Application.absoluteURL.Split("/")[^1];
-//#endif
+#endif
         SetupUI();
         demoMode = false;
 
@@ -165,8 +165,8 @@ public class AreaGeneratorManager : MonoBehaviour
     {
 #if UNITY_EDITOR
         //use local files in editor
-        //Debug.Log("Load from local files");
-        //return new Optional<AreaData>(LoadLocalData());
+        Debug.Log("Load from local files");
+        return new Optional<AreaData>(LoadLocalData());
 #endif
 
         //load data from backend
