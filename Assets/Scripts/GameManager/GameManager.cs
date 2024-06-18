@@ -616,7 +616,8 @@ public class GameManager : MonoBehaviour
 
     public PlayerstatisticDTO[] GetDummyDataRewards()
     {
-        PlayerstatisticDTO[] allStatistics = new PlayerstatisticDTO[3];
+        int playerCount = 30;
+        PlayerstatisticDTO[] allStatistics = new PlayerstatisticDTO[playerCount];
 
         AreaLocationDTO currentArea = new AreaLocationDTO(1, 1);
         AreaLocationDTO[] unlockedAreas = { currentArea };
@@ -625,15 +626,19 @@ public class GameManager : MonoBehaviour
         TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
         TeleporterDTO[] unlockedTeleporters = { teleporter };
 
-        PlayerstatisticDTO player1 = new PlayerstatisticDTO("1", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id1", "Suyane", 200, 250);
-        PlayerstatisticDTO player2 = new PlayerstatisticDTO("2", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id2", "Duygu", 100, 50);
-        PlayerstatisticDTO player3 = new PlayerstatisticDTO("3", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id3", "random 3rd guy", 100, 150);
+        System.Random random = new System.Random();
 
+        for (int i = 0; i < playerCount; i++)
+        {
+            string id = (i + 1).ToString();
+            string userId = "Id" + id;
+            string username = "Player" + id;
+            int knowledge = random.Next(0, 501); 
+            int rewards = random.Next(0, 501); 
 
-        allStatistics[0] = player1;
-        allStatistics[1] = player2;
-        allStatistics[2] = player3;
-
+            PlayerstatisticDTO player = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards);
+            allStatistics[i] = player;
+        }
 
         return allStatistics;
     }
