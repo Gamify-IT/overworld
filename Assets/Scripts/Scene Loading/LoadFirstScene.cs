@@ -71,7 +71,7 @@ public class LoadFirstScene : MonoBehaviour
     /// </summary>
     private async UniTask StartGame()
     {
-        //await GameSettings.FetchValues();
+        await GameSettings.FetchValues();
 
         var playerPosition = new Vector2(21.5f, 2.5f);
         var worldIndex = 1;
