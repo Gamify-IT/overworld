@@ -256,36 +256,9 @@ public class LeaderboardManagerUpdate : MonoBehaviour
        return minigames;
    }*/
 
-    private List<PlayerStatisticData> FilterReward()
-    {
-        List<PlayerStatisticData> rewardsToDisplay = new List<PlayerStatisticData>();
-        foreach (PlayerStatisticData ranking in ranking)
-        {
-            if (CheckLeague(ranking)  && CheckWorld(ranking))// && CheckMinigame(ranking))
-            {
-                rewardsToDisplay.Add(ranking);
-            }
-        }
-        return rewardsToDisplay;
+    
 
-
-    }
-
-    private List<PlayerStatisticData> FilterRewardso()
-    {
-        List<PlayerStatisticData> rewardsToDisplay = new List<PlayerStatisticData>();
-        foreach (PlayerStatisticData rank in ranking)
-        {
-            if (CheckLeague(rank)   && CheckWorld(rank)) // && CheckMinigame(rank))
-            {
-                rewardsToDisplay.Add(rank);
-                Debug.Log($"Player added to display: {rank.GetLeague()}");
-
-            }
-        }
-
-        return rewardsToDisplay;
-    }
+   
 
     private List<PlayerStatisticData> FilterRewards()
     {
@@ -293,7 +266,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         foreach (PlayerStatisticData rank in ranking)
         { 
-            if (CheckLeague(rank))
+            if (CheckLeague(rank) && CheckWorld(rank))
             {
                 rewardsToDisplay.Add(rank);
                 Debug.Log($"Player added to display: {rank.GetUsername()}, League: {rank.GetLeague()}"); // wird angezeigt
