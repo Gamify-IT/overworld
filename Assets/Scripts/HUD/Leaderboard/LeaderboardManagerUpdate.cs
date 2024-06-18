@@ -333,7 +333,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             string playername = rank.GetUsername();
             int reward = rank.GetRewards();
 
-            rewardElement.Setup(playername, reward, place); // Setup wird auf rewardElement aufgerufen, nicht auf rewardObject
+            rewardElement.Setup(playername, reward, place, place == 1);
         }
         else
         {
