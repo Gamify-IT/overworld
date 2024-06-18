@@ -12,15 +12,16 @@ public class PlayerStatisticData
     private readonly AreaLocationDTO currentArea;
     private readonly string userId;
     private readonly string username;
-    private readonly long knowledge;
+    private readonly int knowledge;
     private readonly int rewards;
+    private bool showRewards;
 
-    
+
 
     private string leagueOfPlayer;
    
 
-    public PlayerStatisticData(String id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  long knowledge, int rewards)
+    public PlayerStatisticData(String id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  int knowledge, int rewards, bool showRewards)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -33,7 +34,7 @@ public class PlayerStatisticData
         this.knowledge = knowledge;
         this.rewards = rewards;
         this.leagueOfPlayer = calculateLeagueOfPlayer(rewards);
-        
+        this.showRewards = showRewards;        
     }
 
     public static PlayerStatisticData ConvertFromPlayerStatisticDTO(PlayerstatisticDTO statistic)
@@ -41,9 +42,11 @@ public class PlayerStatisticData
         AreaLocationDTO currentArea = statistic.currentArea;
         string userId = statistic.userId;
         string username = statistic.username;
-        long knowledge = statistic.knowledge;
+        int knowledge = statistic.knowledge;
         int rewards = statistic.rewards;
         string id = statistic.id;
+        bool showRewards = statistic.showRewards;
+        
 
         AreaLocationDTO[] unlockedAreas = new AreaLocationDTO[statistic.unlockedAreas.Length];
         AreaLocationDTO[] completedDungeons = new AreaLocationDTO[statistic.unlockedDungeons.Length];
@@ -65,7 +68,7 @@ public class PlayerStatisticData
         }
 
      
-    PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username,  knowledge, rewards);
+    PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username,  knowledge, rewards, showRewards);
         return data;
     }
 
@@ -94,9 +97,34 @@ public class PlayerStatisticData
     #region Getter
 
 
-    public int GetRewards()
+    public string GetId()
     {
-        return rewards;
+        return id;
+    }
+
+    public AreaLocationDTO[] GetUnlockedAreas()
+    {
+        return unlockedAreas;
+    }
+
+    public AreaLocationDTO[] GetUnlockedDungeons()
+    {
+        return unlockedDungeons;
+    }
+
+    public TeleporterDTO[] GetUnlockedTeleporters()
+    {
+        return unlockedTeleporters;
+    }
+
+    public AreaLocationDTO GetCurrentArea()
+    {
+        return currentArea;
+    }
+
+    public string GetUserId()
+    {
+        return userId;
     }
 
     public string GetUsername()
@@ -104,13 +132,24 @@ public class PlayerStatisticData
         return username;
     }
 
+    public int GetKnowledge()
+    {
+        return knowledge;
+    }
 
-    // iteriert durch jedes einzelne Objekt in der DataListe und führt für jedes Objekt da drin die GetLeagues() auf (sehr unnötig, Lösung wird gesucht)
+    public int GetRewards()
+    {
+        return rewards;
+    }
+
+    public bool GetShowRewards()
+    {
+        return showRewards;
+    }
 
     public string GetLeague()
     {
-
-        return this.leagueOfPlayer;
+        return leagueOfPlayer;
     }
 
     public string GetWorld()
@@ -132,23 +171,49 @@ public class PlayerStatisticData
         }
     }
 
-
-
-
-   // public List<string> GetMinigames()
-    //{
-      //  List<string> minigames = new List<string>();
-
-       //minigames.Add("Bugfinder");
-       //minigames.Add("Chickenshock");
-       //minigames.Add("Crosswordpuzzle");
-       //minigames.Add("Finitequiz");
-       //minigames.Add("Memory");
-       //minigames.Add("Towercrush");
-
-
-       // return minigames;
-   // }
     #endregion
+
+
+
+    // public List<string> GetMinigames()
+    //{
+    //  List<string> minigames = new List<string>();
+
+    //minigames.Add("Bugfinder");
+    //minigames.Add("Chickenshock");
+    //minigames.Add("Crosswordpuzzle");
+    //minigames.Add("Finitequiz");
+    //minigames.Add("Memory");
+    //minigames.Add("Towercrush");
+
+
+    // return minigames;
+    // }
+
+    public void updateVisibility(bool update)
+    {
+        showRewards = update;
+    }
+
+    public static PlayerstatisticDTO ConvertToPlayerstatisticDTO(PlayerStatisticData playerStatisticData)
+    {
+        string id = playerStatisticData.GetId();
+        string userId = playerStatisticData.GetUserId();
+        string username = playerStatisticData.GetUsername();
+        int knowledge = playerStatisticData.GetKnowledge();
+        int rewards = playerStatisticData.GetRewards();
+        bool showRewards = playerStatisticData.GetShowRewards();
+        AreaLocationDTO currentArea = playerStatisticData.GetCurrentArea();
+        AreaLocationDTO[] unlockedAreas = playerStatisticData.GetUnlockedAreas();
+        AreaLocationDTO[] unlockedDungeons = playerStatisticData.GetUnlockedDungeons();
+        TeleporterDTO[] unlockedTeleporters = playerStatisticData.GetUnlockedTeleporters();
+
+
+       PlayerstatisticDTO playerStatistic = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards);
+
+
+        return playerStatistic;
+    }
+
 
 }

@@ -201,7 +201,6 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());
 
 
-
         }
 
         Debug.Log("Everything set up");
@@ -403,6 +402,39 @@ public class GameManager : MonoBehaviour
         return savingSuccessful;
     }
 
+    public async UniTask<bool> SaveStatisticData()
+    {
+        List<PlayerStatisticData> playerStatistics = DataManager.Instance.GetAllPlayerStatistics();
+        string basePath = overworldBackendPath + "/playerstatistics/";
+        bool savingSuccessful = true;
+
+
+        foreach (PlayerStatisticData playerStatisticData in playerStatistics)
+        {
+
+            PlayerstatisticDTO playerStatisticDTO = PlayerStatisticData.ConvertToPlayerstatisticDTO(playerStatisticData);
+
+            string path = basePath + playerStatisticData.GetId();
+            string json = JsonUtility.ToJson(playerStatisticDTO, true);
+            bool successful = await RestRequest.PutRequest(path, json);
+            if (successful)
+            {
+                Debug.Log("Updated achievement progress for " + playerStatisticDTO.username + " in the overworld backend");
+            }
+            else
+            {
+                savingSuccessful = false;
+                Debug.Log("Could not update the achievement progress for " + playerStatisticDTO.username + " in the overworld backend");
+            }
+
+
+
+        }
+
+        return savingSuccessful;
+
+    }
+
     /// <summary>
     ///     This functions returns an information text about the barrier.
     /// </summary>
@@ -594,6 +626,7 @@ public class GameManager : MonoBehaviour
         DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
         AchievementStatistic[] achivements = GetDummyAchievements();
         PlayerstatisticDTO[] rewards = GetDummyDataRewards();
+        PlayerstatisticDTO ownPlayer = GetOwnDummyData();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
         DataManager.Instance.ProcessAllPlayerStatistics(rewards);
         ResetKeybindings();
@@ -617,7 +650,7 @@ public class GameManager : MonoBehaviour
     public PlayerstatisticDTO[] GetDummyDataRewards()
     {
         int playerCount = 30;
-        PlayerstatisticDTO[] allStatistics = new PlayerstatisticDTO[playerCount];
+        PlayerstatisticDTO[] allStatistics = new PlayerstatisticDTO[31];
 
         System.Random random = new System.Random();
 
@@ -628,6 +661,7 @@ public class GameManager : MonoBehaviour
             string username = "Player" + id;
             int knowledge = random.Next(0, 501);
             int rewards = random.Next(0, 501);
+            bool showRewards = true;
 
             int worldIndex = random.Next(1, 5); 
             int dungeonIndex = random.Next(1, 5); 
@@ -639,11 +673,37 @@ public class GameManager : MonoBehaviour
             TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
             TeleporterDTO[] unlockedTeleporters = { teleporter };
 
-            PlayerstatisticDTO player = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards);
+            PlayerstatisticDTO player = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards);
             allStatistics[i] = player;
         }
 
-        return allStatistics;
+
+        int worldIndex1 = 2;
+        int dungeonIndex1 = 1;
+        AreaLocationDTO currentArea1 = new AreaLocationDTO(worldIndex1, dungeonIndex1);
+        AreaLocationDTO[] unlockedAreas1 = { currentArea1 };
+        AreaLocationDTO[] unlockedDungeons1 = { currentArea1 };
+
+        TeleporterDTO teleporter1 = new TeleporterDTO("1", currentArea1, 1);
+        TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
+        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id31", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id31", "Akiiii", 200, 170, false);
+        allStatistics[30] = player31;
+        return allStatistics; 
+    }
+
+    public PlayerstatisticDTO GetOwnDummyData()
+    {
+
+        int worldIndex = 2;
+        int dungeonIndex = 1;
+        AreaLocationDTO currentArea = new AreaLocationDTO(worldIndex, dungeonIndex);
+        AreaLocationDTO[] unlockedAreas = { currentArea };
+        AreaLocationDTO[] unlockedDungeons = { currentArea };
+
+        TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
+        TeleporterDTO[] unlockedTeleporters = { teleporter };
+        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Player31", 200, 170,true);
+        return ownPlayerData;
     }
 
 

@@ -622,26 +622,6 @@ public class DataManager : MonoBehaviour
         areaDataManager.GetDummyData();
     }
 
-    public List<PlayerStatisticData> GetDummyDataRewards()
-    {
-        List<PlayerStatisticData> allStatistics = new List<PlayerStatisticData>();
-
-        AreaLocationDTO currentArea = new AreaLocationDTO(1, 1);
-        AreaLocationDTO[] unlockedAreas = { currentArea };
-        AreaLocationDTO[] unlockedDungeons = { currentArea };
-
-        TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
-        TeleporterDTO[] unlockedTeleporters = { teleporter };
-
-        PlayerStatisticData player1 = new PlayerStatisticData("1", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id1", "Suyane", 200, 250);
-        PlayerStatisticData player2 = new PlayerStatisticData("2", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id2", "Duygu", 100, 50);
-
-        allStatistics.Add(player1);
-        allStatistics.Add(player2);
-
-        return allStatistics;
-    }
-
     /// <summary>
     ///     This function returns the area data for the requested area
     /// </summary>

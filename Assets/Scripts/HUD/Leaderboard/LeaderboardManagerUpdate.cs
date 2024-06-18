@@ -92,8 +92,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Debug.Log("WorldDropdown is assigned: " + WorldDropdown.gameObject.name);
         }
 
-
-        ownData = DataManager.Instance.GetOwnStatisticData();
         ranking = DataManager.Instance.GetAllPlayerStatistics();
 
 
@@ -136,10 +134,13 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         if (visibilityButton.text == "hide me")
         {
             visibilityButton.text = "show me";
+            ownData.updateVisibility(true);
         }
         else
         {
             visibilityButton.text = "hide me";
+            ownData.updateVisibility(false);
+
         }
         SaveVisibilityState();
 
