@@ -276,7 +276,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         foreach (PlayerStatisticData rank in ranking)
         {
-            if (rank.GetShowRewards() && CheckLeague(rank) && CheckWorld(rank))
+            if (CheckLeague(rank) && CheckWorld(rank))
             {
                 rewardsToDisplay.Add(rank);
                 Debug.Log($"Player added to display: {rank.GetUsername()}, League: {rank.GetLeague()}");
@@ -311,15 +311,15 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     //private bool CheckMinigame(PlayerStatisticData ranking)
     //{
-      //  bool valid = false;
-        //if (minigame.Equals("Filter by ...") || ranking.GetMinigames().Contains(minigame))
-        //{
-          //  valid = true;
-        //}
-
-        //return valid;
+    //  bool valid = false;
+    //if (minigame.Equals("Filter by ...") || ranking.GetMinigames().Contains(minigame))
+    //{
+    //  valid = true;
     //}
-    
+
+    //return valid;
+    //}
+
     private void DisplayRewards(List<PlayerStatisticData> rewardsToDisplay)
     {
         // Ordnung des Leaderboards
@@ -336,11 +336,11 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     {
         GameObject achievementObject = Instantiate(rewardObject, content.transform, false);
 
-        RewardElement rewardElement = achievementObject.GetComponent<RewardElement>(); // Hier wird das korrekte Component geholt
+        RewardElement rewardElement = achievementObject.GetComponent<RewardElement>(); 
 
         if (rewardElement != null)
         {
-            string playername = rank.GetUsername();
+            string playername = rank.GetShowRewards() ? rank.GetUsername() : "Traveller";
             int reward = rank.GetRewards();
 
             rewardElement.Setup(playername, reward, place, place == 1);
@@ -350,6 +350,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Destroy(achievementObject);
         }
     }
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;

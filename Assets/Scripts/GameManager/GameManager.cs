@@ -652,7 +652,7 @@ public class GameManager : MonoBehaviour
     public PlayerstatisticDTO[] GetDummyDataRewards()
     {
         int playerCount = 30;
-        PlayerstatisticDTO[] allStatistics = new PlayerstatisticDTO[31];
+        PlayerstatisticDTO[] allStatistics = new PlayerstatisticDTO[32];
 
         System.Random random = new System.Random();
 
@@ -688,8 +688,10 @@ public class GameManager : MonoBehaviour
 
         TeleporterDTO teleporter1 = new TeleporterDTO("1", currentArea1, 1);
         TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
-        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id31", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id31", "Akiiii", 200, 170, true);
+        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id31", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id31", "Akiiii", 200, 170, false);
         allStatistics[30] = player31;
+        PlayerstatisticDTO ownPlayer = GetOwnDummyData();
+        allStatistics[31] = ownPlayer;
         return allStatistics; 
     }
 
