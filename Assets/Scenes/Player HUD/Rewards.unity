@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4110,9 +4110,11 @@ MonoBehaviour:
   rewardObject: {fileID: 5708516710113676659, guid: 9e3b81a0b10dfc641a71017f0c55ac17, type: 3}
   LeagueDropdown: {fileID: 39812055}
   WorldDropdown: {fileID: 851026552}
+  MinigameDropdown: {fileID: 0}
   distributionPanel: {fileID: 2068971160}
   visibilityButton: {fileID: 1140657392}
   distributionButton: {fileID: 462397261}
+  resetButton: {fileID: 1363197642}
 --- !u!1 &1140657390
 GameObject:
   m_ObjectHideFlags: 0
@@ -6955,7 +6957,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 400089789}
   m_HandleRect: {fileID: 400089788}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

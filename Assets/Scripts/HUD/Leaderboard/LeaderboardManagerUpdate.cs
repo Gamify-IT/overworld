@@ -30,6 +30,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private Button closeButton;
     public TMP_Text visibilityButton;
     public Button distributionButton;
+    public Button resetButton;
+
 
     private bool isLeaderboardOpen = true;
 
@@ -92,6 +94,14 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             Debug.Log("WorldDropdown is assigned: " + WorldDropdown.gameObject.name);
         }
+        if (resetButton != null)
+        {
+            resetButton.onClick.AddListener(ResetFilter);
+        }
+        else
+        {
+            Debug.LogError("Reset Button is not assigned in the Inspector.");
+        }
 
         ranking = DataManager.Instance.GetAllPlayerStatistics();
         ownData = DataManager.Instance.GetOwnStatisticData();
@@ -118,7 +128,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         SetupDropdowns();
         league = "Filter by...";
         world = "Filter by...";
-        
+     // minigame = "Filter by...";
         filterActive = false;
     }
 
@@ -184,10 +194,17 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     public void ResetFilter()
     {
+        league = "Filter by...";
+        world = "Filter by...";
+       // minigame = "Filter by..."; 
+
         filterActive = false;
+
+        SetupDropdowns(); 
 
         UpdateUI();
     }
+
 
     private void UpdateUI()
     {
