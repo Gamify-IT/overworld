@@ -403,6 +403,31 @@ public class GameManager : MonoBehaviour
         return savingSuccessful;
     }
 
+    //private void StartWeeklySaveRoutine()
+    //{
+        // StartCoroutine(WeeklySaveRoutine());
+    //}
+
+    //private IEnumerator WeeklySaveRoutine()
+    //{
+        // yield return new WaitUntil(IsSundayBeforeMidnight);
+
+        // InvokeRepeating(nameof(SavePlayerStatistics), 0f, 7 * 24 * 60 * 60); 
+    //}
+
+    //private bool IsSundayBeforeMidnight()
+    //{
+        // DateTime nextSunday = DateTime.Today.AddDays((int)DayOfWeek.Sunday - (int)DateTime.Today.DayOfWeek);
+        // DateTime nextSunday2359 = nextSunday.Date.AddHours(23).AddMinutes(59);
+
+        // return DateTime.Now < nextSunday2359;
+    //}
+
+
+    /// <summary>
+    ///  Methode um die Liste aller Playerstatistiken zurück ins Backend zu schicken
+    /// </summary>
+    /// <returns></returns>
     public async UniTask<bool> SaveStatisticData()
     {
         List<PlayerStatisticData> playerStatistics = DataManager.Instance.GetAllPlayerStatistics();
@@ -544,6 +569,8 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             SetupGameManager();
+           // StartWeeklySaveRoutine();
+
         }
         else
         {
