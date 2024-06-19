@@ -140,11 +140,15 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             visibilityButton.text = "show me";
             ownData.updateVisibility(true);
+            Debug.Log($"Player showRewards value: {ownData.GetShowRewards()}");
+
         }
         else
         {
             visibilityButton.text = "hide me";
             ownData.updateVisibility(false);
+            Debug.Log($"Player showRewards value: {ownData.GetShowRewards()}");
+
 
         }
         SaveVisibilityState();
@@ -243,40 +247,39 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     }
 
 
-   /*private List<string> GetMinigames()
-    {
-       List<string> minigames = new()
-       {
-           "Filter by..."
-        };
-        foreach (PlayerStatisticData rank in ranking)
-       {
-            foreach (string minigame in rank.GetWorld())
-            {
-               if (!minigames.Contains(minigame))
-               {
-                   minigames.Add(minigame);
-                }
-            }
-        }
+    /*private List<string> GetMinigames()
+     {
+        List<string> minigames = new()
+        {
+            "Filter by..."
+         };
+         foreach (PlayerStatisticData rank in ranking)
+        {
+             foreach (string minigame in rank.GetWorld())
+             {
+                if (!minigames.Contains(minigame))
+                {
+                    minigames.Add(minigame);
+                 }
+             }
+         }
 
-       return minigames;
-   }*/
+        return minigames;
+    }*/
 
-    
 
-   
+
 
     private List<PlayerStatisticData> FilterRewards()
     {
         List<PlayerStatisticData> rewardsToDisplay = new List<PlayerStatisticData>();
 
         foreach (PlayerStatisticData rank in ranking)
-        { 
-            if (CheckLeague(rank) && CheckWorld(rank))
+        {
+            if (rank.GetShowRewards() && CheckLeague(rank) && CheckWorld(rank))
             {
                 rewardsToDisplay.Add(rank);
-                Debug.Log($"Player added to display: {rank.GetUsername()}, League: {rank.GetLeague()}"); // wird angezeigt
+                Debug.Log($"Player added to display: {rank.GetUsername()}, League: {rank.GetLeague()}");
             }
         }
 

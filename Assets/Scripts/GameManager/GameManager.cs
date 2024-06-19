@@ -688,7 +688,7 @@ public class GameManager : MonoBehaviour
 
         TeleporterDTO teleporter1 = new TeleporterDTO("1", currentArea1, 1);
         TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
-        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id31", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id31", "Akiiii", 200, 170, false);
+        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id31", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id31", "Akiiii", 200, 170, true);
         allStatistics[30] = player31;
         return allStatistics; 
     }
