@@ -324,9 +324,22 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    public void ProcessPlayerStatisticDTO(PlayerstatisticDTO playerStatistic)
+    {
+        
+        if(playerStatistic == null)
+        {
+            Debug.Log("Playerstatistic  is null");
+            return;
+        }
+
+        ownPlayerData = PlayerStatisticData.ConvertFromPlayerStatisticDTO(playerStatistic);
+
+        
+    }
+
     public PlayerStatisticData GetOwnStatisticData()
     {
-        ownPlayerData = PlayerStatisticData.ConvertFromPlayerStatisticDTO(playerData);
         return ownPlayerData;
     }
 

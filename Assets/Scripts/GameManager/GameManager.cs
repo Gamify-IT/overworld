@@ -199,6 +199,7 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
             DataManager.Instance.ProcessKeybindings(keybindings.Value());
             DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());
+            DataManager.Instance.ProcessPlayerStatisticDTO(playerStatistics.Value());
 
 
         }
@@ -629,6 +630,7 @@ public class GameManager : MonoBehaviour
         PlayerstatisticDTO ownPlayer = GetOwnDummyData();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
         DataManager.Instance.ProcessAllPlayerStatistics(rewards);
+        DataManager.Instance.ProcessPlayerStatisticDTO(ownPlayer);
         ResetKeybindings();
     }
 

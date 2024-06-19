@@ -24,6 +24,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private string minigame;
     private List<PlayerStatisticData> ranking;
     private PlayerStatisticData ownData;
+    
     private bool filterActive;
 
     private Button closeButton;
@@ -93,6 +94,10 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
 
         ranking = DataManager.Instance.GetAllPlayerStatistics();
+        ownData = DataManager.Instance.GetOwnStatisticData();
+
+
+        Debug.Log($"My player is: {ownData.GetUsername()},Rewards: {ownData.GetRewards()}");
 
 
         foreach (var playerData in ranking)

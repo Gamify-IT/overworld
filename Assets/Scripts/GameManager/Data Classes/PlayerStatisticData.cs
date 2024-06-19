@@ -21,7 +21,7 @@ public class PlayerStatisticData
     private string leagueOfPlayer;
    
 
-    public PlayerStatisticData(String id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  int knowledge, int rewards, bool showRewards)
+    public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  int knowledge, int rewards, bool showRewards)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
