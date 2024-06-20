@@ -431,7 +431,7 @@ public class GameManager : MonoBehaviour
     public async UniTask<bool> SaveStatisticData()
     {
         List<PlayerStatisticData> playerStatistics = DataManager.Instance.GetAllPlayerStatistics();
-        string basePath = overworldBackendPath + "/playerstatistics/";
+        string basePath = overworldBackendPath + "/players/" + userId +  "/playerstatistics/";
         bool savingSuccessful = true;
 
 
