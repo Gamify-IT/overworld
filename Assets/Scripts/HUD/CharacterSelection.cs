@@ -10,7 +10,7 @@ public class CharacterSelection : MonoBehaviour
     private Sprite character;
     private GameObject confirmButton;
     private int numberOfCharacters = 3;
-    private int characterIndex = 0;
+    private int currentIndex = 0;
     [SerializeField] private GameObject[] characterPrefabs;
     [SerializeField] private Sprite[] playerFaces;
     
@@ -25,6 +25,8 @@ public class CharacterSelection : MonoBehaviour
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
         //get confirm button
         confirmButton = GameObject.Find("Confirm Button");
+        //get the index of the currently selected character 
+        currentIndex = DataManager.Instance.characterIndex;
     }
 
     /// <summary>
@@ -33,7 +35,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     void Update()
     {
-        character = Resources.Load<Sprite>("characters/character" + (characterIndex % numberOfCharacters));
+        character = Resources.Load<Sprite>("characters/character" + (currentIndex % numberOfCharacters));
         characterImage.sprite = character;
     }
 
@@ -43,7 +45,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void PreviousCharacter()
     {
-        characterIndex = Modulo(characterIndex - 1, numberOfCharacters);
+        currentIndex = Modulo(currentIndex - 1, numberOfCharacters);
     }
 
     /// <summary>
@@ -52,7 +54,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void NextCharacter()
     {
-        characterIndex = Modulo(characterIndex + 1, numberOfCharacters);
+        currentIndex = Modulo(currentIndex + 1, numberOfCharacters);
     }
 
     /// <summary>
@@ -61,7 +63,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void ConfirmButton()
     {
-        // current player properties 
+        // current player properties
         GameObject currentPlayer = GameObject.FindGameObjectWithTag("Player");
         Vector3 position = currentPlayer.transform.position;
         Quaternion rotation = currentPlayer.transform.rotation;
@@ -72,11 +74,12 @@ public class CharacterSelection : MonoBehaviour
         // reset current character, instance and face
         Destroy(currentPlayer);
         PlayerAnimation.Instance.ResetInstance();
-        playerFace.sprite = playerFaces[characterIndex];
+        playerFace.sprite = playerFaces[currentIndex];
 
         // create new character in player scene 
-        GameObject newPlayer = Instantiate(characterPrefabs[characterIndex], position, rotation);
+        GameObject newPlayer = Instantiate(characterPrefabs[currentIndex], position, rotation);
         SceneManager.MoveGameObjectToScene(newPlayer, SceneManager.GetSceneByName("Player"));
+        DataManager.Instance.characterIndex = currentIndex;
 
         // add minimap camera to new character 
         miniMapCamera.transform.parent = newPlayer.transform;
@@ -86,7 +89,7 @@ public class CharacterSelection : MonoBehaviour
         // adjust main camera
         PixelPerfectCamera newPixelCam = newPlayer.GetComponentInChildren<PixelPerfectCamera>();
         ZoomScript.Instance.ChangePixelCam(newPixelCam);
-        newPixelCam.refResolutionX = pixelCam.refResolutionX;
+        newPixelCam.refResolutionX = pixelCam.refResolutionX; 
         newPixelCam.refResolutionY = pixelCam.refResolutionY;
     }
 
@@ -101,4 +104,5 @@ public class CharacterSelection : MonoBehaviour
         int r = a % b;
         return r < 0 ? r + b : r;
     }
+
 }
