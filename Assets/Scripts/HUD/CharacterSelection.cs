@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEngine.U2D;
 
 public class CharacterSelection : MonoBehaviour
 {
@@ -66,6 +67,7 @@ public class CharacterSelection : MonoBehaviour
         Quaternion rotation = currentPlayer.transform.rotation;
         GameObject miniMapCamera = GameObject.Find("Minimap Camera");
         Image playerFace = GameObject.Find("Player Face").GetComponent<Image>();
+        PixelPerfectCamera pixelCam = currentPlayer.GetComponentInChildren<PixelPerfectCamera>();
 
         // reset current character, instance and face
         Destroy(currentPlayer);
@@ -79,6 +81,13 @@ public class CharacterSelection : MonoBehaviour
         // add minimap camera to new character 
         miniMapCamera.transform.parent = newPlayer.transform;
         miniMapCamera.GetComponent<Camera>().enabled = true;
+        miniMapCamera.GetComponent<ZoomScript>().enabled = true;
+
+        // adjust main camera
+        PixelPerfectCamera newPixelCam = newPlayer.GetComponentInChildren<PixelPerfectCamera>();
+        ZoomScript.Instance.ChangePixelCam(newPixelCam);
+        newPixelCam.refResolutionX = pixelCam.refResolutionX;
+        newPixelCam.refResolutionY = pixelCam.refResolutionY;
     }
 
     /// <summary>
