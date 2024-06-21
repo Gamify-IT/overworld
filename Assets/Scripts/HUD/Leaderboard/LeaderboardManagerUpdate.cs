@@ -296,8 +296,14 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             if (CheckLeague(rank) && CheckWorld(rank))
             {
                 rewardsToDisplay.Add(rank);
-                Debug.Log($"Player added to display: {rank.GetUsername()}, League: {rank.GetLeague()}");
             }
+        }
+
+        if (league == "Filter by..." && world == "Filter by...")
+        {
+            rewardsToDisplay = ranking.Where(rank =>
+                rank.GetLeague() == ownData.GetLeague() 
+            ).ToList();
         }
 
         return rewardsToDisplay;
@@ -352,14 +358,16 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private void DisplayRewards(PlayerStatisticData rank, int place)
     {
         GameObject achievementObject = Instantiate(rewardObject, content.transform, false);
-
-        RewardElement rewardElement = achievementObject.GetComponent<RewardElement>(); 
+        RewardElement rewardElement = achievementObject.GetComponent<RewardElement>();
 
         if (rewardElement != null)
         {
             string playername = rank.GetShowRewards() ? rank.GetUsername() : "Traveller";
+            if (rank.GetUsername() == ownData.GetUsername())
+            {
+                playername += " (you)";
+            }
             int reward = rank.GetRewards();
-
             rewardElement.Setup(playername, reward, place, place == 1);
         }
         else
