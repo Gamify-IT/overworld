@@ -189,9 +189,9 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private void ToggleButtonText()
     {
-        if (visibilityButton.text == "your visibility is hidden")
+        if (visibilityButton.text == "your username is anonymous")
         {
-            visibilityButton.text = "your visibility is public";
+            visibilityButton.text = "your username is public";
             ownData.updateVisibility(true);
             Debug.Log($"Player showRewards value: {ownData.GetShowRewards()}");
 
@@ -199,7 +199,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
         else
         {
-            visibilityButton.text = "your visibility is hidden";
+            visibilityButton.text = "your username is anonymous";
             ownData.updateVisibility(false);
             Debug.Log($"Player showRewards value: {ownData.GetShowRewards()}");
 
@@ -249,7 +249,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
         else
         {
-            visibilityButton.text = "your visibility is hidden"; 
+            visibilityButton.text = "your username is anonymous"; 
         }
     }
 
