@@ -370,7 +370,9 @@ public class LeaderboardManagerUpdate : MonoBehaviour
                 playername += " (you)";
             }
             int reward = rank.GetRewards();
-            rewardElement.Setup(playername, reward, place, place == 1);
+
+            rewardElement.Setup(playername, reward, place, place == 1|| place == 2 || place == 3 );
+          
         }
         else
         {
