@@ -36,6 +36,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     public Button distributionButton;
     public Button resetButton;
     public Button changeVisibilityButton;
+    public Button closeInputfieldButton;
+
 
 
 
@@ -126,6 +128,11 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         if (changePseudonymButton != null)
         {
             changePseudonymButton.onClick.AddListener(OpenOrCloseInputField);
+        }
+
+        if (closeInputfieldButton != null)
+        {
+            closeInputfieldButton.onClick.AddListener(CloseInputField);
         }
 
         ranking = DataManager.Instance.GetAllPlayerStatistics();
@@ -404,19 +411,20 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     public void SetPseudonym()
     {
-        if (inputField != null)
+        if (inputField != null && inputField.gameObject.activeSelf)
         {
-            string newPseudonym = inputField.text; 
-            ownData.SetPseudonym(newPseudonym); 
-            Debug.Log($"Updated pseudoname to: {newPseudonym}");
+            string newPseudonym = inputField.text;
+            ownData.SetPseudonym(newPseudonym);
+            Debug.Log($"Updated pseudonym to: {newPseudonym}");
 
-            inputField.gameObject.SetActive(false); 
+            inputField.gameObject.SetActive(false);
         }
         else
         {
-            Debug.LogError("InputField is not assigned in the Inspector.");
+            Debug.LogError("InputField is not assigned in the Inspector or not active.");
         }
     }
+
 
     //private bool CheckMinigame(PlayerStatisticData ranking)
     //{
@@ -448,11 +456,21 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         if (rewardElement != null)
         {
-            string playername = rank.GetShowRewards() ? rank.GetUsername() : "Traveller";
+            string playername;
+            if (rank.GetShowRewards())
+            {
+                playername = rank.GetUsername();
+            }
+            else
+            {
+                playername = rank.GetPseudonym(); 
+            }
+
             if (rank.GetUsername() == ownData.GetUsername())
             {
                 playername += " (you)";
             }
+
             int reward = rank.GetRewards();
             rewardElement.Setup(playername, reward, place, place == 1);
         }
@@ -461,6 +479,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Destroy(achievementObject);
         }
     }
+
 
     private void OnEnable()
     {
@@ -513,6 +532,11 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             CloseDistributionPanel();
         }
+
+        if (Input.GetKeyDown(KeyCode.Return) && inputField.gameObject.activeSelf)
+        {
+            SetPseudonym();
+        }
     }
 
     private void OpenDistributionPanel()
@@ -538,7 +562,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
-    private void OpenOrCloseInputField()
+    public void OpenOrCloseInputField()
     {
         if (inputField != null)
         {
@@ -551,14 +575,18 @@ public class LeaderboardManagerUpdate : MonoBehaviour
                 inputField.Select();
                 inputField.ActivateInputField();
             }
-            else
-            {
-                SetPseudonym();
-            }
         }
         else
         {
             Debug.LogError("InputField is not assigned in the Inspector.");
+        }
+    }
+
+    private void CloseInputField()
+    {
+        if (inputField != null)
+        {
+            inputField.gameObject.SetActive(false);
         }
     }
 
