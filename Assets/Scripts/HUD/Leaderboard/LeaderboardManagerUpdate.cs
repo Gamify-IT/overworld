@@ -224,10 +224,9 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private List<string> GetLeague()
     {
-        List<string> leagues = new()
-        {
-            "Filter by..."
-        };
+        List<string> leagues = new();
+        string playerLeague = ownData.GetLeague();
+        leagues.Add(playerLeague);
         foreach (PlayerStatisticData rank in ranking)
         {
             string league = rank.GetLeague();
@@ -238,7 +237,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
               }
             
         }
-
+        leagues.Add("All");
         return leagues;
     }
 
@@ -293,9 +292,12 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         foreach (PlayerStatisticData rank in ranking)
         {
-            if (CheckLeague(rank) && CheckWorld(rank))
+            if (league == "All" || CheckLeague(rank))
             {
-                rewardsToDisplay.Add(rank);
+                if (CheckWorld(rank))
+                {
+                    rewardsToDisplay.Add(rank);
+                }
             }
         }
 
