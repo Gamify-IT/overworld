@@ -23,6 +23,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     [SerializeField] private Button visButton;
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private Button changePseudonymButton;
+
     private string league;
     private string world;
     private string minigame;
@@ -37,6 +38,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     public Button resetButton;
     public Button changeVisibilityButton;
     public Button closeInputfieldButton;
+    public Button closeVisibilityMenuButton;
 
 
 
@@ -133,6 +135,15 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         if (closeInputfieldButton != null)
         {
             closeInputfieldButton.onClick.AddListener(CloseInputField);
+        }
+
+        if (closeVisibilityMenuButton != null)
+        {
+            closeVisibilityMenuButton.onClick.AddListener(CloseVisibilityMenu); 
+        }
+        else
+        {
+            Debug.LogError("Close Visibility Menu Button is not assigned in the Inspector.");
         }
 
         ranking = DataManager.Instance.GetAllPlayerStatistics();
@@ -591,6 +602,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             inputField.gameObject.SetActive(false);
         }
     }
+
+
 
 
 }
