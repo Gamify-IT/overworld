@@ -15,13 +15,13 @@ public class PlayerStatisticData
     private readonly int knowledge;
     private readonly int rewards;
     private bool showRewards;
-
+    private string pseudonym;
 
 
     private string leagueOfPlayer;
    
 
-    public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  int knowledge, int rewards, bool showRewards)
+    public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  int knowledge, int rewards, bool showRewards, string pseudonym)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -34,7 +34,8 @@ public class PlayerStatisticData
         this.knowledge = knowledge;
         this.rewards = rewards;
         this.leagueOfPlayer = calculateLeagueOfPlayer(rewards);
-        this.showRewards = showRewards;        
+        this.showRewards = showRewards;
+        this.pseudonym = pseudonym;
     }
 
     public static PlayerStatisticData ConvertFromPlayerStatisticDTO(PlayerstatisticDTO statistic)
@@ -46,7 +47,9 @@ public class PlayerStatisticData
         int rewards = statistic.rewards;
         string id = statistic.id;
         bool showRewards = statistic.showRewards;
-        
+        string pseudonym = statistic.pseudonym;
+
+
 
         AreaLocationDTO[] unlockedAreas = new AreaLocationDTO[statistic.unlockedAreas.Length];
         AreaLocationDTO[] completedDungeons = new AreaLocationDTO[statistic.unlockedDungeons.Length];
@@ -68,7 +71,7 @@ public class PlayerStatisticData
         }
 
      
-    PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username,  knowledge, rewards, showRewards);
+    PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username,  knowledge, rewards, showRewards, pseudonym);
         return data;
     }
 
@@ -171,6 +174,11 @@ public class PlayerStatisticData
         }
     }
 
+    public string GetPseudonym()
+    {
+        return pseudonym;
+    }
+
     #endregion
 
 
@@ -203,17 +211,22 @@ public class PlayerStatisticData
         int knowledge = playerStatisticData.GetKnowledge();
         int rewards = playerStatisticData.GetRewards();
         bool showRewards = playerStatisticData.GetShowRewards();
+        string pseudonym = playerStatisticData.GetPseudonym();
         AreaLocationDTO currentArea = playerStatisticData.GetCurrentArea();
         AreaLocationDTO[] unlockedAreas = playerStatisticData.GetUnlockedAreas();
         AreaLocationDTO[] unlockedDungeons = playerStatisticData.GetUnlockedDungeons();
         TeleporterDTO[] unlockedTeleporters = playerStatisticData.GetUnlockedTeleporters();
 
 
-       PlayerstatisticDTO playerStatistic = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards);
+       PlayerstatisticDTO playerStatistic = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards, pseudonym);
 
 
         return playerStatistic;
     }
 
+    public void SetPseudonym(string newPseudonym)
+    {
+        this.pseudonym = newPseudonym;
+    }
 
 }

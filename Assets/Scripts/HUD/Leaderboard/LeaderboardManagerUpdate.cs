@@ -19,6 +19,10 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     [SerializeField] private GameObject distributionPanel;
     [SerializeField] private WorldData worldNames;
     [SerializeField] private LeagueDefiner leagues;
+    [SerializeField] private GameObject VisibilityMenu;
+    [SerializeField] private Button visButton;
+    [SerializeField] private TMP_InputField inputField;
+    [SerializeField] private Button changePseudonymButton;
     private string league;
     private string world;
     private string minigame;
@@ -31,6 +35,10 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     public TMP_Text visibilityButton;
     public Button distributionButton;
     public Button resetButton;
+    public Button changeVisibilityButton;
+    public Button closeInputfieldButton;
+
+
 
 
     private bool isLeaderboardOpen = true;
@@ -52,9 +60,9 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     }
 
     private void Start()
-    {    
+    {
 
-      
+       
 
         if (distributionButton != null) 
         {
@@ -65,16 +73,25 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Debug.LogError("Distribution Button is not assigned in the Inspector.");
         }
 
-        if (visibilityButton != null)
+        if (visibilityButton!= null)
         {
 
-            visibilityButton.transform.parent.GetComponent<Button>().onClick.AddListener(ToggleButtonText);
-            LoadVisibilityState();
+            visButton.onClick.AddListener(OpenVisibilityMenu);
+
 
         }
         else
         {
             Debug.LogError("Visibility Button is not assigned in the Inspector.");
+        }
+
+        if (changeVisibilityButton != null)
+        {
+            changeVisibilityButton.onClick.AddListener(ToggleButtonText);
+        }
+        else
+        {
+            Debug.LogError("Visibility Change Button is not assigned in the Inspector.");
         }
 
         if (LeagueDropdown == null)
@@ -101,6 +118,21 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         else
         {
             Debug.LogError("Reset Button is not assigned in the Inspector.");
+        }
+
+        if (inputField == null)
+        {
+            Debug.LogError("InputField is not assigned in the Inspector.");
+        }
+
+        if (changePseudonymButton != null)
+        {
+            changePseudonymButton.onClick.AddListener(OpenOrCloseInputField);
+        }
+
+        if (closeInputfieldButton != null)
+        {
+            closeInputfieldButton.onClick.AddListener(CloseInputField);
         }
 
         ranking = DataManager.Instance.GetAllPlayerStatistics();
@@ -146,16 +178,17 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private void ToggleButtonText()
     {
-        if (visibilityButton.text == "hide me")
+        if (visibilityButton.text == "your visibility is hidden")
         {
-            visibilityButton.text = "show me";
+            visibilityButton.text = "your visibility is public";
             ownData.updateVisibility(true);
             Debug.Log($"Player showRewards value: {ownData.GetShowRewards()}");
+
 
         }
         else
         {
-            visibilityButton.text = "hide me";
+            visibilityButton.text = "your visibility is hidden";
             ownData.updateVisibility(false);
             Debug.Log($"Player showRewards value: {ownData.GetShowRewards()}");
 
@@ -163,6 +196,32 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
         SaveVisibilityState();
 
+    }
+
+    private void OpenVisibilityMenu()
+    {
+        if (VisibilityMenu != null)
+        {
+            VisibilityMenu.SetActive(true);
+            Debug.Log("Visibility Menu opened.");
+        }
+        else
+        {
+            Debug.LogError("Visibility Menu is not assigned in the Inspector.");
+        }
+    }
+
+    private void CloseVisibilityMenu()
+    {
+        if (VisibilityMenu != null)
+        {
+            VisibilityMenu.SetActive(false);
+            Debug.Log("Visibility Menu closed.");
+        }
+        else
+        {
+            Debug.LogError("Visibility Menu is not assigned in the Inspector.");
+        }
     }
 
     private void SaveVisibilityState()
@@ -179,7 +238,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
         else
         {
-            visibilityButton.text = "hide me"; 
+            visibilityButton.text = "your visibility is hidden"; 
         }
     }
 
@@ -334,6 +393,39 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         return valid;
     }
 
+    public void OpenInputField()
+    {
+        if (inputField != null)
+        {
+            inputField.gameObject.SetActive(true); 
+            inputField.text = ownData.GetPseudonym();
+            inputField.Select(); 
+            inputField.ActivateInputField();
+            SetPseudonym();
+        }
+        else
+        {
+            Debug.LogError("InputField is not assigned in the Inspector.");
+        }
+    }
+
+    public void SetPseudonym()
+    {
+        if (inputField != null && inputField.gameObject.activeSelf)
+        {
+            string newPseudonym = inputField.text;
+            ownData.SetPseudonym(newPseudonym);
+            Debug.Log($"Updated pseudonym to: {newPseudonym}");
+
+            inputField.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError("InputField is not assigned in the Inspector or not active.");
+        }
+    }
+
+
     //private bool CheckMinigame(PlayerStatisticData ranking)
     //{
     //  bool valid = false;
@@ -364,11 +456,21 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         if (rewardElement != null)
         {
-            string playername = rank.GetShowRewards() ? rank.GetUsername() : "Traveller";
+            string playername;
+            if (rank.GetShowRewards())
+            {
+                playername = rank.GetUsername();
+            }
+            else
+            {
+                playername = rank.GetPseudonym(); 
+            }
+
             if (rank.GetUsername() == ownData.GetUsername())
             {
                 playername += " (you)";
             }
+
             int reward = rank.GetRewards();
 
             rewardElement.Setup(playername, reward, place, place == 1|| place == 2 || place == 3 );
@@ -379,6 +481,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Destroy(achievementObject);
         }
     }
+
 
     private void OnEnable()
     {
@@ -431,6 +534,11 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             CloseDistributionPanel();
         }
+
+        if (Input.GetKeyDown(KeyCode.Return) && inputField.gameObject.activeSelf)
+        {
+            SetPseudonym();
+        }
     }
 
     private void OpenDistributionPanel()
@@ -456,6 +564,33 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
-   
+    public void OpenOrCloseInputField()
+    {
+        if (inputField != null)
+        {
+            bool isOpen = !inputField.gameObject.activeSelf;
+            inputField.gameObject.SetActive(isOpen);
+
+            if (isOpen)
+            {
+                inputField.text = ownData.GetPseudonym();
+                inputField.Select();
+                inputField.ActivateInputField();
+            }
+        }
+        else
+        {
+            Debug.LogError("InputField is not assigned in the Inspector.");
+        }
+    }
+
+    private void CloseInputField()
+    {
+        if (inputField != null)
+        {
+            inputField.gameObject.SetActive(false);
+        }
+    }
+
 
 }
