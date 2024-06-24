@@ -428,13 +428,17 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             ownData.SetPseudonym(newPseudonym);
             Debug.Log($"Updated pseudonym to: {newPseudonym}");
 
-            inputField.gameObject.SetActive(false);
+            inputField.text = string.Empty;
+            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {newPseudonym}\nChange current pseudonym";
+            inputField.Select();
+            inputField.ActivateInputField();
         }
         else
         {
             Debug.LogError("InputField is not assigned in the Inspector or not active.");
         }
     }
+
 
 
     //private bool CheckMinigame(PlayerStatisticData ranking)
@@ -538,7 +542,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && isLeaderboardOpen)
         {
             CloseLeaderboardScene();
-
         }
 
         if (Input.GetKeyDown(KeyCode.Return) && distributionPanel != null && distributionPanel.activeSelf)
@@ -551,6 +554,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             SetPseudonym();
         }
     }
+
 
     private void OpenDistributionPanel()
     {
@@ -584,7 +588,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
             if (isOpen)
             {
-                inputField.text = ownData.GetPseudonym();
+                inputField.text = string.Empty; 
+                inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {ownData.GetPseudonym()}\nChange current pseudonym";
                 inputField.Select();
                 inputField.ActivateInputField();
             }
@@ -594,6 +599,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Debug.LogError("InputField is not assigned in the Inspector.");
         }
     }
+
 
     private void CloseInputField()
     {
