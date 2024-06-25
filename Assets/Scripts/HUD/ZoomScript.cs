@@ -10,7 +10,7 @@ public class ZoomScript : MonoBehaviour
     //minigame Zoomlevels
     public int zoomLevel = -40;
     private int maxZoomLevel = -30;
-    private int minZoomLevel = -200;
+    private int minZoomLevel = -60;
 
     //normal camera zoom levels
     private readonly int[] gameZoomLevelX = { 320, 355, 425 };
@@ -67,7 +67,7 @@ public class ZoomScript : MonoBehaviour
         //zoom game in
         if (Input.GetKeyDown(gameZoomIn) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
-            GameZoomIn();
+            GameZoomIn(); 
         }
 
         //zoom game out
@@ -191,4 +191,28 @@ public class ZoomScript : MonoBehaviour
             gameZoomOut = GameManager.Instance.GetKeyCode(Binding.GAME_ZOOM_OUT);
         }
     }
+
+    public void ChangePixelCam(PixelPerfectCamera pixelCam)
+    {
+        this.pixelCam = pixelCam;
+    }
+
+    #region Singelton 
+
+    public static ZoomScript Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    #endregion
 }

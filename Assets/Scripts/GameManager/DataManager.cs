@@ -25,6 +25,9 @@ public class DataManager : MonoBehaviour
     private List<AchievementData> achievementData;
     private Dictionary<Binding, KeyCode> keybindings;
 
+    // player settings 
+    public int characterIndex = 0;
+
     /// <summary>
     ///     This function sets given data for the specified world
     /// </summary>
