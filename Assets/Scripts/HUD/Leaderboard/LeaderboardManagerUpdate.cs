@@ -22,7 +22,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     [SerializeField] private GameObject VisibilityMenu;
     [SerializeField] private Button visButton;
     [SerializeField] private TMP_InputField inputField;
-    [SerializeField] private Button changePseudonymButton;
 
     private string league;
     private string world;
@@ -64,7 +63,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private void Start()
     {
 
-       
+        ranking = DataManager.Instance.GetAllPlayerStatistics();
+        ownData = DataManager.Instance.GetOwnStatisticData();
 
         if (distributionButton != null) 
         {
@@ -122,20 +122,21 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Debug.LogError("Reset Button is not assigned in the Inspector.");
         }
 
-        if (inputField == null)
+        if (inputField != null)
+        {
+            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {ownData.GetPseudonym()}\nChange current pseudonym";
+
+           
+
+           
+        }
+        else
         {
             Debug.LogError("InputField is not assigned in the Inspector.");
         }
 
-        if (changePseudonymButton != null)
-        {
-            changePseudonymButton.onClick.AddListener(OpenOrCloseInputField);
-        }
-
-        if (closeInputfieldButton != null)
-        {
-            closeInputfieldButton.onClick.AddListener(CloseInputField);
-        }
+       
+       
 
         if (closeVisibilityMenuButton != null)
         {
@@ -146,8 +147,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Debug.LogError("Close Visibility Menu Button is not assigned in the Inspector.");
         }
 
-        ranking = DataManager.Instance.GetAllPlayerStatistics();
-        ownData = DataManager.Instance.GetOwnStatisticData();
+      
 
 
         Debug.Log($"My player is: {ownData.GetUsername()},Rewards: {ownData.GetRewards()}");
