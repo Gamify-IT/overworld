@@ -42,7 +42,7 @@ public class AreaGeneratorManager : MonoBehaviour
 #if UNITY_EDITOR
         courseID = "";
 #else
-        courseID = Application.absoluteURL.Split("/")[^2];
+        courseID = Application.absoluteURL.Split("/")[^1];
 #endif
         SetupUI();
         demoMode = false;
@@ -122,8 +122,9 @@ public class AreaGeneratorManager : MonoBehaviour
 #endif
 
         //get gamemode parameter of url
-        string urlPart = Application.absoluteURL.Split("/")[^1];
-
+        //string urlPart = Application.absoluteURL.Split("/")[^1];
+        return new Optional<AreaInformation>(new AreaInformation(1, new Optional<int>(1)));
+        /*
         //split in parts
         string[] areaParts = urlPart.Split("-");
 
@@ -151,7 +152,8 @@ public class AreaGeneratorManager : MonoBehaviour
         {
             Debug.Log("Invalid area provided: " + urlPart);
             return new Optional<AreaInformation>();
-        }     
+        } 
+        */
     }
 
     #endregion

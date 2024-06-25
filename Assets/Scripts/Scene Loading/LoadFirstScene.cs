@@ -14,11 +14,7 @@ public class LoadFirstScene : MonoBehaviour
     /// </summary>
     private void Start()
     {
-
-        // Lade den ausgewählten Charakter aus dem GameManager
-        
-
-        Gamemode gamemode = GetGamemode();
+        Gamemode gamemode = Gamemode.PLAY;
 
         switch(gamemode)
         {

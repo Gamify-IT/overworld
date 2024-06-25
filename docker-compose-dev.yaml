@@ -102,7 +102,7 @@ services:
   #frontends
   landing-page:
     container_name: landing-page
-    image: ghcr.io/gamify-it/landing-page:main
+    image: ghcr.io/gamify-it/landing-page:v1.6.0
     restart: always
     pull_policy: always
     expose:
