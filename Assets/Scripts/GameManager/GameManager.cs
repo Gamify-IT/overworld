@@ -682,12 +682,18 @@ public class GameManager : MonoBehaviour
         PlayerstatisticDTO[] allStatistics = new PlayerstatisticDTO[32];
 
         System.Random random = new System.Random();
+        List<string> names = new List<string> {
+        "John", "Alice", "Bob", "Eve", "Charlie", "Dave", "Mallory", "Trent", "Peggy", "Victor",
+        "Walter", "Grace", "Hank", "Ivy", "Justin", "Karen", "Leo", "Monica", "Nina", "Oscar",
+        "Paula", "Quentin", "Rachel", "Steve", "Tom", "Uma", "Vince", "Wendy", "Xander", "Yara"
+    };
+
 
         for (int i = 0; i < playerCount; i++)
         {
             string id = (i + 1).ToString();
             string userId = "Id" + id;
-            string username = "Player" + id;
+            string username = names[i];
             int knowledge = random.Next(0, 501);
             int rewards = random.Next(0, 501);
             bool showRewards = true;
@@ -715,7 +721,7 @@ public class GameManager : MonoBehaviour
 
         TeleporterDTO teleporter1 = new TeleporterDTO("1", currentArea1, 1);
         TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
-        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id31", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id31", "Akiiii", 200, 170, false,"PSEProfi");
+        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco", 200, 170, true,"TheoPro");
         allStatistics[30] = player31;
         PlayerstatisticDTO ownPlayer = GetOwnDummyData();
         allStatistics[31] = ownPlayer;
@@ -733,7 +739,7 @@ public class GameManager : MonoBehaviour
 
         TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
         TeleporterDTO[] unlockedTeleporters = { teleporter };
-        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Player31", 200, 170,true, "PSEProfi");
+        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki", 200, 170,false, "PSEProfi");
         return ownPlayerData;
     }
 

@@ -171,7 +171,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         SetupDropdowns();
         league = "Filter by...";
         world = "Filter by...";
-     // minigame = "Filter by...";
         filterActive = false;
     }
 
@@ -333,28 +332,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     }
 
 
-    /*private List<string> GetMinigames()
-     {
-        List<string> minigames = new()
-        {
-            "Filter by..."
-         };
-         foreach (PlayerStatisticData rank in ranking)
-        {
-             foreach (string minigame in rank.GetWorld())
-             {
-                if (!minigames.Contains(minigame))
-                {
-                    minigames.Add(minigame);
-                 }
-             }
-         }
-
-        return minigames;
-    }*/
-
-
-
+    
 
     private List<PlayerStatisticData> FilterRewards()
     {
@@ -440,16 +418,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
 
 
-    //private bool CheckMinigame(PlayerStatisticData ranking)
-    //{
-    //  bool valid = false;
-    //if (minigame.Equals("Filter by ...") || ranking.GetMinigames().Contains(minigame))
-    //{
-    //  valid = true;
-    //}
-
-    //return valid;
-    //}
+   
 
     private void DisplayRewards(List<PlayerStatisticData> rewardsToDisplay)
     {
@@ -477,24 +446,24 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             }
             else
             {
-                playername = rank.GetPseudonym(); 
+                playername = rank.GetPseudonym();
             }
 
-            if (rank.GetUsername() == ownData.GetUsername())
+            if (rank.GetId() == ownData.GetId())
             {
                 playername += " (you)";
             }
 
             int reward = rank.GetRewards();
 
-            rewardElement.Setup(playername, reward, place, place == 1|| place == 2 || place == 3 );
-          
+            rewardElement.Setup(playername, reward, place, place == 1 || place == 2 || place == 3);
         }
         else
         {
             Destroy(achievementObject);
         }
     }
+
 
 
     private void OnEnable()
