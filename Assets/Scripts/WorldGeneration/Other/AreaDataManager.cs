@@ -112,12 +112,16 @@ public class AreaDataManager
     private async UniTask<AreaData> FetchData(AreaInformation currentArea)
     {
         //get specific path
-        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + GameSettings.GetCourseID() + "/areaMaps/" + currentArea.GetWorldIndex();
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + GameSettings.GetCourseID() + "/area/" + currentArea.GetWorldIndex().ToString();
 
         if(currentArea.IsDungeon())
         {
             path += "/dungeon/" + currentArea.GetDungeonIndex();
         }
+
+        //---------------------
+        // area data error when starting overworld with run config
+        //---------------------
 
         //fetch area data from backend
         Optional<AreaDTO> areaDTO = await RestRequest.GetRequest<AreaDTO>(path);
