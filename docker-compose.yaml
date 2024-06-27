@@ -102,7 +102,7 @@ services:
   #frontends
   landing-page:
     container_name: landing-page
-    image: ghcr.io/gamify-it/landing-page:v1.6.0
+    image: ghcr.io/gamify-it/landing-page:main
     restart: always
     pull_policy: always
     expose:
@@ -128,7 +128,6 @@ services:
     container_name: overworld
     build: .
     restart: always
-    pull_policy: always
     volumes:
       - ./.nginx/webgl.conf:/etc/nginx/conf.d/default.conf
       - ./build:/webgl/
