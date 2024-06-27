@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
         return false;
 #endif
         courseId = Application.absoluteURL.Split("/")[^1];
+        courseId = courseId.Split("&")[^2];
         GameSettings.SetCourseID(courseId);
 
         string uri = overworldBackendPath + "/courses/" + courseId;
