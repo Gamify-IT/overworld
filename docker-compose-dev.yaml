@@ -126,7 +126,7 @@ services:
 
   overworld:
     container_name: overworld
-    image: ghcr.io/gamify-it/overworld:main
+    image: ghcr.io/gamify-it/overworld:bugfix-do-not-reload-after-minigame
     restart: always
     pull_policy: always
     volumes:

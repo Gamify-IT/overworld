@@ -15,6 +15,7 @@ mergeInto(LibraryManager.library, {
             		if (event.data === "CLOSE ME") {
                 		SendMessage("GameManager", "MinigameDone");
 				iframe.remove();
+				setTimeout(() => { window.parent.postMessage("FOCUS ME"); }, 100); // Wait a bit to give the overworld time to query the new data before focusing it
             		}
         	})
     	}
