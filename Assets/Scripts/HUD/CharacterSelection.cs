@@ -1,12 +1,19 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System;
+using UnityEngine.U2D;
 
 public class CharacterSelection : MonoBehaviour
 {
     private Image characterImage;
     private Sprite character;
     private GameObject confirmButton;
-    private int counter = 1;
+    private int numberOfCharacters = 3;
+    private int currentIndex = 0;
+    [SerializeField] private GameObject[] characterPrefabs;
+    [SerializeField] private Sprite[] playerFaces;
+    
 
     public AudioClip clickSound;
     private AudioSource audioSource;
@@ -31,6 +38,8 @@ public class CharacterSelection : MonoBehaviour
         }
         //set audio clip
         audioSource.clip=clickSound;
+        //get the index of the currently selected character 
+        currentIndex = DataManager.Instance.characterIndex;
     }
 
     /// <summary>
@@ -39,18 +48,8 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     void Update()
     {
-        character = Resources.Load<Sprite>("characters/character" + counter);
+        character = Resources.Load<Sprite>("characters/character" + (currentIndex % numberOfCharacters));
         characterImage.sprite = character;
-        //enable confirm button for character 1
-        if (counter == 1)
-        {
-            confirmButton.SetActive(true);
-        }
-        //disable for all other characters since they are not implemented into the game
-        else
-        {
-            confirmButton.SetActive(false);
-        }
     }
 
     /// <summary>
@@ -59,12 +58,15 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void PreviousCharacter()
     {
+
         counter -= 1;
         if (counter < 1)
         {
             counter = 4;
         }
         PlayClickSound();
+
+        currentIndex = Modulo(currentIndex - 1, numberOfCharacters);
     }
 
     /// <summary>
@@ -79,14 +81,17 @@ public class CharacterSelection : MonoBehaviour
             counter = 1;
         }
         PlayClickSound();
+
+        currentIndex = Modulo(currentIndex + 1, numberOfCharacters);
     }
 
     /// <summary>
     /// This function is called by the <c>Select Character Button</c>.
-    /// This function switches to selected character.
+    /// This function switches to the selected character.
     /// </summary>
     public void ConfirmButton()
     {
+
         PlayClickSound();
         //TODO: implement character selection
         //  -> not part of this project
@@ -104,4 +109,47 @@ public class CharacterSelection : MonoBehaviour
             audioSource.PlayOneShot(clickSound);
         }
     }
+
+        // current player properties
+        GameObject currentPlayer = GameObject.FindGameObjectWithTag("Player");
+        Vector3 position = currentPlayer.transform.position;
+        Quaternion rotation = currentPlayer.transform.rotation;
+        GameObject miniMapCamera = GameObject.Find("Minimap Camera");
+        Image playerFace = GameObject.Find("Player Face").GetComponent<Image>();
+        PixelPerfectCamera pixelCam = currentPlayer.GetComponentInChildren<PixelPerfectCamera>();
+
+        // reset current character, instance and face
+        Destroy(currentPlayer);
+        PlayerAnimation.Instance.ResetInstance();
+        playerFace.sprite = playerFaces[currentIndex];
+
+        // create new character in player scene 
+        GameObject newPlayer = Instantiate(characterPrefabs[currentIndex], position, rotation);
+        SceneManager.MoveGameObjectToScene(newPlayer, SceneManager.GetSceneByName("Player"));
+        DataManager.Instance.characterIndex = currentIndex;
+
+        // add minimap camera to new character 
+        miniMapCamera.transform.parent = newPlayer.transform;
+        miniMapCamera.GetComponent<Camera>().enabled = true;
+        miniMapCamera.GetComponent<ZoomScript>().enabled = true;
+
+        // adjust main camera
+        PixelPerfectCamera newPixelCam = newPlayer.GetComponentInChildren<PixelPerfectCamera>();
+        ZoomScript.Instance.ChangePixelCam(newPixelCam);
+        newPixelCam.refResolutionX = pixelCam.refResolutionX; 
+        newPixelCam.refResolutionY = pixelCam.refResolutionY;
+    }
+
+    /// <summary>
+    ///     This method realizes the modulo operator from modular arithmetic.
+    /// </summary>
+    /// <param name="a">arbitrary number</param>
+    /// <param name="b">modulus</param>
+    /// <returns>positive remainder</returns>
+    private int Modulo(int a, int b)
+    {
+        int r = a % b;
+        return r < 0 ? r + b : r;
+    }
+
 }

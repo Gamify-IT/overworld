@@ -333,6 +333,13 @@ public class PlayerAnimation : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    /// <summary>
+    ///     Resets the current instance to null.
+    /// </summary>
+    public void ResetInstance()
+    {
+        Instance = null;
+    }
 
     #endregion
 }

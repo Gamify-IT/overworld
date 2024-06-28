@@ -27,6 +27,7 @@ public class AreaGeneratorManager : MonoBehaviour
 
     //Data
     private string courseID;
+    private string startParameters;
     private bool demoMode;
     private AreaInformation currentArea;
     private AreaData areaData;
@@ -42,7 +43,11 @@ public class AreaGeneratorManager : MonoBehaviour
 #if UNITY_EDITOR
         courseID = "";
 #else
-        courseID = Application.absoluteURL.Split("/")[^2];
+        Debug.Log("Splitting Url: " + Application.absoluteURL);
+        startParameters = Application.absoluteURL.Split("/")[^1];
+        Debug.Log("Start Parameters: "  + startParameters);
+        courseID = startParameters.Split("&")[^2];
+        Debug.Log("Course ID: " + courseID);
 #endif
         SetupUI();
         demoMode = false;
@@ -122,8 +127,9 @@ public class AreaGeneratorManager : MonoBehaviour
 #endif
 
         //get gamemode parameter of url
-        string urlPart = Application.absoluteURL.Split("/")[^1];
-
+        //string urlPart = Application.absoluteURL.Split("/")[^1];
+        return new Optional<AreaInformation>(new AreaInformation(1, new Optional<int>(1)));
+        /*
         //split in parts
         string[] areaParts = urlPart.Split("-");
 
@@ -151,7 +157,8 @@ public class AreaGeneratorManager : MonoBehaviour
         {
             Debug.Log("Invalid area provided: " + urlPart);
             return new Optional<AreaInformation>();
-        }     
+        } 
+        */
     }
 
     #endregion
@@ -170,7 +177,7 @@ public class AreaGeneratorManager : MonoBehaviour
 #endif
 
         //load data from backend
-        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseID + "/areaMaps/" + currentArea.GetWorldIndex();
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseID + "/area/" + currentArea.GetWorldIndex();
         if(currentArea.IsDungeon())
         {
             path += "/dungeon/" + currentArea.GetDungeonIndex();

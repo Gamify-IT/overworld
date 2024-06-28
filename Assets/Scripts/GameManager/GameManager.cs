@@ -54,7 +54,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("Skip loading, due to Unity Editor mode");
         return false;
 #endif
-        courseId = Application.absoluteURL.Split("/")[^2];
+        courseId = Application.absoluteURL.Split("/")[^1];
+        courseId = courseId.Split("&")[^2];
         GameSettings.SetCourseID(courseId);
 
         string uri = overworldBackendPath + "/courses/" + courseId;
@@ -498,6 +499,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
             SetupGameManager();
         }
         else

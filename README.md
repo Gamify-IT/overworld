@@ -1,4 +1,4 @@
-# overworld
+# Overworld
 
 ## Disclaimer
 
@@ -56,3 +56,7 @@ https://pixabay.com/sound-effects/ufo-flies-away-101315/
 14.	UFO departure
 Revers of https://pixabay.com/sound-effects/ufo-flies-away-101315/
 
+
+Note: This repositorys `docker-compose-dev.yaml` doesn't work in the same way as in the other repositories.
+Here this file pulls the main docker image from GitHub instead of not pulling any image and enabling you to run the 
+project locally.
