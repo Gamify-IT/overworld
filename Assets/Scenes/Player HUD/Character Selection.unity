@@ -627,18 +627,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21233805df61c3f49a3cc9edd0956df5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-
+  characterPrefabs: []
+  playerFaces: []
   clickSound: {fileID: 8300000, guid: 7565c07c03948d2448b7897577b7c1f0, type: 3}
-
-  characterPrefabs:
-  - {fileID: 5603177028076193785, guid: 1696570aa1f26da4d8f591b27f47d0e2, type: 3}
-  - {fileID: 6962129799168212026, guid: 7df6c2ef7323cb84b9c97164b993a167, type: 3}
-  - {fileID: 5473735387981550251, guid: 1d29e5999f1cb3f459e53fedfcd311bf, type: 3}
-  playerFaces:
-  - {fileID: 21300000, guid: 20da17b2d591d5e4f9588db4dade1fb5, type: 3}
-  - {fileID: 21300000, guid: d88b348644437044bb4c16ec3dbe1414, type: 3}
-  - {fileID: 21300000, guid: ef1cd0ff1a75afc4da71435d08b93f06, type: 3}
-
 --- !u!1 &946046130
 GameObject:
   m_ObjectHideFlags: 0
@@ -1027,6 +1018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b5c52f8b6c5b2e4092829fdd2d9e475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  achievementNotificationSound: {fileID: 0}
   achievementNotificationManagerPrefab: {fileID: 0}
 --- !u!1 &1521554930
 GameObject:

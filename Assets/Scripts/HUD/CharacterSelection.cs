@@ -28,6 +28,8 @@ public class CharacterSelection : MonoBehaviour
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
         //get confirm button
         confirmButton = GameObject.Find("Confirm Button");
+        //get the index of the currently selected character 
+        currentIndex = DataManager.Instance.characterIndex;
 
         //get AudioSource component
         audioSource=GetComponent<AudioSource>();
@@ -38,8 +40,6 @@ public class CharacterSelection : MonoBehaviour
         }
         //set audio clip
         audioSource.clip=clickSound;
-        //get the index of the currently selected character 
-        currentIndex = DataManager.Instance.characterIndex;
     }
 
     /// <summary>
@@ -58,14 +58,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void PreviousCharacter()
     {
-
-        counter -= 1;
-        if (counter < 1)
-        {
-            counter = 4;
-        }
         PlayClickSound();
-
         currentIndex = Modulo(currentIndex - 1, numberOfCharacters);
     }
 
@@ -75,13 +68,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void NextCharacter()
     {
-        counter += 1;
-        if (counter > 4)
-        {
-            counter = 1;
-        }
         PlayClickSound();
-
         currentIndex = Modulo(currentIndex + 1, numberOfCharacters);
     }
 
@@ -91,25 +78,6 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void ConfirmButton()
     {
-
-        PlayClickSound();
-        //TODO: implement character selection
-        //  -> not part of this project
-    }
-
-
-    /// <summary>
-    /// This function is called by the <c>Navigation Buttons</c>.
-    /// This function plays the click sound.
-    /// </summary>
-    private void PlayClickSound()
-    {
-        if (clickSound != null && audioSource != null)
-        {
-            audioSource.PlayOneShot(clickSound);
-        }
-    }
-
         // current player properties
         GameObject currentPlayer = GameObject.FindGameObjectWithTag("Player");
         Vector3 position = currentPlayer.transform.position;
@@ -138,7 +106,23 @@ public class CharacterSelection : MonoBehaviour
         ZoomScript.Instance.ChangePixelCam(newPixelCam);
         newPixelCam.refResolutionX = pixelCam.refResolutionX; 
         newPixelCam.refResolutionY = pixelCam.refResolutionY;
+
+        PlayClickSound();
     }
+
+
+    /// <summary>
+    /// This function is called by the <c>Navigation Buttons</c>.
+    /// This function plays the click sound.
+    /// </summary>
+    private void PlayClickSound()
+    {
+        if (clickSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
+    }
+        
 
     /// <summary>
     ///     This method realizes the modulo operator from modular arithmetic.
