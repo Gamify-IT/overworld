@@ -16,9 +16,21 @@ public class CloseGame : MonoBehaviour
     [SerializeField] private Button confirmButton;
     [SerializeField] private Button cancelButton;
 
+    public AudioClip clickSound;
+    private AudioSource audioSource;
+
     private void Start()
     {
         savingCanvas.gameObject.SetActive(false);
+
+        //get AudioSource component
+        audioSource=GetComponent<AudioSource>();
+        //add AudioSource component if necessary
+        if(audioSource==null){
+            audioSource=gameObject.AddComponent<AudioSource>();
+        }
+        //set audio clip
+        audioSource.clip=clickSound;
     }
 
     /// <summary>
@@ -26,6 +38,7 @@ public class CloseGame : MonoBehaviour
     /// </summary>
     public async void CloseButtonPressed()
     {
+        PlayClickSound();
         InitCanvas();
         bool success = await GameManager.Instance.SaveAchievements();
         if(success)
@@ -67,5 +80,16 @@ public class CloseGame : MonoBehaviour
     public void CancelButtonPressed()
     {
         savingCanvas.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// This function plays the click sound.
+    /// </summary>
+    private void PlayClickSound()
+    {
+        if (clickSound!=null && audioSource!=null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
     }
 }

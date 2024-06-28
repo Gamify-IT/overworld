@@ -259,6 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b5c52f8b6c5b2e4092829fdd2d9e475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  achievementNotificationSound: {fileID: 8300000, guid: 4874f70b96dafa844a60e90eb1b8111d, type: 3}
   achievementNotificationManagerPrefab: {fileID: 3353499656544615801, guid: 84d1d0654029bb2418bc58e6a9bedbb4, type: 3}
 --- !u!4 &1749240694
 Transform:
@@ -342,5 +343,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5603177028076193789, guid: 1696570aa1f26da4d8f591b27f47d0e2, type: 3}
+      propertyPath: moveSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 948037a77c937254b9f4694410bf49cf, type: 3}
+    - target: {fileID: 5603177028076193789, guid: 1696570aa1f26da4d8f591b27f47d0e2, type: 3}
+      propertyPath: clickSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 182269edf1b9c07499a840f9d4ac88bf, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1696570aa1f26da4d8f591b27f47d0e2, type: 3}

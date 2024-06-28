@@ -12,6 +12,9 @@ public class KeyBindingUIElement : MonoBehaviour
 
     private Keybinding keybinding;
 
+    public AudioClip clickSound;
+    private AudioSource audioSource;
+
     /// <summary>
     ///     This function sets up the UI Element
     /// </summary>
@@ -49,6 +52,19 @@ public class KeyBindingUIElement : MonoBehaviour
     /// </summary>
     public void ChangeKeyButtonPressed()
     {
+        //get AudioSource component
+        audioSource=GetComponent<AudioSource>();
+        //add AudioSource component if necessary
+        if(audioSource == null)
+        {
+            audioSource=gameObject.AddComponent<AudioSource>();
+        }
+        //set audio clip
+        audioSource.clip=clickSound;
+        //AudioSource does not start playing automatically when the GameObject awakens
+        audioSource.playOnAwake=false;
+        PlayClickSound();
+
         title.color = Color.black;
         binding.color = Color.black;
         binding.text = "___";
@@ -100,5 +116,25 @@ public class KeyBindingUIElement : MonoBehaviour
     {
         title.text = keybinding.GetBinding().ToString().Replace("_", " ");
         binding.text = keybinding.GetKey().ToString();
+    }
+
+    /// <summary>
+    /// This function plays the click sound.
+    /// </summary>
+    private void PlayClickSound()
+    {
+        if(clickSound != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
+    }
+
+    /// <summary>
+    /// This function calls in the Key Binding Manager.
+    /// This function sets the click sound to the object.
+    /// </summary>
+    public void SetClickSound(AudioClip clip)
+    {
+        clickSound = clip;            
     }
 }

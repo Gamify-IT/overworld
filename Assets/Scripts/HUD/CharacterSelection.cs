@@ -15,6 +15,9 @@ public class CharacterSelection : MonoBehaviour
     [SerializeField] private Sprite[] playerFaces;
     
 
+    public AudioClip clickSound;
+    private AudioSource audioSource;
+
     /// <summary>
     /// The <c>Start</c> function is called after the object is initialized.
     /// This function sets up the references of the object.
@@ -27,6 +30,16 @@ public class CharacterSelection : MonoBehaviour
         confirmButton = GameObject.Find("Confirm Button");
         //get the index of the currently selected character 
         currentIndex = DataManager.Instance.characterIndex;
+
+        //get AudioSource component
+        audioSource=GetComponent<AudioSource>();
+        //add AudioSource component if necessary
+        if(audioSource == null)
+        {
+            audioSource=gameObject.AddComponent<AudioSource>();
+        }
+        //set audio clip
+        audioSource.clip=clickSound;
     }
 
     /// <summary>
@@ -45,6 +58,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void PreviousCharacter()
     {
+        PlayClickSound();
         currentIndex = Modulo(currentIndex - 1, numberOfCharacters);
     }
 
@@ -54,6 +68,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void NextCharacter()
     {
+        PlayClickSound();
         currentIndex = Modulo(currentIndex + 1, numberOfCharacters);
     }
 
@@ -91,7 +106,23 @@ public class CharacterSelection : MonoBehaviour
         ZoomScript.Instance.ChangePixelCam(newPixelCam);
         newPixelCam.refResolutionX = pixelCam.refResolutionX; 
         newPixelCam.refResolutionY = pixelCam.refResolutionY;
+
+        PlayClickSound();
     }
+
+
+    /// <summary>
+    /// This function is called by the <c>Navigation Buttons</c>.
+    /// This function plays the click sound.
+    /// </summary>
+    private void PlayClickSound()
+    {
+        if (clickSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
+    }
+        
 
     /// <summary>
     ///     This method realizes the modulo operator from modular arithmetic.

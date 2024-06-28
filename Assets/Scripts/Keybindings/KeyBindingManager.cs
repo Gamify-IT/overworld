@@ -13,6 +13,9 @@ public class KeyBindingManager : MonoBehaviour
     private List<Keybinding> newKeybindings;
     private bool validBindings;
 
+    public AudioClip clickSound;
+    private AudioSource audioSource;
+
     //Keybinding Objects
     private Dictionary<Binding, KeyBindingUIElement> keybindingObjects;
 
@@ -31,6 +34,18 @@ public class KeyBindingManager : MonoBehaviour
         validBindings = true;
 
         DisplayKeybinding();
+
+        //get AudioSource component
+        audioSource=GetComponent<AudioSource>();
+        //add AudioSource component if necessary
+        if(audioSource == null)
+        {
+            audioSource=gameObject.AddComponent<AudioSource>();
+        }
+        //set audio clip
+        audioSource.clip=clickSound;
+        //AudioSource does not start playing automatically when the GameObject awakens
+        audioSource.playOnAwake=false;
     }
 
     private void Update()
@@ -80,6 +95,7 @@ public class KeyBindingManager : MonoBehaviour
         {
             confirmationCanvas.SetActive(true);
         }
+        PlayClickSound();
     }
 
     /// <summary>
@@ -115,6 +131,7 @@ public class KeyBindingManager : MonoBehaviour
     public void CancelButtonPressed()
     {
         confirmationCanvas.SetActive(false);
+        PlayClickSound();
     }
 
     /// <summary>
@@ -153,12 +170,14 @@ public class KeyBindingManager : MonoBehaviour
         {
             keyBindingUIElement.Setup(keybinding, this);
             keybindingObjects.Add(keybinding.GetBinding(), keyBindingUIElement);
+            keyBindingUIElement.SetClickSound(clickSound);
         }
         else
         {
             Destroy(keybindingObject);
         }
     }
+
 
     /// <summary>
     ///     This function changes the given Keybinding in the <c>newKeybindings</c> List
@@ -231,6 +250,18 @@ public class KeyBindingManager : MonoBehaviour
         if(pauseMenu != null)
         {
             pauseMenu.CloseSubMenu();
+        }
+    }
+
+
+    /// <summary>
+    /// This function plays the click sound.
+    /// </summary>
+    private void PlayClickSound()
+    {
+        if(clickSound != null)
+        {
+            audioSource.PlayOneShot(clickSound);
         }
     }
 }

@@ -3,7 +3,13 @@ guid: cf004dea68fc7bd44acdfd2a72980355
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - teleporterCanvas: {instanceID: 0}
+  - spriteNormal: {instanceID: 0}
+  - spriteHighlight: {instanceID: 0}
+  - teleporterOpeningSound: {instanceID: 0}
+  - ufoTakesSound: {instanceID: 0}
+  - ufoReturnsSound: {fileID: 8300000, guid: 37ff7a67f2c1c864c83c0e9a5900711c, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
