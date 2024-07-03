@@ -26,7 +26,8 @@ public class PlayerAnimation : MonoBehaviour
     private KeyCode moveDown;
     private KeyCode moveRight;
     private KeyCode sprint;
-
+    private float sprintStartTime = 0f;
+    private float sprintDuration = 0f; 
 
     /// <summary>
     ///     This method is called before the first frame update.
@@ -85,12 +86,27 @@ public class PlayerAnimation : MonoBehaviour
             {
                 targetSpeed = movementSpeed + sprintingSpeed;
                 playerAnimator.speed = 2;
+                sprintStartTime = Time.time;
+            }
+            
+            if (Input.GetKey(sprint))
+            {
+                float currentTime = Time.time;
+                sprintDuration = currentTime - sprintStartTime;
+
+                while (sprintDuration >= 1f)
+                {
+                    GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SPEEDRUNNER, 1);
+                    sprintDuration -= 1f;
+                    sprintStartTime += 1f;
+                }
             }
 
             if (Input.GetKeyUp(sprint))
             {
                 targetSpeed = movementSpeed;
                 playerAnimator.speed = 1;
+                sprintDuration = 0f; 
             }
 
             // dev keybindings

@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 /// <summary>
 ///     This class is responsible for the Book logic.
@@ -16,6 +17,9 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     private TextMeshProUGUI bookText;
     private bool playerIsClose;
     private string uuid;
+
+    private readonly int achievementUpdateIntervall = 1;
+    private static List<(int, int, int)> readBooks = new List<(int, int, int)>();
 
     //KeyCodes
     private KeyCode interact;
@@ -148,8 +152,93 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         GameObject.Find("Book_Name").GetComponent<TextMeshProUGUI>().text = nameOfBook;
         bookText = GameObject.Find("Book_Text").GetComponent<TextMeshProUGUI>();
         bookText.text = bookContent;
+        UpdateListOfBooks();
     }
 
+    /// <summary>
+    ///     This method adds a new read book to the list. 
+    /// </summary>
+    private void UpdateListOfBooks()
+    {
+        var key = (world, dungeon, number);
+        if(!readBooks.Contains(key))
+        {
+            readBooks.Add((world, dungeon, number));
+            if (world == 1)
+            {
+                UpdateAchievementWorld1();
+                UpdateAchievementInTotal();
+            }
+            if (world == 2)
+            {
+                UpdateAchievementWorld2();
+                UpdateAchievementInTotal();
+            }
+            if (world == 3)
+            {
+                UpdateAchievementWorld3();
+                UpdateAchievementInTotal();
+            }
+            if (world == 4)
+            {
+                UpdateAchievementWorld4();
+                UpdateAchievementInTotal();
+            }
+        } 
+    }
+
+    /// <summary>
+    ///     This method updates the "read books" achievement in general.
+    /// </summary>
+    private void UpdateAchievementInTotal()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_1, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_2, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_3, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "read books" achievement in World 1.
+    /// </summary>
+    private void UpdateAchievementWorld1()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_1_WORLD_1, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_2_WORLD_1, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_3_WORLD_1, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "read books" achievement in World 2.
+    /// </summary>
+    private void UpdateAchievementWorld2()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_1_WORLD_2, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_2_WORLD_2, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_3_WORLD_2, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "read books" achievement in World 3.
+    /// </summary>
+    private void UpdateAchievementWorld3()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_1_WORLD_3, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_2_WORLD_3, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_3_WORLD_3, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "read books" achievement in World 4.
+    /// </summary>
+    private void UpdateAchievementWorld4()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_1_WORLD_4, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_2_WORLD_4, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_3_WORLD_4, achievementUpdateIntervall);
+    }
+
+
+    
     /// <summary>
     ///     This function returns the Book object info
     /// </summary>

@@ -91,6 +91,8 @@ public class CharacterSelection : MonoBehaviour
         ZoomScript.Instance.ChangePixelCam(newPixelCam);
         newPixelCam.refResolutionX = pixelCam.refResolutionX; 
         newPixelCam.refResolutionY = pixelCam.refResolutionY;
+
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1);
     }
 
     /// <summary>
