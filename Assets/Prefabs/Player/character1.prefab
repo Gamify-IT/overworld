@@ -404,6 +404,7 @@ MonoBehaviour:
   movement: {x: 0, y: 0}
   playerRigidBody: {fileID: 5603177028076193778}
   playerAnimator: {fileID: 5603177028076193790}
+  moveSound: {fileID: 8300000, guid: 948037a77c937254b9f4694410bf49cf, type: 3}
 --- !u!50 &5603177028076193778
 Rigidbody2D:
   serializedVersion: 4
