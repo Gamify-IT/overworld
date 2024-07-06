@@ -95,19 +95,19 @@ public class MinimapAreaName : MonoBehaviour
     /// </summary>
     private void GetClipToPlay()
     {
-        if (currentAreaName.Contains("Blooming Savanna"))
+        if (currentAreaName.Contains("World 1"))
         {
             clipToPlay = backgroundMusicWorld1;
         }
-        else if (currentAreaName.Contains("Sunny Beach"))
+        else if (currentAreaName.Contains("World 2"))
         {
             clipToPlay = backgroundMusicWorld2;
         }
-        else if (currentAreaName.Contains("Magic Forest"))
+        else if (currentAreaName.Contains("World 3"))
         {
             clipToPlay = backgroundMusicWorld3;
         }
-        else if (currentAreaName.Contains("Winter Wonder Land"))
+        else if (currentAreaName.Contains("World 4"))
         {
             clipToPlay = backgroundMusicWorld4;
         }
