@@ -42,7 +42,8 @@ public class MinigameStarting : MonoBehaviour
         //esc handling
         if (Input.GetKeyDown(cancel))
         {
-            QuitMinigame();
+            PlayClickSound();
+            Invoke("QuitMinigame", 0.5f);
         }
     }
 
@@ -88,9 +89,9 @@ public class MinigameStarting : MonoBehaviour
     /// </summary>
     public void StartButtonPressed()
     {
-        PlayClickSound();
         LoadMinigameInIframe(game, configurationId);
-        QuitMinigame();
+        PlayClickSound();
+        Invoke("QuitMinigame", 0.5f);
     }
 
     /// <summary>
@@ -99,7 +100,7 @@ public class MinigameStarting : MonoBehaviour
     public void QuitButtonPressed()
     {
         PlayClickSound();
-        QuitMinigame();
+        Invoke("QuitMinigame", 0.5f);
     }
 
     /// <summary>
