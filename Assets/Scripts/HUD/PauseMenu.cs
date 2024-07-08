@@ -95,6 +95,7 @@ public class PauseMenu : MonoBehaviour
         PlayClickSound();
         SceneManager.UnloadScene("Menu");
         menuOpen = false;
+        GameManager.Instance.isPaused = false;
         Time.timeScale = 1f;
     }
 
@@ -104,6 +105,7 @@ public class PauseMenu : MonoBehaviour
     public void Pause()
     {
         menuOpen = true;
+        GameManager.Instance.isPaused = true;
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
         Time.timeScale = 0f;
     }

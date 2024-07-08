@@ -41,6 +41,9 @@ public class GameManager : MonoBehaviour
     //Achievements
     [SerializeField] private GameObject achievementNotificationManagerPrefab;
 
+    //Game status
+    public bool isPaused = false;
+
     /// <summary>
     ///     This function checks whether or not a valid courseId was passed or not.
     ///     If a valid id was passed, it gets stored.

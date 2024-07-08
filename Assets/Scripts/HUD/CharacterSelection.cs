@@ -24,6 +24,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     void Start()
     {
+        GameManager.Instance.isPaused = true;
         //get image component
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
         //get confirm button

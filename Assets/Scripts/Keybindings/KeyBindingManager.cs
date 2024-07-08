@@ -86,7 +86,8 @@ public class KeyBindingManager : MonoBehaviour
     /// </summary>
     public void BackButtonPressed()
     {
-        if(validBindings)
+        PlayClickSound();
+        if (validBindings)
         {
             SaveKeybindings();
             CloseKeybindingsMenu();
@@ -95,7 +96,6 @@ public class KeyBindingManager : MonoBehaviour
         {
             confirmationCanvas.SetActive(true);
         }
-        PlayClickSound();
     }
 
     /// <summary>
