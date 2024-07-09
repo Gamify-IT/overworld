@@ -75,7 +75,6 @@ public class ProgressBar : MonoBehaviour
         if (worldIndex == 1)
         {
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINER_WORLD_1, 1);
-            Debug.Log("розблоковано");
         }
         if (worldIndex == 2)
         {
