@@ -81,6 +81,7 @@ public class MinigameStarting : MonoBehaviour
     /// </summary>
     public void StartButtonPressed()
     {
+        GameManager.Instance.SaveAchievements();
         LoadMinigameInIframe(game, configurationId);
         QuitMinigame();
     }
