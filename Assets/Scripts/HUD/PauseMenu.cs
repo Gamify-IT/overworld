@@ -11,13 +11,27 @@ public class PauseMenu : MonoBehaviour
     public static bool subMenuOpen;
     public static string buttonName;
 
+    public AudioClip clickSound;
+    private AudioSource audioSource;
+
     //KeyCodes
     private KeyCode cancel;
 
     private void Start()
     {
+        //get AudioSource component
+        audioSource=GetComponent<AudioSource>();
+        //add AudioSource component if necessary
+        if(audioSource == null)
+        {
+            audioSource=gameObject.AddComponent<AudioSource>();
+        }
+        //set audio clip
+        audioSource.clip=clickSound;
+
         cancel = GameManager.Instance.GetKeyCode(Binding.CANCEL);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
+        PlayClickSound();
     }
 
     /// <summary>
@@ -30,6 +44,7 @@ public class PauseMenu : MonoBehaviour
         {
             PauseOrResume();
         }
+        
     }
 
     private void OnDestroy()
@@ -64,12 +79,23 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function closes the pause menu.
+    ///     This function closes the pause menu. 
     /// </summary>
     public void Resume()
     {
+        //create temporary AudioSource to play sound and then destroy it
+        if (clickSound != null)
+        {
+            GameObject temporaryAudioSource = new GameObject("TemporaryAudio");
+            AudioSource audioSource = temporaryAudioSource.AddComponent<AudioSource>();
+            audioSource.clip = clickSound;
+            audioSource.PlayOneShot(clickSound);
+            Destroy(temporaryAudioSource, clickSound.length);
+        }
+        PlayClickSound();
         SceneManager.UnloadScene("Menu");
         menuOpen = false;
+        GameManager.Instance.isPaused = false;
         Time.timeScale = 1f;
     }
 
@@ -79,6 +105,7 @@ public class PauseMenu : MonoBehaviour
     public void Pause()
     {
         menuOpen = true;
+        GameManager.Instance.isPaused = true;
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
         Time.timeScale = 0f;
     }
@@ -93,6 +120,7 @@ public class PauseMenu : MonoBehaviour
         buttonName = EventSystem.current.currentSelectedGameObject.name;
         //remove appendix " Button" = length 7
         buttonName = buttonName.Remove(buttonName.Length - 7);
+
     }
 
     /// <summary>
@@ -128,7 +156,21 @@ public class PauseMenu : MonoBehaviour
         if (binding == Binding.CANCEL)
         {
             cancel = GameManager.Instance.GetKeyCode(Binding.CANCEL);
+            PlayClickSound();
         }
     }
 
+
+    /// <summary>
+    /// This function is called by the menu and submenu buttons.
+    /// This function plays the click sound.
+    /// </summary>
+    private void PlayClickSound()
+    {
+        if (clickSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
+    }
 }
+

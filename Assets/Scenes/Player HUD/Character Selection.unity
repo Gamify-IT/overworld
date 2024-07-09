@@ -529,6 +529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdfdbb4fa184c3c478cf632db506b501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clickSound: {fileID: 8300000, guid: 7565c07c03948d2448b7897577b7c1f0, type: 3}
 --- !u!114 &796368250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,6 +635,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 20da17b2d591d5e4f9588db4dade1fb5, type: 3}
   - {fileID: 21300000, guid: d88b348644437044bb4c16ec3dbe1414, type: 3}
   - {fileID: 21300000, guid: ef1cd0ff1a75afc4da71435d08b93f06, type: 3}
+  clickSound: {fileID: 8300000, guid: 7565c07c03948d2448b7897577b7c1f0, type: 3}
 --- !u!1 &946046130
 GameObject:
   m_ObjectHideFlags: 0
@@ -1022,6 +1024,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b5c52f8b6c5b2e4092829fdd2d9e475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  achievementNotificationSound: {fileID: 0}
   achievementNotificationManagerPrefab: {fileID: 0}
 --- !u!1 &1521554930
 GameObject:
