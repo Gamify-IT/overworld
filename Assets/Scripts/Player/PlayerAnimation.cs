@@ -29,12 +29,17 @@ public class PlayerAnimation : MonoBehaviour
     private float sprintStartTime = 0f;
     private float sprintDuration = 0f; 
 
+    private float timeInGameStart = 0f;
+    private float timeInGameDuration = 0f;
+
     /// <summary>
     ///     This method is called before the first frame update.
     ///     It is used to initialize variables.
     /// </summary>
     private void Start()
     {
+        timeInGameStart=Time.time;
+
         canMove = true;
         busy = false;
         playerRigidBody = GetComponent<Rigidbody2D>();
@@ -134,6 +139,22 @@ public class PlayerAnimation : MonoBehaviour
                     !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
             }
             // dev keybindings
+        }
+        timeInGameDuration = Time.time - timeInGameStart;
+        UpdateAchievementForTimeInGame();
+    }
+
+    /// <summary>
+    ///     this function updates time achievement each 60 seconds when the player is playing
+    /// </summary>
+    private void UpdateAchievementForTimeInGame()
+    {
+        while (timeInGameDuration >= 60f)
+        {
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.BEGINNER, 1);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.EXPERIENCED_PLAYER, 1);
+            timeInGameDuration -= 60f;
+            timeInGameStart += 60f;
         }
     }
 
