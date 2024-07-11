@@ -127,8 +127,8 @@ public class AreaGeneratorManager : MonoBehaviour
 #endif
 
         //get gamemode parameter of url
-        //string urlPart = Application.absoluteURL.Split("/")[^1];
-        return new Optional<AreaInformation>(new AreaInformation(1, new Optional<int>(1)));
+        //string urlPart = Application.absoluteURL.Split("&")[^1];
+        return new Optional<AreaInformation>(new AreaInformation(1, new Optional<int>()));
         /*
         //split in parts
         string[] areaParts = urlPart.Split("-");

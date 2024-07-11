@@ -384,7 +384,7 @@ public class AreaManager : MonoBehaviour
         return true;
 #endif
         //send area map data to backend
-        path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseID + "/areaMaps/" + areaIdentifier.GetWorldIndex();
+        path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseID + "/area/" + areaIdentifier.GetWorldIndex();
         if(areaIdentifier.IsDungeon())
         {
             path += "/dungeon/" + areaIdentifier.GetDungeonIndex();

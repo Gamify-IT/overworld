@@ -4,10 +4,10 @@ using UnityEngine.SceneManagement;
 
 public enum FacingDirection
 {
-    north,
-    east,
-    south,
-    west
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST
 }
 
 /// <summary>
@@ -51,28 +51,28 @@ public class LoadSubScene : MonoBehaviour
                     //was in the dungeon this scene transition points to
                     areaExchange = new AreaInformation(worldIndex, new Optional<int>());
 
-                    if (facingDirection == FacingDirection.north)
+                    if (facingDirection == FacingDirection.NORTH)
                     {
                         PlayerAnimation.Instance.playerAnimator.Play("Idle_Up");
                         Vector2 playerPosition = this.transform.position + new Vector3(0, 2, 0);
                         GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
                     }
 
-                    if (facingDirection == FacingDirection.east)
+                    if (facingDirection == FacingDirection.EAST)
                     {
                         PlayerAnimation.Instance.playerAnimator.Play("Idle_Right");
                         Vector2 playerPosition = this.transform.position + new Vector3(2, 0, 0);
                         GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
                     }
 
-                    if (facingDirection == FacingDirection.south)
+                    if (facingDirection == FacingDirection.SOUTH)
                     {
                         PlayerAnimation.Instance.playerAnimator.Play("Idle_Down");
                         Vector2 playerPosition = this.transform.position + new Vector3(0, -2, 0);
                         GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
                     }
 
-                    if (facingDirection == FacingDirection.west)
+                    if (facingDirection == FacingDirection.WEST)
                     {
                         PlayerAnimation.Instance.playerAnimator.Play("Idle_Left");
                         Vector2 playerPosition = this.transform.position + new Vector3(-2, 0, 0);
@@ -89,28 +89,28 @@ public class LoadSubScene : MonoBehaviour
             worldIndex = areaExchange.GetWorldIndex();
             dungeonIndex = areaExchange.GetDungeonIndex();
 
-            if (facingDirection == FacingDirection.north)
+            if (facingDirection == FacingDirection.NORTH)
             {
                 PlayerAnimation.Instance.playerAnimator.Play("Idle_Up");
                 Vector2 playerPosition = this.transform.position + new Vector3(0, 2, 0);
                 GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
             }
 
-            if (facingDirection == FacingDirection.east)
+            if (facingDirection == FacingDirection.EAST)
             {
                 PlayerAnimation.Instance.playerAnimator.Play("Idle_Right");
                 Vector2 playerPosition = this.transform.position + new Vector3(2, 0, 0);
                 GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
             }
 
-            if (facingDirection == FacingDirection.south)
+            if (facingDirection == FacingDirection.SOUTH)
             {
                 PlayerAnimation.Instance.playerAnimator.Play("Idle_Down");
                 Vector2 playerPosition = this.transform.position + new Vector3(0, -2, 0);
                 GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
             }
 
-            if (facingDirection == FacingDirection.west)
+            if (facingDirection == FacingDirection.WEST)
             {
                 PlayerAnimation.Instance.playerAnimator.Play("Idle_Left");
                 Vector2 playerPosition = this.transform.position + new Vector3(-2, 0, 0);

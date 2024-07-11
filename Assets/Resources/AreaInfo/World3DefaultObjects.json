@@ -435,7 +435,7 @@
                 "worldIndex": 3,
                 "dungeonIndex": 1
             },
-            "facingDirection": "south",
+            "facingDirection": "SOUTH",
             "style": "HOUSE"
         },
         {
@@ -455,7 +455,7 @@
                 "worldIndex": 3,
                 "dungeonIndex": 2
             },
-            "facingDirection": "south",
+            "facingDirection": "SOUTH",
             "style": "CAVE_ENTRANCE"
         },
         {
@@ -475,7 +475,7 @@
                 "worldIndex": 3,
                 "dungeonIndex": 3
             },
-            "facingDirection": "south",
+            "facingDirection": "SOUTH",
             "style": "HOUSE"
         },
         {
@@ -495,7 +495,7 @@
                 "worldIndex": 3,
                 "dungeonIndex": 4
             },
-            "facingDirection": "south",
+            "facingDirection": "SOUTH",
             "style": "CAVE_ENTRANCE"
         }
     ]
