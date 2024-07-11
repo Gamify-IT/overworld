@@ -27,6 +27,10 @@ public class PlayerAnimation : MonoBehaviour
     private KeyCode moveRight;
     private KeyCode sprint;
 
+    public AudioClip moveSound;
+    private AudioSource audioSource;
+    private bool isMoving;
+
 
     /// <summary>
     ///     This method is called before the first frame update.
@@ -48,7 +52,22 @@ public class PlayerAnimation : MonoBehaviour
         moveRight = GameManager.Instance.GetKeyCode(Binding.MOVE_RIGHT);
         sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
+
+        //get AudioSource component
+        audioSource = GetComponent<AudioSource>();
+        //add AudioSource component if necessary
+        if(audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        //set audio clip
+        audioSource.clip = moveSound;
+        //set AudioSource to loop
+        audioSource.loop = true;
+        //AudioSource does not start playing automatically when the GameObject awakens
+        audioSource.playOnAwake = false;
     }
+
 
     /// <summary>
     ///     If 'canMove' is true, this function allows the player to move.
@@ -57,26 +76,31 @@ public class PlayerAnimation : MonoBehaviour
     {
         if (canMove)
         {
+            isMoving = false;
             movement.x = 0;
             movement.y = 0;
             if (Input.GetKey(moveLeft))
             {
                 movement.x -= 1;
+                isMoving = true;
             }
 
             if (Input.GetKey(moveRight))
             {
                 movement.x += 1;
+                isMoving = true;
             }
 
             if (Input.GetKey(moveDown))
             {
                 movement.y -= 1;
+                isMoving = true;
             }
 
             if (Input.GetKey(moveUp))
             {
                 movement.y += 1;
+                isMoving = true;
             }
 
             movement = movement.normalized;
@@ -85,12 +109,14 @@ public class PlayerAnimation : MonoBehaviour
             {
                 targetSpeed = movementSpeed + sprintingSpeed;
                 playerAnimator.speed = 2;
+                audioSource.pitch = 1.75f;
             }
 
             if (Input.GetKeyUp(sprint))
             {
                 targetSpeed = movementSpeed;
                 playerAnimator.speed = 1;
+                audioSource.pitch = 1f;
             }
 
             // dev keybindings
@@ -118,6 +144,14 @@ public class PlayerAnimation : MonoBehaviour
                     !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
             }
             // dev keybindings
+            if (isMoving && !GameManager.Instance.isPaused)
+            {
+                PlayMoveSound();
+            }
+            else
+            {
+                StopMoveSound();
+            }
         }
     }
 
@@ -255,6 +289,29 @@ public class PlayerAnimation : MonoBehaviour
     {
         this.busy = busy;
     }
+    
+    /// <summary>
+    /// This function plays the movement sound.
+    /// </summary>
+    private void PlayMoveSound()
+    {
+        if (moveSound != null && !audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+    }
+
+    /// <summary>
+    /// This function stops the movement sound.
+    /// </summary>
+    private void StopMoveSound()
+    {
+        if (audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+    }
+
 
     #region Singleton
 
