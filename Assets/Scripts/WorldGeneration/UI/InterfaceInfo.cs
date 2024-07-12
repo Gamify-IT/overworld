@@ -391,6 +391,54 @@ public class InterfaceInfo : MonoBehaviour
         }
     }
 
+    public void AreaSelectionInfoButtonPressed()
+    {
+        Debug.Log("active");
+        if (infoPanel.activeSelf)
+        {
+            infoPanel.SetActive(false);
+        }
+        else
+        {
+            string header = "Area Info";
+            string body = "This menu enables you to select which world and dungeon to generate a new map for. \n" +
+                            "\n" + "<b>Course ID</b>: Select the course for which you want to create a new area. \n" +
+                            "\n" + "<b>World</b>: Enter the world index for the area you want to create. \n" +
+                            "\n" + "<b>Dungeon:</b> Enter the dungeon index if you want to create a new dungeon.\n" +
+                            "\n" + "<b>Hint</b>: If there is already an existing world for this index, the correspondending world will be updated.";
+            DisplayInfo(header, body, true, false);
+        }
+    }
+
+    public void WorldInfoButtonPressed()
+    {
+        Debug.Log("active");
+        if (infoPanel.activeSelf)
+        {
+            infoPanel.SetActive(false);
+        }
+        else
+        {
+            string header = "World Info";
+            string body = "TODO";
+            DisplayInfo(header, body, true, false);
+        }
+    }
+    public void DungeonInfoButtonPressed()
+    {
+        Debug.Log("active");
+        if (infoPanel.activeSelf)
+        {
+            infoPanel.SetActive(false);
+        }
+        else
+        {
+            string header = "Dungeon Info";
+            string body = "TODO";
+            DisplayInfo(header, body, true, false);
+        }
+    }
+
     #endregion
 
     /// <summary>
