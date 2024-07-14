@@ -71,7 +71,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         if (walletButton != null) 
         {
             walletButton.onClick.AddListener(OpenwalletPanel);
-            walletField.text = $"Your current credit: {ownData.GetCredit()}";
+            walletField.text = $"Your current credit: {ownData.GetCredit()}.";
             
         }
         else
@@ -269,7 +269,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     {
         league = "Filter by...";
         world = "Filter by...";
-       // minigame = "Filter by..."; 
 
         filterActive = false;
 
@@ -426,12 +425,10 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private void DisplayRewards(List<PlayerStatisticData> rewardsToDisplay)
     {
-        // Ordnung des Leaderboards
         var sortedRewards = rewardsToDisplay.OrderByDescending(rank => rank.GetRewards()).ToList();
 
         for (int i = 0; i < sortedRewards.Count; i++)
         {
-            // Platzierung
             DisplayRewards(sortedRewards[i], i + 1);
         }
     }
@@ -505,7 +502,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             SceneManager.UnloadSceneAsync("Rewards");
             isLeaderboardOpen = false;
-            Time.timeScale = 1f; // Zeit fortsetzen
+            Time.timeScale = 1f; 
         }
     }
 
