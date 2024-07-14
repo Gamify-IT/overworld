@@ -16,12 +16,14 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     [SerializeField] public TMP_Dropdown LeagueDropdown;
     [SerializeField] public TMP_Dropdown WorldDropdown;
     [SerializeField] public TMP_Dropdown MinigameDropdown;
-    [SerializeField] private GameObject distributionPanel;
+    [SerializeField] private GameObject walletPanel;
     [SerializeField] private WorldData worldNames;
     [SerializeField] private LeagueDefiner leagues;
     [SerializeField] private GameObject VisibilityMenu;
     [SerializeField] private Button visButton;
     [SerializeField] private TMP_InputField inputField;
+    [SerializeField] private TMP_Text walletField;
+
 
     private string league;
     private string world;
@@ -33,7 +35,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private Button closeButton;
     public TMP_Text visibilityButton;
-    public Button distributionButton;
+    public Button walletButton;
     public Button resetButton;
     public Button changeVisibilityButton;
     public Button closeInputfieldButton;
@@ -66,13 +68,15 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         ranking = DataManager.Instance.GetAllPlayerStatistics();
         ownData = DataManager.Instance.GetOwnStatisticData();
 
-        if (distributionButton != null) 
+        if (walletButton != null) 
         {
-            distributionButton.onClick.AddListener(OpenDistributionPanel);
+            walletButton.onClick.AddListener(OpenwalletPanel);
+            walletField.text = $"Your current credit: {ownData.GetCredit()}";
+            
         }
         else
         {
-            Debug.LogError("Distribution Button is not assigned in the Inspector.");
+            Debug.LogError("wallet Button is not assigned in the Inspector.");
         }
 
         if (visibilityButton!= null)
@@ -512,9 +516,9 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             CloseLeaderboardScene();
         }
 
-        if (Input.GetKeyDown(KeyCode.Return) && distributionPanel != null && distributionPanel.activeSelf)
+        if (Input.GetKeyDown(KeyCode.Return) && walletPanel != null && walletPanel.activeSelf)
         {
-            CloseDistributionPanel();
+            ClosewalletPanel();
         }
 
         if (Input.GetKeyDown(KeyCode.Return) && inputField.gameObject.activeSelf)
@@ -524,26 +528,27 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     }
 
 
-    private void OpenDistributionPanel()
+    private void OpenwalletPanel()
     {
-        if (distributionPanel != null)
+        if (walletPanel != null)
         {
-            distributionPanel.SetActive(true);
-            Debug.Log("Distribution Panel opened.");
+            walletPanel.SetActive(true);
+            Debug.Log("wallet Panel opened.");
+            
 
         }
         else
         {
-            Debug.LogError("Distribution Panel is not assigned in the Inspector.");
+            Debug.LogError("wallet Panel is not assigned in the Inspector.");
         }
     }
 
-    private void CloseDistributionPanel()
+    private void ClosewalletPanel()
     {
-        if (distributionPanel != null)
+        if (walletPanel != null)
         {
-            distributionPanel.SetActive(false);
-            Debug.Log("Distribution Panel closed.");
+            walletPanel.SetActive(false);
+            Debug.Log("wallet Panel closed.");
         }
     }
 
@@ -567,6 +572,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Debug.LogError("InputField is not assigned in the Inspector.");
         }
     }
+
+   
 
 
     private void CloseInputField()
