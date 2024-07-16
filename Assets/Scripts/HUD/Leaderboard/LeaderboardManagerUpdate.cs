@@ -94,6 +94,11 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         if (changeVisibilityButton != null)
         {
             changeVisibilityButton.onClick.AddListener(ToggleButtonText);
+
+            // the following can be used as soon as the the leaderboard branch is merged with the main branch
+
+            /* changeVisibilityButton.GetComponent<Image>().sprite = DataManager.Instance.GetPlayerFace(DataManager.Instance.GetCharacterIndex());
+             */
         }
         else
         {
