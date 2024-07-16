@@ -1,13 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
-using System.Linq;
-using System;
 using System.Runtime.InteropServices;
-using UnityEngine.SceneManagement;
-using Cysharp.Threading.Tasks;
+using System.Text.RegularExpressions;
+using UnityEngine.UI;
 
 public class SelectorUI : MonoBehaviour
 {
@@ -18,10 +13,12 @@ public class SelectorUI : MonoBehaviour
     [DllImport("__Internal")]
     private static extern void CloseOverworld();
 
+    // UI elements
     [SerializeField] private TMP_Dropdown courseIDDropDownMenu;
     [SerializeField] private TMP_InputField wordlIndexInputField;
     [SerializeField] private TMP_InputField dungeonIndexInputField;
 
+    // world data
     private string courseID;
     private int worldIndex;
     private Optional<int> dungeonIndex;
@@ -36,38 +33,67 @@ public class SelectorUI : MonoBehaviour
         dungeonIndexInputField.text = "";
     }
 
-    public void OnContinueButtonPressed()
+    /// <summary>
+    /// Closes the Selector Menu and returns to the Landing Page.
+    /// </summary>
+    public void QuitButtonPressed()
     {
-        ContinueButton();
+        CloseOverworld();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     private void CourseIDDropDownMenu()
     {
         string path = GameSettings.GetOverworldBackendPath() + "/courses/";
-        //Optional<> areaDTO = await RestRequest.GetRequest<AreaDTO>(path);
+        // TODO: retieve all courses from backend via get request
     }
 
     /// <summary>
     /// This function is called by the continue button and saves the entered course ID, dungeon Index (if entered) and world index.
+    /// After that, the World Generation continues with the Genrator Menu.
     /// </summary>
     /// <returns></returns>
-    public async UniTask ContinueButton()
+    public void OnContinueButtonPressed()
     {
-        Debug.Log("Course ID: " + courseIDDropDownMenu.value);
-        Debug.Log("World Index: " + wordlIndexInputField.text);
-        Debug.Log("Dungeon Index: " + dungeonIndexInputField.text);
+        if (CheckEnteredData())
+        {
+            Debug.Log("Course ID: " + courseIDDropDownMenu.value);
+            Debug.Log("World Index: " + wordlIndexInputField.text);
+            Debug.Log("Dungeon Index: " + dungeonIndexInputField.text);
 
-        // retrieve entered data
-        courseID = courseIDDropDownMenu.value.ToString();
-        worldIndex = int.Parse(wordlIndexInputField.text);
-        dungeonIndex = dungeonIndexInputField.text != "" ? new Optional<int>(int.Parse(dungeonIndexInputField.text)) : new Optional<int>();
-        Debug.Log(AreaGeneratorManager.Instance);
-        AreaGeneratorManager.Instance.StartGenerator(courseID, worldIndex, dungeonIndex);
+            // retrieve entered data
+            courseID = courseIDDropDownMenu.value.ToString();
+            worldIndex = int.Parse(wordlIndexInputField.text);
+            dungeonIndex = dungeonIndexInputField.text != "" ? new Optional<int>(int.Parse(dungeonIndexInputField.text)) : new Optional<int>();
+            Debug.Log(AreaGeneratorManager.Instance);
+            AreaGeneratorManager.Instance.StartGenerator(courseID, worldIndex, dungeonIndex);
+        }
+        else
+        {
+            InterfaceInfo.Instance.DisplayErrorInfo();
+        }
+       
     }
 
-    public void QuitButtonPressed()
+    /// <summary>
+    /// Checks if the entered data by the users is correect, i.e., a couse is selected and the world and dungeon index are correct.
+    /// </summary>
+    /// <returns></returns>
+    private bool CheckEnteredData()
     {
-        CloseOverworld();
+        Regex worldIndexValue = new(@"^[1-9]\d*$");
+        Regex dungeonIndexValue = new(@"^[1-4]$");
+
+        if (courseIDDropDownMenu.value != 0 && worldIndexValue.IsMatch(wordlIndexInputField.text) && dungeonIndexValue.IsMatch(dungeonIndexInputField.text))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 }
