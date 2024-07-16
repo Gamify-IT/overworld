@@ -1211,6 +1211,7 @@ MonoBehaviour:
   infoText: {fileID: 1378176124}
   demoButton: {fileID: 809919491}
   quitButton: {fileID: 1271759980}
+  selectorUIPrefab: {fileID: 4782640127395809241, guid: 076d48f03efd0bc4496cbe604e7bdf67, type: 3}
 --- !u!1 &1978432640
 GameObject:
   m_ObjectHideFlags: 0
