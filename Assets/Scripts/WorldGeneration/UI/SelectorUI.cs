@@ -65,4 +65,9 @@ public class SelectorUI : MonoBehaviour
         AreaGeneratorManager.Instance.StartGenerator(courseID, worldIndex, dungeonIndex);
     }
 
+    public void QuitButtonPressed()
+    {
+        CloseOverworld();
+    }
+
 }
