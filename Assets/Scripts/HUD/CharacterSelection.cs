@@ -8,11 +8,9 @@ public class CharacterSelection : MonoBehaviour
 {
     private Image characterImage;
     private Sprite character;
-    private GameObject confirmButton;
     private int numberOfCharacters = 3;
     private int currentIndex = 0;
     [SerializeField] private GameObject[] characterPrefabs;
-    [SerializeField] private Sprite[] playerFaces;
     
 
     public AudioClip clickSound;
@@ -27,10 +25,8 @@ public class CharacterSelection : MonoBehaviour
         GameManager.Instance.isPaused = true;
         //get image component
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
-        //get confirm button
-        confirmButton = GameObject.Find("Confirm Button");
         //get the index of the currently selected character 
-        currentIndex = DataManager.Instance.characterIndex;
+        currentIndex = DataManager.Instance.GetCharacterIndex();
 
         //get AudioSource component
         audioSource=GetComponent<AudioSource>();
@@ -90,12 +86,12 @@ public class CharacterSelection : MonoBehaviour
         // reset current character, instance and face
         Destroy(currentPlayer);
         PlayerAnimation.Instance.ResetInstance();
-        playerFace.sprite = playerFaces[currentIndex];
+        playerFace.sprite = DataManager.Instance.GetCharacterFaces()[currentIndex];
 
         // create new character in player scene 
         GameObject newPlayer = Instantiate(characterPrefabs[currentIndex], position, rotation);
         SceneManager.MoveGameObjectToScene(newPlayer, SceneManager.GetSceneByName("Player"));
-        DataManager.Instance.characterIndex = currentIndex;
+        DataManager.Instance.SetCharacterIndex(currentIndex);
 
         // add minimap camera to new character 
         miniMapCamera.transform.parent = newPlayer.transform;

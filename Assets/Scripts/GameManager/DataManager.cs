@@ -26,7 +26,9 @@ public class DataManager : MonoBehaviour
     private Dictionary<Binding, KeyCode> keybindings;
 
     // player settings 
-    public int characterIndex = 0;
+    private int characterIndex = 0;
+    [SerializeField] private Sprite[] characterFaces;
+
 
     /// <summary>
     ///     This function sets given data for the specified world
@@ -1098,5 +1100,32 @@ public class DataManager : MonoBehaviour
         }
         
         return activeMinigameCount;
+    }
+
+    /// <summary>
+    /// Gets the character index of the currently selected character by the player
+    /// </summary>
+    /// <returns>index of the character position in the array</returns>
+    public int GetCharacterIndex()
+    {
+        return characterIndex;
+    }
+
+    /// <summary>
+    /// Updates the character index if the character is changed by the player
+    /// </summary>
+    /// <param name="index">index of the newly, selected character</param>
+    public void SetCharacterIndex(int index)
+    {
+        characterIndex = index;
+    }
+
+    /// <summary>
+    /// Gets the array with all faces of available characters in the game
+    /// </summary>
+    /// <returns>player faces array</returns>
+    public Sprite[] GetCharacterFaces()
+    {
+        return characterFaces;
     }
 }
