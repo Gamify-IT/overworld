@@ -2,6 +2,8 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 ///     This enum is used to store the state of a minigame as follows:
@@ -34,6 +36,9 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     [SerializeField] private MinigameStatus status;
     [SerializeField] private int highscore;
     public SpriteRenderer sprites;
+    private static List<(int, int, int)> unlockedMinigames = new List<(int, int, int)>();
+    private static List<(int, int, int)> successfullyCompletedMinigames = new List<(int, int, int)>();
+    private static List<(string, string)> alreadyPlayed = new List<(string, string)>();
 
     #endregion
 
@@ -117,6 +122,12 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         {
             Debug.Log("Player enters minigame " + game + ", config: " + configurationID);
             StartCoroutine(LoadMinigameStarting());
+            var key = (world,dungeon,number);
+            if(!unlockedMinigames.Contains(key))
+            {
+                unlockedMinigames.Add((world,dungeon,number));
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_FINDER, 1);
+            }
         }
     }
 
@@ -160,10 +171,41 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
                 Debug.Log("Minigame " + world + "-" + dungeon + "-" + number + ": color: blue");
                 sprites.color = new Color(0f, 0f, 1f, 1f);
                 gameObject.SetActive(true);
+                UpdateAchievements();
                 break;
         }
     }
 
+    /// <summary>
+    ///     This functions updates achievements for each minigame.
+    /// </summary>
+    private void UpdateAchievements()
+    {
+        var key = (world,dungeon,number);
+        if(!successfullyCompletedMinigames.Contains(key))
+        {
+            successfullyCompletedMinigames.Add((world,dungeon,number));
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_ACHIEVER, 1);
+        }
+        if(game=="CHICKENSHOCK"){
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.CHICKENSHOCK_MASTER, 1);
+        }
+        if(game=="MEMORY"){
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MEMORY_MASTER, 1);
+        }
+        if(game=="FINITEQUIZ"){
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.FINITEQUIZ_MASTER, 1);
+        }
+        if(game=="TOWERCRUSH"){
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TOWERCRUSH_MASTER, 1);
+        }
+        if(game=="CROSSWORDPUZZLE"){
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.CROSSWORDPUZZLE_MASTER, 1);
+        }
+        if(game=="BUGFINDER"){
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.BUGFINDER_MASTER, 1);
+        }
+    }
     /// <summary>
     ///     This function returns the info of the minigame object.
     /// </summary>
