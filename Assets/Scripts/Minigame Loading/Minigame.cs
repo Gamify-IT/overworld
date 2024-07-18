@@ -127,6 +127,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
             {
                 unlockedMinigames.Add((world,dungeon,number));
                 GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_FINDER, 1);
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_MASTER, 1);
             }
         }
     }
@@ -186,6 +187,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         {
             successfullyCompletedMinigames.Add((world,dungeon,number));
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_ACHIEVER, 1);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_PROFESSIONAL, 1);
         }
         if(game=="CHICKENSHOCK"){
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.CHICKENSHOCK_MASTER, 1);
