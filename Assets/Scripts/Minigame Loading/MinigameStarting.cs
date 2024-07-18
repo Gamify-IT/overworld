@@ -91,7 +91,7 @@ public class MinigameStarting : MonoBehaviour
     {
         LoadMinigameInIframe(game, configurationId);
         PlayClickSound();
-        Invoke("QuitMinigame", 0.3f);
+        //Invoke("QuitMinigame", 0.3f);  // Makes no sense here ?!
     }
 
     /// <summary>
