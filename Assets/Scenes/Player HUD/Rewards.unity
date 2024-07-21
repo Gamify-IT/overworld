@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5418,6 +5418,8 @@ MonoBehaviour:
   changeVisibilityButton: {fileID: 952899214}
   closeInputfieldButton: {fileID: 0}
   closeVisibilityMenuButton: {fileID: 826803893}
+  clickSound: {fileID: 8300000, guid: 7565c07c03948d2448b7897577b7c1f0, type: 3}
+  walletOpenSound: {fileID: 8300000, guid: c8c01f6ab0e908f45a67a88166bdfa25, type: 3}
 --- !u!1 &1140657390
 GameObject:
   m_ObjectHideFlags: 0
