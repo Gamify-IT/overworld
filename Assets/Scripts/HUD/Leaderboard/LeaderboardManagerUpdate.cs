@@ -41,6 +41,9 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     public Button closeInputfieldButton;
     public Button closeVisibilityMenuButton;
 
+    public AudioClip clickSound;
+    public AudioClip walletOpenSound;
+    private AudioSource audioSource;
 
 
 
@@ -64,7 +67,14 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        if(audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.playOnAwake = false;
 
+        PlaySound(clickSound);
         ranking = DataManager.Instance.GetAllPlayerStatistics();
         ownData = DataManager.Instance.GetOwnStatisticData();
 
@@ -175,6 +185,12 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     }
 
+    private void PlaySound(AudioClip audioClip)
+    {
+        audioSource.clip = audioClip;
+        audioSource.Play();
+    }
+
     private void Setup()
     {
         SetupDropdowns();
@@ -223,6 +239,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             VisibilityMenu.SetActive(true);
             Debug.Log("Visibility Menu opened.");
+            PlaySound(clickSound);
         }
         else
         {
@@ -236,6 +253,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             VisibilityMenu.SetActive(false);
             Debug.Log("Visibility Menu closed.");
+            PlaySound(clickSound);
         }
         else
         {
@@ -503,6 +521,15 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     public void CloseLeaderboardScene()
     {
+        if (clickSound != null)
+        {
+            GameObject temporaryAudioSource = new GameObject("TemporaryAudio");
+            AudioSource audioSource = temporaryAudioSource.AddComponent<AudioSource>();
+            audioSource.clip = clickSound;
+            audioSource.PlayOneShot(clickSound);
+            Destroy(temporaryAudioSource, clickSound.length);
+        }
+        PlaySound(clickSound);
         if (isLeaderboardOpen)
         {
             SceneManager.UnloadSceneAsync("Rewards");
@@ -537,6 +564,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             walletPanel.SetActive(true);
             Debug.Log("wallet Panel opened.");
             
+            PlaySound(walletOpenSound);
 
         }
         else
@@ -551,6 +579,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             walletPanel.SetActive(false);
             Debug.Log("wallet Panel closed.");
+            PlaySound(clickSound);
         }
     }
 
