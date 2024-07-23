@@ -78,6 +78,8 @@ public class AreaGeneratorManager : MonoBehaviour
         if(areaIdentifier.IsPresent())
         {
             currentArea = areaIdentifier.Value();
+            Debug.Log("AreaInformation: " + areaIdentifier.Value().GetWorldIndex());
+            Debug.Log("AreaInformation: " + areaIdentifier.Value().GetDungeonIndex());
         }
         else
         {
@@ -92,6 +94,7 @@ public class AreaGeneratorManager : MonoBehaviour
         if(result.IsPresent())
         {
             areaData = result.Value();
+            Debug.Log("AreaData: " + result.Value());
             LoadAreaScene();
         }
         else
@@ -333,7 +336,7 @@ public class AreaGeneratorManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Saves all necessary values for the World Generation and starts it.
+    ///     Saves all necessary values for the World Generation and starts it.
     /// </summary>
     /// <param name="courseID">ID of the selected course</param>
     /// <param name="worldIndex">Index of the selected world which should be created</param>
