@@ -3,6 +3,7 @@ using TMPro;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class SelectorUI : MonoBehaviour
 {
@@ -15,13 +16,14 @@ public class SelectorUI : MonoBehaviour
 
     // UI elements
     [SerializeField] private TMP_Dropdown courseIDDropDownMenu;
-    [SerializeField] private TMP_InputField wordlIndexInputField;
-    [SerializeField] private TMP_InputField dungeonIndexInputField;
+    [SerializeField] private TMP_Dropdown wordlIndexDropDownMenu;
+    [SerializeField] private TMP_Dropdown dungeonIndexDropDownMenu;
 
     // world data
     private string courseID;
     private int worldIndex;
     private Optional<int> dungeonIndex;
+    private List<CourseData> courseData;
 
     /// <summary>
     ///     This function resets the content panel
@@ -29,8 +31,8 @@ public class SelectorUI : MonoBehaviour
     public void ResetContentPanel()
     {
         courseIDDropDownMenu.value = 0;
-        wordlIndexInputField.text = "";
-        dungeonIndexInputField.text = "";
+        wordlIndexDropDownMenu.value = 0;
+        dungeonIndexDropDownMenu.value = 0;
     }
 
     /// <summary>
@@ -44,10 +46,26 @@ public class SelectorUI : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
-    private void CourseIDDropDownMenu()
+    async private void CourseIDDropDownMenu()
     {
         string path = GameSettings.GetOverworldBackendPath() + "/courses/";
+
         // TODO: retieve all courses from backend via get request
+
+        Optional<List<CourseDTO>> courseDTO = await RestRequest.GetRequest<List<CourseDTO>>(path);
+
+        if (courseDTO.IsPresent())
+        {
+            courseData = CourseData.ConvertDtoToData(courseDTO.Value());
+        }
+
+        List<string> courseNames = new List<string>();
+
+        foreach (CourseData courseData in courseData)
+        {
+            Debug.Log(courseData.GetCourseName());
+            courseNames.Add(courseData.GetCourseName());
+        }
     }
 
     /// <summary>
@@ -60,13 +78,13 @@ public class SelectorUI : MonoBehaviour
         if (CheckEnteredData())
         {
             Debug.Log("Course ID: " + courseIDDropDownMenu.value);
-            Debug.Log("World Index: " + wordlIndexInputField.text);
-            Debug.Log("Dungeon Index: " + dungeonIndexInputField.text);
+            Debug.Log("World Index: " + wordlIndexDropDownMenu.value);
+            Debug.Log("Dungeon Index: " + dungeonIndexDropDownMenu.value);
 
             // retrieve entered data
             courseID = courseIDDropDownMenu.value.ToString();
-            worldIndex = int.Parse(wordlIndexInputField.text);
-            dungeonIndex = dungeonIndexInputField.text != "" ? new Optional<int>(int.Parse(dungeonIndexInputField.text)) : new Optional<int>();
+            worldIndex = wordlIndexDropDownMenu.value;
+            dungeonIndex = dungeonIndexDropDownMenu.value != 0 ? new Optional<int>(dungeonIndexDropDownMenu.value) : new Optional<int>();
             Debug.Log(AreaGeneratorManager.Instance);
             AreaGeneratorManager.Instance.StartGenerator(courseID, worldIndex, dungeonIndex);
         }
@@ -78,15 +96,12 @@ public class SelectorUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks if the entered data by the users is correect, i.e., a couse is selected and the world and dungeon index are correct.
+    /// Checks if the user has selected course and world id.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>true if values have been selected</returns>
     private bool CheckEnteredData()
     {
-        Regex worldIndexValue = new(@"^[1-9]\d*$");
-        Regex dungeonIndexValue = new(@"^[1-4]$");
-
-        if (courseIDDropDownMenu.value != 0 && worldIndexValue.IsMatch(wordlIndexInputField.text) && dungeonIndexValue.IsMatch(dungeonIndexInputField.text))
+        if (courseIDDropDownMenu.value != 0 && wordlIndexDropDownMenu.value != 0)
         {
             return true;
         }
