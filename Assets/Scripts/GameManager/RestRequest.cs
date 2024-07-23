@@ -117,6 +117,7 @@ public static class RestRequest
                 case UnityWebRequest.Result.Success:
                     Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
                     List<T> returnValue = JsonHelper.GetJsonList<T>(webRequest.downloadHandler.text);
+                    Debug.Log("JSON List of courses: " + returnValue);
                     Optional<List<T>> result = new Optional<List<T>>(returnValue);
                     return result;
             }

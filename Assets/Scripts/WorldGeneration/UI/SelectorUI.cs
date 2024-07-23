@@ -55,7 +55,7 @@ public class SelectorUI : MonoBehaviour
 
         // TODO: retieve all courses from backend via get request
 
-        Optional<List<CourseDTO>> courseDTO = await RestRequest.GetRequest<List<CourseDTO>>(path);
+        Optional<List<CourseDTO>> courseDTO = await RestRequest.GetListRequest<CourseDTO>(path);
 
         if (courseDTO.IsPresent())
         {
