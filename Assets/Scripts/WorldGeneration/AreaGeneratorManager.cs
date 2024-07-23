@@ -68,7 +68,7 @@ public class AreaGeneratorManager : MonoBehaviour
         Debug.Log("Splitting Url: " + Application.absoluteURL);
         startParameters = Application.absoluteURL.Split("/")[^1];
         Debug.Log("Start Parameters: "  + startParameters);
-        courseID = startParameters.Split("&")[^2];
+        //courseID = startParameters.Split("&")[^2];
         Debug.Log("Course ID: " + courseID);
 #endif
         SetupUI();
