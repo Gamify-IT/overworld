@@ -53,8 +53,6 @@ public class SelectorUI : MonoBehaviour
     {
         string path = GameSettings.GetOverworldBackendPath() + "/courses/";
 
-        // TODO: retieve all courses from backend via get request
-
         Optional<List<CourseDTO>> courseDTO = await RestRequest.GetListRequest<CourseDTO>(path);
 
         if (courseDTO.IsPresent())
@@ -62,6 +60,15 @@ public class SelectorUI : MonoBehaviour
             courseData = CourseData.ConvertDtoToData(courseDTO.Value());
         }
 
+        FillCourseDropDownMenu();
+
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void FillCourseDropDownMenu()
+    {
         List<string> courseNames = new List<string>();
 
         foreach (CourseData courseData in courseData)
@@ -69,6 +76,9 @@ public class SelectorUI : MonoBehaviour
             Debug.Log(courseData.GetCourseName());
             courseNames.Add(courseData.GetCourseName());
         }
+
+        courseIDDropDownMenu.AddOptions(courseNames);
+
     }
 
     /// <summary>

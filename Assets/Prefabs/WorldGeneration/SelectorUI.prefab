@@ -5837,12 +5837,6 @@ MonoBehaviour:
     m_Options:
     - m_Text: 
       m_Image: {fileID: 0}
-    - m_Text: Course #1
-      m_Image: {fileID: 0}
-    - m_Text: Course #2
-      m_Image: {fileID: 0}
-    - m_Text: Course #3
-      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
