@@ -1,8 +1,6 @@
 using UnityEngine;
 using TMPro;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
-using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class SelectorUI : MonoBehaviour
@@ -25,6 +23,11 @@ public class SelectorUI : MonoBehaviour
     private Optional<int> dungeonIndex;
     private List<CourseData> courseData;
 
+    private void Awake()
+    {
+        LoadExistingCourses();
+    }
+
     /// <summary>
     ///     This function resets the content panel
     /// </summary>
@@ -46,7 +49,7 @@ public class SelectorUI : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
-    async private void CourseIDDropDownMenu()
+    async private void LoadExistingCourses()
     {
         string path = GameSettings.GetOverworldBackendPath() + "/courses/";
 
