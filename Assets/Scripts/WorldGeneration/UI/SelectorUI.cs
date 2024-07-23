@@ -25,7 +25,12 @@ public class SelectorUI : MonoBehaviour
 
     private void Awake()
     {
+#if UNITY_EDITOR
+        List<string> dummyCourses = new() { "Test 1", "Test 2" };
+        courseIDDropDownMenu.AddOptions(dummyCourses);
+#else
         LoadExistingCourses();
+#endif
     }
 
     /// <summary>

@@ -94,7 +94,8 @@ public class AreaGeneratorManager : MonoBehaviour
         if(result.IsPresent())
         {
             areaData = result.Value();
-            Debug.Log("AreaData: " + result.Value());
+            Debug.Log("AreaData: " + result.Value().GetArea().GetWorldIndex());
+            Debug.Log("AreaData: " + result.Value().GetArea().GetDungeonIndex());
             LoadAreaScene();
         }
         else
