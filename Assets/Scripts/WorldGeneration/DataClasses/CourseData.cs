@@ -8,6 +8,7 @@ using UnityEngine;
 public class CourseData
 {
     #region Attributes
+    private int courseID;
     private string courseName;
     private readonly string semester;
     private readonly string description;
@@ -16,8 +17,9 @@ public class CourseData
     #endregion
 
     #region Constructor 
-    public CourseData( string courseName, string semester, string description, bool active, List<WorldData> worlds)
+    public CourseData(int courseID, string courseName, string semester, string description, bool active, List<WorldData> worlds)
     {
+        this.courseID = courseID;
         this.courseName = courseName;
         this.semester = semester;
         this.description = description;
@@ -33,6 +35,7 @@ public class CourseData
     /// <returns>The converted CourseData</returns>
     public static CourseData ConvertDtoToData(CourseDTO dto)
     {
+        int courseID = dto.courseID;
         string courseName = dto.courseName;
         string semester = dto.semester;
         string description = dto.description;
@@ -46,12 +49,12 @@ public class CourseData
             worlds.Add(worldData);
         }
 
-        CourseData data = new CourseData(courseName, semester, description, active, worlds);
+        CourseData data = new CourseData(courseID, courseName, semester, description, active, worlds);
         return data;
     }
 
     /// <summary>
-    ///     Thi function converts a list of CourseDTOs to a list of CourseDatas
+    ///     This function converts a list of CourseDTOs to a list of CourseDatas
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
@@ -70,12 +73,21 @@ public class CourseData
 
     #region Getter 
     /// <summary>
-    /// 
+    ///     Gets the name of the course
     /// </summary>
-    /// <returns></returns>
+    /// <returns>name of the course</returns>
     public string GetCourseName()
     {
         return courseName;
+    }
+
+    /// <summary>
+    ///     Gets the course ID of the course
+    /// </summary>
+    /// <returns>ID of the course</returns>
+    public int GetCourseID()
+    {
+        return courseID;
     }
     #endregion
 }

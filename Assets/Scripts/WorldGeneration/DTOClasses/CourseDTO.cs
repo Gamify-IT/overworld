@@ -10,6 +10,7 @@ using System;
 public class CourseDTO
 {
     #region Attributes
+    public int courseID;
     public string courseName;
     public string semester;
     public string description;
@@ -18,8 +19,9 @@ public class CourseDTO
     #endregion
 
     #region Constructors 
-    public CourseDTO(string courseName, string semester, string description, bool active, List<WorldDTO> worlds)
+    public CourseDTO(int courseID, string courseName, string semester, string description, bool active, List<WorldDTO> worlds)
     {
+        this.courseID = courseID;
         this.courseName = courseName;
         this.semester = semester;
         this.description = description;

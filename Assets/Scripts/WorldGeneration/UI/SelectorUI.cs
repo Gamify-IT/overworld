@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.Collections;
 
 public class SelectorUI : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class SelectorUI : MonoBehaviour
     private int worldIndex;
     private Optional<int> dungeonIndex;
     private List<CourseData> courseData;
+    private ArrayList courseIDs;
 
     private void Awake()
     {
@@ -80,6 +82,7 @@ public class SelectorUI : MonoBehaviour
         {
             Debug.Log(courseData.GetCourseName());
             courseNames.Add(courseData.GetCourseName());
+            courseIDs.Add(courseData.GetCourseID());
         }
 
         courseIDDropDownMenu.AddOptions(courseNames);
@@ -99,8 +102,9 @@ public class SelectorUI : MonoBehaviour
             Debug.Log("World Index: " + wordlIndexDropDownMenu.value);
             Debug.Log("Dungeon Index: " + dungeonIndexDropDownMenu.value);
 
-            // retrieve entered data
-            courseID = courseIDDropDownMenu.value.ToString();
+            // retrieve entered data from dropdownmenus
+            //courseID = courseIDDropDownMenu.value.ToString();
+            courseID = (string) courseIDs[courseIDDropDownMenu.value];
             worldIndex = wordlIndexDropDownMenu.value;
             dungeonIndex = dungeonIndexDropDownMenu.value != 0 ? new Optional<int>(dungeonIndexDropDownMenu.value) : new Optional<int>();
             Debug.Log(AreaGeneratorManager.Instance);
