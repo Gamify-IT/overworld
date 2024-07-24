@@ -8,7 +8,7 @@ using UnityEngine;
 public class CourseData
 {
     #region Attributes
-    private int courseID;
+    private int id;
     private string courseName;
     private readonly string semester;
     private readonly string description;
@@ -17,9 +17,9 @@ public class CourseData
     #endregion
 
     #region Constructor 
-    public CourseData(int courseID, string courseName, string semester, string description, bool active, List<WorldData> worlds)
+    public CourseData(int id, string courseName, string semester, string description, bool active, List<WorldData> worlds)
     {
-        this.courseID = courseID;
+        this.id = id;
         this.courseName = courseName;
         this.semester = semester;
         this.description = description;
@@ -35,7 +35,7 @@ public class CourseData
     /// <returns>The converted CourseData</returns>
     public static CourseData ConvertDtoToData(CourseDTO dto)
     {
-        int courseID = dto.courseID;
+        int courseID = dto.id;
         string courseName = dto.courseName;
         string semester = dto.semester;
         string description = dto.description;
@@ -87,7 +87,7 @@ public class CourseData
     /// <returns>ID of the course</returns>
     public int GetCourseID()
     {
-        return courseID;
+        return id;
     }
     #endregion
 }
