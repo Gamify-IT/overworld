@@ -103,6 +103,7 @@ public class SelectorUI : MonoBehaviour
             Debug.Log("Dungeon Index: " + dungeonIndexDropDownMenu.value);
 
             // retrieve entered data from dropdownmenus
+            Debug.Log("array index: " + (courseIDDropDownMenu.value - 1));
             Debug.Log("courseID: " + courseIDs[courseIDDropDownMenu.value - 1]);
             courseID = courseIDs[courseIDDropDownMenu.value - 1];
             Debug.Log("courseID string: " + courseID.ToString());
