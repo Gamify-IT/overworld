@@ -105,6 +105,10 @@ public class SelectorUI : MonoBehaviour
             // retrieve entered data from dropdownmenus
             Debug.Log("array index: " + (courseIDDropDownMenu.value - 1));
             Debug.Log("courseID: " + courseIDs[courseIDDropDownMenu.value - 1]);
+            for (int i = 0; i < courseIDs.Count; i++)
+            {
+                Debug.Log("courseID element: " + courseIDs[i]);
+            }
             courseID = courseIDs[courseIDDropDownMenu.value - 1];
             Debug.Log("courseID string: " + courseID.ToString());
             worldIndex = wordlIndexDropDownMenu.value;
