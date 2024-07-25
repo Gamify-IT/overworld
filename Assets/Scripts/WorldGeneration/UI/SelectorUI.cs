@@ -98,17 +98,20 @@ public class SelectorUI : MonoBehaviour
     {
         if (CheckEnteredData())
         {
+
             Debug.Log("Course ID: " + courseIDDropDownMenu.value);
             Debug.Log("World Index: " + wordlIndexDropDownMenu.value);
             Debug.Log("Dungeon Index: " + dungeonIndexDropDownMenu.value);
 
             // retrieve entered data from dropdownmenus
             Debug.Log("array index: " + (courseIDDropDownMenu.value - 1));
+            courseIDs.ForEach(id => Debug.Log("id list: " + id));
             Debug.Log("courseID: " + courseIDs[courseIDDropDownMenu.value - 1]);
             for (int i = 0; i < courseIDs.Count; i++)
             {
                 Debug.Log("courseID element: " + courseIDs[i]);
             }
+            courseIDs.ForEach(id => Debug.Log("id list: " + id));
             courseID = courseIDs[courseIDDropDownMenu.value - 1];
             Debug.Log("courseID string: " + courseID.ToString());
             worldIndex = wordlIndexDropDownMenu.value;
