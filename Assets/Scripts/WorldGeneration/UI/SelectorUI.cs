@@ -19,11 +19,11 @@ public class SelectorUI : MonoBehaviour
     [SerializeField] private TMP_Dropdown dungeonIndexDropDownMenu;
 
     // world data
-    private string courseID;
+    private int courseID;
     private int worldIndex;
     private Optional<int> dungeonIndex;
-    private CourseData[] courseData;
-    private ArrayList courseIDs;
+    private List<CourseData> courseData;
+    private List<int> courseIDs;
 
     private void Awake()
     {
@@ -60,7 +60,7 @@ public class SelectorUI : MonoBehaviour
     {
         string path = GameSettings.GetOverworldBackendPath() + "/courses/";
 
-        Optional<CourseDTO[]> courseDTO = await RestRequest.GetArrayRequest<CourseDTO>(path);
+        Optional<List<CourseDTO>> courseDTO = await RestRequest.GetListRequest<CourseDTO>(path);
 
         if (courseDTO.IsPresent())
         {
@@ -80,9 +80,13 @@ public class SelectorUI : MonoBehaviour
 
         foreach (CourseData courseData in courseData)
         {
-            Debug.Log(courseData.GetCourseName());
+            Debug.Log("Course Name: " + courseData.GetCourseName());
             courseNames.Add(courseData.GetCourseName());
+            courseNames.ForEach(name => Debug.Log("current name list: " + name));
+
+            Debug.Log("Course ID: " + courseData.GetCourseID());
             courseIDs.Add(courseData.GetCourseID());
+            courseIDs.ForEach(id => Debug.Log("current id list: " + id));
         }
 
         courseIDDropDownMenu.AddOptions(courseNames);
@@ -104,11 +108,11 @@ public class SelectorUI : MonoBehaviour
 
             // retrieve entered data from dropdownmenus
             //courseID = courseIDDropDownMenu.value.ToString();
-            courseID = (string) courseIDs[courseIDDropDownMenu.value];
+            courseID = courseIDs[courseIDDropDownMenu.value - 1];
             worldIndex = wordlIndexDropDownMenu.value;
             dungeonIndex = dungeonIndexDropDownMenu.value != 0 ? new Optional<int>(dungeonIndexDropDownMenu.value) : new Optional<int>();
             Debug.Log(AreaGeneratorManager.Instance);
-            AreaGeneratorManager.Instance.StartGenerator(courseID, worldIndex, dungeonIndex);
+            AreaGeneratorManager.Instance.StartGenerator(courseID.ToString(), worldIndex, dungeonIndex);
         }
         else
         {
