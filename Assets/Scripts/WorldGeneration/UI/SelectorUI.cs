@@ -26,7 +26,7 @@ public class SelectorUI : MonoBehaviour
     private int worldIndex;
     private Optional<int> dungeonIndex;
     private List<CourseData> courseData;
-    private List<int> courseIDs;
+    private List<int> courseIDs = new List<int>();
     List<string> courseNames = new List<string>();
 
     private void Awake()
@@ -37,6 +37,11 @@ public class SelectorUI : MonoBehaviour
 #else
         LoadExistingCourses();
 #endif
+    }
+
+    private void Update()
+    {
+        Debug.Log("First ID: " + courseIDs[0]);
     }
 
     /// <summary>
