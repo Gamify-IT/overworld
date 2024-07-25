@@ -19,11 +19,12 @@ public class SelectorUI : MonoBehaviour
     [SerializeField] private TMP_Dropdown dungeonIndexDropDownMenu;
 
     // world data
-    private int courseID;
+    private string courseID;
     private int worldIndex;
     private Optional<int> dungeonIndex;
     private List<CourseData> courseData;
     private List<int> courseIDs;
+    List<string> courseNames = new List<string>();
 
     private void Awake()
     {
@@ -76,7 +77,6 @@ public class SelectorUI : MonoBehaviour
     /// </summary>
     private void FillCourseDropDownMenu()
     {
-        List<string> courseNames = new List<string>();
 
         foreach (CourseData courseData in courseData)
         {
@@ -84,9 +84,9 @@ public class SelectorUI : MonoBehaviour
             courseIDs.Add(courseData.GetCourseID());
         }
         courseNames.ForEach(name => Debug.Log("name list: " + name));
-        courseIDs.ForEach(id => Debug.Log("id list: " + id));
-        courseIDDropDownMenu.AddOptions(courseNames);
 
+        courseIDDropDownMenu.AddOptions(courseNames);
+        courseNames.ForEach(name => Debug.Log("name list: " + name));
     }
 
     /// <summary>
@@ -99,24 +99,18 @@ public class SelectorUI : MonoBehaviour
         if (CheckEnteredData())
         {
 
-            Debug.Log("Course ID: " + courseIDDropDownMenu.value);
+            Debug.Log("Course ID: " + courseIDs[courseIDDropDownMenu.value]);
             Debug.Log("World Index: " + wordlIndexDropDownMenu.value);
             Debug.Log("Dungeon Index: " + dungeonIndexDropDownMenu.value);
 
             // retrieve entered data from dropdownmenus
-            Debug.Log("array index: " + (courseIDDropDownMenu.value - 1));
-            courseIDs.ForEach(id => Debug.Log("id list: " + id));
-            Debug.Log("courseID: " + courseIDs[courseIDDropDownMenu.value - 1]);
-            for (int i = 0; i < courseIDs.Count; i++)
-            {
-                Debug.Log("courseID element: " + courseIDs[i]);
-            }
-            courseIDs.ForEach(id => Debug.Log("id list: " + id));
-            courseID = courseIDs[courseIDDropDownMenu.value - 1];
-            Debug.Log("courseID string: " + courseID.ToString());
+            courseNames.ForEach(name => Debug.Log("name list: " + name));
+            //courseIDs.ForEach(id => Debug.Log("id list: " + id));
+
+            courseID = courseIDs[courseIDDropDownMenu.value - 1].ToString();
             worldIndex = wordlIndexDropDownMenu.value;
             dungeonIndex = dungeonIndexDropDownMenu.value != 0 ? new Optional<int>(dungeonIndexDropDownMenu.value) : new Optional<int>();
-            AreaGeneratorManager.Instance.StartGenerator(courseID.ToString(), worldIndex, dungeonIndex);
+            AreaGeneratorManager.Instance.StartGenerator(courseID, worldIndex, dungeonIndex);
         }
         else
         {
