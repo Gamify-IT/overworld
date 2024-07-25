@@ -22,7 +22,7 @@ public class SelectorUI : MonoBehaviour
     private string courseID;
     private int worldIndex;
     private Optional<int> dungeonIndex;
-    private List<CourseData> courseData;
+    private CourseData[] courseData;
     private ArrayList courseIDs;
 
     private void Awake()
@@ -60,7 +60,7 @@ public class SelectorUI : MonoBehaviour
     {
         string path = GameSettings.GetOverworldBackendPath() + "/courses/";
 
-        Optional<List<CourseDTO>> courseDTO = await RestRequest.GetListRequest<CourseDTO>(path);
+        Optional<CourseDTO[]> courseDTO = await RestRequest.GetArrayRequest<CourseDTO>(path);
 
         if (courseDTO.IsPresent())
         {

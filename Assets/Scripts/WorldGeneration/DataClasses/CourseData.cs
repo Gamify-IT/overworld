@@ -56,8 +56,8 @@ public class CourseData
     /// <summary>
     ///     This function converts a list of CourseDTOs to a list of CourseDatas
     /// </summary>
-    /// <param name="dto"></param>
-    /// <returns></returns>
+    /// <param name="dto">The CourseDTO to convert</param>
+    /// <returns>The converted CourseData list</returns>
     public static List<CourseData> ConvertDtoToData(List<CourseDTO> dto)
     {
         List<CourseData> dataList = new List<CourseData>();
@@ -69,6 +69,24 @@ public class CourseData
         }
 
         return dataList;
+    }
+
+    /// <summary>
+    ///     This function converts an array of CourseDTOs to a list of CourseDatas
+    /// </summary>
+    /// <param name="dto">The CourseDTO to convert</param>
+    /// <returns>The converted CourseData array</returns>
+    public static CourseData[] ConvertDtoToData(CourseDTO[] dto)
+    {
+        CourseData[] dataArray = new CourseData[dto.Length];
+
+        for (int i = 0; i < dto.Length; i++)
+        {
+            CourseData data = ConvertDtoToData(dto[i]);
+            dataArray[i] = data;
+        }
+
+        return dataArray;
     }
 
     #region Getter 
