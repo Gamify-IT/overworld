@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Collections;
 
+/// <summary>
+///     Menu where user can select the course, world and dungeon to create/update a new world with the world generation
+/// </summary>
 public class SelectorUI : MonoBehaviour
 {
 
@@ -47,7 +50,7 @@ public class SelectorUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Closes the Selector Menu and returns to the Landing Page.
+    ///     Closes the Selector Menu and returns to the Landing Page
     /// </summary>
     public void QuitButtonPressed()
     {
@@ -55,9 +58,9 @@ public class SelectorUI : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    ///     Gets all existing courses from the backend
     /// </summary>
-    async private void LoadExistingCourses()
+    private async void LoadExistingCourses()
     {
         string path = GameSettings.GetOverworldBackendPath() + "/courses/";
 
@@ -73,7 +76,7 @@ public class SelectorUI : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    ///     Puts all existing courses loaded from the backend into the dropdown menu 
     /// </summary>
     private void FillCourseDropDownMenu()
     {
@@ -84,28 +87,27 @@ public class SelectorUI : MonoBehaviour
             courseIDs.Add(courseData.GetCourseID());
         }
         courseNames.ForEach(name => Debug.Log("name list: " + name));
-
+        courseIDs.ForEach(id => Debug.Log("id list: " + id));
         courseIDDropDownMenu.AddOptions(courseNames);
-        courseNames.ForEach(name => Debug.Log("name list: " + name));
     }
 
     /// <summary>
-    /// This function is called by the continue button and saves the entered course ID, dungeon Index (if entered) and world index.
-    /// After that, the World Generation continues with the Genrator Menu.
+    ///     This function is called by the continue button and saves the entered course ID, dungeon Index (if selected) and world index
+    ///     After that, the World Generation continues with the Genrator Menu.
     /// </summary>
     /// <returns></returns>
     public void OnContinueButtonPressed()
     {
+        courseIDs.ForEach(id => Debug.Log("id list: " + id));
         if (CheckEnteredData())
         {
-
             Debug.Log("Course ID: " + courseIDs[courseIDDropDownMenu.value]);
             Debug.Log("World Index: " + wordlIndexDropDownMenu.value);
             Debug.Log("Dungeon Index: " + dungeonIndexDropDownMenu.value);
 
             // retrieve entered data from dropdownmenus
             courseNames.ForEach(name => Debug.Log("name list: " + name));
-            //courseIDs.ForEach(id => Debug.Log("id list: " + id));
+            courseIDs.ForEach(id => Debug.Log("id list: " + id));
 
             courseID = courseIDs[courseIDDropDownMenu.value - 1].ToString();
             worldIndex = wordlIndexDropDownMenu.value;
@@ -120,11 +122,12 @@ public class SelectorUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks if the user has selected course and world id.
+    /// Checks if the user has selected course and world id
     /// </summary>
     /// <returns>true if values have been selected</returns>
     private bool CheckEnteredData()
     {
+        courseIDs.ForEach(id => Debug.Log("id list: " + id));
         if (courseIDDropDownMenu.value != 0 && wordlIndexDropDownMenu.value != 0)
         {
             return true;
