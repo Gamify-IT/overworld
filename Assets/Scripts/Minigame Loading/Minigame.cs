@@ -40,6 +40,9 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     private static List<(int, int, int)> unlockedMinigames = new List<(int, int, int)>();
     private static List<(int, int, int)> successfullyCompletedMinigames = new List<(int, int, int)>();
 
+    public AudioClip minigameSpotOpenSound;
+    private AudioSource audioSource;
+
     #endregion
 
     #region Setup
@@ -52,8 +55,12 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     private void Awake()
     {
         sprites = transform.GetComponent<SpriteRenderer>();
+
         LoadUnlockedMinigames();
         LoadSuccessfullyCompletedMinigames();
+        audioSource = gameObject.AddComponent<AudioSource>();
+        minigameSpotOpenSound = Resources.Load<AudioClip>("Music/minigame_spot_open");
+        audioSource.clip = minigameSpotOpenSound;
     }
 
     /// <summary>
@@ -120,6 +127,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     /// <param name="collision"></param>
     public void OnTriggerEnter2D(Collider2D collision)
     {
+        PlayMinigameSpotOpenSound();
         if (collision.CompareTag("Player"))
         {
             Debug.Log("Player enters minigame " + game + ", config: " + configurationID);
@@ -274,5 +282,12 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         return info;
     }
 
+    /// <summary>
+    ///     This function plays minigame spot open sound when the player enters the minigame spot.
+    /// </summary>
+    private void PlayMinigameSpotOpenSound()
+    {
+        audioSource.PlayOneShot(minigameSpotOpenSound);
+    }
     #endregion
 }

@@ -8,12 +8,13 @@ public class CharacterSelection : MonoBehaviour
 {
     private Image characterImage;
     private Sprite character;
-    private GameObject confirmButton;
     private int numberOfCharacters = 3;
     private int currentIndex = 0;
     [SerializeField] private GameObject[] characterPrefabs;
-    [SerializeField] private Sprite[] playerFaces;
     
+
+    public AudioClip clickSound;
+    private AudioSource audioSource;
 
     /// <summary>
     /// The <c>Start</c> function is called after the object is initialized.
@@ -21,12 +22,21 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     void Start()
     {
+        GameManager.Instance.isPaused = true;
         //get image component
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
-        //get confirm button
-        confirmButton = GameObject.Find("Confirm Button");
         //get the index of the currently selected character 
-        currentIndex = DataManager.Instance.characterIndex;
+        currentIndex = DataManager.Instance.GetCharacterIndex();
+
+        //get AudioSource component
+        audioSource=GetComponent<AudioSource>();
+        //add AudioSource component if necessary
+        if(audioSource == null)
+        {
+            audioSource=gameObject.AddComponent<AudioSource>();
+        }
+        //set audio clip
+        audioSource.clip=clickSound;
     }
 
     /// <summary>
@@ -45,6 +55,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void PreviousCharacter()
     {
+        PlayClickSound();
         currentIndex = Modulo(currentIndex - 1, numberOfCharacters);
     }
 
@@ -54,6 +65,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void NextCharacter()
     {
+        PlayClickSound();
         currentIndex = Modulo(currentIndex + 1, numberOfCharacters);
     }
 
@@ -74,12 +86,12 @@ public class CharacterSelection : MonoBehaviour
         // reset current character, instance and face
         Destroy(currentPlayer);
         PlayerAnimation.Instance.ResetInstance();
-        playerFace.sprite = playerFaces[currentIndex];
+        playerFace.sprite = DataManager.Instance.GetCharacterFaces()[currentIndex];
 
         // create new character in player scene 
         GameObject newPlayer = Instantiate(characterPrefabs[currentIndex], position, rotation);
         SceneManager.MoveGameObjectToScene(newPlayer, SceneManager.GetSceneByName("Player"));
-        DataManager.Instance.characterIndex = currentIndex;
+        DataManager.Instance.SetCharacterIndex(currentIndex);
 
         // add minimap camera to new character 
         miniMapCamera.transform.parent = newPlayer.transform;
@@ -93,7 +105,22 @@ public class CharacterSelection : MonoBehaviour
         newPixelCam.refResolutionY = pixelCam.refResolutionY;
 
         GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1);
+        PlayClickSound();
     }
+
+
+    /// <summary>
+    /// This function is called by the <c>Navigation Buttons</c>.
+    /// This function plays the click sound.
+    /// </summary>
+    private void PlayClickSound()
+    {
+        if (clickSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
+    }
+        
 
     /// <summary>
     ///     This method realizes the modulo operator from modular arithmetic.

@@ -143,6 +143,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// </summary>
     private IEnumerator LoadBookScene()
     {
+        
         var asyncLoadScene = SceneManager.LoadSceneAsync("Book", LoadSceneMode.Additive);
         while (!asyncLoadScene.isDone)
         {
