@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 ///     This class is part of an teleporter game object
@@ -43,7 +44,8 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             teleporterNumber);
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
             GameEvents.current.onKeybindingChange += UpdateKeybindings;
-        }            
+        }    
+        LoadUnlockedTeleporters();      
     }
 
     private void OnDestroy()
@@ -137,6 +139,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         if(!unlockedTeleporters.Contains(key))
         {
             unlockedTeleporters.Add((worldID, dungeonID, teleporterNumber));
+            SaveUnlockedTeleporters();
             if (worldID == 1)
             {
                 UpdateAchievementWorld1();
@@ -338,4 +341,28 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         }
     }
 
+    /// <summary>
+    ///     This method saves the list of unlocked teleporters to PlayerPrefs.
+    /// </summary>
+    private void SaveUnlockedTeleporters()
+    {
+        PlayerPrefs.SetString("UnlockedTeleporters", string.Join(";", unlockedTeleporters.Select(teleporter => $"{teleporter.Item1},{teleporter.Item2},{teleporter.Item3}")));
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    ///     This method loads the list of unlocked teleporters from PlayerPrefs.
+    /// </summary>
+    private void LoadUnlockedTeleporters()
+    {
+        if (PlayerPrefs.HasKey("UnlockedTeleporters"))
+        {
+            string savedData = PlayerPrefs.GetString("UnlockedTeleporters");
+            unlockedTeleporters = savedData.Split(';').Select(teleporter =>
+            {
+                var parts = teleporter.Split(',');
+                return (int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
+            }).ToList();
+        }
+    }
 }

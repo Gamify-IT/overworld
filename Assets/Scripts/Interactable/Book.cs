@@ -1,8 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 ///     This class is responsible for the Book logic.
@@ -32,6 +33,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     {
         interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
+        LoadReadBooks();
     }
 
     /// <summary>
@@ -114,7 +116,6 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         }
     }
 
-
     /// <summary>
     ///     This function registers the Book to the GameManager.
     /// </summary>
@@ -135,7 +136,6 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         string text = bookContent;
         Debug.Log("setup book " + world + "-" + number + " with Text: " + text);
     }
-
 
     /// <summary>
     ///     This method loads the dialogue window and will change the text and name of the Book to the text and name set in the
@@ -164,6 +164,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         if(!readBooks.Contains(key))
         {
             readBooks.Add((world, dungeon, number));
+            SaveReadBooks();
             if (world == 1)
             {
                 UpdateAchievementWorld1();
@@ -237,8 +238,6 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_3_WORLD_4, achievementUpdateIntervall);
     }
 
-
-    
     /// <summary>
     ///     This function returns the Book object info
     /// </summary>
@@ -264,4 +263,28 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         }
     }
 
+    /// <summary>
+    ///     This method saves the list of read books to PlayerPrefs.
+    /// </summary>
+    private void SaveReadBooks()
+    {
+        PlayerPrefs.SetString("ReadBooks", string.Join(";", readBooks.Select(book => $"{book.Item1},{book.Item2},{book.Item3}")));
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    ///     This method loads the list of read books from PlayerPrefs.
+    /// </summary>
+    private void LoadReadBooks()
+    {
+        if (PlayerPrefs.HasKey("ReadBooks"))
+        {
+            string savedData = PlayerPrefs.GetString("ReadBooks");
+            readBooks = savedData.Split(';').Select(book =>
+            {
+                var parts = book.Split(',');
+                return (int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
+            }).ToList();
+        }
+    }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 ///     This class is responsible for the NPC logic.
@@ -41,7 +42,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         {
             speechIndicator = child;
         }
-
+        LoadAlreadyTalkedNPC();
         InitNewStuffSprite();
         interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
@@ -273,6 +274,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         if(!alreadyTalkedNPC.Contains(key))
         {
             alreadyTalkedNPC.Add((world, dungeon, number));
+            SaveAlreadyTalkedNPC();
             if (world == 1)
             {
                 UpdateAchievementWorld1();
@@ -374,6 +376,31 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         if (binding == Binding.INTERACT)
         {
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
+        }
+    }
+
+    /// <summary>
+    ///     This method saves the list of already talked NPCs to PlayerPrefs.
+    /// </summary>
+    private void SaveAlreadyTalkedNPC()
+    {
+        PlayerPrefs.SetString("AlreadyTalkedNPC", string.Join(";", alreadyTalkedNPC.Select(npc => $"{npc.Item1},{npc.Item2},{npc.Item3}")));
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    ///     This method loads the list of already talked NPCs from PlayerPrefs.
+    /// </summary>
+    private void LoadAlreadyTalkedNPC()
+    {
+        if (PlayerPrefs.HasKey("AlreadyTalkedNPC"))
+        {
+            string savedData = PlayerPrefs.GetString("AlreadyTalkedNPC");
+            alreadyTalkedNPC = savedData.Split(';').Select(npc =>
+            {
+                var parts = npc.Split(',');
+                return (int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
+            }).ToList();
         }
     }
 

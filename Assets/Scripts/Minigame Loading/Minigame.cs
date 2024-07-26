@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
 ///     This enum is used to store the state of a minigame as follows:
@@ -38,7 +39,6 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     public SpriteRenderer sprites;
     private static List<(int, int, int)> unlockedMinigames = new List<(int, int, int)>();
     private static List<(int, int, int)> successfullyCompletedMinigames = new List<(int, int, int)>();
-    private static List<(string, string)> alreadyPlayed = new List<(string, string)>();
 
     #endregion
 
@@ -52,6 +52,8 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     private void Awake()
     {
         sprites = transform.GetComponent<SpriteRenderer>();
+        LoadUnlockedMinigames();
+        LoadSuccessfullyCompletedMinigames();
     }
 
     /// <summary>
@@ -126,6 +128,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
             if(!unlockedMinigames.Contains(key))
             {
                 unlockedMinigames.Add((world,dungeon,number));
+                SaveUnlockedMinigames();
                 GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_FINDER, 1);
                 GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_MASTER, 1);
             }
@@ -178,6 +181,56 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     }
 
     /// <summary>
+    ///     This method saves the list of unlocked minigames to PlayerPrefs.
+    /// </summary>
+    private void SaveUnlockedMinigames()
+    {
+        PlayerPrefs.SetString("UnlockedMinigames", string.Join(";", unlockedMinigames.Select(minigame => $"{minigame.Item1},{minigame.Item2},{minigame.Item3}")));
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    ///     This method loads the list of unlocked minigames from PlayerPrefs.
+    /// </summary>
+    private void LoadUnlockedMinigames()
+    {
+        if (PlayerPrefs.HasKey("UnlockedMinigames"))
+        {
+            string savedData = PlayerPrefs.GetString("UnlockedMinigames");
+            unlockedMinigames = savedData.Split(';').Select(minigame =>
+            {
+                var parts = minigame.Split(',');
+                return (int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
+            }).ToList();
+        }
+    }
+
+    /// <summary>
+    ///     This method saves the list of successfully completed minigames to PlayerPrefs.
+    /// </summary>
+    private void SaveSuccessfullyCompletedMinigames()
+    {
+        PlayerPrefs.SetString("SuccessfullyCompletedMinigames", string.Join(";", successfullyCompletedMinigames.Select(minigame => $"{minigame.Item1},{minigame.Item2},{minigame.Item3}")));
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    ///     This method loads the list of successfully completed minigames from PlayerPrefs.
+    /// </summary>
+    private void LoadSuccessfullyCompletedMinigames()
+    {
+        if (PlayerPrefs.HasKey("SuccessfullyCompletedMinigames"))
+        {
+            string savedData = PlayerPrefs.GetString("SuccessfullyCompletedMinigames");
+            successfullyCompletedMinigames = savedData.Split(';').Select(minigame =>
+            {
+                var parts = minigame.Split(',');
+                return (int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
+            }).ToList();
+        }
+    }
+
+    /// <summary>
     ///     This functions updates achievements for each minigame.
     /// </summary>
     private void UpdateAchievements()
@@ -186,26 +239,28 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         if(!successfullyCompletedMinigames.Contains(key))
         {
             successfullyCompletedMinigames.Add((world,dungeon,number));
+            SaveSuccessfullyCompletedMinigames();
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_ACHIEVER, 1);
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_PROFESSIONAL, 1);
-        }
-        if(game=="CHICKENSHOCK"){
+            
+            if(game=="CHICKENSHOCK"){
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.CHICKENSHOCK_MASTER, 1);
-        }
-        if(game=="MEMORY"){
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MEMORY_MASTER, 1);
-        }
-        if(game=="FINITEQUIZ"){
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.FINITEQUIZ_MASTER, 1);
-        }
-        if(game=="TOWERCRUSH"){
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TOWERCRUSH_MASTER, 1);
-        }
-        if(game=="CROSSWORDPUZZLE"){
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.CROSSWORDPUZZLE_MASTER, 1);
-        }
-        if(game=="BUGFINDER"){
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.BUGFINDER_MASTER, 1);
+            }
+            if(game=="MEMORY"){
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MEMORY_MASTER, 1);
+            }
+            if(game=="FINITEQUIZ"){
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.FINITEQUIZ_MASTER, 1);
+            }
+            if(game=="TOWERCRUSH"){
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TOWERCRUSH_MASTER, 1);
+            }
+            if(game=="CROSSWORDPUZZLE"){
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.CROSSWORDPUZZLE_MASTER, 1);
+            }
+            if(game=="BUGFINDER"){
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.BUGFINDER_MASTER, 1);
+            }
         }
     }
     /// <summary>
