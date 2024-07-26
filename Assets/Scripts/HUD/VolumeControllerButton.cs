@@ -14,6 +14,9 @@ public class VolumeControllerButton : MonoBehaviour
     public AudioClip clickSound;
     private AudioSource audioSource;
 
+    /// <summary>
+    /// This function initializes the audio sources and gets last volume level choice
+    /// </summary>
     private void Start()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
@@ -28,6 +31,9 @@ public class VolumeControllerButton : MonoBehaviour
         UpdateVolume();
     }
 
+    /// <summary>
+    /// This function changes the volume level to the next one and save this level in PlayerPrefs
+    /// </summary>
     private void ChangeVolume()
     {
         audioSource.Play();
@@ -38,6 +44,9 @@ public class VolumeControllerButton : MonoBehaviour
         UpdateButtonImage();
     }
 
+    /// <summary>
+    /// This function updates the level volume and applies the changes to all audio in the game
+    /// </summary>
     private void UpdateVolume()
     {
         float volume = 0f;
@@ -59,6 +68,9 @@ public class VolumeControllerButton : MonoBehaviour
         AudioListener.volume = volume;
     }
 
+    /// <summary>
+    /// This function changes the volume controller button to the next one
+    /// </summary>
     private void UpdateButtonImage()
     {
         switch (volumeLevel)

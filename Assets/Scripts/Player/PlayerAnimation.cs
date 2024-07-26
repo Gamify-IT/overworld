@@ -72,6 +72,9 @@ public class PlayerAnimation : MonoBehaviour
         UpdateVolume();
     }
 
+    /// <summary>
+    /// This function updates the level volume and applies the changes to all audio in the game
+    /// </summary>
     private void UpdateVolume()
     {
         float volume = 0f;
