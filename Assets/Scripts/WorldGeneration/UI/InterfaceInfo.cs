@@ -404,6 +404,10 @@ public class InterfaceInfo : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Selector Infos
+
     public void AreaSelectionInfoButtonPressed()
     {
         Debug.Log("active");
@@ -414,7 +418,7 @@ public class InterfaceInfo : MonoBehaviour
         else
         {
             string header = "Area Info";
-            string body = "This menu enables you to select which World and Dungeon you want to generate or update. \n" +
+            string body = "In this menu, you can choose for which course you want to create or update Worlds and Dungeons. \n" +
                             "\n" + "<b>Course ID</b>: Choose the Course for which you want to create a new area. \n" +
                             "\n" + "<b>World</b>: Enter the World Index for the area you want to create. \n" +
                             "\n" + "<b>Dungeon:</b> Enter the Dungeon Index if you want to create a new Dungeon.\n" +
@@ -433,7 +437,7 @@ public class InterfaceInfo : MonoBehaviour
         else
         {
             string header = "World Info";
-            string body = "The World Index is a positive number, starting from 1.";
+            string body = "Each World has an index to indentify it.";
             DisplayInfo(header, body, true, false);
         }
     }
@@ -448,8 +452,7 @@ public class InterfaceInfo : MonoBehaviour
         {
             string header = "Dungeon Info";
             string body = "Each World can have up to four Dungeons. \n" +
-                            "The Dungeon Index is a positive number between 1 and 4. \n" +
-                            "\n" + "If you just want to create or update a new World, leave the field empty.";
+                            "If you just want to create or update a new World, leave the field empty.";
             DisplayInfo(header, body, true, false);
         }
     }

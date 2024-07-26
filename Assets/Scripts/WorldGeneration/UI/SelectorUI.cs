@@ -39,11 +39,6 @@ public class SelectorUI : MonoBehaviour
 #endif
     }
 
-    private void Update()
-    {
-        Debug.Log("First ID: " + courseIDs[0]);
-    }
-
     /// <summary>
     ///     This function resets the content panel
     /// </summary>
