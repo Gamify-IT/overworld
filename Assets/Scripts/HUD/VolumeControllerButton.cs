@@ -33,6 +33,7 @@ public class VolumeControllerButton : MonoBehaviour
         audioSource.Play();
         volumeLevel = (volumeLevel + 1) % 4;
         PlayerPrefs.SetInt("VolumeLevel", volumeLevel);
+        PlayerPrefs.Save();
         UpdateVolume();
         UpdateButtonImage();
     }
@@ -46,16 +47,15 @@ public class VolumeControllerButton : MonoBehaviour
                 volume = 0f;
                 break;
             case 1:
-                volume = 0.33f;
+                volume = 0.5f;
                 break;
             case 2:
-                volume = 0.66f;
-                break;
-            case 3:
                 volume = 1f;
                 break;
+            case 3:
+                volume = 2f;
+                break;
         }
-
         AudioListener.volume = volume;
     }
 

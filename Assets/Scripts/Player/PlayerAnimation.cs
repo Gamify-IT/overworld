@@ -15,6 +15,7 @@ public class PlayerAnimation : MonoBehaviour
     private bool canMove;
     private float currentSpeed;
     private float targetSpeed;
+    private int volumeLevel;
 
     private Vector3 lastPosition;
     private float distanceWalked;
@@ -66,6 +67,30 @@ public class PlayerAnimation : MonoBehaviour
         audioSource.loop = true;
         //AudioSource does not start playing automatically when the GameObject awakens
         audioSource.playOnAwake = false;
+
+        volumeLevel = PlayerPrefs.GetInt("VolumeLevel", 3);
+        UpdateVolume();
+    }
+
+    private void UpdateVolume()
+    {
+        float volume = 0f;
+        switch (volumeLevel)
+        {
+            case 0:
+                volume = 0f;
+                break;
+            case 1:
+                volume = 0.5f;
+                break;
+            case 2:
+                volume = 1f;
+                break;
+            case 3:
+                volume = 2f;
+                break;
+        }
+        AudioListener.volume = volume;
     }
 
 
