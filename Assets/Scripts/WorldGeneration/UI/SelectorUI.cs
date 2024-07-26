@@ -22,12 +22,9 @@ public class SelectorUI : MonoBehaviour
     [SerializeField] private TMP_Dropdown dungeonIndexDropDownMenu;
 
     // world data
-    private string courseID;
-    private int worldIndex;
-    private Optional<int> dungeonIndex;
     private List<CourseData> courseData;
-    private List<int> courseIDs = new List<int>();
-    List<string> courseNames = new List<string>();
+    private readonly List<int> courseIDs = new List<int>();
+    readonly List<string> courseNames = new List<string>();
 
     private void Awake()
     {
@@ -80,10 +77,10 @@ public class SelectorUI : MonoBehaviour
     /// </summary>
     private void FillCourseDropDownMenu()
     {
-        foreach (CourseData courseData in courseData)
+        foreach (CourseData data in courseData)
         {
-            courseNames.Add(courseData.GetCourseName());
-            courseIDs.Add(courseData.GetCourseID());
+            courseNames.Add(data.GetCourseName());
+            courseIDs.Add(data.GetCourseID());
         }
 
         courseNames.ForEach(name => Debug.Log("Course Names: " + name));
@@ -102,9 +99,10 @@ public class SelectorUI : MonoBehaviour
         if (CheckEnteredData())
         {
             // retrieve entered data from dropdownmenus
-            courseID = courseIDs[courseIDDropDownMenu.value - 1].ToString();
-            worldIndex = wordlIndexDropDownMenu.value;
-            dungeonIndex = dungeonIndexDropDownMenu.value != 0 ? new Optional<int>(dungeonIndexDropDownMenu.value) : new Optional<int>();
+            string courseID = courseIDs[courseIDDropDownMenu.value - 1].ToString();
+            int worldIndex = wordlIndexDropDownMenu.value;
+            Optional<int> dungeonIndex = dungeonIndexDropDownMenu.value != 0 ? new Optional<int>(dungeonIndexDropDownMenu.value) : new Optional<int>();
+
             AreaGeneratorManager.Instance.StartGenerator(courseID, worldIndex, dungeonIndex);
         }
         else

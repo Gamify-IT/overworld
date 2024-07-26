@@ -8,8 +8,8 @@ using UnityEngine;
 public class CourseData
 {
     #region Attributes
-    private int id;
-    private string courseName;
+    private readonly int id;
+    private readonly string courseName;
     private readonly string semester;
     private readonly string description;
     private readonly bool active;
@@ -106,6 +106,42 @@ public class CourseData
     public int GetCourseID()
     {
         return id;
+    }
+
+    /// <summary>
+    ///     Gets the semester of the course
+    /// </summary>
+    /// <returns>smester of the course</returns>
+    public string GetSemester()
+    {
+        return semester;
+    }
+
+    /// <summary>
+    ///     Gets the description of the course
+    /// </summary>
+    /// <returns>course description</returns>
+    public string GetDescription()
+    {
+        return description;
+    }
+
+    /// <summary>
+    ///     Gets the status of the course, i.e., if the course is active or not
+    /// </summary>
+    /// <returns>course status</returns>
+    public bool GetActiveStatus()
+    {
+        return active;
+    }
+
+    /// <summary>
+    ///     Gets all worlds of the course
+    /// </summary>
+    /// <returns>course worlds</returns>
+    public List<WorldData> GetWorldData()
+    {
+        return worlds;
     }
     #endregion
 }
