@@ -85,14 +85,15 @@ public class SelectorUI : MonoBehaviour
     /// </summary>
     private void FillCourseDropDownMenu()
     {
-
         foreach (CourseData courseData in courseData)
         {
             courseNames.Add(courseData.GetCourseName());
             courseIDs.Add(courseData.GetCourseID());
         }
-        courseNames.ForEach(name => Debug.Log("name list: " + name));
-        courseIDs.ForEach(id => Debug.Log("id list: " + id));
+
+        courseNames.ForEach(name => Debug.Log("Name list: " + name));
+        courseIDs.ForEach(id => Debug.Log("ID list: " + id));
+
         courseIDDropDownMenu.AddOptions(courseNames);
     }
 
@@ -106,14 +107,9 @@ public class SelectorUI : MonoBehaviour
         courseIDs.ForEach(id => Debug.Log("id list: " + id));
         if (CheckEnteredData())
         {
-            Debug.Log("Course ID: " + courseIDs[courseIDDropDownMenu.value]);
-            Debug.Log("World Index: " + wordlIndexDropDownMenu.value);
-            Debug.Log("Dungeon Index: " + dungeonIndexDropDownMenu.value);
-
             // retrieve entered data from dropdownmenus
-            courseNames.ForEach(name => Debug.Log("name list: " + name));
-            courseIDs.ForEach(id => Debug.Log("id list: " + id));
-
+            Debug.Log("dropdownmenu value: " + (courseIDDropDownMenu.value - 1));
+            Debug.Log(courseIDs[courseIDDropDownMenu.value - 1].ToString());
             courseID = courseIDs[courseIDDropDownMenu.value - 1].ToString();
             worldIndex = wordlIndexDropDownMenu.value;
             dungeonIndex = dungeonIndexDropDownMenu.value != 0 ? new Optional<int>(dungeonIndexDropDownMenu.value) : new Optional<int>();
