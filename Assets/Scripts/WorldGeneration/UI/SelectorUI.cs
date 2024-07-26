@@ -86,8 +86,8 @@ public class SelectorUI : MonoBehaviour
             courseIDs.Add(courseData.GetCourseID());
         }
 
-        courseNames.ForEach(name => Debug.Log("Name list: " + name));
-        courseIDs.ForEach(id => Debug.Log("ID list: " + id));
+        courseNames.ForEach(name => Debug.Log("Course Names: " + name));
+        courseIDs.ForEach(id => Debug.Log("Course IDs: " + id));
 
         courseIDDropDownMenu.AddOptions(courseNames);
     }
@@ -99,12 +99,9 @@ public class SelectorUI : MonoBehaviour
     /// <returns></returns>
     public void OnContinueButtonPressed()
     {
-        courseIDs.ForEach(id => Debug.Log("id list: " + id));
         if (CheckEnteredData())
         {
             // retrieve entered data from dropdownmenus
-            Debug.Log("dropdownmenu value: " + (courseIDDropDownMenu.value - 1));
-            Debug.Log(courseIDs[courseIDDropDownMenu.value - 1].ToString());
             courseID = courseIDs[courseIDDropDownMenu.value - 1].ToString();
             worldIndex = wordlIndexDropDownMenu.value;
             dungeonIndex = dungeonIndexDropDownMenu.value != 0 ? new Optional<int>(dungeonIndexDropDownMenu.value) : new Optional<int>();
@@ -113,8 +110,7 @@ public class SelectorUI : MonoBehaviour
         else
         {
             InterfaceInfo.Instance.DisplayErrorInfo();
-        }
-       
+        } 
     }
 
     /// <summary>
