@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 /// <summary>
 ///     This class manages the movement and the animations of the player.
@@ -26,18 +27,65 @@ public class PlayerAnimation : MonoBehaviour
     private KeyCode moveDown;
     private KeyCode moveRight;
     private KeyCode sprint;
+    private float sprintStartTime = 0f;
+    private float sprintDuration = 0f; 
+
+    private float timeInGameStart = 0f;
+    private float timeInGameDuration = 0f;
 
     public AudioClip moveSound;
     private AudioSource audioSource;
     private bool isMoving;
 
-
+    private int daysPlayed;
+    private DateTime lastPlayDate;
+    private bool checkIfChanged=false;
     /// <summary>
     ///     This method is called before the first frame update.
     ///     It is used to initialize variables.
     /// </summary>
     private void Start()
     {
+        string lastPlayDateStr = PlayerPrefs.GetString("LastPlayDate", "");
+        int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
+
+        if (!string.IsNullOrEmpty(lastPlayDateStr))
+        {
+            lastPlayDate = DateTime.Parse(lastPlayDateStr);
+            DateTime today = DateTime.Today;
+            DateTime lastPlayDay = lastPlayDate.Date;
+
+            if (lastPlayDay < today)
+            {
+                int daysSinceLastPlay = (today - lastPlayDay).Days;
+                daysPlayed = daysCount + daysSinceLastPlay;
+                PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
+            }
+            else
+            {
+                daysPlayed = daysCount;
+            }
+        }
+        else
+        {
+            lastPlayDate = DateTime.Now;
+            daysPlayed = 1;
+            PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
+        }
+
+        if (daysPlayed > daysCount)
+        {
+            checkIfChanged=true;
+            
+            Debug.Log("success!!!!!");
+        }
+        PlayerPrefs.SetString("LastPlayDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")); // store the current date and time with milliseconds
+        Debug.Log("day: days played "+daysPlayed);
+        Debug.Log("day: current date "+DateTime.Now);
+        Debug.Log("day: last play date "+lastPlayDate);
+        
+        timeInGameStart=Time.time;
+
         canMove = true;
         busy = false;
         playerRigidBody = GetComponent<Rigidbody2D>();
@@ -68,12 +116,24 @@ public class PlayerAnimation : MonoBehaviour
         audioSource.playOnAwake = false;
     }
 
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.SetString("LastPlayDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+        PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
+        PlayerPrefs.Save();
+    }
 
     /// <summary>
     ///     If 'canMove' is true, this function allows the player to move.
     /// </summary>
     private void Update()
     {
+        if(checkIfChanged){
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1);
+            checkIfChanged=false;
+            Debug.Log("success in update");
+        }
         if (canMove)
         {
             isMoving = false;
@@ -109,6 +169,20 @@ public class PlayerAnimation : MonoBehaviour
             {
                 targetSpeed = movementSpeed + sprintingSpeed;
                 playerAnimator.speed = 2;
+                sprintStartTime = Time.time;
+            }
+            
+            if (Input.GetKey(sprint))
+            {
+                float currentTime = Time.time;
+                sprintDuration = currentTime - sprintStartTime;
+
+                while (sprintDuration >= 1f)
+                {
+                    GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SPEEDRUNNER, 1);
+                    sprintDuration -= 1f;
+                    sprintStartTime += 1f;
+                }
                 audioSource.pitch = 1.75f;
             }
 
@@ -116,6 +190,7 @@ public class PlayerAnimation : MonoBehaviour
             {
                 targetSpeed = movementSpeed;
                 playerAnimator.speed = 1;
+                sprintDuration = 0f; 
                 audioSource.pitch = 1f;
             }
 
@@ -152,6 +227,22 @@ public class PlayerAnimation : MonoBehaviour
             {
                 StopMoveSound();
             }
+        }
+        timeInGameDuration = Time.time - timeInGameStart;
+        UpdateAchievementForTimeInGame();
+    }
+
+    /// <summary>
+    ///     this function updates time achievement each 60 seconds when the player is playing
+    /// </summary>
+    private void UpdateAchievementForTimeInGame()
+    {
+        while (timeInGameDuration >= 60f)
+        {
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.BEGINNER, 1);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.EXPERIENCED_PLAYER, 1);
+            timeInGameDuration -= 60f;
+            timeInGameStart += 60f;
         }
     }
 

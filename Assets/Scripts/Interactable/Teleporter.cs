@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 ///     This class is part of an teleporter game object
@@ -28,6 +30,8 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     private bool inTrigger;
     private bool interactable = true;
 
+    private readonly int achievementUpdateIntervall = 1;
+    private static List<(int, int, int)> unlockedTeleporters = new List<(int, int, int)>();
     public AudioClip teleporterOpeningSound;
     public AudioClip ufoTakesSound;
     public AudioClip ufoReturnsSound;
@@ -70,6 +74,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             //set audio clip
             audioSourceUfoReturns.clip = ufoReturnsSound;
         }            
+        LoadUnlockedTeleporters();      
     }
 
     private void OnDestroy()
@@ -204,9 +209,94 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
                 isUnlocked = true;
                 SetUnLockedState(isUnlocked);
                 GameManager.Instance.ActivateTeleporter(worldID, dungeonID, teleporterNumber);
+                UpdateListOfTeleporters();
             }
         }
     }
+
+    /// <summary>
+    ///     This method adds a new opened teleporter to the list. 
+    /// </summary>
+    private void UpdateListOfTeleporters()
+    {
+        var key = (worldID, dungeonID, teleporterNumber);
+        if(!unlockedTeleporters.Contains(key))
+        {
+            unlockedTeleporters.Add((worldID, dungeonID, teleporterNumber));
+            SaveUnlockedTeleporters();
+            if (worldID == 1)
+            {
+                UpdateAchievementWorld1();
+                UpdateAchievementInTotal();
+            }
+            if (worldID == 2)
+            {
+                UpdateAchievementWorld2();
+                UpdateAchievementInTotal();
+            }
+            if (worldID == 3)
+            {
+                UpdateAchievementWorld3();
+                UpdateAchievementInTotal();
+            }
+            if (worldID == 4)
+            {
+                UpdateAchievementWorld4();
+                UpdateAchievementInTotal();
+            }
+        } 
+    }
+
+    /// <summary>
+    ///     This method updates the "open teleporters" achievement in general.
+    /// </summary>
+    private void UpdateAchievementInTotal()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_BEGINNER, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_PROFESSIONAL, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_MASTER, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "open teleporters" achievement in World 1.
+    /// </summary>
+    private void UpdateAchievementWorld1()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_BEGINNER_WORLD_1, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_PROFESSIONAL_WORLD_1, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_MASTER_WORLD_1, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "open teleporters" achievement in World 2.
+    /// </summary>
+    private void UpdateAchievementWorld2()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_BEGINNER_WORLD_2, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_PROFESSIONAL_WORLD_2, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_MASTER_WORLD_2, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "open teleporters" achievement in World 3.
+    /// </summary>
+    private void UpdateAchievementWorld3()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_BEGINNER_WORLD_3, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_PROFESSIONAL_WORLD_3, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_MASTER_WORLD_3, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "open teleporters" achievement in World 4.
+    /// </summary>
+    private void UpdateAchievementWorld4()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_BEGINNER_WORLD_4, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_PROFESSIONAL_WORLD_4, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_MASTER_WORLD_4, achievementUpdateIntervall);
+    }
+
 
     /// <summary>
     ///     Recognize the player exiting the teleporter
@@ -263,6 +353,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     /// <param name="worldIndex"></param>
     public void TeleportPlayerTo(Vector2 position, int worldID, int dungeonID)
     {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TRAVELER, achievementUpdateIntervall);
         //setup scene transition exchange
         LoadSubScene.transitionBlocked = true;
         Optional<int> dungeonIndex = new Optional<int>();
@@ -337,6 +428,31 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         }
     }
 
+    /// <summary>
+    ///     This method saves the list of unlocked teleporters to PlayerPrefs.
+    /// </summary>
+    private void SaveUnlockedTeleporters()
+    {
+        PlayerPrefs.SetString("UnlockedTeleporters", string.Join(";", unlockedTeleporters.Select(teleporter => $"{teleporter.Item1},{teleporter.Item2},{teleporter.Item3}")));
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    ///     This method loads the list of unlocked teleporters from PlayerPrefs.
+    /// </summary>
+    private void LoadUnlockedTeleporters()
+    {
+        if (PlayerPrefs.HasKey("UnlockedTeleporters"))
+        {
+            string savedData = PlayerPrefs.GetString("UnlockedTeleporters");
+            unlockedTeleporters = savedData.Split(';').Select(teleporter =>
+            {
+                var parts = teleporter.Split(',');
+                return (int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
+            }).ToList();
+         }
+    }
+    
     /// <summary>
     /// This function plays the teleporter opening sound.
     /// </summary>

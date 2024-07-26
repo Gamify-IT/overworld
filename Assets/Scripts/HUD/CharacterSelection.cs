@@ -104,6 +104,7 @@ public class CharacterSelection : MonoBehaviour
         newPixelCam.refResolutionX = pixelCam.refResolutionX; 
         newPixelCam.refResolutionY = pixelCam.refResolutionY;
 
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1);
         PlayClickSound();
     }
 
