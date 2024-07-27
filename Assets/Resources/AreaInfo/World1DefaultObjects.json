@@ -184,7 +184,7 @@
                 "x": 8.0,
                 "y": 44.5
             },
-            "name": "Björn",
+            "name": "Bjï¿½rn",
             "spriteName": "npc_5",
             "iconName": "NPCHeads_5"
         },
@@ -485,7 +485,7 @@
                 "worldIndex": 1,
                 "dungeonIndex": 1
             },
-            "facingDirection": "south",
+            "facingDirection": "SOUTH",
             "style": "CAVE_ENTRANCE" 
         },
         {
@@ -505,7 +505,7 @@
                 "worldIndex": 1,
                 "dungeonIndex": 2
             },
-            "facingDirection": "south",
+            "facingDirection": "SOUTH",
             "style": "GATE"
         },
         {
@@ -525,7 +525,7 @@
                 "worldIndex": 1,
                 "dungeonIndex": 3
             },
-            "facingDirection": "south",
+            "facingDirection": "SOUTH",
             "style": "HOUSE"
         },
         {
@@ -545,7 +545,7 @@
                 "worldIndex": 1,
                 "dungeonIndex": 4
             },
-            "facingDirection": "south",
+            "facingDirection": "SOUTH",
             "style": "HOUSE"
         }
     ]

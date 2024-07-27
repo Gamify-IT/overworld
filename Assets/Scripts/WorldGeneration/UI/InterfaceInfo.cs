@@ -8,6 +8,8 @@ using System;
 /// </summary>
 public class InterfaceInfo : MonoBehaviour
 {
+    public static InterfaceInfo Instance { get; private set; }
+
     [SerializeField] private GameObject infoPanel;
     [SerializeField] private TextMeshProUGUI infoHeader;
     [SerializeField] private ScrollRect infoScrollRect;
@@ -15,9 +17,20 @@ public class InterfaceInfo : MonoBehaviour
     [SerializeField] private Button infoCloseButton;
     [SerializeField] private Button infoCloseAndViewButton;
 
+    /// <summary>
+    /// Sets up the singelton instance 
+    /// </summary>
     private void Awake()
     {
-        infoPanel.SetActive(false);
+        if (Instance == null)
+        {
+            Instance = this;
+            infoPanel.SetActive(false);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     #region Generator Infos
@@ -387,6 +400,75 @@ public class InterfaceInfo : MonoBehaviour
                 "A dungeon does not contain any barriers. \n" +
                 "\n" +
                 "To enable or disable the icons on the layout, use the respective checkbox.";
+            DisplayInfo(header, body, true, false);
+        }
+    }
+
+    #endregion
+
+    #region Selector Infos
+
+    public void AreaSelectionInfoButtonPressed()
+    {
+        Debug.Log("active");
+        if (infoPanel.activeSelf)
+        {
+            infoPanel.SetActive(false);
+        }
+        else
+        {
+            string header = "Area Info";
+            string body = "In this menu, you can choose for which course you want to create or update Worlds and Dungeons. \n" +
+                            "\n" + "<b>Course ID</b>: Choose the Course for which you want to create a new area. \n" +
+                            "\n" + "<b>World</b>: Enter the World Index for the area you want to create. \n" +
+                            "\n" + "<b>Dungeon:</b> Enter the Dungeon Index if you want to create a new Dungeon.\n" +
+                            "\n" + "<b>Hint</b>: If there is already an existing world for this index, the correspondending world will be updated.";
+            DisplayInfo(header, body, true, false);
+        }
+    }
+
+    public void WorldInfoButtonPressed()
+    {
+        Debug.Log("active");
+        if (infoPanel.activeSelf)
+        {
+            infoPanel.SetActive(false);
+        }
+        else
+        {
+            string header = "World Info";
+            string body = "Each World has an index to indentify it.";
+            DisplayInfo(header, body, true, false);
+        }
+    }
+    public void DungeonInfoButtonPressed()
+    {
+        Debug.Log("active");
+        if (infoPanel.activeSelf)
+        {
+            infoPanel.SetActive(false);
+        }
+        else
+        {
+            string header = "Dungeon Info";
+            string body = "Each World can have up to four Dungeons. \n" +
+                            "If you just want to create or update a new World, leave the field empty.";
+            DisplayInfo(header, body, true, false);
+        }
+    }
+
+    public void DisplayErrorInfo()
+    {
+        Debug.Log("active");
+        if (infoPanel.activeSelf)
+        {
+            infoPanel.SetActive(false);
+        }
+        else
+        {
+            string header = "Invalid Values";
+            string body = "One or more entered values are not correct. \n" 
+                            + "\n" + "Please check the info boxes for more information anbd try again.";
             DisplayInfo(header, body, true, false);
         }
     }

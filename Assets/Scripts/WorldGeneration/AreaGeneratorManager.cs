@@ -10,6 +10,8 @@ using System.Runtime.InteropServices;
 /// </summary>
 public class AreaGeneratorManager : MonoBehaviour
 {
+    // Singelton Instance
+    public static AreaGeneratorManager Instance { get; private set; }
     /// <summary>
     ///     Import of the overworld close methode
     /// </summary>
@@ -19,14 +21,17 @@ public class AreaGeneratorManager : MonoBehaviour
     #region Attributes
     //UI
     [SerializeField] private CameraMovement cameraController;
-
     [SerializeField] private GameObject panel;
     [SerializeField] private TextMeshProUGUI infoText;
     [SerializeField] private Button demoButton;
     [SerializeField] private Button quitButton;
-
+    [SerializeField] private GameObject selectorUIPrefab;
+    private GameObject selectorUI;
+    
     //Data
     private string courseID;
+    private int worldIndex;
+    private Optional<int> dungeonIndex;
     private string startParameters;
     private bool demoMode;
     private AreaInformation currentArea;
@@ -35,18 +40,35 @@ public class AreaGeneratorManager : MonoBehaviour
 
     private void Awake()
     {
-        Setup();
+        if (Instance == null)
+        {
+            Instance = this;
+            Setup();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    private async void Setup()
+    private void Setup()
     {
+        selectorUI = Instantiate(selectorUIPrefab);
+        panel.SetActive(false);
+    }
+
+    private async void SetupGenerator()
+    {
+        Destroy(selectorUI);
+        panel.SetActive(true);
+
 #if UNITY_EDITOR
         courseID = "";
 #else
         Debug.Log("Splitting Url: " + Application.absoluteURL);
         startParameters = Application.absoluteURL.Split("/")[^1];
         Debug.Log("Start Parameters: "  + startParameters);
-        courseID = startParameters.Split("&")[^2];
+        //courseID = startParameters.Split("&")[^2];
         Debug.Log("Course ID: " + courseID);
 #endif
         SetupUI();
@@ -56,6 +78,8 @@ public class AreaGeneratorManager : MonoBehaviour
         if(areaIdentifier.IsPresent())
         {
             currentArea = areaIdentifier.Value();
+            Debug.Log("AreaInformation: " + areaIdentifier.Value().GetWorldIndex());
+            Debug.Log("AreaInformation: " + areaIdentifier.Value().GetDungeonIndex());
         }
         else
         {
@@ -70,6 +94,8 @@ public class AreaGeneratorManager : MonoBehaviour
         if(result.IsPresent())
         {
             areaData = result.Value();
+            Debug.Log("AreaData: " + result.Value().GetArea().GetWorldIndex());
+            Debug.Log("AreaData: " + result.Value().GetArea().GetDungeonIndex());
             LoadAreaScene();
         }
         else
@@ -123,12 +149,12 @@ public class AreaGeneratorManager : MonoBehaviour
     {
 #if UNITY_EDITOR
         //skipping area retrieval in editor, using area 1-1 instead
-        return new Optional<AreaInformation>(new AreaInformation(1, new Optional<int>(1)));
+        return new Optional<AreaInformation>(new AreaInformation(worldIndex, dungeonIndex));
 #endif
 
         //get gamemode parameter of url
-        //string urlPart = Application.absoluteURL.Split("/")[^1];
-        return new Optional<AreaInformation>(new AreaInformation(1, new Optional<int>(1)));
+        //string urlPart = Application.absoluteURL.Split("&")[^1];
+        return new Optional<AreaInformation>(new AreaInformation(worldIndex, dungeonIndex));
         /*
         //split in parts
         string[] areaParts = urlPart.Split("-");
@@ -203,6 +229,8 @@ public class AreaGeneratorManager : MonoBehaviour
     private AreaData LoadLocalData()
     {
         string path;
+        Debug.Log("WorldIndex: " + currentArea.GetWorldIndex());
+        Debug.Log("DungeonIndex: " + currentArea.GetDungeonIndex());
         if (currentArea.IsDungeon())
         {
             path = "Areas/Dungeon" + currentArea.GetWorldIndex() + "-" + currentArea.GetDungeonIndex();            
@@ -306,5 +334,19 @@ public class AreaGeneratorManager : MonoBehaviour
         {
             areaManager.SetupGenerator(courseID, this, areaData, currentArea, cameraController, false, demoMode);
         }
+    }
+
+    /// <summary>
+    ///     Saves all necessary values for the World Generation and starts it.
+    /// </summary>
+    /// <param name="courseID">ID of the selected course</param>
+    /// <param name="worldIndex">Index of the selected world which should be created</param>
+    /// <param name="dungeonIndex">Index of the dungeon if it should be created</param>
+    public void StartGenerator(string courseID, int worldIndex, Optional<int> dungeonIndex)
+    {
+        this.courseID = courseID;
+        this.worldIndex = worldIndex;
+        this.dungeonIndex = dungeonIndex;
+        SetupGenerator();
     }
 }
