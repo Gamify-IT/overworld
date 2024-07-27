@@ -1,0 +1,44 @@
+{
+    "area": {
+        "worldIndex": 3,
+        "dungeonIndex": 0
+    },
+    "size": {
+        "x": 295,
+        "y": 141
+    },
+    "objectOffset": {
+        "x": -69,
+        "y": 100
+    },
+    "gridOffset": {
+        "x": -187,
+        "y": -65
+    },
+    "worldConnections": [
+        {
+            "position": {
+                "x": 140,
+                "y": 0
+            },
+            "destinationWorld": 1,
+            "connectionType": "ENTRY"
+        },
+        {
+            "position": {
+                "x": 0,
+                "y": 87
+            },
+            "destinationWorld": 2,
+            "connectionType": "ENTRY"
+        },
+        {
+            "position": {
+                "x": 213,
+                "y": 140
+            },
+            "destinationWorld": 4,
+            "connectionType": "EXIT"
+        }
+    ]
+}
