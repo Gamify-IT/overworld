@@ -112,7 +112,6 @@ public class MinigameStarting : MonoBehaviour
         Reset();
         PlayerAnimation.Instance.playerAnimator.enabled = true;
         PlayerAnimation.Instance.SetBusy(false);
-        //PlayerAnimation.Instance.EnableMovement();  // too early
         SceneManager.UnloadSceneAsync("MinigameStarting Overlay");
     }
 
