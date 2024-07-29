@@ -191,5 +191,3 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     }
     #endregion
 }
-
-/// test
