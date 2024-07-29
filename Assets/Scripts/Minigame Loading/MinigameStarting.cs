@@ -100,6 +100,7 @@ public class MinigameStarting : MonoBehaviour
     public void QuitButtonPressed()
     {
         PlayClickSound();
+        PlayerAnimation.Instance.EnableMovement();
         Invoke("QuitMinigame", 0.3f);
     }
 
