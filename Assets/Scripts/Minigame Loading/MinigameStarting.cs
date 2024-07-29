@@ -91,7 +91,7 @@ public class MinigameStarting : MonoBehaviour
     {
         LoadMinigameInIframe(game, configurationId);
         PlayClickSound();
-        //Invoke("QuitMinigame", 0.3f);  // Makes no sense here ?!
+        Invoke("QuitMinigame", 0.3f); 
     }
 
     /// <summary>
@@ -111,7 +111,7 @@ public class MinigameStarting : MonoBehaviour
         Reset();
         PlayerAnimation.Instance.playerAnimator.enabled = true;
         PlayerAnimation.Instance.SetBusy(false);
-        PlayerAnimation.Instance.EnableMovement();
+        //PlayerAnimation.Instance.EnableMovement();  // too early
         SceneManager.UnloadSceneAsync("MinigameStarting Overlay");
     }
 
