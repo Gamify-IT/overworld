@@ -335,7 +335,7 @@ public class GameManager : MonoBehaviour
     public void SetData(int worldIndex, int dungeonIndex)
     {
         DataManager.Instance.SetCurrentWorldIndex(worldIndex);
-        DataManager.Instance.SetCurrentDungeonIndex(dungeonIndex)
+        DataManager.Instance.SetCurrentDungeonIndex(dungeonIndex);
         //DataManager.Instance.ReadTeleporterConfig();
         if (dungeonIndex != 0)
         {
