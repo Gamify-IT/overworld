@@ -25,9 +25,20 @@ public class DataManager : MonoBehaviour
     private List<AchievementData> achievementData;
     private Dictionary<Binding, KeyCode> keybindings;
 
-    // player settings 
+    //Player status 
+    private float logoutPositionX;
+    private float logoutPositionY;
+    private string logoutScene;
+    private int logoutWorldIndex;
+    private int logoutDungeonIndex;
     private int characterIndex = 0;
     [SerializeField] private Sprite[] characterFaces;
+
+    //Game status
+    private int currentWorldIndex;
+    private int currentDungeonIndex;
+    private string currentSceneName;
+
 
 
     /// <summary>
@@ -1127,5 +1138,149 @@ public class DataManager : MonoBehaviour
     public Sprite[] GetCharacterFaces()
     {
         return characterFaces;
+    }
+
+    /// <summary>
+    /// Sets the x-coordinate of the player when logging out
+    /// </summary>
+    /// <param name="xPos">x-coordinate of the player</param>
+    public void SetLogoutPositionX(float xPos)
+    {
+        logoutPositionX = xPos;
+    }
+
+    /// <summary>
+    /// Gets the x-coordinate of the player when logging out
+    /// </summary>
+    /// <returns>x-coordinate of the player</returns>
+    public float GetLogoutPositionX()
+    {
+        return logoutPositionX;
+    }
+
+    /// <summary>
+    /// Sets the y-coordinate of the player when logging out
+    /// </summary>
+    /// <param name="xPos">y-coordinate of the player</param>
+    public void SetLogoutPositionY(float yPos)
+    {
+        logoutPositionX = yPos;
+    }
+
+    /// <summary>
+    /// Gets the y-coordinate of the player when logging out
+    /// </summary>
+    /// <returns>y-coordinate of the player</returns>
+    public float GetLogoutPositionY()
+    {
+        return logoutPositionY;
+    }
+
+    /// <summary>
+    /// Sets the scene that was loaded when logging out
+    /// </summary>
+    /// <param name="sceneName">name of the last scene</param>
+    public void SetLogoutScene(string sceneName)
+    {
+        logoutScene = sceneName;
+    }
+
+    /// <summary>
+    /// Gets the scene that was loaded when logging out
+    /// </summary>
+    /// <returns>name of the last scene</returns>
+    public string GetLogoutScene()
+    {
+        return logoutScene;
+    }
+
+    /// <summary>
+    /// Sets the index of the world loaded when logging out
+    /// </summary>
+    /// <param name="index">world index</param>
+    public void SetLogoutWorldIndex(int index)
+    {
+        logoutWorldIndex = index;
+    }
+
+    /// <summary>
+    /// Gets the index of the world loaded when logging out
+    /// </summary>
+    /// <returns></returns>
+    public int GetLogoutWorldIndex()
+    {
+        return logoutWorldIndex;
+    }
+
+    /// <summary>
+    /// Sets the index of the dungeon, if loaded, when logging out
+    /// </summary>
+    /// <param name="index">dungeon index</param>
+    public void SetLogoutDungeonIndex(int index)
+    {
+        logoutDungeonIndex = index;
+    }
+
+    /// <summary>
+    /// Gets the index of the dungeon, if loaded, when logging out
+    /// </summary>
+    /// <returns>dungeon index</returns>
+    public int GetLogoutDungeonIndex()
+    {
+        return logoutDungeonIndex;
+    }
+
+    /// <summary>
+    /// Sets the index of the current world
+    /// </summary>
+    /// <param name="worldIndex">world index</param>
+    public void SetCurrentWorldIndex(int worldIndex)
+    {
+        currentWorldIndex = worldIndex;
+    }
+
+    /// <summary>
+    /// Gets the index of the current world
+    /// </summary>
+    /// <returns>world index</returns>
+    public int GetCurrentWorldIndex()
+    {
+        return currentWorldIndex;
+    }
+
+    /// <summary>
+    /// Sets the index of the current dungeon
+    /// </summary>
+    /// <param name="worldIndex">dungeon index</param>
+    public void SetCurrentDungeonIndex(int dungeonIndex)
+    {
+        currentDungeonIndex = dungeonIndex;
+    }
+
+    /// <summary>
+    /// Gets the index of the current dungeon
+    /// </summary>
+    /// <returns>dungeon index</returns>
+    public int GetCurrentDungeonIndex()
+    {
+        return currentDungeonIndex;
+    }
+
+    /// <summary>
+    /// Sets the name of the current scene
+    /// </summary>
+    /// <param name="sceneName">scene name</param>
+    public void SetCurrentSceneName(string sceneName)
+    {
+        currentSceneName = sceneName;
+    }
+
+    /// <summary>
+    /// Gets the name of the current scene
+    /// </summary>
+    /// <returns>scene name</returns>
+    public string GetCurrentSceneName()
+    {
+        return currentSceneName;
     }
 }
