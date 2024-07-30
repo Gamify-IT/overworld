@@ -134,6 +134,8 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("Start loading scene");
 
+        DataManager.Instance.SetCurrentSceneName(sceneToLoad);
+
         await SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
 
         Debug.Log("Finish loading scene");
@@ -265,6 +267,7 @@ public class LoadingManager : MonoBehaviour
         loadingText.text = "PROCESSING DATA...";
 
         GameManager.Instance.SetData(worldIndex, dungeonIndex);
+        DataManager.Instance.SetCurrentSceneName(sceneToLoad);
         AreaLocationDTO[] unlockedAreasNew = DataManager.Instance.GetPlayerData().unlockedAreas;
         SetupProgessBar(unlockedAreasNew);
         string infoText = CheckForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
