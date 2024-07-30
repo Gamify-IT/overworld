@@ -7,16 +7,6 @@ using UnityEngine;
 [Serializable]
 public class PlayerStatisticDTO
 {
-    /// <summary>
-    ///     This function converts a json string to a <c>PlayerstatisticDTO</c> object.
-    /// </summary>
-    /// <param name="jsonString">The json string to convert</param>
-    /// <returns>A <c>PlayerstatisticDTO</c> object containing the data</returns>
-    public static PlayerStatisticDTO CreateFromJSON(string jsonString)
-    {
-        return JsonUtility.FromJson<PlayerStatisticDTO>(jsonString);
-    }
-
     #region Attributes
 
     public string id;
@@ -78,4 +68,14 @@ public class PlayerStatisticDTO
     }
 
     #endregion
+
+    /// <summary>
+    ///     This function converts a json string to a <c>PlayerstatisticDTO</c> object.
+    /// </summary>
+    /// <param name="jsonString">The json string to convert</param>
+    /// <returns>A <c>PlayerstatisticDTO</c> object containing the data</returns>
+    public static PlayerStatisticDTO CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<PlayerStatisticDTO>(jsonString);
+    }
 }
