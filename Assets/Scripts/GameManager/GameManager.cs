@@ -334,18 +334,22 @@ public class GameManager : MonoBehaviour
     /// <param name="dungeonIndex">The index of the dungeon (0 if world)</param>
     public void SetData(int worldIndex, int dungeonIndex)
     {
+        DataManager.Instance.SetCurrentWorldIndex(worldIndex);
+        DataManager.Instance.SetCurrentDungeonIndex(dungeonIndex)
         //DataManager.Instance.ReadTeleporterConfig();
         if (dungeonIndex != 0)
         {
             Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
             DungeonData data = DataManager.Instance.GetDungeonData(worldIndex, dungeonIndex);
             ObjectManager.Instance.SetDungeonData(worldIndex, dungeonIndex, data);
+            DataManager.Instance.SetCurrentSceneName("Dungeon " + worldIndex + "-" + dungeonIndex);
         }
         else
         {
             Debug.Log("Setting data for world " + worldIndex);
             WorldData data = DataManager.Instance.GetWorldData(worldIndex);
             ObjectManager.Instance.SetWorldData(worldIndex, data);
+            DataManager.Instance.SetCurrentSceneName("World " + worldIndex);
         }
     }
 
