@@ -5,16 +5,16 @@ using UnityEngine;
 ///     This class is used to retrieve data from Get Requests.
 /// </summary>
 [Serializable]
-public class PlayerstatisticDTO
+public class PlayerStatisticDTO
 {
     /// <summary>
     ///     This function converts a json string to a <c>PlayerstatisticDTO</c> object.
     /// </summary>
     /// <param name="jsonString">The json string to convert</param>
     /// <returns>A <c>PlayerstatisticDTO</c> object containing the data</returns>
-    public static PlayerstatisticDTO CreateFromJSON(string jsonString)
+    public static PlayerStatisticDTO CreateFromJSON(string jsonString)
     {
-        return JsonUtility.FromJson<PlayerstatisticDTO>(jsonString);
+        return JsonUtility.FromJson<PlayerStatisticDTO>(jsonString);
     }
 
     #region Attributes
@@ -26,14 +26,20 @@ public class PlayerstatisticDTO
     public AreaLocationDTO currentArea;
     public string userId;
     public string username;
+    public float logoutPositionX;
+    public float logoutPositionY;
+    public string logoutScene;
+    public int logoutWorldIndex;
+    public int logoutDungeonIndex;
     public int knowledge;
 
     #endregion
 
     #region Constructors
 
-    public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
-        AreaLocationDTO currentArea, string userId, string username, int knowledge)
+    public PlayerStatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
+        AreaLocationDTO currentArea, string userId, string username, float logoutPositionX, float logoutPositionY, string logoutScene,
+        int logoutWorldIndex, int logoutDungeonIndex, int knowledge)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -42,10 +48,15 @@ public class PlayerstatisticDTO
         this.currentArea = currentArea;
         this.userId = userId;
         this.username = username;
+        this.logoutPositionX = logoutPositionX;
+        this.logoutPositionY = logoutPositionY;
+        this.logoutScene = logoutScene;
+        this.logoutWorldIndex = logoutWorldIndex;
+        this.logoutDungeonIndex = logoutDungeonIndex;
         this.knowledge = knowledge;
     }
 
-    public PlayerstatisticDTO()
+    public PlayerStatisticDTO()
     {
         id = "";
         AreaLocationDTO unlockedWorld = new AreaLocationDTO();
@@ -58,6 +69,11 @@ public class PlayerstatisticDTO
         unlockedTeleporters = new TeleporterDTO[0];
         userId = "";
         username = "";
+        logoutPositionX = 21.5f;
+        logoutPositionY = 2.5f;
+        logoutScene = "World 1";
+        logoutWorldIndex = 1;
+        logoutDungeonIndex = 0;
         knowledge = 0;
     }
 

@@ -145,8 +145,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Optional<PlayerstatisticDTO> playerStatistics =
-            await RestRequest.GetRequest<PlayerstatisticDTO>(path + "/playerstatistics/");
+        Optional<PlayerStatisticDTO> playerStatistics =
+            await RestRequest.GetRequest<PlayerStatisticDTO>(path + "/playerstatistics/");
         if (!playerStatistics.IsPresent())
         {
             loadingError = true;
@@ -533,7 +533,7 @@ public class GameManager : MonoBehaviour
     {
         string uri = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/" + userId;
 
-        Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(uri);
+        Optional<PlayerStatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerStatisticDTO>(uri);
 
         if (playerStatistics.IsPresent())
         {
@@ -599,7 +599,7 @@ private void PlayAchievementNotificationSound(){
             DataManager.Instance.SetWorldData(worldIndex, new WorldData());
         }
 
-        DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
+        DataManager.Instance.ProcessPlayerStatistics(new PlayerStatisticDTO());
         AchievementStatistic[] achivements = GetDummyAchievements();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
         ResetKeybindings();
