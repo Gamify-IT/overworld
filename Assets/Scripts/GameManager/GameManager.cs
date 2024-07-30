@@ -44,6 +44,80 @@ public class GameManager : MonoBehaviour
     //Game status
     public bool isPaused = false;
 
+    //Player 
+    [SerializeField] private Transform playerTransform;
+
+    /// <summary>
+    ///     This function loads the last known position after the player logged out
+    /// </summary
+    public async UniTask<bool> LoadLastPlayerPosition()
+    {
+#if UNITY_EDITOR
+        //skip loading in editor mode
+        Debug.Log("Use demo values, due to Unity Editor mode");
+        return false;
+#endif
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "playerstatistics";
+
+        Optional<PlayerStatisticDTO> playerStatisticDTO = await RestRequest.GetRequest<PlayerStatisticDTO>(path);
+
+        if (playerStatisticDTO.IsPresent())
+        {
+            PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(playerStatisticDTO.Value());
+
+            // update values with those from backend 
+            DataManager.Instance.SetLogoutPositionX(playerStatistic.GetLogoutPositionX());
+            DataManager.Instance.SetLogoutPositionY(playerStatistic.GetLogoutPositionY());
+            DataManager.Instance.SetLogoutScene(playerStatistic.GetLogoutScene());
+            DataManager.Instance.SetLogoutWorldIndex(playerStatistic.GetLogoutWorldIndex());
+            DataManager.Instance.SetLogoutDungeonIndex(playerStatistic.GetLogoutDungeonIndex());
+
+            return true;
+        }
+
+        else
+        {
+            Debug.Log("Player position data could not be loaded.");
+            return false;
+        }
+    }
+
+    /// <summary>
+    ///     This function saves the last known position of the player in the backend when the player logs out 
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask<bool> SavePlayerPosition()
+    {
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics" + userId;
+
+        PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(DataManager.Instance.GetPlayerData());
+
+        playerStatistic.SetLogoutPositionX(playerTransform.position.x);
+        playerStatistic.SetLogoutPositionY(playerTransform.position.y);
+        playerStatistic.SetLogoutScene(DataManager.Instance.GetCurrentSceneName());
+        playerStatistic.SetLogoutWorldIndex(DataManager.Instance.GetCurrentWorldIndex());
+        playerStatistic.SetLogoutDungeonIndex(DataManager.Instance.GetCurrentDungeonIndex());
+
+        string json = JsonUtility.ToJson(playerStatistic, true);
+        bool succesful = await RestRequest.PutRequest(path, json);
+
+        if (succesful)
+        {
+            Debug.Log("Updated player position for " + playerStatistic.GetLogoutPositionX() + " ," + playerStatistic.GetLogoutPositionY() + " ,"
+                + playerStatistic.GetLogoutScene() + " ," + playerStatistic.GetLogoutWorldIndex() + " ," + playerStatistic.GetLogoutDungeonIndex() +
+                " successfully.");
+            return true;
+        }
+        else
+        {
+            Debug.Log("Could not update player position for " + playerStatistic.GetLogoutPositionX() + " ," + playerStatistic.GetLogoutPositionY() + " ,"
+                + playerStatistic.GetLogoutScene() + " ," + playerStatistic.GetLogoutWorldIndex() + " ," + playerStatistic.GetLogoutDungeonIndex() +
+                " successfully.");
+            return false;
+        }
+
+    }
+
     /// <summary>
     ///     This function checks whether or not a valid courseId was passed or not.
     ///     If a valid id was passed, it gets stored.
