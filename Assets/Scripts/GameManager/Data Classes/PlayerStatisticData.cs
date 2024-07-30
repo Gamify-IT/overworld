@@ -3,7 +3,7 @@ using System;
 /// <summary>
 ///     This class defines all needed data for a player statistic. 
 /// </summary>
-public class PlayerstatisticData
+public class PlayerStatisticData
 {
     #region Attributes 
     private string id;
@@ -22,7 +22,7 @@ public class PlayerstatisticData
     #endregion
 
     #region Constructor
-    public PlayerstatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
+    public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
         AreaLocationDTO currentArea, string userId, string username, float logoutPositionX, float logoutPositionY, string logoutScene,
         int logoutWorldIndex, int logoutDungeonIndex, int knowledge)
     {
@@ -42,9 +42,9 @@ public class PlayerstatisticData
     }
     #endregion
 
-    public static PlayerstatisticData ConvertDtoToData(PlayerStatisticDTO dto)
+    public static PlayerStatisticData ConvertDtoToData(PlayerStatisticDTO dto)
     {
-        PlayerstatisticData data = new PlayerstatisticData(dto.id, dto.unlockedAreas, dto.unlockedDungeons, dto.unlockedTeleporters, dto.currentArea,
+        PlayerStatisticData data = new PlayerStatisticData(dto.id, dto.unlockedAreas, dto.unlockedDungeons, dto.unlockedTeleporters, dto.currentArea,
             dto.userId, dto.username, dto.logoutPositionX, dto.logoutPositionY, dto.logoutScene, dto.logoutWorldIndex,
             dto.logoutDungeonIndex, dto.knowledge);
 
