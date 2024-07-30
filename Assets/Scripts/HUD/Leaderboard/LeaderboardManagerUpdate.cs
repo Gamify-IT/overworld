@@ -68,17 +68,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         ranking = DataManager.Instance.GetAllPlayerStatistics();
         ownData = DataManager.Instance.GetOwnStatisticData();
 
-        if (walletButton != null) 
-        {
-            walletButton.onClick.AddListener(OpenwalletPanel);
-            walletField.text = $"Your current credit: {ownData.GetCredit()}.";
-            
-        }
-        else
-        {
-            Debug.LogError("wallet Button is not assigned in the Inspector.");
-        }
-
+       
         if (visibilityButton!= null)
         {
 
