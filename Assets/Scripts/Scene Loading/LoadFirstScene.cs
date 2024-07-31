@@ -98,11 +98,14 @@ public class LoadFirstScene : MonoBehaviour
         Debug.Log("Start retrieving saved player data");
 
         bool validPlayerData = await GameManager.Instance.LoadLastPlayerPosition();
-        if (validCourseId)
+        if (validPlayerData)
         {
             playerPosition = new Vector2(DataManager.Instance.GetLogoutPositionX(), DataManager.Instance.GetLogoutPositionY());
             worldIndex = DataManager.Instance.GetLogoutWorldIndex();
             dungeonIndex = DataManager.Instance.GetLogoutDungeonIndex();
+            Debug.Log("Loaded position: " + playerPosition.ToString());
+            Debug.Log("Loaded world index: " + worldIndex);
+            Debug.Log("Loaded dungeon index: " + dungeonIndex);
         }
 
         Debug.Log("Finish retrieving saved player data");
