@@ -41,7 +41,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     public Button closeInputfieldButton;
     public Button closeVisibilityMenuButton;
 
-
+    private AudioSource audioSource;
+    public AudioClip clickSound;
 
 
     private bool isLeaderboardOpen = true;
@@ -64,6 +65,13 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        if(audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.clip = clickSound;
+        audioSource.playOnAwake = false;
 
         ranking = DataManager.Instance.GetAllPlayerStatistics();
         ownData = DataManager.Instance.GetOwnStatisticData();
@@ -208,6 +216,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             VisibilityMenu.SetActive(true);
             Debug.Log("Visibility Menu opened.");
+            audioSource.Play();
         }
         else
         {
@@ -219,6 +228,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     {
         if (VisibilityMenu != null)
         {
+            audioSource.Play();
             VisibilityMenu.SetActive(false);
             Debug.Log("Visibility Menu closed.");
         }
@@ -490,10 +500,16 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     {
         if (isLeaderboardOpen)
         {
-            SceneManager.UnloadSceneAsync("Rewards");
+            audioSource.Play();
+            Invoke("UnloadScene", 0.15f);
             isLeaderboardOpen = false;
             Time.timeScale = 1f; 
         }
+    }
+
+    private void UnloadScene()
+    {
+        SceneManager.UnloadSceneAsync("Rewards");
     }
 
     private void Update()
