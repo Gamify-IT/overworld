@@ -51,7 +51,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("Skip loading, due to Unity Editor mode");
         return false;
 #endif
-        courseId = Application.absoluteURL.Split("/")[^2];
+        courseId = Application.absoluteURL.Split("/")[^1];
+        courseId = courseId.Split("&")[^2];
         GameSettings.SetCourseID(courseId);
 
         string uri = overworldBackendPath + "/courses/" + courseId;
@@ -263,7 +264,7 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     ///     This function sets the data for the given area.
-    /// </summary>
+    /// </summary>l
     /// <param name="worldIndex">The index of the world</param>
     /// <param name="dungeonIndex">The index of the dungeon (0 if world)</param>
     public void SetData(int worldIndex, int dungeonIndex)
@@ -697,7 +698,6 @@ public class GameManager : MonoBehaviour
             int knowledge = random.Next(0, 501);
             int rewards = random.Next(0, 501);
             bool showRewards = true;
-            float credit = random.Next(0, 501);
 
             int worldIndex = random.Next(1, 5); 
             int dungeonIndex = random.Next(1, 5); 
@@ -709,7 +709,7 @@ public class GameManager : MonoBehaviour
             TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
             TeleporterDTO[] unlockedTeleporters = { teleporter };
 
-            PlayerstatisticDTO player = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards,"-", credit);
+            PlayerstatisticDTO player = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards,"-");
             allStatistics[i] = player;
         }
 
@@ -722,7 +722,7 @@ public class GameManager : MonoBehaviour
 
         TeleporterDTO teleporter1 = new TeleporterDTO("1", currentArea1, 1);
         TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
-        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco", 200, 170, true,"TheoPro",200);
+        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco", 200, 170, true,"TheoPro");
         allStatistics[30] = player31;
         PlayerstatisticDTO ownPlayer = GetOwnDummyData();
         allStatistics[31] = ownPlayer;
@@ -740,7 +740,7 @@ public class GameManager : MonoBehaviour
 
         TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
         TeleporterDTO[] unlockedTeleporters = { teleporter };
-        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki", 200, 170,false, "PSEProfi", 190);
+        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki", 200, 170,false, "PSEProfi");
         return ownPlayerData;
     }
 
