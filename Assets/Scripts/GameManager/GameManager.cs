@@ -94,6 +94,7 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask<bool> SavePlayerPosition()
     {
+        Debug.Log("Start saving logout position");
         string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
 
         PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(DataManager.Instance.GetPlayerData());
@@ -457,6 +458,8 @@ public class GameManager : MonoBehaviour
 
         foreach (AchievementData achievementData in achievements)
         {
+            Debug.Log("Achievement: " + achievementData.GetTitle());
+
             if(achievementData.isUpdated())
             {
                 AchievementStatistic achievementStatistic = AchievementData.ConvertToAchievmentStatistic(achievementData);
