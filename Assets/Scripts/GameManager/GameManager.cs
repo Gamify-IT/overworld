@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask<bool> SavePlayerPosition()
     {
-        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics" + userId;
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
 
         PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(DataManager.Instance.GetPlayerData());
 
