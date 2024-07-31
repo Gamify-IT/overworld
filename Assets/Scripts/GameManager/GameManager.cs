@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.SetLogoutDungeonIndex(playerStatistic.GetLogoutDungeonIndex());
 
             Debug.Log("xPos: " + DataManager.Instance.GetLogoutPositionX());
-            Debug.Log("yPos: " + DataManager.Instance.GetLogoutPositionX());
+            Debug.Log("yPos: " + DataManager.Instance.GetLogoutPositionY());
             Debug.Log("Scene: " + DataManager.Instance.GetLogoutScene());
             Debug.Log("World: " + DataManager.Instance.GetLogoutWorldIndex());
             Debug.Log("Dungeon: " + DataManager.Instance.GetLogoutDungeonIndex());

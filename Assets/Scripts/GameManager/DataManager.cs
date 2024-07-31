@@ -1164,7 +1164,7 @@ public class DataManager : MonoBehaviour
     /// <param name="xPos">y-coordinate of the player</param>
     public void SetLogoutPositionY(float yPos)
     {
-        logoutPositionX = yPos;
+        logoutPositionY = yPos;
     }
 
     /// <summary>
