@@ -11,6 +11,19 @@ public class OpenLeaderboard : MonoBehaviour
     public GameObject rewardsPanel;
     public GameObject shopPanel;
 
+    private AudioSource audioSource;
+    public AudioClip clickSound;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if(audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.clip = clickSound;
+        audioSource.playOnAwake = false;
+    }
     public void openMenue()
     {
         menuOpen = true;
@@ -34,16 +47,28 @@ public class OpenLeaderboard : MonoBehaviour
 
     public void closeMenue()
     {
+        audioSource.Play();
+        Invoke("RewardsPanelSetActive", 0.15f);
         menuOpen = false;
-        rewardsPanel.SetActive(false); 
         Time.timeScale = 1f; 
+    }
+
+    private void RewardsPanelSetActive()
+    {
+        rewardsPanel.SetActive(false); 
     }
 
     public void closeShop()
     {
+        audioSource.Play();
+        Invoke("ShopPanelSetActive", 0.15f);
         menuOpen = false;
-        shopPanel.SetActive(false);
         Time.timeScale = 1f;
+    }
+
+    private void ShopPanelSetActive()
+    {
+        shopPanel.SetActive(false);
     }
 
 }
