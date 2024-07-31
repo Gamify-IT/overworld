@@ -96,9 +96,10 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Start saving logout position");
         string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
-
+        Debug.Log("path: " + path);
+        Debug.Log("player data: " + DataManager.Instance.GetPlayerData());
         PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(DataManager.Instance.GetPlayerData());
-
+        
         playerStatistic.SetLogoutPositionX(playerTransform.position.x);
         playerStatistic.SetLogoutPositionY(playerTransform.position.y);
         playerStatistic.SetLogoutScene(DataManager.Instance.GetCurrentSceneName());

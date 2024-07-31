@@ -266,6 +266,7 @@ MonoBehaviour:
   achievementNotificationSound: {fileID: 8300000, guid: 4874f70b96dafa844a60e90eb1b8111d, type: 3}
   achievementNotificationManagerPrefab: {fileID: 3353499656544615801, guid: 84d1d0654029bb2418bc58e6a9bedbb4, type: 3}
   isPaused: 0
+  playerTransform: {fileID: 2052422323}
 --- !u!4 &1749240694
 Transform:
   m_ObjectHideFlags: 0
@@ -358,3 +359,8 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 182269edf1b9c07499a840f9d4ac88bf, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1696570aa1f26da4d8f591b27f47d0e2, type: 3}
+--- !u!4 &2052422323 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5603177028076193788, guid: 1696570aa1f26da4d8f591b27f47d0e2, type: 3}
+  m_PrefabInstance: {fileID: 2052422322}
+  m_PrefabAsset: {fileID: 0}
