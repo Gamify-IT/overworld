@@ -112,7 +112,7 @@ public class AreaDataManager
     private async UniTask<AreaData> FetchData(AreaInformation currentArea)
     {
         //get specific path
-        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + GameSettings.GetCourseID() + "/areaMaps/" + currentArea.GetWorldIndex();
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + GameSettings.GetCourseID() + "/area/" + currentArea.GetWorldIndex();
 
         if(currentArea.IsDungeon())
         {
