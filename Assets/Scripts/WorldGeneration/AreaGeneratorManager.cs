@@ -170,7 +170,7 @@ public class AreaGeneratorManager : MonoBehaviour
 #endif
 
         //load data from backend
-        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseID + "/areaMaps/" + currentArea.GetWorldIndex();
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseID + "/area/" + currentArea.GetWorldIndex();
         if(currentArea.IsDungeon())
         {
             path += "/dungeon/" + currentArea.GetDungeonIndex();
