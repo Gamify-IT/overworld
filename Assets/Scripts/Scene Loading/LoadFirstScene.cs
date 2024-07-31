@@ -89,6 +89,24 @@ public class LoadFirstScene : MonoBehaviour
 
         Debug.Log("Finish loading HUD");
 
+        Debug.Log("Start retrieving courseId");
+
+        bool validCourseId = await GameManager.Instance.ValidateCourseId();
+
+        Debug.Log("Finish retrieving courseId");
+
+        Debug.Log("Start retrieving saved player data");
+
+        bool validPlayerData = await GameManager.Instance.LoadLastPlayerPosition();
+        if (validCourseId)
+        {
+            playerPosition = new Vector2(DataManager.Instance.GetLogoutPositionX(), DataManager.Instance.GetLogoutPositionY());
+            worldIndex = DataManager.Instance.GetLogoutWorldIndex();
+            dungeonIndex = DataManager.Instance.GetLogoutDungeonIndex();
+        }
+
+        Debug.Log("Finish retrieving saved player data");
+
         Debug.Log("Start loading LoadingScreen");
 
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
@@ -96,9 +114,9 @@ public class LoadFirstScene : MonoBehaviour
 
         Debug.Log("Finish loading LoadingScreen");
 
-        Debug.Log("Start retrieving courseId");
+        Debug.Log("Start testing courseID");
 
-        bool validCourseId = await GameManager.Instance.ValidateCourseId();
+        //bool validCourseId = await GameManager.Instance.ValidateCourseId();
         if (!validCourseId)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
@@ -106,7 +124,7 @@ public class LoadFirstScene : MonoBehaviour
             return;
         }
 
-        Debug.Log("Finish retrieving courseId");
+        Debug.Log("Finish testing courseId");
 
         Debug.Log("Start retrieving playerId");
         bool validPlayerId = await GameManager.Instance.GetUserData();
