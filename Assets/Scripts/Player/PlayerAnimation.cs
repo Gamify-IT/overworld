@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 /// <summary>
 ///     This class manages the movement and the animations of the player.
@@ -15,6 +16,7 @@ public class PlayerAnimation : MonoBehaviour
     private bool canMove;
     private float currentSpeed;
     private float targetSpeed;
+    private int volumeLevel;
 
     private Vector3 lastPosition;
     private float distanceWalked;
@@ -26,14 +28,65 @@ public class PlayerAnimation : MonoBehaviour
     private KeyCode moveDown;
     private KeyCode moveRight;
     private KeyCode sprint;
+    private float sprintStartTime = 0f;
+    private float sprintDuration = 0f; 
 
+    private float timeInGameStart = 0f;
+    private float timeInGameDuration = 0f;
 
+    public AudioClip moveSound;
+    private AudioSource audioSource;
+    private bool isMoving;
+
+    private int daysPlayed;
+    private DateTime lastPlayDate;
+    private bool checkIfChanged=false;
     /// <summary>
     ///     This method is called before the first frame update.
     ///     It is used to initialize variables.
     /// </summary>
     private void Start()
     {
+        string lastPlayDateStr = PlayerPrefs.GetString("LastPlayDate", "");
+        int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
+
+        if (!string.IsNullOrEmpty(lastPlayDateStr))
+        {
+            lastPlayDate = DateTime.Parse(lastPlayDateStr);
+            DateTime today = DateTime.Today;
+            DateTime lastPlayDay = lastPlayDate.Date;
+
+            if (lastPlayDay < today)
+            {
+                int daysSinceLastPlay = (today - lastPlayDay).Days;
+                daysPlayed = daysCount + daysSinceLastPlay;
+                PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
+            }
+            else
+            {
+                daysPlayed = daysCount;
+            }
+        }
+        else
+        {
+            lastPlayDate = DateTime.Now;
+            daysPlayed = 1;
+            PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
+        }
+
+        if (daysPlayed > daysCount)
+        {
+            checkIfChanged=true;
+            
+            Debug.Log("success!!!!!");
+        }
+        PlayerPrefs.SetString("LastPlayDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")); // store the current date and time with milliseconds
+        Debug.Log("day: days played "+daysPlayed);
+        Debug.Log("day: current date "+DateTime.Now);
+        Debug.Log("day: last play date "+lastPlayDate);
+        
+        timeInGameStart=Time.time;
+
         canMove = true;
         busy = false;
         playerRigidBody = GetComponent<Rigidbody2D>();
@@ -48,6 +101,54 @@ public class PlayerAnimation : MonoBehaviour
         moveRight = GameManager.Instance.GetKeyCode(Binding.MOVE_RIGHT);
         sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
+
+        //get AudioSource component
+        audioSource = GetComponent<AudioSource>();
+        //add AudioSource component if necessary
+        if(audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        //set audio clip
+        audioSource.clip = moveSound;
+        //set AudioSource to loop
+        audioSource.loop = true;
+        //AudioSource does not start playing automatically when the GameObject awakens
+        audioSource.playOnAwake = false;
+
+        volumeLevel = PlayerPrefs.GetInt("VolumeLevel", 3);
+        UpdateVolume();
+    }
+
+    /// <summary>
+    /// This function updates the level volume and applies the changes to all audio in the game
+    /// </summary>
+    private void UpdateVolume()
+    {
+        float volume = 0f;
+        switch (volumeLevel)
+        {
+            case 0:
+                volume = 0f;
+                break;
+            case 1:
+                volume = 0.5f;
+                break;
+            case 2:
+                volume = 1f;
+                break;
+            case 3:
+                volume = 2f;
+                break;
+        }
+        AudioListener.volume = volume;
+    }
+
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.SetString("LastPlayDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+        PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
+        PlayerPrefs.Save();
     }
 
     /// <summary>
@@ -55,28 +156,39 @@ public class PlayerAnimation : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if(checkIfChanged){
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1);
+            checkIfChanged=false;
+            Debug.Log("success in update");
+        }
         if (canMove)
         {
+            isMoving = false;
             movement.x = 0;
             movement.y = 0;
             if (Input.GetKey(moveLeft))
             {
                 movement.x -= 1;
+                isMoving = true;
             }
 
             if (Input.GetKey(moveRight))
             {
                 movement.x += 1;
+                isMoving = true;
             }
 
             if (Input.GetKey(moveDown))
             {
                 movement.y -= 1;
+                isMoving = true;
             }
 
             if (Input.GetKey(moveUp))
             {
                 movement.y += 1;
+                isMoving = true;
             }
 
             movement = movement.normalized;
@@ -85,12 +197,29 @@ public class PlayerAnimation : MonoBehaviour
             {
                 targetSpeed = movementSpeed + sprintingSpeed;
                 playerAnimator.speed = 2;
+                sprintStartTime = Time.time;
+            }
+            
+            if (Input.GetKey(sprint))
+            {
+                float currentTime = Time.time;
+                sprintDuration = currentTime - sprintStartTime;
+
+                while (sprintDuration >= 1f)
+                {
+                    GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SPEEDRUNNER, 1);
+                    sprintDuration -= 1f;
+                    sprintStartTime += 1f;
+                }
+                audioSource.pitch = 1.75f;
             }
 
             if (Input.GetKeyUp(sprint))
             {
                 targetSpeed = movementSpeed;
                 playerAnimator.speed = 1;
+                sprintDuration = 0f; 
+                audioSource.pitch = 1f;
             }
 
             // dev keybindings
@@ -118,6 +247,30 @@ public class PlayerAnimation : MonoBehaviour
                     !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
             }
             // dev keybindings
+            if (isMoving && !GameManager.Instance.isPaused)
+            {
+                PlayMoveSound();
+            }
+            else
+            {
+                StopMoveSound();
+            }
+        }
+        timeInGameDuration = Time.time - timeInGameStart;
+        UpdateAchievementForTimeInGame();
+    }
+
+    /// <summary>
+    ///     this function updates time achievement each 60 seconds when the player is playing
+    /// </summary>
+    private void UpdateAchievementForTimeInGame()
+    {
+        while (timeInGameDuration >= 60f)
+        {
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.BEGINNER, 1);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.EXPERIENCED_PLAYER, 1);
+            timeInGameDuration -= 60f;
+            timeInGameStart += 60f;
         }
     }
 
@@ -255,6 +408,29 @@ public class PlayerAnimation : MonoBehaviour
     {
         this.busy = busy;
     }
+    
+    /// <summary>
+    /// This function plays the movement sound.
+    /// </summary>
+    private void PlayMoveSound()
+    {
+        if (moveSound != null && !audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+    }
+
+    /// <summary>
+    /// This function stops the movement sound.
+    /// </summary>
+    private void StopMoveSound()
+    {
+        if (audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+    }
+
 
     #region Singleton
 
@@ -274,6 +450,13 @@ public class PlayerAnimation : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    /// <summary>
+    ///     Resets the current instance to null.
+    /// </summary>
+    public void ResetInstance()
+    {
+        Instance = null;
     }
 
     #endregion

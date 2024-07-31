@@ -3,7 +3,10 @@ guid: a9c77e372d0eca34f8a449016619ec30
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - imageOfNPC: {instanceID: 0}
+  - speechIndicator: {instanceID: 0}
+  - heySound: {fileID: 8300000, guid: 71920c1fc41b93141a116694a7848899, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -7,10 +7,13 @@ using UnityEngine.U2D;
 /// </summary>
 public class ZoomScript : MonoBehaviour
 {
+    public AudioClip clickSound;
+    private AudioSource audioSource;
+
     //minigame Zoomlevels
     public int zoomLevel = -40;
     private int maxZoomLevel = -30;
-    private int minZoomLevel = -200;
+    private int minZoomLevel = -60;
 
     //normal camera zoom levels
     private readonly int[] gameZoomLevelX = { 320, 355, 425 };
@@ -44,6 +47,19 @@ public class ZoomScript : MonoBehaviour
         gameZoomIn = GameManager.Instance.GetKeyCode(Binding.GAME_ZOOM_IN);
         gameZoomOut = GameManager.Instance.GetKeyCode(Binding.GAME_ZOOM_OUT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
+
+        //get AudioSource component
+        audioSource=GetComponent<AudioSource>();
+        //add AudioSource component if necessary
+        if(audioSource == null)
+        {
+            audioSource=gameObject.AddComponent<AudioSource>();
+        }
+        //set audio clip
+        audioSource.clip=clickSound;
+        //AudioSource does not start playing automatically when the GameObject awakens
+        audioSource.playOnAwake=false;
+
     }
 
     /// <summary>
@@ -67,7 +83,7 @@ public class ZoomScript : MonoBehaviour
         //zoom game in
         if (Input.GetKeyDown(gameZoomIn) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
         {
-            GameZoomIn();
+            GameZoomIn(); 
         }
 
         //zoom game out
@@ -108,6 +124,7 @@ public class ZoomScript : MonoBehaviour
                     -1 * zoomLevel / minimapIconResizeValue, 0);
             }
         }
+        PlayClickSound();
     }
 
     /// <summary>
@@ -128,6 +145,7 @@ public class ZoomScript : MonoBehaviour
                     -1 * zoomLevel / minimapIconResizeValue, 0);
             }
         }
+        PlayClickSound();
     }
 
     /// <summary>
@@ -191,4 +209,39 @@ public class ZoomScript : MonoBehaviour
             gameZoomOut = GameManager.Instance.GetKeyCode(Binding.GAME_ZOOM_OUT);
         }
     }
+    /// <summary>
+    /// This function is called by the zoom buttons.
+    /// This function plays the click sound.
+    /// </summary>
+    private void PlayClickSound()
+    {
+        if(clickSound != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
+    }
+
+    public void ChangePixelCam(PixelPerfectCamera pixelCam)
+    {
+        this.pixelCam = pixelCam;
+    }
+
+    #region Singelton 
+
+    public static ZoomScript Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    #endregion
 }

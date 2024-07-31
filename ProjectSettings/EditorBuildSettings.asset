@@ -119,4 +119,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Player HUD/Rewards.unity
     guid: b6a04b182ddb06041ae559d67ccc82cd
+  - enabled: 1
+    path: Assets/Scenes/Worlds/Tutorial/Tutorial.unity
+    guid: f8548483a8188004d9da1c82592e1d71
   m_configObjects: {}

@@ -3,7 +3,11 @@ guid: d0048ff9fd212f34689aa1a1a4bf82c9
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - npcSpotPrefab: {instanceID: 0}
+  - placeholderPrefab: {instanceID: 0}
+  - minimapIcons: {instanceID: 0}
+  - heySound: {fileID: 8300000, guid: 71920c1fc41b93141a116694a7848899, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -198,7 +198,7 @@ public class ObjectGenerator
                 areaToLoad.SetDungeonIndex(index);
             }
 
-            FacingDirection facingDirection = FacingDirection.south;
+            FacingDirection facingDirection = FacingDirection.SOUTH;
 
             //shift position
             Vector2 shiftedPosition = position + shift + offset;

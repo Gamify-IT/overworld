@@ -2,11 +2,13 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 /// <summary>
 ///     This class manages the loading of the game scenes.
 /// </summary>
 public class LoadFirstScene : MonoBehaviour
 {
+    
     /// <summary>
     ///     This function is called by Unity before the first frame updates.
     /// </summary>
@@ -43,14 +45,13 @@ public class LoadFirstScene : MonoBehaviour
     private Gamemode GetGamemode()
     {
         //get gamemode parameter of url
-        string urlGamemodePart = Application.absoluteURL.Split("/")[^1];
+        string urlGamemodePart = Application.absoluteURL.Split("&")[^1];
 
         //get first part
-        string gamemodePart = urlGamemodePart.Split("-")[0];
-        gamemodePart = gamemodePart.ToUpper();
+        urlGamemodePart = urlGamemodePart.ToUpper();
 
         //try to parse to valid gamemode
-        bool success = System.Enum.TryParse<Gamemode>(gamemodePart, out Gamemode gamemode);
+        bool success = System.Enum.TryParse<Gamemode>(urlGamemodePart, out Gamemode gamemode);
         if (success)
         {
             Debug.Log("Specified gamemode: " + gamemode);
@@ -59,7 +60,7 @@ public class LoadFirstScene : MonoBehaviour
         else
         {
             Gamemode defaultGamemode = Gamemode.PLAY;
-            Debug.LogError("Incorrect gamemode specified: " + gamemodePart + ", setting default gamemode: " + defaultGamemode);
+            Debug.LogError("Incorrect gamemode specified: " + urlGamemodePart + ", setting default gamemode: " + defaultGamemode);
             return defaultGamemode;
         }
     }
