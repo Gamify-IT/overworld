@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Use demo values, due to Unity Editor mode");
         return false;
 #endif
-        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "playerstatistics";
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics";
 
         Optional<PlayerStatisticDTO> playerStatisticDTO = await RestRequest.GetRequest<PlayerStatisticDTO>(path);
 
