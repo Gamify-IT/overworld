@@ -50,6 +50,18 @@ public class ProgressBar : MonoBehaviour
     public void setUnlockedArea(int worldIndex)
     {
         unlockedAreaText.text = worldIndex.ToString();
+        if (worldIndex == 2)
+        {
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.OPENER_WORLD_2, 1);
+        }
+        if (worldIndex == 3)
+        {
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.OPENER_WORLD_3, 1);
+        }
+        if (worldIndex == 4)
+        {
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.OPENER_WORLD_4, 1);
+        }
     }
 
     /// <summary>
@@ -60,5 +72,21 @@ public class ProgressBar : MonoBehaviour
     public void setUnlockedArea(int worldIndex, int dungeonIndex)
     {
         unlockedAreaText.text = worldIndex + "-" + dungeonIndex;
+        if (worldIndex == 1)
+        {
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINER_WORLD_1, 1);
+        }
+        if (worldIndex == 2)
+        {
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINER_WORLD_2, 1);
+        }
+        if (worldIndex == 3)
+        {
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINER_WORLD_3, 1);
+        }
+        if (worldIndex == 4)
+        {
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINER_WORLD_4, 1);
+        }
     }
 }

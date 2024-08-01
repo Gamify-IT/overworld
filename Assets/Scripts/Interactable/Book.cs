@@ -1,7 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 /// <summary>
 ///     This class is responsible for the Book logic.
@@ -17,6 +19,9 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     private bool playerIsClose;
     private string uuid;
 
+    private readonly int achievementUpdateIntervall = 1;
+    private static List<(int, int, int)> readBooks = new List<(int, int, int)>();
+
     //KeyCodes
     private KeyCode interact;
 
@@ -28,6 +33,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     {
         interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
+        LoadReadBooks();
     }
 
     /// <summary>
@@ -110,7 +116,6 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         }
     }
 
-
     /// <summary>
     ///     This function registers the Book to the GameManager.
     /// </summary>
@@ -132,13 +137,13 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         Debug.Log("setup book " + world + "-" + number + " with Text: " + text);
     }
 
-
     /// <summary>
     ///     This method loads the dialogue window and will change the text and name of the Book to the text and name set in the
     ///     Book.
     /// </summary>
     private IEnumerator LoadBookScene()
     {
+        
         var asyncLoadScene = SceneManager.LoadSceneAsync("Book", LoadSceneMode.Additive);
         while (!asyncLoadScene.isDone)
         {
@@ -148,6 +153,90 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         GameObject.Find("Book_Name").GetComponent<TextMeshProUGUI>().text = nameOfBook;
         bookText = GameObject.Find("Book_Text").GetComponent<TextMeshProUGUI>();
         bookText.text = bookContent;
+        UpdateListOfBooks();
+    }
+
+    /// <summary>
+    ///     This method adds a new read book to the list. 
+    /// </summary>
+    private void UpdateListOfBooks()
+    {
+        var key = (world, dungeon, number);
+        if(!readBooks.Contains(key))
+        {
+            readBooks.Add((world, dungeon, number));
+            SaveReadBooks();
+            if (world == 1)
+            {
+                UpdateAchievementWorld1();
+                UpdateAchievementInTotal();
+            }
+            if (world == 2)
+            {
+                UpdateAchievementWorld2();
+                UpdateAchievementInTotal();
+            }
+            if (world == 3)
+            {
+                UpdateAchievementWorld3();
+                UpdateAchievementInTotal();
+            }
+            if (world == 4)
+            {
+                UpdateAchievementWorld4();
+                UpdateAchievementInTotal();
+            }
+        } 
+    }
+
+    /// <summary>
+    ///     This method updates the "read books" achievement in general.
+    /// </summary>
+    private void UpdateAchievementInTotal()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_1, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_2, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_3, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "read books" achievement in World 1.
+    /// </summary>
+    private void UpdateAchievementWorld1()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_1_WORLD_1, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_2_WORLD_1, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_3_WORLD_1, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "read books" achievement in World 2.
+    /// </summary>
+    private void UpdateAchievementWorld2()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_1_WORLD_2, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_2_WORLD_2, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_3_WORLD_2, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "read books" achievement in World 3.
+    /// </summary>
+    private void UpdateAchievementWorld3()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_1_WORLD_3, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_2_WORLD_3, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_3_WORLD_3, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "read books" achievement in World 4.
+    /// </summary>
+    private void UpdateAchievementWorld4()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_1_WORLD_4, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_2_WORLD_4, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_3_WORLD_4, achievementUpdateIntervall);
     }
 
     /// <summary>
@@ -175,4 +264,28 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         }
     }
 
+    /// <summary>
+    ///     This method saves the list of read books to PlayerPrefs.
+    /// </summary>
+    private void SaveReadBooks()
+    {
+        PlayerPrefs.SetString("ReadBooks", string.Join(";", readBooks.Select(book => $"{book.Item1},{book.Item2},{book.Item3}")));
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    ///     This method loads the list of read books from PlayerPrefs.
+    /// </summary>
+    private void LoadReadBooks()
+    {
+        if (PlayerPrefs.HasKey("ReadBooks"))
+        {
+            string savedData = PlayerPrefs.GetString("ReadBooks");
+            readBooks = savedData.Split(';').Select(book =>
+            {
+                var parts = book.Split(',');
+                return (int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
+            }).ToList();
+        }
+    }
 }

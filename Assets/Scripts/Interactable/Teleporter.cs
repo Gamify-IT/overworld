@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 ///     This class is part of an teleporter game object
@@ -28,6 +30,18 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     private bool inTrigger;
     private bool interactable = true;
 
+    private readonly int achievementUpdateIntervall = 1;
+    private static List<(int, int, int)> unlockedTeleporters = new List<(int, int, int)>();
+    public AudioClip teleporterOpeningSound;
+    public AudioClip ufoTakesSound;
+    public AudioClip ufoReturnsSound;
+
+    private AudioSource audioSourceTeleport;
+    private AudioSource audioSourceUfoTakes;
+    private AudioSource audioSourceUfoReturns;
+    
+    private bool isUfoSoundPlaying = false;
+
     //KeyCodes
     private KeyCode interact;
 
@@ -39,7 +53,28 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             teleporterNumber);
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
             GameEvents.current.onKeybindingChange += UpdateKeybindings;
+
+            //add AudioSource component
+            audioSourceTeleport = gameObject.AddComponent<AudioSource>();
+            audioSourceUfoTakes = gameObject.AddComponent<AudioSource>();
+            audioSourceUfoReturns = gameObject.AddComponent<AudioSource>();
+
+            //Load the sound from Resources folder
+            teleporterOpeningSound = Resources.Load<AudioClip>("Music/teleporter_opening");
+            //set audio clip
+            audioSourceTeleport.clip = teleporterOpeningSound;
+
+            //Load the sound from Resources folder
+            ufoTakesSound = Resources.Load<AudioClip>("Music/ufo_takes_the_player");
+            //set audio clip
+            audioSourceUfoTakes.clip = ufoTakesSound;
+
+            //Load the sound from Resources folder
+            ufoReturnsSound = Resources.Load<AudioClip>("Music/ufo_returns_the_player");
+            //set audio clip
+            audioSourceUfoReturns.clip = ufoReturnsSound;
         }            
+        LoadUnlockedTeleporters();      
     }
 
     private void OnDestroy()
@@ -63,6 +98,17 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     {
         if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
+            if (IsUfoArrivalAnimationPlaying())
+            {
+                PlayUfoReturnsSound();
+                return;
+            }
+            if (IsUfoDepartureAnimationPlaying())
+            {
+                PlayUfoTakesSound();
+                return;
+            }
+
             if (currentTeleporterCanvas != null && currentTeleporterCanvas.activeInHierarchy &&
             Input.GetKeyDown(interact) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
             {
@@ -82,9 +128,52 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
                     teleporterUI = newCanvas.transform.GetChild(0).GetComponent<TeleporterUI>();
                     SetupTeleporterUI(teleporterUI);
                     currentTeleporterCanvas = newCanvas;
+                    PlayTeleporterOpeningSound();
                 }
             }
-        }            
+        }         
+    }
+
+    /// <summary>
+    ///     This function checks if the ufo arrival animation playing
+    /// </summary>
+    private bool IsUfoArrivalAnimationPlaying()
+    {
+        if (player == null)
+        {
+            return false;
+        }
+        Animation animation = player.GetComponent<Animation>();
+        if (animation == null)
+        {
+            return false;
+        } 
+        if (animation.IsPlaying("UfoArrival"))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    ///     This function checks if the ufo departure animation playing
+    /// </summary>
+    private bool IsUfoDepartureAnimationPlaying()
+    {
+        if (player == null)
+        {
+            return false;
+        }
+        Animation animation = player.GetComponent<Animation>();
+        if (animation == null)
+        {
+            return false;
+        }
+        if (animation.IsPlaying("UfoDeparture"))
+        {
+            return true;
+        }
+        return false;
     }
 
     /// <summary>
@@ -110,6 +199,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     /// </summary>
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        PlayTeleporterOpeningSound();
         if (collision.CompareTag("Player"))
         {
             player = collision.transform;
@@ -119,9 +209,94 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
                 isUnlocked = true;
                 SetUnLockedState(isUnlocked);
                 GameManager.Instance.ActivateTeleporter(worldID, dungeonID, teleporterNumber);
+                UpdateListOfTeleporters();
             }
         }
     }
+
+    /// <summary>
+    ///     This method adds a new opened teleporter to the list. 
+    /// </summary>
+    private void UpdateListOfTeleporters()
+    {
+        var key = (worldID, dungeonID, teleporterNumber);
+        if(!unlockedTeleporters.Contains(key))
+        {
+            unlockedTeleporters.Add((worldID, dungeonID, teleporterNumber));
+            SaveUnlockedTeleporters();
+            if (worldID == 1)
+            {
+                UpdateAchievementWorld1();
+                UpdateAchievementInTotal();
+            }
+            if (worldID == 2)
+            {
+                UpdateAchievementWorld2();
+                UpdateAchievementInTotal();
+            }
+            if (worldID == 3)
+            {
+                UpdateAchievementWorld3();
+                UpdateAchievementInTotal();
+            }
+            if (worldID == 4)
+            {
+                UpdateAchievementWorld4();
+                UpdateAchievementInTotal();
+            }
+        } 
+    }
+
+    /// <summary>
+    ///     This method updates the "open teleporters" achievement in general.
+    /// </summary>
+    private void UpdateAchievementInTotal()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_BEGINNER, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_PROFESSIONAL, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_MASTER, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "open teleporters" achievement in World 1.
+    /// </summary>
+    private void UpdateAchievementWorld1()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_BEGINNER_WORLD_1, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_PROFESSIONAL_WORLD_1, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_MASTER_WORLD_1, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "open teleporters" achievement in World 2.
+    /// </summary>
+    private void UpdateAchievementWorld2()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_BEGINNER_WORLD_2, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_PROFESSIONAL_WORLD_2, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_MASTER_WORLD_2, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "open teleporters" achievement in World 3.
+    /// </summary>
+    private void UpdateAchievementWorld3()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_BEGINNER_WORLD_3, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_PROFESSIONAL_WORLD_3, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_MASTER_WORLD_3, achievementUpdateIntervall);
+    }
+
+    /// <summary>
+    ///     This method updates the "open teleporters" achievement in World 4.
+    /// </summary>
+    private void UpdateAchievementWorld4()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_BEGINNER_WORLD_4, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_PROFESSIONAL_WORLD_4, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_MASTER_WORLD_4, achievementUpdateIntervall);
+    }
+
 
     /// <summary>
     ///     Recognize the player exiting the teleporter
@@ -178,6 +353,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     /// <param name="worldIndex"></param>
     public void TeleportPlayerTo(Vector2 position, int worldID, int dungeonID)
     {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TRAVELER, achievementUpdateIntervall);
         //setup scene transition exchange
         LoadSubScene.transitionBlocked = true;
         Optional<int> dungeonIndex = new Optional<int>();
@@ -198,9 +374,10 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         player.GetComponent<PlayerAnimation>().DisableMovement();
         interactable = false;
         ufoAnimation.Play("UfoDeparture");
-
+        PlayUfoTakesSound();
         Debug.Log("Animation length: " + ufoAnimation.clip.length);
         Invoke("FinishTeleportation", ufoAnimation.clip.length);
+        isUfoSoundPlaying = false;
     }
 
 
@@ -226,7 +403,9 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         }
         Animation animation = player.GetComponent<Animation>();
         animation.Play("UfoArrival");
+        PlayUfoReturnsSound();
         LoadSubScene.transitionBlocked = false;
+        isUfoSoundPlaying = false;
     }
 
 
@@ -249,4 +428,63 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         }
     }
 
+    /// <summary>
+    ///     This method saves the list of unlocked teleporters to PlayerPrefs.
+    /// </summary>
+    private void SaveUnlockedTeleporters()
+    {
+        PlayerPrefs.SetString("UnlockedTeleporters", string.Join(";", unlockedTeleporters.Select(teleporter => $"{teleporter.Item1},{teleporter.Item2},{teleporter.Item3}")));
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    ///     This method loads the list of unlocked teleporters from PlayerPrefs.
+    /// </summary>
+    private void LoadUnlockedTeleporters()
+    {
+        if (PlayerPrefs.HasKey("UnlockedTeleporters"))
+        {
+            string savedData = PlayerPrefs.GetString("UnlockedTeleporters");
+            unlockedTeleporters = savedData.Split(';').Select(teleporter =>
+            {
+                var parts = teleporter.Split(',');
+                return (int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
+            }).ToList();
+         }
+    }
+    
+    /// <summary>
+    /// This function plays the teleporter opening sound.
+    /// </summary>
+    private void PlayTeleporterOpeningSound()
+    {
+        if (teleporterOpeningSound != null && audioSourceTeleport != null)
+        {
+            audioSourceTeleport.PlayOneShot(teleporterOpeningSound);
+        }
+    }
+
+    /// <summary>
+    /// This function plays the ufo sound when it picks up the player.
+    /// </summary>
+    private void PlayUfoTakesSound()
+    {
+        if (!isUfoSoundPlaying && ufoTakesSound != null && audioSourceUfoTakes != null)
+        {
+            audioSourceUfoTakes.PlayOneShot(ufoTakesSound);
+            isUfoSoundPlaying = true;
+        }
+    }
+
+    /// <summary>
+    /// This function plays the ufo sound when it returns the player.
+    /// </summary>
+    private void PlayUfoReturnsSound()
+    {
+        if (!isUfoSoundPlaying && ufoReturnsSound != null && audioSourceUfoReturns != null)
+        {
+            audioSourceUfoReturns.PlayOneShot(ufoReturnsSound);
+            isUfoSoundPlaying = true;
+        }
+    }
 }

@@ -35,8 +35,14 @@ public class GameManager : MonoBehaviour
     private int minigameWorldIndex;
     private int minigameDungeonIndex;
 
+    public AudioClip achievementNotificationSound;
+    private AudioSource audioSource;
+
     //Achievements
     [SerializeField] private GameObject achievementNotificationManagerPrefab;
+
+    //Game status
+    public bool isPaused = false;
 
     /// <summary>
     ///     This function checks whether or not a valid courseId was passed or not.
@@ -569,6 +575,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
             SetupGameManager();
            // StartWeeklySaveRoutine();
 
@@ -638,8 +645,23 @@ public class GameManager : MonoBehaviour
         }
 
         AchievementNotificationManager.Instance.AddAchievement(achievement);
+
+        audioSource=GetComponent<AudioSource>();
+        if(audioSource==null){
+            audioSource=gameObject.AddComponent<AudioSource>();
+        }
+
+        audioSource.clip=achievementNotificationSound;
+        audioSource.playOnAwake=false;
+        PlayAchievementNotificationSound();
     }
 
+
+private void PlayAchievementNotificationSound(){
+    if(achievementNotificationSound!=null){
+        audioSource.PlayOneShot(achievementNotificationSound);
+    }
+}
     /// <summary>
     ///     This function sets up everything with dummy data for the offline mode
     /// </summary>

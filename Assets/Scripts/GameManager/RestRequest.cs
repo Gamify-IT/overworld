@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -89,6 +90,45 @@ public static class RestRequest
             return v;
         }
     }
+
+    public static async UniTask<Optional<List<T>>> GetListRequest<T>(string uri)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            Debug.Log("Get Request for path: " + uri);
+
+            // Request and wait for the desired page.
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(uri + ": Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
+                    List<T> returnValue = JsonHelper.GetJsonList<T>(webRequest.downloadHandler.text);
+                    Debug.Log("JSON List of courses: " + returnValue);
+                    Optional<List<T>> result = new Optional<List<T>>(returnValue);
+                    return result;
+            }
+            T type = default;
+            List<T> list = new List<T> { type };
+            Optional<List<T>> v = new Optional<List<T>>(list);
+            v.Clear();
+            return v;
+        }
+    }
+
 
     /// <summary>
     ///     This function sends a POST REQUEST to the provided <c>uri</c> with the <c>json</c> body. 

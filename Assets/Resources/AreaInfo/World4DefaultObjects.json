@@ -422,7 +422,7 @@
                 "worldIndex": 4,
                 "dungeonIndex": 1
             },
-            "facingDirection": "south",
+            "facingDirection": "SOUTH",
             "style": "GATE"
         },
         {
@@ -442,7 +442,7 @@
                 "worldIndex": 4,
                 "dungeonIndex": 2
             },
-            "facingDirection": "south",
+            "facingDirection": "SOUTH",
             "style": "GATE"
         },
         {
@@ -462,7 +462,7 @@
                 "worldIndex": 4,
                 "dungeonIndex": 3
             },
-            "facingDirection": "south",
+            "facingDirection": "SOUTH",
             "style": "GATE"
         },
         {
@@ -482,7 +482,7 @@
                 "worldIndex": 4,
                 "dungeonIndex": 4
             },
-            "facingDirection": "south",
+            "facingDirection": "SOUTH",
             "style": "GATE"
         }
     ]
