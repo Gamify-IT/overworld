@@ -38,53 +38,12 @@ public class PlayerAnimation : MonoBehaviour
     private AudioSource audioSource;
     private bool isMoving;
 
-    private int daysPlayed;
-    private DateTime lastPlayDate;
-    private bool checkIfChanged=false;
     /// <summary>
     ///     This method is called before the first frame update.
     ///     It is used to initialize variables.
     /// </summary>
     private void Start()
-    {
-        string lastPlayDateStr = PlayerPrefs.GetString("LastPlayDate", "");
-        int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
-
-        if (!string.IsNullOrEmpty(lastPlayDateStr))
-        {
-            lastPlayDate = DateTime.Parse(lastPlayDateStr);
-            DateTime today = DateTime.Today;
-            DateTime lastPlayDay = lastPlayDate.Date;
-
-            if (lastPlayDay < today)
-            {
-                int daysSinceLastPlay = (today - lastPlayDay).Days;
-                daysPlayed = daysCount + daysSinceLastPlay;
-                PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
-            }
-            else
-            {
-                daysPlayed = daysCount;
-            }
-        }
-        else
-        {
-            lastPlayDate = DateTime.Now;
-            daysPlayed = 1;
-            PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
-        }
-
-        if (daysPlayed > daysCount)
-        {
-            checkIfChanged=true;
-            
-            Debug.Log("success!!!!!");
-        }
-        PlayerPrefs.SetString("LastPlayDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")); // store the current date and time with milliseconds
-        Debug.Log("day: days played "+daysPlayed);
-        Debug.Log("day: current date "+DateTime.Now);
-        Debug.Log("day: last play date "+lastPlayDate);
-        
+    { 
         timeInGameStart=Time.time;
 
         canMove = true;
@@ -102,18 +61,13 @@ public class PlayerAnimation : MonoBehaviour
         sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
 
-        //get AudioSource component
         audioSource = GetComponent<AudioSource>();
-        //add AudioSource component if necessary
         if(audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
-        //set audio clip
         audioSource.clip = moveSound;
-        //set AudioSource to loop
         audioSource.loop = true;
-        //AudioSource does not start playing automatically when the GameObject awakens
         audioSource.playOnAwake = false;
 
         volumeLevel = PlayerPrefs.GetInt("VolumeLevel", 3);
@@ -144,24 +98,12 @@ public class PlayerAnimation : MonoBehaviour
         AudioListener.volume = volume;
     }
 
-    private void OnApplicationQuit()
-    {
-        PlayerPrefs.SetString("LastPlayDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-        PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
-        PlayerPrefs.Save();
-    }
 
     /// <summary>
     ///     If 'canMove' is true, this function allows the player to move.
     /// </summary>
     private void Update()
-    {
-        if(checkIfChanged){
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1);
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1);
-            checkIfChanged=false;
-            Debug.Log("success in update");
-        }
+    { 
         if (canMove)
         {
             isMoving = false;

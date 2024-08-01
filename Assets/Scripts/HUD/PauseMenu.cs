@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
+using System;
+
 /// <summary>
 ///     This script manages the pause menu.
 /// </summary>
@@ -17,16 +19,16 @@ public class PauseMenu : MonoBehaviour
     //KeyCodes
     private KeyCode cancel;
 
+    private int daysPlayed;
+    private DateTime lastLoginDate;
+    
     private void Start()
     {
-        //get AudioSource component
         audioSource=GetComponent<AudioSource>();
-        //add AudioSource component if necessary
         if(audioSource == null)
         {
             audioSource=gameObject.AddComponent<AudioSource>();
         }
-        //set audio clip
         audioSource.clip=clickSound;
 
         cancel = GameManager.Instance.GetKeyCode(Binding.CANCEL);
@@ -108,6 +110,44 @@ public class PauseMenu : MonoBehaviour
         GameManager.Instance.isPaused = true;
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
         Time.timeScale = 0f;
+
+        string lastLoginDateStr = PlayerPrefs.GetString("LastLoginDate", "");
+        int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
+
+        DateTime today = DateTime.Today;
+        if (!string.IsNullOrEmpty(lastLoginDateStr))
+        {
+            lastLoginDate = DateTime.Parse(lastLoginDateStr);
+
+            if (lastLoginDate.Date < today)
+            {
+                daysPlayed = daysCount + 1;
+                PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
+                PlayerPrefs.Save();
+
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1);
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1);
+            }
+            else
+            {
+                daysPlayed = daysCount;
+            }
+        }
+        else
+        {
+            lastLoginDate = DateTime.Now;
+            daysPlayed = 1;
+            PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
+            PlayerPrefs.Save();
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1);
+        }
+
+        PlayerPrefs.SetString("LastLoginDate", DateTime.Now.ToString("yyyy-MM-dd"));
+        PlayerPrefs.Save();
+        Debug.Log("day: days played " + daysPlayed);
+        Debug.Log("day: current date " + DateTime.Now);
+        Debug.Log("day: last play date " + lastLoginDate);
     }
 
     /// <summary>
