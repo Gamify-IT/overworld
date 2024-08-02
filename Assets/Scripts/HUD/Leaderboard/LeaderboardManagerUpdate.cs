@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
-//new comment
+//new commentt
 
 public class LeaderboardManagerUpdate : MonoBehaviour
 {
