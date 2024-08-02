@@ -56,8 +56,8 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     {
         sprites = transform.GetComponent<SpriteRenderer>();
 
-        LoadUnlockedMinigames();
-        LoadSuccessfullyCompletedMinigames();
+        //LoadUnlockedMinigames();
+        //LoadSuccessfullyCompletedMinigames();
         audioSource = gameObject.AddComponent<AudioSource>();
         minigameSpotOpenSound = Resources.Load<AudioClip>("Music/minigame_spot_open");
         audioSource.clip = minigameSpotOpenSound;
@@ -127,7 +127,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     /// <param name="collision"></param>
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        PlayMinigameSpotOpenSound();
+        audioSource.PlayOneShot(minigameSpotOpenSound);
         if (collision.CompareTag("Player"))
         {
             Debug.Log("Player enters minigame " + game + ", config: " + configurationID);
@@ -136,9 +136,9 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
             if(!unlockedMinigames.Contains(key))
             {
                 unlockedMinigames.Add((world,dungeon,number));
-                SaveUnlockedMinigames();
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_FINDER, 1);
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_MASTER, 1);
+                //SaveUnlockedMinigames();
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_FINDER, 1, unlockedMinigames);
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_MASTER, 1, unlockedMinigames);
             }
         }
     }
@@ -187,7 +187,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
                 break;
         }
     }
-
+/*
     /// <summary>
     ///     This method saves the list of unlocked minigames to PlayerPrefs.
     /// </summary>
@@ -237,7 +237,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
             }).ToList();
         }
     }
-
+*/
     /// <summary>
     ///     This functions updates achievements for each minigame.
     /// </summary>
@@ -247,27 +247,27 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         if(!successfullyCompletedMinigames.Contains(key))
         {
             successfullyCompletedMinigames.Add((world,dungeon,number));
-            SaveSuccessfullyCompletedMinigames();
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_ACHIEVER, 1);
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_PROFESSIONAL, 1);
+            //SaveSuccessfullyCompletedMinigames();
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_ACHIEVER, 1, successfullyCompletedMinigames);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_PROFESSIONAL, 1, successfullyCompletedMinigames);
             
             if(game=="CHICKENSHOCK"){
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.CHICKENSHOCK_MASTER, 1);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.CHICKENSHOCK_MASTER, 1, successfullyCompletedMinigames);
             }
             if(game=="MEMORY"){
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MEMORY_MASTER, 1);
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MEMORY_MASTER, 1, successfullyCompletedMinigames);
             }
             if(game=="FINITEQUIZ"){
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.FINITEQUIZ_MASTER, 1);
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.FINITEQUIZ_MASTER, 1, successfullyCompletedMinigames);
             }
             if(game=="TOWERCRUSH"){
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TOWERCRUSH_MASTER, 1);
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TOWERCRUSH_MASTER, 1, successfullyCompletedMinigames);
             }
             if(game=="CROSSWORDPUZZLE"){
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.CROSSWORDPUZZLE_MASTER, 1);
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.CROSSWORDPUZZLE_MASTER, 1, successfullyCompletedMinigames);
             }
             if(game=="BUGFINDER"){
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.BUGFINDER_MASTER, 1);
+                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.BUGFINDER_MASTER, 1, successfullyCompletedMinigames);
             }
         }
     }
@@ -280,14 +280,6 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         string info = world + "-" + dungeon + "-" + number + ": Game: " + game + ", Config: " + configurationID +
                       ", Status: " + status + ", Highscore: " + highscore;
         return info;
-    }
-
-    /// <summary>
-    ///     This function plays minigame spot open sound when the player enters the minigame spot.
-    /// </summary>
-    private void PlayMinigameSpotOpenSound()
-    {
-        audioSource.PlayOneShot(minigameSpotOpenSound);
     }
     #endregion
 }

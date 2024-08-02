@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 ///     This class is used to retrieve <c>AchievementStatistic</c> data from Get Requests.
@@ -11,13 +12,15 @@ public class AchievementStatistic
     public Achievement achievement;
     public int progress;
     public bool completed;
+    public List<(int,int,int)> interactedObjects;
 
-    public AchievementStatistic(string id, Achievement achievement, int progress, bool completed)
+    public AchievementStatistic(string id, Achievement achievement, int progress, bool completed, List<(int,int,int)> interactedObjects)
     {
         this.id = id;
         this.achievement = achievement;
         this.progress = progress;
         this.completed = completed;
+        this.interactedObjects = interactedObjects;
     }
 
     public AchievementStatistic() { }

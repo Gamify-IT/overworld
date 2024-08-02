@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 /// <summary>
 ///     This class is responsible for the NPC logic.
@@ -26,7 +27,6 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     private bool typingIsFinished;
     private string uuid;
 
-    private readonly int achievementUpdateIntervall = 1;
     private static List<(int, int, int)> alreadyTalkedNPC = new List<(int, int, int)>();
     //KeyCodes
     private KeyCode interact;
@@ -42,7 +42,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         {
             speechIndicator = child;
         }
-        LoadAlreadyTalkedNPC();
+        //LoadAlreadyTalkedNPC();
         InitNewStuffSprite();
         interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
@@ -274,79 +274,24 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         if(!alreadyTalkedNPC.Contains(key))
         {
             alreadyTalkedNPC.Add((world, dungeon, number));
-            SaveAlreadyTalkedNPC();
-            if (world == 1)
-            {
-                UpdateAchievementWorld1();
-                UpdateAchievementInTotal();
-            }
-            if (world == 2)
-            {
-                UpdateAchievementWorld2();
-                UpdateAchievementInTotal();
-            }
-            if (world == 3)
-            { 
-                UpdateAchievementWorld3();
-                UpdateAchievementInTotal();      
-            }
-            if (world == 4)
-            {
-                UpdateAchievementWorld4();
-                UpdateAchievementInTotal();
-            }
+            //SaveAlreadyTalkedNPC();
+            UpdateAchievements(world);
         } 
-    
     }
 
     /// <summary>
-    ///     This method updates the "talk to NPC" achievement in general.
+    ///     This method updates the "talk to NPC" achievements in general and for a particular world.
     /// </summary>
-    private void UpdateAchievementInTotal()
+    /// <param name="worldNumber">The number of the world where the NPC the player spoke to is located</param>
+    private void UpdateAchievements(int worldNumber)
     {
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_1, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_2, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_3, achievementUpdateIntervall);
-    }
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_1, 1, alreadyTalkedNPC);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_2, 1, alreadyTalkedNPC);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_3, 1, alreadyTalkedNPC);
 
-    /// <summary>
-    ///     This method updates the "talk to NPC" achievement in World 1.
-    /// </summary>
-    private void UpdateAchievementWorld1()
-    {
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_1_WORLD_1, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_2_WORLD_1, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_3_WORLD_1, achievementUpdateIntervall);
-    }
-
-    /// <summary>
-    ///     This method updates the "talk to NPC" achievement in World 2.
-    /// </summary>
-    private void UpdateAchievementWorld2()
-    {
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_1_WORLD_2, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_2_WORLD_2, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_3_WORLD_2, achievementUpdateIntervall);
-    }
-
-    /// <summary>
-    ///     This method updates the "talk to NPC" achievement in World 3.
-    /// </summary>
-    private void UpdateAchievementWorld3()
-    {
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_1_WORLD_3, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_2_WORLD_3, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_3_WORLD_3, achievementUpdateIntervall);
-    }
-
-    /// <summary>
-    ///     This method updates the "talk to NPC" achievement in World 4.
-    /// </summary>
-    private void UpdateAchievementWorld4()
-    {
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_1_WORLD_4, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_2_WORLD_4, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_3_WORLD_4, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"COMMUNICATOR_LEVEL_1_WORLD_{worldNumber}"), 1, alreadyTalkedNPC);
+        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"COMMUNICATOR_LEVEL_2_WORLD_{worldNumber}"), 1, alreadyTalkedNPC);
+        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"COMMUNICATOR_LEVEL_3_WORLD_{worldNumber}"), 1, alreadyTalkedNPC);
     }
 
     /// <summary>
@@ -378,7 +323,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         }
     }
-
+/*
     /// <summary>
     ///     This method saves the list of already talked NPCs to PlayerPrefs.
     /// </summary>
@@ -402,6 +347,6 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
                 return (int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
             }).ToList();
         }
-    }
+    }*/
 
 }

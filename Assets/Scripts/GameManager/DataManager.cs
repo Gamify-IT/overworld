@@ -447,12 +447,12 @@ public class DataManager : MonoBehaviour
     /// <param name="title">The title of the achievement</param>
     /// <param name="newProgress">The new progress of the achievement</param>
     /// <returns>True if the acheivement is just now completed, false otherwise</returns>
-    public bool UpdateAchievement(AchievementTitle title, int newProgress)
+    public bool UpdateAchievement(AchievementTitle title, int newProgress, List<(int, int, int)> interactedObjects)
     {
         AchievementData achievement = GetAchievement(title);
         if (achievement != null)
         {
-            return achievement.UpdateProgress(newProgress);
+            return achievement.UpdateProgress(newProgress, interactedObjects);
         }
 
         return false;
@@ -464,14 +464,14 @@ public class DataManager : MonoBehaviour
     /// <param name="title">The title of the achievement</param>
     /// <param name="increment">The amount to increase the progress</param>
     /// <returns>True if the acheivement is just now completed, false otherwise</returns>
-    public bool IncreaseAchievementProgress(AchievementTitle title, int increment)
+    public bool IncreaseAchievementProgress(AchievementTitle title, int increment, List<(int, int, int)> interactedObjects)
     {
         AchievementData achievement = GetAchievement(title);
         if (achievement != null)
         {
             int newProgress = achievement.GetProgress() + increment;
             //Debug.Log("New Progress of '" + title + "': " + achievement.GetProgress());
-            return achievement.UpdateProgress(newProgress);
+            return achievement.UpdateProgress(newProgress, interactedObjects);
         }
 
         return false;

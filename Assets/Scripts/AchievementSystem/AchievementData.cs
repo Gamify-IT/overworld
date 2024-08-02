@@ -19,8 +19,9 @@ public class AchievementData
     private int progress;
     private bool completed;
     private bool updated;
+    private List<(int,int,int)> interactedObjects;
 
-    public AchievementData(string id, string title, string description, List<string> categories, string imageName, int amountRequired, int progress, bool completed) 
+    public AchievementData(string id, string title, string description, List<string> categories, string imageName, int amountRequired, int progress, bool completed, List<(int,int,int)> interactedObjects) 
     {
         this.id = id;
         this.title = title;
@@ -32,6 +33,7 @@ public class AchievementData
         this.progress = progress;
         this.completed = completed;
         updated = false;
+        this.interactedObjects = interactedObjects;
     }
 
     /// <summary>
@@ -53,8 +55,9 @@ public class AchievementData
         int amountRequired = statistic.achievement.amountRequired;
         int progress = statistic.progress;
         bool completed = statistic.completed;
+        List<(int,int,int)> interactedObjects = new List<(int,int,int)>();
 
-        AchievementData data = new AchievementData(id, title, description, categories, imageName, amountRequired, progress, completed);
+        AchievementData data = new AchievementData(id, title, description, categories, imageName, amountRequired, progress, completed, interactedObjects);
         return data;
     }
 
@@ -75,9 +78,11 @@ public class AchievementData
         int progress = achievementData.GetProgress();
         bool completed = achievementData.IsCompleted();
 
+        List<(int, int, int)> interactedObjects = achievementData.GetInteractedObjects();
+
         Achievement achievement = new Achievement(title, description, categories, imageName, amountRequired);
 
-        AchievementStatistic achievementStatistic = new AchievementStatistic(id, achievement, progress, completed);
+        AchievementStatistic achievementStatistic = new AchievementStatistic(id, achievement, progress, completed, interactedObjects);
 
         return achievementStatistic;
     }
@@ -87,10 +92,11 @@ public class AchievementData
     /// </summary>
     /// <param name="newProgress">The new progress</param>
     /// <returns>True if the achievement is just now completed, false otherwise</returns>
-    public bool UpdateProgress(int newProgress)
+    public bool UpdateProgress(int newProgress, List<(int, int, int)> newInteractedObjects)
     {
         updated = true;
         progress = newProgress;
+        interactedObjects = newInteractedObjects;
         if(newProgress >= amountRequired && !completed)
         {
             completed = true;
@@ -166,6 +172,11 @@ public class AchievementData
     public bool isUpdated()
     {
         return updated;
+    }
+
+    public List<(int,int,int)> GetInteractedObjects()
+    {
+        return interactedObjects;
     }
     #endregion
 }
