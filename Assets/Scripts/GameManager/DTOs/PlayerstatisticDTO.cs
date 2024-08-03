@@ -30,15 +30,13 @@ public class PlayerstatisticDTO
     public int rewards;
     public bool showRewards;
     public string pseudonym;
-    public DateTime created;
-    public DateTime lastActive;
 
     #endregion
 
     #region Constructors
 
     public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
-         AreaLocationDTO currentArea, string userId, string username, DateTime created, DateTime lastActive, int knowledge, int rewards, bool showRewards, string pseudonym)
+         AreaLocationDTO currentArea, string userId, string username, int knowledge, int rewards, bool showRewards, string pseudonym)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -47,8 +45,6 @@ public class PlayerstatisticDTO
         this.currentArea = currentArea;
         this.userId = userId;
         this.username = username;
-        this.created = created;
-        this.lastActive = lastActive;
         this.knowledge = knowledge;
         this.rewards = rewards;
         this.showRewards = showRewards;
@@ -68,8 +64,6 @@ public class PlayerstatisticDTO
         unlockedTeleporters = new TeleporterDTO[0];
         userId = "";
         username = "";
-        created = DateTime.Now;
-        lastActive = DateTime.Now;
         knowledge = 0;
         rewards = 0;
         showRewards = true;

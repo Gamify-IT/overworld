@@ -16,12 +16,11 @@ public class PlayerStatisticData
     private readonly int rewards;
     private bool showRewards;
     private string pseudonym;
-    private DateTime created;
-    private DateTime lastActive;
+
     private string leagueOfPlayer;
    
 
-    public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username, DateTime created, DateTime lastActive, int knowledge, int rewards, bool showRewards, string pseudonym)
+    public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  int knowledge, int rewards, bool showRewards, string pseudonym)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -30,8 +29,7 @@ public class PlayerStatisticData
         this.currentArea = currentArea;
         this.userId = userId;
         this.username = username;
-        this.created = created;
-        this.lastActive = lastActive;        
+        
         this.knowledge = knowledge;
         this.rewards = rewards;
         this.leagueOfPlayer = calculateLeagueOfPlayer(rewards);
@@ -49,8 +47,6 @@ public class PlayerStatisticData
         string id = statistic.id;
         bool showRewards = statistic.showRewards;
         string pseudonym = statistic.pseudonym;
-        DateTime created = statistic.created;
-        DateTime lastActive = statistic.lastActive;
 
 
 
@@ -74,7 +70,7 @@ public class PlayerStatisticData
         }
 
      
-    PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username, created, lastActive, knowledge, rewards, showRewards, pseudonym);
+    PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username,  knowledge, rewards, showRewards, pseudonym);
         return data;
     }
 
@@ -223,7 +219,7 @@ public class PlayerStatisticData
         TeleporterDTO[] unlockedTeleporters = playerStatisticData.GetUnlockedTeleporters();
 
 
-       PlayerstatisticDTO playerStatistic = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, DateTime.Now, DateTime.Now, knowledge, rewards, showRewards, pseudonym);
+       PlayerstatisticDTO playerStatistic = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards, pseudonym);
 
 
         return playerStatistic;
