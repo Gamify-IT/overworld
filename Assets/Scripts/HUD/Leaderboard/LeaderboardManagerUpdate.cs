@@ -65,18 +65,17 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private void Start()
     {
+        ownData = DataManager.Instance.GetOwnStatisticData();
+        ranking = DataManager.Instance.GetAllPlayerStatistics();
+
         audioSource = GetComponent<AudioSource>();
-        if(audioSource == null)
+        if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
         audioSource.clip = clickSound;
         audioSource.playOnAwake = false;
 
-        ranking = DataManager.Instance.GetAllPlayerStatistics();
-        ownData = DataManager.Instance.GetOwnStatisticData();
-
-       
         if (visibilityButton!= null)
         {
 
@@ -159,7 +158,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             Debug.Log($"Player added to display: {playerData.GetUsername()},Rewards: {playerData.GetRewards()}, League: {playerData.GetLeague()}, World: {playerData.GetWorld()}");
         }
-
+       
         Setup();
 
         

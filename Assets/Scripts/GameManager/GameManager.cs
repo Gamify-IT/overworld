@@ -202,9 +202,9 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
-            DataManager.Instance.ProcessKeybindings(keybindings.Value());            
+            DataManager.Instance.ProcessKeybindings(keybindings.Value());             
+            DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());           
             DataManager.Instance.ProcessPlayerStatisticDTO(playerStatistics.Value());
-            DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());
 
         }
 
@@ -616,8 +616,9 @@ private void PlayAchievementNotificationSound(){
         PlayerstatisticDTO[] rewards = GetDummyDataRewards();
         PlayerstatisticDTO ownPlayer = GetOwnDummyData();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
+        DataManager.Instance.ProcessPlayerStatisticDTO(ownPlayer);        
         DataManager.Instance.ProcessAllPlayerStatistics(rewards);
-        DataManager.Instance.ProcessPlayerStatisticDTO(ownPlayer);
+
         ResetKeybindings();
     }
 
@@ -670,7 +671,7 @@ private void PlayAchievementNotificationSound(){
             TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
             TeleporterDTO[] unlockedTeleporters = { teleporter };
 
-            PlayerstatisticDTO player = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards, "-");
+            PlayerstatisticDTO player = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, DateTime.Now, DateTime.Now, knowledge, rewards, showRewards, "-");
             allStatistics[i] = player;
         }
 
@@ -683,7 +684,7 @@ private void PlayAchievementNotificationSound(){
 
         TeleporterDTO teleporter1 = new TeleporterDTO("1", currentArea1, 1);
         TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
-        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco", 200, 170, true, "TheoPro");
+        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco", DateTime.Now, DateTime.Now, 200, 170, true, "TheoPro");
         allStatistics[30] = player31;
         PlayerstatisticDTO ownPlayer = GetOwnDummyData();
         allStatistics[31] = ownPlayer;
@@ -701,7 +702,7 @@ private void PlayAchievementNotificationSound(){
 
         TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
         TeleporterDTO[] unlockedTeleporters = { teleporter };
-        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki", 200, 170, false, "PSEProfi");
+        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki", DateTime.Now, DateTime.Now,200, 170, false, "PSEProfi");
         return ownPlayerData;
     }
 
