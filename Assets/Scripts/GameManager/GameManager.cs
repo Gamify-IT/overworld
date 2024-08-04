@@ -121,6 +121,26 @@ public class GameManager : MonoBehaviour
         return validUserId;
     }
 
+    private List<IntTupel> ConvertToListIntTupel(List<(int, int, int)> list)
+    {
+        List<IntTupel> result = new List<IntTupel>();
+        foreach (var item in list)
+        {
+            result.Add(new IntTupel(item.Item1, item.Item2, item.Item3));
+        }
+        return result;
+    }
+
+    private List<(int, int, int)> ConvertFromListIntTupel(List<IntTupel> list)
+    {
+        List<(int, int, int)> result = new List<(int, int, int)>();
+        foreach (var item in list)
+        {
+            result.Add((item.Item1, item.Item2, item.Item3));
+        }
+        return result;
+    }
+    
     /// <summary>
     ///     This function loads all needed data from the backend an converts the data into usable formats.
     ///     If an error accours while loading, the <c>loadingError</c> flag is set.
@@ -584,11 +604,13 @@ public class GameManager : MonoBehaviour
     }
 
 
-private void PlayAchievementNotificationSound(){
-    if(achievementNotificationSound!=null){
-        audioSource.PlayOneShot(achievementNotificationSound);
+    private void PlayAchievementNotificationSound()
+    {
+        if(achievementNotificationSound != null)
+        {
+            audioSource.PlayOneShot(achievementNotificationSound);
+        }
     }
-}
     /// <summary>
     ///     This function sets up everything with dummy data for the offline mode
     /// </summary>
@@ -613,10 +635,10 @@ private void PlayAchievementNotificationSound(){
         string[] categories1 = { "Exploring" };
         Achievement achievement1 =
             new Achievement("GO_FOR_A_WALK", "Walk 10 tiles", categories1, "achievement2", 10);
-        AchievementStatistic achievementStatistic1 = new AchievementStatistic(username, achievement1, 0, false, null);
+        AchievementStatistic achievementStatistic1 = new AchievementStatistic(username, achievement1, 0, false, (List<(int, int, int)>)null);
         Achievement achievement2 =
             new Achievement("GO_FOR_A_LONGER_WALK", "Walk 1000 tiles", categories1, "achievement2", 1000);
-        AchievementStatistic achievementStatistic2 = new AchievementStatistic(username, achievement2, 0, false, null);
+        AchievementStatistic achievementStatistic2 = new AchievementStatistic(username, achievement2, 0, false, (List<(int, int, int)>)null);
         statistcs[0] = achievementStatistic1;
         statistcs[1] = achievementStatistic2;
         return statistcs;

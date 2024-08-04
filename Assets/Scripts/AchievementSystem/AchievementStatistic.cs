@@ -22,6 +22,14 @@ public class AchievementStatistic
         this.completed = completed;
         this.interactedObjects = interactedObjects;
     }
+     public AchievementStatistic(string id, Achievement achievement, int progress, bool completed, List<IntTupel> interactedObjects)
+    {
+        this.id = id;
+        this.achievement = achievement;
+        this.progress = progress;
+        this.completed = completed;
+        this.interactedObjects = ConvertFromListIntTupel(interactedObjects);
+    }
 
     public AchievementStatistic() { }
 
@@ -33,5 +41,15 @@ public class AchievementStatistic
     public static AchievementStatistic CreateFromJSON(string jsonString)
     {
         return JsonUtility.FromJson<AchievementStatistic>(jsonString);
+    }
+
+    private List<(int, int, int)> ConvertFromListIntTupel(List<IntTupel> list)
+    {
+        List<(int, int, int)> result = new List<(int, int, int)>();
+        foreach (var item in list)
+        {
+            result.Add((item.Item1, item.Item2, item.Item3));
+        }
+        return result;
     }
 }
