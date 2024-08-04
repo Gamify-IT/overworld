@@ -1,14 +1,14 @@
 [System.Serializable]
 public class IntTupel
 {
-    public int Item1 { get; set; }
-    public int Item2 { get; set; }
-    public int Item3 { get; set; }
+    public int First { get; set; }
+    public int Second { get; set; }
+    public int Third { get; set; }
 
-    public IntTupel(int item1, int item2, int item3)
+    public IntTupel(int first, int second, int third)
     {
-        Item1 = item1;
-        Item2 = item2;
-        Item3 = item3;
+        First = first;
+        Second = second;
+        Third = third;
     }
 }

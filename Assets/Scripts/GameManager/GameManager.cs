@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
         List<(int, int, int)> result = new List<(int, int, int)>();
         foreach (var item in list)
         {
-            result.Add((item.Item1, item.Item2, item.Item3));
+            result.Add((item.First, item.Second, item.Third));
         }
         return result;
     }
