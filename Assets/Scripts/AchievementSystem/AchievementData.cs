@@ -97,11 +97,6 @@ public class AchievementData
         updated = true;
         progress = newProgress;
         interactedObjects = newInteractedObjects;
-        foreach(AchievementData data in DataManager.Instance.GetAchievements())
-        {
-            Debug.Log("Interacted with: ");
-            data.GetInteractedObjects().ForEach(e => Debug.Log(e));
-        }
         if(newProgress >= amountRequired && !completed)
         {
             completed = true;

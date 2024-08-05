@@ -471,8 +471,6 @@ public class DataManager : MonoBehaviour
         {
             int newProgress = achievement.GetProgress() + increment;
             //Debug.Log("New Progress of '" + title + "': " + achievement.GetProgress());
-            Debug.Log("Intercated with: ");
-            interactedObjects.ForEach(e => Debug.Log(e));
             return achievement.UpdateProgress(newProgress, interactedObjects);
         }
 
