@@ -20,7 +20,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     private bool playerIsClose;
     private string uuid;
 
-    private static List<(int, int, int)> readBooks = new List<(int, int, int)>();
+    private List<(int, int, int)> readBooks = new List<(int, int, int)>();
 
     //KeyCodes
     private KeyCode interact;
