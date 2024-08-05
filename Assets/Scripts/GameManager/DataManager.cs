@@ -26,20 +26,8 @@ public class DataManager : MonoBehaviour
     private Dictionary<Binding, KeyCode> keybindings;
 
     //Player status 
-    private float logoutPositionX;
-    private float logoutPositionY;
-    private string logoutScene;
-    private int logoutWorldIndex;
-    private int logoutDungeonIndex;
     private int characterIndex = 0;
     [SerializeField] private Sprite[] characterFaces;
-
-    //Game status
-    private int currentWorldIndex;
-    private int currentDungeonIndex;
-    private string currentSceneName;
-
-
 
     /// <summary>
     ///     This function sets given data for the specified world
@@ -115,6 +103,15 @@ public class DataManager : MonoBehaviour
     public PlayerStatisticDTO GetPlayerData()
     {
         return playerData;
+    }
+
+    /// <summary>
+    ///     This function sets the player data
+    /// </summary>
+    /// <param name="data">Player data to be set</param>
+    public void SetPlayerData(PlayerStatisticDTO data)
+    {
+        playerData = data;
     }
 
     /// <summary>
@@ -1139,7 +1136,7 @@ public class DataManager : MonoBehaviour
     {
         return characterFaces;
     }
-
+    /*
     /// <summary>
     /// Sets the x-coordinate of the player when logging out
     /// </summary>
@@ -1265,22 +1262,31 @@ public class DataManager : MonoBehaviour
     {
         return currentDungeonIndex;
     }
-
+    */
     /// <summary>
-    /// Sets the name of the current scene
+    ///     Sets the name of the current scene
     /// </summary>
     /// <param name="sceneName">scene name</param>
     public void SetCurrentSceneName(string sceneName)
     {
-        currentSceneName = sceneName;
+        playerData.logoutScene = sceneName;
     }
 
     /// <summary>
-    /// Gets the name of the current scene
+    ///     Gets the name of the current scene
     /// </summary>
     /// <returns>scene name</returns>
     public string GetCurrentSceneName()
     {
-        return currentSceneName;
+        return playerData.logoutScene;
+    }
+
+    /// <summary>
+    ///     Updates the current area of the player
+    /// </summary>
+    /// <param name="area">current area</param>
+    public void SetCurrentArea(AreaLocationDTO area)
+    {
+        playerData.currentArea = area;
     }
 }

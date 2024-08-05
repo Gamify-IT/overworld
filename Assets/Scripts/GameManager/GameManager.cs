@@ -43,11 +43,11 @@ public class GameManager : MonoBehaviour
 
     //Game status
     public bool isPaused = false;
-
+    /*
     /// <summary>
     ///     This function loads the last known position after the player logged out
     /// </summary
-    public async UniTask<bool> LoadLastPlayerPosition()
+    public async UniTask<bool> LoadPlayerPosition()
     {
 #if UNITY_EDITOR
         //skip loading in editor mode
@@ -60,6 +60,8 @@ public class GameManager : MonoBehaviour
 
         if (playerStatisticDTO.IsPresent())
         {
+            DataManager.Instance.SetPlayerData(playerStatisticDTO.Value());
+
             PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(playerStatisticDTO.Value());
 
             // update values with those from backend 
@@ -74,7 +76,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Scene: " + DataManager.Instance.GetLogoutScene());
             Debug.Log("World: " + DataManager.Instance.GetLogoutWorldIndex());
             Debug.Log("Dungeon: " + DataManager.Instance.GetLogoutDungeonIndex());
-
+            
             return true;
         }
 
@@ -84,7 +86,7 @@ public class GameManager : MonoBehaviour
             return false;
         }
     }
-
+    */
     /// <summary>
     ///     This function saves the last known position of the player in the backend when the player logs out 
     /// </summary>
@@ -96,31 +98,34 @@ public class GameManager : MonoBehaviour
         string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
         Debug.Log("path: " + path);
 
-        PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(DataManager.Instance.GetPlayerData());
+        /*PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(DataManager.Instance.GetPlayerData());
         
         playerStatistic.SetLogoutPositionX(GameObject.FindGameObjectWithTag("Player").transform.position.x);
         playerStatistic.SetLogoutPositionY(GameObject.FindGameObjectWithTag("Player").transform.position.y);
         playerStatistic.SetLogoutScene(DataManager.Instance.GetCurrentSceneName());
         playerStatistic.SetLogoutWorldIndex(DataManager.Instance.GetCurrentWorldIndex());
-        playerStatistic.SetLogoutDungeonIndex(DataManager.Instance.GetCurrentDungeonIndex());
+        playerStatistic.SetLogoutDungeonIndex(DataManager.Instance.GetCurrentDungeonIndex());*/
+
+        PlayerStatisticDTO playerStatistic = DataManager.Instance.GetPlayerData();
+
+        playerStatistic.logoutPositionX = GameObject.FindGameObjectWithTag("Player").transform.position.x;
+        playerStatistic.logoutPositionY = GameObject.FindGameObjectWithTag("Player").transform.position.y;
 
         string json = JsonUtility.ToJson(playerStatistic, true);
-
-        Debug.Log("Data: " + json);
 
         bool succesful = await RestRequest.PutRequest(path, json);
 
         if (succesful)
         {
-            Debug.Log("Updated player position for " + playerStatistic.GetLogoutPositionX() + ", " + playerStatistic.GetLogoutPositionY() + ", "
-                + playerStatistic.GetLogoutScene() + ", " + playerStatistic.GetLogoutWorldIndex() + ", " + playerStatistic.GetLogoutDungeonIndex() +
+            Debug.Log("Updated player position for " + playerStatistic.logoutPositionX + ", " + playerStatistic.logoutPositionY + ", "
+                + playerStatistic.logoutScene + ", " + playerStatistic.currentArea.worldIndex + ", " + playerStatistic.currentArea.dungeonIndex +
                 " successfully");
             return true;
         }
         else
         {
-            Debug.Log("Could not update player position for " + playerStatistic.GetLogoutPositionX() + ", " + playerStatistic.GetLogoutPositionY() + ", "
-                + playerStatistic.GetLogoutScene() + ", " + playerStatistic.GetLogoutWorldIndex() + ", " + playerStatistic.GetLogoutDungeonIndex() +
+            Debug.Log("Could not update player position for " + playerStatistic.logoutPositionX + ", " + playerStatistic.logoutPositionY + ", "
+                + playerStatistic.logoutScene + ", " + playerStatistic.currentArea.worldIndex + ", " + playerStatistic.currentArea.dungeonIndex +
                 " successfully");
             return false;
         }
@@ -343,15 +348,14 @@ public class GameManager : MonoBehaviour
     /// <param name="dungeonIndex">The index of the dungeon (0 if world)</param>
     public void SetData(int worldIndex, int dungeonIndex)
     {
-        DataManager.Instance.SetCurrentWorldIndex(worldIndex);
-        DataManager.Instance.SetCurrentDungeonIndex(dungeonIndex);
+        DataManager.Instance.SetCurrentArea(new AreaLocationDTO(worldIndex, dungeonIndex));
         //DataManager.Instance.ReadTeleporterConfig();
         if (dungeonIndex != 0)
         {
             Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
             DungeonData data = DataManager.Instance.GetDungeonData(worldIndex, dungeonIndex);
             ObjectManager.Instance.SetDungeonData(worldIndex, dungeonIndex, data);
-            DataManager.Instance.SetCurrentSceneName("Dungeon " + worldIndex + "-" + dungeonIndex);
+            DataManager.Instance.SetCurrentSceneName("Dungeon " + worldIndex + "-" + dungeonIndex)
         }
         else
         {

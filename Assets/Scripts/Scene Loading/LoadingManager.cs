@@ -128,13 +128,15 @@ public class LoadingManager : MonoBehaviour
     /// </summary>
     public async UniTask LoadScene()
     {
+        PlayerStatisticDTO playerData = DataManager.Instance.GetPlayerData();
+        Vector2 newPlayerPosition = new Vector2(playerData.logoutPositionX, playerData.logoutPositionY);
+        setup(playerData.logoutScene, playerData.currentArea.worldIndex, playerData.currentArea.dungeonIndex, newPlayerPosition);
+
         slider.value = 0.5f;
         progressText.text = "50%";
         loadingText.text = "LOADING WORLD...";
 
         Debug.Log("Start loading scene");
-
-        DataManager.Instance.SetCurrentSceneName(sceneToLoad);
 
         await SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
 

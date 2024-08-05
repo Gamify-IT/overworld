@@ -19,8 +19,6 @@ public class PlayerStatisticDTO
     public float logoutPositionX;
     public float logoutPositionY;
     public string logoutScene;
-    public int logoutWorldIndex;
-    public int logoutDungeonIndex;
     public int knowledge;
 
     #endregion
@@ -28,8 +26,7 @@ public class PlayerStatisticDTO
     #region Constructors
 
     public PlayerStatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
-        AreaLocationDTO currentArea, string userId, string username, float logoutPositionX, float logoutPositionY, string logoutScene,
-        int logoutWorldIndex, int logoutDungeonIndex, int knowledge)
+        AreaLocationDTO currentArea, string userId, string username, float logoutPositionX, float logoutPositionY, string logoutScene, int knowledge)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -41,8 +38,6 @@ public class PlayerStatisticDTO
         this.logoutPositionX = logoutPositionX;
         this.logoutPositionY = logoutPositionY;
         this.logoutScene = logoutScene;
-        this.logoutWorldIndex = logoutWorldIndex;
-        this.logoutDungeonIndex = logoutDungeonIndex;
         this.knowledge = knowledge;
     }
 
@@ -62,8 +57,6 @@ public class PlayerStatisticDTO
         logoutPositionX = 21.5f;
         logoutPositionY = 2.5f;
         logoutScene = "World 1";
-        logoutWorldIndex = 1;
-        logoutDungeonIndex = 0;
         knowledge = 0;
     }
 

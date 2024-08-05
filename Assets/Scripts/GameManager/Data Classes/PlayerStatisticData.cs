@@ -3,6 +3,7 @@ using System;
 /// <summary>
 ///     This class defines all needed data for a player statistic. 
 /// </summary>
+/*
 public class PlayerStatisticData
 {
     #region Attributes 
@@ -107,4 +108,4 @@ public class PlayerStatisticData
         logoutDungeonIndex = dungeonIndex;
     }
     #endregion
-}
+}*/
