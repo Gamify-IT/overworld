@@ -120,26 +120,6 @@ public class GameManager : MonoBehaviour
         bool validUserId = await ValidateUserId();
         return validUserId;
     }
-
-    private List<IntTupel> ConvertToListIntTupel(List<(int, int, int)> list)
-    {
-        List<IntTupel> result = new List<IntTupel>();
-        foreach (var item in list)
-        {
-            result.Add(new IntTupel(item.Item1, item.Item2, item.Item3));
-        }
-        return result;
-    }
-
-    private List<(int, int, int)> ConvertFromListIntTupel(List<IntTupel> list)
-    {
-        List<(int, int, int)> result = new List<(int, int, int)>();
-        foreach (var item in list)
-        {
-            result.Add((item.First, item.Second, item.Third));
-        }
-        return result;
-    }
     
     /// <summary>
     ///     This function loads all needed data from the backend an converts the data into usable formats.
