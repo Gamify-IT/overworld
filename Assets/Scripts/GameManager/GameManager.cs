@@ -355,7 +355,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
             DungeonData data = DataManager.Instance.GetDungeonData(worldIndex, dungeonIndex);
             ObjectManager.Instance.SetDungeonData(worldIndex, dungeonIndex, data);
-            DataManager.Instance.SetCurrentSceneName("Dungeon " + worldIndex + "-" + dungeonIndex)
+            DataManager.Instance.SetCurrentSceneName("Dungeon " + worldIndex + "-" + dungeonIndex);
         }
         else
         {
