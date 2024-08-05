@@ -55,7 +55,7 @@ public class AchievementData
         int amountRequired = statistic.achievement.amountRequired;
         int progress = statistic.progress;
         bool completed = statistic.completed;
-        List<(int, int, int)> interactedObjects = new List<(int, int, int)>();
+        List<(int, int, int)> interactedObjects = AchievementStatistic.ConvertFromListIntTupel(statistic.interactedObjects);
 
         AchievementData data = new AchievementData(id, title, description, categories, imageName, amountRequired, progress, completed, interactedObjects);
         return data;
@@ -78,23 +78,13 @@ public class AchievementData
         int progress = achievementData.GetProgress();
         bool completed = achievementData.IsCompleted();
 
-        List<IntTupel> interactedObjects = achievementData.ConvertToListIntTupel(achievementData.GetInteractedObjects());
+        List<IntTupel> interactedObjects = AchievementStatistic.ConvertToListIntTupel(achievementData.GetInteractedObjects());
 
         Achievement achievement = new Achievement(title, description, categories, imageName, amountRequired);
 
         AchievementStatistic achievementStatistic = new AchievementStatistic(id, achievement, progress, completed, interactedObjects);
 
         return achievementStatistic;
-    }
-
-    private List<IntTupel> ConvertToListIntTupel(List<(int, int, int)> list)
-    {
-        List<IntTupel> result = new List<IntTupel>();
-        foreach (var item in list)
-        {
-            result.Add(new IntTupel(item.Item1, item.Item2, item.Item3));
-        }
-        return result;
     }
 
     /// <summary>
