@@ -615,10 +615,10 @@ public class GameManager : MonoBehaviour
         string[] categories1 = { "Exploring" };
         Achievement achievement1 =
             new Achievement("GO_FOR_A_WALK", "Walk 10 tiles", categories1, "achievement2", 10);
-        AchievementStatistic achievementStatistic1 = new AchievementStatistic(username, achievement1, 0, false, (List<(int, int, int)>)null);
+        AchievementStatistic achievementStatistic1 = new AchievementStatistic(username, achievement1, 0, false, new List<IntTupel>());
         Achievement achievement2 =
             new Achievement("GO_FOR_A_LONGER_WALK", "Walk 1000 tiles", categories1, "achievement2", 1000);
-        AchievementStatistic achievementStatistic2 = new AchievementStatistic(username, achievement2, 0, false, (List<(int, int, int)>)null);
+        AchievementStatistic achievementStatistic2 = new AchievementStatistic(username, achievement2, 0, false, new List<IntTupel>());
         statistcs[0] = achievementStatistic1;
         statistcs[1] = achievementStatistic2;
         return statistcs;

@@ -57,7 +57,6 @@ public class AchievementStatistic
     public static List<IntTupel> ConvertToListIntTupel(List<(int, int, int)> list)
     {
         List<IntTupel> result = new List<IntTupel>();
-
         foreach (var item in list)
         {
             result.Add(new IntTupel(item.Item1, item.Item2, item.Item3));
