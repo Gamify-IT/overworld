@@ -373,8 +373,8 @@ public class GameManager : MonoBehaviour
         {
             if (e.GetInteractedObjects().Count != 0)
             {
-                Debug.Log(e.GetTitle());
-                Debug.Log(e.GetInteractedObjects());
+                Debug.Log(e.GetTitle() + " :");
+                e.GetInteractedObjects().ForEach(a => Debug.Log(a.Item1 + ", " + a.Item2 + ", " + a.Item3));
             }
             else
             {
@@ -393,7 +393,8 @@ public class GameManager : MonoBehaviour
                 AchievementStatistic achievementStatistic = AchievementData.ConvertToAchievmentStatistic(achievementData);
                 if (achievementStatistic.interactedObjects.Count != 0)
                 {
-                    Debug.Log(achievementStatistic.achievement.achievementTitle + " :" + achievementStatistic.interactedObjects);
+                    Debug.Log(achievementStatistic.achievement.achievementTitle + " :");
+                    achievementStatistic.interactedObjects.ForEach(e => Debug.Log(e.First + ", " + e.Second + ", " + e.Third));
                 }
                 else
                 {
