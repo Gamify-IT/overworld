@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 /// <summary>
 ///     This class manages the movement and the animations of the player.
@@ -32,12 +33,53 @@ public class PlayerAnimation : MonoBehaviour
     private float timeInGameStart = 0f;
     private float timeInGameDuration = 0f;
 
+    private int daysPlayed;
+    private DateTime lastPlayDate;
+    private bool checkIfChanged=false;
     /// <summary>
     ///     This method is called before the first frame update.
     ///     It is used to initialize variables.
     /// </summary>
     private void Start()
     {
+        string lastPlayDateStr = PlayerPrefs.GetString("LastPlayDate", "");
+        int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
+
+        if (!string.IsNullOrEmpty(lastPlayDateStr))
+        {
+            lastPlayDate = DateTime.Parse(lastPlayDateStr);
+            DateTime today = DateTime.Today;
+            DateTime lastPlayDay = lastPlayDate.Date;
+
+            if (lastPlayDay < today)
+            {
+                int daysSinceLastPlay = (today - lastPlayDay).Days;
+                daysPlayed = daysCount + daysSinceLastPlay;
+                PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
+            }
+            else
+            {
+                daysPlayed = daysCount;
+            }
+        }
+        else
+        {
+            lastPlayDate = DateTime.Now;
+            daysPlayed = 1;
+            PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
+        }
+
+        if (daysPlayed > daysCount)
+        {
+            checkIfChanged=true;
+            
+            Debug.Log("success!!!!!");
+        }
+        PlayerPrefs.SetString("LastPlayDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")); // store the current date and time with milliseconds
+        Debug.Log("day: days played "+daysPlayed);
+        Debug.Log("day: current date "+DateTime.Now);
+        Debug.Log("day: last play date "+lastPlayDate);
+        
         timeInGameStart=Time.time;
 
         canMove = true;
@@ -56,11 +98,24 @@ public class PlayerAnimation : MonoBehaviour
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
     }
 
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.SetString("LastPlayDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+        PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
+        PlayerPrefs.Save();
+    }
+
     /// <summary>
     ///     If 'canMove' is true, this function allows the player to move.
     /// </summary>
     private void Update()
     {
+        if(checkIfChanged){
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1);
+            checkIfChanged=false;
+            Debug.Log("success in update");
+        }
         if (canMove)
         {
             movement.x = 0;
