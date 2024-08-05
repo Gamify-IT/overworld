@@ -44,9 +44,6 @@ public class GameManager : MonoBehaviour
     //Game status
     public bool isPaused = false;
 
-    //Player 
-    [SerializeField] private Transform playerTransform;
-
     /// <summary>
     ///     This function loads the last known position after the player logged out
     /// </summary
@@ -100,8 +97,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("player data: " + DataManager.Instance.GetPlayerData());
         PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(DataManager.Instance.GetPlayerData());
         
-        playerStatistic.SetLogoutPositionX(playerTransform.position.x);
-        playerStatistic.SetLogoutPositionY(playerTransform.position.y);
+        playerStatistic.SetLogoutPositionX(GameObject.FindGameObjectWithTag("Player").transform.position.x);
+        playerStatistic.SetLogoutPositionY(GameObject.FindGameObjectWithTag("Player").transform.position.y);
         playerStatistic.SetLogoutScene(DataManager.Instance.GetCurrentSceneName());
         playerStatistic.SetLogoutWorldIndex(DataManager.Instance.GetCurrentWorldIndex());
         playerStatistic.SetLogoutDungeonIndex(DataManager.Instance.GetCurrentDungeonIndex());
