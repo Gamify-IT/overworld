@@ -92,9 +92,10 @@ public class GameManager : MonoBehaviour
     public async UniTask<bool> SavePlayerPosition()
     {
         Debug.Log("Start saving logout position");
+
         string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
         Debug.Log("path: " + path);
-        Debug.Log("player data: " + DataManager.Instance.GetPlayerData());
+
         PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(DataManager.Instance.GetPlayerData());
         
         playerStatistic.SetLogoutPositionX(GameObject.FindGameObjectWithTag("Player").transform.position.x);
@@ -104,20 +105,23 @@ public class GameManager : MonoBehaviour
         playerStatistic.SetLogoutDungeonIndex(DataManager.Instance.GetCurrentDungeonIndex());
 
         string json = JsonUtility.ToJson(playerStatistic, true);
+
+        Debug.Log("Data: " + json);
+
         bool succesful = await RestRequest.PutRequest(path, json);
 
         if (succesful)
         {
-            Debug.Log("Updated player position for " + playerStatistic.GetLogoutPositionX() + " ," + playerStatistic.GetLogoutPositionY() + " ,"
-                + playerStatistic.GetLogoutScene() + " ," + playerStatistic.GetLogoutWorldIndex() + " ," + playerStatistic.GetLogoutDungeonIndex() +
-                " successfully.");
+            Debug.Log("Updated player position for " + playerStatistic.GetLogoutPositionX() + ", " + playerStatistic.GetLogoutPositionY() + ", "
+                + playerStatistic.GetLogoutScene() + ", " + playerStatistic.GetLogoutWorldIndex() + ", " + playerStatistic.GetLogoutDungeonIndex() +
+                " successfully");
             return true;
         }
         else
         {
-            Debug.Log("Could not update player position for " + playerStatistic.GetLogoutPositionX() + " ," + playerStatistic.GetLogoutPositionY() + " ,"
-                + playerStatistic.GetLogoutScene() + " ," + playerStatistic.GetLogoutWorldIndex() + " ," + playerStatistic.GetLogoutDungeonIndex() +
-                " successfully.");
+            Debug.Log("Could not update player position for " + playerStatistic.GetLogoutPositionX() + ", " + playerStatistic.GetLogoutPositionY() + ", "
+                + playerStatistic.GetLogoutScene() + ", " + playerStatistic.GetLogoutWorldIndex() + ", " + playerStatistic.GetLogoutDungeonIndex() +
+                " successfully");
             return false;
         }
 
