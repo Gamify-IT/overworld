@@ -14,14 +14,6 @@ public class AchievementStatistic
     public bool completed;
     public List<IntTupel> interactedObjects;
 
-    public AchievementStatistic(string id, Achievement achievement, int progress, bool completed, List<(int,int,int)> interactedObjects)
-    {
-        this.id = id;
-        this.achievement = achievement;
-        this.progress = progress;
-        this.completed = completed;
-        this.interactedObjects = ConvertToListIntTupel(interactedObjects);
-    }
      public AchievementStatistic(string id, Achievement achievement, int progress, bool completed, List<IntTupel> interactedObjects)
     {
         this.id = id;
