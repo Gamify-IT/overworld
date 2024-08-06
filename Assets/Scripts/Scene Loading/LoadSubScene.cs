@@ -198,6 +198,7 @@ public class LoadSubScene : MonoBehaviour
             yield return null;
         }
 
+        GameManager.Instance.SetPlayerPosition(worldIndexToLoad, dungeonIndexToLoad);
         GameManager.Instance.SetData(worldIndexToLoad, dungeonIndexToLoad);
 
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)

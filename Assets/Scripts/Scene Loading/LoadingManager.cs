@@ -148,7 +148,9 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("Setting data");
 
+        GameManager.Instance.SetPlayerPosition(worldIndex, dungeonIndex);
         GameManager.Instance.SetData(worldIndex, dungeonIndex);
+
         AreaLocationDTO[] unlockedAreas = DataManager.Instance.GetPlayerData().unlockedAreas;
         SetupProgessBar(unlockedAreas);
 
@@ -268,8 +270,9 @@ public class LoadingManager : MonoBehaviour
         progressText.text = "50%";
         loadingText.text = "PROCESSING DATA...";
 
+        GameManager.Instance.SetPlayerPosition(worldIndex, dungeonIndex);
         GameManager.Instance.SetData(worldIndex, dungeonIndex);
-        DataManager.Instance.SetCurrentSceneName(sceneToLoad);
+
         AreaLocationDTO[] unlockedAreasNew = DataManager.Instance.GetPlayerData().unlockedAreas;
         SetupProgessBar(unlockedAreasNew);
         string infoText = CheckForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);

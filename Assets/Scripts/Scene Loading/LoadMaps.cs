@@ -7,9 +7,9 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class LoadMaps : MonoBehaviour
 {
-    public string sceneOrigin;
-    public string sceneDestination;
-    public int sceneDestinationIndex;
+    [SerializeField] private string sceneOrigin;
+    [SerializeField] private string sceneDestination;
+    [SerializeField] private int sceneDestinationIndex;
 
     /// <summary>
     ///     This function is called when the player enters hitbox on the way to the next world.
@@ -25,8 +25,8 @@ public class LoadMaps : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function setups the world data.
-    ///     If the world isn't already loaded completely it calls 'LoadWorld()' to load the scene.
+    ///     This function loads the next world. 
+    ///     If it isn't already loaded completely it calls 'LoadWorld()' to load the scene.
     /// </summary>
     private async UniTask SetupWorld()
     {
@@ -36,7 +36,6 @@ public class LoadMaps : MonoBehaviour
         }
 
         await LoadWorld();
-        GameManager.Instance.SetData(sceneDestinationIndex, 0);
     }
 
     /// <summary>
@@ -55,5 +54,14 @@ public class LoadMaps : MonoBehaviour
                 await SceneManager.UnloadSceneAsync(tempSceneName);
             }
         }
+    }
+
+    /// <summary>
+    ///     This function gets the index of the loaded world
+    /// </summary>
+    /// <returns>world index</returns>
+    public int GetSceneDestinationIndex()
+    {
+        return sceneDestinationIndex;
     }
 }

@@ -62,7 +62,7 @@ public class CloseGame : MonoBehaviour
     /// </summary>
     private void InitCanvas()
     {
-        savingText.text = "SAVING ACHIEVEMENT PROGRESS...";
+        savingText.text = "SAVING PROGRESS...";
         confirmButton.gameObject.SetActive(false);
         cancelButton.gameObject.SetActive(false);
         savingCanvas.gameObject.SetActive(true);

@@ -43,50 +43,7 @@ public class GameManager : MonoBehaviour
 
     //Game status
     public bool isPaused = false;
-    /*
-    /// <summary>
-    ///     This function loads the last known position after the player logged out
-    /// </summary
-    public async UniTask<bool> LoadPlayerPosition()
-    {
-#if UNITY_EDITOR
-        //skip loading in editor mode
-        Debug.Log("Use demo values, due to Unity Editor mode");
-        return false;
-#endif
-        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics";
 
-        Optional<PlayerStatisticDTO> playerStatisticDTO = await RestRequest.GetRequest<PlayerStatisticDTO>(path);
-
-        if (playerStatisticDTO.IsPresent())
-        {
-            DataManager.Instance.SetPlayerData(playerStatisticDTO.Value());
-
-            PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(playerStatisticDTO.Value());
-
-            // update values with those from backend 
-            DataManager.Instance.SetLogoutPositionX(playerStatistic.GetLogoutPositionX());
-            DataManager.Instance.SetLogoutPositionY(playerStatistic.GetLogoutPositionY());
-            DataManager.Instance.SetLogoutScene(playerStatistic.GetLogoutScene());
-            DataManager.Instance.SetLogoutWorldIndex(playerStatistic.GetLogoutWorldIndex());
-            DataManager.Instance.SetLogoutDungeonIndex(playerStatistic.GetLogoutDungeonIndex());
-
-            Debug.Log("xPos: " + DataManager.Instance.GetLogoutPositionX());
-            Debug.Log("yPos: " + DataManager.Instance.GetLogoutPositionY());
-            Debug.Log("Scene: " + DataManager.Instance.GetLogoutScene());
-            Debug.Log("World: " + DataManager.Instance.GetLogoutWorldIndex());
-            Debug.Log("Dungeon: " + DataManager.Instance.GetLogoutDungeonIndex());
-            
-            return true;
-        }
-
-        else
-        {
-            Debug.Log("Player position data could not be loaded.");
-            return false;
-        }
-    }
-    */
     /// <summary>
     ///     This function saves the last known position of the player in the backend when the player logs out 
     /// </summary>
@@ -97,14 +54,6 @@ public class GameManager : MonoBehaviour
 
         string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
         Debug.Log("path: " + path);
-
-        /*PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(DataManager.Instance.GetPlayerData());
-        
-        playerStatistic.SetLogoutPositionX(GameObject.FindGameObjectWithTag("Player").transform.position.x);
-        playerStatistic.SetLogoutPositionY(GameObject.FindGameObjectWithTag("Player").transform.position.y);
-        playerStatistic.SetLogoutScene(DataManager.Instance.GetCurrentSceneName());
-        playerStatistic.SetLogoutWorldIndex(DataManager.Instance.GetCurrentWorldIndex());
-        playerStatistic.SetLogoutDungeonIndex(DataManager.Instance.GetCurrentDungeonIndex());*/
 
         PlayerStatisticDTO playerStatistic = DataManager.Instance.GetPlayerData();
 
@@ -348,20 +297,36 @@ public class GameManager : MonoBehaviour
     /// <param name="dungeonIndex">The index of the dungeon (0 if world)</param>
     public void SetData(int worldIndex, int dungeonIndex)
     {
-        DataManager.Instance.SetCurrentArea(new AreaLocationDTO(worldIndex, dungeonIndex));
         //DataManager.Instance.ReadTeleporterConfig();
         if (dungeonIndex != 0)
         {
-            Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
             DungeonData data = DataManager.Instance.GetDungeonData(worldIndex, dungeonIndex);
             ObjectManager.Instance.SetDungeonData(worldIndex, dungeonIndex, data);
+        }
+        else
+        {
+            WorldData data = DataManager.Instance.GetWorldData(worldIndex);
+            ObjectManager.Instance.SetWorldData(worldIndex, data);
+        }
+    }
+
+    /// <summary>
+    ///     This function sets all necessary data to save the current player position
+    /// </summary>
+    /// <param name="worldIndex">index of the current world</param>
+    /// <param name="dungeonIndex">index of the current dungeon</param>
+    public void SetPlayerPosition(int worldIndex, int dungeonIndex)
+    {
+        DataManager.Instance.SetCurrentArea(new AreaLocationDTO(worldIndex, dungeonIndex));
+
+        if (dungeonIndex != 0)
+        {
+            Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
             DataManager.Instance.SetCurrentSceneName("Dungeon " + worldIndex + "-" + dungeonIndex);
         }
         else
         {
             Debug.Log("Setting data for world " + worldIndex);
-            WorldData data = DataManager.Instance.GetWorldData(worldIndex);
-            ObjectManager.Instance.SetWorldData(worldIndex, data);
             DataManager.Instance.SetCurrentSceneName("World " + worldIndex);
         }
     }

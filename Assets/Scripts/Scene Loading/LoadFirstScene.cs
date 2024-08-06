@@ -95,18 +95,6 @@ public class LoadFirstScene : MonoBehaviour
 
         Debug.Log("Finish retrieving courseId");
 
-        /*Debug.Log("Start retrieving saved player data");
-
-        bool validPlayerData = await GameManager.Instance.LoadPlayerPosition();
-        if (validPlayerData)
-        {
-            Debug.Log("Loaded position: " + DataManager.Instance.GetPlayerData().logoutPositionX + ", " + DataManager.Instance.GetPlayerData().logoutPositionY);
-            Debug.Log("Loaded world index: " + DataManager.Instance.GetPlayerData().currentArea.worldIndex);
-            Debug.Log("Loaded dungeon index: " + DataManager.Instance.GetPlayerData().currentArea.dungeonIndex);
-        }
-
-        Debug.Log("Finish retrieving saved player data");*/
-
         Debug.Log("Start loading LoadingScreen");
 
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
@@ -116,7 +104,6 @@ public class LoadFirstScene : MonoBehaviour
 
         Debug.Log("Start testing courseID");
 
-        //bool validCourseId = await GameManager.Instance.ValidateCourseId();
         if (!validCourseId)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
