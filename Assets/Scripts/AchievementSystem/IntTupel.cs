@@ -1,9 +1,11 @@
-[System.Serializable]
+using System;
+
+[Serializable]
 public class IntTupel
 {
-    public int First { get; set; }
-    public int Second { get; set; }
-    public int Third { get; set; }
+    public int First;
+    public int Second;
+    public int Third;
 
     public IntTupel(int first, int second, int third)
     {
