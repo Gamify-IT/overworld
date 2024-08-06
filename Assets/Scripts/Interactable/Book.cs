@@ -34,7 +34,6 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
         readBooks = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "READER_LEVEL_3").GetInteractedObjects();
-        //LoadReadBooks();
     }
 
     /// <summary>
@@ -64,7 +63,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     {
         if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
-            Debug.Log("remove Book " + world + "-" + dungeon + "-" + number);
+            //Debug.Log("remove Book " + world + "-" + dungeon + "-" + number);
             ObjectManager.Instance.RemoveGameEntity<Book, BookData>(world, dungeon, number);
             GameEvents.current.onKeybindingChange -= UpdateKeybindings;
         }            
@@ -122,7 +121,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// </summary>
     private void RegisterToGameManager()
     {
-        Debug.Log("register Book " + world + "-" + dungeon + "-" + number);
+        //Debug.Log("register Book " + world + "-" + dungeon + "-" + number);
         ObjectManager.Instance.AddGameEntity<Book, BookData>(gameObject, world, dungeon, number);
     }
 
@@ -135,7 +134,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         uuid = data.GetUuid();
         bookContent = data.GetBookText();
         string text = bookContent;
-        Debug.Log("setup book " + world + "-" + number + " with Text: " + text);
+        //Debug.Log("setup book " + world + "-" + number + " with Text: " + text);
     }
 
     /// <summary>
@@ -158,21 +157,20 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     }
 
     /// <summary>
-    ///     This method adds a new read book to the list. 
+    ///     This method adds a new read book to the list and calls the method for the achievement update by interacting with the new book. 
     /// </summary>
     private void UpdateListOfBooks()
     {
         var key = (world, dungeon, number);
         if(!readBooks.Contains(key))
         {
-            readBooks.Add((world, dungeon, number));
-            //SaveReadBooks();
+            readBooks.Add(key);
             UpdateAchievements(world);
         } 
     }
 
     /// <summary>
-    ///     This method updates the "read books" achievements in general and for a particular world.
+    ///     This method updates the "read books" achievements in general and for a specific world.
     /// </summary>
     /// <param name="worldNumber">The number of the world in which is the interacted book</param>
     private void UpdateAchievements(int worldNumber)
@@ -210,29 +208,4 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         }
     }
-/*
-    /// <summary>
-    ///     This method saves the list of read books to PlayerPrefs.
-    /// </summary>
-    private void SaveReadBooks()
-    {
-        PlayerPrefs.SetString("ReadBooks", string.Join(";", readBooks.Select(book => $"{book.Item1},{book.Item2},{book.Item3}")));
-        PlayerPrefs.Save();
-    }
-
-    /// <summary>
-    ///     This method loads the list of read books from PlayerPrefs.
-    /// </summary>
-    private void LoadReadBooks()
-    {
-        if (PlayerPrefs.HasKey("ReadBooks"))
-        {
-            string savedData = PlayerPrefs.GetString("ReadBooks");
-            readBooks = savedData.Split(';').Select(book =>
-            {
-                var parts = book.Split(',');
-                return (int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
-            }).ToList();
-        }
-    }*/
 }

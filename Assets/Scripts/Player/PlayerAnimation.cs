@@ -60,6 +60,16 @@ public class PlayerAnimation : MonoBehaviour
         sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
 
+        InitializeAudio();
+        volumeLevel = PlayerPrefs.GetInt("VolumeLevel", 3);
+        UpdateVolume();
+    }
+
+    /// <summary>
+    ///     This function adds new audio sources and sets clip with move sound
+    /// </summary>
+    private void InitializeAudio()
+    {
         audioSource = GetComponent<AudioSource>();
         if(audioSource == null)
         {
@@ -68,10 +78,8 @@ public class PlayerAnimation : MonoBehaviour
         audioSource.clip = moveSound;
         audioSource.loop = true;
         audioSource.playOnAwake = false;
-
-        volumeLevel = PlayerPrefs.GetInt("VolumeLevel", 3);
-        UpdateVolume();
     }
+
 
     /// <summary>
     /// This function updates the level volume and applies the changes to all audio in the game
@@ -179,7 +187,7 @@ public class PlayerAnimation : MonoBehaviour
 
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * 50);
 
-            UpdateAchievement();
+            UpdateWalkAchievement();
 
             // dev keybindings
             if (Input.GetKeyDown("k"))
@@ -202,7 +210,7 @@ public class PlayerAnimation : MonoBehaviour
     }
 
     /// <summary>
-    ///     this function updates time achievement each 60 seconds when the player is playing
+    ///     This function updates time achievements each 60 seconds when the player is playing
     /// </summary>
     private void UpdateAchievementForTimeInGame()
     {
@@ -263,7 +271,10 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
-    private void UpdateAchievement()
+    /// <summary>
+    ///     This function updates the walk achievements
+    /// </summary>
+    private void UpdateWalkAchievement()
     {
         float distance = Vector3.Distance(transform.position, lastPosition);
         if (distance <= 5)

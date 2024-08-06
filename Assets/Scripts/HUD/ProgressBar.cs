@@ -44,7 +44,7 @@ public class ProgressBar : MonoBehaviour
     }
 
     /// <summary>
-    /// This function sets the unlocked area for a world
+    /// This function sets the unlocked area for a world and updates achievements if new world is unlocked
     /// </summary>
     /// <param name="worldIndex">The index of the unlocked world</param>
     public void setUnlockedArea(int worldIndex)
@@ -65,7 +65,7 @@ public class ProgressBar : MonoBehaviour
     }
 
     /// <summary>
-    /// This function sets the unlocked area for a dungeon
+    /// This function sets the unlocked area for a dungeon and updates achievements if new dungeon is unlocked
     /// </summary>
     /// <param name="worldIndex">The index of the world the unlocked dungeon is in</param>
     /// <param name="dungeonIndex">The index of the unlocked dungeon</param>

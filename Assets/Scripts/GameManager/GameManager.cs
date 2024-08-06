@@ -325,7 +325,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="newProgress">The new progress of the achievement</param>
-    /// <param name="interactedObjects">The list of interacted objects that are important for the achievement</param>
+    /// <param name="interactedObjects">Updated list with interacted objects regarding achievement for which this method is called</param>
+    /// <returns>True if the acheivement is now completed, false otherwise</returns>
     public async void UpdateAchievement(AchievementTitle title, int newProgress, List<(int, int, int)> interactedObjects)
     {
         bool unlocked = DataManager.Instance.UpdateAchievement(title, newProgress, interactedObjects);
@@ -346,7 +347,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="increment">The amount to increase the progress</param>
-    /// <param name="interactedObjects">The list of interacted objects that are important for the achievement</param>
+    /// <param name="interactedObjects">Updated list with interacted objects regarding achievement for which this method is called</param>
     /// <returns>True if the acheivement is now completed, false otherwise</returns>
     public async void IncreaseAchievementProgress(AchievementTitle title, int increment, List<(int, int, int)> interactedObjects)
     {
@@ -615,10 +616,10 @@ public class GameManager : MonoBehaviour
         string[] categories1 = { "Exploring" };
         Achievement achievement1 =
             new Achievement("GO_FOR_A_WALK", "Walk 10 tiles", categories1, "achievement2", 10);
-        AchievementStatistic achievementStatistic1 = new AchievementStatistic(username, achievement1, 0, false, new List<IntTupel>());
+        AchievementStatistic achievementStatistic1 = new AchievementStatistic(username, achievement1, 0, false, new List<IntTuple>());
         Achievement achievement2 =
             new Achievement("GO_FOR_A_LONGER_WALK", "Walk 1000 tiles", categories1, "achievement2", 1000);
-        AchievementStatistic achievementStatistic2 = new AchievementStatistic(username, achievement2, 0, false, new List<IntTupel>());
+        AchievementStatistic achievementStatistic2 = new AchievementStatistic(username, achievement2, 0, false, new List<IntTuple>());
         statistcs[0] = achievementStatistic1;
         statistcs[1] = achievementStatistic2;
         return statistcs;

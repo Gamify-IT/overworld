@@ -28,14 +28,11 @@ public class CharacterSelection : MonoBehaviour
         //get the index of the currently selected character 
         currentIndex = DataManager.Instance.GetCharacterIndex();
 
-        //get AudioSource component
         audioSource=GetComponent<AudioSource>();
-        //add AudioSource component if necessary
         if(audioSource == null)
         {
             audioSource=gameObject.AddComponent<AudioSource>();
         }
-        //set audio clip
         audioSource.clip=clickSound;
     }
 

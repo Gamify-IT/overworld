@@ -34,17 +34,20 @@ public class KeyBindingManager : MonoBehaviour
         validBindings = true;
 
         DisplayKeybinding();
+        InitializeAudio();
+    }
 
-        //get AudioSource component
+    /// <summary>
+    ///     This function adds new audio sources and sets click sound as a clip
+    /// </summary>
+    private void InitializeAudio()
+    {
         audioSource=GetComponent<AudioSource>();
-        //add AudioSource component if necessary
         if(audioSource == null)
         {
             audioSource=gameObject.AddComponent<AudioSource>();
         }
-        //set audio clip
         audioSource.clip=clickSound;
-        //AudioSource does not start playing automatically when the GameObject awakens
         audioSource.playOnAwake=false;
     }
 
@@ -252,7 +255,6 @@ public class KeyBindingManager : MonoBehaviour
             pauseMenu.CloseSubMenu();
         }
     }
-
 
     /// <summary>
     /// This function plays the click sound.

@@ -111,6 +111,15 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
         Time.timeScale = 0f;
 
+        CheckForLastLogin();
+    }
+
+
+    /// <summary>
+    ///     This function checks if a new day has already started since the player's last login and if so, the achievement for the login is updated
+    /// </summary>
+    private void CheckForLastLogin()
+    {
         string lastLoginDateStr = PlayerPrefs.GetString("LastLoginDate", "");
         int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
 
@@ -122,11 +131,7 @@ public class PauseMenu : MonoBehaviour
             if (lastLoginDate.Date < today)
             {
                 daysPlayed = daysCount + 1;
-                PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
-                PlayerPrefs.Save();
-
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1, null);
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1, null);
+                UpdateLoginAchievement();
             }
             else
             {
@@ -137,17 +142,24 @@ public class PauseMenu : MonoBehaviour
         {
             lastLoginDate = DateTime.Now;
             daysPlayed = 1;
-            PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
-            PlayerPrefs.Save();
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1, null);
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1, null);
+            UpdateLoginAchievement();
         }
 
         PlayerPrefs.SetString("LastLoginDate", DateTime.Now.ToString("yyyy-MM-dd"));
+        PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
         PlayerPrefs.Save();
-        Debug.Log("day: days played " + daysPlayed);
-        Debug.Log("day: current date " + DateTime.Now);
-        Debug.Log("day: last play date " + lastLoginDate);
+        //Debug.Log("day: days played " + daysPlayed);
+        //Debug.Log("day: current date " + DateTime.Now);
+        //Debug.Log("day: last play date " + lastLoginDate);
+    }
+
+    /// <summary>
+    ///     This function updates login achievements
+    /// </summary>
+    private void UpdateLoginAchievement()
+    {
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1, null);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1, null);
     }
 
     /// <summary>
@@ -199,7 +211,6 @@ public class PauseMenu : MonoBehaviour
             PlayClickSound();
         }
     }
-
 
     /// <summary>
     /// This function is called by the menu and submenu buttons.

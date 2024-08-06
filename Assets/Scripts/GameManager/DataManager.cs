@@ -446,6 +446,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="newProgress">The new progress of the achievement</param>
+    /// <param name="interactedObjects">Updated list with interacted objects regarding achievement for which this method is called</param>
     /// <returns>True if the acheivement is just now completed, false otherwise</returns>
     public bool UpdateAchievement(AchievementTitle title, int newProgress, List<(int, int, int)> interactedObjects)
     {
@@ -463,6 +464,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="increment">The amount to increase the progress</param>
+    /// <param name="interactedObjects">Updated list with interacted objects regarding achievement for which this method is called</param>
     /// <returns>True if the acheivement is just now completed, false otherwise</returns>
     public bool IncreaseAchievementProgress(AchievementTitle title, int increment, List<(int, int, int)> interactedObjects)
     {

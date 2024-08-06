@@ -52,16 +52,12 @@ public class KeyBindingUIElement : MonoBehaviour
     /// </summary>
     public void ChangeKeyButtonPressed()
     {
-        //get AudioSource component
         audioSource=GetComponent<AudioSource>();
-        //add AudioSource component if necessary
         if(audioSource == null)
         {
             audioSource=gameObject.AddComponent<AudioSource>();
         }
-        //set audio clip
         audioSource.clip=clickSound;
-        //AudioSource does not start playing automatically when the GameObject awakens
         audioSource.playOnAwake=false;
         PlayClickSound();
 
@@ -119,7 +115,7 @@ public class KeyBindingUIElement : MonoBehaviour
     }
 
     /// <summary>
-    /// This function plays the click sound.
+    /// This function plays the click sound
     /// </summary>
     private void PlayClickSound()
     {
