@@ -20,7 +20,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     private bool playerIsClose;
     private string uuid;
 
-    private List<(int, int, int)> readBooks = new List<(int, int, int)>();
+    private List<(int, int, int)> readBooks = DataManager.Instance.GetAchievements().FirstOrDefault(achievement => achievement.GetTitle() == "READER_LEVEL_3").GetInteractedObjects();
 
     //KeyCodes
     private KeyCode interact;
