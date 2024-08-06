@@ -286,12 +286,8 @@ public class DataManager : MonoBehaviour
 
         foreach (AchievementStatistic statistic in achievementStatistics)
         {
-            Debug.Log("Achievement Statistic Interacted Object List: ");
-            statistic.interactedObjects.ForEach(e => Debug.Log(e.First + ", " + e.Second + ", " + e.Third));
             AchievementData achievement = AchievementData.ConvertFromAchievementStatistic(statistic);
             Debug.Log("Processed achievement: " + achievement.GetTitle());
-            Debug.Log("Achievement Data Interacted Object List: ");
-            achievement.GetInteractedObjects().ForEach(e => Debug.Log((e.Item1, e.Item2, e.Item3)));
             achievementData.Add(achievement);
         }
     }
@@ -474,7 +470,6 @@ public class DataManager : MonoBehaviour
         if (achievement != null)
         {
             int newProgress = achievement.GetProgress() + increment;
-            //Debug.Log("New Progress of '" + title + "': " + achievement.GetProgress());
             return achievement.UpdateProgress(newProgress, interactedObjects);
         }
 

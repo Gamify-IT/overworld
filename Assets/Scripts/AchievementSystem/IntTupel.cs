@@ -3,14 +3,14 @@ using System;
 [Serializable]
 public class IntTupel
 {
-    public int First;
-    public int Second;
-    public int Third;
+    public int first;
+    public int second;
+    public int third;
 
     public IntTupel(int first, int second, int third)
     {
-        First = first;
-        Second = second;
-        Third = third;
+        this.first = first;
+        this.second = second;
+        this.third = third;
     }
 }

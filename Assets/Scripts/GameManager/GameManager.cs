@@ -368,41 +368,20 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public async UniTask<bool> SaveAchievements()
     {   
-        Debug.Log("AchievementData Interacted List: ");
-        DataManager.Instance.GetAchievements().ForEach(e =>
-        {
-            if (e.GetInteractedObjects().Count != 0)
-            {
-                Debug.Log(e.GetTitle() + " :");
-                e.GetInteractedObjects().ForEach(a => Debug.Log(a.Item1 + ", " + a.Item2 + ", " + a.Item3));
-            }
-            else
-            {
-                Debug.Log("List is empty!");
-            }
-        });
         List<AchievementData> achievements = DataManager.Instance.GetAchievements();
         string basePath = overworldBackendPath + "/players/" + userId + "/achievements/";
 
         bool savingSuccessful = true;
-        Debug.Log("AchievementStatistic Interacted List: ");
         foreach (AchievementData achievementData in achievements)
         {
             if(achievementData.isUpdated())
             {
                 AchievementStatistic achievementStatistic = AchievementData.ConvertToAchievmentStatistic(achievementData);
-                if (achievementStatistic.interactedObjects.Count != 0)
-                {
-                    Debug.Log(achievementStatistic.achievement.achievementTitle + " :");
-                    achievementStatistic.interactedObjects.ForEach(e => Debug.Log(e.First + ", " + e.Second + ", " + e.Third));
-                }
-                else
-                {
-                    Debug.Log("List is empty!");
-                }
+
                 string path = basePath + achievementData.GetTitle();
                 string json = JsonUtility.ToJson(achievementStatistic, true);
                 bool successful = await RestRequest.PutRequest(path, json);
+
                 if (successful)
                 {
                     Debug.Log("Updated achievement progress for " + achievementStatistic.achievement.achievementTitle + " in the overworld backend");

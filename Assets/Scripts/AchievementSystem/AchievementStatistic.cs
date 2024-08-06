@@ -41,7 +41,7 @@ public class AchievementStatistic
         List<(int, int, int)> result = new List<(int, int, int)>();
         foreach (var item in list)
         {
-            result.Add((item.First, item.Second, item.Third));
+            result.Add((item.first, item.second, item.third));
         }
         return result;
     }
