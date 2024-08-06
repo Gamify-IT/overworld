@@ -36,8 +36,10 @@ public class PlayerAnimation : MonoBehaviour
     public AudioClip moveSound;
     private AudioSource audioSource;
     private bool isMoving;
- private int daysPlayed;
+    
+    private int daysPlayed;
     private DateTime lastLoginDate;
+
     /// <summary>
     ///     This method is called before the first frame update.
     ///     It is used to initialize variables.
@@ -64,6 +66,8 @@ public class PlayerAnimation : MonoBehaviour
         InitializeAudio();
         volumeLevel = PlayerPrefs.GetInt("VolumeLevel", 3);
         UpdateVolume();
+
+        Invoke("CheckForLastLogin", 4.5f);
     }
 
     /// <summary>
@@ -106,7 +110,7 @@ public class PlayerAnimation : MonoBehaviour
         AudioListener.volume = volume;
     }
 
- /// <summary>
+    /// <summary>
     ///     This function checks if a new day has already started since the player's last login and if so, the achievement for the login is updated
     /// </summary>
     private void CheckForLastLogin()
@@ -152,6 +156,7 @@ public class PlayerAnimation : MonoBehaviour
         GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1, null);
         GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1, null);
     }
+    
     /// <summary>
     ///     If 'canMove' is true, this function allows the player to move.
     /// </summary>
@@ -167,28 +172,24 @@ public class PlayerAnimation : MonoBehaviour
             {
                 movement.x -= 1;
                 isMoving = true;
-                //CheckForLastLogin();
             }
 
             if (Input.GetKey(moveRight))
             {
                 movement.x += 1;
                 isMoving = true;
-                //CheckForLastLogin();
             }
 
             if (Input.GetKey(moveDown))
             {
                 movement.y -= 1;
                 isMoving = true;
-                //CheckForLastLogin();
             }
 
             if (Input.GetKey(moveUp))
             {
                 movement.y += 1;
                 isMoving = true;
-                //CheckForLastLogin();
             }
 
             movement = movement.normalized;
@@ -265,13 +266,8 @@ public class PlayerAnimation : MonoBehaviour
     /// </summary>
     private void UpdateAchievementForTimeInGame()
     {
-        if (timeInGameDuration == 5f)
-        {
-            CheckForLastLogin();
-        }
         while (timeInGameDuration >= 60f)
         {
-            CheckForLastLogin();
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.BEGINNER, 1, null);
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.EXPERIENCED_PLAYER, 1, null);
             timeInGameDuration -= 60f;
@@ -344,7 +340,6 @@ public class PlayerAnimation : MonoBehaviour
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_LONGER_WALK, 1, null);
             distanceWalked -= 1;
         }
-
         lastPosition = transform.position;
     }
 
