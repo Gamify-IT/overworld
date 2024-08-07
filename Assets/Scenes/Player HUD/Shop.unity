@@ -1786,7 +1786,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 384520543}
-        m_TargetAssemblyTypeName: Shop, Assembly-CSharp
+        m_TargetAssemblyTypeName: HandleShopMenu, Assembly-CSharp
         m_MethodName: closeShop
         m_Mode: 1
         m_Arguments:
