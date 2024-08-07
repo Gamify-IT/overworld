@@ -45,6 +45,34 @@ public class GameManager : MonoBehaviour
     public bool isPaused = false;
 
     /// <summary>
+    ///     This function saves the last volume level chosen by the player
+    /// </summary>
+    public async UniTask<bool> SaveVolumeLevel()
+    {
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
+        Debug.Log("path: " + path);
+
+        PlayerStatisticDTO playerStatistic = DataManager.Instance.GetPlayerData();
+        playerStatistic.volumeLevel = VolumeControllerButton.volumeLevel;
+         DataManager.Instance.SetPlayerData(playerStatistic);
+
+        string json = JsonUtility.ToJson(playerStatistic, true);
+
+        bool succesful = await RestRequest.PutRequest(path, json);
+
+        if (succesful)
+        {
+            Debug.Log("Updated volume level " + playerStatistic.volumeLevel +" successfully");
+            return true;
+        }
+        else
+        {
+            Debug.Log("Could not updated volume level " + playerStatistic.volumeLevel +" successfully");
+            return false;
+        }
+    }
+
+    /// <summary>
     ///     This function checks whether or not a valid courseId was passed or not.
     ///     If a valid id was passed, it gets stored.
     ///     Otherwise, the user is redirected to course selection page.
@@ -145,8 +173,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Optional<PlayerstatisticDTO> playerStatistics =
-            await RestRequest.GetRequest<PlayerstatisticDTO>(path + "/playerstatistics/");
+        Optional<PlayerStatisticDTO> playerStatistics =
+            await RestRequest.GetRequest<PlayerStatisticDTO>(path + "/playerstatistics/");
         if (!playerStatistics.IsPresent())
         {
             loadingError = true;
@@ -199,6 +227,15 @@ public class GameManager : MonoBehaviour
         Debug.Log("Everything set up");
 
         return loadingError;
+    }
+
+    /// <summary>
+    ///     This function sets last chosen volume level 
+    /// </summary>
+    /// <param name="volumeLevel">current volume level</param>
+    public void SetVolumeLevel(int volumeLevel)
+    {
+        DataManager.Instance.SetVolumeLevel(volumeLevel);
     }
 
     /// <summary>
@@ -533,7 +570,7 @@ public class GameManager : MonoBehaviour
     {
         string uri = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/" + userId;
 
-        Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(uri);
+        Optional<PlayerStatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerStatisticDTO>(uri);
 
         if (playerStatistics.IsPresent())
         {
@@ -599,7 +636,7 @@ private void PlayAchievementNotificationSound(){
             DataManager.Instance.SetWorldData(worldIndex, new WorldData());
         }
 
-        DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
+        DataManager.Instance.ProcessPlayerStatistics(new PlayerStatisticDTO());
         AchievementStatistic[] achivements = GetDummyAchievements();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
         ResetKeybindings();

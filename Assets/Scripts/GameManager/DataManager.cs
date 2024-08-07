@@ -21,7 +21,7 @@ public class DataManager : MonoBehaviour
     //Data fields
     private AreaDataManager areaDataManager;
     private WorldData[] worldData;
-    private PlayerstatisticDTO playerData;
+    private PlayerStatisticDTO playerData;
     private List<AchievementData> achievementData;
     private Dictionary<Binding, KeyCode> keybindings;
 
@@ -101,11 +101,20 @@ public class DataManager : MonoBehaviour
     ///     This function returns the player data
     /// </summary>
     /// <returns>The player data</returns>
-    public PlayerstatisticDTO GetPlayerData()
+    public PlayerStatisticDTO GetPlayerData()
     {
         return playerData;
     }
 
+    /// <summary>
+    ///     This function sets the player data
+    /// </summary>
+    /// <param name="data">Player data to be set</param>
+    public void SetPlayerData(PlayerStatisticDTO data)
+    {
+        playerData = data;
+    }
+    
     /// <summary>
     ///     This function checks if a player has unlocked a world.
     /// </summary>
@@ -257,7 +266,7 @@ public class DataManager : MonoBehaviour
     ///     This function processes the player data
     /// </summary>
     /// <param name="playerData">The player statistics returned from the backend</param>
-    public void ProcessPlayerStatistics(PlayerstatisticDTO playerStatistics)
+    public void ProcessPlayerStatistics(PlayerStatisticDTO playerStatistics)
     {
         playerData = playerStatistics;
         foreach (TeleporterDTO teleporterDTO in playerData.unlockedTeleporters)
@@ -630,7 +639,7 @@ public class DataManager : MonoBehaviour
         areaDataManager = new AreaDataManager();
 
         worldData = new WorldData[maxWorld + 1];
-        playerData = new PlayerstatisticDTO();
+        playerData = new PlayerStatisticDTO();
         InitKeybindingsDictionary();
 
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
@@ -1127,5 +1136,23 @@ public class DataManager : MonoBehaviour
     public Sprite[] GetCharacterFaces()
     {
         return characterFaces;
+    }
+
+    /// <summary>
+    ///     Gets the current volume level
+    /// </summary>
+    /// <returns>volume level</returns>
+    public int GetVolumeLevel()
+    {
+        return playerData.volumeLevel;
+    }
+
+    /// <summary>
+    ///     Updates the current volume level chosen by the player
+    /// </summary>
+    /// <param name="volumeLevel">current volume level</param>
+    public void SetVolumeLevel(int volumeLevel)
+    {
+        playerData.volumeLevel = volumeLevel;
     }
 }

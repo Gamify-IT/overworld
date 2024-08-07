@@ -17,6 +17,7 @@ public class PlayerAnimation : MonoBehaviour
     private float currentSpeed;
     private float targetSpeed;
     private int volumeLevel;
+    private PlayerStatisticDTO playerData;
 
     private Vector3 lastPosition;
     private float distanceWalked;
@@ -115,8 +116,8 @@ public class PlayerAnimation : MonoBehaviour
         audioSource.loop = true;
         //AudioSource does not start playing automatically when the GameObject awakens
         audioSource.playOnAwake = false;
+        
 
-        volumeLevel = PlayerPrefs.GetInt("VolumeLevel", 3);
         UpdateVolume();
     }
 
@@ -125,6 +126,11 @@ public class PlayerAnimation : MonoBehaviour
     /// </summary>
     private void UpdateVolume()
     {
+                
+ playerData = DataManager.Instance.GetPlayerData();
+
+        volumeLevel = playerData.volumeLevel;
+        Debug.Log("Volume level in PlayerAnimation in PlayerData "+volumeLevel);
         float volume = 0f;
         switch (volumeLevel)
         {
@@ -156,6 +162,7 @@ public class PlayerAnimation : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        
         if(checkIfChanged){
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1);
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1);
