@@ -9,7 +9,7 @@ public class OpenLeaderboard : MonoBehaviour
 
     public static bool menuOpen = true;
     public GameObject rewardsPanel;
-    public GameObject shopPanel;
+    
 
     private AudioSource audioSource;
     public AudioClip clickSound;
@@ -41,7 +41,7 @@ public class OpenLeaderboard : MonoBehaviour
     public void openShop()
     {
         menuOpen = true;
-        shopPanel.SetActive(true);
+        SceneManager.LoadScene("Shop", LoadSceneMode.Additive);
         Time.timeScale = 0f;
     }
 
@@ -58,17 +58,8 @@ public class OpenLeaderboard : MonoBehaviour
         rewardsPanel.SetActive(false); 
     }
 
-    public void closeShop()
-    {
-        audioSource.Play();
-        Invoke("ShopPanelSetActive", 0.15f);
-        menuOpen = false;
-        Time.timeScale = 1f;
-    }
+    
 
-    private void ShopPanelSetActive()
-    {
-        shopPanel.SetActive(false);
-    }
+   
 
 }
