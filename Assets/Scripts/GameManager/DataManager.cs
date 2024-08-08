@@ -330,7 +330,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void ProcessPlayerStatisticDTO(PlayerstatisticDTO playerStatistic)
+    public void ProcessPlayerstatisticDTO(PlayerstatisticDTO playerStatistic)
     {
 
         if (playerStatistic == null)
@@ -547,13 +547,14 @@ public class DataManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="newProgress">The new progress of the achievement</param>
+    /// <param name="interactedObjects">Updated list with interacted objects regarding achievement for which this method is called</param>
     /// <returns>True if the acheivement is just now completed, false otherwise</returns>
-    public bool UpdateAchievement(AchievementTitle title, int newProgress)
+    public bool UpdateAchievement(AchievementTitle title, int newProgress, List<(int, int, int)> interactedObjects)
     {
         AchievementData achievement = GetAchievement(title);
         if (achievement != null)
         {
-            return achievement.UpdateProgress(newProgress);
+            return achievement.UpdateProgress(newProgress, interactedObjects);
         }
 
         return false;
@@ -564,15 +565,15 @@ public class DataManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="increment">The amount to increase the progress</param>
+    /// <param name="interactedObjects">Updated list with interacted objects regarding achievement for which this method is called</param>
     /// <returns>True if the acheivement is just now completed, false otherwise</returns>
-    public bool IncreaseAchievementProgress(AchievementTitle title, int increment)
+    public bool IncreaseAchievementProgress(AchievementTitle title, int increment, List<(int, int, int)> interactedObjects)
     {
         AchievementData achievement = GetAchievement(title);
         if (achievement != null)
         {
             int newProgress = achievement.GetProgress() + increment;
-            //Debug.Log("New Progress of '" + title + "': " + achievement.GetProgress());
-            return achievement.UpdateProgress(newProgress);
+            return achievement.UpdateProgress(newProgress, interactedObjects);
         }
 
         return false;
@@ -1255,5 +1256,22 @@ public class DataManager : MonoBehaviour
     public void SetCurrentArea(AreaLocationDTO area)
     {
         playerData.currentArea = area;
+    }
+    
+    ///     Gets the current volume level
+    /// </summary>
+    /// <returns>volume level</returns>
+    public int GetVolumeLevel()
+    {
+        return playerData.volumeLevel;
+    }
+
+    /// <summary>
+    ///     Updates the current volume level chosen by the player
+    /// </summary>
+    /// <param name="volumeLevel">current volume level</param>
+    public void SetVolumeLevel(int volumeLevel)
+    {
+        playerData.volumeLevel = volumeLevel;
     }
 }

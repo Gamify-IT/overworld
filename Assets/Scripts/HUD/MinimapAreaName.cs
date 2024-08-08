@@ -7,6 +7,9 @@ public class MinimapAreaName : MonoBehaviour
     public bool dungeonArea;
 
     private string currentAreaName;
+    
+    private PlayerstatisticDTO playerData;
+    private int volumeLevel;
   
     public AudioClip backgroundMusicWorld1;
     public AudioClip backgroundMusicWorld2;
@@ -24,7 +27,7 @@ public class MinimapAreaName : MonoBehaviour
     public float crossfadeDuration = 0.5f;
 
     /// <summary>
-    /// This function initializes the audio sources and starts playing background sound.
+    /// This function initializes the audio sources and starts playing the background music
     /// </summary>
     private void Start()
     {
@@ -35,12 +38,40 @@ public class MinimapAreaName : MonoBehaviour
         InitializeAudioSource(audioSource2);
 
         PlayBackgroundMusic();
+        
+        UpdateVolume();
     }
 
     /// <summary>
-    /// This function configures the specified audio source with initial settings.
+    /// This function updates the volume level and applies the changes to all audio in the game
     /// </summary>
-    /// <param name="audioSource">The AudioSource component to initialize.</param>
+    private void UpdateVolume()
+    {
+        playerData = DataManager.Instance.GetPlayerData();
+        volumeLevel = playerData.volumeLevel;
+        float volume = 0f;
+        switch (volumeLevel)
+        {
+            case 0:
+                volume = 0f;
+                break;
+            case 1:
+                volume = 0.5f;
+                break;
+            case 2:
+                volume = 1f;
+                break;
+            case 3:
+                volume = 2f;
+                break;
+        }
+        AudioListener.volume = volume;
+    }
+
+    /// <summary>
+    /// This function configures the specified audio source with initial settings
+    /// </summary>
+    /// <param name="audioSource">The AudioSource component to initialize</param>
     private void InitializeAudioSource(AudioSource audioSource)
     {
         audioSource.loop = true;
@@ -49,7 +80,7 @@ public class MinimapAreaName : MonoBehaviour
     }
 
     /// <summary>
-    /// This function updates the current area name and changes background music if the area has changed.
+    /// This function updates the current area name and changes the background music if the area has changed
     /// </summary>
     private void Update()
     {
@@ -78,7 +109,7 @@ public class MinimapAreaName : MonoBehaviour
     }
 
     /// <summary>
-    /// This function starts a new audio clip for the received area.
+    /// This function starts a new audio clip for the received area
     /// </summary>
     private void PlayBackgroundMusic()
     {
@@ -91,7 +122,7 @@ public class MinimapAreaName : MonoBehaviour
     }
 
     /// <summary>
-    /// This function gives an audio clip based on the current area name.
+    /// This function gives an audio clip based on the current area name
     /// </summary>
     private void GetClipToPlay()
     {
@@ -118,7 +149,7 @@ public class MinimapAreaName : MonoBehaviour
     }
 
     /// <summary>
-    /// This function makes smoothly crossfades between the currently playing audio clip and a new one.
+    /// This function makes smoothly crossfades between the currently playing audio clip and a new one
     /// </summary>
     /// <param name="newClip">The new audio clip to play.</param>
     private IEnumerator CrossfadeMusic(AudioClip newClip)

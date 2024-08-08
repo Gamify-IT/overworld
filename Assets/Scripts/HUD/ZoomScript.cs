@@ -47,19 +47,21 @@ public class ZoomScript : MonoBehaviour
         gameZoomIn = GameManager.Instance.GetKeyCode(Binding.GAME_ZOOM_IN);
         gameZoomOut = GameManager.Instance.GetKeyCode(Binding.GAME_ZOOM_OUT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
+        InitializeAudio();
+    }
 
-        //get AudioSource component
+    /// <summary>
+    ///     This function adds new audio sources and sets clip with click sound
+    /// </summary>
+    private void InitializeAudio()
+    {
         audioSource=GetComponent<AudioSource>();
-        //add AudioSource component if necessary
         if(audioSource == null)
         {
             audioSource=gameObject.AddComponent<AudioSource>();
         }
-        //set audio clip
         audioSource.clip=clickSound;
-        //AudioSource does not start playing automatically when the GameObject awakens
         audioSource.playOnAwake=false;
-
     }
 
     /// <summary>
