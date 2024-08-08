@@ -7,6 +7,9 @@ public class MinimapAreaName : MonoBehaviour
     public bool dungeonArea;
 
     private string currentAreaName;
+    
+    private PlayerstatisticDTO playerData;
+    private int volumeLevel;
   
     public AudioClip backgroundMusicWorld1;
     public AudioClip backgroundMusicWorld2;
@@ -35,6 +38,34 @@ public class MinimapAreaName : MonoBehaviour
         InitializeAudioSource(audioSource2);
 
         PlayBackgroundMusic();
+        
+        UpdateVolume();
+    }
+
+    /// <summary>
+    /// This function updates the volume level and applies the changes to all audio in the game
+    /// </summary>
+    private void UpdateVolume()
+    {
+        playerData = DataManager.Instance.GetPlayerData();
+        volumeLevel = playerData.volumeLevel;
+        float volume = 0f;
+        switch (volumeLevel)
+        {
+            case 0:
+                volume = 0f;
+                break;
+            case 1:
+                volume = 0.5f;
+                break;
+            case 2:
+                volume = 1f;
+                break;
+            case 3:
+                volume = 2f;
+                break;
+        }
+        AudioListener.volume = volume;
     }
 
     /// <summary>

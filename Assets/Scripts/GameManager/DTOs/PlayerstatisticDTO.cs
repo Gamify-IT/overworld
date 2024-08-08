@@ -7,16 +7,6 @@ using UnityEngine;
 [Serializable]
 public class PlayerstatisticDTO
 {
-    /// <summary>
-    ///     This function converts a json string to a <c>PlayerstatisticDTO</c> object.
-    /// </summary>
-    /// <param name="jsonString">The json string to convert</param>
-    /// <returns>A <c>PlayerstatisticDTO</c> object containing the data</returns>
-    public static PlayerstatisticDTO CreateFromJSON(string jsonString)
-    {
-        return JsonUtility.FromJson<PlayerstatisticDTO>(jsonString);
-    }
-
     #region Attributes
 
     public string id;
@@ -27,6 +17,7 @@ public class PlayerstatisticDTO
     public string userId;
     public string username;
     public int knowledge;
+    public int volumeLevel;
     public int rewards;
     public bool showRewards;
     public string pseudonym;
@@ -36,7 +27,7 @@ public class PlayerstatisticDTO
     #region Constructors
 
     public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
-         AreaLocationDTO currentArea, string userId, string username, int knowledge, int rewards, bool showRewards, string pseudonym)
+         AreaLocationDTO currentArea, string userId, string username, int volumeLevel, int knowledge, int rewards, bool showRewards, string pseudonym)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -45,6 +36,7 @@ public class PlayerstatisticDTO
         this.currentArea = currentArea;
         this.userId = userId;
         this.username = username;
+        this.volumeLevel = volumeLevel;
         this.knowledge = knowledge;
         this.rewards = rewards;
         this.showRewards = showRewards;
@@ -64,6 +56,7 @@ public class PlayerstatisticDTO
         unlockedTeleporters = new TeleporterDTO[0];
         userId = "";
         username = "";
+        volumeLevel = 1;
         knowledge = 0;
         rewards = 0;
         showRewards = true;
@@ -72,4 +65,14 @@ public class PlayerstatisticDTO
 
 
     #endregion
+
+    /// <summary>
+    ///     This function converts a json string to a <c>PlayerstatisticDTO</c> object.
+    /// </summary>
+    /// <param name="jsonString">The json string to convert</param>
+    /// <returns>A <c>PlayerstatisticDTO</c> object containing the data</returns>
+    public static PlayerstatisticDTO CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<PlayerstatisticDTO>(jsonString);
+    }
 }
