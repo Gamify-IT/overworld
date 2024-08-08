@@ -62,12 +62,12 @@ public class GameManager : MonoBehaviour
 
         if (succesful)
         {
-            Debug.Log("Updated volume level " + playerStatistic.volumeLevel +" successfully");
+            //Debug.Log("Updated volume level " + playerStatistic.volumeLevel +" successfully");
             return true;
         }
         else
         {
-            Debug.Log("Could not updated volume level " + playerStatistic.volumeLevel +" successfully");
+            //Debug.Log("Could not updated volume level " + playerStatistic.volumeLevel +" successfully");
             return false;
         }
     }

@@ -26,9 +26,10 @@ public class VolumeControllerButton : MonoBehaviour
         button = GetComponent<Button>();
         buttonImage = button.GetComponent<Image>();
         button.onClick.AddListener(ChangeVolume);
+
         PlayerStatisticDTO playerData = DataManager.Instance.GetPlayerData();
         volumeLevel = playerData.volumeLevel;
-        Debug.Log("Volume level in VolumeComtrollerButton "+volumeLevel);
+
         UpdateButtonImage();
         UpdateVolume();
     }
@@ -42,8 +43,6 @@ public class VolumeControllerButton : MonoBehaviour
         volumeLevel = (volumeLevel + 1) % 4;
         GameManager.Instance.SetVolumeLevel(volumeLevel);
         GameManager.Instance.SaveVolumeLevel();
-        //PlayerPrefs.SetInt("VolumeLevel", volumeLevel);
-        //PlayerPrefs.Save();
         UpdateVolume();
         UpdateButtonImage();
     }
