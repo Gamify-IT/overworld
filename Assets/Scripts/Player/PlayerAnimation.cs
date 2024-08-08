@@ -219,7 +219,7 @@ public class PlayerAnimation : MonoBehaviour
                     !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
             }
             // dev keybindings
-            if (isMoving && !GameManager.Instance.isPaused)
+            if (isMoving && !GameManager.Instance.GetIsPaused())
             {
                 PlayMoveSound();
             }

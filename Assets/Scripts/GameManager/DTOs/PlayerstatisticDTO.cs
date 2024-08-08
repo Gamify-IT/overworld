@@ -16,6 +16,9 @@ public class PlayerstatisticDTO
     public AreaLocationDTO currentArea;
     public string userId;
     public string username;
+    public float logoutPositionX;
+    public float logoutPositionY;
+    public string logoutScene;
     public int knowledge;
     public int volumeLevel;
     public int rewards;
@@ -25,6 +28,27 @@ public class PlayerstatisticDTO
     #endregion
 
     #region Constructors
+      
+    public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
+         AreaLocationDTO currentArea, string userId, string username, float logoutPositionX, float logoutPositionY, string logoutScene, int volumeLevel, int knowledge, int rewards, 
+         bool showRewards, string pseudonym)
+    {
+        this.id = id;
+        this.unlockedAreas = unlockedAreas;
+        this.unlockedDungeons = unlockedDungeons;
+        this.unlockedTeleporters = unlockedTeleporters;
+        this.currentArea = currentArea;
+        this.userId = userId;
+        this.username = username;
+        this.logoutPositionX = logoutPositionX;
+        this.logoutPositionY = logoutPositionY;
+        this.logoutScene = logoutScene;
+        this.volumeLevel = volumeLevel;
+        this.knowledge = knowledge;
+        this.rewards = rewards;
+        this.showRewards = showRewards;
+        this.pseudonym = pseudonym;
+    }
 
     public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
          AreaLocationDTO currentArea, string userId, string username, int volumeLevel, int knowledge, int rewards, bool showRewards, string pseudonym)
@@ -42,6 +66,8 @@ public class PlayerstatisticDTO
         this.showRewards = showRewards;
         this.pseudonym = pseudonym;
     }
+  
+  
 
     public PlayerstatisticDTO()
     {
@@ -56,6 +82,9 @@ public class PlayerstatisticDTO
         unlockedTeleporters = new TeleporterDTO[0];
         userId = "";
         username = "";
+        logoutPositionX = 21.5f;
+        logoutPositionY = 2.5f;
+        logoutScene = "World 1";
         volumeLevel = 1;
         knowledge = 0;
         rewards = 0;
