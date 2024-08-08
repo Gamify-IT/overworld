@@ -32,6 +32,7 @@ public class LoadMaps : MonoBehaviour
     {
         if (SceneManager.GetSceneByName(sceneDestination).isLoaded)
         {
+            DataManager.Instance.SetPlayerPosition(int.Parse(sceneOrigin.Split(' ')[1]), 0);
             return;
         }
 
