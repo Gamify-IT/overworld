@@ -42,7 +42,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject achievementNotificationManagerPrefab;
 
     //Game status
-    public bool isPaused = false;
+    private bool isPaused = false;
+
+    private bool justLoaded = true;
 
     /// <summary>
     ///     This function saves the last known position of the player in the backend when the player logs out 
@@ -743,4 +745,39 @@ private void PlayAchievementNotificationSound(){
         return ownPlayerData;
     }
 
+    /// <summary>
+    ///     This function sets if the game has just been loaded
+    /// </summary>
+    /// <param name="status">has the game just been loaded</param>
+    public void SetJustLoaded(bool status)
+    {
+        justLoaded = status;
+    }
+
+    /// <summary>
+    ///     This function gets the if the game juts has loaded 
+    /// </summary>
+    /// <returns>whether game just has been loaded</returns>
+    public bool GetJustLoaded()
+    {
+        return justLoaded;
+    }
+
+    /// <summary>
+    ///     This function decides if the game should be paused
+    /// </summary>
+    /// <param name="status">current game status</param>
+    public void SetIsPaused(bool status)
+    {
+        isPaused = status;
+    }
+
+    /// <summary>
+    ///     This function gets the current game status, i.e., paused or not.
+    /// </summary>
+    /// <returns>whether game is paused</returns>
+    public bool GetIsPaused()
+    {
+        return isPaused;
+    }
 }

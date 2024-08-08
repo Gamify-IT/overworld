@@ -22,7 +22,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     void Start()
     {
-        GameManager.Instance.isPaused = true;
+        GameManager.Instance.SetIsPaused(true);
         //get image component
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
         //get the index of the currently selected character 
