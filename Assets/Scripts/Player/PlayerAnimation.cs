@@ -63,9 +63,6 @@ public class PlayerAnimation : MonoBehaviour
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
 
         InitializeAudio();
-        volumeLevel = PlayerPrefs.GetInt("VolumeLevel", 3);
-        UpdateVolume();
-
         Invoke("CheckForLastLogin", 4.5f);
     }
 
@@ -82,31 +79,6 @@ public class PlayerAnimation : MonoBehaviour
         audioSource.clip = moveSound;
         audioSource.loop = true;
         audioSource.playOnAwake = false;
-    }
-
-
-    /// <summary>
-    /// This function updates the level volume and applies the changes to all audio in the game
-    /// </summary>
-    private void UpdateVolume()
-    {
-        float volume = 0f;
-        switch (volumeLevel)
-        {
-            case 0:
-                volume = 0f;
-                break;
-            case 1:
-                volume = 0.5f;
-                break;
-            case 2:
-                volume = 1f;
-                break;
-            case 3:
-                volume = 2f;
-                break;
-        }
-        AudioListener.volume = volume;
     }
 
     /// <summary>
