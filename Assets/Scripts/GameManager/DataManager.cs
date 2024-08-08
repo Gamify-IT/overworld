@@ -304,7 +304,7 @@ public class DataManager : MonoBehaviour
 
         foreach (PlayerstatisticDTO statistic in allPlayerStatistics)
         {
-            PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertFromPlayerstatisticDTO(statistic);
+            PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertFromPlayerStatisticDTO(statistic);
             allPlayerStatisticsData.Add(playerStatistic);
         }
     }
@@ -318,7 +318,7 @@ public class DataManager : MonoBehaviour
             return;
         }
 
-        ownPlayerData = PlayerStatisticData.ConvertFromPlayerstatisticDTO(playerStatistic);
+        ownPlayerData = PlayerStatisticData.ConvertFromPlayerStatisticDTO(playerStatistic);
 
 
     }
