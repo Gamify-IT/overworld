@@ -37,7 +37,7 @@ public class PlayerStatisticData
         this.pseudonym = pseudonym;
     }
 
-    public static PlayerStatisticData ConvertFromPlayerStatisticDTO(PlayerstatisticDTO statistic)
+    public static PlayerStatisticData ConvertFromPlayerstatisticDTO(PlayerstatisticDTO statistic)
     {
         AreaLocationDTO currentArea = statistic.currentArea;
         string userId = statistic.userId;

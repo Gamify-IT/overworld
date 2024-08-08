@@ -21,7 +21,7 @@ public class DataManager : MonoBehaviour
     //Data fields
     private AreaDataManager areaDataManager;
     private WorldData[] worldData;
-    private PlayerStatisticDTO playerData;
+    private PlayerstatisticDTO playerData;
     private PlayerStatisticData ownPlayerData;
     private List<AchievementData> achievementData;
     private List<PlayerStatisticData> allPlayerStatisticsData;
@@ -110,7 +110,7 @@ public class DataManager : MonoBehaviour
     ///     This function returns the player data
     /// </summary>
     /// <returns>The player data</returns>
-    public PlayerStatisticDTO GetPlayerData()
+    public PlayerstatisticDTO GetPlayerData()
     {
         return playerData;
     }
@@ -119,7 +119,7 @@ public class DataManager : MonoBehaviour
     ///     This function sets the player data
     /// </summary>
     /// <param name="data">Player data to be set</param>
-    public void SetPlayerData(PlayerStatisticDTO data)
+    public void SetPlayerData(PlayerstatisticDTO data)
     {
         playerData = data;
     }
@@ -275,7 +275,7 @@ public class DataManager : MonoBehaviour
     ///     This function processes the player data
     /// </summary>
     /// <param name="playerData">The player statistics returned from the backend</param>
-    public void ProcessPlayerStatistics(PlayerStatisticDTO playerStatistics)
+    public void ProcessPlayerStatistics(PlayerstatisticDTO playerStatistics)
     {
         playerData = playerStatistics;
         foreach (TeleporterDTO teleporterDTO in playerData.unlockedTeleporters)
@@ -304,12 +304,12 @@ public class DataManager : MonoBehaviour
 
         foreach (PlayerstatisticDTO statistic in allPlayerStatistics)
         {
-            PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertFromPlayerStatisticDTO(statistic);
+            PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertFromPlayerstatisticDTO(statistic);
             allPlayerStatisticsData.Add(playerStatistic);
         }
     }
 
-    public void ProcessPlayerStatisticDTO(PlayerstatisticDTO playerStatistic)
+    public void ProcessPlayerstatisticDTO(PlayerstatisticDTO playerStatistic)
     {
 
         if (playerStatistic == null)
@@ -318,7 +318,7 @@ public class DataManager : MonoBehaviour
             return;
         }
 
-        ownPlayerData = PlayerStatisticData.ConvertFromPlayerStatisticDTO(playerStatistic);
+        ownPlayerData = PlayerStatisticData.ConvertFromPlayerstatisticDTO(playerStatistic);
 
 
     }
@@ -710,7 +710,7 @@ public class DataManager : MonoBehaviour
         areaDataManager = new AreaDataManager();
 
         worldData = new WorldData[maxWorld + 1];
-        playerData = new PlayerStatisticDTO();
+        playerData = new PlayerstatisticDTO();
         InitKeybindingsDictionary();
 
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)

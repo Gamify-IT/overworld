@@ -5,7 +5,7 @@ using UnityEngine;
 ///     This class is used to retrieve data from Get Requests.
 /// </summary>
 [Serializable]
-public class PlayerStatisticDTO
+public class PlayerstatisticDTO
 {
     #region Attributes
 
@@ -43,7 +43,7 @@ public class PlayerStatisticDTO
         this.pseudonym = pseudonym;
     }
 
-    public PlayerStatisticDTO()
+    public PlayerstatisticDTO()
     {
         id = "";
         AreaLocationDTO unlockedWorld = new AreaLocationDTO();
@@ -71,8 +71,8 @@ public class PlayerStatisticDTO
     /// </summary>
     /// <param name="jsonString">The json string to convert</param>
     /// <returns>A <c>PlayerstatisticDTO</c> object containing the data</returns>
-    public static PlayerStatisticDTO CreateFromJSON(string jsonString)
+    public static PlayerstatisticDTO CreateFromJSON(string jsonString)
     {
-        return JsonUtility.FromJson<PlayerStatisticDTO>(jsonString);
+        return JsonUtility.FromJson<PlayerstatisticDTO>(jsonString);
     }
 }

@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
         string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
         Debug.Log("path: " + path);
 
-        PlayerStatisticDTO playerStatistic = DataManager.Instance.GetPlayerData();
+        PlayerstatisticDTO playerStatistic = DataManager.Instance.GetPlayerData();
         playerStatistic.volumeLevel = VolumeControllerButton.volumeLevel;
          DataManager.Instance.SetPlayerData(playerStatistic);
 
@@ -173,8 +173,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Optional<PlayerStatisticDTO> playerStatistics =
-            await RestRequest.GetRequest<PlayerStatisticDTO>(path + "/playerstatistics/");
+        Optional<PlayerstatisticDTO> playerStatistics =
+            await RestRequest.GetRequest<PlayerstatisticDTO>(path + "/playerstatistics/");
         if (!playerStatistics.IsPresent())
         {
             loadingError = true;
@@ -232,7 +232,7 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
             DataManager.Instance.ProcessKeybindings(keybindings.Value());             
             DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());           
-            DataManager.Instance.ProcessPlayerStatisticDTO(playerStatistics.Value());
+            DataManager.Instance.ProcessPlayerstatisticDTO(playerStatistics.Value());
 
         }
 
@@ -582,7 +582,7 @@ public class GameManager : MonoBehaviour
     {
         string uri = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/" + userId;
 
-        Optional<PlayerStatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerStatisticDTO>(uri);
+        Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(uri);
 
         if (playerStatistics.IsPresent())
         {
@@ -648,12 +648,12 @@ private void PlayAchievementNotificationSound(){
             DataManager.Instance.SetWorldData(worldIndex, new WorldData());
         }
 
-        DataManager.Instance.ProcessPlayerStatistics(new PlayerStatisticDTO());
+        DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
         AchievementStatistic[] achivements = GetDummyAchievements();
         PlayerstatisticDTO[] rewards = GetDummyDataRewards();
         PlayerstatisticDTO ownPlayer = GetOwnDummyData();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
-        DataManager.Instance.ProcessPlayerStatisticDTO(ownPlayer);        
+        DataManager.Instance.ProcessPlayerstatisticDTO(ownPlayer);        
         DataManager.Instance.ProcessAllPlayerStatistics(rewards);
 
         ResetKeybindings();

@@ -8,7 +8,7 @@ public class MinimapAreaName : MonoBehaviour
 
     private string currentAreaName;
     
-    private PlayerStatisticDTO playerData;
+    private PlayerstatisticDTO playerData;
     private int volumeLevel;
   
     public AudioClip backgroundMusicWorld1;
@@ -67,7 +67,7 @@ public class MinimapAreaName : MonoBehaviour
         }
         AudioListener.volume = volume;
     }
-    
+
     /// <summary>
     /// This function configures the specified audio source with initial settings.
     /// </summary>

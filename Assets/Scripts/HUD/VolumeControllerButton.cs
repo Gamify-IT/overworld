@@ -27,7 +27,7 @@ public class VolumeControllerButton : MonoBehaviour
         buttonImage = button.GetComponent<Image>();
         button.onClick.AddListener(ChangeVolume);
 
-        PlayerStatisticDTO playerData = DataManager.Instance.GetPlayerData();
+        PlayerstatisticDTO playerData = DataManager.Instance.GetPlayerData();
         volumeLevel = playerData.volumeLevel;
 
         UpdateButtonImage();
