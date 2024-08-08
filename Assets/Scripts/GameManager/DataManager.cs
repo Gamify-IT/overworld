@@ -22,8 +22,15 @@ public class DataManager : MonoBehaviour
     private AreaDataManager areaDataManager;
     private WorldData[] worldData;
     private PlayerstatisticDTO playerData;
+    private PlayerStatisticData ownPlayerData;
     private List<AchievementData> achievementData;
+    private List<PlayerStatisticData> allPlayerStatisticsData;
     private Dictionary<Binding, KeyCode> keybindings;
+    private Dictionary<String, int> wanderer;
+    private Dictionary<String, int> explorer;
+    private Dictionary<String, int> pathfinder;
+    private Dictionary<String, int> trailblazer;
+
 
     // player settings 
     private int characterIndex = 0;
@@ -75,6 +82,8 @@ public class DataManager : MonoBehaviour
 
         return worldData[worldIndex];
     }
+
+
 
     /// <summary>
     ///     This function returns the data of a given dungeon
@@ -267,6 +276,68 @@ public class DataManager : MonoBehaviour
             int number = teleporterDTO.index;
             GetWorldData(worldIndex).UnlockTeleporter(dungeonIndex, number);
         }
+    }
+
+    /// <summary>
+    ///     This function processes the playerStatistic statistics data returned from the backend and stores the needed data in the
+    ///     <c>DataManager</c>
+    /// </summary>
+    /// <param name="allPlayerStatistics">The player statistic data returned from the backend</param>
+    public void ProcessAllPlayerStatistics(PlayerstatisticDTO[] allPlayerStatistics)
+    {
+        allPlayerStatisticsData = new List<PlayerStatisticData>();
+        if (allPlayerStatistics == null)
+        {
+            Debug.Log("allPlayerStatistics list is null");
+            return;
+        }
+        Debug.Log("Process " + allPlayerStatistics.Length + "player statistics");
+
+        foreach (PlayerstatisticDTO statistic in allPlayerStatistics)
+        {
+            PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertFromPlayerStatisticDTO(statistic);
+            allPlayerStatisticsData.Add(playerStatistic);
+        }
+    }
+
+    public void ProcessPlayerStatisticDTO(PlayerstatisticDTO playerStatistic)
+    {
+
+        if (playerStatistic == null)
+        {
+            Debug.Log("Playerstatistic  is null");
+            return;
+        }
+
+        ownPlayerData = PlayerStatisticData.ConvertFromPlayerStatisticDTO(playerStatistic);
+
+
+    }
+
+    public PlayerStatisticData GetOwnStatisticData()
+    {
+        return ownPlayerData;
+    }
+
+    /// <summary>
+    ///     This function returns all stored player statistics
+    /// </summary>
+    /// <returns>A list containing all statistics</returns>
+    public List<PlayerStatisticData> GetAllPlayerStatistics()
+    {
+        return allPlayerStatisticsData;
+    }
+
+    public Dictionary<string, int> GetAllPlayerRewards()
+    {
+        Dictionary<string, int> allPlayerRewards = new Dictionary<string, int>();
+        foreach (PlayerStatisticData statistic in allPlayerStatisticsData)
+        {
+            string username = statistic.GetUsername();
+            int rewards = statistic.GetRewards();
+            allPlayerRewards.Add(username, rewards);
+        }
+        return allPlayerRewards;
     }
 
     /// <summary>
