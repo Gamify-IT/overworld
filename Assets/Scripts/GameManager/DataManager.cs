@@ -116,6 +116,15 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function sets the player data
+    /// </summary>
+    /// <param name="data">Player data to be set</param>
+    public void SetPlayerData(PlayerstatisticDTO data)
+    {
+        playerData = data;
+    }
+    
+    /// <summary>
     ///     This function checks if a player has unlocked a world.
     /// </summary>
     /// <param name="worldIndex">The index of the world to check</param>
@@ -300,7 +309,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void ProcessPlayerStatisticDTO(PlayerstatisticDTO playerStatistic)
+    public void ProcessPlayerstatisticDTO(PlayerstatisticDTO playerStatistic)
     {
 
         if (playerStatistic == null)
@@ -1199,5 +1208,23 @@ public class DataManager : MonoBehaviour
     public Sprite[] GetCharacterFaces()
     {
         return characterFaces;
+    }
+
+    /// <summary>
+    ///     Gets the current volume level
+    /// </summary>
+    /// <returns>volume level</returns>
+    public int GetVolumeLevel()
+    {
+        return playerData.volumeLevel;
+    }
+
+    /// <summary>
+    ///     Updates the current volume level chosen by the player
+    /// </summary>
+    /// <param name="volumeLevel">current volume level</param>
+    public void SetVolumeLevel(int volumeLevel)
+    {
+        playerData.volumeLevel = volumeLevel;
     }
 }

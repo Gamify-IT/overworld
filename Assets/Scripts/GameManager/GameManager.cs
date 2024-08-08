@@ -45,6 +45,34 @@ public class GameManager : MonoBehaviour
     public bool isPaused = false;
 
     /// <summary>
+    ///     This function saves the last volume level chosen by the player
+    /// </summary>
+    public async UniTask<bool> SaveVolumeLevel()
+    {
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
+        Debug.Log("path: " + path);
+
+        PlayerstatisticDTO playerStatistic = DataManager.Instance.GetPlayerData();
+        playerStatistic.volumeLevel = VolumeControllerButton.volumeLevel;
+         DataManager.Instance.SetPlayerData(playerStatistic);
+
+        string json = JsonUtility.ToJson(playerStatistic, true);
+
+        bool succesful = await RestRequest.PutRequest(path, json);
+
+        if (succesful)
+        {
+            //Debug.Log("Updated volume level " + playerStatistic.volumeLevel +" successfully");
+            return true;
+        }
+        else
+        {
+            //Debug.Log("Could not updated volume level " + playerStatistic.volumeLevel +" successfully");
+            return false;
+        }
+    }
+
+    /// <summary>
     ///     This function checks whether or not a valid courseId was passed or not.
     ///     If a valid id was passed, it gets stored.
     ///     Otherwise, the user is redirected to course selection page.
@@ -204,13 +232,22 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
             DataManager.Instance.ProcessKeybindings(keybindings.Value());             
             DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());           
-            DataManager.Instance.ProcessPlayerStatisticDTO(playerStatistics.Value());
+            DataManager.Instance.ProcessPlayerstatisticDTO(playerStatistics.Value());
 
         }
 
         Debug.Log("Everything set up");
 
         return loadingError;
+    }
+
+    /// <summary>
+    ///     This function sets last chosen volume level 
+    /// </summary>
+    /// <param name="volumeLevel">current volume level</param>
+    public void SetVolumeLevel(int volumeLevel)
+    {
+        DataManager.Instance.SetVolumeLevel(volumeLevel);
     }
 
     /// <summary>
@@ -621,7 +658,7 @@ public class GameManager : MonoBehaviour
         PlayerstatisticDTO[] rewards = GetDummyDataRewards();
         PlayerstatisticDTO ownPlayer = GetOwnDummyData();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
-        DataManager.Instance.ProcessPlayerStatisticDTO(ownPlayer);        
+        DataManager.Instance.ProcessPlayerstatisticDTO(ownPlayer);        
         DataManager.Instance.ProcessAllPlayerStatistics(rewards);
 
         ResetKeybindings();
@@ -676,7 +713,7 @@ public class GameManager : MonoBehaviour
             TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
             TeleporterDTO[] unlockedTeleporters = { teleporter };
 
-            PlayerstatisticDTO player = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards, "-");
+            PlayerstatisticDTO player = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, 1,  knowledge, rewards, showRewards, "-");
             allStatistics[i] = player;
         }
 
@@ -689,7 +726,7 @@ public class GameManager : MonoBehaviour
 
         TeleporterDTO teleporter1 = new TeleporterDTO("1", currentArea1, 1);
         TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
-        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco", 200, 170, true, "TheoPro");
+        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco", 1, 200, 170, true, "TheoPro");
         allStatistics[30] = player31;
         PlayerstatisticDTO ownPlayer = GetOwnDummyData();
         allStatistics[31] = ownPlayer;
@@ -707,7 +744,7 @@ public class GameManager : MonoBehaviour
 
         TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
         TeleporterDTO[] unlockedTeleporters = { teleporter };
-        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki", 200, 170, false, "PSEProfi");
+        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki", 1, 200, 170, false, "PSEProfi");
         return ownPlayerData;
     }
 

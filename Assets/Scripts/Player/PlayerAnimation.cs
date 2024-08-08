@@ -16,7 +16,6 @@ public class PlayerAnimation : MonoBehaviour
     private bool canMove;
     private float currentSpeed;
     private float targetSpeed;
-    private int volumeLevel;
 
     private Vector3 lastPosition;
     private float distanceWalked;

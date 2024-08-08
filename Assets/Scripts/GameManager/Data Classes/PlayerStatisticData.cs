@@ -18,6 +18,7 @@ public class PlayerStatisticData
     private string pseudonym;
 
     private string leagueOfPlayer;
+    private static int volumeLevel;
    
 
     public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  int knowledge, int rewards, bool showRewards, string pseudonym)
@@ -218,8 +219,10 @@ public class PlayerStatisticData
         AreaLocationDTO[] unlockedDungeons = playerStatisticData.GetUnlockedDungeons();
         TeleporterDTO[] unlockedTeleporters = playerStatisticData.GetUnlockedTeleporters();
 
+        PlayerstatisticDTO playerData = DataManager.Instance.GetPlayerData();
+        volumeLevel = playerData.volumeLevel;
 
-       PlayerstatisticDTO playerStatistic = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards, pseudonym);
+        PlayerstatisticDTO playerStatistic = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, volumeLevel, knowledge, rewards, showRewards, pseudonym);
 
 
         return playerStatistic;
