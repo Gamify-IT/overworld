@@ -45,6 +45,43 @@ public class GameManager : MonoBehaviour
     public bool isPaused = false;
 
     /// <summary>
+    ///     This function saves the last known position of the player in the backend when the player logs out 
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask<bool> SavePlayerPosition()
+    {
+        Debug.Log("Start saving logout position");
+
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
+        Debug.Log("path: " + path);
+
+        PlayerstatisticDTO playerStatistic = DataManager.Instance.GetPlayerData();
+
+        playerStatistic.logoutPositionX = GameObject.FindGameObjectWithTag("Player").transform.position.x;
+        playerStatistic.logoutPositionY = GameObject.FindGameObjectWithTag("Player").transform.position.y;
+
+        string json = JsonUtility.ToJson(playerStatistic, true);
+
+        bool succesful = await RestRequest.PutRequest(path, json);
+
+        if (succesful)
+        {
+            Debug.Log("Updated player position for " + playerStatistic.logoutPositionX + ", " + playerStatistic.logoutPositionY + ", "
+                + playerStatistic.logoutScene + ", " + playerStatistic.currentArea.worldIndex + ", " + playerStatistic.currentArea.dungeonIndex +
+                " successfully");
+            return true;
+        }
+        else
+        {
+            Debug.Log("Could not update player position for " + playerStatistic.logoutPositionX + ", " + playerStatistic.logoutPositionY + ", "
+                + playerStatistic.logoutScene + ", " + playerStatistic.currentArea.worldIndex + ", " + playerStatistic.currentArea.dungeonIndex +
+                " successfully");
+            return false;
+        }
+
+    }
+
+    /// <summary>
     ///     This function checks whether or not a valid courseId was passed or not.
     ///     If a valid id was passed, it gets stored.
     ///     Otherwise, the user is redirected to course selection page.
@@ -153,8 +190,7 @@ public class GameManager : MonoBehaviour
         }
 
         Optional<PlayerstatisticDTO[]> allPlayerStatistics =
-           await RestRequest.GetArrayRequest<PlayerstatisticDTO>(path +
-                                                                     "/playerstatistics/allPlayerStatistics");
+           await RestRequest.GetArrayRequest<PlayerstatisticDTO>(path + "/playerstatistics/allPlayerStatistics");
         if (!allPlayerStatistics.IsPresent())
         {
             loadingError = true;
@@ -272,6 +308,7 @@ public class GameManager : MonoBehaviour
     /// <param name="dungeonIndex">The index of the dungeon (0 if world)</param>
     public void SetData(int worldIndex, int dungeonIndex)
     {
+        Debug.Log("SetData: " + worldIndex + "-" + dungeonIndex);
         //DataManager.Instance.ReadTeleporterConfig();
         if (dungeonIndex != 0)
         {

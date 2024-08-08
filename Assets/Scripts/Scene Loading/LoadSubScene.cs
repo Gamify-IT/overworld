@@ -30,6 +30,7 @@ public class LoadSubScene : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("Current Area Start: " + worldIndex + "-" + dungeonIndex);
         if(GameSettings.GetGamemode() != Gamemode.PLAY)
         {
             return;
@@ -123,6 +124,7 @@ public class LoadSubScene : MonoBehaviour
                 setupDone = true;
             }            
         }
+        Debug.Log("Current Area End: " + worldIndex + "-" + dungeonIndex);
     }
 
     /// <summary>
@@ -191,6 +193,7 @@ public class LoadSubScene : MonoBehaviour
             sceneToLoad = "Dungeon";
         }
 
+        Debug.Log("Scene to load: " + sceneToLoad);
         AsyncOperation asyncOperationLoad = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
 
         while (!asyncOperationLoad.isDone)
@@ -198,6 +201,7 @@ public class LoadSubScene : MonoBehaviour
             yield return null;
         }
 
+        DataManager.Instance.SetPlayerPosition(worldIndexToLoad, dungeonIndexToLoad);
         GameManager.Instance.SetData(worldIndexToLoad, dungeonIndexToLoad);
 
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)

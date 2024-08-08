@@ -40,16 +40,18 @@ public class CloseGame : MonoBehaviour
     {
         PlayClickSound();
         InitCanvas();
-        bool success = await GameManager.Instance.SaveAchievements();
-        if(success)
+        bool achievementSaved = await GameManager.Instance.SaveAchievements();
+        bool positionSaved = await GameManager.Instance.SavePlayerPosition();
+
+        if (achievementSaved && positionSaved)
         {
-            Debug.Log("Saved all achievement progress");
+            Debug.Log("Saved all progress");
             CloseOverworld();
         }
         else
         {
-            Debug.Log("Could not save all achievement progress");
-            savingText.text = "NOT ALL PROGRESS COULD BE SAVED, DO YOU WANT TO LEAVE AND RISK LOOSING THE PROGRESS OF SOME ACHIEVEMENTS?";
+            Debug.Log("Could not save all progress");
+            savingText.text = "NOT ALL PROGRESS COULD BE SAVED, DO YOU WANT TO LEAVE AND RISK LOOSING PROGRESS?";
             confirmButton.gameObject.SetActive(true);
             cancelButton.gameObject.SetActive(true);
         }
@@ -60,7 +62,7 @@ public class CloseGame : MonoBehaviour
     /// </summary>
     private void InitCanvas()
     {
-        savingText.text = "SAVING ACHIEVEMENT PROGRESS...";
+        savingText.text = "SAVING PROGRESS...";
         confirmButton.gameObject.SetActive(false);
         cancelButton.gameObject.SetActive(false);
         savingCanvas.gameObject.SetActive(true);

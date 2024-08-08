@@ -30,8 +30,10 @@ public class AreaManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        Debug.Log("World Index 1: " + worldIndex);
+        Debug.Log("Dungeon Index 1: " + dungeonIndex);
         //if not in play mode: do nothing
-        if(GameSettings.GetGamemode() != Gamemode.PLAY)
+        if (GameSettings.GetGamemode() != Gamemode.PLAY)
         {
             return;
         }
@@ -43,10 +45,14 @@ public class AreaManager : MonoBehaviour
             areaIdentifier = LoadSubScene.areaExchange;
             worldIndex = areaIdentifier.GetWorldIndex();
             dungeonIndex = areaIdentifier.GetDungeonIndex();
+            Debug.Log("World Index 2: " + worldIndex);
+            Debug.Log("Dungeon Index 2: " + dungeonIndex);
         }
         else
         {
             areaIdentifier = new AreaInformation(worldIndex, new Optional<int>());
+            Debug.Log("World Index 3: " + worldIndex);
+            Debug.Log("Dungeon Index 3: " + dungeonIndex);
         }
 
         //get area information

@@ -116,6 +116,36 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function sets the player data
+    /// </summary>
+    /// <param name="data">Player data to be set</param>
+    public void SetPlayerData(PlayerstatisticDTO data)
+    {
+        playerData = data;
+    }
+
+    /// <summary>
+    ///     This function sets all necessary data to save the current player position
+    /// </summary>
+    /// <param name="worldIndex">index of the current world</param>
+    /// <param name="dungeonIndex">index of the current dungeon</param>
+    public void SetPlayerPosition(int worldIndex, int dungeonIndex)
+    {
+        SetCurrentArea(new AreaLocationDTO(worldIndex, dungeonIndex));
+
+        if (dungeonIndex != 0)
+        {
+            Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
+            SetCurrentSceneName("Dungeon");
+        }
+        else
+        {
+            Debug.Log("Setting data for world " + worldIndex);
+            SetCurrentSceneName("World " + worldIndex);
+        }
+    }
+
+    /// <summary>
     ///     This function checks if a player has unlocked a world.
     /// </summary>
     /// <param name="worldIndex">The index of the world to check</param>
@@ -1198,5 +1228,32 @@ public class DataManager : MonoBehaviour
     public Sprite[] GetCharacterFaces()
     {
         return characterFaces;
+    }
+
+    /// <summary>
+    ///     Sets the name of the current scene
+    /// </summary>
+    /// <param name="sceneName">scene name</param>
+    public void SetCurrentSceneName(string sceneName)
+    {
+        playerData.logoutScene = sceneName;
+    }
+
+    /// <summary>
+    ///     Gets the name of the current scene
+    /// </summary>
+    /// <returns>scene name</returns>
+    public string GetCurrentSceneName()
+    {
+        return playerData.logoutScene;
+    }
+
+    /// <summary>
+    ///     Updates the current area of the player
+    /// </summary>
+    /// <param name="area">current area</param>
+    public void SetCurrentArea(AreaLocationDTO area)
+    {
+        playerData.currentArea = area;
     }
 }

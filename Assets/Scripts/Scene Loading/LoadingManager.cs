@@ -119,6 +119,10 @@ public class LoadingManager : MonoBehaviour
         }
         else
         {
+            PlayerstatisticDTO playerData = DataManager.Instance.GetPlayerData();
+            Vector2 newPlayerPosition = new Vector2(playerData.logoutPositionX, playerData.logoutPositionY);
+            setup(playerData.logoutScene, playerData.currentArea.worldIndex, playerData.currentArea.dungeonIndex, newPlayerPosition);
+
             await LoadScene();
         }
     }
@@ -144,6 +148,7 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("Setting data");
 
+        DataManager.Instance.SetPlayerPosition(worldIndex, dungeonIndex);
         GameManager.Instance.SetData(worldIndex, dungeonIndex);
         AreaLocationDTO[] unlockedAreas = DataManager.Instance.GetPlayerData().unlockedAreas;
         SetupProgessBar(unlockedAreas);
@@ -164,10 +169,13 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("Set player position");
 
-        AreaData world1 = DataManager.Instance.GetAreaData(new AreaInformation(1, new Optional<int>())).Value();
-        if (world1.IsGeneratedArea())
+        Optional<int> dungeon = dungeonIndex == 0 ? new Optional<int>() : new Optional<int>(dungeonIndex);
+        AreaData area = DataManager.Instance.GetAreaData(new AreaInformation(worldIndex, dungeon)).Value();
+
+        //AreaData world1 = DataManager.Instance.GetAreaData(new AreaInformation(1, new Optional<int>())).Value();
+        if (area.IsGeneratedArea())
         {
-            playerPosition = FindStartingPosition(world1);
+            playerPosition = FindStartingPosition(area);
         }
 
         GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
