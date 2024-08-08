@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
         bool validUserId = await ValidateUserId();
         return validUserId;
     }
-
+    
     /// <summary>
     ///     This function loads all needed data from the backend an converts the data into usable formats.
     ///     If an error accours while loading, the <c>loadingError</c> flag is set.
@@ -374,9 +374,11 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="newProgress">The new progress of the achievement</param>
-    public async void UpdateAchievement(AchievementTitle title, int newProgress)
+    /// <param name="interactedObjects">Updated list with interacted objects regarding achievement for which this method is called</param>
+    /// <returns>True if the acheivement is now completed, false otherwise</returns>
+    public async void UpdateAchievement(AchievementTitle title, int newProgress, List<(int, int, int)> interactedObjects)
     {
-        bool unlocked = DataManager.Instance.UpdateAchievement(title, newProgress);
+        bool unlocked = DataManager.Instance.UpdateAchievement(title, newProgress, interactedObjects);
         if (unlocked)
         {
             AchievementData achievement = DataManager.Instance.GetAchievement(title);
@@ -394,10 +396,11 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="increment">The amount to increase the progress</param>
+    /// <param name="interactedObjects">Updated list with interacted objects regarding achievement for which this method is called</param>
     /// <returns>True if the acheivement is now completed, false otherwise</returns>
-    public async void IncreaseAchievementProgress(AchievementTitle title, int increment)
+    public async void IncreaseAchievementProgress(AchievementTitle title, int increment, List<(int, int, int)> interactedObjects)
     {
-        bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment);
+        bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment, interactedObjects);
         if (unlocked)
         {
             AchievementData achievement = DataManager.Instance.GetAchievement(title);
@@ -414,12 +417,11 @@ public class GameManager : MonoBehaviour
     ///     This function saves all achievements, which made progress in the current session
     /// </summary>
     public async UniTask<bool> SaveAchievements()
-    {
+    {   
         List<AchievementData> achievements = DataManager.Instance.GetAchievements();
         string basePath = overworldBackendPath + "/players/" + userId + "/achievements/";
 
         bool savingSuccessful = true;
-
         foreach (AchievementData achievementData in achievements)
         {
             if(achievementData.isUpdated())
@@ -429,6 +431,7 @@ public class GameManager : MonoBehaviour
                 string path = basePath + achievementData.GetTitle();
                 string json = JsonUtility.ToJson(achievementStatistic, true);
                 bool successful = await RestRequest.PutRequest(path, json);
+
                 if (successful)
                 {
                     Debug.Log("Updated achievement progress for " + achievementStatistic.achievement.achievementTitle + " in the overworld backend");
@@ -631,11 +634,13 @@ public class GameManager : MonoBehaviour
     }
 
 
-private void PlayAchievementNotificationSound(){
-    if(achievementNotificationSound!=null){
-        audioSource.PlayOneShot(achievementNotificationSound);
+    private void PlayAchievementNotificationSound()
+    {
+        if(achievementNotificationSound != null)
+        {
+            audioSource.PlayOneShot(achievementNotificationSound);
+        }
     }
-}
     /// <summary>
     ///     This function sets up everything with dummy data for the offline mode
     /// </summary>
@@ -665,10 +670,10 @@ private void PlayAchievementNotificationSound(){
         string[] categories1 = { "Exploring" };
         Achievement achievement1 =
             new Achievement("GO_FOR_A_WALK", "Walk 10 tiles", categories1, "achievement2", 10);
-        AchievementStatistic achievementStatistic1 = new AchievementStatistic(username, achievement1, 0, false);
+        AchievementStatistic achievementStatistic1 = new AchievementStatistic(username, achievement1, 0, false, new List<IntTuple>());
         Achievement achievement2 =
             new Achievement("GO_FOR_A_LONGER_WALK", "Walk 1000 tiles", categories1, "achievement2", 1000);
-        AchievementStatistic achievementStatistic2 = new AchievementStatistic(username, achievement2, 0, false);
+        AchievementStatistic achievementStatistic2 = new AchievementStatistic(username, achievement2, 0, false, new List<IntTuple>());
         statistcs[0] = achievementStatistic1;
         statistcs[1] = achievementStatistic2;
         return statistcs;

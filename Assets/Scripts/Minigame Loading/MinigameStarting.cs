@@ -128,7 +128,7 @@ public class MinigameStarting : MonoBehaviour
         }
     }
     /// <summary>
-    ///     This function plays click sound when the button is clicked.
+    ///     This function plays click sound 
     /// </summary>
     private void PlayClickSound()
     {

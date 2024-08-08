@@ -28,14 +28,11 @@ public class CharacterSelection : MonoBehaviour
         //get the index of the currently selected character 
         currentIndex = DataManager.Instance.GetCharacterIndex();
 
-        //get AudioSource component
         audioSource=GetComponent<AudioSource>();
-        //add AudioSource component if necessary
         if(audioSource == null)
         {
             audioSource=gameObject.AddComponent<AudioSource>();
         }
-        //set audio clip
         audioSource.clip=clickSound;
     }
 
@@ -104,7 +101,7 @@ public class CharacterSelection : MonoBehaviour
         newPixelCam.refResolutionX = pixelCam.refResolutionX; 
         newPixelCam.refResolutionY = pixelCam.refResolutionY;
 
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
         PlayClickSound();
     }
 

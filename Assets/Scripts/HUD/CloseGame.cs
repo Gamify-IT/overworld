@@ -23,13 +23,10 @@ public class CloseGame : MonoBehaviour
     {
         savingCanvas.gameObject.SetActive(false);
 
-        //get AudioSource component
         audioSource=GetComponent<AudioSource>();
-        //add AudioSource component if necessary
         if(audioSource==null){
             audioSource=gameObject.AddComponent<AudioSource>();
         }
-        //set audio clip
         audioSource.clip=clickSound;
     }
 

@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+///     This script manages the volume controller button
+/// </summary>
 public class VolumeControllerButton : MonoBehaviour
 {
     public Sprite mutedImage;
@@ -14,9 +17,6 @@ public class VolumeControllerButton : MonoBehaviour
     public AudioClip clickSound;
     private AudioSource audioSource;
 
-    /// <summary>
-    /// This function initializes the audio sources and gets last volume level choice
-    /// </summary>
     private void Start()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
@@ -48,7 +48,7 @@ public class VolumeControllerButton : MonoBehaviour
     }
 
     /// <summary>
-    /// This function updates the level volume and applies the changes to all audio in the game
+    /// This function updates the volume level and applies the changes to all audio in the game
     /// </summary>
     private void UpdateVolume()
     {

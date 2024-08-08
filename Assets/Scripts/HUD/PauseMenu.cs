@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
+using System;
+
 /// <summary>
 ///     This script manages the pause menu.
 /// </summary>
@@ -16,17 +18,14 @@ public class PauseMenu : MonoBehaviour
 
     //KeyCodes
     private KeyCode cancel;
-
+    
     private void Start()
     {
-        //get AudioSource component
         audioSource=GetComponent<AudioSource>();
-        //add AudioSource component if necessary
         if(audioSource == null)
         {
             audioSource=gameObject.AddComponent<AudioSource>();
         }
-        //set audio clip
         audioSource.clip=clickSound;
 
         cancel = GameManager.Instance.GetKeyCode(Binding.CANCEL);
@@ -160,7 +159,6 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// This function is called by the menu and submenu buttons.
     /// This function plays the click sound.
@@ -173,4 +171,3 @@ public class PauseMenu : MonoBehaviour
         }
     }
 }
-
