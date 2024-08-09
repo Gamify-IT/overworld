@@ -27,7 +27,7 @@ public class PlayerAnimation : MonoBehaviour
     private KeyCode moveRight;
     private KeyCode sprint;
     private float sprintStartTime = 0f;
-    private float sprintDuration = 0f; 
+    private float sprintDuration = 0f;
 
     private float timeInGameStart = 0f;
     private float timeInGameDuration = 0f;
@@ -35,7 +35,7 @@ public class PlayerAnimation : MonoBehaviour
     public AudioClip moveSound;
     private AudioSource audioSource;
     private bool isMoving;
-    
+
     private int daysPlayed;
     private DateTime lastLoginDate;
 
@@ -44,7 +44,7 @@ public class PlayerAnimation : MonoBehaviour
     ///     It is used to initialize variables.
     /// </summary>
     private void Start()
-    { 
+    {
         timeInGameStart=Time.time;
 
         canMove = true;
@@ -132,7 +132,7 @@ public class PlayerAnimation : MonoBehaviour
     ///     If 'canMove' is true, this function allows the player to move.
     /// </summary>
     private void Update()
-    { 
+    {
         if (canMove)
         {
             
@@ -423,13 +423,6 @@ public class PlayerAnimation : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    /// <summary>
-    ///     Resets the current instance to null.
-    /// </summary>
-    public void ResetInstance()
-    {
-        Instance = null;
-    }
-
     #endregion
+
 }

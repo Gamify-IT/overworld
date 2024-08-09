@@ -30,7 +30,6 @@ public class PlayerStatisticData
         this.currentArea = currentArea;
         this.userId = userId;
         this.username = username;
-        
         this.knowledge = knowledge;
         this.rewards = rewards;
         this.leagueOfPlayer = calculateLeagueOfPlayer(rewards);
