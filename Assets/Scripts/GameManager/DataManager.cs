@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine.UI;
 
 /// <summary>
 ///     The <c>DataManager</c> stores all required data to set up the objects in the areas.
@@ -299,6 +300,7 @@ public class DataManager : MonoBehaviour
     public void ProcessPlayerStatistics(PlayerstatisticDTO playerStatistics)
     {
         playerData = playerStatistics;
+     
         foreach (TeleporterDTO teleporterDTO in playerData.unlockedTeleporters)
         {
             int worldIndex = teleporterDTO.area.worldIndex;
@@ -306,6 +308,29 @@ public class DataManager : MonoBehaviour
             int number = teleporterDTO.index;
             GetWorldData(worldIndex).UnlockTeleporter(dungeonIndex, number);
         }
+
+        SetupCharacter(playerData.currentCharacterIndex);
+    }
+
+   /// <summary>
+   ///      Setups the character with the saved or selected values.
+   /// </summary>
+   /// <param name="currentIndex">selected character index</param>
+    public void SetupCharacter(int currentIndex)
+    {
+        // get player components
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        SpriteRenderer currentSprite = player.GetComponent<SpriteRenderer>();
+        Animator currentAnimator = player.GetComponent<Animator>();
+        Image characterHead = GameObject.Find("Player Head").GetComponent<Image>();
+
+        // initialize the saved player sprite, animations and head on the minimap
+        currentSprite.sprite = GetCharacterSprites()[currentIndex];
+        currentAnimator.runtimeAnimatorController = GetCharacterAnimators()[currentIndex];
+        characterHead.sprite = GetCharacterHeads()[currentIndex];
+
+        // save selected character
+        SetCharacterIndex(currentIndex);
     }
 
     /// <summary>

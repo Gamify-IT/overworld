@@ -67,20 +67,9 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void ConfirmButton()
     {
-        // get player components
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        SpriteRenderer currentSprite = player.GetComponent<SpriteRenderer>();
-        Animator currentAnimator = player.GetComponent<Animator>();
-        Image characterHead = GameObject.Find("Player Face").GetComponent<Image>();
-
-        // change the player's sprite, animations and head on the minimap
-        currentSprite.sprite = DataManager.Instance.GetCharacterSprites()[currentIndex];
-        currentAnimator.runtimeAnimatorController = DataManager.Instance.GetCharacterAnimators()[currentIndex];
-        characterHead.sprite = DataManager.Instance.GetCharacterHeads()[currentIndex];
-
-        // save new progress 
-        DataManager.Instance.SetCharacterIndex(currentIndex);
+        DataManager.Instance.SetupCharacter(currentIndex);
         GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
+
         PlayClickSound();
     }
 

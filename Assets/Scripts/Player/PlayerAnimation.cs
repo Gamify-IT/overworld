@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using UnityEngine.UIElements;
 
 /// <summary>
 ///     This class manages the movement and the animations of the player.
@@ -28,7 +27,7 @@ public class PlayerAnimation : MonoBehaviour
     private KeyCode moveRight;
     private KeyCode sprint;
     private float sprintStartTime = 0f;
-    private float sprintDuration = 0f; 
+    private float sprintDuration = 0f;
 
     private float timeInGameStart = 0f;
     private float timeInGameDuration = 0f;
@@ -36,7 +35,7 @@ public class PlayerAnimation : MonoBehaviour
     public AudioClip moveSound;
     private AudioSource audioSource;
     private bool isMoving;
-    
+
     private int daysPlayed;
     private DateTime lastLoginDate;
 
@@ -45,7 +44,7 @@ public class PlayerAnimation : MonoBehaviour
     ///     It is used to initialize variables.
     /// </summary>
     private void Start()
-    { 
+    {
         timeInGameStart=Time.time;
 
         canMove = true;
@@ -63,23 +62,8 @@ public class PlayerAnimation : MonoBehaviour
         sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
 
-        LoadSavedCharacter();
         InitializeAudio();
         Invoke("CheckForLastLogin", 4.5f);
-    }
-
-    private void LoadSavedCharacter()
-    {
-        // get player components
-        SpriteRenderer currentSprite = GetComponent<SpriteRenderer>();
-        Animator currentAnimator = GetComponent<Animator>();
-        Image characterHead = GameObject.Find("Player Face").GetComponent<Image>();
-
-        // initialize the saved player sprite, animations and image on the minimap
-        int currentIndex = DataManager.Instance.GetCharacterIndex();
-        currentSprite.sprite = DataManager.Instance.GetCharacterSprites()[currentIndex];
-        currentAnimator.runtimeAnimatorController = DataManager.Instance.GetCharacterAnimators()[currentIndex];
-        characterHead.sprite = DataManager.Instance.GetCharacterHeads()[currentIndex];
     }
 
     /// <summary>
@@ -148,7 +132,7 @@ public class PlayerAnimation : MonoBehaviour
     ///     If 'canMove' is true, this function allows the player to move.
     /// </summary>
     private void Update()
-    { 
+    {
         if (canMove)
         {
             
