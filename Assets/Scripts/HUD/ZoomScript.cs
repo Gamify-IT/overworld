@@ -37,16 +37,21 @@ public class ZoomScript : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        // get components
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         GameObject miniMapCam = GameObject.Find("Minimap Camera");
         pixelCam = GameObject.Find("Main Camera").GetComponent<PixelPerfectCamera>();
+
         miniMapCam.transform.SetParent(player.transform);
         miniMapCam.transform.localPosition = new Vector3(0, 0, zoomLevel);
+
+        // set up key bindings
         minimapZoomIn = GameManager.Instance.GetKeyCode(Binding.MINIMAP_ZOOM_IN);
         minimapZoomOut = GameManager.Instance.GetKeyCode(Binding.MINIMAP_ZOOM_OUT);
         gameZoomIn = GameManager.Instance.GetKeyCode(Binding.GAME_ZOOM_IN);
         gameZoomOut = GameManager.Instance.GetKeyCode(Binding.GAME_ZOOM_OUT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
+
         InitializeAudio();
     }
 
@@ -223,27 +228,4 @@ public class ZoomScript : MonoBehaviour
         }
     }
 
-    public void ChangePixelCam(PixelPerfectCamera pixelCam)
-    {
-        this.pixelCam = pixelCam;
-    }
-
-    #region Singelton 
-
-    public static ZoomScript Instance { get; private set; }
-
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    #endregion
 }

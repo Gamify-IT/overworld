@@ -19,6 +19,7 @@ public class PlayerstatisticDTO
     public float logoutPositionX;
     public float logoutPositionY;
     public string logoutScene;
+    public int currentCharacterIndex;
     public int knowledge;
     public int volumeLevel;
     public int rewards;
@@ -30,8 +31,8 @@ public class PlayerstatisticDTO
     #region Constructors
       
     public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
-         AreaLocationDTO currentArea, string userId, string username, float logoutPositionX, float logoutPositionY, string logoutScene, int volumeLevel, int knowledge, int rewards, 
-         bool showRewards, string pseudonym)
+         AreaLocationDTO currentArea, string userId, string username, float logoutPositionX, float logoutPositionY, string logoutScene, int currentCharacterIndex,
+         int volumeLevel, int knowledge, int rewards, bool showRewards, string pseudonym)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -43,6 +44,7 @@ public class PlayerstatisticDTO
         this.logoutPositionX = logoutPositionX;
         this.logoutPositionY = logoutPositionY;
         this.logoutScene = logoutScene;
+        this.currentCharacterIndex = currentCharacterIndex;
         this.volumeLevel = volumeLevel;
         this.knowledge = knowledge;
         this.rewards = rewards;
@@ -85,6 +87,7 @@ public class PlayerstatisticDTO
         logoutPositionX = 21.5f;
         logoutPositionY = 2.5f;
         logoutScene = "World 1";
+        currentCharacterIndex = 0;
         volumeLevel = 1;
         knowledge = 0;
         rewards = 0;

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine.UI;
 
 /// <summary>
 ///     The <c>DataManager</c> stores all required data to set up the objects in the areas.
@@ -31,10 +32,10 @@ public class DataManager : MonoBehaviour
     private Dictionary<String, int> pathfinder;
     private Dictionary<String, int> trailblazer;
 
-
-    // player settings 
-    private int characterIndex = 0;
-    [SerializeField] private Sprite[] characterFaces;
+    [Header("Character Selection")]
+    [SerializeField] private List<Sprite> characterSprites;
+    [SerializeField] private List<RuntimeAnimatorController> characterAnimators;
+    [SerializeField] private List<Sprite> characterHeads;
 
 
     /// <summary>
@@ -299,6 +300,7 @@ public class DataManager : MonoBehaviour
     public void ProcessPlayerStatistics(PlayerstatisticDTO playerStatistics)
     {
         playerData = playerStatistics;
+     
         foreach (TeleporterDTO teleporterDTO in playerData.unlockedTeleporters)
         {
             int worldIndex = teleporterDTO.area.worldIndex;
@@ -306,6 +308,29 @@ public class DataManager : MonoBehaviour
             int number = teleporterDTO.index;
             GetWorldData(worldIndex).UnlockTeleporter(dungeonIndex, number);
         }
+
+        SetupCharacter(playerData.currentCharacterIndex);
+    }
+
+   /// <summary>
+   ///      Setups the character with the saved or selected values.
+   /// </summary>
+   /// <param name="currentIndex">selected character index</param>
+    public void SetupCharacter(int currentIndex)
+    {
+        // get player components
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        SpriteRenderer currentSprite = player.GetComponent<SpriteRenderer>();
+        Animator currentAnimator = player.GetComponent<Animator>();
+        Image characterHead = GameObject.Find("Player Head").GetComponent<Image>();
+
+        // initialize the saved player sprite, animations and head on the minimap
+        currentSprite.sprite = GetCharacterSprites()[currentIndex];
+        currentAnimator.runtimeAnimatorController = GetCharacterAnimators()[currentIndex];
+        characterHead.sprite = GetCharacterHeads()[currentIndex];
+
+        // save selected character
+        SetCharacterIndex(currentIndex);
     }
 
     /// <summary>
@@ -1205,30 +1230,48 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets the character index of the currently selected character by the player
+    ///     Gets the character index of the currently selected character by the player
     /// </summary>
-    /// <returns>index of the character position in the array</returns>
+    /// <returns>index of the character position in the list</returns>
     public int GetCharacterIndex()
     {
-        return characterIndex;
+        return playerData.currentCharacterIndex;
     }
 
     /// <summary>
-    /// Updates the character index if the character is changed by the player
+    ///     Updates the character index if the character is changed by the player
     /// </summary>
     /// <param name="index">index of the newly, selected character</param>
     public void SetCharacterIndex(int index)
     {
-        characterIndex = index;
+        playerData.currentCharacterIndex = index;
     }
 
     /// <summary>
-    /// Gets the array with all faces of available characters in the game
+    ///     Gets all character sprites available via character selection 
     /// </summary>
-    /// <returns>player faces array</returns>
-    public Sprite[] GetCharacterFaces()
+    /// <returns>list of character sprites</returns>
+    public List<Sprite> GetCharacterSprites()
     {
-        return characterFaces;
+        return characterSprites;
+    }
+
+    /// <summary>
+    ///     Gets all animators for the characters available via character selection 
+    /// </summary>
+    /// <returns></returns>
+    public List<RuntimeAnimatorController> GetCharacterAnimators()
+    {
+        return characterAnimators;
+    }
+
+    /// <summary>
+    ///     Gets all character heads that are shown on the minimap 
+    /// </summary>
+    /// <returns></returns>
+    public List<Sprite> GetCharacterHeads()
+    {
+        return characterHeads;
     }
 
     /// <summary>

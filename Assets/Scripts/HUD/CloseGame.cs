@@ -37,10 +37,10 @@ public class CloseGame : MonoBehaviour
     {
         PlayClickSound();
         InitCanvas();
-        bool achievementSaved = await GameManager.Instance.SaveAchievements();
-        bool positionSaved = await GameManager.Instance.SavePlayerPosition();
 
-        if (achievementSaved && positionSaved)
+        bool playerDataSaved = await GameManager.Instance.SavePlayerData();
+
+        if (playerDataSaved)
         {
             Debug.Log("Saved all progress");
             CloseOverworld();
