@@ -223,27 +223,4 @@ public class ZoomScript : MonoBehaviour
         }
     }
 
-    public void ChangePixelCam(PixelPerfectCamera pixelCam)
-    {
-        this.pixelCam = pixelCam;
-    }
-
-    #region Singelton 
-
-    public static ZoomScript Instance { get; private set; }
-
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    #endregion
 }

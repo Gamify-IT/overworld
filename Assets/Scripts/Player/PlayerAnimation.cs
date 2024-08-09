@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.UIElements;
 
 /// <summary>
 ///     This class manages the movement and the animations of the player.
@@ -62,8 +63,23 @@ public class PlayerAnimation : MonoBehaviour
         sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
 
+        LoadSavedCharacter();
         InitializeAudio();
         Invoke("CheckForLastLogin", 4.5f);
+    }
+
+    private void LoadSavedCharacter()
+    {
+        // get player components
+        SpriteRenderer currentSprite = GetComponent<SpriteRenderer>();
+        Animator currentAnimator = GetComponent<Animator>();
+        Image characterHead = GameObject.Find("Player Face").GetComponent<Image>();
+
+        // initialize the saved player sprite, animations and image on the minimap
+        int currentIndex = DataManager.Instance.GetCharacterIndex();
+        currentSprite.sprite = DataManager.Instance.GetCharacterSprites()[currentIndex];
+        currentAnimator.runtimeAnimatorController = DataManager.Instance.GetCharacterAnimators()[currentIndex];
+        characterHead.sprite = DataManager.Instance.GetCharacterHeads()[currentIndex];
     }
 
     /// <summary>
@@ -423,13 +439,6 @@ public class PlayerAnimation : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    /// <summary>
-    ///     Resets the current instance to null.
-    /// </summary>
-    public void ResetInstance()
-    {
-        Instance = null;
-    }
-
     #endregion
+
 }

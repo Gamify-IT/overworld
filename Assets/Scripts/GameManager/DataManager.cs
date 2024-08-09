@@ -31,10 +31,10 @@ public class DataManager : MonoBehaviour
     private Dictionary<String, int> pathfinder;
     private Dictionary<String, int> trailblazer;
 
-
-    // player settings 
-    private int characterIndex = 0;
-    [SerializeField] private Sprite[] characterFaces;
+    [Header("Character Selection")]
+    [SerializeField] private List<Sprite> characterSprites;
+    [SerializeField] private List<RuntimeAnimatorController> characterAnimators;
+    [SerializeField] private List<Sprite> characterHeads;
 
 
     /// <summary>
@@ -1205,30 +1205,48 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets the character index of the currently selected character by the player
+    ///     Gets the character index of the currently selected character by the player
     /// </summary>
-    /// <returns>index of the character position in the array</returns>
+    /// <returns>index of the character position in the list</returns>
     public int GetCharacterIndex()
     {
-        return characterIndex;
+        return playerData.currentCharacterIndex;
     }
 
     /// <summary>
-    /// Updates the character index if the character is changed by the player
+    ///     Updates the character index if the character is changed by the player
     /// </summary>
     /// <param name="index">index of the newly, selected character</param>
     public void SetCharacterIndex(int index)
     {
-        characterIndex = index;
+        playerData.currentCharacterIndex = index;
     }
 
     /// <summary>
-    /// Gets the array with all faces of available characters in the game
+    ///     Gets all character sprites available via character selection 
     /// </summary>
-    /// <returns>player faces array</returns>
-    public Sprite[] GetCharacterFaces()
+    /// <returns>list of character sprites</returns>
+    public List<Sprite> GetCharacterSprites()
     {
-        return characterFaces;
+        return characterSprites;
+    }
+
+    /// <summary>
+    ///     Gets all animators for the characters available via character selection 
+    /// </summary>
+    /// <returns></returns>
+    public List<RuntimeAnimatorController> GetCharacterAnimators()
+    {
+        return characterAnimators;
+    }
+
+    /// <summary>
+    ///     Gets all character heads that are shown on the minimap 
+    /// </summary>
+    /// <returns></returns>
+    public List<Sprite> GetCharacterHeads()
+    {
+        return characterHeads;
     }
 
     /// <summary>

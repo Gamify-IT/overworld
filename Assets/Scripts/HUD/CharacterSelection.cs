@@ -1,34 +1,31 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using System;
-using UnityEngine.U2D;
+using System.Collections.Generic;
 
+/// <summary>
+///     This class opens the <c>character selection</c> menu and includes logic for choosing and selecting new characters.
+/// </summary>
 public class CharacterSelection : MonoBehaviour
 {
-    private Image characterImage;
-    private Sprite character;
-    private int numberOfCharacters = 3;
-    private int currentIndex = 0;
-    [SerializeField] private GameObject[] characterPrefabs;
-    
+    [SerializeField] private AudioClip clickSound;
 
-    public AudioClip clickSound;
+    private int numberOfCharacters;
+    private int currentIndex;
+    private Image characterImage;
     private AudioSource audioSource;
 
     /// <summary>
-    /// The <c>Start</c> function is called after the object is initialized.
-    /// This function sets up the references of the object.
+    ///     This function initializes all necessary variables.
     /// </summary>
     void Start()
     {
         GameManager.Instance.SetIsPaused(true);
-        //get image component
-        characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
-        //get the index of the currently selected character 
-        currentIndex = DataManager.Instance.GetCharacterIndex();
 
+        numberOfCharacters = DataManager.Instance.GetCharacterSprites().Count;
+        characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
+        currentIndex = DataManager.Instance.GetCharacterIndex();
         audioSource=GetComponent<AudioSource>();
+
         if(audioSource == null)
         {
             audioSource=gameObject.AddComponent<AudioSource>();
@@ -37,78 +34,59 @@ public class CharacterSelection : MonoBehaviour
     }
 
     /// <summary>
-    /// The <c>Update</c> function is called once every frame.
-    /// This function sets up the character selection menu.
+    ///     This function always updates the currently shown character in the carousel.
     /// </summary>
     void Update()
     {
-        character = Resources.Load<Sprite>("characters/character" + (currentIndex % numberOfCharacters));
-        characterImage.sprite = character;
+        characterImage.sprite = Resources.Load<Sprite>("characters/character" + (currentIndex % numberOfCharacters));
     }
 
     /// <summary>
-    /// This function is called by the <c>Previous Character Button</c>.
-    /// This function switches to the previous character.
+    ///     This function is called by the <c>Previous Character Button</c>.
+    ///     This function switches to the previous character.
     /// </summary>
     public void PreviousCharacter()
     {
         PlayClickSound();
-        currentIndex = Modulo(currentIndex - 1, numberOfCharacters);
+        currentIndex = PositiveModulo(currentIndex - 1, numberOfCharacters);
     }
 
     /// <summary>
-    /// This function is called by the <c>Next Character Button</c>.
-    /// This function switches to the next character.
+    ///     This function is called by the <c>Next Character Button</c>.
+    ///     This function switches to the next character.
     /// </summary>
     public void NextCharacter()
     {
         PlayClickSound();
-        currentIndex = Modulo(currentIndex + 1, numberOfCharacters);
+        currentIndex = PositiveModulo(currentIndex + 1, numberOfCharacters);
     }
 
     /// <summary>
-    /// This function is called by the <c>Select Character Button</c>.
-    /// This function switches to the selected character.
+    ///     This function is called by the <c>Select Character Button</c>.
+    ///     This function switches to the selected character.
     /// </summary>
     public void ConfirmButton()
     {
-        // current player properties
-        GameObject currentPlayer = GameObject.FindGameObjectWithTag("Player");
-        Vector3 position = currentPlayer.transform.position;
-        Quaternion rotation = currentPlayer.transform.rotation;
-        GameObject miniMapCamera = GameObject.Find("Minimap Camera");
-        Image playerFace = GameObject.Find("Player Face").GetComponent<Image>();
-        PixelPerfectCamera pixelCam = currentPlayer.GetComponentInChildren<PixelPerfectCamera>();
+        // get player components
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        SpriteRenderer currentSprite = player.GetComponent<SpriteRenderer>();
+        Animator currentAnimator = player.GetComponent<Animator>();
+        Image characterHead = GameObject.Find("Player Face").GetComponent<Image>();
 
-        // reset current character, instance and face
-        Destroy(currentPlayer);
-        PlayerAnimation.Instance.ResetInstance();
-        playerFace.sprite = DataManager.Instance.GetCharacterFaces()[currentIndex];
+        // change the player's sprite, animations and head on the minimap
+        currentSprite.sprite = DataManager.Instance.GetCharacterSprites()[currentIndex];
+        currentAnimator.runtimeAnimatorController = DataManager.Instance.GetCharacterAnimators()[currentIndex];
+        characterHead.sprite = DataManager.Instance.GetCharacterHeads()[currentIndex];
 
-        // create new character in player scene 
-        GameObject newPlayer = Instantiate(characterPrefabs[currentIndex], position, rotation);
-        SceneManager.MoveGameObjectToScene(newPlayer, SceneManager.GetSceneByName("Player"));
+        // save new progress 
         DataManager.Instance.SetCharacterIndex(currentIndex);
-
-        // add minimap camera to new character 
-        miniMapCamera.transform.parent = newPlayer.transform;
-        miniMapCamera.GetComponent<Camera>().enabled = true;
-        miniMapCamera.GetComponent<ZoomScript>().enabled = true;
-
-        // adjust main camera
-        PixelPerfectCamera newPixelCam = newPlayer.GetComponentInChildren<PixelPerfectCamera>();
-        ZoomScript.Instance.ChangePixelCam(newPixelCam);
-        newPixelCam.refResolutionX = pixelCam.refResolutionX; 
-        newPixelCam.refResolutionY = pixelCam.refResolutionY;
-
         GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
         PlayClickSound();
     }
 
-
     /// <summary>
-    /// This function is called by the <c>Navigation Buttons</c>.
-    /// This function plays the click sound.
+    ///     This function is called by the <c>Navigation Buttons</c>.
+    ///     This function plays the click sound.
     /// </summary>
     private void PlayClickSound()
     {
@@ -117,18 +95,17 @@ public class CharacterSelection : MonoBehaviour
             audioSource.PlayOneShot(clickSound);
         }
     }
-        
 
     /// <summary>
-    ///     This method realizes the modulo operator from modular arithmetic.
+    ///     This function returns the positive remainder of the division of an integer by a modulus.
     /// </summary>
-    /// <param name="a">arbitrary number</param>
-    /// <param name="b">modulus</param>
-    /// <returns>positive remainder</returns>
-    private int Modulo(int a, int b)
+    /// <param name="value">An integer that can be positive, negative, or zero.</param>
+    /// <param name="modulus">The modulus, which must be a positive integer.</param>
+    /// <returns>A positive remainder, which is always between 0 (inclusive) and b (exclusive).</returns>
+    private int PositiveModulo(int value, int modulus)
     {
-        int r = a % b;
-        return r < 0 ? r + b : r;
+        int remainder = value % modulus;
+        return remainder < 0 ? remainder + modulus : remainder;
     }
 
 }

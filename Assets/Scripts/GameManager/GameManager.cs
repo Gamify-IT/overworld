@@ -46,13 +46,25 @@ public class GameManager : MonoBehaviour
 
     private bool justLoaded = true;
 
+
+    #region save player data
+
+    /// <summary>
+    ///     This function saves all important player data when the plaer is logging out
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask<bool> SavePlayerData()
+    {
+        return await SavePlayerStatistic() && await SaveAchievements();
+    }
+
     /// <summary>
     ///     This function saves the last known position of the player in the backend when the player logs out 
     /// </summary>
     /// <returns></returns>
-    public async UniTask<bool> SavePlayerPosition()
+    public async UniTask<bool> SavePlayerStatistic()
     {
-        Debug.Log("Start saving logout position");
+        Debug.Log("Start saving player statistic");
 
         string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
         Debug.Log("path: " + path);
@@ -61,6 +73,7 @@ public class GameManager : MonoBehaviour
 
         playerStatistic.logoutPositionX = GameObject.FindGameObjectWithTag("Player").transform.position.x;
         playerStatistic.logoutPositionY = GameObject.FindGameObjectWithTag("Player").transform.position.y;
+        playerStatistic.currentCharacterIndex = DataManager.Instance.GetCharacterIndex();
 
         string json = JsonUtility.ToJson(playerStatistic, true);
 
@@ -68,16 +81,12 @@ public class GameManager : MonoBehaviour
 
         if (succesful)
         {
-            Debug.Log("Updated player position for " + playerStatistic.logoutPositionX + ", " + playerStatistic.logoutPositionY + ", "
-                + playerStatistic.logoutScene + ", " + playerStatistic.currentArea.worldIndex + ", " + playerStatistic.currentArea.dungeonIndex +
-                " successfully");
+            Debug.Log("Updated player statistic successfully");
             return true;
         }
         else
         {
-            Debug.Log("Could not update player position for " + playerStatistic.logoutPositionX + ", " + playerStatistic.logoutPositionY + ", "
-                + playerStatistic.logoutScene + ", " + playerStatistic.currentArea.worldIndex + ", " + playerStatistic.currentArea.dungeonIndex +
-                " successfully");
+            Debug.Log("Could not update player statistic");
             return false;
         }
 
@@ -110,6 +119,41 @@ public class GameManager : MonoBehaviour
             return false;
         }
     }
+
+    /// <summary>
+    ///     This function saves all achievements, which made progress in the current session
+    /// </summary>
+    public async UniTask<bool> SaveAchievements()
+    {
+        List<AchievementData> achievements = DataManager.Instance.GetAchievements();
+        string basePath = overworldBackendPath + "/players/" + userId + "/achievements/";
+
+        bool savingSuccessful = true;
+        foreach (AchievementData achievementData in achievements)
+        {
+            if (achievementData.isUpdated())
+            {
+                AchievementStatistic achievementStatistic = AchievementData.ConvertToAchievmentStatistic(achievementData);
+
+                string path = basePath + achievementData.GetTitle();
+                string json = JsonUtility.ToJson(achievementStatistic, true);
+                bool successful = await RestRequest.PutRequest(path, json);
+
+                if (successful)
+                {
+                    Debug.Log("Updated achievement progress for " + achievementStatistic.achievement.achievementTitle + " in the overworld backend");
+                }
+                else
+                {
+                    savingSuccessful = false;
+                    Debug.Log("Could not update the achievement progress for " + achievementStatistic.achievement.achievementTitle + " in the overworld backend");
+                }
+            }
+        }
+
+        return savingSuccessful;
+    }
+    #endregion
 
     /// <summary>
     ///     This function checks whether or not a valid courseId was passed or not.
@@ -450,40 +494,6 @@ public class GameManager : MonoBehaviour
 
             EarnAchievement(achievement);
         }
-    }
-
-    /// <summary>
-    ///     This function saves all achievements, which made progress in the current session
-    /// </summary>
-    public async UniTask<bool> SaveAchievements()
-    {   
-        List<AchievementData> achievements = DataManager.Instance.GetAchievements();
-        string basePath = overworldBackendPath + "/players/" + userId + "/achievements/";
-
-        bool savingSuccessful = true;
-        foreach (AchievementData achievementData in achievements)
-        {
-            if(achievementData.isUpdated())
-            {
-                AchievementStatistic achievementStatistic = AchievementData.ConvertToAchievmentStatistic(achievementData);
-
-                string path = basePath + achievementData.GetTitle();
-                string json = JsonUtility.ToJson(achievementStatistic, true);
-                bool successful = await RestRequest.PutRequest(path, json);
-
-                if (successful)
-                {
-                    Debug.Log("Updated achievement progress for " + achievementStatistic.achievement.achievementTitle + " in the overworld backend");
-                }
-                else
-                {
-                    savingSuccessful = false;
-                    Debug.Log("Could not update the achievement progress for " + achievementStatistic.achievement.achievementTitle + " in the overworld backend");
-                }
-            }
-        }
-
-        return savingSuccessful;
     }
 
     /// <summary>
