@@ -386,11 +386,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public List<ShopItemData> GetShopItems()
-    {
-        Debug.Log("Data Manager, shop items " + shopItemData.Count);
-        return shopItemData;
-    }
+ 
     /// <summary>
     ///     This function checks for a given array of <c>KeycodeDTO</c>s whether they are valid or not.
     ///     If so, they are set as the bindings, otherwise the default bindings are set.
@@ -540,6 +536,11 @@ public class DataManager : MonoBehaviour
         return achievementData;
     }
 
+    public List<ShopItemData> GetShopItems()
+    {
+        Debug.Log("Data Manager, shop items " + shopItemData.Count);
+        return shopItemData;
+    }
 
 
     /// <summary>
@@ -558,6 +559,18 @@ public class DataManager : MonoBehaviour
 
         return false;
     }
+
+    public bool UpdateShopItemStatus(ShopItemTitle title, bool newProgress)
+    {
+        ShopItemData shopItem = GetShopItem(title);
+        if (shopItem != null)
+        {
+            return shopItem.UpdateProgress(newProgress);
+        }
+
+        return false;
+    }
+
 
     /// <summary>
     ///     This function increases an achievements progress by a given increment
@@ -595,6 +608,20 @@ public class DataManager : MonoBehaviour
 
         return null;
     }
+
+    public ShopItemData GetShopItem(ShopItemTitle title)
+    {
+        foreach (ShopItemData shopItem in shopItemData)
+        {
+            if (shopItem.GetTitle().Equals(title.ToString()))
+            {
+                return shopItem;
+            }
+        }
+
+        return null;
+    }
+
 
     /// <summary>
     ///     This function returns all stored keybindings

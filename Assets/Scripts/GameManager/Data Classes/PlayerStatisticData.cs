@@ -237,4 +237,10 @@ public class PlayerStatisticData
         this.pseudonym = newPseudonym;
     }
 
+    public void SetCredit(int newCredit)
+    {
+        this.credit = credit;
+    }
+
+    
 }

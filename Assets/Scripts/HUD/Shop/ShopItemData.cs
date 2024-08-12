@@ -9,10 +9,11 @@ public class ShopItemData : MonoBehaviour
 
     private readonly string shopItemID;
     private readonly int cost;
-    private readonly bool bought;
+    private  bool bought;
     private readonly string id;
     private readonly string imageName;
     private readonly Sprite image;
+    private bool updated;
 
 
     public ShopItemData(string id, string shopItemID, int cost, bool bought, string imageName)
@@ -23,6 +24,8 @@ public class ShopItemData : MonoBehaviour
         this.id = id;
         this.imageName = imageName;
         this.image = GetImage(imageName);
+        updated = false;
+
 
     }
 
@@ -44,7 +47,7 @@ public class ShopItemData : MonoBehaviour
     {
         string id = shopItemData.GetId();
         int cost = shopItemData.GetCost();
-        bool bought = shopItemData.GetBought();
+        bool bought = shopItemData.IsBought();
         string title = shopItemData.GetTitle();
         string imageName = shopItemData.GetImageName();
 
@@ -55,7 +58,19 @@ public class ShopItemData : MonoBehaviour
         return shopItemStatus;
     }
 
-    
+
+    public bool UpdateProgress(bool newProgress)
+    {
+        updated = true;
+        bought = newProgress;
+        if (newProgress = true)
+        {
+            
+            return true;
+        }
+        return false;
+    }
+
 
 
     private Sprite GetImage(string imageName)
@@ -95,11 +110,14 @@ public class ShopItemData : MonoBehaviour
         return cost;
     }
 
-    public bool GetBought()
+    public bool IsBought()
     {
         return bought;
     }
 
-    
+    public bool isUpdated()
+    {
+        return updated;
+    }
 
 }

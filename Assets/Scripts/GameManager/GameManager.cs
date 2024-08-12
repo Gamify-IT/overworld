@@ -359,7 +359,21 @@ public class GameManager : MonoBehaviour
                 return;
             }
 
-            EarnAchievement(achievement);
+        }
+    }
+
+   
+    public async void UpdateShopItemStatus(ShopItemTitle title, bool newProgress)
+    {
+        bool unlocked = DataManager.Instance.UpdateShopItemStatus(title, newProgress);
+        if (unlocked)
+        {
+            ShopItemData shopItem = DataManager.Instance.GetShopItem(title);
+            if (shopItem == null)
+            {
+                return;
+            }
+
         }
     }
 
@@ -411,6 +425,37 @@ public class GameManager : MonoBehaviour
                 {
                     savingSuccessful = false;
                     Debug.Log("Could not update the achievement progress for " + achievementStatistic.achievement.achievementTitle + " in the overworld backend");
+                }
+            }
+        }
+
+        return savingSuccessful;
+    }
+
+    public async UniTask<bool> SaveShopItems()
+    {
+        List<ShopItemData> shopItems = DataManager.Instance.GetShopItems();
+        string basePath = overworldBackendPath + "/players/" + userId + "/shop/";
+
+        bool savingSuccessful = true;
+
+        foreach (ShopItemData shopItemData in shopItems)
+        {
+            if (shopItemData.isUpdated())
+            {
+                ShopItemStatus shopItemStatus = ShopItemData.ConvertToShopItemStatus(shopItemData);
+
+                string path = basePath + shopItemData.GetTitle();
+                string json = JsonUtility.ToJson(shopItemStatus, true);
+                bool successful = await RestRequest.PutRequest(path, json);
+                if (successful)
+                {
+                    Debug.Log("Updated shop item  for " + shopItemStatus.shopItem.shopItemID + " in the overworld backend");
+                }
+                else
+                {
+                    savingSuccessful = false;
+                    Debug.Log("Could not update the shop item progress for " + shopItemStatus.shopItem.shopItemID + " in the overworld backend");
                 }
             }
         }
@@ -657,7 +702,7 @@ private void PlayAchievementNotificationSound(){
             new ShopItem("SKINS_1",15,  "Image1");
         ShopItemStatus Status1 = new ShopItemStatus("1", shopItem1, true);
         ShopItem shopItem2 =
-            new ShopItem("SKINS_2333", 12, "Image2");
+            new ShopItem("SKINS_2", 12, "Image2");
         ShopItemStatus Status2 = new ShopItemStatus("2", shopItem2, false);
         statuses[0] = Status1;
         statuses[1] = Status2;
