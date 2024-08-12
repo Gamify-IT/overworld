@@ -35,7 +35,7 @@ public class ShopItemManager : MonoBehaviour
         shopItemData = DataManager.Instance.GetShopItems();
         UpdateUI();
 
-        yesButton.onClick.AddListener(OnYesButtonClicked);
+        yesButton.onClick.AddListener(YesButtonClicked);
         noButton.onClick.AddListener(() => insurancePanel.SetActive(false));
 
         insuranceCloseButton.onClick.AddListener(() => ClosePanels());
@@ -88,7 +88,7 @@ public class ShopItemManager : MonoBehaviour
         currentItemPrice = price;
     }
 
-    private void OnYesButtonClicked()
+    private void YesButtonClicked()
     {
         Debug.Log($"Attempting to buy item: {currentItemTitle} for {currentItemPrice} coins.");
 
@@ -104,16 +104,26 @@ public class ShopItemManager : MonoBehaviour
             int updatedCredit = ownData.GetCredit();
             Debug.Log($"Credit after update: {updatedCredit}");
 
-            UpdateCreditText();  
+            
 
             successPanel.SetActive(true);
             successText.text = $"Nice! You just bought the {currentItemTitle} for {currentItemPrice} coins!";
+            if (System.Enum.TryParse(currentItemTitle, out ShopItemTitle itemTitle))
+            {
+                DataManager.Instance.UpdateShopItemStatus(itemTitle, true);
+            }
+            else
+            {
+                Debug.LogError($"Failed to parse item title: {currentItemTitle}");
+                insuranceText.text = "Error: Invalid item title!";
+            }
         }
         else
         {
             insuranceText.text = "Sorry, you don't have enough credits!";
         }
 
+        UpdateCreditText();
         insurancePanel.SetActive(false);
     }
 
