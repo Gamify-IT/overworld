@@ -22,15 +22,15 @@ public class DataManager : MonoBehaviour
     //Data fields
     private AreaDataManager areaDataManager;
     private WorldData[] worldData;
-    private PlayerstatisticDTO playerData;
-    private PlayerStatisticData ownPlayerData;
+    private PlayerStatisticData playerData;
+    //private PlayerStatisticData ownPlayerData;
     private List<AchievementData> achievementData;
     private List<PlayerStatisticData> allPlayerStatisticsData;
     private Dictionary<Binding, KeyCode> keybindings;
-    private Dictionary<String, int> wanderer;
-    private Dictionary<String, int> explorer;
-    private Dictionary<String, int> pathfinder;
-    private Dictionary<String, int> trailblazer;
+    private Dictionary<string, int> wanderer;
+    private Dictionary<string, int> explorer;
+    private Dictionary<string, int> pathfinder;
+    private Dictionary<string, int> trailblazer;
 
     [Header("Character Selection")]
     [SerializeField] private List<Sprite> characterSprites;
@@ -111,7 +111,7 @@ public class DataManager : MonoBehaviour
     ///     This function returns the player data
     /// </summary>
     /// <returns>The player data</returns>
-    public PlayerstatisticDTO GetPlayerData()
+    public PlayerStatisticData GetPlayerData()
     {
         return playerData;
     }
@@ -120,7 +120,7 @@ public class DataManager : MonoBehaviour
     ///     This function sets the player data
     /// </summary>
     /// <param name="data">Player data to be set</param>
-    public void SetPlayerData(PlayerstatisticDTO data)
+    public void SetPlayerData(PlayerStatisticData data)
     {
         playerData = data;
     }
@@ -132,17 +132,17 @@ public class DataManager : MonoBehaviour
     /// <param name="dungeonIndex">index of the current dungeon</param>
     public void SetPlayerPosition(int worldIndex, int dungeonIndex)
     {
-        SetCurrentArea(new AreaLocationDTO(worldIndex, dungeonIndex));
+        playerData.SetCurrentArea(new AreaLocationDTO(worldIndex, dungeonIndex));
 
         if (dungeonIndex != 0)
         {
             Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
-            SetCurrentSceneName("Dungeon");
+            playerData.SetLogoutScene("Dungeon");
         }
         else
         {
             Debug.Log("Setting data for world " + worldIndex);
-            SetCurrentSceneName("World " + worldIndex);
+            playerData.SetLogoutScene("World " + worldIndex);
         }
     }
 
@@ -153,10 +153,10 @@ public class DataManager : MonoBehaviour
     /// <returns>True, if the player has unlocked the world, false otherwise</returns>
     public bool IsWorldUnlocked(int worldIndex)
     {
-        for (int i = 0; i < playerData.unlockedAreas.Length; i++)
+        for (int i = 0; i < playerData.GetUnlockedAreas().Length; i++)
         {
-            if (playerData.unlockedAreas[i].worldIndex == worldIndex &&
-                playerData.unlockedAreas[i].dungeonIndex == 0)
+            if (playerData.GetUnlockedAreas()[i].worldIndex == worldIndex &&
+                playerData.GetUnlockedAreas()[i].dungeonIndex == 0)
             {
                 return true;
             }
@@ -173,10 +173,10 @@ public class DataManager : MonoBehaviour
     /// <returns>True, if the player has unlocked the dungeon, false otherwise</returns>
     public bool IsDungeonUnlocked(int worldIndex, int dungeonIndex)
     {
-        for (int i = 0; i < playerData.unlockedAreas.Length; i++)
+        for (int i = 0; i < playerData.GetUnlockedAreas().Length; i++)
         {
-            if (playerData.unlockedAreas[i].worldIndex == worldIndex &&
-                playerData.unlockedAreas[i].dungeonIndex == dungeonIndex)
+            if (playerData.GetUnlockedAreas()[i].worldIndex == worldIndex &&
+                playerData.GetUnlockedAreas()[i].dungeonIndex == dungeonIndex)
             {
                 return true;
             }
@@ -297,11 +297,16 @@ public class DataManager : MonoBehaviour
     ///     This function processes the player data
     /// </summary>
     /// <param name="playerData">The player statistics returned from the backend</param>
-    public void ProcessPlayerStatistics(PlayerstatisticDTO playerStatistics)
+    public void ProcessPlayerStatistics(PlayerStatisticDTO playerStatistic)
     {
-        playerData = playerStatistics;
-     
-        foreach (TeleporterDTO teleporterDTO in playerData.unlockedTeleporters)
+        if (playerStatistic == null)
+        {
+            return;
+        }
+
+        playerData = PlayerStatisticData.ConvertDtoToData(playerStatistic);
+
+        foreach (TeleporterDTO teleporterDTO in playerData.GetUnlockedTeleporters())
         {
             int worldIndex = teleporterDTO.area.worldIndex;
             int dungeonIndex = teleporterDTO.area.dungeonIndex;
@@ -309,13 +314,44 @@ public class DataManager : MonoBehaviour
             GetWorldData(worldIndex).UnlockTeleporter(dungeonIndex, number);
         }
 
-        SetupCharacter(playerData.currentCharacterIndex);
+        SetupCharacter(playerData.GetCurrentCharacterIndex());
+
+#if !UNITY_EDITOR
+        CheckForLastLogin();
+#endif
     }
 
-   /// <summary>
-   ///      Setups the character with the saved or selected values.
-   /// </summary>
-   /// <param name="currentIndex">selected character index</param>
+    private void CheckForLastLogin()
+    {
+        DateTime lastActive = DateTime.ParseExact(playerData.GetLastActive(), "yyyy-MM-dd HH:mm:ss", null);
+
+        Debug.Log("Progress before: " + GetAchievement(AchievementTitle.PROFESSIONAL_GAMER).GetProgress());
+
+        if (lastActive.Date == DateTime.Now.Date.AddDays(-1))
+        {
+            Debug.Log("Streak yes");
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1, null);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1, null);
+        }
+        else
+        {
+            Debug.Log("Streak no");
+            GameManager.Instance.UpdateAchievement(AchievementTitle.GAMER, 1, null);
+            GameManager.Instance.UpdateAchievement(AchievementTitle.PROFESSIONAL_GAMER, 1, null);
+        }
+
+        Debug.Log("Progress after: " + GetAchievement(AchievementTitle.PROFESSIONAL_GAMER).GetProgress());
+
+        Debug.Log("Todays Date: " + DateTime.Now.ToString());
+        Debug.Log("Last Active: " + lastActive.ToString());
+        Debug.Log("Streak: " + GetAchievement(AchievementTitle.PROFESSIONAL_GAMER).GetProgress());
+
+    }
+
+    /// <summary>
+    ///      Setups the character with the saved or selected values.
+    /// </summary>
+    /// <param name="currentIndex">selected character index</param>
     public void SetupCharacter(int currentIndex)
     {
         // get player components
@@ -330,7 +366,7 @@ public class DataManager : MonoBehaviour
         characterHead.sprite = GetCharacterHeads()[currentIndex];
 
         // save selected character
-        SetCharacterIndex(currentIndex);
+        playerData.SetCurrentCharacterIndex(currentIndex);
     }
 
     /// <summary>
@@ -338,40 +374,21 @@ public class DataManager : MonoBehaviour
     ///     <c>DataManager</c>
     /// </summary>
     /// <param name="allPlayerStatistics">The player statistic data returned from the backend</param>
-    public void ProcessAllPlayerStatistics(PlayerstatisticDTO[] allPlayerStatistics)
+    public void ProcessAllPlayerStatistics(PlayerStatisticDTO[] allPlayerStatistics)
     {
         allPlayerStatisticsData = new List<PlayerStatisticData>();
+
         if (allPlayerStatistics == null)
         {
-            Debug.Log("allPlayerStatistics list is null");
             return;
         }
         Debug.Log("Process " + allPlayerStatistics.Length + "player statistics");
 
-        foreach (PlayerstatisticDTO statistic in allPlayerStatistics)
+        foreach (PlayerStatisticDTO statistic in allPlayerStatistics)
         {
-            PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertFromPlayerStatisticDTO(statistic);
+            PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(statistic);
             allPlayerStatisticsData.Add(playerStatistic);
         }
-    }
-
-    public void ProcessPlayerstatisticDTO(PlayerstatisticDTO playerStatistic)
-    {
-
-        if (playerStatistic == null)
-        {
-            Debug.Log("Playerstatistic  is null");
-            return;
-        }
-
-        ownPlayerData = PlayerStatisticData.ConvertFromPlayerStatisticDTO(playerStatistic);
-
-
-    }
-
-    public PlayerStatisticData GetOwnStatisticData()
-    {
-        return ownPlayerData;
     }
 
     /// <summary>
@@ -703,7 +720,7 @@ public class DataManager : MonoBehaviour
         int worldIndex = data.worldID;
         int dungeonIndex = data.dungeonID;
 
-        foreach(TeleporterDTO unlockedTeleporter in playerData.unlockedTeleporters)
+        foreach(TeleporterDTO unlockedTeleporter in playerData.GetUnlockedTeleporters())
         {
             if(unlockedTeleporter.area.worldIndex == worldIndex &&
                 unlockedTeleporter.area.dungeonIndex == dungeonIndex &&
@@ -757,7 +774,7 @@ public class DataManager : MonoBehaviour
         areaDataManager = new AreaDataManager();
 
         worldData = new WorldData[maxWorld + 1];
-        playerData = new PlayerstatisticDTO();
+        playerData = PlayerStatisticData.ConvertDtoToData(new PlayerStatisticDTO());
         InitKeybindingsDictionary();
 
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
@@ -1230,24 +1247,6 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     Gets the character index of the currently selected character by the player
-    /// </summary>
-    /// <returns>index of the character position in the list</returns>
-    public int GetCharacterIndex()
-    {
-        return playerData.currentCharacterIndex;
-    }
-
-    /// <summary>
-    ///     Updates the character index if the character is changed by the player
-    /// </summary>
-    /// <param name="index">index of the newly, selected character</param>
-    public void SetCharacterIndex(int index)
-    {
-        playerData.currentCharacterIndex = index;
-    }
-
-    /// <summary>
     ///     Gets all character sprites available via character selection 
     /// </summary>
     /// <returns>list of character sprites</returns>
@@ -1274,47 +1273,4 @@ public class DataManager : MonoBehaviour
         return characterHeads;
     }
 
-    /// <summary>
-    ///     Sets the name of the current scene
-    /// </summary>
-    /// <param name="sceneName">scene name</param>
-    public void SetCurrentSceneName(string sceneName)
-    {
-        playerData.logoutScene = sceneName;
-    }
-
-    /// <summary>
-    ///     Gets the name of the current scene
-    /// </summary>
-    /// <returns>scene name</returns>
-    public string GetCurrentSceneName()
-    {
-        return playerData.logoutScene;
-    }
-
-    /// <summary>
-    ///     Updates the current area of the player
-    /// </summary>
-    /// <param name="area">current area</param>
-    public void SetCurrentArea(AreaLocationDTO area)
-    {
-        playerData.currentArea = area;
-    }
-    
-    ///     Gets the current volume level
-    /// </summary>
-    /// <returns>volume level</returns>
-    public int GetVolumeLevel()
-    {
-        return playerData.volumeLevel;
-    }
-
-    /// <summary>
-    ///     Updates the current volume level chosen by the player
-    /// </summary>
-    /// <param name="volumeLevel">current volume level</param>
-    public void SetVolumeLevel(int volumeLevel)
-    {
-        playerData.volumeLevel = volumeLevel;
-    }
 }

@@ -8,7 +8,7 @@ public class MinimapAreaName : MonoBehaviour
 
     private string currentAreaName;
     
-    private PlayerstatisticDTO playerData;
+    private PlayerStatisticData playerData;
     private int volumeLevel;
   
     public AudioClip backgroundMusicWorld1;
@@ -48,7 +48,7 @@ public class MinimapAreaName : MonoBehaviour
     private void UpdateVolume()
     {
         playerData = DataManager.Instance.GetPlayerData();
-        volumeLevel = playerData.volumeLevel;
+        volumeLevel = playerData.GetVolumeLevel();
         float volume = 0f;
         switch (volumeLevel)
         {

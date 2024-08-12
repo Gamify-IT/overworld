@@ -15,9 +15,9 @@ public enum FacingDirection
 /// </summary>
 public class LoadSubScene : MonoBehaviour
 {
-    public static AreaInformation areaExchange = DataManager.Instance.GetPlayerData().logoutScene == "Dungeon" ? 
-        new AreaInformation(DataManager.Instance.GetPlayerData().currentArea.worldIndex, new Optional<int>(DataManager.Instance.GetPlayerData().currentArea.dungeonIndex))
-        : new AreaInformation(DataManager.Instance.GetPlayerData().currentArea.worldIndex, new Optional<int>());
+    public static AreaInformation areaExchange = DataManager.Instance.GetPlayerData().GetLogoutScene() == "Dungeon" ? 
+        new AreaInformation(DataManager.Instance.GetPlayerData().GetCurrentArea().worldIndex, new Optional<int>(DataManager.Instance.GetPlayerData().GetCurrentArea().dungeonIndex))
+        : new AreaInformation(DataManager.Instance.GetPlayerData().GetCurrentArea().worldIndex, new Optional<int>());
     public static bool transitionBlocked = false;
     public static bool setupDone = false;
 

@@ -98,7 +98,7 @@ public class LoadFirstScene : MonoBehaviour
         Debug.Log("Finish retrieving courseId");
 
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
-        LoadingManager.Instance.setup("World 1", worldIndex, dungeonIndex, playerPosition);
+        LoadingManager.Instance.Setup("World 1", worldIndex, dungeonIndex, playerPosition);
 
         Debug.Log("Finish loading LoadingScreen");
 
