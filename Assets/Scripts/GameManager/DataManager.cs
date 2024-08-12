@@ -24,6 +24,7 @@ public class DataManager : MonoBehaviour
     private PlayerstatisticDTO playerData;
     private PlayerStatisticData ownPlayerData;
     private List<AchievementData> achievementData;
+    private List<ShopItemData> shopItemData;
     private List<PlayerStatisticData> allPlayerStatisticsData;
     private Dictionary<Binding, KeyCode> keybindings;
     private Dictionary<String, int> wanderer;
@@ -364,6 +365,33 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function processes the achievement statistics data returned from the backend and stores the needed data in the
+    ///     <c>DataManager</c>
+    /// </summary>
+    /// <param name="shopItemStatus">The achievement statistic data returned from the backend</param>
+    public void ProcessShopItemStatus(ShopItemStatus[] shopItemStatus)
+    {
+        shopItemData = new List<ShopItemData>();
+        if (shopItemStatus == null)
+        {
+            Debug.Log("status list is null");
+            return;
+        }
+        Debug.Log("Process " + shopItemStatus.Length + " statuses of shop items");
+
+        foreach (ShopItemStatus status in shopItemStatus)
+        {
+            ShopItemData shopItem = ShopItemData.ConvertFromShopItemStatus(status);
+            shopItemData.Add(shopItem);
+        }
+    }
+
+    public List<ShopItemData> GetShopItems()
+    {
+        Debug.Log("Data Manager, shop items " + shopItemData.Count);
+        return shopItemData;
+    }
+    /// <summary>
     ///     This function checks for a given array of <c>KeycodeDTO</c>s whether they are valid or not.
     ///     If so, they are set as the bindings, otherwise the default bindings are set.
     /// </summary>
@@ -511,6 +539,8 @@ public class DataManager : MonoBehaviour
         Debug.Log("Data Manager, achievements: " + achievementData.Count);
         return achievementData;
     }
+
+
 
     /// <summary>
     ///     This function updates an achievement

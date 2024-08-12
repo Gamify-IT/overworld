@@ -185,6 +185,16 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
+        Optional<ShopItemStatus[]> shopItemStatus =
+            await RestRequest.GetArrayRequest<ShopItemStatus>(playerPath + "/shop");
+        if (!shopItemStatus.IsPresent())
+        {
+            loadingError = true;
+        }
+
+
+
+
         Optional<KeybindingDTO[]> keybindings =
             await RestRequest.GetArrayRequest<KeybindingDTO>(playerPath + "/keybindings");
 
@@ -205,6 +215,7 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessKeybindings(keybindings.Value());             
             DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());           
             DataManager.Instance.ProcessPlayerStatisticDTO(playerStatistics.Value());
+            DataManager.Instance.ProcessShopItemStatus(shopItemStatus.Value());
 
         }
 
@@ -615,9 +626,11 @@ private void PlayAchievementNotificationSound(){
         AchievementStatistic[] achivements = GetDummyAchievements();
         PlayerstatisticDTO[] rewards = GetDummyDataRewards();
         PlayerstatisticDTO ownPlayer = GetOwnDummyData();
+        ShopItemStatus[] shopItems = GetDummyShopItems();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
         DataManager.Instance.ProcessPlayerStatisticDTO(ownPlayer);        
         DataManager.Instance.ProcessAllPlayerStatistics(rewards);
+        DataManager.Instance.ProcessShopItemStatus(shopItems);
 
         ResetKeybindings();
     }
@@ -637,7 +650,20 @@ private void PlayAchievementNotificationSound(){
         return statistcs;
     }
 
-  
+    public ShopItemStatus[] GetDummyShopItems()
+    {
+        ShopItemStatus[] statuses = new ShopItemStatus[2];
+        ShopItem shopItem1 =
+            new ShopItem("SKINS_1",15,  "Image1");
+        ShopItemStatus Status1 = new ShopItemStatus("1", shopItem1, true);
+        ShopItem shopItem2 =
+            new ShopItem("SKINS_2333", 12, "Image2");
+        ShopItemStatus Status2 = new ShopItemStatus("2", shopItem2, false);
+        statuses[0] = Status1;
+        statuses[1] = Status2;
+        return statuses;
+
+    }
 
     public PlayerstatisticDTO[] GetDummyDataRewards()
     {
@@ -660,7 +686,7 @@ private void PlayAchievementNotificationSound(){
             int knowledge = random.Next(0, 501);
             int rewards = random.Next(0, 501);
             bool showRewards = true;
-
+            int credit = 30;
             int worldIndex = random.Next(1, 5);
             int dungeonIndex = random.Next(1, 5);
 
@@ -671,7 +697,7 @@ private void PlayAchievementNotificationSound(){
             TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
             TeleporterDTO[] unlockedTeleporters = { teleporter };
 
-            PlayerstatisticDTO player = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards, "-");
+            PlayerstatisticDTO player = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards, credit, "-");
             allStatistics[i] = player;
         }
 
@@ -684,7 +710,7 @@ private void PlayAchievementNotificationSound(){
 
         TeleporterDTO teleporter1 = new TeleporterDTO("1", currentArea1, 1);
         TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
-        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco", 200, 170, true, "TheoPro");
+        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco", 200, 170, true, 30,"TheoPro");
         allStatistics[30] = player31;
         PlayerstatisticDTO ownPlayer = GetOwnDummyData();
         allStatistics[31] = ownPlayer;
@@ -702,7 +728,7 @@ private void PlayAchievementNotificationSound(){
 
         TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
         TeleporterDTO[] unlockedTeleporters = { teleporter };
-        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki", 200, 170, false, "PSEProfi");
+        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki", 200, 170, false, 30,"PSEProfi");
         return ownPlayerData;
     }
 

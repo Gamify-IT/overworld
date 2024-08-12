@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class ShopItem : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public string shopItemID;
+    public int cost;
+    public string imageName;
+
+
+    public ShopItem(string shopItemID, int cost, string imageName)
     {
-        
+        this.shopItemID = shopItemID;
+        this.cost = cost;
+        this.imageName = imageName;
     }
 
-    // Update is called once per frame
-    void Update()
+    public ShopItem() { }
+
+    public static ShopItem CreateFromJSON(string jsonString)
     {
-        
+        return JsonUtility.FromJson<ShopItem>(jsonString);
     }
+    
 }

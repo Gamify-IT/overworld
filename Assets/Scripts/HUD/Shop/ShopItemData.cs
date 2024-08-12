@@ -4,15 +4,102 @@ using UnityEngine;
 
 public class ShopItemData : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private static string imageFolder = "ShopItemImages";
+    private static string defaultImageName = "defaultImage";
+
+    private readonly string shopItemID;
+    private readonly int cost;
+    private readonly bool bought;
+    private readonly string id;
+    private readonly string imageName;
+    private readonly Sprite image;
+
+
+    public ShopItemData(string id, string shopItemID, int cost, bool bought, string imageName)
     {
-        
+        this.shopItemID = shopItemID;
+        this.cost = cost;
+        this.bought = bought;
+        this.id = id;
+        this.imageName = imageName;
+        this.image = GetImage(imageName);
+
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public static ShopItemData ConvertFromShopItemStatus(ShopItemStatus status)
     {
+        string id = status.id;
+        int cost = status.shopItem.cost;
+        string title = status.shopItem.shopItemID;
+        string imageName = status.shopItem.imageName;
+        bool bought = status.bought;
         
+
+       ShopItemData data = new ShopItemData(id, title, cost, bought, imageName);
+        return data;
     }
+
+    public static ShopItemStatus ConvertToShopItemStatus(ShopItemData shopItemData)
+    {
+        string id = shopItemData.GetId();
+        int cost = shopItemData.GetCost();
+        bool bought = shopItemData.GetBought();
+        string title = shopItemData.GetTitle();
+        string imageName = shopItemData.GetImageName();
+
+       ShopItem shopItem = new ShopItem(title, cost, imageName);
+
+        ShopItemStatus shopItemStatus = new ShopItemStatus(id, shopItem, bought);
+
+        return shopItemStatus;
+    }
+
+    
+
+
+    private Sprite GetImage(string imageName)
+    {
+        var sprite = Resources.Load<Sprite>(imageFolder + "/" + imageName);
+        if (sprite == null)
+        {
+            Debug.Log("Load default image");
+            sprite = Resources.Load<Sprite>(imageFolder + "/" + defaultImageName);
+        }
+        //Debug.Log(sprite.ToString());
+        return sprite;
+    }
+
+    public string GetImageName()
+    {
+        return imageName;
+    }
+
+    public Sprite GetImage()
+    {
+        return image;
+    }
+
+    public string GetId()
+    {
+        return id;
+    }
+
+    public string GetTitle()
+    {
+        return shopItemID;
+    }
+
+    public int GetCost()
+    {
+        return cost;
+    }
+
+    public bool GetBought()
+    {
+        return bought;
+    }
+
+    
+
 }
