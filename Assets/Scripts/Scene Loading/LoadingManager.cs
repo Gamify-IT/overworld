@@ -60,7 +60,7 @@ public class LoadingManager : MonoBehaviour
     /// <param name="worldIndex">index of the current world</param>
     /// <param name="dungeonIndex">index of the current dungeon - null if the area is a world</param>
     /// <param name="playerPosition">position where the player should start</param>
-    public void setup(string sceneToLoad, int worldIndex, int dungeonIndex, Vector2 playerPosition)
+    public void Setup(string sceneToLoad, int worldIndex, int dungeonIndex, Vector2 playerPosition)
     {
         this.sceneToLoad = sceneToLoad;
         this.worldIndex = worldIndex;
@@ -119,9 +119,9 @@ public class LoadingManager : MonoBehaviour
         }
         else
         {
-            PlayerstatisticDTO playerData = DataManager.Instance.GetPlayerData();
-            Vector2 newPlayerPosition = new Vector2(playerData.logoutPositionX, playerData.logoutPositionY);
-            setup(playerData.logoutScene, playerData.currentArea.worldIndex, playerData.currentArea.dungeonIndex, newPlayerPosition);
+            PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
+            Vector2 newPlayerPosition = new Vector2(playerData.GetLogoutPositionX(), playerData.GetLogoutPositionY());
+            Setup(playerData.GetLogoutScene(), playerData.GetCurrentArea().worldIndex, playerData.GetCurrentArea().dungeonIndex, newPlayerPosition);
 
             await LoadScene();
         }
@@ -150,7 +150,7 @@ public class LoadingManager : MonoBehaviour
 
         DataManager.Instance.SetPlayerPosition(worldIndex, dungeonIndex);
         GameManager.Instance.SetData(worldIndex, dungeonIndex);
-        AreaLocationDTO[] unlockedAreas = DataManager.Instance.GetPlayerData().unlockedAreas;
+        AreaLocationDTO[] unlockedAreas = DataManager.Instance.GetPlayerData().GetUnlockedAreas();
         SetupProgessBar(unlockedAreas);
 
         slider.value = 0.85f;
@@ -253,7 +253,7 @@ public class LoadingManager : MonoBehaviour
             return;
         }
 
-        AreaLocationDTO[] unlockedAreasOld = DataManager.Instance.GetPlayerData().unlockedAreas;
+        AreaLocationDTO[] unlockedAreasOld = DataManager.Instance.GetPlayerData().GetUnlockedAreas();
 
         Debug.Log("Start fetching data");
 
@@ -273,7 +273,7 @@ public class LoadingManager : MonoBehaviour
         loadingText.text = "PROCESSING DATA...";
 
         GameManager.Instance.SetData(worldIndex, dungeonIndex);
-        AreaLocationDTO[] unlockedAreasNew = DataManager.Instance.GetPlayerData().unlockedAreas;
+        AreaLocationDTO[] unlockedAreasNew = DataManager.Instance.GetPlayerData().GetUnlockedAreas();
         SetupProgessBar(unlockedAreasNew);
         string infoText = CheckForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
 

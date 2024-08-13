@@ -36,16 +36,15 @@ public class PlayerAnimation : MonoBehaviour
     private AudioSource audioSource;
     private bool isMoving;
 
-    private int daysPlayed;
-    private DateTime lastLoginDate;
-
     /// <summary>
     ///     This method is called before the first frame update.
     ///     It is used to initialize variables.
     /// </summary>
     private void Start()
     {
-        timeInGameStart=Time.time;
+        InitializeAudio();
+
+        timeInGameStart = Time.time;
 
         canMove = true;
         busy = false;
@@ -61,9 +60,6 @@ public class PlayerAnimation : MonoBehaviour
         moveRight = GameManager.Instance.GetKeyCode(Binding.MOVE_RIGHT);
         sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
-
-        InitializeAudio();
-        Invoke("CheckForLastLogin", 4.5f);
     }
 
     /// <summary>
@@ -79,53 +75,6 @@ public class PlayerAnimation : MonoBehaviour
         audioSource.clip = moveSound;
         audioSource.loop = true;
         audioSource.playOnAwake = false;
-    }
-
-    /// <summary>
-    ///     This function checks if a new day has already started since the player's last login and if so, the achievement for the login is updated
-    /// </summary>
-    private void CheckForLastLogin()
-    {
-        string lastLoginDateStr = PlayerPrefs.GetString("LastLoginDate", "");
-        int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
-
-        DateTime today = DateTime.Today;
-        if (!string.IsNullOrEmpty(lastLoginDateStr))
-        {
-            lastLoginDate = DateTime.Parse(lastLoginDateStr);
-
-            if (lastLoginDate.Date < today)
-            {
-                daysPlayed = daysCount + 1;
-                UpdateLoginAchievement();
-            }
-            else
-            {
-                daysPlayed = daysCount;
-            }
-        }
-        else
-        {
-            lastLoginDate = DateTime.Now;
-            daysPlayed = 1;
-            UpdateLoginAchievement();
-        }
-
-        PlayerPrefs.SetString("LastLoginDate", DateTime.Now.ToString("yyyy-MM-dd"));
-        PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
-        PlayerPrefs.Save();
-        Debug.Log("day: days played " + daysPlayed);
-        Debug.Log("day: current date " + DateTime.Now);
-        Debug.Log("day: last play date " + lastLoginDate);
-    }
-
-    /// <summary>
-    ///     This function updates login achievements
-    /// </summary>
-    private void UpdateLoginAchievement()
-    {
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1, null);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1, null);
     }
     
     /// <summary>

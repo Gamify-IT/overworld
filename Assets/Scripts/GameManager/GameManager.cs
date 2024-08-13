@@ -69,13 +69,15 @@ public class GameManager : MonoBehaviour
         string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
         Debug.Log("path: " + path);
 
-        PlayerstatisticDTO playerStatistic = DataManager.Instance.GetPlayerData();
+        PlayerStatisticData playerStatistic = DataManager.Instance.GetPlayerData();
 
-        playerStatistic.logoutPositionX = GameObject.FindGameObjectWithTag("Player").transform.position.x;
-        playerStatistic.logoutPositionY = GameObject.FindGameObjectWithTag("Player").transform.position.y;
-        playerStatistic.currentCharacterIndex = DataManager.Instance.GetCharacterIndex();
+        playerStatistic.SetLastActive(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        playerStatistic.SetLogoutPositionX(GameObject.FindGameObjectWithTag("Player").transform.position.x);
+        playerStatistic.SetLogoutPositionY(GameObject.FindGameObjectWithTag("Player").transform.position.y);
 
-        string json = JsonUtility.ToJson(playerStatistic, true);
+        PlayerStatisticDTO playerStatisticDTO = PlayerStatisticDTO.ConvertDataToDTO(playerStatistic);
+
+        string json = JsonUtility.ToJson(playerStatisticDTO, true);
 
         bool succesful = await RestRequest.PutRequest(path, json);
 
@@ -100,22 +102,21 @@ public class GameManager : MonoBehaviour
         string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
         Debug.Log("path: " + path);
 
-        PlayerstatisticDTO playerStatistic = DataManager.Instance.GetPlayerData();
-        playerStatistic.volumeLevel = VolumeControllerButton.volumeLevel;
-         DataManager.Instance.SetPlayerData(playerStatistic);
+        PlayerStatisticData playerStatistic = DataManager.Instance.GetPlayerData();
+        playerStatistic.SetVolumeLevel(VolumeControllerButton.volumeLevel);
 
-        string json = JsonUtility.ToJson(playerStatistic, true);
+        PlayerStatisticDTO playerStatisticDTO = PlayerStatisticDTO.ConvertDataToDTO(playerStatistic);
+
+        string json = JsonUtility.ToJson(playerStatisticDTO, true);
 
         bool succesful = await RestRequest.PutRequest(path, json);
 
         if (succesful)
         {
-            //Debug.Log("Updated volume level " + playerStatistic.volumeLevel +" successfully");
             return true;
         }
         else
         {
-            //Debug.Log("Could not updated volume level " + playerStatistic.volumeLevel +" successfully");
             return false;
         }
     }
@@ -256,15 +257,15 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Optional<PlayerstatisticDTO> playerStatistics =
-            await RestRequest.GetRequest<PlayerstatisticDTO>(path + "/playerstatistics/");
+        Optional<PlayerStatisticDTO> playerStatistics =
+            await RestRequest.GetRequest<PlayerStatisticDTO>(path + "/playerstatistics/");
         if (!playerStatistics.IsPresent())
         {
             loadingError = true;
         }
 
-        Optional<PlayerstatisticDTO[]> allPlayerStatistics =
-           await RestRequest.GetArrayRequest<PlayerstatisticDTO>(path + "/playerstatistics/allPlayerStatistics");
+        Optional<PlayerStatisticDTO[]> allPlayerStatistics =
+           await RestRequest.GetArrayRequest<PlayerStatisticDTO>(path + "/playerstatistics/allPlayerStatistics");
         if (!allPlayerStatistics.IsPresent())
         {
             loadingError = true;
@@ -308,28 +309,19 @@ public class GameManager : MonoBehaviour
             }
 
             DataManager.Instance.ReadTeleporterConfig();
-            DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
             DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
             DataManager.Instance.ProcessKeybindings(keybindings.Value());             
             DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());           
-            DataManager.Instance.ProcessPlayerstatisticDTO(playerStatistics.Value());
+            //DataManager.Instance.ProcessPlayerstatisticDTO(playerStatistics.Value());
+            DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
 
         }
 
         Debug.Log("Everything set up");
 
         return loadingError;
-    }
-
-    /// <summary>
-    ///     This function sets last chosen volume level 
-    /// </summary>
-    /// <param name="volumeLevel">current volume level</param>
-    public void SetVolumeLevel(int volumeLevel)
-    {
-        DataManager.Instance.SetVolumeLevel(volumeLevel);
     }
 
     /// <summary>
@@ -380,7 +372,7 @@ public class GameManager : MonoBehaviour
     {
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
         LoadingManager.Instance.UnloadUnneededScenesExcept("no exceptions in this case ;)");
-        LoadingManager.Instance.setup(sceneName, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
+        LoadingManager.Instance.Setup(sceneName, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
         await LoadingManager.Instance.LoadScene();
     }
 
@@ -634,7 +626,7 @@ public class GameManager : MonoBehaviour
     {
         string uri = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/" + userId;
 
-        Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(uri);
+        Optional<PlayerStatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerStatisticDTO>(uri);
 
         if (playerStatistics.IsPresent())
         {
@@ -702,13 +694,13 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.SetWorldData(worldIndex, new WorldData());
         }
 
-        DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
         AchievementStatistic[] achivements = GetDummyAchievements();
-        PlayerstatisticDTO[] rewards = GetDummyDataRewards();
-        PlayerstatisticDTO ownPlayer = GetOwnDummyData();
+        PlayerStatisticDTO[] rewards = GetDummyDataRewards();
+        PlayerStatisticDTO ownPlayer = GetOwnDummyData();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
-        DataManager.Instance.ProcessPlayerstatisticDTO(ownPlayer);        
+        //DataManager.Instance.ProcessPlayerstatisticDTO(ownPlayer);        
         DataManager.Instance.ProcessAllPlayerStatistics(rewards);
+        DataManager.Instance.ProcessPlayerStatistics(new PlayerStatisticDTO());
 
         ResetKeybindings();
     }
@@ -730,10 +722,10 @@ public class GameManager : MonoBehaviour
 
   
 
-    public PlayerstatisticDTO[] GetDummyDataRewards()
+    public PlayerStatisticDTO[] GetDummyDataRewards()
     {
         int playerCount = 30;
-        PlayerstatisticDTO[] allStatistics = new PlayerstatisticDTO[32];
+        PlayerStatisticDTO[] allStatistics = new PlayerStatisticDTO[32];
 
         System.Random random = new System.Random();
         List<string> names = new List<string> {
@@ -741,7 +733,6 @@ public class GameManager : MonoBehaviour
         "Walter", "Grace", "Hank", "Ivy", "Justin", "Karen", "Leo", "Monica", "Nina", "Oscar",
         "Paula", "Quentin", "Rachel", "Steve", "Tom", "Uma", "Vince", "Wendy", "Xander", "Yara"
     };
-
 
         for (int i = 0; i < playerCount; i++)
         {
@@ -762,7 +753,8 @@ public class GameManager : MonoBehaviour
             TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
             TeleporterDTO[] unlockedTeleporters = { teleporter };
 
-            PlayerstatisticDTO player = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, 1,  knowledge, rewards, showRewards, "-");
+            PlayerStatisticDTO player = new PlayerStatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+               21.5f, 2.5f, "World 1", 0 , 1,  knowledge, rewards, showRewards, "-");
             allStatistics[i] = player;
         }
 
@@ -775,14 +767,15 @@ public class GameManager : MonoBehaviour
 
         TeleporterDTO teleporter1 = new TeleporterDTO("1", currentArea1, 1);
         TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
-        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco", 1, 200, 170, true, "TheoPro");
+        PlayerStatisticDTO player31 = new PlayerStatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco",
+            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 21.5f, 2.5f, "World 1", 0, 1, 200, 170, true, "TheoPro");
         allStatistics[30] = player31;
-        PlayerstatisticDTO ownPlayer = GetOwnDummyData();
+        PlayerStatisticDTO ownPlayer = GetOwnDummyData();
         allStatistics[31] = ownPlayer;
         return allStatistics;
     }
 
-    public PlayerstatisticDTO GetOwnDummyData()
+    public PlayerStatisticDTO GetOwnDummyData()
     {
 
         int worldIndex = 2;
@@ -793,7 +786,8 @@ public class GameManager : MonoBehaviour
 
         TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
         TeleporterDTO[] unlockedTeleporters = { teleporter };
-        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki", 1, 200, 170, false, "PSEProfi");
+        PlayerStatisticDTO ownPlayerData = new PlayerStatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki",
+            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 21.5f, 2.5f, "World 1", 0, 1, 200, 170, false, "PSEProfi");
         return ownPlayerData;
     }
 

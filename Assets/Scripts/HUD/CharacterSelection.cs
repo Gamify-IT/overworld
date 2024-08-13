@@ -23,7 +23,7 @@ public class CharacterSelection : MonoBehaviour
 
         numberOfCharacters = DataManager.Instance.GetCharacterSprites().Count;
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
-        currentIndex = DataManager.Instance.GetCharacterIndex();
+        currentIndex = DataManager.Instance.GetPlayerData().GetCurrentCharacterIndex();
         audioSource=GetComponent<AudioSource>();
 
         if(audioSource == null)
