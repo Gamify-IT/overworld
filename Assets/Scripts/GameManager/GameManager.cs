@@ -363,6 +363,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Start minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
         Reload();
+        PlayerAnimation.Instance.EnableMovement(); 
     }
 
     /// <summary>
