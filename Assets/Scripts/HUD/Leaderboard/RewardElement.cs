@@ -18,14 +18,20 @@ public class RewardElement : MonoBehaviour
         this.playername.text = playername.Replace("_", " ");
         this.reward.text = reward.ToString();
         this.place.text = place.ToString();
+        
         if (showCrown && place == 1)
         {
             crownIcon.gameObject.SetActive(showCrown);
-        } else if (showCrown && place == 2) { 
-        silverIcon.gameObject.SetActive(showCrown); }
+            GameManager.Instance.UpdateAchievement(AchievementTitle.GOAT, 1, null);
+        } 
+        else if (showCrown && place == 2) { 
+            silverIcon.gameObject.SetActive(showCrown); 
+            GameManager.Instance.UpdateAchievement(AchievementTitle.ONE_OF_THE_BEST_PLAYERS, 1, null);
+        }
         else
         {
             bronzeIcon.gameObject.SetActive(showCrown);
+            GameManager.Instance.UpdateAchievement(AchievementTitle.ONE_OF_THE_BEST_PLAYERS, 1, null);
         }
        
     }

@@ -166,7 +166,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
 
     }
-
+    
     private void Setup()
     {
         SetupDropdowns();

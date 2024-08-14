@@ -38,6 +38,8 @@ public class PlayerAnimation : MonoBehaviour
 
     private int daysPlayed;
     private DateTime lastLoginDate;
+    private PlayerStatisticData ownPlayerData;
+    private int rewardsAmount;
 
     /// <summary>
     ///     This method is called before the first frame update.
@@ -64,6 +66,18 @@ public class PlayerAnimation : MonoBehaviour
 
         InitializeAudio();
         Invoke("CheckForLastLogin", 4.5f);
+        Invoke("CheckForRewardsAmount", 3.5f);
+    }
+
+    /// <summary>
+    ///     This function updates the rewards amount for achievement regarding saved data in the leaderboard
+    /// </summary>
+    private void CheckForRewardsAmount()
+    {
+        ownPlayerData = DataManager.Instance.GetOwnStatisticData();
+        rewardsAmount = ownPlayerData.GetRewards();
+        GameManager.Instance.UpdateAchievement(AchievementTitle.GET_COINS, rewardsAmount, null);
+        GameManager.Instance.UpdateAchievement(AchievementTitle.GET_MORE_COINS, rewardsAmount, null);
     }
 
     /// <summary>
@@ -133,6 +147,7 @@ public class PlayerAnimation : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        CheckForRewardsAmount();
         if (canMove)
         {
             
