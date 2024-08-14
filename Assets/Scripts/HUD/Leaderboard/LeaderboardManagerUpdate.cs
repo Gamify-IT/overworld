@@ -65,7 +65,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private void Start()
     {
-        ownData = DataManager.Instance.GetOwnStatisticData();
+        ownData = DataManager.Instance.GetPlayerData();
         ranking = DataManager.Instance.GetAllPlayerStatistics();
 
         audioSource = GetComponent<AudioSource>();
@@ -192,7 +192,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         if (visibilityButton.text == "your username is anonymous")
         {
             visibilityButton.text = "your username is public";
-            ownData.updateVisibility(true);
+            ownData.SetVisibility(true);
             Debug.Log($"Player showRewards value: {ownData.GetShowRewards()}");
 
 
@@ -200,7 +200,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         else
         {
             visibilityButton.text = "your username is anonymous";
-            ownData.updateVisibility(false);
+            ownData.SetVisibility(false);
             Debug.Log($"Player showRewards value: {ownData.GetShowRewards()}");
 
 

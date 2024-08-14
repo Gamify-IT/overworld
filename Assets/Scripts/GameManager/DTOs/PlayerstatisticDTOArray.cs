@@ -9,7 +9,7 @@ public class PlayerstatisticDTOArray
 {
     #region Attributes
 
-    public PlayerstatisticDTO[] playerstatisticDTOs;
+    public PlayerStatisticDTO[] playerstatisticDTOs;
 
     #endregion
 
@@ -25,7 +25,7 @@ public class PlayerstatisticDTOArray
 
     #region Constructors
 
-    public PlayerstatisticDTOArray(PlayerstatisticDTO[] playerstatisticDTOs)
+    public PlayerstatisticDTOArray(PlayerStatisticDTO[] playerstatisticDTOs)
     {
         this.playerstatisticDTOs = playerstatisticDTOs;
     }

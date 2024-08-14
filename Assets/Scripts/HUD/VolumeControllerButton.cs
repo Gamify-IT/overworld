@@ -27,8 +27,8 @@ public class VolumeControllerButton : MonoBehaviour
         buttonImage = button.GetComponent<Image>();
         button.onClick.AddListener(ChangeVolume);
 
-        PlayerstatisticDTO playerData = DataManager.Instance.GetPlayerData();
-        volumeLevel = playerData.volumeLevel;
+        PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
+        volumeLevel = playerData.GetVolumeLevel();
 
         UpdateButtonImage();
         UpdateVolume();
@@ -37,12 +37,12 @@ public class VolumeControllerButton : MonoBehaviour
     /// <summary>
     /// This function changes the volume level to the next one and save this level in PlayerPrefs
     /// </summary>
-    private void ChangeVolume()
+    private async void ChangeVolume()
     {
         audioSource.Play();
         volumeLevel = (volumeLevel + 1) % 4;
-        GameManager.Instance.SetVolumeLevel(volumeLevel);
-        GameManager.Instance.SaveVolumeLevel();
+        DataManager.Instance.GetPlayerData().SetVolumeLevel(volumeLevel);
+        await GameManager.Instance.SaveVolumeLevel();
         UpdateVolume();
         UpdateButtonImage();
     }
