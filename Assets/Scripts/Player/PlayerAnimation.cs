@@ -65,7 +65,6 @@ public class PlayerAnimation : MonoBehaviour
         sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
 
-        InitializeAudio();
         Invoke("CheckForRewardsAmount", 3.5f);
     }
 
