@@ -75,7 +75,7 @@ public enum AchievementTitle
     TRAVELER,
     GAMER,
     PROFESSIONAL_GAMER,
-    LEVEL_UP,
+    //LEVEL_UP,
     GOAT,
     ONE_OF_THE_BEST_PLAYERS,
     GET_COINS,
