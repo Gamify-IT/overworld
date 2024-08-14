@@ -71,7 +71,7 @@ public class PlayerAnimation : MonoBehaviour
     /// </summary>
     private void CheckForRewardsAmount()
     {
-        ownPlayerData = DataManager.Instance.GetOwnStatisticData();
+        ownPlayerData = DataManager.Instance.GetPlayerData();
         rewardsAmount = ownPlayerData.GetRewards();
         GameManager.Instance.UpdateAchievement(AchievementTitle.GET_COINS, rewardsAmount, null);
         GameManager.Instance.UpdateAchievement(AchievementTitle.GET_MORE_COINS, rewardsAmount, null);
