@@ -36,6 +36,9 @@ public class PlayerAnimation : MonoBehaviour
     private AudioSource audioSource;
     private bool isMoving;
 
+    private PlayerStatisticData ownPlayerData;
+    private int rewardsAmount;
+
     /// <summary>
     ///     This method is called before the first frame update.
     ///     It is used to initialize variables.
@@ -60,6 +63,18 @@ public class PlayerAnimation : MonoBehaviour
         moveRight = GameManager.Instance.GetKeyCode(Binding.MOVE_RIGHT);
         sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
+        Invoke("CheckForRewardsAmount", 3.5f);
+    }
+
+    /// <summary>
+    ///     This function updates the rewards amount for achievement regarding saved data in the leaderboard
+    /// </summary>
+    private void CheckForRewardsAmount()
+    {
+        ownPlayerData = DataManager.Instance.GetOwnStatisticData();
+        rewardsAmount = ownPlayerData.GetRewards();
+        GameManager.Instance.UpdateAchievement(AchievementTitle.GET_COINS, rewardsAmount, null);
+        GameManager.Instance.UpdateAchievement(AchievementTitle.GET_MORE_COINS, rewardsAmount, null);
     }
 
     /// <summary>
@@ -82,6 +97,7 @@ public class PlayerAnimation : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        CheckForRewardsAmount();
         if (canMove)
         {
             
