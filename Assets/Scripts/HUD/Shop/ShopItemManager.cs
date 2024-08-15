@@ -41,6 +41,7 @@ public class ShopItemManager : MonoBehaviour
     {
         shopItemData = DataManager.Instance.GetShopItems();
         UpdateUI();
+        UpdateCreditText();
 
         yesButton.onClick.AddListener(YesButtonClicked);
         noButton.onClick.AddListener(() => insurancePanel.SetActive(false));
@@ -52,6 +53,7 @@ public class ShopItemManager : MonoBehaviour
         ACCESSORIESEButton.onClick.AddListener(OnAccessoriesButtonClicked);
         showAllButton.onClick.AddListener(OnShowAllItemsClicked);
         inventoryButton.onClick.AddListener(ShowPurchasedItems);
+      
     }
 
     void UpdateUI()
