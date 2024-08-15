@@ -43,7 +43,7 @@ public class ShopItemManager : MonoBehaviour
 
     void UpdateUI()
     {
-        ClearShopItems(); 
+        ClearShopItems();
         DisplayShopItems(shopItemData);
     }
 
@@ -51,7 +51,7 @@ public class ShopItemManager : MonoBehaviour
     {
         foreach (Transform child in content.transform)
         {
-            Destroy(child.gameObject);  
+            Destroy(child.gameObject);
         }
     }
 

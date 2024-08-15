@@ -699,27 +699,27 @@ private void PlayAchievementNotificationSound(){
     {
         ShopItemStatus[] statuses = new ShopItemStatus[6];
         ShopItem shopItem1 =
-            new ShopItem("FLAME HAT",15,  "flames");
+            new ShopItem("FLAME HAT",15,  "flames", "ACCESSORIES");
         ShopItemStatus Status1 = new ShopItemStatus("1", shopItem1, true);
 
         ShopItem shopItem2 =
-            new ShopItem("GLOBE HAT", 31, "globuseinzeln");
+            new ShopItem("GLOBE HAT", 31, "globuseinzeln", "ACCESSORIES");
         ShopItemStatus Status2 = new ShopItemStatus("2", shopItem2, false);
 
         ShopItem shopItem3 =
-           new ShopItem("SANTA COSTUME", 18, "santa");
+           new ShopItem("SANTA COSTUME", 18, "santa", "OUTFIT") ;
         ShopItemStatus Status3 = new ShopItemStatus("3", shopItem3, false);
 
         ShopItem shopItem4 =
-           new ShopItem("HEART GLASSES", 25, "herzi");
+           new ShopItem("HEART GLASSES", 25, "herzi", "ACCESSORIES");
         ShopItemStatus Status4 = new ShopItemStatus("4", shopItem4, false);
 
         ShopItem shopItem5 =
-           new ShopItem("SUIT", 7, "anzug");
+           new ShopItem("SUIT", 7, "anzug", "OUTFIT");
         ShopItemStatus Status5 = new ShopItemStatus("5", shopItem5, true);
 
         ShopItem shopItem6 =
-           new ShopItem("BLUE SHIRT", 7, "shirt");
+           new ShopItem("BLUE SHIRT", 7, "shirt", "OUTFIT");
         ShopItemStatus Status6 = new ShopItemStatus("6", shopItem6, true);
 
 

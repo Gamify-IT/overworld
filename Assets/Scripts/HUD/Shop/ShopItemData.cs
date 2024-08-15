@@ -16,9 +16,10 @@ public class ShopItemData
     private readonly string imageName;
     private readonly Sprite image;
     private bool updated;
+    private readonly string category;
 
 
-    public ShopItemData(string id, string shopItemID, int cost, bool bought, string imageName)
+    public ShopItemData(string id, string shopItemID, int cost, bool bought, string imageName, string category)
     {
         this.shopItemID = shopItemID;
         this.cost = cost;
@@ -27,7 +28,7 @@ public class ShopItemData
         this.imageName = imageName;
         this.image = GetImage(imageName);
         updated = false;
-
+        this.category = category;
 
     }
 
@@ -39,9 +40,10 @@ public class ShopItemData
         string title = status.shopItem.shopItemID;
         string imageName = status.shopItem.imageName;
         bool bought = status.bought;
+        string category = status.shopItem.category;
         
 
-       ShopItemData data = new ShopItemData(id, title, cost, bought, imageName);
+       ShopItemData data = new ShopItemData(id, title, cost, bought, imageName, category);
         return data;
     }
 
@@ -52,8 +54,9 @@ public class ShopItemData
         bool bought = shopItemData.IsBought();
         string title = shopItemData.GetTitle();
         string imageName = shopItemData.GetImageName();
+        string category = shopItemData.GetCategory();
 
-       ShopItem shopItem = new ShopItem(title, cost, imageName);
+       ShopItem shopItem = new ShopItem(title, cost, imageName, category);
 
         ShopItemStatus shopItemStatus = new ShopItemStatus(id, shopItem, bought);
 
@@ -122,4 +125,8 @@ public class ShopItemData
         return updated;
     }
 
+    public string GetCategory()
+    {
+        return category;
+    }
 }
