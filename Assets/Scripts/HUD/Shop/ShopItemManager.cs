@@ -27,6 +27,10 @@ public class ShopItemManager : MonoBehaviour
 
     [SerializeField] private AudioSource audioSource;  
     [SerializeField] private AudioClip successSound;
+    [SerializeField] private AudioClip notEnoughCreditSound;
+    [SerializeField] private AudioClip alertSound;
+    [SerializeField] private AudioClip clickSound;
+
 
     [SerializeField] private TMP_Text creditText;
 
@@ -102,6 +106,7 @@ public class ShopItemManager : MonoBehaviour
                 }
 
                 buyButton.onClick.AddListener(() => {
+                    PlayAlertSound();
                     successPanel.SetActive(true);
                     successText.text = "You already bought this item.";
                 });
@@ -134,6 +139,9 @@ public class ShopItemManager : MonoBehaviour
 
     private void YesButtonClicked()
     {
+
+        PlayClickSound();
+
         ownData = DataManager.Instance.GetOwnStatisticData();
 
         Debug.Log($"Attempting to buy item: {currentItemTitle} for {currentItemPrice} coins.");
@@ -150,9 +158,13 @@ public class ShopItemManager : MonoBehaviour
             int updatedCredit = ownData.GetCredit();
             Debug.Log($"Credit after update: {updatedCredit}");
 
+            PlayClickSound();
+
+            PlaySuccessSound();
+
             successPanel.SetActive(true);
             successText.text = $"Nice! You just bought the {currentItemTitle} for {currentItemPrice} coins!";
-            PlaySuccessSound();
+            
             if (System.Enum.TryParse(currentItemTitle, out ShopItemTitle itemTitle))
             {
                 DataManager.Instance.UpdateShopItemStatus(itemTitle, true);
@@ -168,6 +180,9 @@ public class ShopItemManager : MonoBehaviour
         }
         else
         {
+            PlayClickSound();
+
+            PlayNotEnoughCreditSound();
             successPanel.SetActive(true);
             successText.text = "Oh no, you don't have enough credit! Let's gain some more rewards and then turn back!";
         }
@@ -186,6 +201,7 @@ public class ShopItemManager : MonoBehaviour
 
     private void ClosePanels()
     {
+        PlayClickSound();
         insurancePanel.SetActive(false);
         successPanel.SetActive(false);
     }
@@ -194,8 +210,41 @@ public class ShopItemManager : MonoBehaviour
     {
         if (audioSource != null && successSound != null)
         {
+            audioSource.time = 1.0f;
             audioSource.PlayOneShot(successSound);
         }
+
+        
+    }
+
+    private void PlayNotEnoughCreditSound()
+    {
+        if (audioSource != null && notEnoughCreditSound != null)
+        {
+            audioSource.PlayOneShot(notEnoughCreditSound);
+        }
+
+
+    }
+
+    private void PlayAlertSound()
+    {
+        if (audioSource != null && alertSound != null)
+        {
+            audioSource.PlayOneShot(alertSound);
+        }
+
+
+    }
+
+    private void PlayClickSound()
+    {
+        if (audioSource != null && clickSound != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
+
+
     }
 
     private void FilterItemsByCategory(string category)
@@ -206,17 +255,24 @@ public class ShopItemManager : MonoBehaviour
     }
 
     public void OnOutfitButtonClicked()
+
     {
+        PlayClickSound();
+
         FilterItemsByCategory("OUTFIT");
     }
 
     public void OnAccessoriesButtonClicked()
     {
+        PlayClickSound();
+
         FilterItemsByCategory("ACCESSORIES");
     }
 
     public void OnShowAllItemsClicked()
     {
+        PlayClickSound();
+
         ClearShopItems();
         DisplayShopItems(shopItemData);
     }
@@ -231,6 +287,8 @@ public class ShopItemManager : MonoBehaviour
 
     private void ShowPurchasedItems()
     {
+        PlayClickSound();
+
         ClearShopItems();
 
         List<ShopItemData> purchasedItems = shopItemData.FindAll(item => item.IsBought());
