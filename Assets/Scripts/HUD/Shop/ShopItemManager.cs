@@ -31,7 +31,6 @@ public class ShopItemManager : MonoBehaviour
 
     void Start()
     {
-        ownData = DataManager.Instance.GetOwnStatisticData();
         shopItemData = DataManager.Instance.GetShopItems();
         UpdateUI();
 
@@ -44,8 +43,16 @@ public class ShopItemManager : MonoBehaviour
 
     void UpdateUI()
     {
+        ClearShopItems(); 
         DisplayShopItems(shopItemData);
-        UpdateCreditText();
+    }
+
+    private void ClearShopItems()
+    {
+        foreach (Transform child in content.transform)
+        {
+            Destroy(child.gameObject);  
+        }
     }
 
     private void DisplayShopItems(List<ShopItemData> shopItemsToDisplay)
@@ -66,11 +73,39 @@ public class ShopItemManager : MonoBehaviour
             string title = shopItem.GetTitle();
             Sprite image = shopItem.GetImage();
             int price = shopItem.GetCost();
-            shopItemUIElement.Setup(title, image, price);
+            bool bought = shopItem.IsBought();
+            bool showCoin = !bought;
+            shopItemUIElement.Setup(title, image, bought, showCoin);
 
             Button buyButton = shopItemObject.GetComponentInChildren<Button>();
-            if (buyButton != null)
+            TMP_Text buyButtonText = buyButton.GetComponentInChildren<TMP_Text>();
+
+            Image panelImage = shopItemObject.GetComponent<Image>();
+
+
+            if (bought)
             {
+                panelImage.color = new Color(1f, 1f, 1f, 0.5f);
+
+                if (buyButtonText != null)
+                {
+                    buyButtonText.text = "<i>Already Bought</i>";  
+                }
+
+                buyButton.onClick.AddListener(() => {
+                    successPanel.SetActive(true);
+                    successText.text = "You already bought this item.";
+                });
+
+            }
+            else
+            {
+                if (buyButtonText != null)
+                {
+                    buyButtonText.text = $"Buy for {price} coins";
+                }
+                buyButton.interactable = true;
+
                 buyButton.onClick.AddListener(() => OpenInsurancePanel(title, price));
             }
         }
@@ -90,6 +125,8 @@ public class ShopItemManager : MonoBehaviour
 
     private void YesButtonClicked()
     {
+        ownData = DataManager.Instance.GetOwnStatisticData();
+
         Debug.Log($"Attempting to buy item: {currentItemTitle} for {currentItemPrice} coins.");
 
         if (ownData.GetCredit() >= currentItemPrice)
@@ -104,8 +141,6 @@ public class ShopItemManager : MonoBehaviour
             int updatedCredit = ownData.GetCredit();
             Debug.Log($"Credit after update: {updatedCredit}");
 
-            
-
             successPanel.SetActive(true);
             successText.text = $"Nice! You just bought the {currentItemTitle} for {currentItemPrice} coins!";
             if (System.Enum.TryParse(currentItemTitle, out ShopItemTitle itemTitle))
@@ -117,18 +152,23 @@ public class ShopItemManager : MonoBehaviour
                 Debug.LogError($"Failed to parse item title: {currentItemTitle}");
                 insuranceText.text = "Error: Invalid item title!";
             }
+
+            UpdateCreditText();
+            UpdateUI();
         }
         else
         {
-            insuranceText.text = "Sorry, you don't have enough credits!";
+            successPanel.SetActive(true);
+            successText.text = "Oh no, you don't have enough credit! Let's gain some more rewards and then turn back!";
         }
 
-        UpdateCreditText();
         insurancePanel.SetActive(false);
     }
 
     private void UpdateCreditText()
     {
+        ownData = DataManager.Instance.GetOwnStatisticData();
+
         int credit = ownData.GetCredit();
         creditText.text = $"{credit}";
         Debug.Log($"Updated Credit Text: {credit}");

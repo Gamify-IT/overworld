@@ -697,15 +697,39 @@ private void PlayAchievementNotificationSound(){
 
     public ShopItemStatus[] GetDummyShopItems()
     {
-        ShopItemStatus[] statuses = new ShopItemStatus[2];
+        ShopItemStatus[] statuses = new ShopItemStatus[6];
         ShopItem shopItem1 =
-            new ShopItem("SKINS_1",15,  "Image1");
+            new ShopItem("FLAME HAT",15,  "flames");
         ShopItemStatus Status1 = new ShopItemStatus("1", shopItem1, true);
+
         ShopItem shopItem2 =
-            new ShopItem("SKINS_2", 12, "Image2");
+            new ShopItem("GLOBE HAT", 31, "globuseinzeln");
         ShopItemStatus Status2 = new ShopItemStatus("2", shopItem2, false);
+
+        ShopItem shopItem3 =
+           new ShopItem("SANTA COSTUME", 18, "santa");
+        ShopItemStatus Status3 = new ShopItemStatus("3", shopItem3, false);
+
+        ShopItem shopItem4 =
+           new ShopItem("HEART GLASSES", 25, "herzi");
+        ShopItemStatus Status4 = new ShopItemStatus("4", shopItem4, false);
+
+        ShopItem shopItem5 =
+           new ShopItem("SUIT", 7, "anzug");
+        ShopItemStatus Status5 = new ShopItemStatus("5", shopItem5, true);
+
+        ShopItem shopItem6 =
+           new ShopItem("BLUE SHIRT", 7, "shirt");
+        ShopItemStatus Status6 = new ShopItemStatus("6", shopItem6, true);
+
+
         statuses[0] = Status1;
         statuses[1] = Status2;
+        statuses[2] = Status3;
+        statuses[3] = Status4;
+        statuses[4] = Status5;
+        statuses[5] = Status6;
+
         return statuses;
 
     }
