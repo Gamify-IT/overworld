@@ -164,7 +164,7 @@ public class LoadingManager : MonoBehaviour
 
         Debug.Log("Set player position");
 
-        AreaData world1 = DataManager.Instance.GetAreaData(new AreaInformation(1, new Optional<int>())).Value();
+        AreaData world1 = DataManager.Instance.GetAreaData(new AreaInformation(worldIndex, new Optional<int>(dungeonIndex))).Value();
         if (world1.IsGeneratedArea())
         {
             playerPosition = FindStartingPosition(world1);

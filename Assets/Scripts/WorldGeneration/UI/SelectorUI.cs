@@ -115,7 +115,7 @@ public class SelectorUI : MonoBehaviour
         {
             // retrieve entered data from dropdownmenus
             string courseID = courseIDs[courseIDDropDownMenu.value - 1].ToString();
-            int worldIndex = wordlIndexDropDownMenu.value;
+            int worldIndex = wordlIndexDropDownMenu.value + 4;
             Optional<int> dungeonIndex = dungeonIndexDropDownMenu.value != 0 ? new Optional<int>(dungeonIndexDropDownMenu.value) : new Optional<int>();
 
             AreaGeneratorManager.Instance.StartGenerator(courseID, worldIndex, dungeonIndex);

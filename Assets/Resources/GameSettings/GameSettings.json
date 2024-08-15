@@ -1,6 +1,6 @@
 {
     "overworldBackendPath": "/overworld/api/v1",
-    "maxWorld": 4,
+    "maxWorld": 8,
     "maxMinigames": 15,
     "maxNPCs": 10,
     "maxBooks": 5,

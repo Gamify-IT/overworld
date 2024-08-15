@@ -93,7 +93,7 @@ public class LoadFirstScene : MonoBehaviour
         Debug.Log("Start loading LoadingScreen");
 
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
-        LoadingManager.Instance.setup("World 1", worldIndex, dungeonIndex, playerPosition);
+        LoadingManager.Instance.setup("World 5", 5, 0, playerPosition);
 
         Debug.Log("Finish loading LoadingScreen");
 
