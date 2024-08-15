@@ -20,6 +20,12 @@ public class ShopItemManager : MonoBehaviour
     [SerializeField] private Button insuranceCloseButton;
     [SerializeField] private Button successCloseButton;
 
+    [SerializeField] private Button OUTFITButton;
+    [SerializeField] private Button ACCESSORIESEButton;
+
+    [SerializeField] private AudioSource audioSource;  
+    [SerializeField] private AudioClip successSound;
+
     [SerializeField] private TMP_Text creditText;
 
     private string currentItemTitle;
@@ -143,6 +149,7 @@ public class ShopItemManager : MonoBehaviour
 
             successPanel.SetActive(true);
             successText.text = $"Nice! You just bought the {currentItemTitle} for {currentItemPrice} coins!";
+            PlaySuccessSound();
             if (System.Enum.TryParse(currentItemTitle, out ShopItemTitle itemTitle))
             {
                 DataManager.Instance.UpdateShopItemStatus(itemTitle, true);
@@ -179,4 +186,13 @@ public class ShopItemManager : MonoBehaviour
         insurancePanel.SetActive(false);
         successPanel.SetActive(false);
     }
+
+    private void PlaySuccessSound()
+    {
+        if (audioSource != null && successSound != null)
+        {
+            audioSource.PlayOneShot(successSound);
+        }
+    }
+
 }
