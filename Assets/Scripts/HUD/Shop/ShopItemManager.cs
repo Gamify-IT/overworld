@@ -22,6 +22,8 @@ public class ShopItemManager : MonoBehaviour
 
     [SerializeField] private Button OUTFITButton;
     [SerializeField] private Button ACCESSORIESEButton;
+    [SerializeField] private Button showAllButton;
+    [SerializeField] private Button inventoryButton;
 
     [SerializeField] private AudioSource audioSource;  
     [SerializeField] private AudioClip successSound;
@@ -45,6 +47,11 @@ public class ShopItemManager : MonoBehaviour
 
         insuranceCloseButton.onClick.AddListener(() => ClosePanels());
         successCloseButton.onClick.AddListener(() => ClosePanels());
+
+        OUTFITButton.onClick.AddListener(OnOutfitButtonClicked);
+        ACCESSORIESEButton.onClick.AddListener(OnAccessoriesButtonClicked);
+        showAllButton.onClick.AddListener(OnShowAllItemsClicked);
+        inventoryButton.onClick.AddListener(ShowPurchasedItems);
     }
 
     void UpdateUI()
@@ -53,13 +60,7 @@ public class ShopItemManager : MonoBehaviour
         DisplayShopItems(shopItemData);
     }
 
-    private void ClearShopItems()
-    {
-        foreach (Transform child in content.transform)
-        {
-            Destroy(child.gameObject);
-        }
-    }
+   
 
     private void DisplayShopItems(List<ShopItemData> shopItemsToDisplay)
     {
@@ -193,6 +194,45 @@ public class ShopItemManager : MonoBehaviour
         {
             audioSource.PlayOneShot(successSound);
         }
+    }
+
+    private void FilterItemsByCategory(string category)
+    {
+        ClearShopItems();
+        List<ShopItemData> filteredItems = shopItemData.FindAll(item => item.GetCategory() == category);
+        DisplayShopItems(filteredItems);
+    }
+
+    public void OnOutfitButtonClicked()
+    {
+        FilterItemsByCategory("OUTFIT");
+    }
+
+    public void OnAccessoriesButtonClicked()
+    {
+        FilterItemsByCategory("ACCESSORIES");
+    }
+
+    public void OnShowAllItemsClicked()
+    {
+        ClearShopItems();
+        DisplayShopItems(shopItemData);
+    }
+
+    private void ClearShopItems()
+    {
+        foreach (Transform child in content.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    private void ShowPurchasedItems()
+    {
+        ClearShopItems();
+
+        List<ShopItemData> purchasedItems = shopItemData.FindAll(item => item.IsBought());
+        DisplayShopItems(purchasedItems);
     }
 
 }
