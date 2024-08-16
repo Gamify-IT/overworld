@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
-
+using System;
 /// <summary>
 ///     This enum is used to store the state of a minigame as follows:
 ///     notConfigurated -> the minigame was not set by the courses and therefor is not part of the game
@@ -128,6 +128,8 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     /// <param name="collision"></param>
     public void OnTriggerEnter2D(Collider2D collision)
     {
+        PlayerAnimation.Instance.DisableMovement();
+        PlayerAnimation.Instance.StopMoveSound();
         audioSource.PlayOneShot(minigameSpotOpenSound);
         if (collision.CompareTag("Player"))
         {
@@ -200,24 +202,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_ACHIEVER, 1, successfullyCompletedMinigames);
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_PROFESSIONAL, 1, successfullyCompletedMinigames);
             
-            if(game=="CHICKENSHOCK"){
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.CHICKENSHOCK_MASTER, 1, successfullyCompletedMinigames);
-            }
-            if(game=="MEMORY"){
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MEMORY_MASTER, 1, successfullyCompletedMinigames);
-            }
-            if(game=="FINITEQUIZ"){
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.FINITEQUIZ_MASTER, 1, successfullyCompletedMinigames);
-            }
-            if(game=="TOWERCRUSH"){
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TOWERCRUSH_MASTER, 1, successfullyCompletedMinigames);
-            }
-            if(game=="CROSSWORDPUZZLE"){
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.CROSSWORDPUZZLE_MASTER, 1, successfullyCompletedMinigames);
-            }
-            if(game=="BUGFINDER"){
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.BUGFINDER_MASTER, 1, successfullyCompletedMinigames);
-            }
+            GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"{game}_MASTER"), 1, successfullyCompletedMinigames);
         }
     }
     /// <summary>

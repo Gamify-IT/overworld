@@ -94,6 +94,10 @@ public class AchievementData
     /// <returns>True if the achievement is just now completed, false otherwise</returns>
     public bool UpdateProgress(int newProgress, List<(int, int, int)> newInteractedObjects)
     {
+        if(completed)
+        {
+            return false;
+        }
         updated = true;
         progress = newProgress;
         interactedObjects = newInteractedObjects;
