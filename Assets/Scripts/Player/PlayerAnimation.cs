@@ -360,7 +360,7 @@ public class PlayerAnimation : MonoBehaviour
     /// <summary>
     /// This function stops the movement sound.
     /// </summary>
-    private void StopMoveSound()
+    public void StopMoveSound()
     {
         if (audioSource.isPlaying)
         {
