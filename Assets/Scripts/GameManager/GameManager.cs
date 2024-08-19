@@ -741,7 +741,7 @@ public class GameManager : MonoBehaviour
             string userId = "Id" + id;
             string username = names[i];
             int knowledge = random.Next(0, 501);
-            int rewards = random.Next(0, 501);
+            int rewards = random.Next(0, 15);
             bool showRewards = true;
 
             int worldIndex = random.Next(1, 5);

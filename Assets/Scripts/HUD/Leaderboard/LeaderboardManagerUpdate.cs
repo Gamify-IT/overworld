@@ -420,19 +420,37 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
 
 
-   
+
 
     private void DisplayRewards(List<PlayerStatisticData> rewardsToDisplay)
     {
-        var sortedRewards = rewardsToDisplay.OrderByDescending(rank => rank.GetRewards()).ToList();
+        var groupedRewards = rewardsToDisplay
+            .GroupBy(rank => rank.GetRewards())
+            .OrderByDescending(group => group.Key) 
+            .ToList();
 
-        for (int i = 0; i < sortedRewards.Count; i++)
+        int currentRank = 1;
+        int highlightRankLimit = 3; 
+        int uniqueRankCount = 0; 
+
+        foreach (var group in groupedRewards)
         {
-            DisplayRewards(sortedRewards[i], i + 1);
+            var sortedGroup = group.OrderBy(rank => rank.GetUsername()).ToList(); 
+            int groupSize = sortedGroup.Count;
+
+            bool shouldHighlight = uniqueRankCount < highlightRankLimit;
+
+            foreach (var player in sortedGroup)
+            {
+                DisplayRewards(player, currentRank, shouldHighlight);
+            }
+
+            uniqueRankCount++;
+            currentRank += 1;
         }
     }
 
-    private void DisplayRewards(PlayerStatisticData rank, int place)
+    private void DisplayRewards(PlayerStatisticData rank, int place, bool highlight)
     {
         GameObject achievementObject = Instantiate(rewardObject, content.transform, false);
         RewardElement rewardElement = achievementObject.GetComponent<RewardElement>();
@@ -456,13 +474,14 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
             int reward = rank.GetRewards();
 
-            rewardElement.Setup(playername, reward, place, place == 1 || place == 2 || place == 3);
+            rewardElement.Setup(playername, reward, place, highlight);
         }
         else
         {
             Destroy(achievementObject);
         }
     }
+
 
 
 
