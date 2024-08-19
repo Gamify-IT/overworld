@@ -797,7 +797,7 @@ private void PlayAchievementNotificationSound(){
 
         TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
         TeleporterDTO[] unlockedTeleporters = { teleporter };
-        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("50", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki", 200, 170, false, 30,"PSEProfi");
+        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki", 200, 170, false, 50,"PSEProfi");
         return ownPlayerData;
     }
 

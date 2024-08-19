@@ -15,6 +15,7 @@ public class HandleShopMenu : MonoBehaviour
     public void closeShop()
     {
         ShopPanel.SetActive(false);
+        Time.timeScale = 1f;
     }
 
 }

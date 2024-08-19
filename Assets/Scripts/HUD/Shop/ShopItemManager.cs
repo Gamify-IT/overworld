@@ -43,6 +43,7 @@ public class ShopItemManager : MonoBehaviour
 
     void Start()
     {
+        ownData = DataManager.Instance.GetOwnStatisticData();
         shopItemData = DataManager.Instance.GetShopItems();
         UpdateUI();
         UpdateCreditText();
