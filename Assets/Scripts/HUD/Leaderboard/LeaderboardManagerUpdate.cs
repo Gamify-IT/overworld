@@ -70,7 +70,12 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         ownData = DataManager.Instance.GetPlayerData();
         visibility = ownData.GetVisibility();
         ranking = DataManager.Instance.GetAllPlayerStatistics();
-        
+
+        // change character head in visibility button to selected one
+        Image characterHead = GameObject.Find("Head Leaderboard").GetComponent<Image>();
+        int characterIndex = DataManager.Instance.GetPlayerData().GetCurrentCharacterIndex();
+        characterHead.sprite = DataManager.Instance.GetCharacterHeads()[characterIndex];
+
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
