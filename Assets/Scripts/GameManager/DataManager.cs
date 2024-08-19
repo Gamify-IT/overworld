@@ -358,7 +358,7 @@ public class DataManager : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         SpriteRenderer currentSprite = player.GetComponent<SpriteRenderer>();
         Animator currentAnimator = player.GetComponent<Animator>();
-        Image characterHead = GameObject.Find("Player Head").GetComponent<Image>();
+        Image characterHead = GameObject.Find("Head Minimap").GetComponent<Image>();
 
         // initialize the saved player sprite, animations and head on the minimap
         currentSprite.sprite = GetCharacterSprites()[currentIndex];
