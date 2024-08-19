@@ -296,6 +296,11 @@ public class PlayerStatisticData
         return pseudonym;
     }
 
+    public bool GetVisibility()
+    {
+        return showRewards;
+    }
+
     public void SetPseudonym(string newPseudonym)
     {
         this.pseudonym = newPseudonym;

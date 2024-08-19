@@ -44,6 +44,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip clickSound;
 
+    private bool visibility;
 
     private bool isLeaderboardOpen = true;
 
@@ -65,9 +66,11 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private void Start()
     {
+       
         ownData = DataManager.Instance.GetPlayerData();
+        visibility = ownData.GetVisibility();
         ranking = DataManager.Instance.GetAllPlayerStatistics();
-
+        
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
@@ -446,7 +449,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             }
             else
             {
-                playername = rank.GetPseudonym();
+                playername = ownData.GetPseudonym();
             }
 
             if (rank.GetId() == ownData.GetId())
