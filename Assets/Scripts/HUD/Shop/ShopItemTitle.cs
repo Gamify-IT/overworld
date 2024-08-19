@@ -4,6 +4,10 @@ using UnityEngine;
 
 public enum ShopItemTitle 
 {
-    SKINS_1,
-    SKINS_2
+   FLAME_HAT,
+   GLOBE_HAT,
+   SANTA_COSTUME,
+   HEART_GLASSES,
+   SUIT,
+   BLUE_SHIRT   
 }

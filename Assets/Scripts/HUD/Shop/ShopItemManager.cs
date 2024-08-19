@@ -143,20 +143,13 @@ public class ShopItemManager : MonoBehaviour
         PlayClickSound();
 
         ownData = DataManager.Instance.GetOwnStatisticData();
+        int price = currentItemPrice;
 
         Debug.Log($"Attempting to buy item: {currentItemTitle} for {currentItemPrice} coins.");
 
         if (ownData.GetCredit() >= currentItemPrice)
         {
-            int oldCredit = ownData.GetCredit();
-            int newCredit = oldCredit - currentItemPrice;
-
-            Debug.Log($"Old Credit: {oldCredit}, New Credit: {newCredit}");
-
-            ownData.SetCredit(newCredit);
-
-            int updatedCredit = ownData.GetCredit();
-            Debug.Log($"Credit after update: {updatedCredit}");
+            
 
             PlayClickSound();
 
@@ -164,10 +157,13 @@ public class ShopItemManager : MonoBehaviour
 
             successPanel.SetActive(true);
             successText.text = $"Nice! You just bought the {currentItemTitle} for {currentItemPrice} coins!";
-            
+
+            ownData.UpdateData(currentItemPrice);
+
             if (System.Enum.TryParse(currentItemTitle, out ShopItemTitle itemTitle))
             {
-                DataManager.Instance.UpdateShopItemStatus(itemTitle, true);
+
+                GameManager.Instance.UpdateShopItemStatus(itemTitle, true);
             }
             else
             {
@@ -192,7 +188,6 @@ public class ShopItemManager : MonoBehaviour
 
     private void UpdateCreditText()
     {
-        ownData = DataManager.Instance.GetOwnStatisticData();
 
         int credit = ownData.GetCredit();
         creditText.text = $"{credit}";

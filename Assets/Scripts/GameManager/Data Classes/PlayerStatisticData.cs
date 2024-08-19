@@ -77,6 +77,12 @@ public class PlayerStatisticData
         return data;
     }
 
+    public void UpdateData(int price)
+    {
+        
+        credit = this.credit - price;
+       
+    }
 
     public string calculateLeagueOfPlayer(int rewards)
     {
