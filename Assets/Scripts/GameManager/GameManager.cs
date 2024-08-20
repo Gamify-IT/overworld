@@ -102,18 +102,15 @@ public class GameManager : MonoBehaviour
         List<Keybinding> keybindingList = DataManager.Instance.GetKeybindings();
         foreach (var keybinding in keybindingList)
         {
-            string binding = keybinding.GetBinding().ToString();
+            //string binding = keybinding.GetBinding().ToString();
             keybinding.SetVolumeLevel(VolumeControllerButton.volumeLevel);
-            string path = overworldBackendPath + "/players/" + userId + "/keybindings/" + binding;
+            string path = overworldBackendPath + "/players/" + userId + "/keybindings/" + keybinding.GetBinding();
             string json = JsonUtility.ToJson(keybinding, true);
             bool succesful = await RestRequest.PutRequest(path, json);
             if (!succesful)
             {
                 return false;
             }
-            
-                
-            
         }
         return false;
         /*string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;

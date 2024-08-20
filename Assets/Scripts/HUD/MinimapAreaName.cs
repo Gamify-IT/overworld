@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class MinimapAreaName : MonoBehaviour
 
     private string currentAreaName;
     
-    private PlayerStatisticData playerData;
+    private List<Keybinding> keybindings;
     private int volumeLevel;
   
     public AudioClip backgroundMusicWorld1;
@@ -47,8 +48,12 @@ public class MinimapAreaName : MonoBehaviour
     /// </summary>
     private void UpdateVolume()
     {
-        playerData = DataManager.Instance.GetPlayerData();
-        volumeLevel = playerData.GetVolumeLevel();
+        keybindings = DataManager.Instance.GetKeybindings();
+        foreach (var keybinding in keybindings)
+        {
+            volumeLevel = keybinding.GetVolumeLevel();
+        }
+
         float volume = 0f;
         switch (volumeLevel)
         {
