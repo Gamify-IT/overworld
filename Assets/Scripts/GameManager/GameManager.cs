@@ -99,7 +99,24 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public async UniTask<bool> SaveVolumeLevel()
     {
-        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
+        List<Keybinding> keybindingList = DataManager.Instance.GetKeybindings();
+        foreach (var keybinding in keybindingList)
+        {
+            string binding = keybinding.GetBinding().ToString();
+            keybinding.SetVolumeLevel(VolumeControllerButton.volumeLevel);
+            string path = overworldBackendPath + "/players/" + userId + "/keybindings/" + binding;
+            string json = JsonUtility.ToJson(keybinding, true);
+            bool succesful = await RestRequest.PutRequest(path, json);
+            if (!succesful)
+            {
+                return false;
+            }
+            
+                
+            
+        }
+        return false;
+        /*string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
         Debug.Log("path: " + path);
 
         PlayerStatisticData playerStatistic = DataManager.Instance.GetPlayerData();
@@ -110,15 +127,8 @@ public class GameManager : MonoBehaviour
         string json = JsonUtility.ToJson(playerStatisticDTO, true);
 
         bool succesful = await RestRequest.PutRequest(path, json);
-
-        if (succesful)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+*/
+        
     }
 
     /// <summary>
@@ -521,7 +531,8 @@ public class GameManager : MonoBehaviour
         {
             string binding = keybinding.GetBinding().ToString();
             string key = keybinding.GetKey().ToString();
-            KeybindingDTO keybindingDTO = new KeybindingDTO(userId, binding, key);
+            int volumeLevel = keybinding.GetVolumeLevel();
+            KeybindingDTO keybindingDTO = new KeybindingDTO(userId, binding, key, volumeLevel);
 
             string json = JsonUtility.ToJson(keybindingDTO, true);
             string path = overworldBackendPath + "/players/" + userId + "/keybindings/" + binding;
@@ -553,37 +564,39 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ResetKeybindings()
     {
-        Keybinding moveUp = new Keybinding(Binding.MOVE_UP, KeyCode.W);
+        int currentVolumeLevel = VolumeControllerButton.volumeLevel;
+
+        Keybinding moveUp = new Keybinding(Binding.MOVE_UP, KeyCode.W, currentVolumeLevel);
         ChangeKeybind(moveUp);
 
-        Keybinding moveLeft = new Keybinding(Binding.MOVE_LEFT, KeyCode.A);
+        Keybinding moveLeft = new Keybinding(Binding.MOVE_LEFT, KeyCode.A, currentVolumeLevel);
         ChangeKeybind(moveLeft);
 
-        Keybinding moveDown = new Keybinding(Binding.MOVE_DOWN, KeyCode.S);
+        Keybinding moveDown = new Keybinding(Binding.MOVE_DOWN, KeyCode.S, currentVolumeLevel);
         ChangeKeybind(moveDown);
 
-        Keybinding moveRight = new Keybinding(Binding.MOVE_RIGHT, KeyCode.D);
+        Keybinding moveRight = new Keybinding(Binding.MOVE_RIGHT, KeyCode.D, currentVolumeLevel);
         ChangeKeybind(moveRight);
 
-        Keybinding sprint = new Keybinding(Binding.SPRINT, KeyCode.LeftShift);
+        Keybinding sprint = new Keybinding(Binding.SPRINT, KeyCode.LeftShift, currentVolumeLevel);
         ChangeKeybind(sprint);
 
-        Keybinding interact = new Keybinding(Binding.INTERACT, KeyCode.E);
+        Keybinding interact = new Keybinding(Binding.INTERACT, KeyCode.E, currentVolumeLevel);
         ChangeKeybind(interact);
 
-        Keybinding cancel = new Keybinding(Binding.CANCEL, KeyCode.Escape);
+        Keybinding cancel = new Keybinding(Binding.CANCEL, KeyCode.Escape, currentVolumeLevel);
         ChangeKeybind(cancel);
 
-        Keybinding minimapZoomIn = new Keybinding(Binding.MINIMAP_ZOOM_IN, KeyCode.P);
+        Keybinding minimapZoomIn = new Keybinding(Binding.MINIMAP_ZOOM_IN, KeyCode.P, currentVolumeLevel);
         ChangeKeybind(minimapZoomIn);
 
-        Keybinding minimapZoomOut = new Keybinding(Binding.MINIMAP_ZOOM_OUT, KeyCode.O);
+        Keybinding minimapZoomOut = new Keybinding(Binding.MINIMAP_ZOOM_OUT, KeyCode.O, currentVolumeLevel);
         ChangeKeybind(minimapZoomOut);
 
-        Keybinding gameZoomIn = new Keybinding(Binding.GAME_ZOOM_IN, KeyCode.Alpha0);
+        Keybinding gameZoomIn = new Keybinding(Binding.GAME_ZOOM_IN, KeyCode.Alpha0, currentVolumeLevel);
         ChangeKeybind(gameZoomIn);
 
-        Keybinding gameZoomOut = new Keybinding(Binding.GAME_ZOOM_OUT, KeyCode.Alpha9);
+        Keybinding gameZoomOut = new Keybinding(Binding.GAME_ZOOM_OUT, KeyCode.Alpha9, currentVolumeLevel);
         ChangeKeybind(gameZoomOut);
     }
 

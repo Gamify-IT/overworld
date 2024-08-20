@@ -10,12 +10,14 @@ public class KeybindingDTO
     public string id;
     public string binding;
     public string key;
+    public int volumeLevel;
 
-    public KeybindingDTO(string id, string binding, string key)
+    public KeybindingDTO(string id, string binding, string key, int volumeLevel)
     {
         this.id = id;
         this.binding = binding;
         this.key = key;
+        this.volumeLevel = volumeLevel;
     }
 
     public KeybindingDTO() { }

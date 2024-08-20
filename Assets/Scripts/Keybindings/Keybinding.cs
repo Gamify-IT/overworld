@@ -6,14 +6,26 @@ public class Keybinding
 {
     private Binding binding;
     private KeyCode key;
+    private int volumeLevel;
 
-    public Keybinding(Binding binding, KeyCode key)
+    public Keybinding(Binding binding, KeyCode key, int volumeLevel)
     {
         this.binding = binding;
         this.key = key;
+        this.volumeLevel = volumeLevel;
     }
 
     #region Getter And Setter
+
+    public int GetVolumeLevel()
+    {
+        return volumeLevel;
+    }
+
+    public void SetVolumeLevel(int volumeLevel)
+    {
+        this.volumeLevel = volumeLevel;
+    }
 
     public Binding GetBinding()
     {
@@ -39,7 +51,8 @@ public class Keybinding
     {
         Binding binding = (Binding) System.Enum.Parse(typeof(Binding), keybindingDTO.binding);
         KeyCode key = (KeyCode)System.Enum.Parse(typeof(KeyCode), keybindingDTO.key);
-        Keybinding keybinding = new Keybinding(binding, key);
+        int volumeLevel = keybindingDTO.volumeLevel;
+        Keybinding keybinding = new Keybinding(binding, key, volumeLevel);
         return keybinding;
     }
 

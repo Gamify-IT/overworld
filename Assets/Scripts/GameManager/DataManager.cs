@@ -23,6 +23,7 @@ public class DataManager : MonoBehaviour
     private AreaDataManager areaDataManager;
     private WorldData[] worldData;
     private PlayerStatisticData playerData;
+    private List<Keybinding> keybinding;
     //private PlayerStatisticData ownPlayerData;
     private List<AchievementData> achievementData;
     private List<PlayerStatisticData> allPlayerStatisticsData;
@@ -665,6 +666,7 @@ public class DataManager : MonoBehaviour
             keybindings[binding] = keyCode;
             GameEvents.current.KeybindingChange(binding);
             keyChanged = true;
+            keybinding.SetVolumeLevel(VolumeControllerButton.volumeLevel);
             Debug.Log("Changed binding " + binding + " to: " + keybinding.GetKey().ToString());
         }
         return keyChanged;
@@ -948,11 +950,12 @@ public class DataManager : MonoBehaviour
     /// <returns>A list containing all keybindings</returns>
     private List<Keybinding> KeybindingsAsList()
     {
+        int currentVolumeLevel = VolumeControllerButton.volumeLevel;
         List<Keybinding> keybindingsList = new List<Keybinding>();
 
         foreach (KeyValuePair<Binding, KeyCode> pair in keybindings)
         {
-            Keybinding newBinding = new Keybinding(pair.Key, pair.Value);
+            Keybinding newBinding = new Keybinding(pair.Key, pair.Value, currentVolumeLevel);
             keybindingsList.Add(newBinding);
         }
 

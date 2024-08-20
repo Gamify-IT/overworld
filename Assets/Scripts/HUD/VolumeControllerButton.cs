@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 /// <summary>
 ///     This script manages the volume controller button
@@ -27,8 +28,12 @@ public class VolumeControllerButton : MonoBehaviour
         buttonImage = button.GetComponent<Image>();
         button.onClick.AddListener(ChangeVolume);
 
-        PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
-        volumeLevel = playerData.GetVolumeLevel();
+        //PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
+        //volumeLevel = playerData.GetVolumeLevel();
+
+        List<Keybinding> keybinding = DataManager.Instance.GetKeybindings();
+
+        volumeLevel = keybinding[0].GetVolumeLevel();
 
         UpdateButtonImage();
         UpdateVolume();
