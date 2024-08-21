@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviour
         }
 
         Optional<ShopItem[]> shopItems =
-           await RestRequest.GetArrayRequest<ShopItem>(path + "/shop");
+           await RestRequest.GetArrayRequest<ShopItem>(overworldBackendPath + "/players/" + userId + "/courses/" + courseId + "/shop");
         if (!shopItems.IsPresent())
         {
             loadingError = true;
