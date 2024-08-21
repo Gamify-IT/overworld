@@ -176,6 +176,13 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
+        Optional<ShopItem[]> shopItems =
+           await RestRequest.GetArrayRequest<ShopItem>(path + "/shop");
+        if (!shopItems.IsPresent())
+        {
+            loadingError = true;
+        }
+
         string playerPath = overworldBackendPath + "/players/" + userId;
 
         Optional<AchievementStatistic[]> achievementStatistics =
@@ -185,12 +192,7 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
-        Optional<ShopItemStatus[]> shopItemStatus =
-            await RestRequest.GetArrayRequest<ShopItemStatus>(playerPath + "/shop");
-        if (!shopItemStatus.IsPresent())
-        {
-            loadingError = true;
-        }
+       
 
 
 
@@ -215,7 +217,7 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessKeybindings(keybindings.Value());             
             DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());           
             DataManager.Instance.ProcessPlayerStatisticDTO(playerStatistics.Value());
-            DataManager.Instance.ProcessShopItemStatus(shopItemStatus.Value());
+            DataManager.Instance.ProcessShopItem(shopItems.Value());
 
         }
 
@@ -377,6 +379,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public async void UpdatePlayerCredit(int price, int credit)
+    {
+        bool unlocked = DataManager.Instance.UpdatePlayerCredit(price, credit);
+       
+    }
+
+
     /// <summary>
     ///     This function increases an achievements progress by a given increment
     /// </summary>
@@ -432,6 +441,8 @@ public class GameManager : MonoBehaviour
         return savingSuccessful;
     }
 
+   
+
     public async UniTask<bool> SaveShopItems()
     {
         List<ShopItemData> shopItems = DataManager.Instance.GetShopItems();
@@ -443,25 +454,29 @@ public class GameManager : MonoBehaviour
         {
             if (shopItemData.isUpdated())
             {
-                ShopItemStatus shopItemStatus = ShopItemData.ConvertToShopItemStatus(shopItemData);
+                ShopItem shopItem = ShopItemData.ConvertToShopItem(shopItemData);
 
                 string path = basePath + shopItemData.GetTitle();
-                string json = JsonUtility.ToJson(shopItemStatus, true);
+                string json = JsonUtility.ToJson(shopItem, true);
                 bool successful = await RestRequest.PutRequest(path, json);
                 if (successful)
                 {
-                    Debug.Log("Updated shop item  for " + shopItemStatus.shopItem.shopItemID + " in the overworld backend");
+                    Debug.Log("Updated shop item  for " + shopItem.shopItemID + " in the overworld backend");
                 }
                 else
                 {
                     savingSuccessful = false;
-                    Debug.Log("Could not update the shop item progress for " + shopItemStatus.shopItem.shopItemID + " in the overworld backend");
+                    Debug.Log("Could not update the shop item progress for " + shopItem.shopItemID + " in the overworld backend");
                 }
             }
         }
 
         return savingSuccessful;
     }
+
+   
+
+
 
     /// <summary>
     ///     This functions returns an information text about the barrier.
@@ -671,11 +686,11 @@ private void PlayAchievementNotificationSound(){
         AchievementStatistic[] achivements = GetDummyAchievements();
         PlayerstatisticDTO[] rewards = GetDummyDataRewards();
         PlayerstatisticDTO ownPlayer = GetOwnDummyData();
-        ShopItemStatus[] shopItems = GetDummyShopItems();
+        ShopItem[] shopItems = GetDummyShopItems();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
         DataManager.Instance.ProcessPlayerStatisticDTO(ownPlayer);        
         DataManager.Instance.ProcessAllPlayerStatistics(rewards);
-        DataManager.Instance.ProcessShopItemStatus(shopItems);
+        DataManager.Instance.ProcessShopItem(shopItems);
 
         ResetKeybindings();
     }
@@ -695,42 +710,36 @@ private void PlayAchievementNotificationSound(){
         return statistcs;
     }
 
-    public ShopItemStatus[] GetDummyShopItems()
+    public ShopItem[] GetDummyShopItems()
     {
-        ShopItemStatus[] statuses = new ShopItemStatus[6];
+        ShopItem[] items = new ShopItem[6];
         ShopItem shopItem1 =
-            new ShopItem("FLAME_HAT",15,  "flames", "ACCESSORIES");
-        ShopItemStatus Status1 = new ShopItemStatus("1", shopItem1, false);
+            new ShopItem("FLAME_HAT",15,  "flames", "ACCESSORIES", false);
 
         ShopItem shopItem2 =
-            new ShopItem("GLOBE_HAT", 31, "globuseinzeln", "ACCESSORIES");
-        ShopItemStatus Status2 = new ShopItemStatus("2", shopItem2, false);
-
+            new ShopItem("GLOBE_HAT", 31, "globuseinzeln", "ACCESSORIES", false);
+       
         ShopItem shopItem3 =
-           new ShopItem("SANTA_COSTUME", 18, "santa", "OUTFIT") ;
-        ShopItemStatus Status3 = new ShopItemStatus("3", shopItem3, false);
+           new ShopItem("SANTA_COSTUME", 18, "santa", "OUTFIT", false) ;
 
         ShopItem shopItem4 =
-           new ShopItem("HEART_GLASSES", 25, "herzi", "ACCESSORIES");
-        ShopItemStatus Status4 = new ShopItemStatus("4", shopItem4, false);
+           new ShopItem("HEART_GLASSES", 25, "herzi", "ACCESSORIES", false);
 
         ShopItem shopItem5 =
-           new ShopItem("SUIT", 7, "anzug", "OUTFIT");
-        ShopItemStatus Status5 = new ShopItemStatus("5", shopItem5, false);
+           new ShopItem("SUIT", 7, "anzug", "OUTFIT", false);
 
         ShopItem shopItem6 =
-           new ShopItem("BLUE_SHIRT", 7, "shirt", "OUTFIT");
-        ShopItemStatus Status6 = new ShopItemStatus("6", shopItem6, false);
+           new ShopItem("BLUE_SHIRT", 7, "shirt", "OUTFIT", false);
 
 
-        statuses[0] = Status1;
-        statuses[1] = Status2;
-        statuses[2] = Status3;
-        statuses[3] = Status4;
-        statuses[4] = Status5;
-        statuses[5] = Status6;
+        items[0] = shopItem1;
+        items[1] = shopItem2;
+        items[2] = shopItem3;
+        items[3] = shopItem4;
+        items[4] = shopItem5;
+        items[5] = shopItem6;
 
-        return statuses;
+        return items;
 
     }
 

@@ -116,6 +116,11 @@ public class DataManager : MonoBehaviour
         return playerData;
     }
 
+    public PlayerStatisticData GetOwnPlayerData()
+    {
+        return ownPlayerData;
+    }
+
     /// <summary>
     ///     This function checks if a player has unlocked a world.
     /// </summary>
@@ -369,19 +374,19 @@ public class DataManager : MonoBehaviour
     ///     <c>DataManager</c>
     /// </summary>
     /// <param name="shopItemStatus">The achievement statistic data returned from the backend</param>
-    public void ProcessShopItemStatus(ShopItemStatus[] shopItemStatus)
+    public void ProcessShopItem(ShopItem[] shopItems)
     {
         shopItemData = new List<ShopItemData>();
-        if (shopItemStatus == null)
+        if (shopItems == null)
         {
             Debug.Log("status list is null");
             return;
         }
-        Debug.Log("Process " + shopItemStatus.Length + " statuses of shop items");
+        Debug.Log("Process " + shopItems.Length + " statuses of shop items");
 
-        foreach (ShopItemStatus status in shopItemStatus)
+        foreach (ShopItem item in shopItems)
         {
-            ShopItemData shopItem = ShopItemData.ConvertFromShopItemStatus(status);
+            ShopItemData shopItem = ShopItemData.ConvertFromShopItem(item);
             shopItemData.Add(shopItem);
         }
     }
@@ -571,6 +576,15 @@ public class DataManager : MonoBehaviour
         return false;
     }
 
+    public bool UpdatePlayerCredit(int price, int credit)
+    {
+       
+        if(ownPlayerData != null)
+        {
+            return ownPlayerData.UpdateData(price);
+        }
+        return false;
+    }
 
     /// <summary>
     ///     This function increases an achievements progress by a given increment

@@ -19,6 +19,7 @@ public class PlayerStatisticData
     private string pseudonym;
 
     private string leagueOfPlayer;
+    private bool updated = false;
    
 
     public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  int knowledge, int rewards, bool showRewards,int credit, string pseudonym)
@@ -77,11 +78,20 @@ public class PlayerStatisticData
         return data;
     }
 
-    public void UpdateData(int price)
+
+
+
+    public bool UpdateData(int price)
     {
+        updated = true;
+        int newCredit = this.credit - price;
         
-        credit = this.credit - price;
-       
+        if(newCredit < credit)
+        {
+            credit = newCredit;
+            return true;
+        }
+        return false;
     }
 
     public string calculateLeagueOfPlayer(int rewards)
@@ -103,6 +113,11 @@ public class PlayerStatisticData
 
         return "-";
 
+    }
+
+    public bool isUpdated()
+    {
+        return updated;
     }
 
     #region Getter

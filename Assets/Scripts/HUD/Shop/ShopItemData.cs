@@ -12,19 +12,17 @@ public class ShopItemData
     private readonly string shopItemID;
     private readonly int cost;
     private  bool bought;
-    private readonly string id;
     private readonly string imageName;
     private readonly Sprite image;
     private bool updated;
     private readonly string category;
 
 
-    public ShopItemData(string id, string shopItemID, int cost, bool bought, string imageName, string category)
+    public ShopItemData(string shopItemID, int cost, bool bought, string imageName, string category)
     {
         this.shopItemID = shopItemID;
         this.cost = cost;
         this.bought = bought;
-        this.id = id;
         this.imageName = imageName;
         this.image = GetImage(imageName);
         updated = false;
@@ -33,34 +31,31 @@ public class ShopItemData
     }
 
 
-    public static ShopItemData ConvertFromShopItemStatus(ShopItemStatus status)
+    public static ShopItemData ConvertFromShopItem(ShopItem status)
     {
-        string id = status.id;
-        int cost = status.shopItem.cost;
-        string title = status.shopItem.shopItemID;
-        string imageName = status.shopItem.imageName;
+        int cost = status.cost;
+        string title = status.shopItemID;
+        string imageName = status.imageName;
         bool bought = status.bought;
-        string category = status.shopItem.category;
+        string category = status.category;
         
 
-       ShopItemData data = new ShopItemData(id, title, cost, bought, imageName, category);
+       ShopItemData data = new ShopItemData(title, cost, bought, imageName, category);
         return data;
     }
 
-    public static ShopItemStatus ConvertToShopItemStatus(ShopItemData shopItemData)
+    public static ShopItem ConvertToShopItem(ShopItemData shopItemData)
     {
-        string id = shopItemData.GetId();
         int cost = shopItemData.GetCost();
         bool bought = shopItemData.IsBought();
         string title = shopItemData.GetTitle();
         string imageName = shopItemData.GetImageName();
         string category = shopItemData.GetCategory();
 
-       ShopItem shopItem = new ShopItem(title, cost, imageName, category);
+       ShopItem shopItem = new ShopItem(title, cost, imageName, category, bought);
 
-        ShopItemStatus shopItemStatus = new ShopItemStatus(id, shopItem, bought);
 
-        return shopItemStatus;
+        return shopItem;
     }
 
 
@@ -100,10 +95,7 @@ public class ShopItemData
         return image;
     }
 
-    public string GetId()
-    {
-        return id;
-    }
+    
 
     public string GetTitle()
     {

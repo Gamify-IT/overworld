@@ -58,7 +58,12 @@ public class ShopItemManager : MonoBehaviour
         ACCESSORIESEButton.onClick.AddListener(OnAccessoriesButtonClicked);
         showAllButton.onClick.AddListener(OnShowAllItemsClicked);
         inventoryButton.onClick.AddListener(ShowPurchasedItems);
-      
+
+        if (audioSource != null)
+        {
+            audioSource.volume = 0.3f;
+        }
+
     }
 
     void UpdateUI()
@@ -159,7 +164,7 @@ public class ShopItemManager : MonoBehaviour
             successPanel.SetActive(true);
             successText.text = $"Nice! You just bought the {currentItemTitle} for {currentItemPrice} coins!";
 
-            ownData.UpdateData(currentItemPrice);
+            GameManager.Instance.UpdatePlayerCredit(price, ownData.GetCredit());
 
             if (System.Enum.TryParse(currentItemTitle, out ShopItemTitle itemTitle))
             {

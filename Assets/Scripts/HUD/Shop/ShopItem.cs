@@ -8,13 +8,15 @@ public class ShopItem : MonoBehaviour
     public int cost;
     public string imageName;
     public string category;
+    public bool bought;
 
-    public ShopItem(string shopItemID, int cost, string imageName, string category)
+    public ShopItem(string shopItemID, int cost, string imageName, string category, bool bought)
     {
         this.shopItemID = shopItemID;
         this.cost = cost;
         this.imageName = imageName;
         this.category = category;
+        this.bought = bought;
     }
 
     public ShopItem() { }
