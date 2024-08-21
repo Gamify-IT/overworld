@@ -443,37 +443,6 @@ public class GameManager : MonoBehaviour
 
    
 
-    public async UniTask<bool> SaveShopItems()
-    {
-        List<ShopItemData> shopItems = DataManager.Instance.GetShopItems();
-        string basePath = overworldBackendPath + "/players/" + userId + "/shop/";
-
-        bool savingSuccessful = true;
-
-        foreach (ShopItemData shopItemData in shopItems)
-        {
-            if (shopItemData.isUpdated())
-            {
-                ShopItem shopItem = ShopItemData.ConvertToShopItem(shopItemData);
-
-                string path = basePath + shopItemData.GetTitle();
-                string json = JsonUtility.ToJson(shopItem, true);
-                bool successful = await RestRequest.PutRequest(path, json);
-                if (successful)
-                {
-                    Debug.Log("Updated shop item  for " + shopItem.shopItemID + " in the overworld backend");
-                }
-                else
-                {
-                    savingSuccessful = false;
-                    Debug.Log("Could not update the shop item progress for " + shopItem.shopItemID + " in the overworld backend");
-                }
-            }
-        }
-
-        return savingSuccessful;
-    }
-
    
 
 
