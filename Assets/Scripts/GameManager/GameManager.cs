@@ -48,7 +48,6 @@ public class GameManager : MonoBehaviour
 
 
     #region save player data
-
     /// <summary>
     ///     This function saves all important player data when the plaer is logging out
     /// </summary>
@@ -62,7 +61,7 @@ public class GameManager : MonoBehaviour
     ///     This function saves the last known position of the player in the backend when the player logs out 
     /// </summary>
     /// <returns></returns>
-    public async UniTask<bool> SavePlayerStatistic()
+    private async UniTask<bool> SavePlayerStatistic()
     {
         Debug.Log("Start saving player statistic");
 
@@ -92,40 +91,6 @@ public class GameManager : MonoBehaviour
             return false;
         }
 
-    }
-
-    /// <summary>
-    ///     This function saves the last volume level chosen by the player
-    /// </summary>
-    public async UniTask<bool> SaveVolumeLevel()
-    {
-        List<Keybinding> keybindingList = DataManager.Instance.GetKeybindings();
-        foreach (var keybinding in keybindingList)
-        {
-            //string binding = keybinding.GetBinding().ToString();
-            keybinding.SetVolumeLevel(VolumeControllerButton.volumeLevel);
-            string path = overworldBackendPath + "/players/" + userId + "/keybindings/" + keybinding.GetBinding();
-            string json = JsonUtility.ToJson(keybinding, true);
-            bool succesful = await RestRequest.PutRequest(path, json);
-            if (!succesful)
-            {
-                return false;
-            }
-        }
-        return false;
-        /*string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
-        Debug.Log("path: " + path);
-
-        PlayerStatisticData playerStatistic = DataManager.Instance.GetPlayerData();
-        playerStatistic.SetVolumeLevel(VolumeControllerButton.volumeLevel);
-
-        PlayerStatisticDTO playerStatisticDTO = PlayerStatisticDTO.ConvertDataToDTO(playerStatistic);
-
-        string json = JsonUtility.ToJson(playerStatisticDTO, true);
-
-        bool succesful = await RestRequest.PutRequest(path, json);
-*/
-        
     }
 
     /// <summary>
@@ -321,7 +286,6 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
             DataManager.Instance.ProcessKeybindings(keybindings.Value());             
             DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());           
-            //DataManager.Instance.ProcessPlayerstatisticDTO(playerStatistics.Value());
             DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
 
         }
@@ -461,6 +425,7 @@ public class GameManager : MonoBehaviour
     /// <returns>True if the acheivement is now completed, false otherwise</returns>
     public async void UpdateAchievement(AchievementTitle title, int newProgress, List<(int, int, int)> interactedObjects)
     {
+    #if !UNITY_EDITOR
         bool unlocked = DataManager.Instance.UpdateAchievement(title, newProgress, interactedObjects);
         if (unlocked)
         {
@@ -472,6 +437,7 @@ public class GameManager : MonoBehaviour
 
             EarnAchievement(achievement);
         }
+    #endif
     }
 
     /// <summary>
@@ -528,8 +494,13 @@ public class GameManager : MonoBehaviour
         {
             string binding = keybinding.GetBinding().ToString();
             string key = keybinding.GetKey().ToString();
-            int volumeLevel = keybinding.GetVolumeLevel();
-            KeybindingDTO keybindingDTO = new KeybindingDTO(userId, binding, key, volumeLevel);
+
+            if (keybinding.GetBinding() == Binding.VOLUME_LEVEL)
+            {
+                key = DataManager.Instance.ConvertKeyCodeToInt(keybinding.GetKey()).ToString();
+            }
+
+            KeybindingDTO keybindingDTO = new KeybindingDTO(userId, binding, key);
 
             string json = JsonUtility.ToJson(keybindingDTO, true);
             string path = overworldBackendPath + "/players/" + userId + "/keybindings/" + binding;
@@ -561,40 +532,62 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ResetKeybindings()
     {
-        int currentVolumeLevel = VolumeControllerButton.volumeLevel;
-
-        Keybinding moveUp = new Keybinding(Binding.MOVE_UP, KeyCode.W, currentVolumeLevel);
+        Keybinding moveUp = new Keybinding(Binding.MOVE_UP, KeyCode.W);
         ChangeKeybind(moveUp);
 
-        Keybinding moveLeft = new Keybinding(Binding.MOVE_LEFT, KeyCode.A, currentVolumeLevel);
+        Keybinding moveLeft = new Keybinding(Binding.MOVE_LEFT, KeyCode.A);
         ChangeKeybind(moveLeft);
 
-        Keybinding moveDown = new Keybinding(Binding.MOVE_DOWN, KeyCode.S, currentVolumeLevel);
+        Keybinding moveDown = new Keybinding(Binding.MOVE_DOWN, KeyCode.S);
         ChangeKeybind(moveDown);
 
-        Keybinding moveRight = new Keybinding(Binding.MOVE_RIGHT, KeyCode.D, currentVolumeLevel);
+        Keybinding moveRight = new Keybinding(Binding.MOVE_RIGHT, KeyCode.D);
         ChangeKeybind(moveRight);
 
-        Keybinding sprint = new Keybinding(Binding.SPRINT, KeyCode.LeftShift, currentVolumeLevel);
+        Keybinding sprint = new Keybinding(Binding.SPRINT, KeyCode.LeftShift);
         ChangeKeybind(sprint);
 
-        Keybinding interact = new Keybinding(Binding.INTERACT, KeyCode.E, currentVolumeLevel);
+        Keybinding interact = new Keybinding(Binding.INTERACT, KeyCode.E);
         ChangeKeybind(interact);
 
-        Keybinding cancel = new Keybinding(Binding.CANCEL, KeyCode.Escape, currentVolumeLevel);
+        Keybinding cancel = new Keybinding(Binding.CANCEL, KeyCode.Escape);
         ChangeKeybind(cancel);
 
-        Keybinding minimapZoomIn = new Keybinding(Binding.MINIMAP_ZOOM_IN, KeyCode.P, currentVolumeLevel);
+        Keybinding minimapZoomIn = new Keybinding(Binding.MINIMAP_ZOOM_IN, KeyCode.P);
         ChangeKeybind(minimapZoomIn);
 
-        Keybinding minimapZoomOut = new Keybinding(Binding.MINIMAP_ZOOM_OUT, KeyCode.O, currentVolumeLevel);
+        Keybinding minimapZoomOut = new Keybinding(Binding.MINIMAP_ZOOM_OUT, KeyCode.O);
         ChangeKeybind(minimapZoomOut);
 
-        Keybinding gameZoomIn = new Keybinding(Binding.GAME_ZOOM_IN, KeyCode.Alpha0, currentVolumeLevel);
+        Keybinding gameZoomIn = new Keybinding(Binding.GAME_ZOOM_IN, KeyCode.Alpha0);
         ChangeKeybind(gameZoomIn);
 
-        Keybinding gameZoomOut = new Keybinding(Binding.GAME_ZOOM_OUT, KeyCode.Alpha9, currentVolumeLevel);
+        Keybinding gameZoomOut = new Keybinding(Binding.GAME_ZOOM_OUT, KeyCode.Alpha9);
         ChangeKeybind(gameZoomOut);
+    }
+
+    /// <summary>
+    ///     This function updates the volume level and applies the changes to all audio in the game
+    /// </summary>
+    public void UpdateVolume(int volumeLevel)
+    {
+        float volume = 0f;
+        switch (volumeLevel)
+        {
+            case 0:
+                volume = 0f;
+                break;
+            case 1:
+                volume = 0.5f;
+                break;
+            case 2:
+                volume = 1f;
+                break;
+            case 3:
+                volume = 2f;
+                break;
+        }
+        AudioListener.volume = volume;
     }
 
     /// <summary>
@@ -707,9 +700,7 @@ public class GameManager : MonoBehaviour
 
         AchievementStatistic[] achivements = GetDummyAchievements();
         PlayerStatisticDTO[] rewards = GetDummyDataRewards();
-        PlayerStatisticDTO ownPlayer = GetOwnDummyData();
-        DataManager.Instance.ProcessAchievementStatistics(achivements);
-        //DataManager.Instance.ProcessPlayerstatisticDTO(ownPlayer);        
+        DataManager.Instance.ProcessAchievementStatistics(achivements);      
         DataManager.Instance.ProcessAllPlayerStatistics(rewards);
         DataManager.Instance.ProcessPlayerStatistics(new PlayerStatisticDTO());
 

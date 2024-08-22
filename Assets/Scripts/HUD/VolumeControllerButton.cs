@@ -1,22 +1,23 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 ///     This script manages the volume controller button
 /// </summary>
 public class VolumeControllerButton : MonoBehaviour
 {
-    public Sprite mutedImage;
-    public Sprite quietImage;
-    public Sprite midImage;
-    public Sprite highImage;
+    [SerializeField] private Sprite mutedImage;
+    [SerializeField] private Sprite quietImage;
+    [SerializeField] private Sprite midImage;
+    [SerializeField] private Sprite highImage;
+    [SerializeField] private AudioClip clickSound;
 
     private Button button;
     private Image buttonImage;
-    public static int volumeLevel;
-    public AudioClip clickSound;
     private AudioSource audioSource;
+    private static int volumeLevel;
 
     private void Start()
     {
@@ -28,56 +29,27 @@ public class VolumeControllerButton : MonoBehaviour
         buttonImage = button.GetComponent<Image>();
         button.onClick.AddListener(ChangeVolume);
 
-        //PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
-        //volumeLevel = playerData.GetVolumeLevel();
-
-        List<Keybinding> keybinding = DataManager.Instance.GetKeybindings();
-
-        volumeLevel = keybinding[0].GetVolumeLevel();
-
         UpdateButtonImage();
-        UpdateVolume();
     }
 
     /// <summary>
-    /// This function changes the volume level to the next one and save this level in PlayerPrefs
+    ///     This function changes the volume level to the next one, updates the menu and saves the new volume level
     /// </summary>
-    private async void ChangeVolume()
+    private void ChangeVolume()
     {
         audioSource.Play();
         volumeLevel = (volumeLevel + 1) % 4;
-        DataManager.Instance.GetPlayerData().SetVolumeLevel(volumeLevel);
-        await GameManager.Instance.SaveVolumeLevel();
-        UpdateVolume();
+
         UpdateButtonImage();
+        GameManager.Instance.UpdateVolume(volumeLevel);
+
+        KeyCode volumeLevelKey = DataManager.Instance.ConvertIntToKeyCode(volumeLevel);
+        Keybinding volumeLevelBinding = new Keybinding(Binding.VOLUME_LEVEL, volumeLevelKey);
+        GameManager.Instance.ChangeKeybind(volumeLevelBinding);
     }
 
     /// <summary>
-    /// This function updates the volume level and applies the changes to all audio in the game
-    /// </summary>
-    private void UpdateVolume()
-    {
-        float volume = 0f;
-        switch (volumeLevel)
-        {
-            case 0:
-                volume = 0f;
-                break;
-            case 1:
-                volume = 0.5f;
-                break;
-            case 2:
-                volume = 1f;
-                break;
-            case 3:
-                volume = 2f;
-                break;
-        }
-        AudioListener.volume = volume;
-    }
-
-    /// <summary>
-    /// This function changes the volume controller button to the next one
+    ///     This function changes the volume controller button's image to the next one
     /// </summary>
     private void UpdateButtonImage()
     {
@@ -97,4 +69,17 @@ public class VolumeControllerButton : MonoBehaviour
                 break;
         }
     }
+
+    /// <summary>
+    ///     Updates the current volume level to a new value if this value is between 0 and 3
+    /// </summary>
+    /// <param name="volumeLevel">new volume level between 0 and 3</param>
+    public static void SetVolumeLevel(int volumeLevel)
+    {
+        if (volumeLevel >= 0 && volumeLevel <= 3)
+        {
+            VolumeControllerButton.volumeLevel = volumeLevel;
+        }
+    }
+
 }

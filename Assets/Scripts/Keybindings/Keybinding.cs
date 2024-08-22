@@ -6,27 +6,14 @@ public class Keybinding
 {
     private Binding binding;
     private KeyCode key;
-    private int volumeLevel;
 
-    public Keybinding(Binding binding, KeyCode key, int volumeLevel)
+    public Keybinding(Binding binding, KeyCode key)
     {
         this.binding = binding;
         this.key = key;
-        this.volumeLevel = volumeLevel;
     }
 
     #region Getter And Setter
-
-    public int GetVolumeLevel()
-    {
-        return volumeLevel;
-    }
-
-    public void SetVolumeLevel(int volumeLevel)
-    {
-        this.volumeLevel = volumeLevel;
-    }
-
     public Binding GetBinding()
     {
         return binding;
@@ -50,9 +37,20 @@ public class Keybinding
     public static Keybinding ConvertDTO(KeybindingDTO keybindingDTO)
     {
         Binding binding = (Binding) System.Enum.Parse(typeof(Binding), keybindingDTO.binding);
-        KeyCode key = (KeyCode)System.Enum.Parse(typeof(KeyCode), keybindingDTO.key);
-        int volumeLevel = keybindingDTO.volumeLevel;
-        Keybinding keybinding = new Keybinding(binding, key, volumeLevel);
+        KeyCode key;
+
+        if (binding != Binding.VOLUME_LEVEL)
+        {
+            key = (KeyCode)System.Enum.Parse(typeof(KeyCode), keybindingDTO.key);
+        }
+        else
+        {
+            string receivedKey = keybindingDTO.key;
+            key = receivedKey != "" ? DataManager.Instance.ConvertIntToKeyCode(int.Parse(keybindingDTO.key)) : DataManager.Instance.ConvertIntToKeyCode(1);
+        }   
+        
+        Debug.Log("Converted key for " + binding.ToString() + ": " + key.ToString());
+        Keybinding keybinding = new Keybinding(binding, key);
         return keybinding;
     }
 
