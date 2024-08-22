@@ -8,11 +8,11 @@ public class ShopItem
 {
     public int cost;
     public string imageName;
-    public ShopItemCategory category;
+    public string category;
     public bool bought;
-    public ShopItemTitle title;
+    public string title;
 
-    public ShopItem(ShopItemTitle title, int cost, string imageName, ShopItemCategory category, bool bought)
+    public ShopItem(string title, int cost, string imageName, string category, bool bought)
     {
         this.title = title;
         this.cost = cost;

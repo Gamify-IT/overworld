@@ -47,11 +47,7 @@ public class ShopItemManager : MonoBehaviour
         ownData = DataManager.Instance.GetOwnStatisticData();
         shopItemData = DataManager.Instance.GetShopItems();
 
-        Debug.Log("Shop items loaded:");
-        foreach (var item in shopItemData)
-        {
-            Debug.Log($"Item: {item.GetTitle()}, Category: {item.GetCategory()}");
-        }
+       
 
         UpdateUI();
         UpdateCreditText();
@@ -97,9 +93,8 @@ public class ShopItemManager : MonoBehaviour
         ShopItemUIElement shopItemUIElement = shopItemObject.GetComponent<ShopItemUIElement>();
         if (shopItemUIElement != null)
         {
-            ShopItemTitle titleEnum = shopItem.GetTitle();
 
-            string title = titleEnum.ToString();
+            string title = shopItem.GetTitle();
             Sprite image = shopItem.GetImage();
             int price = shopItem.GetCost();
             bool bought = shopItem.IsBought();
@@ -176,15 +171,9 @@ public class ShopItemManager : MonoBehaviour
 
             GameManager.Instance.UpdatePlayerCredit(price, ownData.GetCredit());
 
-            ShopItemTitle itemTitle;
-            if (Enum.TryParse(currentItemTitle, out itemTitle))
-            {
-                GameManager.Instance.UpdateShopItem(itemTitle, true);
-            }
-            else
-            {
-                Debug.LogWarning($"Invalid ShopItemTitle: {currentItemTitle}");
-            }
+            
+            GameManager.Instance.UpdateShopItem(currentItemTitle, true);
+            
 
 
 
@@ -258,24 +247,23 @@ public class ShopItemManager : MonoBehaviour
 
 
     }
-
-    private void FilterItemsByCategory(ShopItemCategory category)
+    private void FilterItemsByCategory(string category)
     {
         ClearShopItems();
-        List<ShopItemData> filteredItems = shopItemData.FindAll(item => item.GetCategory() == category);
+        List<ShopItemData> filteredItems = shopItemData.FindAll(item => item.GetCategory().Equals(category, StringComparison.OrdinalIgnoreCase));
         DisplayShopItems(filteredItems);
     }
 
     public void OnOutfitButtonClicked()
     {
         PlayClickSound();
-        FilterItemsByCategory(ShopItemCategory.OUTFIT);
+        FilterItemsByCategory("OUTFIT");
     }
 
     public void OnAccessoriesButtonClicked()
     {
         PlayClickSound();
-        FilterItemsByCategory(ShopItemCategory.ACCESSORIES);
+        FilterItemsByCategory("ACCESSORIES");
     }
 
     public void OnShowAllItemsClicked()

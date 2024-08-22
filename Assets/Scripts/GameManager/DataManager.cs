@@ -570,7 +570,7 @@ public class DataManager : MonoBehaviour
         return false;
     }
 
-    public bool UpdateShopItem(ShopItemTitle title, bool newProgress)
+    public bool UpdateShopItem(string title, bool newProgress)
     {
         ShopItemData shopItem = GetShopItem(title);
         if (shopItem != null)
@@ -628,11 +628,11 @@ public class DataManager : MonoBehaviour
         return null;
     }
 
-    public ShopItemData GetShopItem(ShopItemTitle title)
+    public ShopItemData GetShopItem(string title)
     {
         foreach (ShopItemData shopItem in shopItemData)
         {
-            if (shopItem.GetTitle().Equals(title.ToString()))
+            if (shopItem.GetTitle().Equals(title))
             {
                 return shopItem;
             }

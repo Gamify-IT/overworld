@@ -365,18 +365,11 @@ public class GameManager : MonoBehaviour
     }
 
    
-    public async void UpdateShopItem(ShopItemTitle title, bool newProgress)
+    public async void UpdateShopItem(string title, bool newProgress)
     {
-        bool unlocked = DataManager.Instance.UpdateShopItem(title, newProgress);
-        if (unlocked)
-        {
-            ShopItemData shopItem = DataManager.Instance.GetShopItem(title);
-            if (shopItem == null)
-            {
-                return;
-            }
+        DataManager.Instance.UpdateShopItem(title, newProgress);
+       
 
-        }
     }
 
     public async void UpdatePlayerCredit(int price, int credit)
@@ -683,22 +676,22 @@ private void PlayAchievementNotificationSound(){
     {
         ShopItem[] items = new ShopItem[6];
         ShopItem shopItem1 =
-            new ShopItem(ShopItemTitle.FLAME_HAT, 15,  "flames", ShopItemCategory.ACCESSORIES, false);
+            new ShopItem("FLAME_HAT", 15,  "flames", "ACCESSORIES", false);
 
         ShopItem shopItem2 =
-            new ShopItem(ShopItemTitle.GLOBE_HAT, 31, "globuseinzeln", ShopItemCategory.ACCESSORIES, false);
+            new ShopItem("GLOBE_HAT", 31, "globuseinzeln", "ACCESSORIES", false);
        
         ShopItem shopItem3 =
-           new ShopItem(ShopItemTitle.SANTA_COSTUME, 18, "santa", ShopItemCategory.OUTFIT, false) ;
+           new ShopItem("SANTA_COSTUME", 18, "santa", "OUTFIT", false) ;
 
         ShopItem shopItem4 =
-           new ShopItem(ShopItemTitle.HEART_GLASSES, 25, "herzi", ShopItemCategory.ACCESSORIES, false);
+           new ShopItem("HEART_GLASSES", 25, "herzi", "ACCESSORIES", false);
 
         ShopItem shopItem5 =
-           new ShopItem(ShopItemTitle.SUIT, 7, "anzug", ShopItemCategory.OUTFIT, false);
+           new ShopItem("SUIT", 7, "anzug", "OUTFIT", false);
 
         ShopItem shopItem6 =
-           new ShopItem(ShopItemTitle.BLUE_SHIRT, 7, "shirt", ShopItemCategory.OUTFIT, false);
+           new ShopItem("BLUE_SHIRT", 7, "shirt", "OUTFIT", false);
 
 
         items[0] = shopItem1;
