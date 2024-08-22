@@ -33,7 +33,7 @@ public class ShopItemData
     public static ShopItemData ConvertFromShopItem(ShopItem status)
     {
         int cost = status.cost;
-        string title = status.title;
+        string title = status.shopItemID;
         string imageName = status.imageName;
         bool bought = status.bought;
         string category = status.category;

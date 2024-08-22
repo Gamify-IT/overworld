@@ -10,11 +10,11 @@ public class ShopItem
     public string imageName;
     public string category;
     public bool bought;
-    public string title;
+    public string shopItemID;
 
-    public ShopItem(string title, int cost, string imageName, string category, bool bought)
+    public ShopItem(string shopItemID, int cost, string imageName, string category, bool bought)
     {
-        this.title = title;
+        this.shopItemID = shopItemID;
         this.cost = cost;
         this.imageName = imageName;
         this.category = category;
