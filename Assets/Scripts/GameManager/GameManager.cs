@@ -683,22 +683,22 @@ private void PlayAchievementNotificationSound(){
     {
         ShopItem[] items = new ShopItem[6];
         ShopItem shopItem1 =
-            new ShopItem("FLAME_HAT",15,  "flames", "ACCESSORIES", false);
+            new ShopItem(ShopItemTitle.FLAME_HAT, 15,  "flames", ShopItemCategory.ACCESSORIES, false);
 
         ShopItem shopItem2 =
-            new ShopItem("GLOBE_HAT", 31, "globuseinzeln", "ACCESSORIES", false);
+            new ShopItem(ShopItemTitle.GLOBE_HAT, 31, "globuseinzeln", ShopItemCategory.ACCESSORIES, false);
        
         ShopItem shopItem3 =
-           new ShopItem("SANTA_COSTUME", 18, "santa", "OUTFIT", false) ;
+           new ShopItem(ShopItemTitle.SANTA_COSTUME, 18, "santa", ShopItemCategory.OUTFIT, false) ;
 
         ShopItem shopItem4 =
-           new ShopItem("HEART_GLASSES", 25, "herzi", "ACCESSORIES", false);
+           new ShopItem(ShopItemTitle.HEART_GLASSES, 25, "herzi", ShopItemCategory.ACCESSORIES, false);
 
         ShopItem shopItem5 =
-           new ShopItem("SUIT", 7, "anzug", "OUTFIT", false);
+           new ShopItem(ShopItemTitle.SUIT, 7, "anzug", ShopItemCategory.OUTFIT, false);
 
         ShopItem shopItem6 =
-           new ShopItem("BLUE_SHIRT", 7, "shirt", "OUTFIT", false);
+           new ShopItem(ShopItemTitle.BLUE_SHIRT, 7, "shirt", ShopItemCategory.OUTFIT, false);
 
 
         items[0] = shopItem1;

@@ -386,7 +386,12 @@ public class DataManager : MonoBehaviour
 
         foreach (ShopItem item in shopItems)
         {
+            Debug.Log($"Converted ShopItem: Title={item.title}, Cost={item.cost}, Bought={item.bought}, ImageName={item.imageName}, Category={item.category}");
+
             ShopItemData shopItem = ShopItemData.ConvertFromShopItem(item);
+            Debug.Log($"Converted ShopItem: Title={shopItem.GetTitle()}, Cost={shopItem.GetCost()}, Bought={shopItem.IsBought()}, ImageName={shopItem.GetImageName()}, Category={shopItem.GetCategory()}");
+
+
             shopItemData.Add(shopItem);
         }
     }

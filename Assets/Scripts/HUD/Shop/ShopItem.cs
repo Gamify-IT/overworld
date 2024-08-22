@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class ShopItem : MonoBehaviour
+[Serializable]
+public class ShopItem 
 {
-    public string shopItemID;
     public int cost;
     public string imageName;
-    public string category;
+    public ShopItemCategory category;
     public bool bought;
+    public ShopItemTitle title;
 
-    public ShopItem(string shopItemID, int cost, string imageName, string category, bool bought)
+    public ShopItem(ShopItemTitle title, int cost, string imageName, ShopItemCategory category, bool bought)
     {
-        this.shopItemID = shopItemID;
+        this.title = title;
         this.cost = cost;
         this.imageName = imageName;
         this.category = category;

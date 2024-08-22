@@ -46,6 +46,13 @@ public class ShopItemManager : MonoBehaviour
     {
         ownData = DataManager.Instance.GetOwnStatisticData();
         shopItemData = DataManager.Instance.GetShopItems();
+
+        Debug.Log("Shop items loaded:");
+        foreach (var item in shopItemData)
+        {
+            Debug.Log($"Item: {item.GetTitle()}, Category: {item.GetCategory()}");
+        }
+
         UpdateUI();
         UpdateCreditText();
 
@@ -90,7 +97,9 @@ public class ShopItemManager : MonoBehaviour
         ShopItemUIElement shopItemUIElement = shopItemObject.GetComponent<ShopItemUIElement>();
         if (shopItemUIElement != null)
         {
-            string title = shopItem.GetTitle();
+            ShopItemTitle titleEnum = shopItem.GetTitle();
+
+            string title = titleEnum.ToString();
             Sprite image = shopItem.GetImage();
             int price = shopItem.GetCost();
             bool bought = shopItem.IsBought();
@@ -167,11 +176,17 @@ public class ShopItemManager : MonoBehaviour
 
             GameManager.Instance.UpdatePlayerCredit(price, ownData.GetCredit());
 
-            ShopItemTitle itemTitle = (ShopItemTitle)Enum.Parse(typeof(ShopItemTitle), currentItemTitle);
+            ShopItemTitle itemTitle;
+            if (Enum.TryParse(currentItemTitle, out itemTitle))
+            {
+                GameManager.Instance.UpdateShopItem(itemTitle, true);
+            }
+            else
+            {
+                Debug.LogWarning($"Invalid ShopItemTitle: {currentItemTitle}");
+            }
 
-            GameManager.Instance.UpdateShopItem(itemTitle, true);
-            
-           
+
 
             UpdateCreditText();
             UpdateUI();
@@ -244,7 +259,7 @@ public class ShopItemManager : MonoBehaviour
 
     }
 
-    private void FilterItemsByCategory(string category)
+    private void FilterItemsByCategory(ShopItemCategory category)
     {
         ClearShopItems();
         List<ShopItemData> filteredItems = shopItemData.FindAll(item => item.GetCategory() == category);
@@ -252,18 +267,15 @@ public class ShopItemManager : MonoBehaviour
     }
 
     public void OnOutfitButtonClicked()
-
     {
         PlayClickSound();
-
-        FilterItemsByCategory("OUTFIT");
+        FilterItemsByCategory(ShopItemCategory.OUTFIT);
     }
 
     public void OnAccessoriesButtonClicked()
     {
         PlayClickSound();
-
-        FilterItemsByCategory("ACCESSORIES");
+        FilterItemsByCategory(ShopItemCategory.ACCESSORIES);
     }
 
     public void OnShowAllItemsClicked()

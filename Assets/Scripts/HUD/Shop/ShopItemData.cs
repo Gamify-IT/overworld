@@ -9,16 +9,16 @@ public class ShopItemData
     private static string imageFolder = "ShopItemImages";
     private static string defaultImageName = "defaultImage";
 
-    private readonly string shopItemID;
     private readonly int cost;
     private  bool bought;
     private readonly string imageName;
     private readonly Sprite image;
     private bool updated;
-    private readonly string category;
+    private readonly ShopItemCategory category;
+    private readonly ShopItemTitle shopItemID;
 
 
-    public ShopItemData(string shopItemID, int cost, bool bought, string imageName, string category)
+    public ShopItemData(ShopItemTitle shopItemID, int cost, bool bought, string imageName, ShopItemCategory category)
     {
         this.shopItemID = shopItemID;
         this.cost = cost;
@@ -34,10 +34,10 @@ public class ShopItemData
     public static ShopItemData ConvertFromShopItem(ShopItem status)
     {
         int cost = status.cost;
-        string title = status.shopItemID;
+        ShopItemTitle title = status.title;
         string imageName = status.imageName;
         bool bought = status.bought;
-        string category = status.category;
+        ShopItemCategory category = status.category;
         
 
        ShopItemData data = new ShopItemData(title, cost, bought, imageName, category);
@@ -48,9 +48,9 @@ public class ShopItemData
     {
         int cost = shopItemData.GetCost();
         bool bought = shopItemData.IsBought();
-        string title = shopItemData.GetTitle();
+        ShopItemTitle title = shopItemData.GetTitle();
         string imageName = shopItemData.GetImageName();
-        string category = shopItemData.GetCategory();
+        ShopItemCategory category = shopItemData.GetCategory();
 
        ShopItem shopItem = new ShopItem(title, cost, imageName, category, bought);
 
@@ -97,7 +97,7 @@ public class ShopItemData
 
     
 
-    public string GetTitle()
+    public ShopItemTitle GetTitle()
     {
         return shopItemID;
     }
@@ -117,7 +117,7 @@ public class ShopItemData
         return updated;
     }
 
-    public string GetCategory()
+    public ShopItemCategory GetCategory()
     {
         return category;
     }
