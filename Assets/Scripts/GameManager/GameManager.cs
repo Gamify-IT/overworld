@@ -365,9 +365,9 @@ public class GameManager : MonoBehaviour
     }
 
    
-    public async void UpdateShopItemStatus(ShopItemTitle title, bool newProgress)
+    public async void UpdateShopItem(ShopItemTitle title, bool newProgress)
     {
-        bool unlocked = DataManager.Instance.UpdateShopItemStatus(title, newProgress);
+        bool unlocked = DataManager.Instance.UpdateShopItem(title, newProgress);
         if (unlocked)
         {
             ShopItemData shopItem = DataManager.Instance.GetShopItem(title);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class ShopItemManager : MonoBehaviour
 {
@@ -166,16 +167,11 @@ public class ShopItemManager : MonoBehaviour
 
             GameManager.Instance.UpdatePlayerCredit(price, ownData.GetCredit());
 
-            if (System.Enum.TryParse(currentItemTitle, out ShopItemTitle itemTitle))
-            {
+            ShopItemTitle itemTitle = (ShopItemTitle)Enum.Parse(typeof(ShopItemTitle), currentItemTitle);
 
-                GameManager.Instance.UpdateShopItemStatus(itemTitle, true);
-            }
-            else
-            {
-                Debug.LogError($"Failed to parse item title: {currentItemTitle}");
-                insuranceText.text = "Error: Invalid item title!";
-            }
+            GameManager.Instance.UpdateShopItem(itemTitle, true);
+            
+           
 
             UpdateCreditText();
             UpdateUI();

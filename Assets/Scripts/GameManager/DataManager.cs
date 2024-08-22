@@ -373,7 +373,7 @@ public class DataManager : MonoBehaviour
     ///     This function processes the achievement statistics data returned from the backend and stores the needed data in the
     ///     <c>DataManager</c>
     /// </summary>
-    /// <param name="shopItemStatus">The achievement statistic data returned from the backend</param>
+    /// <param name="shopItem">The achievement statistic data returned from the backend</param>
     public void ProcessShopItem(ShopItem[] shopItems)
     {
         shopItemData = new List<ShopItemData>();
@@ -565,7 +565,7 @@ public class DataManager : MonoBehaviour
         return false;
     }
 
-    public bool UpdateShopItemStatus(ShopItemTitle title, bool newProgress)
+    public bool UpdateShopItem(ShopItemTitle title, bool newProgress)
     {
         ShopItemData shopItem = GetShopItem(title);
         if (shopItem != null)
