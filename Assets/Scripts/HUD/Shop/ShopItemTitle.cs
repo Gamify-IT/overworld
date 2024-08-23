@@ -9,5 +9,8 @@ public enum ShopItemTitle
    SANTA_COSTUME,
    HEART_GLASSES,
    SUIT,
-   BLUE_SHIRT   
+   BLUE_SHIRT,
+   COOL_GLASSES,
+   RETRO_GLASSES,
+   SAFETY_HELMET
 }

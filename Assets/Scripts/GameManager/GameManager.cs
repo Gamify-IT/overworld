@@ -679,13 +679,13 @@ private void PlayAchievementNotificationSound(){
             new ShopItem("FLAME_HAT", 15,  "flames", "ACCESSORIES", false);
 
         ShopItem shopItem2 =
-            new ShopItem("GLOBE_HAT", 31, "globuseinzeln", "ACCESSORIES", false);
+            new ShopItem("GLOBE_HAT", 31, "globus", "ACCESSORIES", false);
        
         ShopItem shopItem3 =
            new ShopItem("SANTA_COSTUME", 18, "santa", "OUTFIT", false) ;
 
         ShopItem shopItem4 =
-           new ShopItem("HEART_GLASSES", 25, "herzi", "ACCESSORIES", false);
+           new ShopItem("HEART_GLASSES", 25, "herzbrille", "ACCESSORIES", false);
 
         ShopItem shopItem5 =
            new ShopItem("SUIT", 7, "anzug", "OUTFIT", false);
