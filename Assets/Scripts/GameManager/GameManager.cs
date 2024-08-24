@@ -382,8 +382,15 @@ public class GameManager : MonoBehaviour
     public async void UpdatePlayerCredit(int price, int credit)
     {
         bool unlocked = DataManager.Instance.UpdatePlayerCredit(price, credit);
-       
-       
+        if (unlocked)
+        {
+           PlayerStatisticData playerData = DataManager.Instance.GetOwnPlayerData();
+            if (playerData == null)
+            {
+                return;
+            }
+        }
+
     }
 
 
@@ -482,19 +489,23 @@ public class GameManager : MonoBehaviour
         string basePath = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/";
         bool savingSuccessful = true;
 
-        PlayerstatisticDTO playerstatistic = PlayerStatisticData.ConvertToPlayerstatisticDTO(playerStatisticData);
-        string path = basePath + playerStatisticData.GetUserId();
-        string json = JsonUtility.ToJson(playerstatistic, true);
-        bool successful = await RestRequest.PutRequest(path, json);
-        if (successful)
+        if (playerStatisticData.isUpdated())
         {
-            Debug.Log("Updated player statistic  for " + playerstatistic.id + " in the overworld backend");
+            PlayerstatisticDTO playerstatistic = PlayerStatisticData.ConvertToPlayerstatisticDTO(playerStatisticData);
+            string path = basePath + userId;
+            string json = JsonUtility.ToJson(playerstatistic, true);
+            Debug.Log(playerstatistic.id + userId);
+            bool successful = await RestRequest.PutRequest(path, json);
+            if (successful)
+            {
+                Debug.Log("Updated player statistic  for " + playerstatistic.id + " in the overworld backend");
 
-        }
-        else
-        {
-            savingSuccessful = false;
-            Debug.Log("Could not update the player statistic for " + playerstatistic.id + " in the overworld backend");
+            }
+            else
+            {
+                savingSuccessful = false;
+                Debug.Log("Could not update the player statistic for " + playerstatistic.id + " in the overworld backend");
+            }
         }
         return savingSuccessful;
 
@@ -709,13 +720,7 @@ private void PlayAchievementNotificationSound(){
 
         DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
         AchievementStatistic[] achivements = GetDummyAchievements();
-        PlayerstatisticDTO[] rewards = GetDummyDataRewards();
-        PlayerstatisticDTO ownPlayer = GetOwnDummyData();
-        ShopItem[] shopItems = GetDummyShopItems();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
-        DataManager.Instance.ProcessPlayerStatisticDTO(ownPlayer);        
-        DataManager.Instance.ProcessAllPlayerStatistics(rewards);
-        DataManager.Instance.ProcessShopItem(shopItems);
 
         ResetKeybindings();
     }
@@ -768,71 +773,7 @@ private void PlayAchievementNotificationSound(){
 
     }
 
-    public PlayerstatisticDTO[] GetDummyDataRewards()
-    {
-        int playerCount = 30;
-        PlayerstatisticDTO[] allStatistics = new PlayerstatisticDTO[32];
+  
 
-        System.Random random = new System.Random();
-        List<string> names = new List<string> {
-        "John", "Alice", "Bob", "Eve", "Charlie", "Dave", "Mallory", "Trent", "Peggy", "Victor",
-        "Walter", "Grace", "Hank", "Ivy", "Justin", "Karen", "Leo", "Monica", "Nina", "Oscar",
-        "Paula", "Quentin", "Rachel", "Steve", "Tom", "Uma", "Vince", "Wendy", "Xander", "Yara"
-    };
-
-
-        for (int i = 0; i < playerCount; i++)
-        {
-            string id = (i + 1).ToString();
-            string userId = "Id" + id;
-            string username = names[i];
-            int knowledge = random.Next(0, 501);
-            int rewards = random.Next(0, 501);
-            bool showRewards = true;
-            int credit = 30;
-            int worldIndex = random.Next(1, 5);
-            int dungeonIndex = random.Next(1, 5);
-
-            AreaLocationDTO currentArea = new AreaLocationDTO(worldIndex, dungeonIndex);
-            AreaLocationDTO[] unlockedAreas = { currentArea };
-            AreaLocationDTO[] unlockedDungeons = { currentArea };
-
-            TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
-            TeleporterDTO[] unlockedTeleporters = { teleporter };
-
-            PlayerstatisticDTO player = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards, credit, "-");
-            allStatistics[i] = player;
-        }
-
-
-        int worldIndex1 = 2;
-        int dungeonIndex1 = 1;
-        AreaLocationDTO currentArea1 = new AreaLocationDTO(worldIndex1, dungeonIndex1);
-        AreaLocationDTO[] unlockedAreas1 = { currentArea1 };
-        AreaLocationDTO[] unlockedDungeons1 = { currentArea1 };
-
-        TeleporterDTO teleporter1 = new TeleporterDTO("1", currentArea1, 1);
-        TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
-        PlayerstatisticDTO player31 = new PlayerstatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco", 200, 170, true, 30,"TheoPro");
-        allStatistics[30] = player31;
-        PlayerstatisticDTO ownPlayer = GetOwnDummyData();
-        allStatistics[31] = ownPlayer;
-        return allStatistics;
-    }
-
-    public PlayerstatisticDTO GetOwnDummyData()
-    {
-
-        int worldIndex = 2;
-        int dungeonIndex = 1;
-        AreaLocationDTO currentArea = new AreaLocationDTO(worldIndex, dungeonIndex);
-        AreaLocationDTO[] unlockedAreas = { currentArea };
-        AreaLocationDTO[] unlockedDungeons = { currentArea };
-
-        TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
-        TeleporterDTO[] unlockedTeleporters = { teleporter };
-        PlayerstatisticDTO ownPlayerData = new PlayerstatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki", 200, 170, false, 50,"PSEProfi");
-        return ownPlayerData;
-    }
-
+   
 }

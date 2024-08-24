@@ -26,6 +26,13 @@ public class PlayerstatisticDTO
     public AreaLocationDTO currentArea;
     public string userId;
     public string username;
+    public string lastActive;
+    public float logoutPositionX;
+    public float logoutPositionY;
+    public string logoutScene;
+    public int currentCharacterIndex;
+    public int volumeLevel;
+
     public int knowledge;
     public int rewards;
     public bool showRewards;
@@ -37,7 +44,8 @@ public class PlayerstatisticDTO
     #region Constructors
 
     public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
-         AreaLocationDTO currentArea, string userId, string username, int knowledge, int rewards, bool showRewards, int credit, string pseudonym)
+         AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
+         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool showRewards, int credit, string pseudonym)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -46,6 +54,13 @@ public class PlayerstatisticDTO
         this.currentArea = currentArea;
         this.userId = userId;
         this.username = username;
+        this.lastActive = lastActive;
+        this.logoutPositionX = logoutPositionX;
+        this.logoutPositionY = logoutPositionY;
+        this.logoutScene = logoutScene;
+        this.currentCharacterIndex = currentCharacterIndex;
+        this.volumeLevel = volumeLevel;
+
         this.knowledge = knowledge;
         this.rewards = rewards;
         this.showRewards = showRewards;
@@ -66,6 +81,12 @@ public class PlayerstatisticDTO
         unlockedTeleporters = new TeleporterDTO[0];
         userId = "";
         username = "";
+        lastActive = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        logoutPositionX = 21.5f;
+        logoutPositionY = 2.5f;
+        logoutScene = "World 1";
+        currentCharacterIndex = 0;
+        volumeLevel = 1;
         knowledge = 0;
         rewards = 0;
         showRewards = true;

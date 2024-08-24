@@ -12,17 +12,23 @@ public class PlayerStatisticData
     private readonly AreaLocationDTO currentArea;
     private readonly string userId;
     private readonly string username;
+    private string lastActive;
+    private float logoutPositionX;
+    private float logoutPositionY;
+    private string logoutScene;
+    private int currentCharacterIndex;
     private readonly int knowledge;
+    private int volumeLevel;
     private readonly int rewards;
     private bool showRewards;    
     private int credit;
     private string pseudonym;
-
     private string leagueOfPlayer;
     private bool updated = false;
    
 
-    public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username,  int knowledge, int rewards, bool showRewards,int credit, string pseudonym)
+    public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
+         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool showRewards,int credit, string pseudonym)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -31,7 +37,12 @@ public class PlayerStatisticData
         this.currentArea = currentArea;
         this.userId = userId;
         this.username = username;
-        
+        this.lastActive = lastActive;
+        this.logoutPositionX = logoutPositionX;
+        this.logoutPositionY = logoutPositionY;
+        this.logoutScene = logoutScene;
+        this.currentCharacterIndex = currentCharacterIndex;
+        this.volumeLevel = volumeLevel;
         this.knowledge = knowledge;
         this.rewards = rewards;
         this.leagueOfPlayer = calculateLeagueOfPlayer(rewards);
@@ -45,6 +56,14 @@ public class PlayerStatisticData
         AreaLocationDTO currentArea = statistic.currentArea;
         string userId = statistic.userId;
         string username = statistic.username;
+        string lastActive = statistic.lastActive;
+
+        float logoutPositionX = statistic.logoutPositionX;
+        float logoutPositionY = statistic.logoutPositionY;
+        string logoutScene = statistic.logoutScene;
+        int currentCharacterIndex = statistic.currentCharacterIndex;
+        int volumeLevel = statistic.volumeLevel;
+
         int knowledge = statistic.knowledge;
         int rewards = statistic.rewards;
         string id = statistic.id;
@@ -74,7 +93,8 @@ public class PlayerStatisticData
         }
 
      
-    PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username,  knowledge, rewards, showRewards,credit, pseudonym);
+    PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username, lastActive,
+            logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, showRewards,credit, pseudonym);
         return data;
     }
 
@@ -84,11 +104,9 @@ public class PlayerStatisticData
     public bool UpdateData(int price)
     {
         updated = true;
-        int newCredit = this.credit - price;
-        
-        if(newCredit < credit)
+        credit = this.credit - price;
+        if(credit > 0)
         {
-            credit = newCredit;
             return true;
         }
         return false;
@@ -121,6 +139,72 @@ public class PlayerStatisticData
     }
 
     #region Getter
+
+    public string GetLastActive()
+    {
+        return lastActive;
+    }
+
+    public void SetLastActive(string lastActive)
+    {
+        this.lastActive = lastActive;
+    }
+
+    public float GetLogoutPositionX()
+    {
+        return logoutPositionX;
+    }
+
+    public void SetLogoutPositionX(float xPosition)
+    {
+        logoutPositionX = xPosition;
+    }
+
+    public float GetLogoutPositionY()
+    {
+        return logoutPositionY;
+    }
+
+    public void SetLogoutPositionY(float YPosition)
+    {
+        logoutPositionY = YPosition;
+    }
+
+    /// <summary>
+    ///     Gets the name of the current scene
+    /// </summary>
+    /// <returns>scene name</returns>
+    public string GetLogoutScene()
+    {
+        return logoutScene;
+    }
+
+    /// <summary>
+    ///     Sets the name of the current scene
+    /// </summary>
+    /// <param name="sceneName">scene name</param>
+    public void SetLogoutScene(string logoutScene)
+    {
+        this.logoutScene = logoutScene;
+    }
+
+    /// <summary>
+    ///     Gets the character index of the currently selected character by the player
+    /// </summary>
+    /// <returns>index of the character position in the list</returns>
+    public int GetCurrentCharacterIndex()
+    {
+        return currentCharacterIndex;
+    }
+
+    /// <summary>
+    ///     Updates the character index if the character is changed by the player
+    /// </summary>
+    /// <param name="index">index of the newly, selected character</param>
+    public void SetCurrentCharacterIndex(int index)
+    {
+        currentCharacterIndex = index;
+    }
 
 
     public string GetId()
@@ -207,6 +291,11 @@ public class PlayerStatisticData
         return credit;
     }
 
+    public int GetVolumeLevel()
+    {
+        return volumeLevel;
+    }
+
     #endregion
 
 
@@ -236,7 +325,14 @@ public class PlayerStatisticData
         string id = playerStatisticData.GetId();
         string userId = playerStatisticData.GetUserId();
         string username = playerStatisticData.GetUsername();
+        string lastActive = playerStatisticData.GetLastActive();
+        float logoutPositionX = playerStatisticData.GetLogoutPositionX();
+        float logoutPositionY = playerStatisticData.GetLogoutPositionY();
+        string logoutScene = playerStatisticData.GetLogoutScene();
+        int currentCharacterIndex = playerStatisticData.GetCurrentCharacterIndex();
         int knowledge = playerStatisticData.GetKnowledge();
+        int volumeLevel = playerStatisticData.GetVolumeLevel();
+
         int rewards = playerStatisticData.GetRewards();
         bool showRewards = playerStatisticData.GetShowRewards();
         int credit = playerStatisticData.GetCredit();
@@ -247,7 +343,9 @@ public class PlayerStatisticData
         TeleporterDTO[] unlockedTeleporters = playerStatisticData.GetUnlockedTeleporters();
 
 
-       PlayerstatisticDTO playerStatistic = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, knowledge, rewards, showRewards, credit, pseudonym);
+       PlayerstatisticDTO playerStatistic = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive, logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex,
+            volumeLevel,
+        knowledge, rewards, showRewards, credit, pseudonym);
 
 
         return playerStatistic;
