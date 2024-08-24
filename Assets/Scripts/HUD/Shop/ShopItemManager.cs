@@ -170,11 +170,11 @@ public class ShopItemManager : MonoBehaviour
             successText.text = $"Nice! You just bought the {currentItemTitle} for {currentItemPrice} coins!";
 
             GameManager.Instance.UpdatePlayerCredit(price, ownData.GetCredit());
+            GameManager.Instance.SavePlayerData();
 
-            
+
             GameManager.Instance.UpdateShopItem(currentItemTitle, true);
-            
-
+            GameManager.Instance.SaveShopItem();
 
 
             UpdateCreditText();

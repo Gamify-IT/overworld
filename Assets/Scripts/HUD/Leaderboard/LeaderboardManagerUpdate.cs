@@ -406,6 +406,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         {
             string newPseudonym = inputField.text;
             ownData.SetPseudonym(newPseudonym);
+            GameManager.Instance.SavePlayerData();
             Debug.Log($"Updated pseudonym of {ownData.GetUsername()} to: {ownData.GetPseudonym()}");
             inputField.text = string.Empty;
             inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {newPseudonym}\nChange current pseudonym";

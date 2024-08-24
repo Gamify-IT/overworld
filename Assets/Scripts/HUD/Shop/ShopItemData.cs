@@ -47,11 +47,11 @@ public class ShopItemData
     {
         int cost = shopItemData.GetCost();
         bool bought = shopItemData.IsBought();
-        string title = shopItemData.GetTitle();
+        string shopItemID = shopItemData.GetTitle();
         string imageName = shopItemData.GetImageName();
         string category = shopItemData.GetCategory();
 
-       ShopItem shopItem = new ShopItem(title, cost, imageName, category, bought);
+       ShopItem shopItem = new ShopItem(shopItemID, cost, imageName, category, bought);
 
 
         return shopItem;

@@ -367,14 +367,22 @@ public class GameManager : MonoBehaviour
    
     public async void UpdateShopItem(string title, bool newProgress)
     {
-        DataManager.Instance.UpdateShopItem(title, newProgress);
-       
+        bool unlocked =  DataManager.Instance.UpdateShopItem(title, newProgress);
+        if (unlocked)
+        {
+            ShopItemData shopItem = DataManager.Instance.GetShopItem(title);
+            if(shopItem == null)
+            {
+                return;
+            }
+        }
 
     }
 
     public async void UpdatePlayerCredit(int price, int credit)
     {
         bool unlocked = DataManager.Instance.UpdatePlayerCredit(price, credit);
+       
        
     }
 
@@ -435,8 +443,63 @@ public class GameManager : MonoBehaviour
     }
 
    
+    public async UniTask<bool> SaveShopItem()
+    {
+        List<ShopItemData> shopItems = DataManager.Instance.GetShopItems();
+        string basePath = overworldBackendPath + "/players/" + userId + "/courses/" + courseId + "/shop/";
 
-   
+        bool savingSuccessful = true;
+
+        foreach (ShopItemData shopItemData in shopItems)
+        {
+            if (shopItemData.isUpdated())
+            {
+                ShopItem shopItem = ShopItemData.ConvertToShopItem(shopItemData);
+
+                string path = basePath + shopItemData.GetTitle();
+                string json = JsonUtility.ToJson(shopItem, true);
+                bool successful = await RestRequest.PutRequest(path, json);
+                if (successful)
+                {
+                    Debug.Log("Updated shop item status for " + shopItem.shopItemID + " in the overworld backend");
+
+                }
+                else
+                {
+                    savingSuccessful = false;
+                    Debug.Log("Could not update the shop item status for " + shopItem.shopItemID + " in the overworld backend");
+                }
+            }
+        }
+
+        return savingSuccessful;
+
+    }
+
+    public async UniTask<bool> SavePlayerData()
+    {
+        PlayerStatisticData playerStatisticData = DataManager.Instance.GetOwnPlayerData();
+        string basePath = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/";
+        bool savingSuccessful = true;
+
+        PlayerstatisticDTO playerstatistic = PlayerStatisticData.ConvertToPlayerstatisticDTO(playerStatisticData);
+        string path = basePath + playerStatisticData.GetUserId();
+        string json = JsonUtility.ToJson(playerstatistic, true);
+        bool successful = await RestRequest.PutRequest(path, json);
+        if (successful)
+        {
+            Debug.Log("Updated player statistic  for " + playerstatistic.id + " in the overworld backend");
+
+        }
+        else
+        {
+            savingSuccessful = false;
+            Debug.Log("Could not update the player statistic for " + playerstatistic.id + " in the overworld backend");
+        }
+        return savingSuccessful;
+
+    }
+
 
 
 
