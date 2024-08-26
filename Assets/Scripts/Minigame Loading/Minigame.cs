@@ -54,10 +54,10 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     private void Awake()
     {
         sprites = transform.GetComponent<SpriteRenderer>();
-
+    #if !UNITY_EDITOR
         unlockedMinigames = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "MINIGAME_SPOTS_MASTER").GetInteractedObjects();
         successfullyCompletedMinigames = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "MINIGAME_PROFESSIONAL").GetInteractedObjects();
-        
+    #endif
         audioSource = gameObject.AddComponent<AudioSource>();
         minigameSpotOpenSound = Resources.Load<AudioClip>("Music/minigame_spot_open");
         audioSource.clip = minigameSpotOpenSound;
@@ -102,9 +102,9 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         ObjectManager.Instance.AddGameEntity<Minigame, MinigameData>(gameObject, world, dungeon, number);
     }
 
-    #endregion
+#endregion
 
-    #region Functionality
+#region Functionality
 
     /// <summary>
     ///     This functions configurates the minigame with the given data and updates the object.
@@ -215,5 +215,5 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
                       ", Status: " + status + ", Highscore: " + highscore;
         return info;
     }
-    #endregion
+#endregion
 }

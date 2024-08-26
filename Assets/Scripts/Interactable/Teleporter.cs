@@ -53,8 +53,10 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
             GameEvents.current.onKeybindingChange += UpdateKeybindings;
             InitializeAudio();            
-        }            
+        }
+#if !UNITY_EDITOR
         unlockedTeleporters = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "TELEPORTER_MASTER").GetInteractedObjects();    
+#endif
     }
 
     /// <summary>

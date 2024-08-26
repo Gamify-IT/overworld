@@ -14,7 +14,6 @@ public class Keybinding
     }
 
     #region Getter And Setter
-
     public Binding GetBinding()
     {
         return binding;
@@ -38,7 +37,19 @@ public class Keybinding
     public static Keybinding ConvertDTO(KeybindingDTO keybindingDTO)
     {
         Binding binding = (Binding) System.Enum.Parse(typeof(Binding), keybindingDTO.binding);
-        KeyCode key = (KeyCode)System.Enum.Parse(typeof(KeyCode), keybindingDTO.key);
+        KeyCode key;
+
+        if (binding != Binding.VOLUME_LEVEL)
+        {
+            key = (KeyCode)System.Enum.Parse(typeof(KeyCode), keybindingDTO.key);
+        }
+        else
+        {
+            string receivedKey = keybindingDTO.key;
+            key = receivedKey != "" ? DataManager.Instance.ConvertIntToKeyCode(int.Parse(keybindingDTO.key)) : DataManager.Instance.ConvertIntToKeyCode(1);
+        }   
+        
+        Debug.Log("Converted key for " + binding.ToString() + ": " + key.ToString());
         Keybinding keybinding = new Keybinding(binding, key);
         return keybinding;
     }

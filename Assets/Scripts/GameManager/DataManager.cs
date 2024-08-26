@@ -23,7 +23,6 @@ public class DataManager : MonoBehaviour
     private AreaDataManager areaDataManager;
     private WorldData[] worldData;
     private PlayerStatisticData playerData;
-    //private PlayerStatisticData ownPlayerData;
     private List<AchievementData> achievementData;
     private List<PlayerStatisticData> allPlayerStatisticsData;
     private Dictionary<Binding, KeyCode> keybindings;
@@ -340,12 +339,6 @@ public class DataManager : MonoBehaviour
             GameManager.Instance.UpdateAchievement(AchievementTitle.PROFESSIONAL_GAMER, 1, null);
         }
 
-        Debug.Log("Progress after: " + GetAchievement(AchievementTitle.PROFESSIONAL_GAMER).GetProgress());
-
-        Debug.Log("Todays Date: " + DateTime.Now.ToString());
-        Debug.Log("Last Active: " + lastActive.ToString());
-        Debug.Log("Streak: " + GetAchievement(AchievementTitle.PROFESSIONAL_GAMER).GetProgress());
-
     }
 
     /// <summary>
@@ -452,6 +445,16 @@ public class DataManager : MonoBehaviour
         {
             Debug.Log("Keybindings invalid");
             GameManager.Instance.ResetKeybindings();
+
+            // update the volume level
+            KeyCode currentVolumeLevelKey = keybindings.Find(item => item.GetBinding() == Binding.VOLUME_LEVEL).GetKey();
+            KeyCode newVolumeLevelKey = currentVolumeLevelKey != KeyCode.None ? newVolumeLevelKey = currentVolumeLevelKey : newVolumeLevelKey = KeyCode.Alpha1;
+            Keybinding volumeLevelBinding = new Keybinding(Binding.VOLUME_LEVEL, newVolumeLevelKey);
+            GameManager.Instance.ChangeKeybind(volumeLevelBinding);
+
+            int volumeLevel = ConvertKeyCodeToInt(newVolumeLevelKey);
+            GameManager.Instance.UpdateVolume(volumeLevel);
+            VolumeControllerButton.SetVolumeLevel(volumeLevel);
         }
     }
 
@@ -659,7 +662,6 @@ public class DataManager : MonoBehaviour
         KeyCode keyCode = keybinding.GetKey();
 
         bool keyChanged = false;
-
         if(keybindings[binding] != keyCode)
         {
             keybindings[binding] = keyCode;
@@ -801,6 +803,7 @@ public class DataManager : MonoBehaviour
         keybindings.Add(Binding.MINIMAP_ZOOM_OUT, KeyCode.None);
         keybindings.Add(Binding.GAME_ZOOM_IN, KeyCode.None);
         keybindings.Add(Binding.GAME_ZOOM_OUT, KeyCode.None);
+        keybindings.Add(Binding.VOLUME_LEVEL, KeyCode.None);
 
         this.keybindings = keybindings;
     }
@@ -818,7 +821,7 @@ public class DataManager : MonoBehaviour
             try
             {
                 Keybinding keybinding = Keybinding.ConvertDTO(keybindingDTO);
-                keybindings.Add(keybinding);
+                keybindings.Add(keybinding);       
             }
             catch (ArgumentException)
             {
@@ -844,41 +847,50 @@ public class DataManager : MonoBehaviour
         Dictionary<Binding, bool> bindingContained = new Dictionary<Binding, bool>();
         foreach(Binding bindingValue in Enum.GetValues(typeof(Binding)))
         {
-            bindingContained.Add(bindingValue, false);
+            if (bindingValue != Binding.VOLUME_LEVEL)
+            {
+                bindingContained.Add(bindingValue, false);
+            }          
         }
 
         foreach (Keybinding keybinding in keybindings)
         {
-            KeyCode keyCode = keybinding.GetKey();
-            Binding binding = keybinding.GetBinding();
-            
-            if(keyCodes.Contains(keyCode))
+            if (keybinding.GetBinding() != Binding.VOLUME_LEVEL)
             {
-                Debug.Log("Multiple uses of keyCode: " + keyCode);
-                validBindings = false;
-                break;
-            }
-            keyCodes.Add(keyCode);
+                KeyCode keyCode = keybinding.GetKey();
+                Binding binding = keybinding.GetBinding();
 
-            if(bindings.Contains(binding))
-            {
-                Debug.Log("Multiple bindings for: " + binding);
-                validBindings = false;
-                break;
-            }
-            bindings.Add(binding);
+                if (keyCodes.Contains(keyCode))
+                {
+                    Debug.Log("Multiple uses of keyCode: " + keyCode);
+                    validBindings = false;
+                    break;
+                }
+                keyCodes.Add(keyCode);
 
-            bindingContained[binding] = true;
+                if (bindings.Contains(binding))
+                {
+                    Debug.Log("Multiple bindings for: " + binding);
+                    validBindings = false;
+                    break;
+                }
+                bindings.Add(binding);
+
+                bindingContained[binding] = true;
+            }     
         }
 
         if(validBindings)
         {
             foreach (Binding bindingValue in Enum.GetValues(typeof(Binding)))
             {
-                if (!bindingContained[bindingValue])
+                if (bindingValue != Binding.VOLUME_LEVEL)
                 {
-                    Debug.Log("No binding for: " + bindingValue);
-                    validBindings = false;
+                    if (!bindingContained[bindingValue])
+                    {
+                        Debug.Log("No binding for: " + bindingValue);
+                        validBindings = false;
+                    }
                 }
             }
         }        
@@ -895,7 +907,59 @@ public class DataManager : MonoBehaviour
         foreach(Keybinding keybinding in keybindings)
         {
             ChangeKeybind(keybinding);
+
+            // update the volume level
+            if (keybinding.GetBinding() == Binding.VOLUME_LEVEL)
+            {
+                int volumeLevel = ConvertKeyCodeToInt(keybinding.GetKey());
+                VolumeControllerButton.SetVolumeLevel(volumeLevel);
+                GameManager.Instance.UpdateVolume(volumeLevel);
+            }
         }
+    }
+
+    /// <summary>
+    ///     Converts a keycode into an integer. 
+    ///     Note that the volume level consists only of four values, hence the mapping only requires four values.
+    /// </summary>
+    /// <param name="keycode"></param>
+    /// <returns>integer mapped to this keycode</returns>
+    public int ConvertKeyCodeToInt(KeyCode keycode)
+    {
+        switch(keycode)
+        {
+            case KeyCode.Alpha0:
+                return 0;
+            case KeyCode.Alpha1:
+                return 1;
+            case KeyCode.Alpha2:
+                return 2;
+            case KeyCode.Alpha3:
+                return 3;
+        }
+        return 1;
+    }
+
+    /// <summary>
+    ///     Converts an integer into a keycode. 
+    ///     Note that the volume level consists only of four values, hence the mapping only requires four values.
+    /// </summary>
+    /// <param name="level"></param>
+    /// <returns>keycode mapped to this integer</returns>
+    public KeyCode ConvertIntToKeyCode(int level)
+    {
+        switch (level)
+        {
+            case 0:
+                return KeyCode.Alpha0;
+            case 1:
+                return KeyCode.Alpha1;
+            case 2:
+                return KeyCode.Alpha2;
+            case 3:
+                return KeyCode.Alpha3;
+        }
+        return KeyCode.Alpha1;
     }
 
     /// <summary>

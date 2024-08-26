@@ -48,7 +48,6 @@ public class GameManager : MonoBehaviour
 
 
     #region save player data
-
     /// <summary>
     ///     This function saves all important player data when the plaer is logging out
     /// </summary>
@@ -62,7 +61,7 @@ public class GameManager : MonoBehaviour
     ///     This function saves the last known position of the player in the backend when the player logs out 
     /// </summary>
     /// <returns></returns>
-    public async UniTask<bool> SavePlayerStatistic()
+    private async UniTask<bool> SavePlayerStatistic()
     {
         Debug.Log("Start saving player statistic");
 
@@ -92,33 +91,6 @@ public class GameManager : MonoBehaviour
             return false;
         }
 
-    }
-
-    /// <summary>
-    ///     This function saves the last volume level chosen by the player
-    /// </summary>
-    public async UniTask<bool> SaveVolumeLevel()
-    {
-        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
-        Debug.Log("path: " + path);
-
-        PlayerStatisticData playerStatistic = DataManager.Instance.GetPlayerData();
-        playerStatistic.SetVolumeLevel(VolumeControllerButton.volumeLevel);
-
-        PlayerStatisticDTO playerStatisticDTO = PlayerStatisticDTO.ConvertDataToDTO(playerStatistic);
-
-        string json = JsonUtility.ToJson(playerStatisticDTO, true);
-
-        bool succesful = await RestRequest.PutRequest(path, json);
-
-        if (succesful)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     /// <summary>
@@ -314,7 +286,6 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
             DataManager.Instance.ProcessKeybindings(keybindings.Value());             
             DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());           
-            //DataManager.Instance.ProcessPlayerstatisticDTO(playerStatistics.Value());
             DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
 
         }
@@ -454,6 +425,7 @@ public class GameManager : MonoBehaviour
     /// <returns>True if the acheivement is now completed, false otherwise</returns>
     public async void UpdateAchievement(AchievementTitle title, int newProgress, List<(int, int, int)> interactedObjects)
     {
+    #if !UNITY_EDITOR
         bool unlocked = DataManager.Instance.UpdateAchievement(title, newProgress, interactedObjects);
         if (unlocked)
         {
@@ -465,6 +437,7 @@ public class GameManager : MonoBehaviour
 
             EarnAchievement(achievement);
         }
+    #endif
     }
 
     /// <summary>
@@ -521,6 +494,12 @@ public class GameManager : MonoBehaviour
         {
             string binding = keybinding.GetBinding().ToString();
             string key = keybinding.GetKey().ToString();
+
+            if (keybinding.GetBinding() == Binding.VOLUME_LEVEL)
+            {
+                key = DataManager.Instance.ConvertKeyCodeToInt(keybinding.GetKey()).ToString();
+            }
+
             KeybindingDTO keybindingDTO = new KeybindingDTO(userId, binding, key);
 
             string json = JsonUtility.ToJson(keybindingDTO, true);
@@ -585,6 +564,30 @@ public class GameManager : MonoBehaviour
 
         Keybinding gameZoomOut = new Keybinding(Binding.GAME_ZOOM_OUT, KeyCode.Alpha9);
         ChangeKeybind(gameZoomOut);
+    }
+
+    /// <summary>
+    ///     This function updates the volume level and applies the changes to all audio in the game
+    /// </summary>
+    public void UpdateVolume(int volumeLevel)
+    {
+        float volume = 0f;
+        switch (volumeLevel)
+        {
+            case 0:
+                volume = 0f;
+                break;
+            case 1:
+                volume = 0.5f;
+                break;
+            case 2:
+                volume = 1f;
+                break;
+            case 3:
+                volume = 2f;
+                break;
+        }
+        AudioListener.volume = volume;
     }
 
     /// <summary>
@@ -697,9 +700,7 @@ public class GameManager : MonoBehaviour
 
         AchievementStatistic[] achivements = GetDummyAchievements();
         PlayerStatisticDTO[] rewards = GetDummyDataRewards();
-        PlayerStatisticDTO ownPlayer = GetOwnDummyData();
-        DataManager.Instance.ProcessAchievementStatistics(achivements);
-        //DataManager.Instance.ProcessPlayerstatisticDTO(ownPlayer);        
+        DataManager.Instance.ProcessAchievementStatistics(achivements);      
         DataManager.Instance.ProcessAllPlayerStatistics(rewards);
         DataManager.Instance.ProcessPlayerStatistics(new PlayerStatisticDTO());
 

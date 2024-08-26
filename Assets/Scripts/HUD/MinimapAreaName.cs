@@ -1,30 +1,26 @@
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
 public class MinimapAreaName : MonoBehaviour
 {
-    public string areaName;
-    public bool dungeonArea;
+    [SerializeField] private string areaName;
+    [SerializeField] private bool dungeonArea;
+    [SerializeField] private AudioClip backgroundMusicWorld1;
+    [SerializeField] private AudioClip backgroundMusicWorld2;
+    [SerializeField] private AudioClip backgroundMusicWorld3;
+    [SerializeField] private AudioClip backgroundMusicWorld4;
+    [SerializeField] private AudioClip backgroundMusicDungeon;
+    [SerializeField] private float crossfadeDuration = 0.5f;
 
-    private string currentAreaName;
-    
-    private PlayerStatisticData playerData;
-    private int volumeLevel;
-  
-    public AudioClip backgroundMusicWorld1;
-    public AudioClip backgroundMusicWorld2;
-    public AudioClip backgroundMusicWorld3;
-    public AudioClip backgroundMusicWorld4;
-    public AudioClip backgroundMusicDungeon;
-    public static AudioClip clipToPlay;
-    
     private AudioSource audioSource1;
     private AudioSource audioSource2;
     private bool isUsingSource1 = true;
+    private string currentAreaName;
 
     private static AudioClip currentClip;
+    public static AudioClip clipToPlay;
 
-    public float crossfadeDuration = 0.5f;
 
     /// <summary>
     /// This function initializes the audio sources and starts playing the background music
@@ -38,34 +34,6 @@ public class MinimapAreaName : MonoBehaviour
         InitializeAudioSource(audioSource2);
 
         PlayBackgroundMusic();
-        
-        UpdateVolume();
-    }
-
-    /// <summary>
-    /// This function updates the volume level and applies the changes to all audio in the game
-    /// </summary>
-    private void UpdateVolume()
-    {
-        playerData = DataManager.Instance.GetPlayerData();
-        volumeLevel = playerData.GetVolumeLevel();
-        float volume = 0f;
-        switch (volumeLevel)
-        {
-            case 0:
-                volume = 0f;
-                break;
-            case 1:
-                volume = 0.5f;
-                break;
-            case 2:
-                volume = 1f;
-                break;
-            case 3:
-                volume = 2f;
-                break;
-        }
-        AudioListener.volume = volume;
     }
 
     /// <summary>
