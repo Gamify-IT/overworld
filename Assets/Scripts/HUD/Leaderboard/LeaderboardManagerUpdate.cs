@@ -76,6 +76,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         audioSource.clip = clickSound;
         audioSource.playOnAwake = false;
 
+        InitializeVisibilityButtonText();
+
         if (visibilityButton!= null)
         {
 
@@ -187,27 +189,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     }
 
-    private void ToggleButtonText()
-    {
-        if (visibilityButton.text == "your username is anonymous")
-        {
-            visibilityButton.text = "your username is public";
-            ownData.updateVisibility(true);
-            Debug.Log($"Player showRewards value: {ownData.GetShowRewards()}");
-
-
-        }
-        else
-        {
-            visibilityButton.text = "your username is anonymous";
-            ownData.updateVisibility(false);
-            Debug.Log($"Player showRewards value: {ownData.GetShowRewards()}");
-
-
-        }
-        SaveVisibilityState();
-
-    }
+   
 
     private void OpenVisibilityMenu()
     {
@@ -237,6 +219,37 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
+    private void InitializeVisibilityButtonText()
+    {
+        if (ownData.GetShowRewards())
+        {
+            visibilityButton.text = "your username is public";
+        }
+        else
+        {
+            visibilityButton.text = "your username is anonymous";
+        }
+    }
+
+    private void ToggleButtonText()
+    {
+        if (ownData.GetShowRewards())
+        {
+            visibilityButton.text = "your username is anonymous";
+            GameManager.Instance.UpdateVisibility(false);
+        }
+        else
+        {
+            visibilityButton.text = "your username is public";
+            GameManager.Instance.UpdateVisibility(true);
+        }
+
+        GameManager.Instance.SavePlayerData();
+        SaveVisibilityState();
+        ranking = DataManager.Instance.GetAllPlayerStatistics();
+        UpdateUI(); 
+    }
+
     private void SaveVisibilityState()
     {
         PlayerPrefs.SetString("VisibilityState", visibilityButton.text);
@@ -251,7 +264,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
         else
         {
-            visibilityButton.text = "your username is anonymous"; 
+            InitializeVisibilityButtonText();
+            SaveVisibilityState();
         }
     }
 
@@ -405,8 +419,12 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         if (inputField != null && inputField.gameObject.activeSelf)
         {
             string newPseudonym = inputField.text;
-            ownData.SetPseudonym(newPseudonym);
+
+            GameManager.Instance.UpdatePseudonym(newPseudonym);
             GameManager.Instance.SavePlayerData();
+        
+            ranking = DataManager.Instance.GetAllPlayerStatistics();
+
             Debug.Log($"Updated pseudonym of {ownData.GetUsername()} to: {ownData.GetPseudonym()}");
             inputField.text = string.Empty;
             inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {newPseudonym}\nChange current pseudonym";
@@ -418,9 +436,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Debug.LogError("InputField is not assigned in the Inspector or not active.");
         }
     }
-
-
-
    
 
     private void DisplayRewards(List<PlayerStatisticData> rewardsToDisplay)
@@ -440,12 +455,14 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         if (rewardElement != null)
         {
-            string playername;
+            Debug.Log($"GetShowRewards: {rank.GetShowRewards()}, Username: {rank.GetUsername()}, Pseudonym: {rank.GetPseudonym()}");
+
+            string playername = "";
             if (rank.GetShowRewards())
             {
                 playername = rank.GetUsername();
             }
-            else
+            else if(!rank.GetShowRewards())
             {
                 playername = rank.GetPseudonym();
             }
@@ -462,6 +479,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         else
         {
             Destroy(achievementObject);
+            UpdateUI();
         }
     }
 
@@ -491,6 +509,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             {
                 Debug.LogError("Close Button is not found in the RewardsScene.");
             }
+            UpdateUI();
         }
     }
 

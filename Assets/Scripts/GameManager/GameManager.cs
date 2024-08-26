@@ -393,6 +393,33 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public async void UpdatePseudonym(string name)
+    {
+        bool unlocked = DataManager.Instance.UpdatePseudonym(name);
+        if (unlocked)
+        {
+            PlayerStatisticData playerData = DataManager.Instance.GetOwnPlayerData();
+            if (playerData == null)
+            {
+                return;
+            }
+        }
+
+    }
+
+    public async void UpdateVisibility(bool visibility)
+    {
+        bool unlocked = DataManager.Instance.UpdateVisibility(visibility);
+        if (unlocked)
+        {
+            PlayerStatisticData playerData = DataManager.Instance.GetOwnPlayerData();
+            if (playerData == null)
+            {
+                return;
+            }
+        }
+
+    }
 
     /// <summary>
     ///     This function increases an achievements progress by a given increment
@@ -489,7 +516,7 @@ public class GameManager : MonoBehaviour
         string basePath = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/";
         bool savingSuccessful = true;
 
-        if (playerStatisticData.isUpdated())
+        if (playerStatisticData.isUpdated() || playerStatisticData.pseudoIsUpdated() || playerStatisticData.visIsUpdated())
         {
             PlayerstatisticDTO playerstatistic = PlayerStatisticData.ConvertToPlayerstatisticDTO(playerStatisticData);
             string path = basePath + userId;

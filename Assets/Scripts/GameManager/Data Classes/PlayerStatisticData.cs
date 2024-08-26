@@ -25,6 +25,8 @@ public class PlayerStatisticData
     private string pseudonym;
     private string leagueOfPlayer;
     private bool updated = false;
+    private bool updatedName = false;
+    private bool updatedVisibility = false;
    
 
     public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
@@ -112,6 +114,36 @@ public class PlayerStatisticData
         return false;
     }
 
+    public bool UpdatePseudonym(string name)
+    {
+        updatedName = true;
+       
+        if (name != null)
+        {
+            pseudonym = name;
+            return true;
+        }
+        return false;
+    }
+
+    public bool UpdateVisibility(bool visibility)
+    {
+        updatedVisibility = true;
+
+        if (visibility)
+        {
+            showRewards = true;
+        }
+        else
+        {
+            showRewards = false;
+            
+        }
+
+        return true;
+    }
+
+
     public string calculateLeagueOfPlayer(int rewards)
     {
         if(rewards < 100)
@@ -137,6 +169,17 @@ public class PlayerStatisticData
     {
         return updated;
     }
+
+    public bool pseudoIsUpdated()
+    {
+        return updatedName;
+    }
+
+    public bool visIsUpdated()
+    {
+        return updatedVisibility;
+    }
+
 
     #region Getter
 

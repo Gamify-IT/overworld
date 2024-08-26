@@ -592,6 +592,25 @@ public class DataManager : MonoBehaviour
         return false;
     }
 
+    public bool UpdatePseudonym(string pseudonym)
+    {
+
+        if (ownPlayerData != null)
+        {
+            return ownPlayerData.UpdatePseudonym(pseudonym);
+        }
+        return false;
+    }
+
+    public bool UpdateVisibility(bool visibility)
+    {
+        if (ownPlayerData != null)
+        {
+            return ownPlayerData.UpdateVisibility(visibility);
+        }
+        return false;
+    }
+
     /// <summary>
     ///     This function increases an achievements progress by a given increment
     /// </summary>
