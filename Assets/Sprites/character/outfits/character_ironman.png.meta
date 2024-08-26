@@ -102,18 +102,370 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: character_ironman_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 226
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c974e14e71f335f43840bd7fb461ee63
+      internalID: -530330169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_1
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 225
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8ba5b81fc6254d46b87d1e7fcc49a7e
+      internalID: -539777598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_2
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 226
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be7b87b400f32ac4bbb35e1991925528
+      internalID: 777512865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_3
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 225
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab553979e47f39e4aa18dbf3cef08389
+      internalID: 780545154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 195
+        width: 17
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0230b1b873f91804994745612953a421
+      internalID: 1594057880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_5
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 194
+        width: 17
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7636037c09d296439da93ad0bc6894e
+      internalID: 1645743873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_6
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 195
+        width: 17
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e5bf6381de9d63419682107b3346019
+      internalID: 1632055147
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_7
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 194
+        width: 17
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d809e6bc3476a14cae24b6e0c92a94a
+      internalID: -310416095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 164
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9c154e59d3dc4d4daf7f5afd2731719
+      internalID: 2075131524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_9
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 163
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f48a0fa457b2d0a4e9dc4291d835ceff
+      internalID: 186154477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_10
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 164
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4ccc02e1ebae504db96252f8dd9da2d
+      internalID: -1364414781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_11
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 163
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a49671dc82b2be34b8ad6941e0cf8e8a
+      internalID: 43537115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 133
+        width: 17
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4d1c0e10e7f25949bfa292fd1ae4897
+      internalID: -1341499839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_13
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 132
+        width: 17
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69911bf216c260942ae451c7012eb7bb
+      internalID: 1007730701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_14
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 133
+        width: 17
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e02699e69de22344681640dbe5ddb29f
+      internalID: -807171393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_ironman_15
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 132
+        width: 17
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf2f3caf51282264586dcfee39760127
+      internalID: 1072507240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5dfa8723c3f9fb84683767abe44ea921
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      character_ironman_10: -1364414781
+      character_ironman_9: 186154477
+      character_ironman_0: -530330169
+      character_ironman_11: 43537115
+      character_ironman_1: -539777598
+      character_ironman_7: -310416095
+      character_ironman_8: 2075131524
+      character_ironman_15: 1072507240
+      character_ironman_2: 777512865
+      character_ironman_4: 1594057880
+      character_ironman_14: -807171393
+      character_ironman_6: 1632055147
+      character_ironman_12: -1341499839
+      character_ironman_5: 1645743873
+      character_ironman_13: 1007730701
+      character_ironman_3: 780545154
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -102,18 +102,634 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: character_lange_haare_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 228
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51a208dabe992d74c931e81069bb9c3b
+      internalID: -1246418112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_1
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 228
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6f8d6aa35503024d85b68f40aadbb3c
+      internalID: -1778475987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_2
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 228
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3f5575c5b6213042bf1e3d255085291
+      internalID: 691513664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_3
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 228
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c832b9b60ff7102409d337d362e96039
+      internalID: -1864130982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_4
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 228
+        width: 14
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 621985c10191823449eb00404130b68b
+      internalID: 1617411806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_5
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 228
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ba4240dbec09a14abb52fc7c7447df7
+      internalID: -1417673507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_6
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 228
+        width: 16
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a848a9c96b9bbf45a01dd64664aa423
+      internalID: 631610166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_7
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 196
+        width: 12
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17bb9b131884aad4f8e3cf23b4b4815a
+      internalID: -964367124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_8
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 196
+        width: 12
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3bfdd3c914471934ba2c9f2cb828d1da
+      internalID: 1469916410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_9
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 196
+        width: 12
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 24e5a6d91073a064fac7fc779b900f2d
+      internalID: 1293740361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_10
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 196
+        width: 12
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd5557e642eb15e4e9295a6d0ed9e5f6
+      internalID: 263951835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_11
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 196
+        width: 15
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 391f66a2874b7ed44be5a021a8a1267c
+      internalID: 1990652161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_12
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 196
+        width: 13
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c977365ec2922d448a29433724ea95cb
+      internalID: -51755254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_13
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 196
+        width: 13
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21938481bf7153d448aa89cce9305cdd
+      internalID: -111153125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_14
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 164
+        width: 14
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b9f90c12d501854297f0124541a31fe
+      internalID: 1161754048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_15
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 164
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f481214660476794d8d84509597c12a9
+      internalID: 213589705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_16
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 164
+        width: 14
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ea4f2e9b3bd00b41bee7245e819fdf2
+      internalID: 1713004462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_17
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 164
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d009a7473889b4642ab2516565584e0d
+      internalID: 1341660502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_18
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 164
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b35ba2407cb81224a805d68a7742d451
+      internalID: 121203165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_19
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 164
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51243b9f27e672f4d9327ba6b95a6fe3
+      internalID: -582570935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_20
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 164
+        width: 16
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e2660e0e61cf9b49ac0d30f4019d36b
+      internalID: 1202062289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_21
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 132
+        width: 12
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f034ec366fbaec47865d0ae238e7e76
+      internalID: 1155683338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_22
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 132
+        width: 12
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 060e825e349821b4f9e8f0ef11fe45e5
+      internalID: -890681239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_23
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 132
+        width: 12
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac5c8560443ff5548bc7d733c3040c72
+      internalID: -1497721022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_24
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 132
+        width: 12
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19ee8a6c845238345827f3e3af845cf6
+      internalID: -194238082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_25
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 132
+        width: 15
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7caa1033d9888ce4184af7fed402775a
+      internalID: 942608462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_26
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 132
+        width: 13
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 119304c6de3a4614e9a3602613c83b44
+      internalID: 2003727527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: character_lange_haare_27
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 132
+        width: 13
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f437cc62db7c84146a8b2e0e7eb70b9c
+      internalID: 535670631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 40099aa3b4344af4ca7a48ebad6d944d
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      character_lange_haare_11: 1990652161
+      character_lange_haare_13: -111153125
+      character_lange_haare_5: -1417673507
+      character_lange_haare_3: -1864130982
+      character_lange_haare_22: -890681239
+      character_lange_haare_14: 1161754048
+      character_lange_haare_18: 121203165
+      character_lange_haare_6: 631610166
+      character_lange_haare_4: 1617411806
+      character_lange_haare_7: -964367124
+      character_lange_haare_17: 1341660502
+      character_lange_haare_19: -582570935
+      character_lange_haare_23: -1497721022
+      character_lange_haare_26: 2003727527
+      character_lange_haare_16: 1713004462
+      character_lange_haare_20: 1202062289
+      character_lange_haare_12: -51755254
+      character_lange_haare_24: -194238082
+      character_lange_haare_2: 691513664
+      character_lange_haare_27: 535670631
+      character_lange_haare_21: 1155683338
+      character_lange_haare_10: 263951835
+      character_lange_haare_15: 213589705
+      character_lange_haare_0: -1246418112
+      character_lange_haare_8: 1469916410
+      character_lange_haare_25: 942608462
+      character_lange_haare_9: 1293740361
+      character_lange_haare_1: -1778475987
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
