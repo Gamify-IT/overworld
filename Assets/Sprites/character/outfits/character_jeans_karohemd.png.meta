@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -107,10 +107,10 @@ TextureImporter:
       name: character_jeans_karohemd_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 228
-        width: 15
-        height: 22
+        x: 0
+        y: 224
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,10 +128,10 @@ TextureImporter:
       name: character_jeans_karohemd_1
       rect:
         serializedVersion: 2
-        x: 17
-        y: 228
-        width: 15
-        height: 21
+        x: 16
+        y: 224
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -149,10 +149,10 @@ TextureImporter:
       name: character_jeans_karohemd_2
       rect:
         serializedVersion: 2
-        x: 33
-        y: 228
-        width: 15
-        height: 22
+        x: 32
+        y: 224
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -170,10 +170,10 @@ TextureImporter:
       name: character_jeans_karohemd_3
       rect:
         serializedVersion: 2
-        x: 49
-        y: 228
-        width: 15
-        height: 21
+        x: 48
+        y: 224
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -191,10 +191,10 @@ TextureImporter:
       name: character_jeans_karohemd_4
       rect:
         serializedVersion: 2
-        x: 81
-        y: 228
-        width: 15
-        height: 20
+        x: 80
+        y: 224
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -212,10 +212,10 @@ TextureImporter:
       name: character_jeans_karohemd_6
       rect:
         serializedVersion: 2
-        x: 2
-        y: 196
-        width: 13
-        height: 22
+        x: 112
+        y: 224
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -233,10 +233,10 @@ TextureImporter:
       name: character_jeans_karohemd_7
       rect:
         serializedVersion: 2
-        x: 18
-        y: 196
-        width: 13
-        height: 21
+        x: 0
+        y: 192
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -254,10 +254,10 @@ TextureImporter:
       name: character_jeans_karohemd_8
       rect:
         serializedVersion: 2
-        x: 34
-        y: 196
-        width: 13
-        height: 22
+        x: 16
+        y: 192
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -275,10 +275,10 @@ TextureImporter:
       name: character_jeans_karohemd_9
       rect:
         serializedVersion: 2
-        x: 50
-        y: 196
-        width: 13
-        height: 21
+        x: 32
+        y: 192
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -296,10 +296,10 @@ TextureImporter:
       name: character_jeans_karohemd_10
       rect:
         serializedVersion: 2
-        x: 80
-        y: 196
+        x: 48
+        y: 192
         width: 16
-        height: 20
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -317,10 +317,10 @@ TextureImporter:
       name: character_jeans_karohemd_11
       rect:
         serializedVersion: 2
-        x: 98
-        y: 196
-        width: 13
-        height: 22
+        x: 80
+        y: 192
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -338,10 +338,10 @@ TextureImporter:
       name: character_jeans_karohemd_12
       rect:
         serializedVersion: 2
-        x: 114
-        y: 196
-        width: 13
-        height: 22
+        x: 96
+        y: 192
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -359,10 +359,10 @@ TextureImporter:
       name: character_jeans_karohemd_13
       rect:
         serializedVersion: 2
-        x: 0
-        y: 164
-        width: 15
-        height: 23
+        x: 112
+        y: 192
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -380,10 +380,10 @@ TextureImporter:
       name: character_jeans_karohemd_14
       rect:
         serializedVersion: 2
-        x: 16
-        y: 164
-        width: 15
-        height: 22
+        x: 0
+        y: 160
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -401,10 +401,10 @@ TextureImporter:
       name: character_jeans_karohemd_15
       rect:
         serializedVersion: 2
-        x: 32
-        y: 164
-        width: 15
-        height: 23
+        x: 16
+        y: 160
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -422,10 +422,10 @@ TextureImporter:
       name: character_jeans_karohemd_16
       rect:
         serializedVersion: 2
-        x: 48
-        y: 164
-        width: 15
-        height: 22
+        x: 32
+        y: 160
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -443,10 +443,10 @@ TextureImporter:
       name: character_jeans_karohemd_17
       rect:
         serializedVersion: 2
-        x: 80
-        y: 164
-        width: 15
-        height: 20
+        x: 48
+        y: 160
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -464,10 +464,10 @@ TextureImporter:
       name: character_jeans_karohemd_18
       rect:
         serializedVersion: 2
-        x: 96
-        y: 164
-        width: 15
-        height: 22
+        x: 80
+        y: 160
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -485,10 +485,10 @@ TextureImporter:
       name: character_jeans_karohemd_19
       rect:
         serializedVersion: 2
-        x: 112
-        y: 164
+        x: 96
+        y: 160
         width: 16
-        height: 22
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -506,10 +506,10 @@ TextureImporter:
       name: character_jeans_karohemd_20
       rect:
         serializedVersion: 2
-        x: 1
-        y: 132
-        width: 13
-        height: 22
+        x: 112
+        y: 160
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -527,10 +527,10 @@ TextureImporter:
       name: character_jeans_karohemd_21
       rect:
         serializedVersion: 2
-        x: 17
-        y: 132
-        width: 13
-        height: 21
+        x: 0
+        y: 128
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -548,10 +548,10 @@ TextureImporter:
       name: character_jeans_karohemd_22
       rect:
         serializedVersion: 2
-        x: 33
-        y: 132
-        width: 13
-        height: 22
+        x: 16
+        y: 128
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -569,10 +569,10 @@ TextureImporter:
       name: character_jeans_karohemd_23
       rect:
         serializedVersion: 2
-        x: 49
-        y: 132
-        width: 13
-        height: 21
+        x: 32
+        y: 128
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -590,10 +590,10 @@ TextureImporter:
       name: character_jeans_karohemd_24
       rect:
         serializedVersion: 2
-        x: 81
-        y: 132
-        width: 15
-        height: 20
+        x: 48
+        y: 128
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -611,10 +611,10 @@ TextureImporter:
       name: character_jeans_karohemd_25
       rect:
         serializedVersion: 2
-        x: 97
-        y: 132
-        width: 13
-        height: 22
+        x: 80
+        y: 128
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -632,10 +632,10 @@ TextureImporter:
       name: character_jeans_karohemd_26
       rect:
         serializedVersion: 2
-        x: 114
-        y: 132
-        width: 13
-        height: 22
+        x: 96
+        y: 128
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -653,10 +653,10 @@ TextureImporter:
       name: character_jeans_karohemd_5
       rect:
         serializedVersion: 2
-        x: 97
-        y: 228
-        width: 15
-        height: 22
+        x: 96
+        y: 224
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -675,9 +675,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 112
-        y: 228
+        y: 128
         width: 16
-        height: 22
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

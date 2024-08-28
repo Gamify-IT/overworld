@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 
 /// <summary>
 ///     This class manages the movement and the animations of the player.
@@ -12,6 +13,7 @@ public class PlayerAnimation : MonoBehaviour
     public Vector2 movement;
     public Rigidbody2D playerRigidBody;
     public Animator playerAnimator;
+    public Animator accessoireAnimator;
     private bool busy;
     private bool canMove;
     private float currentSpeed;
@@ -47,6 +49,7 @@ public class PlayerAnimation : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        accessoireAnimator = this.gameObject.transform.GetChild(2).GetComponent<Animator>();
         string lastPlayDateStr = PlayerPrefs.GetString("LastPlayDate", "");
         int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
 
@@ -293,6 +296,8 @@ public class PlayerAnimation : MonoBehaviour
             {
                 playerAnimator.SetBool("LookUp", true);
                 playerAnimator.SetBool("LookRight", false);
+                accessoireAnimator.SetBool("LookUp", true);
+                accessoireAnimator.SetBool("LookRight", false);
             }
 
             if
@@ -300,12 +305,16 @@ public class PlayerAnimation : MonoBehaviour
             {
                 playerAnimator.SetBool("LookUp", false);
                 playerAnimator.SetBool("LookRight", false);
+                accessoireAnimator.SetBool("LookUp", false);
+                accessoireAnimator.SetBool("LookRight", false);
             }
 
             if (movement.x > 0.01f)
             {
                 playerAnimator.SetBool("LookRight", true);
                 playerAnimator.SetBool("LookUp", false);
+                accessoireAnimator.SetBool("LookUp", false);
+                accessoireAnimator.SetBool("LookRight", true);
             }
 
             if
@@ -313,12 +322,18 @@ public class PlayerAnimation : MonoBehaviour
             {
                 playerAnimator.SetBool("LookRight", false);
                 playerAnimator.SetBool("LookUp", false);
+                accessoireAnimator.SetBool("LookUp", false);
+                accessoireAnimator.SetBool("LookRight", false);
             }
 
             playerAnimator.SetFloat("Horizontal", movement.x);
             playerAnimator.SetFloat("Vertical", movement.y);
             playerAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
             playerAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
+            accessoireAnimator.SetFloat("Horizontal", movement.x);
+            accessoireAnimator.SetFloat("Vertical", movement.y);
+            accessoireAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
+            accessoireAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
         }
     }
 
