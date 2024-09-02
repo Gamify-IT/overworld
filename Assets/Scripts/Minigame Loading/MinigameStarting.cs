@@ -87,9 +87,9 @@ public class MinigameStarting : MonoBehaviour
     /// <summary>
     ///     This function starts the minigame.
     /// </summary>
-    public void StartButtonPressed()
+    public async void StartButtonPressed()
     {
-        GameManager.Instance.SaveAchievements();
+        await GameManager.Instance.SavePlayerData();
         LoadMinigameInIframe(game, configurationId);
         PlayClickSound();
         Invoke("QuitMinigame", 0.3f); 
