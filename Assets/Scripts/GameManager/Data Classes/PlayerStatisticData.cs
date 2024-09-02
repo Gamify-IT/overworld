@@ -20,7 +20,7 @@ public class PlayerStatisticData
     private readonly int knowledge;
     private int volumeLevel;
     private readonly int rewards;
-    private bool showRewards;    
+    private bool visibility;
     private int credit;
     private string pseudonym;
     private string leagueOfPlayer;
@@ -30,7 +30,7 @@ public class PlayerStatisticData
    
 
     public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
-         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool showRewards,int credit, string pseudonym)
+         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool visibility,int credit, string pseudonym)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -48,7 +48,7 @@ public class PlayerStatisticData
         this.knowledge = knowledge;
         this.rewards = rewards;
         this.leagueOfPlayer = calculateLeagueOfPlayer(rewards);
-        this.showRewards = showRewards;
+        this.visibility = visibility;
         this.credit = credit;
         this.pseudonym = pseudonym;
     }
@@ -132,11 +132,11 @@ public class PlayerStatisticData
 
         if (visibility)
         {
-            showRewards = true;
+            visibility = true;
         }
         else
         {
-            showRewards = false;
+            visibility = false;
             
         }
 
@@ -297,7 +297,7 @@ public class PlayerStatisticData
 
     public bool GetVisibility()
     {
-        return showRewards;
+        return visibility;
     }
 
     public string GetLeague()
