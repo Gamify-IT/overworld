@@ -35,7 +35,7 @@ public class PlayerstatisticDTO
 
     public int knowledge;
     public int rewards;
-    public bool showRewards;
+    public bool visibility;
     public int credit;
     public string pseudonym;
 
@@ -45,7 +45,7 @@ public class PlayerstatisticDTO
 
     public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
          AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
-         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool showRewards, int credit, string pseudonym)
+         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool visibility, int credit, string pseudonym)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -63,7 +63,7 @@ public class PlayerstatisticDTO
 
         this.knowledge = knowledge;
         this.rewards = rewards;
-        this.showRewards = showRewards;
+        this.visibility = visibility;
         this.credit = credit;
         this.pseudonym = pseudonym;
     }
@@ -89,7 +89,7 @@ public class PlayerstatisticDTO
         volumeLevel = 1;
         knowledge = 0;
         rewards = 0;
-        showRewards = true;
+        visibility = true;
         credit = 0;
         pseudonym = "";
     }

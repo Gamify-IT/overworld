@@ -24,8 +24,8 @@ public class PlayerStatisticData
     private int credit;
     private string pseudonym;
     private string leagueOfPlayer;
-    private bool updated = false;
-    private bool updatedName = false;
+    private bool updatedCredit = false;
+    private bool updatedPseudonym= false;
     private bool updatedVisibility = false;
    
 
@@ -69,7 +69,7 @@ public class PlayerStatisticData
         int knowledge = statistic.knowledge;
         int rewards = statistic.rewards;
         string id = statistic.id;
-        bool showRewards = statistic.showRewards;
+        bool visibility = statistic.visibility;
         int credit = statistic.credit;
         string pseudonym = statistic.pseudonym;
 
@@ -96,16 +96,16 @@ public class PlayerStatisticData
 
      
     PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username, lastActive,
-            logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, showRewards,credit, pseudonym);
+            logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility,credit, pseudonym);
         return data;
     }
 
 
 
 
-    public bool UpdateData(int price)
+    public bool updateCredit(int price)
     {
-        updated = true;
+        updatedCredit = true;
         credit = this.credit - price;
         if(credit > 0)
         {
@@ -114,9 +114,9 @@ public class PlayerStatisticData
         return false;
     }
 
-    public bool UpdatePseudonym(string name)
+    public bool updatePseudonym(string name)
     {
-        updatedName = true;
+        updatedPseudonym = true;
        
         if (name != null)
         {
@@ -126,7 +126,7 @@ public class PlayerStatisticData
         return false;
     }
 
-    public bool UpdateVisibility(bool visibility)
+    public bool updateVisibility(bool visibility)
     {
         updatedVisibility = true;
 
@@ -165,17 +165,17 @@ public class PlayerStatisticData
 
     }
 
-    public bool isUpdated()
+    public bool creditIsUpdated()
     {
-        return updated;
+        return updatedCredit;
     }
 
-    public bool pseudoIsUpdated()
+    public bool PseudonymIsUpdated()
     {
-        return updatedName;
+        return updatedPseudonym;
     }
 
-    public bool visIsUpdated()
+    public bool VisibilityIsUpdated()
     {
         return updatedVisibility;
     }
@@ -295,7 +295,7 @@ public class PlayerStatisticData
         return rewards;
     }
 
-    public bool GetShowRewards()
+    public bool GetVisibility()
     {
         return showRewards;
     }
@@ -341,28 +341,9 @@ public class PlayerStatisticData
 
     #endregion
 
+  
 
-
-    // public List<string> GetMinigames()
-    //{
-    //  List<string> minigames = new List<string>();
-
-    //minigames.Add("Bugfinder");
-    //minigames.Add("Chickenshock");
-    //minigames.Add("Crosswordpuzzle");
-    //minigames.Add("Finitequiz");
-    //minigames.Add("Memory");
-    //minigames.Add("Towercrush");
-
-
-    // return minigames;
-    // }
-
-    public void updateVisibility(bool update)
-    {
-        showRewards = update;
-    }
-
+ 
     public static PlayerstatisticDTO ConvertToPlayerstatisticDTO(PlayerStatisticData playerStatisticData)
     {
         string id = playerStatisticData.GetId();
@@ -377,7 +358,7 @@ public class PlayerStatisticData
         int volumeLevel = playerStatisticData.GetVolumeLevel();
 
         int rewards = playerStatisticData.GetRewards();
-        bool showRewards = playerStatisticData.GetShowRewards();
+        bool visibility = playerStatisticData.GetVisibility();
         int credit = playerStatisticData.GetCredit();
         string pseudonym = playerStatisticData.GetPseudonym();
         AreaLocationDTO currentArea = playerStatisticData.GetCurrentArea();
@@ -386,9 +367,7 @@ public class PlayerStatisticData
         TeleporterDTO[] unlockedTeleporters = playerStatisticData.GetUnlockedTeleporters();
 
 
-       PlayerstatisticDTO playerStatistic = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive, logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex,
-            volumeLevel,
-        knowledge, rewards, showRewards, credit, pseudonym);
+       PlayerstatisticDTO playerStatistic = new PlayerstatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive, logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex,volumeLevel,knowledge, rewards, visibility, credit, pseudonym);
 
 
         return playerStatistic;

@@ -516,7 +516,7 @@ public class GameManager : MonoBehaviour
         string basePath = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/";
         bool savingSuccessful = true;
 
-        if (playerStatisticData.isUpdated() || playerStatisticData.pseudoIsUpdated() || playerStatisticData.visIsUpdated())
+        if (playerStatisticData.creditIsUpdated() || playerStatisticData.PseudonymIsUpdated() || playerStatisticData.VisibilityIsUpdated())
         {
             PlayerstatisticDTO playerstatistic = PlayerStatisticData.ConvertToPlayerstatisticDTO(playerStatisticData);
             string path = basePath + userId;

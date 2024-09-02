@@ -587,7 +587,7 @@ public class DataManager : MonoBehaviour
        
         if(ownPlayerData != null)
         {
-            return ownPlayerData.UpdateData(price);
+            return ownPlayerData.updateCredit(price);
         }
         return false;
     }
@@ -597,7 +597,7 @@ public class DataManager : MonoBehaviour
 
         if (ownPlayerData != null)
         {
-            return ownPlayerData.UpdatePseudonym(pseudonym);
+            return ownPlayerData.updatePseudonym(pseudonym);
         }
         return false;
     }
@@ -606,7 +606,7 @@ public class DataManager : MonoBehaviour
     {
         if (ownPlayerData != null)
         {
-            return ownPlayerData.UpdateVisibility(visibility);
+            return ownPlayerData.updateVisibility(visibility);
         }
         return false;
     }

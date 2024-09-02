@@ -221,7 +221,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private void InitializeVisibilityButtonText()
     {
-        if (ownData.GetShowRewards())
+        if (ownData.GetVisibility())
         {
             visibilityButton.text = "your username is public";
         }
@@ -233,7 +233,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private void ToggleButtonText()
     {
-        if (ownData.GetShowRewards())
+        if (ownData.GetVisibility())
         {
             visibilityButton.text = "your username is anonymous";
             GameManager.Instance.UpdateVisibility(false);
@@ -455,14 +455,14 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         if (rewardElement != null)
         {
-            Debug.Log($"GetShowRewards: {rank.GetShowRewards()}, Username: {rank.GetUsername()}, Pseudonym: {rank.GetPseudonym()}");
+            Debug.Log($"GetVisibility: {rank.GetVisibility()}, Username: {rank.GetUsername()}, Pseudonym: {rank.GetPseudonym()}");
 
             string playername = "";
-            if (rank.GetShowRewards())
+            if (rank.GetVisibility())
             {
                 playername = rank.GetUsername();
             }
-            else if(!rank.GetShowRewards())
+            else if(!rank.GetVisibility())
             {
                 playername = rank.GetPseudonym();
             }
