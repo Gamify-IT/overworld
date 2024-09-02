@@ -89,7 +89,7 @@ public class PlayerstatisticDTO
         volumeLevel = 1;
         knowledge = 0;
         rewards = 0;
-        visibility = true;
+        visibility = false;
         credit = 0;
         pseudonym = "";
     }
