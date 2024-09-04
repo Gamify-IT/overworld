@@ -132,11 +132,11 @@ public class PlayerStatisticData
 
         if (visibility)
         {
-            visibility = true;
+            this.visibility = true;
         }
         else
         {
-            visibility = false;
+            this.visibility = false;
             
         }
 

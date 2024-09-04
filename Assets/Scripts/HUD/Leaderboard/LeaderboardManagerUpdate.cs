@@ -1,13 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
-
-//new comment
 
 public class LeaderboardManagerUpdate : MonoBehaviour
 {
@@ -15,53 +11,32 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     [SerializeField] private GameObject rewardObject;
     [SerializeField] public TMP_Dropdown LeagueDropdown;
     [SerializeField] public TMP_Dropdown WorldDropdown;
-    [SerializeField] public TMP_Dropdown MinigameDropdown;
-    [SerializeField] private GameObject walletPanel;
     [SerializeField] private WorldData worldNames;
     [SerializeField] private LeagueDefiner leagues;
     [SerializeField] private GameObject VisibilityMenu;
     [SerializeField] private Button visButton;
     [SerializeField] private TMP_InputField inputField;
-    [SerializeField] private TMP_Text walletField;
+    [SerializeField] private Toggle visibilityToggle;
+    [SerializeField] private Image toggleBackground;
+    [SerializeField] private Color pastelRed;
+    [SerializeField] private Color pastelGreen;
+    [SerializeField] private TextMeshProUGUI toggleText;
 
 
     private string league;
     private string world;
-    private string minigame;
     private List<PlayerStatisticData> ranking;
     private PlayerStatisticData ownData;
-    
     private bool filterActive;
-
     private Button closeButton;
-    public TMP_Text visibilityButton;
-    public Button walletButton;
     public Button resetButton;
-    public Button changeVisibilityButton;
-    public Button closeInputfieldButton;
     public Button closeVisibilityMenuButton;
 
     private AudioSource audioSource;
     public AudioClip clickSound;
-
+    private bool previousToggleState;
 
     private bool isLeaderboardOpen = true;
-
-    public void SetLeague()
-    {
-        int option = LeagueDropdown.value;
-        league = LeagueDropdown.options[option].text;
-        Debug.Log($"Selected league: {league}");
-
-        UpdateUI();
-    }
-
-    public void SetWorld()
-    {
-        int option = WorldDropdown.value;
-        world = WorldDropdown.options[option].text;
-        UpdateUI();
-    }
 
     private void Start()
     {
@@ -76,46 +51,15 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         audioSource.clip = clickSound;
         audioSource.playOnAwake = false;
 
-        InitializeVisibilityButtonText();
-
-        if (visibilityButton!= null)
+        if (visButton != null)
         {
-
             visButton.onClick.AddListener(OpenVisibilityMenu);
-
-
         }
         else
         {
             Debug.LogError("Visibility Button is not assigned in the Inspector.");
         }
 
-        if (changeVisibilityButton != null)
-        {
-            changeVisibilityButton.onClick.AddListener(ToggleButtonText);
-        }
-        else
-        {
-            Debug.LogError("Visibility Change Button is not assigned in the Inspector.");
-        }
-
-        if (LeagueDropdown == null)
-        {
-            Debug.LogError("LeagueDropdown is not assigned in the Inspector.");
-        }
-        else
-        {
-            Debug.Log("LeagueDropdown is assigned: " + LeagueDropdown.gameObject.name);
-        }
-
-        if (WorldDropdown == null)
-        {
-            Debug.LogError("WorldDropdown is not assigned in the Inspector.");
-        }
-        else
-        {
-            Debug.Log("WorldDropdown is assigned: " + WorldDropdown.gameObject.name);
-        }
         if (resetButton != null)
         {
             resetButton.onClick.AddListener(ResetFilter);
@@ -128,45 +72,33 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         if (inputField != null)
         {
             inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {ownData.GetPseudonym()}\nChange current pseudonym";
-
-           
-
-           
         }
         else
         {
             Debug.LogError("InputField is not assigned in the Inspector.");
         }
 
-       
-       
-
         if (closeVisibilityMenuButton != null)
         {
-            closeVisibilityMenuButton.onClick.AddListener(CloseVisibilityMenu); 
+            closeVisibilityMenuButton.onClick.AddListener(CloseVisibilityMenu);
         }
         else
         {
             Debug.LogError("Close Visibility Menu Button is not assigned in the Inspector.");
         }
 
-      
-
-
-        Debug.Log($"My player is: {ownData.GetUsername()},Rewards: {ownData.GetRewards()}");
-
-
-        foreach (var playerData in ranking)
+        if (visibilityToggle != null)
         {
-            Debug.Log($"Player added to display: {playerData.GetUsername()},Rewards: {playerData.GetRewards()}, League: {playerData.GetLeague()}, World: {playerData.GetWorld()}");
+            visibilityToggle.onValueChanged.AddListener(OnToggleChanged);
+            LoadVisibilityState();
         }
-       
+        else
+        {
+            Debug.LogError("Visibility Toggle is not assigned in the Inspector.");
+        }
+
         Setup();
-
-        
         UpdateUI();
-
-
     }
 
     private void Setup()
@@ -186,10 +118,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         List<string> worlds = GetWorld();
         WorldDropdown.ClearOptions();
         WorldDropdown.AddOptions(worlds);
-
     }
-
-   
 
     private void OpenVisibilityMenu()
     {
@@ -219,40 +148,9 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
-    private void InitializeVisibilityButtonText()
-    {
-        if (ownData.GetVisibility())
-        {
-            visibilityButton.text = "your username is public";
-        }
-        else
-        {
-            visibilityButton.text = "your username is anonymous";
-        }
-    }
-
-    private void ToggleButtonText()
-    {
-        if (ownData.GetVisibility())
-        {
-            visibilityButton.text = "your username is anonymous";
-            GameManager.Instance.UpdateVisibility(false);
-        }
-        else
-        {
-            visibilityButton.text = "your username is public";
-            GameManager.Instance.UpdateVisibility(true);
-        }
-
-        GameManager.Instance.SavePlayerData();
-        SaveVisibilityState();
-        ranking = DataManager.Instance.GetAllPlayerStatistics();
-        UpdateUI(); 
-    }
-
     private void SaveVisibilityState()
     {
-        PlayerPrefs.SetString("VisibilityState", visibilityButton.text);
+        PlayerPrefs.SetInt("VisibilityState", visibilityToggle.isOn ? 1 : 0);
         PlayerPrefs.Save();
     }
 
@@ -260,36 +158,28 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("VisibilityState"))
         {
-            visibilityButton.text = PlayerPrefs.GetString("VisibilityState");
+            bool isPublic = PlayerPrefs.GetInt("VisibilityState") == 1;
+            visibilityToggle.isOn = isPublic;
+            UpdateToggleButtonColor(isPublic);
+            UpdateToggleText(isPublic);
         }
         else
         {
-            InitializeVisibilityButtonText();
+            visibilityToggle.isOn = false;
             SaveVisibilityState();
+            UpdateToggleButtonColor(false);
+            UpdateToggleText(false);
         }
-    }
-
-  
-
-  public void SetMinigame()
-    {
-        int option = MinigameDropdown.value;
-        minigame = MinigameDropdown.options[option].text;
-        UpdateUI();
     }
 
     public void ResetFilter()
     {
         league = "Filter by...";
         world = "Filter by...";
-
         filterActive = false;
-
-        SetupDropdowns(); 
-
+        SetupDropdowns();
         UpdateUI();
     }
-
 
     private void UpdateUI()
     {
@@ -303,7 +193,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         foreach (Transform child in content.transform)
         {
             Destroy(child.gameObject);
-
         }
     }
 
@@ -315,45 +204,32 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         foreach (PlayerStatisticData rank in ranking)
         {
             string league = rank.GetLeague();
-            
             if (!leagues.Contains(league))
-              {
-                  leagues.Add(league);
-              }
-            
+            {
+                leagues.Add(league);
+            }
         }
         leagues.Add("All");
         return leagues;
     }
 
-
-
     private List<string> GetWorld()
     {
-        List<string> worlds = new()
-        {
-            "Filter by..."
-        };
+        List<string> worlds = new() { "Filter by..." };
         foreach (PlayerStatisticData rank in ranking)
         {
             string world = rank.GetWorld();
-                if (!worlds.Contains(world))
-                {
-                    worlds.Add(world);
-                }
-            
+            if (!worlds.Contains(world))
+            {
+                worlds.Add(world);
+            }
         }
-
         return worlds;
     }
-
-
-    
 
     private List<PlayerStatisticData> FilterRewards()
     {
         List<PlayerStatisticData> rewardsToDisplay = new List<PlayerStatisticData>();
-
         foreach (PlayerStatisticData rank in ranking)
         {
             if (league == "All" || CheckLeague(rank))
@@ -367,44 +243,28 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
         if (league == "Filter by..." && world == "Filter by...")
         {
-            rewardsToDisplay = ranking.Where(rank =>
-                rank.GetLeague() == ownData.GetLeague() 
-            ).ToList();
+            rewardsToDisplay = ranking.Where(rank => rank.GetLeague() == ownData.GetLeague()).ToList();
         }
-
         return rewardsToDisplay;
     }
 
-
     private bool CheckLeague(PlayerStatisticData ranking)
     {
-        bool valid = false;
-        if (league.Equals("Filter by...") || ranking.GetLeague().Equals(league))
-        {
-            valid = true;
-        }
-
-        return valid;
+        return league.Equals("Filter by...") || ranking.GetLeague().Equals(league);
     }
 
     private bool CheckWorld(PlayerStatisticData ranking)
     {
-        bool valid = false;
-        if (world.Equals("Filter by...") || ranking.GetWorld().Equals(world))
-        {
-            valid = true;
-        }
-
-        return valid;
+        return world.Equals("Filter by...") || ranking.GetWorld().Equals(world);
     }
 
     public void OpenInputField()
     {
         if (inputField != null)
         {
-            inputField.gameObject.SetActive(true); 
+            inputField.gameObject.SetActive(true);
             inputField.text = ownData.GetPseudonym();
-            inputField.Select(); 
+            inputField.Select();
             inputField.ActivateInputField();
             SetPseudonym();
         }
@@ -419,10 +279,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         if (inputField != null && inputField.gameObject.activeSelf)
         {
             string newPseudonym = inputField.text;
-
             GameManager.Instance.UpdatePseudonym(newPseudonym);
             GameManager.Instance.SavePlayerData();
-        
             ranking = DataManager.Instance.GetAllPlayerStatistics();
 
             Debug.Log($"Updated pseudonym of {ownData.GetUsername()} to: {ownData.GetPseudonym()}");
@@ -436,33 +294,48 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             Debug.LogError("InputField is not assigned in the Inspector or not active.");
         }
     }
-   
 
     private void DisplayRewards(List<PlayerStatisticData> rewardsToDisplay)
     {
-        var sortedRewards = rewardsToDisplay.OrderByDescending(rank => rank.GetRewards()).ToList();
+        var groupedRewards = rewardsToDisplay
+            .GroupBy(rank => rank.GetRewards())
+            .OrderByDescending(group => group.Key)
+            .ToList();
 
-        for (int i = 0; i < sortedRewards.Count; i++)
+        int currentRank = 1;
+        int highlightRankLimit = 3;
+        int uniqueRankCount = 0;
+
+        foreach (var group in groupedRewards)
         {
-            DisplayRewards(sortedRewards[i], i + 1);
+            var sortedGroup = group.OrderBy(rank => rank.GetUsername()).ToList();
+            int groupSize = sortedGroup.Count;
+
+            bool shouldHighlight = uniqueRankCount < highlightRankLimit;
+
+            foreach (var player in sortedGroup)
+            {
+                DisplayRewards(player, currentRank, shouldHighlight);
+            }
+
+            uniqueRankCount++;
+            currentRank += 1;
         }
     }
 
-    private void DisplayRewards(PlayerStatisticData rank, int place)
+    private void DisplayRewards(PlayerStatisticData rank, int place, bool highlight)
     {
         GameObject achievementObject = Instantiate(rewardObject, content.transform, false);
         RewardElement rewardElement = achievementObject.GetComponent<RewardElement>();
 
         if (rewardElement != null)
         {
-            Debug.Log($"GetVisibility: {rank.GetVisibility()}, Username: {rank.GetUsername()}, Pseudonym: {rank.GetPseudonym()}");
-
-            string playername = "";
+            string playername;
             if (rank.GetVisibility())
             {
                 playername = rank.GetUsername();
             }
-            else if(!rank.GetVisibility())
+            else
             {
                 playername = rank.GetPseudonym();
             }
@@ -473,17 +346,13 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             }
 
             int reward = rank.GetRewards();
-
-            rewardElement.Setup(playername, reward, place, place == 1 || place == 2 || place == 3);
+            rewardElement.Setup(playername, reward, place, highlight);
         }
         else
         {
             Destroy(achievementObject);
-            UpdateUI();
         }
     }
-
-
 
     private void OnEnable()
     {
@@ -499,7 +368,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     {
         if (scene.name == "Rewards")
         {
-
             closeButton = GameObject.Find("CloseButton").GetComponent<Button>();
             if (closeButton != null)
             {
@@ -513,8 +381,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
-   
-
     public void CloseLeaderboardScene()
     {
         if (isLeaderboardOpen)
@@ -522,7 +388,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             audioSource.Play();
             Invoke("UnloadScene", 0.15f);
             isLeaderboardOpen = false;
-            Time.timeScale = 1f; 
+            Time.timeScale = 1f;
         }
     }
 
@@ -533,44 +399,26 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
     private void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.Escape) && isLeaderboardOpen)
         {
             CloseLeaderboardScene();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Return) && walletPanel != null && walletPanel.activeSelf)
-        {
-            ClosewalletPanel();
         }
 
         if (Input.GetKeyDown(KeyCode.Return) && inputField.gameObject.activeSelf)
         {
             SetPseudonym();
         }
-    }
 
-
-    private void OpenwalletPanel()
-    {
-        if (walletPanel != null)
+        if (visibilityToggle != null)
         {
-            walletPanel.SetActive(true);
-            Debug.Log("wallet Panel opened.");
-            
+            bool isOn = visibilityToggle.isOn;
 
-        }
-        else
-        {
-            Debug.LogError("wallet Panel is not assigned in the Inspector.");
-        }
-    }
-
-    private void ClosewalletPanel()
-    {
-        if (walletPanel != null)
-        {
-            walletPanel.SetActive(false);
-            Debug.Log("wallet Panel closed.");
+            if (isOn != previousToggleState)
+            {
+                OnToggleChanged(isOn);
+                previousToggleState = isOn;
+            }
         }
     }
 
@@ -583,7 +431,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
 
             if (isOpen)
             {
-                inputField.text = string.Empty; 
+                inputField.text = string.Empty;
                 inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {ownData.GetPseudonym()}\nChange current pseudonym";
                 inputField.Select();
                 inputField.ActivateInputField();
@@ -595,18 +443,40 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
-   
-
-
-    private void CloseInputField()
+    private void UpdateToggleButtonColor(bool isPublic)
     {
-        if (inputField != null)
+        if (toggleBackground != null)
         {
-            inputField.gameObject.SetActive(false);
+            toggleBackground.color = isPublic ? pastelGreen : pastelRed;
+        }
+        else
+        {
+            Debug.LogError("Toggle Background Image is not assigned in the Inspector.");
         }
     }
 
+    private void OnToggleChanged(bool isOn)
+    {
+        UpdateToggleButtonColor(isOn);
+        UpdateToggleText(isOn); 
+        GameManager.Instance.UpdateVisibility(isOn);
+        GameManager.Instance.SavePlayerData();
+        SaveVisibilityState();
+        ranking = DataManager.Instance.GetAllPlayerStatistics();
+        UpdateUI();
+    }
 
+    private void UpdateToggleText(bool isPublic)
+    {
+        if (toggleText != null)
+        {
+            toggleText.text = isPublic ? "Public" : "Private";
+        }
+        else
+        {
+            Debug.LogError("Toggle TextMeshProUGUI is not assigned in the Inspector.");
+        }
+    }
 
 
 }
