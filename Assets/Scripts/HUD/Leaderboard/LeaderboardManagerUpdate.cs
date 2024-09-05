@@ -18,8 +18,9 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private Toggle visibilityToggle;
     [SerializeField] private Image toggleBackground;
-    [SerializeField] private Color pastelRed;
-    [SerializeField] private Color pastelGreen;
+    [SerializeField] private Image visibilityImage; 
+
+
     [SerializeField] private TextMeshProUGUI toggleText;
 
 
@@ -31,6 +32,9 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private Button closeButton;
     public Button resetButton;
     public Button closeVisibilityMenuButton;
+
+    private Color pastelRed = new Color(1f, 0.6f, 0.6f);  
+    private Color pastelGreen = new Color(0.6f, 1f, 0.6f);
 
     private AudioSource audioSource;
     public AudioClip clickSound;
@@ -127,6 +131,8 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             VisibilityMenu.SetActive(true);
             Debug.Log("Visibility Menu opened.");
             audioSource.Play();
+            bool isPublic = visibilityToggle.isOn;
+            UpdateVisibilityImage(isPublic);
         }
         else
         {
@@ -447,11 +453,20 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     {
         if (toggleBackground != null)
         {
-            toggleBackground.color = isPublic ? pastelGreen : pastelRed;
+            toggleBackground.color = isPublic ? pastelGreen : pastelRed;  
         }
         else
         {
             Debug.LogError("Toggle Background Image is not assigned in the Inspector.");
+        }
+
+        if (toggleText != null)
+        {
+            toggleText.color = isPublic ? pastelGreen : pastelRed;
+        }
+        else
+        {
+            Debug.LogError("Toggle TextMeshProUGUI is not assigned in the Inspector.");
         }
     }
 
@@ -462,6 +477,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         GameManager.Instance.UpdateVisibility(isOn);
         GameManager.Instance.SavePlayerData();
         SaveVisibilityState();
+        UpdateVisibilityImage(isOn);
         ranking = DataManager.Instance.GetAllPlayerStatistics();
         UpdateUI();
     }
@@ -478,5 +494,18 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
+    private void UpdateVisibilityImage(bool isPublic)
+    {
+        if (visibilityImage != null)
+        {
+            Color imageColor = visibilityImage.color; 
+            imageColor.a = isPublic ? 1f : 0.5f;     
+            visibilityImage.color = imageColor;       
+        }
+        else
+        {
+            Debug.LogError("Visibility Image is not assigned in the Inspector.");
+        }
+    }
 
 }
