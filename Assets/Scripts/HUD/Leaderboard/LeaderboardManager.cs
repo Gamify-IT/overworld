@@ -5,22 +5,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LeaderboardManagerUpdate : MonoBehaviour
+public class LeaderboardManager : MonoBehaviour
 {
-    [SerializeField] private GameObject content;
-    [SerializeField] private GameObject rewardObject;
-    [SerializeField] public TMP_Dropdown LeagueDropdown;
-    [SerializeField] public TMP_Dropdown WorldDropdown;
-    [SerializeField] private WorldData worldNames;
-    [SerializeField] private LeagueDefiner leagues;
-    [SerializeField] private GameObject VisibilityMenu;
-    [SerializeField] private Button visButton;
+
+    [SerializeField] private GameObject content; 
+    [SerializeField] private GameObject rewardObject; 
+    [SerializeField] public TMP_Dropdown LeagueDropdown; 
+    [SerializeField] public TMP_Dropdown WorldDropdown; 
+    [SerializeField] private GameObject VisibilityMenu; 
+    [SerializeField] private Button visibilityButton;
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private Toggle visibilityToggle;
     [SerializeField] private Image toggleBackground;
     [SerializeField] private Image visibilityImage; 
-
-
     [SerializeField] private TextMeshProUGUI toggleText;
 
 
@@ -28,91 +25,79 @@ public class LeaderboardManagerUpdate : MonoBehaviour
     private string world;
     private List<PlayerStatisticData> ranking;
     private PlayerStatisticData ownData;
-    private bool filterActive;
     private Button closeButton;
     public Button resetButton;
     public Button closeVisibilityMenuButton;
-
+    private bool previousToggleState;
+    private bool isLeaderboardOpen = true;
     private Color pastelRed = new Color(1f, 0.6f, 0.6f);  
     private Color pastelGreen = new Color(0.6f, 1f, 0.6f);
 
     private AudioSource audioSource;
     public AudioClip clickSound;
-    private bool previousToggleState;
 
-    private bool isLeaderboardOpen = true;
 
+    /// <summary>
+    /// Initializes the leaderboard manager.
+    /// This method is called when the script is first run.
+    /// Sets up data, audio, UI listeners, and the initial state of the UI.
+    /// </summary>
     private void Start()
     {
-        ownData = DataManager.Instance.GetOwnStatisticData();
-        ranking = DataManager.Instance.GetAllPlayerStatistics();
-
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-        {
-            audioSource = gameObject.AddComponent<AudioSource>();
-        }
-        audioSource.clip = clickSound;
-        audioSource.playOnAwake = false;
-
-        if (visButton != null)
-        {
-            visButton.onClick.AddListener(OpenVisibilityMenu);
-        }
-        else
-        {
-            Debug.LogError("Visibility Button is not assigned in the Inspector.");
-        }
-
-        if (resetButton != null)
-        {
-            resetButton.onClick.AddListener(ResetFilter);
-        }
-        else
-        {
-            Debug.LogError("Reset Button is not assigned in the Inspector.");
-        }
-
-        if (inputField != null)
-        {
-            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {ownData.GetPseudonym()}\nChange current pseudonym";
-        }
-        else
-        {
-            Debug.LogError("InputField is not assigned in the Inspector.");
-        }
-
-        if (closeVisibilityMenuButton != null)
-        {
-            closeVisibilityMenuButton.onClick.AddListener(CloseVisibilityMenu);
-        }
-        else
-        {
-            Debug.LogError("Close Visibility Menu Button is not assigned in the Inspector.");
-        }
-
-        if (visibilityToggle != null)
-        {
-            visibilityToggle.onValueChanged.AddListener(OnToggleChanged);
-            LoadVisibilityState();
-        }
-        else
-        {
-            Debug.LogError("Visibility Toggle is not assigned in the Inspector.");
-        }
-
+        InitializeData();
+        InitializeAudioSource();
+        SetupUIListeners();
         Setup();
         UpdateUI();
     }
 
+    /// <summary>
+    /// Retrieves and sets up the player’s own data and the ranking data.
+    /// </summary>
+    private void InitializeData()
+    {
+        ownData = DataManager.Instance.GetOwnStatisticData();
+        ranking = DataManager.Instance.GetAllPlayerStatistics();
+    }
+
+    /// <summary>
+    /// Initializes the audio source component for playing sounds.
+    /// Adds an AudioSource component if one is not already attached.
+    /// </summary>
+    private void InitializeAudioSource()
+    {
+        audioSource = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
+        audioSource.clip = clickSound;
+        audioSource.playOnAwake = false;
+    }
+
+    /// <summary>
+    /// Sets up event listeners for UI elements such as buttons and toggles.
+    /// Configures the placeholder text of the input field and loads the saved visibility state.
+    /// </summary>
+    private void SetupUIListeners()
+    {
+        visibilityButton?.onClick.AddListener(OpenVisibilityMenu);
+        resetButton?.onClick.AddListener(ResetFilter);
+        inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {ownData.GetPseudonym()}\nChange current pseudonym";
+        closeVisibilityMenuButton?.onClick.AddListener(CloseVisibilityMenu);
+        visibilityToggle?.onValueChanged.AddListener(OnToggleChanged);
+        LoadVisibilityState();
+    }
+
+    /// <summary>
+    /// Performs initial setup tasks, such as configuring dropdowns and filter states.
+    /// </summary>
     private void Setup()
     {
         SetupDropdowns();
         league = "Filter by...";
         world = "Filter by...";
-        filterActive = false;
     }
 
+    /// <summary>
+    /// Configures the options for the League and World dropdown menus.
+    /// </summary>
     private void SetupDropdowns()
     {
         List<string> leagues = GetLeague();
@@ -124,42 +109,45 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         WorldDropdown.AddOptions(worlds);
     }
 
+    /// <summary>
+    /// Opens the visibility menu and updates the visibility icon based on the current toggle state.
+    /// </summary>
     private void OpenVisibilityMenu()
     {
         if (VisibilityMenu != null)
         {
             VisibilityMenu.SetActive(true);
-            Debug.Log("Visibility Menu opened.");
             audioSource.Play();
             bool isPublic = visibilityToggle.isOn;
             UpdateVisibilityImage(isPublic);
-        }
-        else
-        {
-            Debug.LogError("Visibility Menu is not assigned in the Inspector.");
-        }
+        }        
     }
 
+    /// <summary>
+    /// Closes the visibility menu and plays a click sound.
+    /// </summary>
     private void CloseVisibilityMenu()
     {
         if (VisibilityMenu != null)
         {
             audioSource.Play();
             VisibilityMenu.SetActive(false);
-            Debug.Log("Visibility Menu closed.");
         }
-        else
-        {
-            Debug.LogError("Visibility Menu is not assigned in the Inspector.");
-        }
+        
     }
 
+    /// <summary>
+    /// Saves the current state of the visibility toggle to player preferences.
+    /// </summary>
     private void SaveVisibilityState()
     {
         PlayerPrefs.SetInt("VisibilityState", visibilityToggle.isOn ? 1 : 0);
         PlayerPrefs.Save();
     }
 
+    /// <summary>
+    /// Loads the visibility state from player preferences and updates the UI accordingly.
+    /// </summary>
     private void LoadVisibilityState()
     {
         if (PlayerPrefs.HasKey("VisibilityState"))
@@ -178,15 +166,20 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Resets the filter settings and updates the UI to reflect these changes.
+    /// </summary>
     public void ResetFilter()
     {
         league = "Filter by...";
         world = "Filter by...";
-        filterActive = false;
         SetupDropdowns();
         UpdateUI();
     }
 
+    /// <summary>
+    /// Updates the UI by resetting current elements, filtering rewards, and displaying them.
+    /// </summary>
     private void UpdateUI()
     {
         ResetUI();
@@ -194,6 +187,9 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         DisplayRewards(rewardsToDisplay);
     }
 
+    /// <summary>
+    /// Clears all child objects from the content container.
+    /// </summary>
     private void ResetUI()
     {
         foreach (Transform child in content.transform)
@@ -202,6 +198,10 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Retrieves a list of unique league names from the ranking data.
+    /// </summary>
+    /// <returns>A list of league names including "All".</returns>
     private List<string> GetLeague()
     {
         List<string> leagues = new();
@@ -219,6 +219,10 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         return leagues;
     }
 
+    // <summary>
+    /// Retrieves a list of unique world names from the ranking data.
+    /// </summary>
+    /// <returns>A list of world names with "Filter by..." as the default option.</returns>
     private List<string> GetWorld()
     {
         List<string> worlds = new() { "Filter by..." };
@@ -233,6 +237,10 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         return worlds;
     }
 
+    /// <summary>
+    /// Filters the list of rewards based on the current league and world filters.
+    /// </summary>
+    /// <returns>A list of player statistics that match the filter criteria.</returns>    
     private List<PlayerStatisticData> FilterRewards()
     {
         List<PlayerStatisticData> rewardsToDisplay = new List<PlayerStatisticData>();
@@ -254,16 +262,29 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         return rewardsToDisplay;
     }
 
+    /// <summary>
+    /// Checks if a player’s league matches the selected league filter.
+    /// </summary>
+    /// <param name="ranking">The player’s ranking data.</param>
+    /// <returns>True if the league matches or if no filter is applied; otherwise, false.</returns>
     private bool CheckLeague(PlayerStatisticData ranking)
     {
         return league.Equals("Filter by...") || ranking.GetLeague().Equals(league);
     }
 
+    // <summary>
+    /// Checks if a player’s world matches the selected world filter.
+    /// </summary>
+    /// <param name="ranking">The player’s ranking data.</param>
+    /// <returns>True if the world matches or if no filter is applied; otherwise, false.</returns>
     private bool CheckWorld(PlayerStatisticData ranking)
     {
         return world.Equals("Filter by...") || ranking.GetWorld().Equals(world);
     }
 
+    /// <summary>
+    /// Opens the input field for changing the pseudonym and sets its initial value.
+    /// </summary>
     public void OpenInputField()
     {
         if (inputField != null)
@@ -274,12 +295,12 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             inputField.ActivateInputField();
             SetPseudonym();
         }
-        else
-        {
-            Debug.LogError("InputField is not assigned in the Inspector.");
-        }
+       
     }
 
+    /// <summary>
+    /// Updates the player’s pseudonym and refreshes the ranking data.
+    /// </summary>
     public void SetPseudonym()
     {
         if (inputField != null && inputField.gameObject.activeSelf)
@@ -289,7 +310,6 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             GameManager.Instance.SavePlayerData();
             ranking = DataManager.Instance.GetAllPlayerStatistics();
 
-            Debug.Log($"Updated pseudonym of {ownData.GetUsername()} to: {ownData.GetPseudonym()}");
             inputField.text = string.Empty;
             inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {newPseudonym}\nChange current pseudonym";
             inputField.Select();
@@ -301,6 +321,11 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Displays a list of rewards, grouping them by their reward value and sorting them in descending order.
+    /// Rewards are displayed with ranks, and the top few ranks are highlighted.
+    /// </summary>
+    /// <param name="rewardsToDisplay">A list of player statistics to be displayed in the leaderboard.</param>
     private void DisplayRewards(List<PlayerStatisticData> rewardsToDisplay)
     {
         var groupedRewards = rewardsToDisplay
@@ -329,6 +354,13 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Instantiates and sets up the display of a single player's reward.
+    /// Configures the appearance of the reward element based on the player's visibility and rank.
+    /// </summary>
+    /// <param name="rank">The player's ranking data to be displayed.</param>
+    /// <param name="place">The rank place to be assigned to this player.</param>
+    /// <param name="highlight">Whether this reward should be highlighted.</param>
     private void DisplayRewards(PlayerStatisticData rank, int place, bool highlight)
     {
         GameObject achievementObject = Instantiate(rewardObject, content.transform, false);
@@ -360,16 +392,28 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Subscribes to the scene loaded event when the object is enabled.
+    /// </summary>
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    /// <summary>
+    /// Unsubscribes from the scene loaded event when the object is disabled.
+    /// </summary>
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    /// <summary>
+    /// Handles actions when a new scene is loaded.
+    /// Specifically, sets up the close button if the "Rewards" scene is loaded and updates the UI.
+    /// </summary>
+    /// <param name="scene">The scene that was loaded.</param>
+    /// <param name="mode">The mode in which the scene was loaded.</param>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "Rewards")
@@ -379,14 +423,14 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             {
                 closeButton.onClick.AddListener(CloseLeaderboardScene);
             }
-            else
-            {
-                Debug.LogError("Close Button is not found in the RewardsScene.");
-            }
+            
             UpdateUI();
         }
     }
 
+    /// <summary>
+    /// Closes the leaderboard scene and unloads it after a brief delay.
+    /// </summary>
     public void CloseLeaderboardScene()
     {
         if (isLeaderboardOpen)
@@ -398,11 +442,18 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Unloads the "Rewards" scene asynchronously.
+    /// </summary>
     private void UnloadScene()
     {
         SceneManager.UnloadSceneAsync("Rewards");
     }
 
+    /// <summary>
+    /// Updates the leaderboard and pseudonym input field based on user input and toggle state.
+    /// Handles key presses for closing the scene and updating the pseudonym.
+    /// </summary>
     private void Update()
     {
 
@@ -428,6 +479,10 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Toggles the visibility of the input field for changing the pseudonym.
+    /// Updates the placeholder text and activates the input field if opened.
+    /// </summary>
     public void OpenOrCloseInputField()
     {
         if (inputField != null)
@@ -443,33 +498,32 @@ public class LeaderboardManagerUpdate : MonoBehaviour
                 inputField.ActivateInputField();
             }
         }
-        else
-        {
-            Debug.LogError("InputField is not assigned in the Inspector.");
-        }
+        
     }
 
+    /// <summary>
+    /// Updates the color of the toggle button background and text based on the visibility state.
+    /// </summary>
+    /// <param name="isPublic">The visibility state (true for public, false for private).</param>
     private void UpdateToggleButtonColor(bool isPublic)
     {
         if (toggleBackground != null)
         {
             toggleBackground.color = isPublic ? pastelGreen : pastelRed;  
         }
-        else
-        {
-            Debug.LogError("Toggle Background Image is not assigned in the Inspector.");
-        }
-
+       
         if (toggleText != null)
         {
             toggleText.color = isPublic ? pastelGreen : pastelRed;
         }
-        else
-        {
-            Debug.LogError("Toggle TextMeshProUGUI is not assigned in the Inspector.");
-        }
+       
     }
 
+    /// <summary>
+    /// Handles changes to the visibility toggle.
+    /// Updates the button color, text, and visibility image, and refreshes player data and UI.
+    /// </summary>
+    /// <param name="isOn">The new state of the toggle (true for public, false for private).</param>
     private void OnToggleChanged(bool isOn)
     {
         UpdateToggleButtonColor(isOn);
@@ -482,18 +536,23 @@ public class LeaderboardManagerUpdate : MonoBehaviour
         UpdateUI();
     }
 
+    /// <summary>
+    /// Updates the text displayed on the visibility toggle based on the current state.
+    /// </summary>
+    /// <param name="isPublic">The visibility state (true for public, false for private).</param>
     private void UpdateToggleText(bool isPublic)
     {
         if (toggleText != null)
         {
             toggleText.text = isPublic ? "Public" : "Private";
         }
-        else
-        {
-            Debug.LogError("Toggle TextMeshProUGUI is not assigned in the Inspector.");
-        }
+        
     }
 
+    /// <summary>
+    /// Updates the alpha value of the visibility image based on the visibility state.
+    /// </summary>
+    /// <param name="isPublic">The visibility state (true for public, false for private).</param>
     private void UpdateVisibilityImage(bool isPublic)
     {
         if (visibilityImage != null)
@@ -502,10 +561,7 @@ public class LeaderboardManagerUpdate : MonoBehaviour
             imageColor.a = isPublic ? 1f : 0.5f;     
             visibilityImage.color = imageColor;       
         }
-        else
-        {
-            Debug.LogError("Visibility Image is not assigned in the Inspector.");
-        }
+        
     }
 
 }
