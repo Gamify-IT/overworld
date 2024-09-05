@@ -50,9 +50,14 @@ public class ProgressBar : MonoBehaviour
     public void setUnlockedArea(int worldIndex)
     {
         unlockedAreaText.text = worldIndex.ToString();
+        if (worldIndex == 1)
+        {
+            GameManager.Instance.UpdateAchievement(AchievementTitle.LEVEL_UP, 1, null);
+        }
         if (worldIndex == 2)
         {
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.OPENER_WORLD_2, 1, null);
+            GameManager.Instance.UpdateAchievement(AchievementTitle.LEVEL_UP, 2, null);
         }
         if (worldIndex == 3)
         {
@@ -74,19 +79,21 @@ public class ProgressBar : MonoBehaviour
         unlockedAreaText.text = worldIndex + "-" + dungeonIndex;
         if (worldIndex == 1)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINER_WORLD_1, 1, null);
+ GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_1, dungeonIndex, null);
+            
+           
         }
         if (worldIndex == 2)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINER_WORLD_2, 1, null);
+            GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_2, dungeonIndex, null);
         }
         if (worldIndex == 3)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINER_WORLD_3, 1, null);
+            GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_3, dungeonIndex, null);
         }
         if (worldIndex == 4)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINER_WORLD_4, 1, null);
+            GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_4, dungeonIndex, null);
         }
     }
 }
