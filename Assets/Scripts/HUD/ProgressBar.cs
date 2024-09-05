@@ -79,9 +79,7 @@ public class ProgressBar : MonoBehaviour
         unlockedAreaText.text = worldIndex + "-" + dungeonIndex;
         if (worldIndex == 1)
         {
- GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_1, dungeonIndex, null);
-            
-           
+            GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_1, dungeonIndex, null);
         }
         if (worldIndex == 2)
         {
