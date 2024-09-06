@@ -315,10 +315,7 @@ public class LeaderboardManager : MonoBehaviour
             inputField.Select();
             inputField.ActivateInputField();
         }
-        else
-        {
-            Debug.LogError("InputField is not assigned in the Inspector or not active.");
-        }
+        
     }
 
     /// <summary>
