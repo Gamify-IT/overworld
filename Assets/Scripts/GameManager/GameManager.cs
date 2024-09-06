@@ -678,7 +678,9 @@ public class GameManager : MonoBehaviour
         PlayAchievementNotificationSound();
     }
 
-
+    /// <summary>
+    ///     This function plays the achievement notification sound.
+    /// </summary>
     private void PlayAchievementNotificationSound()
     {
         if(achievementNotificationSound != null)
@@ -686,6 +688,7 @@ public class GameManager : MonoBehaviour
             audioSource.PlayOneShot(achievementNotificationSound);
         }
     }
+
     /// <summary>
     ///     This function sets up everything with dummy data for the offline mode
     /// </summary>
