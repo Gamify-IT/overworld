@@ -42,13 +42,15 @@ public class ShopItemManager : MonoBehaviour
 
     private List<ShopItemData> shopItemData;
 
+    /// <summary>
+    /// Initializes the shop by loading player data, shop items, and setting up UI elements.
+    /// Adds listeners to the various buttons for user interaction.
+    /// </summary>
     void Start()
     {
         ownData = DataManager.Instance.GetOwnStatisticData();
         shopItemData = DataManager.Instance.GetShopItems();
-
        
-
         UpdateUI();
         UpdateCreditText();
 
@@ -63,6 +65,9 @@ public class ShopItemManager : MonoBehaviour
         showAllButton.onClick.AddListener(OnShowAllItemsClicked);
         inventoryButton.onClick.AddListener(ShowPurchasedItems);
 
+        content.GetComponent<ScrollRect>().gameObject.AddComponent<DisableScrollRectDrag>();
+
+
         if (audioSource != null)
         {
             audioSource.volume = 0.3f;
@@ -70,13 +75,20 @@ public class ShopItemManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Updates the UI by clearing existing shop items and displaying the current items available for purchase.
+    /// </summary>
     void UpdateUI()
     {
         ClearShopItems();
         DisplayShopItems(shopItemData);
     }
 
-   
+
+    /// <summary>
+    /// Displays the list of shop items provided as a parameter by instantiating UI elements for each item.
+    /// </summary>
+    /// <param name="shopItemsToDisplay">A list of shop items to display in the shop UI.</param>
 
     private void DisplayShopItems(List<ShopItemData> shopItemsToDisplay)
     {
@@ -86,6 +98,11 @@ public class ShopItemManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Creates a UI element for a single shop item, sets up its display, and configures the interaction behavior.
+    /// Changes the button interaction based on whether the item is already purchased.
+    /// </summary>
+    /// <param name="shopItem">The shop item to display in the UI.</param>
     private void DisplayShopItem(ShopItemData shopItem)
     {
         GameObject shopItemObject = Instantiate(shopItemPrefab, content.transform, false);
@@ -109,19 +126,29 @@ public class ShopItemManager : MonoBehaviour
 
             if (bought)
             {
-                panelImage.color = new Color(1f, 1f, 1f, 0.5f);
+               
+                Color originalColor = panelImage.color;
+
+                float brightnessFactor = 1.2f; 
+                Color brighterColor = new Color(
+                    Mathf.Clamp(originalColor.r * brightnessFactor, 0f, 1f),
+                    Mathf.Clamp(originalColor.g * brightnessFactor, 0f, 1f),
+                    Mathf.Clamp(originalColor.b * brightnessFactor, 0f, 1f),
+                    originalColor.a 
+                );
+
+                panelImage.color = brighterColor;
 
                 if (buyButtonText != null)
                 {
-                    buyButtonText.text = "<i>Already Bought</i>";  
+                    buyButtonText.text = "<i>Already Bought!</i>";
                 }
 
                 buyButton.onClick.AddListener(() => {
                     PlayAlertSound();
                     successPanel.SetActive(true);
-                    successText.text = "You already bought this item.";
+                    successText.text = "You already bought this item!";
                 });
-
             }
             else
             {
@@ -140,6 +167,12 @@ public class ShopItemManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Opens a confirmation panel to ask the player if they want to purchase a specific item.
+    /// Sets the item title and price for the confirmation.
+    /// </summary>
+    /// <param name="title">The title of the item to be purchased.</param>
+    /// <param name="price">The cost of the item in coins.</param>
     private void OpenInsurancePanel(string title, int price)
     {
         insurancePanel.SetActive(true);
@@ -148,6 +181,10 @@ public class ShopItemManager : MonoBehaviour
         currentItemPrice = price;
     }
 
+    /// <summary>
+    /// Handles the logic for when the player confirms purchasing an item.
+    /// Checks if the player has enough credit, processes the purchase, and updates the shop and player data.
+    /// </summary>
     private void YesButtonClicked()
     {
 
@@ -193,14 +230,19 @@ public class ShopItemManager : MonoBehaviour
         insurancePanel.SetActive(false);
     }
 
+    /// <summary>
+    /// Updates the player's current credit displayed in the shop UI.
+    /// </summary>
     private void UpdateCreditText()
     {
 
         int credit = ownData.GetCredit();
         creditText.text = $"{credit}";
-        Debug.Log($"Updated Credit Text: {credit}");
     }
 
+    /// <summary>
+    /// Closes any open panels such as the insurance and success panels.
+    /// </summary>
     private void ClosePanels()
     {
         PlayClickSound();
@@ -208,6 +250,9 @@ public class ShopItemManager : MonoBehaviour
         successPanel.SetActive(false);
     }
 
+    /// <summary>
+    /// Plays the success sound effect when the player successfully purchases an item.
+    /// </summary>
     private void PlaySuccessSound()
     {
         if (audioSource != null && successSound != null)
@@ -219,6 +264,9 @@ public class ShopItemManager : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Plays the sound effect for when the player doesn't have enough credit to buy an item.
+    /// </summary>
     private void PlayNotEnoughCreditSound()
     {
         if (audioSource != null && notEnoughCreditSound != null)
@@ -229,6 +277,10 @@ public class ShopItemManager : MonoBehaviour
 
     }
 
+
+    /// <summary>
+    /// Plays the alert sound effect, usually when the player attempts to buy an already purchased item.
+    /// </summary>
     private void PlayAlertSound()
     {
         if (audioSource != null && alertSound != null)
@@ -239,6 +291,9 @@ public class ShopItemManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Plays the standard click sound effect for button interactions.
+    /// </summary>
     private void PlayClickSound()
     {
         if (audioSource != null && clickSound != null)
@@ -248,6 +303,11 @@ public class ShopItemManager : MonoBehaviour
 
 
     }
+
+    /// <summary>
+    /// Filters the shop items based on the provided category and updates the UI with the filtered results.
+    /// </summary>
+    /// <param name="category">The category to filter items by (e.g., OUTFIT, ACCESSORIES).</param>
     private void FilterItemsByCategory(string category)
     {
         ClearShopItems();
@@ -255,18 +315,27 @@ public class ShopItemManager : MonoBehaviour
         DisplayShopItems(filteredItems);
     }
 
+    /// <summary>
+    /// Handles the outfit category button click, filters the shop items by "OUTFIT" category.
+    /// </summary>
     public void OnOutfitButtonClicked()
     {
         PlayClickSound();
         FilterItemsByCategory("OUTFIT");
     }
 
+    /// <summary>
+    /// Handles the accessories category button click, filters the shop items by "ACCESSORIES" category.
+    /// </summary>
     public void OnAccessoriesButtonClicked()
     {
         PlayClickSound();
         FilterItemsByCategory("ACCESSORIES");
     }
 
+    /// <summary>
+    /// Shows all items by clearing any filters and displaying all available shop items.
+    /// </summary>
     public void OnShowAllItemsClicked()
     {
         PlayClickSound();
@@ -275,6 +344,9 @@ public class ShopItemManager : MonoBehaviour
         DisplayShopItems(shopItemData);
     }
 
+    /// <summary>
+    /// Clears all shop items currently displayed in the UI by destroying their game objects.
+    /// </summary>
     private void ClearShopItems()
     {
         foreach (Transform child in content.transform)
@@ -283,6 +355,9 @@ public class ShopItemManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Displays the items the player has already purchased by filtering out non-purchased items.
+    /// </summary>
     private void ShowPurchasedItems()
     {
         PlayClickSound();
