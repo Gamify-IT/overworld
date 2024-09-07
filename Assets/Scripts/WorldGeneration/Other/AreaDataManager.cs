@@ -21,7 +21,12 @@ public class AreaDataManager
     {
         Debug.Log("Loading area data");
 
-        int amountWorlds = GameSettings.GetMaxWorlds();
+        string courseID = GameSettings.GetCourseID();
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseID + "/area";
+        Optional<List<AreaDTO>> areas = await RestRequest.GetListRequest<AreaDTO>(path);
+
+        int amountWorlds = areas.Value().Count;
+        Debug.Log(amountWorlds + "worlds found for this course");
 
         for (int worldIndex = 1; worldIndex <= amountWorlds; worldIndex++)
         {
