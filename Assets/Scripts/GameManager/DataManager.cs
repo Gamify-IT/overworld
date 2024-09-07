@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine.UI;
 
 /// <summary>
 ///     The <c>DataManager</c> stores all required data to set up the objects in the areas.
@@ -21,13 +22,19 @@ public class DataManager : MonoBehaviour
     //Data fields
     private AreaDataManager areaDataManager;
     private WorldData[] worldData;
-    private PlayerstatisticDTO playerData;
+    private PlayerStatisticData playerData;
     private List<AchievementData> achievementData;
+    private List<PlayerStatisticData> allPlayerStatisticsData;
     private Dictionary<Binding, KeyCode> keybindings;
+    private Dictionary<string, int> wanderer;
+    private Dictionary<string, int> explorer;
+    private Dictionary<string, int> pathfinder;
+    private Dictionary<string, int> trailblazer;
 
-    // player settings 
-    private int characterIndex = 0;
-    [SerializeField] private Sprite[] characterFaces;
+    [Header("Character Selection")]
+    [SerializeField] private List<Sprite> characterSprites;
+    [SerializeField] private List<RuntimeAnimatorController> characterAnimators;
+    [SerializeField] private List<Sprite> characterHeads;
 
 
     /// <summary>
@@ -76,6 +83,8 @@ public class DataManager : MonoBehaviour
         return worldData[worldIndex];
     }
 
+
+
     /// <summary>
     ///     This function returns the data of a given dungeon
     /// </summary>
@@ -101,9 +110,39 @@ public class DataManager : MonoBehaviour
     ///     This function returns the player data
     /// </summary>
     /// <returns>The player data</returns>
-    public PlayerstatisticDTO GetPlayerData()
+    public PlayerStatisticData GetPlayerData()
     {
         return playerData;
+    }
+
+    /// <summary>
+    ///     This function sets the player data
+    /// </summary>
+    /// <param name="data">Player data to be set</param>
+    public void SetPlayerData(PlayerStatisticData data)
+    {
+        playerData = data;
+    }
+
+    /// <summary>
+    ///     This function sets all necessary data to save the current player position
+    /// </summary>
+    /// <param name="worldIndex">index of the current world</param>
+    /// <param name="dungeonIndex">index of the current dungeon</param>
+    public void SetPlayerPosition(int worldIndex, int dungeonIndex)
+    {
+        playerData.SetCurrentArea(new AreaLocationDTO(worldIndex, dungeonIndex));
+
+        if (dungeonIndex != 0)
+        {
+            Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
+            playerData.SetLogoutScene("Dungeon");
+        }
+        else
+        {
+            Debug.Log("Setting data for world " + worldIndex);
+            playerData.SetLogoutScene("World " + worldIndex);
+        }
     }
 
     /// <summary>
@@ -113,10 +152,10 @@ public class DataManager : MonoBehaviour
     /// <returns>True, if the player has unlocked the world, false otherwise</returns>
     public bool IsWorldUnlocked(int worldIndex)
     {
-        for (int i = 0; i < playerData.unlockedAreas.Length; i++)
+        for (int i = 0; i < playerData.GetUnlockedAreas().Length; i++)
         {
-            if (playerData.unlockedAreas[i].worldIndex == worldIndex &&
-                playerData.unlockedAreas[i].dungeonIndex == 0)
+            if (playerData.GetUnlockedAreas()[i].worldIndex == worldIndex &&
+                playerData.GetUnlockedAreas()[i].dungeonIndex == 0)
             {
                 return true;
             }
@@ -133,10 +172,10 @@ public class DataManager : MonoBehaviour
     /// <returns>True, if the player has unlocked the dungeon, false otherwise</returns>
     public bool IsDungeonUnlocked(int worldIndex, int dungeonIndex)
     {
-        for (int i = 0; i < playerData.unlockedAreas.Length; i++)
+        for (int i = 0; i < playerData.GetUnlockedAreas().Length; i++)
         {
-            if (playerData.unlockedAreas[i].worldIndex == worldIndex &&
-                playerData.unlockedAreas[i].dungeonIndex == dungeonIndex)
+            if (playerData.GetUnlockedAreas()[i].worldIndex == worldIndex &&
+                playerData.GetUnlockedAreas()[i].dungeonIndex == dungeonIndex)
             {
                 return true;
             }
@@ -257,16 +296,113 @@ public class DataManager : MonoBehaviour
     ///     This function processes the player data
     /// </summary>
     /// <param name="playerData">The player statistics returned from the backend</param>
-    public void ProcessPlayerStatistics(PlayerstatisticDTO playerStatistics)
+    public void ProcessPlayerStatistics(PlayerStatisticDTO playerStatistic)
     {
-        playerData = playerStatistics;
-        foreach (TeleporterDTO teleporterDTO in playerData.unlockedTeleporters)
+        if (playerStatistic == null)
+        {
+            return;
+        }
+
+        playerData = PlayerStatisticData.ConvertDtoToData(playerStatistic);
+
+        foreach (TeleporterDTO teleporterDTO in playerData.GetUnlockedTeleporters())
         {
             int worldIndex = teleporterDTO.area.worldIndex;
             int dungeonIndex = teleporterDTO.area.dungeonIndex;
             int number = teleporterDTO.index;
             GetWorldData(worldIndex).UnlockTeleporter(dungeonIndex, number);
         }
+
+        SetupCharacter(playerData.GetCurrentCharacterIndex());
+
+#if !UNITY_EDITOR
+        CheckForLastLogin();
+#endif
+    }
+
+    private void CheckForLastLogin()
+    {
+        DateTime lastActive = DateTime.ParseExact(playerData.GetLastActive(), "yyyy-MM-dd HH:mm:ss", null);
+
+        Debug.Log("Progress before: " + GetAchievement(AchievementTitle.PROFESSIONAL_GAMER).GetProgress());
+
+        if (lastActive.Date == DateTime.Now.Date.AddDays(-1))
+        {
+            Debug.Log("Streak yes");
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1, null);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1, null);
+        }
+        else
+        {
+            Debug.Log("Streak no");
+            GameManager.Instance.UpdateAchievement(AchievementTitle.GAMER, 1, null);
+            GameManager.Instance.UpdateAchievement(AchievementTitle.PROFESSIONAL_GAMER, 1, null);
+        }
+
+    }
+
+    /// <summary>
+    ///      Setups the character with the saved or selected values.
+    /// </summary>
+    /// <param name="currentIndex">selected character index</param>
+    public void SetupCharacter(int currentIndex)
+    {
+        // get player components
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        SpriteRenderer currentSprite = player.GetComponent<SpriteRenderer>();
+        Animator currentAnimator = player.GetComponent<Animator>();
+        Image characterHead = GameObject.Find("Head Minimap").GetComponent<Image>();
+
+        // initialize the saved player sprite, animations and head on the minimap
+        currentSprite.sprite = GetCharacterSprites()[currentIndex];
+        currentAnimator.runtimeAnimatorController = GetCharacterAnimators()[currentIndex];
+        characterHead.sprite = GetCharacterHeads()[currentIndex];
+
+        // save selected character
+        playerData.SetCurrentCharacterIndex(currentIndex);
+    }
+
+    /// <summary>
+    ///     This function processes the playerStatistic statistics data returned from the backend and stores the needed data in the
+    ///     <c>DataManager</c>
+    /// </summary>
+    /// <param name="allPlayerStatistics">The player statistic data returned from the backend</param>
+    public void ProcessAllPlayerStatistics(PlayerStatisticDTO[] allPlayerStatistics)
+    {
+        allPlayerStatisticsData = new List<PlayerStatisticData>();
+
+        if (allPlayerStatistics == null)
+        {
+            return;
+        }
+        Debug.Log("Process " + allPlayerStatistics.Length + "player statistics");
+
+        foreach (PlayerStatisticDTO statistic in allPlayerStatistics)
+        {
+            PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertDtoToData(statistic);
+            allPlayerStatisticsData.Add(playerStatistic);
+        }
+    }
+
+    /// <summary>
+    ///     This function returns all stored player statistics
+    /// </summary>
+    /// <returns>A list containing all statistics</returns>
+    public List<PlayerStatisticData> GetAllPlayerStatistics()
+    {
+        return allPlayerStatisticsData;
+    }
+
+    public Dictionary<string, int> GetAllPlayerRewards()
+    {
+        Dictionary<string, int> allPlayerRewards = new Dictionary<string, int>();
+        foreach (PlayerStatisticData statistic in allPlayerStatisticsData)
+        {
+            string username = statistic.GetUsername();
+            int rewards = statistic.GetRewards();
+            allPlayerRewards.Add(username, rewards);
+        }
+        return allPlayerRewards;
     }
 
     /// <summary>
@@ -309,6 +445,16 @@ public class DataManager : MonoBehaviour
         {
             Debug.Log("Keybindings invalid");
             GameManager.Instance.ResetKeybindings();
+
+            // update the volume level
+            KeyCode currentVolumeLevelKey = keybindings.Find(item => item.GetBinding() == Binding.VOLUME_LEVEL).GetKey();
+            KeyCode newVolumeLevelKey = currentVolumeLevelKey != KeyCode.None ? newVolumeLevelKey = currentVolumeLevelKey : newVolumeLevelKey = KeyCode.Alpha1;
+            Keybinding volumeLevelBinding = new Keybinding(Binding.VOLUME_LEVEL, newVolumeLevelKey);
+            GameManager.Instance.ChangeKeybind(volumeLevelBinding);
+
+            int volumeLevel = ConvertKeyCodeToInt(newVolumeLevelKey);
+            GameManager.Instance.UpdateVolume(volumeLevel);
+            VolumeControllerButton.SetVolumeLevel(volumeLevel);
         }
     }
 
@@ -446,13 +592,14 @@ public class DataManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="newProgress">The new progress of the achievement</param>
+    /// <param name="interactedObjects">Updated list with interacted objects regarding achievement for which this method is called</param>
     /// <returns>True if the acheivement is just now completed, false otherwise</returns>
-    public bool UpdateAchievement(AchievementTitle title, int newProgress)
+    public bool UpdateAchievement(AchievementTitle title, int newProgress, List<(int, int, int)> interactedObjects)
     {
         AchievementData achievement = GetAchievement(title);
         if (achievement != null)
         {
-            return achievement.UpdateProgress(newProgress);
+            return achievement.UpdateProgress(newProgress, interactedObjects);
         }
 
         return false;
@@ -463,15 +610,15 @@ public class DataManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="increment">The amount to increase the progress</param>
+    /// <param name="interactedObjects">Updated list with interacted objects regarding achievement for which this method is called</param>
     /// <returns>True if the acheivement is just now completed, false otherwise</returns>
-    public bool IncreaseAchievementProgress(AchievementTitle title, int increment)
+    public bool IncreaseAchievementProgress(AchievementTitle title, int increment, List<(int, int, int)> interactedObjects)
     {
         AchievementData achievement = GetAchievement(title);
         if (achievement != null)
         {
             int newProgress = achievement.GetProgress() + increment;
-            //Debug.Log("New Progress of '" + title + "': " + achievement.GetProgress());
-            return achievement.UpdateProgress(newProgress);
+            return achievement.UpdateProgress(newProgress, interactedObjects);
         }
 
         return false;
@@ -515,7 +662,6 @@ public class DataManager : MonoBehaviour
         KeyCode keyCode = keybinding.GetKey();
 
         bool keyChanged = false;
-
         if(keybindings[binding] != keyCode)
         {
             keybindings[binding] = keyCode;
@@ -576,7 +722,7 @@ public class DataManager : MonoBehaviour
         int worldIndex = data.worldID;
         int dungeonIndex = data.dungeonID;
 
-        foreach(TeleporterDTO unlockedTeleporter in playerData.unlockedTeleporters)
+        foreach(TeleporterDTO unlockedTeleporter in playerData.GetUnlockedTeleporters())
         {
             if(unlockedTeleporter.area.worldIndex == worldIndex &&
                 unlockedTeleporter.area.dungeonIndex == dungeonIndex &&
@@ -630,7 +776,7 @@ public class DataManager : MonoBehaviour
         areaDataManager = new AreaDataManager();
 
         worldData = new WorldData[maxWorld + 1];
-        playerData = new PlayerstatisticDTO();
+        playerData = PlayerStatisticData.ConvertDtoToData(new PlayerStatisticDTO());
         InitKeybindingsDictionary();
 
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)
@@ -657,6 +803,7 @@ public class DataManager : MonoBehaviour
         keybindings.Add(Binding.MINIMAP_ZOOM_OUT, KeyCode.None);
         keybindings.Add(Binding.GAME_ZOOM_IN, KeyCode.None);
         keybindings.Add(Binding.GAME_ZOOM_OUT, KeyCode.None);
+        keybindings.Add(Binding.VOLUME_LEVEL, KeyCode.None);
 
         this.keybindings = keybindings;
     }
@@ -674,7 +821,7 @@ public class DataManager : MonoBehaviour
             try
             {
                 Keybinding keybinding = Keybinding.ConvertDTO(keybindingDTO);
-                keybindings.Add(keybinding);
+                keybindings.Add(keybinding);       
             }
             catch (ArgumentException)
             {
@@ -700,41 +847,50 @@ public class DataManager : MonoBehaviour
         Dictionary<Binding, bool> bindingContained = new Dictionary<Binding, bool>();
         foreach(Binding bindingValue in Enum.GetValues(typeof(Binding)))
         {
-            bindingContained.Add(bindingValue, false);
+            if (bindingValue != Binding.VOLUME_LEVEL)
+            {
+                bindingContained.Add(bindingValue, false);
+            }          
         }
 
         foreach (Keybinding keybinding in keybindings)
         {
-            KeyCode keyCode = keybinding.GetKey();
-            Binding binding = keybinding.GetBinding();
-            
-            if(keyCodes.Contains(keyCode))
+            if (keybinding.GetBinding() != Binding.VOLUME_LEVEL)
             {
-                Debug.Log("Multiple uses of keyCode: " + keyCode);
-                validBindings = false;
-                break;
-            }
-            keyCodes.Add(keyCode);
+                KeyCode keyCode = keybinding.GetKey();
+                Binding binding = keybinding.GetBinding();
 
-            if(bindings.Contains(binding))
-            {
-                Debug.Log("Multiple bindings for: " + binding);
-                validBindings = false;
-                break;
-            }
-            bindings.Add(binding);
+                if (keyCodes.Contains(keyCode))
+                {
+                    Debug.Log("Multiple uses of keyCode: " + keyCode);
+                    validBindings = false;
+                    break;
+                }
+                keyCodes.Add(keyCode);
 
-            bindingContained[binding] = true;
+                if (bindings.Contains(binding))
+                {
+                    Debug.Log("Multiple bindings for: " + binding);
+                    validBindings = false;
+                    break;
+                }
+                bindings.Add(binding);
+
+                bindingContained[binding] = true;
+            }     
         }
 
         if(validBindings)
         {
             foreach (Binding bindingValue in Enum.GetValues(typeof(Binding)))
             {
-                if (!bindingContained[bindingValue])
+                if (bindingValue != Binding.VOLUME_LEVEL)
                 {
-                    Debug.Log("No binding for: " + bindingValue);
-                    validBindings = false;
+                    if (!bindingContained[bindingValue])
+                    {
+                        Debug.Log("No binding for: " + bindingValue);
+                        validBindings = false;
+                    }
                 }
             }
         }        
@@ -751,7 +907,59 @@ public class DataManager : MonoBehaviour
         foreach(Keybinding keybinding in keybindings)
         {
             ChangeKeybind(keybinding);
+
+            // update the volume level
+            if (keybinding.GetBinding() == Binding.VOLUME_LEVEL)
+            {
+                int volumeLevel = ConvertKeyCodeToInt(keybinding.GetKey());
+                VolumeControllerButton.SetVolumeLevel(volumeLevel);
+                GameManager.Instance.UpdateVolume(volumeLevel);
+            }
         }
+    }
+
+    /// <summary>
+    ///     Converts a keycode into an integer. 
+    ///     Note that the volume level consists only of four values, hence the mapping only requires four values.
+    /// </summary>
+    /// <param name="keycode"></param>
+    /// <returns>integer mapped to this keycode</returns>
+    public int ConvertKeyCodeToInt(KeyCode keycode)
+    {
+        switch(keycode)
+        {
+            case KeyCode.Alpha0:
+                return 0;
+            case KeyCode.Alpha1:
+                return 1;
+            case KeyCode.Alpha2:
+                return 2;
+            case KeyCode.Alpha3:
+                return 3;
+        }
+        return 1;
+    }
+
+    /// <summary>
+    ///     Converts an integer into a keycode. 
+    ///     Note that the volume level consists only of four values, hence the mapping only requires four values.
+    /// </summary>
+    /// <param name="level"></param>
+    /// <returns>keycode mapped to this integer</returns>
+    public KeyCode ConvertIntToKeyCode(int level)
+    {
+        switch (level)
+        {
+            case 0:
+                return KeyCode.Alpha0;
+            case 1:
+                return KeyCode.Alpha1;
+            case 2:
+                return KeyCode.Alpha2;
+            case 3:
+                return KeyCode.Alpha3;
+        }
+        return KeyCode.Alpha1;
     }
 
     /// <summary>
@@ -1103,29 +1311,30 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets the character index of the currently selected character by the player
+    ///     Gets all character sprites available via character selection 
     /// </summary>
-    /// <returns>index of the character position in the array</returns>
-    public int GetCharacterIndex()
+    /// <returns>list of character sprites</returns>
+    public List<Sprite> GetCharacterSprites()
     {
-        return characterIndex;
+        return characterSprites;
     }
 
     /// <summary>
-    /// Updates the character index if the character is changed by the player
+    ///     Gets all animators for the characters available via character selection 
     /// </summary>
-    /// <param name="index">index of the newly, selected character</param>
-    public void SetCharacterIndex(int index)
+    /// <returns></returns>
+    public List<RuntimeAnimatorController> GetCharacterAnimators()
     {
-        characterIndex = index;
+        return characterAnimators;
     }
 
     /// <summary>
-    /// Gets the array with all faces of available characters in the game
+    ///     Gets all character heads that are shown on the minimap 
     /// </summary>
-    /// <returns>player faces array</returns>
-    public Sprite[] GetCharacterFaces()
+    /// <returns></returns>
+    public List<Sprite> GetCharacterHeads()
     {
-        return characterFaces;
+        return characterHeads;
     }
+
 }

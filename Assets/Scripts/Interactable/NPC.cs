@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 /// <summary>
 ///     This class is responsible for the NPC logic.
@@ -26,8 +27,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     private bool typingIsFinished;
     private string uuid;
 
-    private readonly int achievementUpdateIntervall = 1;
-    private static List<(int, int, int)> alreadyTalkedNPC = new List<(int, int, int)>();
+    private static List<(int, int, int)> alreadyTalkedNPC;
     //KeyCodes
     private KeyCode interact;
 
@@ -42,7 +42,9 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         {
             speechIndicator = child;
         }
-        LoadAlreadyTalkedNPC();
+#if !UNITY_EDITOR
+        alreadyTalkedNPC = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "COMMUNICATOR_LEVEL_3").GetInteractedObjects();
+#endif
         InitNewStuffSprite();
         interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
@@ -69,10 +71,10 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
                      typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
             {
-                Debug.Log(dialogue.Length - 1);
-                Debug.Log("index before next" + index);
+                //Debug.Log(dialogue.Length - 1);
+                //Debug.Log("index before next" + index);
                 NextLine();
-                Debug.Log("index after next" + index);
+                //Debug.Log("index after next" + index);
             }
             else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
                      !typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
@@ -92,7 +94,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     {
         if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
-            Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
+            //Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
             ObjectManager.Instance.RemoveGameEntity<NPC, NPCData>(world, dungeon, number);
             GameEvents.current.onKeybindingChange -= UpdateKeybindings;
         }
@@ -161,7 +163,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     /// </summary>
     private void RegisterToGameManager()
     {
-        Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
+        //Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
         ObjectManager.Instance.AddGameEntity<NPC, NPCData>(gameObject, world, dungeon, number);
     }
 
@@ -182,8 +184,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             text += " ; ";
         }
 
-        Debug.Log("setup npc " + world + "-" + number + " with new dialogue: " + text + ", new info: " +
-                  !hasBeenTalkedTo);
+        //Debug.Log("setup npc " + world + "-" + number + " with new dialogue: " + text + ", new info: " + !hasBeenTalkedTo);
     }
 
     /// <summary>
@@ -217,7 +218,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     private IEnumerator Typing()
     {
         typingIsFinished = false;
-        Debug.Log(typingIsFinished);
+        //Debug.Log(typingIsFinished);
         foreach (char letter in dialogue[index])
         {
             dialogueText.text += letter;
@@ -225,7 +226,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         }
 
         typingIsFinished = true;
-        Debug.Log(typingIsFinished);
+        //Debug.Log(typingIsFinished);
     }
 
     /// <summary>
@@ -266,87 +267,32 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     }
 
     /// <summary>
-    ///     This method adds a new NPC that the player has already talked to to the list. 
+    ///     This method adds a new NPC that the player has already talked to to the list and 
+    ///     calls the method for the achievement update by interacting with the new NPC.  
     /// </summary>
     private void UpdateListOfNPC()
     {
         var key = (world, dungeon, number);
         if(!alreadyTalkedNPC.Contains(key))
         {
-            alreadyTalkedNPC.Add((world, dungeon, number));
-            SaveAlreadyTalkedNPC();
-            if (world == 1)
-            {
-                UpdateAchievementWorld1();
-                UpdateAchievementInTotal();
-            }
-            if (world == 2)
-            {
-                UpdateAchievementWorld2();
-                UpdateAchievementInTotal();
-            }
-            if (world == 3)
-            { 
-                UpdateAchievementWorld3();
-                UpdateAchievementInTotal();      
-            }
-            if (world == 4)
-            {
-                UpdateAchievementWorld4();
-                UpdateAchievementInTotal();
-            }
+            alreadyTalkedNPC.Add(key);
+            UpdateAchievements(world);
         } 
-    
     }
 
     /// <summary>
-    ///     This method updates the "talk to NPC" achievement in general.
+    ///     This method updates the "talk to NPC" achievements in general and for a specific world.
     /// </summary>
-    private void UpdateAchievementInTotal()
+    /// <param name="worldNumber">The number of the world where the NPC the player spoke to is located</param>
+    private void UpdateAchievements(int worldNumber)
     {
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_1, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_2, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_3, achievementUpdateIntervall);
-    }
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_1, 1, alreadyTalkedNPC);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_2, 1, alreadyTalkedNPC);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_3, 1, alreadyTalkedNPC);
 
-    /// <summary>
-    ///     This method updates the "talk to NPC" achievement in World 1.
-    /// </summary>
-    private void UpdateAchievementWorld1()
-    {
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_1_WORLD_1, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_2_WORLD_1, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_3_WORLD_1, achievementUpdateIntervall);
-    }
-
-    /// <summary>
-    ///     This method updates the "talk to NPC" achievement in World 2.
-    /// </summary>
-    private void UpdateAchievementWorld2()
-    {
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_1_WORLD_2, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_2_WORLD_2, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_3_WORLD_2, achievementUpdateIntervall);
-    }
-
-    /// <summary>
-    ///     This method updates the "talk to NPC" achievement in World 3.
-    /// </summary>
-    private void UpdateAchievementWorld3()
-    {
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_1_WORLD_3, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_2_WORLD_3, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_3_WORLD_3, achievementUpdateIntervall);
-    }
-
-    /// <summary>
-    ///     This method updates the "talk to NPC" achievement in World 4.
-    /// </summary>
-    private void UpdateAchievementWorld4()
-    {
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_1_WORLD_4, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_2_WORLD_4, achievementUpdateIntervall);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_3_WORLD_4, achievementUpdateIntervall);
+        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"COMMUNICATOR_LEVEL_1_WORLD_{worldNumber}"), 1, alreadyTalkedNPC);
+        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"COMMUNICATOR_LEVEL_2_WORLD_{worldNumber}"), 1, alreadyTalkedNPC);
+        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"COMMUNICATOR_LEVEL_3_WORLD_{worldNumber}"), 1, alreadyTalkedNPC);
     }
 
     /// <summary>
@@ -378,30 +324,4 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         }
     }
-
-    /// <summary>
-    ///     This method saves the list of already talked NPCs to PlayerPrefs.
-    /// </summary>
-    private void SaveAlreadyTalkedNPC()
-    {
-        PlayerPrefs.SetString("AlreadyTalkedNPC", string.Join(";", alreadyTalkedNPC.Select(npc => $"{npc.Item1},{npc.Item2},{npc.Item3}")));
-        PlayerPrefs.Save();
-    }
-
-    /// <summary>
-    ///     This method loads the list of already talked NPCs from PlayerPrefs.
-    /// </summary>
-    private void LoadAlreadyTalkedNPC()
-    {
-        if (PlayerPrefs.HasKey("AlreadyTalkedNPC"))
-        {
-            string savedData = PlayerPrefs.GetString("AlreadyTalkedNPC");
-            alreadyTalkedNPC = savedData.Split(';').Select(npc =>
-            {
-                var parts = npc.Split(',');
-                return (int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
-            }).ToList();
-        }
-    }
-
 }

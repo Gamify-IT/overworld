@@ -15,7 +15,6 @@ public class LoadFirstScene : MonoBehaviour
     private void Start()
     {
         Gamemode gamemode = GetGamemode();
-        //Gamemode gamemode = Gamemode.GENERATOR;
 
         switch(gamemode)
         {
@@ -92,14 +91,19 @@ public class LoadFirstScene : MonoBehaviour
 
         Debug.Log("Start loading LoadingScreen");
 
-        await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
-        LoadingManager.Instance.setup("World 5", 5, 0, playerPosition);
-
-        Debug.Log("Finish loading LoadingScreen");
-
         Debug.Log("Start retrieving courseId");
 
         bool validCourseId = await GameManager.Instance.ValidateCourseId();
+
+        Debug.Log("Finish retrieving courseId");
+
+        await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+        LoadingManager.Instance.Setup("World 1", worldIndex, dungeonIndex, playerPosition);
+
+        Debug.Log("Finish loading LoadingScreen");
+
+        Debug.Log("Start validating courseId");
+
         if (!validCourseId)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
@@ -107,7 +111,7 @@ public class LoadFirstScene : MonoBehaviour
             return;
         }
 
-        Debug.Log("Finish retrieving courseId");
+        Debug.Log("Finish validating courseId");
 
         Debug.Log("Start retrieving playerId");
         bool validPlayerId = await GameManager.Instance.GetUserData();

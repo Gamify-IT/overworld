@@ -627,11 +627,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21233805df61c3f49a3cc9edd0956df5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefabs:
-  - {fileID: 5603177028076193785, guid: 1696570aa1f26da4d8f591b27f47d0e2, type: 3}
-  - {fileID: 6962129799168212026, guid: 7df6c2ef7323cb84b9c97164b993a167, type: 3}
-  - {fileID: 5473735387981550251, guid: 1d29e5999f1cb3f459e53fedfcd311bf, type: 3}
-  playerFaces:
+  characterSprites:
+  - {fileID: 1471582995, guid: 3dea2e19f986c7c2ba944ff36bf47fa0, type: 3}
+  - {fileID: 468777438, guid: f615dce3b0381fc41b25fd7405cd3ad9, type: 3}
+  - {fileID: 2003620262, guid: 8a9debd3221d5f8459b64b68aaa91ca2, type: 3}
+  characterAnimators:
+  - {fileID: 9100000, guid: f33a24ecc6819484db0b5c7080856cdb, type: 2}
+  - {fileID: 9100000, guid: 7126fd2065d3d8442962a1fcc274e21d, type: 2}
+  - {fileID: 9100000, guid: f324b836613e45f408c5c92df194498f, type: 2}
+  characterHeads:
   - {fileID: 21300000, guid: 20da17b2d591d5e4f9588db4dade1fb5, type: 3}
   - {fileID: 21300000, guid: d88b348644437044bb4c16ec3dbe1414, type: 3}
   - {fileID: 21300000, guid: ef1cd0ff1a75afc4da71435d08b93f06, type: 3}

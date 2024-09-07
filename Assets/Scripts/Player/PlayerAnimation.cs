@@ -19,7 +19,6 @@ public class PlayerAnimation : MonoBehaviour
 
     private Vector3 lastPosition;
     private float distanceWalked;
-    private readonly int achievementUpdateIntervall = 1;
 
     //KeyCodes
     private KeyCode moveUp;
@@ -28,7 +27,7 @@ public class PlayerAnimation : MonoBehaviour
     private KeyCode moveRight;
     private KeyCode sprint;
     private float sprintStartTime = 0f;
-    private float sprintDuration = 0f; 
+    private float sprintDuration = 0f;
 
     private float timeInGameStart = 0f;
     private float timeInGameDuration = 0f;
@@ -37,54 +36,18 @@ public class PlayerAnimation : MonoBehaviour
     private AudioSource audioSource;
     private bool isMoving;
 
-    private int daysPlayed;
-    private DateTime lastPlayDate;
-    private bool checkIfChanged=false;
+    private PlayerStatisticData ownPlayerData;
+    private int rewardsAmount;
+
     /// <summary>
     ///     This method is called before the first frame update.
     ///     It is used to initialize variables.
     /// </summary>
     private void Start()
     {
-        string lastPlayDateStr = PlayerPrefs.GetString("LastPlayDate", "");
-        int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
+        InitializeAudio();
 
-        if (!string.IsNullOrEmpty(lastPlayDateStr))
-        {
-            lastPlayDate = DateTime.Parse(lastPlayDateStr);
-            DateTime today = DateTime.Today;
-            DateTime lastPlayDay = lastPlayDate.Date;
-
-            if (lastPlayDay < today)
-            {
-                int daysSinceLastPlay = (today - lastPlayDay).Days;
-                daysPlayed = daysCount + daysSinceLastPlay;
-                PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
-            }
-            else
-            {
-                daysPlayed = daysCount;
-            }
-        }
-        else
-        {
-            lastPlayDate = DateTime.Now;
-            daysPlayed = 1;
-            PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
-        }
-
-        if (daysPlayed > daysCount)
-        {
-            checkIfChanged=true;
-            
-            Debug.Log("success!!!!!");
-        }
-        PlayerPrefs.SetString("LastPlayDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")); // store the current date and time with milliseconds
-        Debug.Log("day: days played "+daysPlayed);
-        Debug.Log("day: current date "+DateTime.Now);
-        Debug.Log("day: last play date "+lastPlayDate);
-        
-        timeInGameStart=Time.time;
+        timeInGameStart = Time.time;
 
         canMove = true;
         busy = false;
@@ -100,42 +63,44 @@ public class PlayerAnimation : MonoBehaviour
         moveRight = GameManager.Instance.GetKeyCode(Binding.MOVE_RIGHT);
         sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
+        Invoke("CheckForRewardsAmount", 3.5f);
+    }
 
-        //get AudioSource component
+    /// <summary>
+    ///     This function updates the rewards amount for achievement regarding saved data in the leaderboard
+    /// </summary>
+    private void CheckForRewardsAmount()
+    {
+        ownPlayerData = DataManager.Instance.GetPlayerData();
+        rewardsAmount = ownPlayerData.GetRewards();
+        GameManager.Instance.UpdateAchievement(AchievementTitle.GET_COINS, rewardsAmount, null);
+        GameManager.Instance.UpdateAchievement(AchievementTitle.GET_MORE_COINS, rewardsAmount, null);
+    }
+
+    /// <summary>
+    ///     This function adds new audio sources and sets clip with move sound
+    /// </summary>
+    private void InitializeAudio()
+    {
         audioSource = GetComponent<AudioSource>();
-        //add AudioSource component if necessary
         if(audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
-        //set audio clip
         audioSource.clip = moveSound;
-        //set AudioSource to loop
         audioSource.loop = true;
-        //AudioSource does not start playing automatically when the GameObject awakens
         audioSource.playOnAwake = false;
     }
-
-    private void OnApplicationQuit()
-    {
-        PlayerPrefs.SetString("LastPlayDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-        PlayerPrefs.SetInt("DaysPlayed", daysPlayed);
-        PlayerPrefs.Save();
-    }
-
+    
     /// <summary>
     ///     If 'canMove' is true, this function allows the player to move.
     /// </summary>
     private void Update()
     {
-        if(checkIfChanged){
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1);
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1);
-            checkIfChanged=false;
-            Debug.Log("success in update");
-        }
+        CheckForRewardsAmount();
         if (canMove)
         {
+            
             isMoving = false;
             movement.x = 0;
             movement.y = 0;
@@ -179,7 +144,7 @@ public class PlayerAnimation : MonoBehaviour
 
                 while (sprintDuration >= 1f)
                 {
-                    GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SPEEDRUNNER, 1);
+                    GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SPEEDRUNNER, 1, null);
                     sprintDuration -= 1f;
                     sprintStartTime += 1f;
                 }
@@ -210,7 +175,7 @@ public class PlayerAnimation : MonoBehaviour
 
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * 50);
 
-            UpdateAchievement();
+            UpdateWalkAchievement();
 
             // dev keybindings
             if (Input.GetKeyDown("k"))
@@ -219,7 +184,7 @@ public class PlayerAnimation : MonoBehaviour
                     !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
             }
             // dev keybindings
-            if (isMoving && !GameManager.Instance.isPaused)
+            if (isMoving && !GameManager.Instance.GetIsPaused())
             {
                 PlayMoveSound();
             }
@@ -233,14 +198,14 @@ public class PlayerAnimation : MonoBehaviour
     }
 
     /// <summary>
-    ///     this function updates time achievement each 60 seconds when the player is playing
+    ///     This function updates time achievements each 60 seconds when the player is playing
     /// </summary>
     private void UpdateAchievementForTimeInGame()
     {
         while (timeInGameDuration >= 60f)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.BEGINNER, 1);
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.EXPERIENCED_PLAYER, 1);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.BEGINNER, 1, null);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.EXPERIENCED_PLAYER, 1, null);
             timeInGameDuration -= 60f;
             timeInGameStart += 60f;
         }
@@ -294,7 +259,10 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
-    private void UpdateAchievement()
+    /// <summary>
+    ///     This function updates the walk achievements
+    /// </summary>
+    private void UpdateWalkAchievement()
     {
         float distance = Vector3.Distance(transform.position, lastPosition);
         if (distance <= 5)
@@ -302,15 +270,12 @@ public class PlayerAnimation : MonoBehaviour
             distanceWalked += distance;
         }
 
-        if (distanceWalked >= achievementUpdateIntervall)
+        if (distanceWalked >= 1)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_WALK,
-                achievementUpdateIntervall);
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_LONGER_WALK,
-                achievementUpdateIntervall);
-            distanceWalked -= achievementUpdateIntervall;
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_WALK, 1, null);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GO_FOR_A_LONGER_WALK, 1, null);
+            distanceWalked -= 1;
         }
-
         lastPosition = transform.position;
     }
 
@@ -395,7 +360,7 @@ public class PlayerAnimation : MonoBehaviour
     /// <summary>
     /// This function stops the movement sound.
     /// </summary>
-    private void StopMoveSound()
+    public void StopMoveSound()
     {
         if (audioSource.isPlaying)
         {
@@ -423,13 +388,6 @@ public class PlayerAnimation : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    /// <summary>
-    ///     Resets the current instance to null.
-    /// </summary>
-    public void ResetInstance()
-    {
-        Instance = null;
-    }
-
     #endregion
+
 }
