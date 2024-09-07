@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+///     This class manages the leaderboard such as placements, visibility, filter
+/// </summary>
 public class LeaderboardManager : MonoBehaviour
 {
 

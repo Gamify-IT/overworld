@@ -65,7 +65,6 @@ public class ShopItemManager : MonoBehaviour
         showAllButton.onClick.AddListener(OnShowAllItemsClicked);
         inventoryButton.onClick.AddListener(ShowPurchasedItems);
 
-        content.GetComponent<ScrollRect>().gameObject.AddComponent<DisableScrollRectDrag>();
 
 
         if (audioSource != null)
@@ -276,7 +275,6 @@ public class ShopItemManager : MonoBehaviour
 
 
     }
-
 
     /// <summary>
     /// Plays the alert sound effect, usually when the player attempts to buy an already purchased item.

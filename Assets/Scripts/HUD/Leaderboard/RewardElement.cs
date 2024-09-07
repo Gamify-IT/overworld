@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+///     This class is used to visualize the placements in the leaderboard
+/// </summary>
 public class RewardElement : MonoBehaviour
 {
     [SerializeField] private TMP_Text playername;

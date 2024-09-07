@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
+/// <summary>
+///     This class is used to handle the different panels regarding the leaderboard
+/// </summary>
 public class OpenLeaderboard : MonoBehaviour
 {
 
