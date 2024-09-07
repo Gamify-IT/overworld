@@ -21,7 +21,7 @@ public class DataManager : MonoBehaviour
     //Data fields
     private AreaDataManager areaDataManager;
     private WorldData[] worldData;
-    private PlayerstatisticDTO playerData;
+    private PlayerStatisticDTO playerData;
     private PlayerStatisticData ownPlayerData;
     private List<AchievementData> achievementData;
     private List<ShopItemData> shopItemData;
@@ -108,14 +108,18 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     This function returns the player data
+    ///     This function returns the player data as a DTO
     /// </summary>
-    /// <returns>The player data</returns>
-    public PlayerstatisticDTO GetPlayerData()
+    /// <returns>The player DTO data </returns>
+    public PlayerStatisticDTO GetPlayerData()
     {
         return playerData;
     }
 
+    /// <summary>
+    ///     This function returns the player data as DATA
+    /// </summary>
+    /// <returns>The player DATA data</returns>
     public PlayerStatisticData GetOwnPlayerData()
     {
         return ownPlayerData;
@@ -272,7 +276,7 @@ public class DataManager : MonoBehaviour
     ///     This function processes the player data
     /// </summary>
     /// <param name="playerData">The player statistics returned from the backend</param>
-    public void ProcessPlayerStatistics(PlayerstatisticDTO playerStatistics)
+    public void ProcessPlayerStatistics(PlayerStatisticDTO playerStatistics)
     {
         playerData = playerStatistics;
         foreach (TeleporterDTO teleporterDTO in playerData.unlockedTeleporters)
@@ -282,6 +286,9 @@ public class DataManager : MonoBehaviour
             int number = teleporterDTO.index;
             GetWorldData(worldIndex).UnlockTeleporter(dungeonIndex, number);
         }
+
+        ownPlayerData = PlayerStatisticData.ConvertFromPlayerStatisticDTO(playerStatistics);
+
     }
 
     /// <summary>
@@ -289,7 +296,7 @@ public class DataManager : MonoBehaviour
     ///     <c>DataManager</c>
     /// </summary>
     /// <param name="allPlayerStatistics">The player statistic data returned from the backend</param>
-    public void ProcessAllPlayerStatistics(PlayerstatisticDTO[] allPlayerStatistics)
+    public void ProcessAllPlayerStatistics(PlayerStatisticDTO[] allPlayerStatistics)
     {
         allPlayerStatisticsData = new List<PlayerStatisticData>();
         if (allPlayerStatistics == null)
@@ -299,31 +306,15 @@ public class DataManager : MonoBehaviour
         }
         Debug.Log("Process " + allPlayerStatistics.Length + "player statistics");
 
-        foreach (PlayerstatisticDTO statistic in allPlayerStatistics)
+        foreach (PlayerStatisticDTO statistic in allPlayerStatistics)
         {
             PlayerStatisticData playerStatistic = PlayerStatisticData.ConvertFromPlayerStatisticDTO(statistic);
             allPlayerStatisticsData.Add(playerStatistic);
         }
     }
 
-    public void ProcessPlayerStatisticDTO(PlayerstatisticDTO playerStatistic)
-    {
+    
 
-        if (playerStatistic == null)
-        {
-            Debug.Log("Playerstatistic  is null");
-            return;
-        }
-
-        ownPlayerData = PlayerStatisticData.ConvertFromPlayerStatisticDTO(playerStatistic);
-
-
-    }
-
-    public PlayerStatisticData GetOwnStatisticData()
-    {
-        return ownPlayerData;
-    }
 
     /// <summary>
     ///     This function returns all stored player statistics
@@ -547,6 +538,10 @@ public class DataManager : MonoBehaviour
         return achievementData;
     }
 
+    /// <summary>
+    ///     This function returns all stored shop items
+    /// </summary>
+    /// <returns>A list containing all shop items</returns>
     public List<ShopItemData> GetShopItems()
     {
         Debug.Log("Data Manager, shop items " + shopItemData.Count);
@@ -571,6 +566,12 @@ public class DataManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    ///     This function updates an achievement
+    /// </summary>
+    /// <param name="title">The title of the achievement</param>
+    /// <param name="newProgress">The new progress of the achievement</param>
+    /// <returns>True if the acheivement is just now completed, false otherwise</returns>
     public bool UpdateShopItem(string title, bool newProgress)
     {
         ShopItemData shopItem = GetShopItem(title);
@@ -582,16 +583,26 @@ public class DataManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    ///     This function updates the credit of the own player
+    /// </summary>
+    /// <param name="price">the price of the shop item</param>
+    /// <param name="credit">the new credit of a player</param>
+    /// <returns>True if the players credit is updated, false otherwise</returns>
     public bool UpdatePlayerCredit(int price, int credit)
     {
-       
-        if(ownPlayerData != null)
+       if(ownPlayerData != null)
         {
             return ownPlayerData.updateCredit(price);
         }
         return false;
     }
 
+    /// <summary>
+    ///     This function updates the pseudonym of the own player
+    /// </summary>
+    /// <param name="pseudonym">The new pseudonym of the player</param>
+    /// <returns>True if the players pseudonym is updated, false otherwise</returns>
     public bool UpdatePseudonym(string pseudonym)
     {
 
@@ -602,6 +613,11 @@ public class DataManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    ///     This function updates the visibility of the own player
+    /// </summary>
+    /// <param name="visibility">The visibility state of the player</param>
+    /// <returns>True if the players visibility is updated, false otherwise</returns>
     public bool UpdateVisibility(bool visibility)
     {
         if (ownPlayerData != null)
@@ -648,6 +664,12 @@ public class DataManager : MonoBehaviour
         return null;
     }
 
+
+    /// <summary>
+    ///     This function returns the shop item with the given title
+    /// </summary>
+    /// <param name="title">The title of the achievement to look for</param>
+    /// <returns>The <c>ShopItemData</c> corresponding with the given title if present, null otherwise</returns>
     public ShopItemData GetShopItem(string title)
     {
         foreach (ShopItemData shopItem in shopItemData)
@@ -797,7 +819,7 @@ public class DataManager : MonoBehaviour
         areaDataManager = new AreaDataManager();
 
         worldData = new WorldData[maxWorld + 1];
-        playerData = new PlayerstatisticDTO();
+        playerData = new PlayerStatisticDTO();
         InitKeybindingsDictionary();
 
         for (int worldIndex = 0; worldIndex <= maxWorld; worldIndex++)

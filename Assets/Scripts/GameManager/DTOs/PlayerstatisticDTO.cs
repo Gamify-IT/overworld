@@ -5,18 +5,9 @@ using UnityEngine;
 ///     This class is used to retrieve data from Get Requests.
 /// </summary>
 [Serializable]
-public class PlayerstatisticDTO
+public class PlayerStatisticDTO
 {
-    /// <summary>
-    ///     This function converts a json string to a <c>PlayerstatisticDTO</c> object.
-    /// </summary>
-    /// <param name="jsonString">The json string to convert</param>
-    /// <returns>A <c>PlayerstatisticDTO</c> object containing the data</returns>
-    public static PlayerstatisticDTO CreateFromJSON(string jsonString)
-    {
-        return JsonUtility.FromJson<PlayerstatisticDTO>(jsonString);
-    }
-
+   
     #region Attributes
 
     public string id;
@@ -32,7 +23,6 @@ public class PlayerstatisticDTO
     public string logoutScene;
     public int currentCharacterIndex;
     public int volumeLevel;
-
     public int knowledge;
     public int rewards;
     public bool visibility;
@@ -43,7 +33,7 @@ public class PlayerstatisticDTO
 
     #region Constructors
 
-    public PlayerstatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
+    public PlayerStatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
          AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
          string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool visibility, int credit, string pseudonym)
     {
@@ -67,8 +57,9 @@ public class PlayerstatisticDTO
         this.credit = credit;
         this.pseudonym = pseudonym;
     }
+    
 
-    public PlayerstatisticDTO()
+    public PlayerStatisticDTO()
     {
         id = "";
         AreaLocationDTO unlockedWorld = new AreaLocationDTO();
@@ -93,7 +84,49 @@ public class PlayerstatisticDTO
         credit = 0;
         pseudonym = "";
     }
-
-
     #endregion
+
+    /// <summary>
+    ///     This function converts a <c>PlayerStatisticData</c> object into a <c>PlayerStatisticDTO</c> instance
+    /// </summary>
+    /// <param name="PlayerStatisticData">The <c>PlayerStatisticData</c> object to convert</param>
+    /// <returns>the <c>PlayerStatisticDTO</c> instance</returns>
+    public static PlayerStatisticDTO ConvertToPlayerStatisticDTO(PlayerStatisticData playerStatisticData)
+    {
+        string id = playerStatisticData.GetId();
+        string userId = playerStatisticData.GetUserId();
+        string username = playerStatisticData.GetUsername();
+        string lastActive = playerStatisticData.GetLastActive();
+        float logoutPositionX = playerStatisticData.GetLogoutPositionX();
+        float logoutPositionY = playerStatisticData.GetLogoutPositionY();
+        string logoutScene = playerStatisticData.GetLogoutScene();
+        int currentCharacterIndex = playerStatisticData.GetCurrentCharacterIndex();
+        int knowledge = playerStatisticData.GetKnowledge();
+        int volumeLevel = playerStatisticData.GetVolumeLevel();
+
+        int rewards = playerStatisticData.GetRewards();
+        bool visibility = playerStatisticData.GetVisibility();
+        int credit = playerStatisticData.GetCredit();
+        string pseudonym = playerStatisticData.GetPseudonym();
+        AreaLocationDTO currentArea = playerStatisticData.GetCurrentArea();
+        AreaLocationDTO[] unlockedAreas = playerStatisticData.GetUnlockedAreas();
+        AreaLocationDTO[] unlockedDungeons = playerStatisticData.GetUnlockedDungeons();
+        TeleporterDTO[] unlockedTeleporters = playerStatisticData.GetUnlockedTeleporters();
+
+
+        PlayerStatisticDTO playerStatistic = new PlayerStatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive, logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym);
+
+
+        return playerStatistic;
+    }
+
+    /// <summary>
+    ///     This function converts a json string to a <c>PlayerstatisticDTO</c> object.
+    /// </summary>
+    /// <param name="jsonString">The json string to convert</param>
+    /// <returns>A <c>PlayerstatisticDTO</c> object containing the data</returns>
+    public static PlayerStatisticDTO CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<PlayerStatisticDTO>(jsonString);
+    }
 }

@@ -48,7 +48,7 @@ public class ShopItemManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        ownData = DataManager.Instance.GetOwnStatisticData();
+        ownData = DataManager.Instance.GetOwnPlayerData();
         shopItemData = DataManager.Instance.GetShopItems();
        
         UpdateUI();
@@ -190,7 +190,7 @@ public class ShopItemManager : MonoBehaviour
 
         PlayClickSound();
 
-        ownData = DataManager.Instance.GetOwnStatisticData();
+        ownData = DataManager.Instance.GetOwnPlayerData();
         int price = currentItemPrice;
 
         Debug.Log($"Attempting to buy item: {currentItemTitle} for {currentItemPrice} coins.");

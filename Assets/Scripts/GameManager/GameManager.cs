@@ -145,15 +145,15 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Optional<PlayerstatisticDTO> playerStatistics =
-            await RestRequest.GetRequest<PlayerstatisticDTO>(path + "/playerstatistics/");
+        Optional<PlayerStatisticDTO> playerStatistics =
+            await RestRequest.GetRequest<PlayerStatisticDTO>(path + "/playerstatistics/");
         if (!playerStatistics.IsPresent())
         {
             loadingError = true;
         }
 
-        Optional<PlayerstatisticDTO[]> allPlayerStatistics =
-           await RestRequest.GetArrayRequest<PlayerstatisticDTO>(path +
+        Optional<PlayerStatisticDTO[]> allPlayerStatistics =
+           await RestRequest.GetArrayRequest<PlayerStatisticDTO>(path +
                                                                      "/playerstatistics/allPlayerStatistics");
         if (!allPlayerStatistics.IsPresent())
         {
@@ -216,7 +216,6 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
             DataManager.Instance.ProcessKeybindings(keybindings.Value());             
             DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());           
-            DataManager.Instance.ProcessPlayerStatisticDTO(playerStatistics.Value());
             DataManager.Instance.ProcessShopItem(shopItems.Value());
 
         }
@@ -364,10 +363,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-   
-    public async void UpdateShopItem(string title, bool newProgress)
+    /// <summary>
+    ///     This function updates the bought state of the given shop item
+    /// </summary>
+    /// <param name="title">The title of the shop item</param>
+    /// <param name="newState">The new state of the shop item</param>
+    public async void UpdateShopItem(string title, bool newState)
     {
-        bool unlocked =  DataManager.Instance.UpdateShopItem(title, newProgress);
+        bool unlocked =  DataManager.Instance.UpdateShopItem(title, newState);
         if (unlocked)
         {
             ShopItemData shopItem = DataManager.Instance.GetShopItem(title);
@@ -379,6 +382,11 @@ public class GameManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    ///     This function updates the credit of the player 
+    /// </summary>
+    /// <param name="price">The price of a shop item</param>
+    /// <param name="credit">The new credit of the player</param>
     public async void UpdatePlayerCredit(int price, int credit)
     {
         bool unlocked = DataManager.Instance.UpdatePlayerCredit(price, credit);
@@ -393,6 +401,10 @@ public class GameManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    ///     This function updates the pseudonym of the player
+    /// </summary>
+    /// <param name="name">The new pseudonym of the player</param>
     public async void UpdatePseudonym(string name)
     {
         bool unlocked = DataManager.Instance.UpdatePseudonym(name);
@@ -407,6 +419,10 @@ public class GameManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    ///     This function updates the visibility of the player
+    /// </summary>
+    /// <param name="visibility">The new visibility of the player</param>
     public async void UpdateVisibility(bool visibility)
     {
         bool unlocked = DataManager.Instance.UpdateVisibility(visibility);
@@ -476,7 +492,10 @@ public class GameManager : MonoBehaviour
         return savingSuccessful;
     }
 
-   
+
+    /// <summary>
+    ///     This function saves all shop items, which made progress in the current session
+    /// </summary>
     public async UniTask<bool> SaveShopItem()
     {
         List<ShopItemData> shopItems = DataManager.Instance.GetShopItems();
@@ -510,6 +529,9 @@ public class GameManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    ///     This function saves the changed player data in the current session
+    /// </summary>
     public async UniTask<bool> SavePlayerData()
     {
         PlayerStatisticData playerStatisticData = DataManager.Instance.GetOwnPlayerData();
@@ -518,7 +540,7 @@ public class GameManager : MonoBehaviour
 
         if (playerStatisticData.creditIsUpdated() || playerStatisticData.PseudonymIsUpdated() || playerStatisticData.VisibilityIsUpdated())
         {
-            PlayerstatisticDTO playerstatistic = PlayerStatisticData.ConvertToPlayerstatisticDTO(playerStatisticData);
+            PlayerStatisticDTO playerstatistic = PlayerStatisticDTO.ConvertToPlayerStatisticDTO(playerStatisticData);
             string path = basePath + userId;
             string json = JsonUtility.ToJson(playerstatistic, true);
             Debug.Log(playerstatistic.id + userId);
@@ -679,7 +701,7 @@ public class GameManager : MonoBehaviour
     {
         string uri = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/" + userId;
 
-        Optional<PlayerstatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerstatisticDTO>(uri);
+        Optional<PlayerStatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerStatisticDTO>(uri);
 
         if (playerStatistics.IsPresent())
         {
@@ -745,7 +767,7 @@ private void PlayAchievementNotificationSound(){
             DataManager.Instance.SetWorldData(worldIndex, new WorldData());
         }
 
-        DataManager.Instance.ProcessPlayerStatistics(new PlayerstatisticDTO());
+        DataManager.Instance.ProcessPlayerStatistics(new PlayerStatisticDTO());
         AchievementStatistic[] achivements = GetDummyAchievements();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
 
@@ -765,39 +787,6 @@ private void PlayAchievementNotificationSound(){
         statistcs[0] = achievementStatistic1;
         statistcs[1] = achievementStatistic2;
         return statistcs;
-    }
-
-    public ShopItem[] GetDummyShopItems()
-    {
-        ShopItem[] items = new ShopItem[6];
-        ShopItem shopItem1 =
-            new ShopItem("FLAME_HAT", 15,  "flames", "ACCESSORIES", false);
-
-        ShopItem shopItem2 =
-            new ShopItem("GLOBE_HAT", 31, "globus", "ACCESSORIES", false);
-       
-        ShopItem shopItem3 =
-           new ShopItem("SANTA_COSTUME", 18, "santa", "OUTFIT", false) ;
-
-        ShopItem shopItem4 =
-           new ShopItem("HEART_GLASSES", 25, "herzbrille", "ACCESSORIES", false);
-
-        ShopItem shopItem5 =
-           new ShopItem("SUIT", 7, "anzug", "OUTFIT", false);
-
-        ShopItem shopItem6 =
-           new ShopItem("BLUE_SHIRT", 7, "shirt", "OUTFIT", false);
-
-
-        items[0] = shopItem1;
-        items[1] = shopItem2;
-        items[2] = shopItem3;
-        items[3] = shopItem4;
-        items[4] = shopItem5;
-        items[5] = shopItem6;
-
-        return items;
-
     }
 
   
