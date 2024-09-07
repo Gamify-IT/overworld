@@ -1,30 +1,29 @@
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
 public class MinimapAreaName : MonoBehaviour
 {
-    public string areaName;
-    public bool dungeonArea;
+    [SerializeField] private string areaName;
+    [SerializeField] private bool dungeonArea;
+    [SerializeField] private AudioClip backgroundMusicWorld1;
+    [SerializeField] private AudioClip backgroundMusicWorld2;
+    [SerializeField] private AudioClip backgroundMusicWorld3;
+    [SerializeField] private AudioClip backgroundMusicWorld4;
+    [SerializeField] private AudioClip backgroundMusicDungeon;
+    [SerializeField] private float crossfadeDuration = 0.5f;
 
-    private string currentAreaName;
-  
-    public AudioClip backgroundMusicWorld1;
-    public AudioClip backgroundMusicWorld2;
-    public AudioClip backgroundMusicWorld3;
-    public AudioClip backgroundMusicWorld4;
-    public AudioClip backgroundMusicDungeon;
-    public static AudioClip clipToPlay;
-    
     private AudioSource audioSource1;
     private AudioSource audioSource2;
     private bool isUsingSource1 = true;
+    private string currentAreaName;
 
     private static AudioClip currentClip;
+    public static AudioClip clipToPlay;
 
-    public float crossfadeDuration = 0.5f;
 
     /// <summary>
-    /// This function initializes the audio sources and starts playing background sound.
+    /// This function initializes the audio sources and starts playing the background music
     /// </summary>
     private void Start()
     {
@@ -38,9 +37,9 @@ public class MinimapAreaName : MonoBehaviour
     }
 
     /// <summary>
-    /// This function configures the specified audio source with initial settings.
+    /// This function configures the specified audio source with initial settings
     /// </summary>
-    /// <param name="audioSource">The AudioSource component to initialize.</param>
+    /// <param name="audioSource">The AudioSource component to initialize</param>
     private void InitializeAudioSource(AudioSource audioSource)
     {
         audioSource.loop = true;
@@ -49,7 +48,7 @@ public class MinimapAreaName : MonoBehaviour
     }
 
     /// <summary>
-    /// This function updates the current area name and changes background music if the area has changed.
+    /// This function updates the current area name and changes the background music if the area has changed
     /// </summary>
     private void Update()
     {
@@ -78,7 +77,7 @@ public class MinimapAreaName : MonoBehaviour
     }
 
     /// <summary>
-    /// This function starts a new audio clip for the received area.
+    /// This function starts a new audio clip for the received area
     /// </summary>
     private void PlayBackgroundMusic()
     {
@@ -91,7 +90,7 @@ public class MinimapAreaName : MonoBehaviour
     }
 
     /// <summary>
-    /// This function gives an audio clip based on the current area name.
+    /// This function gives an audio clip based on the current area name
     /// </summary>
     private void GetClipToPlay()
     {
@@ -118,7 +117,7 @@ public class MinimapAreaName : MonoBehaviour
     }
 
     /// <summary>
-    /// This function makes smoothly crossfades between the currently playing audio clip and a new one.
+    /// This function makes smoothly crossfades between the currently playing audio clip and a new one
     /// </summary>
     /// <param name="newClip">The new audio clip to play.</param>
     private IEnumerator CrossfadeMusic(AudioClip newClip)

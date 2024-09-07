@@ -28,6 +28,7 @@ public class AreaDataManager
             bool successfulLoading = await FetchWorldData(worldIndex);
             if(!successfulLoading)
             {
+                Debug.Log("Error in FetchWorldData!");
                 return true;
             }
         }
@@ -48,6 +49,7 @@ public class AreaDataManager
         AreaData worldData = await FetchData(currentArea);
         if (worldData == null)
         {
+            Debug.Log("Error loading world: " + worldIndex);
             return false;
         }
         worldAreas[worldIndex].AddArea(0, worldData);
@@ -69,6 +71,7 @@ public class AreaDataManager
             bool dungeonSuccessful = await FetchDungeonData(worldIndex, dungeonIndex);
             if(!dungeonSuccessful)
             {
+                Debug.Log("Error loading dungeon: " + worldIndex + "-" + dungeonIndex);
                 return false;
             }
         }

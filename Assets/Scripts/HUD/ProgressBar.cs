@@ -44,28 +44,33 @@ public class ProgressBar : MonoBehaviour
     }
 
     /// <summary>
-    /// This function sets the unlocked area for a world
+    /// This function sets the unlocked area for a world and updates achievements if new world is unlocked
     /// </summary>
     /// <param name="worldIndex">The index of the unlocked world</param>
     public void setUnlockedArea(int worldIndex)
     {
         unlockedAreaText.text = worldIndex.ToString();
+        if (worldIndex == 1)
+        {
+            GameManager.Instance.UpdateAchievement(AchievementTitle.LEVEL_UP, 1, null);
+        }
         if (worldIndex == 2)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.OPENER_WORLD_2, 1);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.OPENER_WORLD_2, 1, null);
+            GameManager.Instance.UpdateAchievement(AchievementTitle.LEVEL_UP, 2, null);
         }
         if (worldIndex == 3)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.OPENER_WORLD_3, 1);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.OPENER_WORLD_3, 1, null);
         }
         if (worldIndex == 4)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.OPENER_WORLD_4, 1);
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.OPENER_WORLD_4, 1, null);
         }
     }
 
     /// <summary>
-    /// This function sets the unlocked area for a dungeon
+    /// This function sets the unlocked area for a dungeon and updates achievements if new dungeon is unlocked
     /// </summary>
     /// <param name="worldIndex">The index of the world the unlocked dungeon is in</param>
     /// <param name="dungeonIndex">The index of the unlocked dungeon</param>
@@ -74,19 +79,19 @@ public class ProgressBar : MonoBehaviour
         unlockedAreaText.text = worldIndex + "-" + dungeonIndex;
         if (worldIndex == 1)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINER_WORLD_1, 1);
+            GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_1, dungeonIndex, null);
         }
         if (worldIndex == 2)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINER_WORLD_2, 1);
+            GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_2, dungeonIndex, null);
         }
         if (worldIndex == 3)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINER_WORLD_3, 1);
+            GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_3, dungeonIndex, null);
         }
         if (worldIndex == 4)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINER_WORLD_4, 1);
+            GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_4, dungeonIndex, null);
         }
     }
 }

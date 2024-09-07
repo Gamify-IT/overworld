@@ -78,6 +78,6 @@ public enum AchievementTitle
     LEVEL_UP,
     GOAT,
     ONE_OF_THE_BEST_PLAYERS,
-    OBTAIN_XP,
-    OBTAIN_MORE_XP,
+    GET_COINS,
+    GET_MORE_COINS,
 }

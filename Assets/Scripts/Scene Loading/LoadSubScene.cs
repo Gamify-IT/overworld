@@ -15,7 +15,9 @@ public enum FacingDirection
 /// </summary>
 public class LoadSubScene : MonoBehaviour
 {
-    public static AreaInformation areaExchange = new AreaInformation(1, new Optional<int>());
+    public static AreaInformation areaExchange = DataManager.Instance.GetPlayerData().GetLogoutScene() == "Dungeon" ? 
+        new AreaInformation(DataManager.Instance.GetPlayerData().GetCurrentArea().worldIndex, new Optional<int>(DataManager.Instance.GetPlayerData().GetCurrentArea().dungeonIndex))
+        : new AreaInformation(DataManager.Instance.GetPlayerData().GetCurrentArea().worldIndex, new Optional<int>());
     public static bool transitionBlocked = false;
     public static bool setupDone = false;
 
@@ -83,46 +85,49 @@ public class LoadSubScene : MonoBehaviour
         }
         else
         {
-            //Scene Transition in dungeon
-
-            Debug.Log("Now in dungeon: " + areaExchange.GetWorldIndex() + "-" + areaExchange.GetDungeonIndex());
-            worldIndex = areaExchange.GetWorldIndex();
-            dungeonIndex = areaExchange.GetDungeonIndex();
-
-            if (facingDirection == FacingDirection.NORTH)
+            if (!GameManager.Instance.GetJustLoaded())
             {
-                PlayerAnimation.Instance.playerAnimator.Play("Idle_Up");
-                Vector2 playerPosition = this.transform.position + new Vector3(0, 2, 0);
-                GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+                //Scene Transition in dungeon
+                Debug.Log("Now in dungeon: " + areaExchange.GetWorldIndex() + "-" + areaExchange.GetDungeonIndex());
+                worldIndex = areaExchange.GetWorldIndex();
+                dungeonIndex = areaExchange.GetDungeonIndex();
+
+                if (facingDirection == FacingDirection.NORTH)
+                {
+                    PlayerAnimation.Instance.playerAnimator.Play("Idle_Up");
+                    Vector2 playerPosition = this.transform.position + new Vector3(0, 2, 0);
+                    GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+                }
+
+                if (facingDirection == FacingDirection.EAST)
+                {
+                    PlayerAnimation.Instance.playerAnimator.Play("Idle_Right");
+                    Vector2 playerPosition = this.transform.position + new Vector3(2, 0, 0);
+                    GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+                }
+
+                if (facingDirection == FacingDirection.SOUTH)
+                {
+                    PlayerAnimation.Instance.playerAnimator.Play("Idle_Down");
+                    Vector2 playerPosition = this.transform.position + new Vector3(0, -2, 0);
+                    GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+                }
+
+                if (facingDirection == FacingDirection.WEST)
+                {
+                    PlayerAnimation.Instance.playerAnimator.Play("Idle_Left");
+                    Vector2 playerPosition = this.transform.position + new Vector3(-2, 0, 0);
+                    GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
+                }
+
+                if (!setupDone)
+                {
+                    GameEvents.current.SetupDungeon(areaExchange);
+                    setupDone = true;
+                }
             }
-
-            if (facingDirection == FacingDirection.EAST)
-            {
-                PlayerAnimation.Instance.playerAnimator.Play("Idle_Right");
-                Vector2 playerPosition = this.transform.position + new Vector3(2, 0, 0);
-                GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
-            }
-
-            if (facingDirection == FacingDirection.SOUTH)
-            {
-                PlayerAnimation.Instance.playerAnimator.Play("Idle_Down");
-                Vector2 playerPosition = this.transform.position + new Vector3(0, -2, 0);
-                GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
-            }
-
-            if (facingDirection == FacingDirection.WEST)
-            {
-                PlayerAnimation.Instance.playerAnimator.Play("Idle_Left");
-                Vector2 playerPosition = this.transform.position + new Vector3(-2, 0, 0);
-                GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
-            }
-
-            if(!setupDone)
-            {
-                GameEvents.current.SetupDungeon(areaExchange);
-                setupDone = true;
-            }            
         }
+        GameManager.Instance.SetJustLoaded(false);
     }
 
     /// <summary>
@@ -198,6 +203,7 @@ public class LoadSubScene : MonoBehaviour
             yield return null;
         }
 
+        DataManager.Instance.SetPlayerPosition(worldIndexToLoad, dungeonIndexToLoad);
         GameManager.Instance.SetData(worldIndexToLoad, dungeonIndexToLoad);
 
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
@@ -216,7 +222,7 @@ public class LoadSubScene : MonoBehaviour
         Destroy(panel, 1);
     }
 
-    #region GetterAndSetter
+#region GetterAndSetter
     public void SetWorldIndex(int worldIndex)
     {
         this.worldIndex = worldIndex;
@@ -237,5 +243,5 @@ public class LoadSubScene : MonoBehaviour
         return dungeonIndex;
     }
 
-    #endregion
+#endregion
 }
