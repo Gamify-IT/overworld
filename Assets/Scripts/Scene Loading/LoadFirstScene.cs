@@ -97,6 +97,12 @@ public class LoadFirstScene : MonoBehaviour
 
         Debug.Log("Finish retrieving courseId");
 
+        Debug.Log("Start determining amount of worlds");
+
+        await GameManager.Instance.DetermineAmountOfWorlds();
+
+        Debug.Log("Finish determining amount of worlds");
+
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
         LoadingManager.Instance.Setup("World 1", worldIndex, dungeonIndex, playerPosition);
 

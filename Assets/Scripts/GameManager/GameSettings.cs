@@ -81,6 +81,11 @@ public static class GameSettings
         return maxWorld;
     }
 
+    public static void SetMaxWorlds(int maxWorld)
+    {
+        GameSettings.maxWorld = maxWorld;
+    }
+
     /// <summary>
     ///     This function returns the maximum amount of minigames in an area.
     /// </summary>

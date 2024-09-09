@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     //Game settigs
     private string overworldBackendPath;
-    private int maxWorld;
+    private int maxWorld = 0;
     private int maxMinigames;
     private int maxNPCs;
     private int maxBooks;
@@ -181,6 +181,39 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     Determines the amount of worlds in the current course.
+    /// </summary>
+    /// <returns>amount of worlds</returns>
+    public async UniTask<bool> DetermineAmountOfWorlds()
+    {
+#if UNITY_EDITOR
+        GameSettings.SetMaxWorlds(4);
+        return true;
+#endif
+        string courseID = GameSettings.GetCourseID();
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseID + "/area";
+        Optional<List<AreaDTO>> areas = await RestRequest.GetListRequest<AreaDTO>(path);
+
+        int areaAmount = areas.Value().Count;
+        Debug.Log(areaAmount + "areas found for this course");
+
+        for (int areaIndex = 0; areaIndex < areaAmount; areaIndex++)
+        {
+            // filter worlds in areas
+            if (areas.Value()[areaIndex].area.dungeonIndex == 0)
+            {
+                maxWorld++;
+            }
+
+            GameSettings.SetMaxWorlds(maxWorld);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     ///     This function reads the userId from where it is stored and returns it.
     /// </summary>
     /// <returns>true if userId is valid, false otherwise</returns>
@@ -219,6 +252,8 @@ public class GameManager : MonoBehaviour
 
         //get data
         Optional<WorldDTO>[] worldDTOs = new Optional<WorldDTO>[maxWorld + 1];
+
+
         for (int worldIndex = 1; worldIndex <= maxWorld; worldIndex++)
         {
             Optional<WorldDTO> dto = await RestRequest.GetRequest<WorldDTO>(path + "/worlds/" + worldIndex);
@@ -611,16 +646,16 @@ public class GameManager : MonoBehaviour
     /// <summary>
     ///     This function initializes the <c>GameManager</c>. All arrays are initialized with empty objects.
     /// </summary>
-    private void SetupGameManager()
+    private async void SetupGameManager()
     {
         //loadingError = false;
 
         overworldBackendPath = GameSettings.GetOverworldBackendPath();
-        maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
         maxNPCs = GameSettings.GetMaxNpcs();
         maxBooks = GameSettings.GetMaxBooks();
         maxDungeons = GameSettings.GetMaxDungeons();
+
     }
 
     /// <summary>
