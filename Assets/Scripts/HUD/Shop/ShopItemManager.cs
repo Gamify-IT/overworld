@@ -5,6 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
+
+/// <summary>
+///     This class manages the shop items in the shop such as buy options, description like image and price and filter options
+/// </summary>
 public class ShopItemManager : MonoBehaviour
 {
     [SerializeField] private GameObject shopItemPrefab;
