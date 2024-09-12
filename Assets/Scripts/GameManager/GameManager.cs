@@ -767,9 +767,18 @@ private void PlayAchievementNotificationSound(){
             DataManager.Instance.SetWorldData(worldIndex, new WorldData());
         }
 
-        DataManager.Instance.ProcessPlayerStatistics(new PlayerStatisticDTO());
+        PlayerStatisticDTO[] allPlayers = GetDummyDataRewards();
+        DataManager.Instance.ProcessAllPlayerStatistics(allPlayers);
+
+        PlayerStatisticDTO ownPlayer = GetOwnDummyData();
+        DataManager.Instance.ProcessPlayerStatistics(ownPlayer);
+
         AchievementStatistic[] achivements = GetDummyAchievements();
         DataManager.Instance.ProcessAchievementStatistics(achivements);
+
+        ShopItem[] allItems = GetDummyShopItems();
+        DataManager.Instance.ProcessShopItem(allItems);
+     
 
         ResetKeybindings();
     }
@@ -789,7 +798,124 @@ private void PlayAchievementNotificationSound(){
         return statistcs;
     }
 
-  
 
-   
+    public PlayerStatisticDTO[] GetDummyDataRewards()
+    {
+        int playerCount = 30;
+        PlayerStatisticDTO[] allStatistics = new PlayerStatisticDTO[32];
+        System.Random random = new System.Random();
+        List<string> names = new List<string> {
+        "John", "Alice", "Bob", "Eve", "Charlie", "Dave", "Mallory", "Trent", "Peggy", "Victor",
+        "Walter", "Grace", "Hank", "Ivy", "Justin", "Karen", "Leo", "Monica", "Nina", "Oscar",
+        "Paula", "Quentin", "Rachel", "Steve", "Tom", "Uma", "Vince", "Wendy", "Xander", "Yara"
+    };
+
+        for (int i = 0; i < playerCount; i++)
+        {
+            string id = (i + 1).ToString();
+            string userId = "Id" + id;
+            string username = names[i];
+            int knowledge = random.Next(0, 501);
+            int rewards = random.Next(0, 501);
+            bool showRewards = true;
+            int worldIndex = random.Next(1, 5);
+            int dungeonIndex = random.Next(1, 5);
+            AreaLocationDTO currentArea = new AreaLocationDTO(worldIndex, dungeonIndex);
+            AreaLocationDTO[] unlockedAreas = { currentArea };
+            AreaLocationDTO[] unlockedDungeons = { currentArea };
+            TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
+            TeleporterDTO[] unlockedTeleporters = { teleporter };
+
+            string lastActive = DateTime.Now.AddMinutes(-random.Next(0, 1440)).ToString("yyyy-MM-dd HH:mm:ss");  // Letzte Aktivität in den letzten 24 Stunden
+            float logoutPositionX = (float)random.NextDouble() * 100;  // Zufällige Position X
+            float logoutPositionY = (float)random.NextDouble() * 100;  // Zufällige Position Y
+            string logoutScene = "Scene" + random.Next(1, 5);  // Zufällige Szene
+            int currentCharacterIndex = random.Next(0, 5);  // Zufälliger Charakter
+            int volumeLevel = random.Next(0, 101);  // Lautstärke zwischen 0 und 100
+            int credit = random.Next(0, 1001);  // Zufällige Credits
+            string pseudonym = "Pseudonym" + random.Next(1, 100);  // Zufälliges Pseudonym
+
+            PlayerStatisticDTO player = new PlayerStatisticDTO(
+                id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username,
+                lastActive, logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel,
+                knowledge, rewards, showRewards, credit, pseudonym
+            );
+            allStatistics[i] = player;
+        }
+
+        int worldIndex1 = 2;
+        int dungeonIndex1 = 1;
+        AreaLocationDTO currentArea1 = new AreaLocationDTO(worldIndex1, dungeonIndex1);
+        AreaLocationDTO[] unlockedAreas1 = { currentArea1 };
+        AreaLocationDTO[] unlockedDungeons1 = { currentArea1 };
+        TeleporterDTO teleporter1 = new TeleporterDTO("1", currentArea1, 1);
+        TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
+        PlayerStatisticDTO player31 = new PlayerStatisticDTO(
+            "Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco",
+            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 25.5f, 12.3f, "Scene3", 2, 50, 200, 170, true, 500, "TheoPro"
+        );
+        allStatistics[30] = player31;
+
+        PlayerStatisticDTO ownPlayer = GetOwnDummyData();
+        allStatistics[31] = ownPlayer;
+
+        return allStatistics;
+    }
+
+    public PlayerStatisticDTO GetOwnDummyData()
+    {
+        int worldIndex = 2;
+        int dungeonIndex = 1;
+        AreaLocationDTO currentArea = new AreaLocationDTO(worldIndex, dungeonIndex);
+        AreaLocationDTO[] unlockedAreas = { currentArea };
+        AreaLocationDTO[] unlockedDungeons = { currentArea };
+        TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
+        TeleporterDTO[] unlockedTeleporters = { teleporter };
+
+        PlayerStatisticDTO ownPlayerData = new PlayerStatisticDTO(
+            "31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki",
+            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 20.0f, 15.0f, "World 1", 1, 75, 200, 170, false, 100, "PSEProfi"
+        );
+
+        return ownPlayerData;
+    }
+
+    public ShopItem[] GetDummyShopItems()
+    {
+        int itemCount = 9; // Anzahl der Shop-Items
+        ShopItem[] shopItems = new ShopItem[itemCount];
+        System.Random random = new System.Random();
+
+        List<string> itemNames = new List<string> {
+        "Flame Hat", "Heart Glasses", "Globe Hat", "Suit", "Santa Costume",
+        "Cool Glasses", "Retro Glasses", "Safety Helmet", "Cinema Glasses"
+    };
+
+        List<string> imageNames = new List<string> {
+        "flames", "herzbrille", "globus", "anzug", "santa",
+        "coole_brille", "retro_brille", "schutzhelm", "3D_brille"
+    };
+
+        List<ShopItemCategory> categories = new List<ShopItemCategory> {
+        ShopItemCategory.ACCESSORIES, ShopItemCategory.ACCESSORIES, ShopItemCategory.ACCESSORIES,
+        ShopItemCategory.OUTFIT, ShopItemCategory.OUTFIT, ShopItemCategory.ACCESSORIES,
+        ShopItemCategory.ACCESSORIES, ShopItemCategory.ACCESSORIES, ShopItemCategory.ACCESSORIES
+    };
+
+        for (int i = 0; i < itemCount; i++)
+        {
+            string shopItemID = "ItemID" + (i + 1).ToString();
+            int cost = random.Next(1, 11); // Zufällige Kosten zwischen 1 und 10
+            string imageName = imageNames[i];
+            ShopItemCategory category = categories[i]; // Verwende enum direkt
+            bool bought = random.Next(0, 2) == 1; // Zufällig ob gekauft oder nicht
+
+            ShopItem shopItem = new ShopItem(shopItemID, cost, imageName, category.ToString(), bought);
+            shopItems[i] = shopItem;
+        }
+
+        return shopItems;
+    }
+
+
 }
