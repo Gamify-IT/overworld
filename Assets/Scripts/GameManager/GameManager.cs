@@ -826,14 +826,14 @@ private void PlayAchievementNotificationSound(){
             TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
             TeleporterDTO[] unlockedTeleporters = { teleporter };
 
-            string lastActive = DateTime.Now.AddMinutes(-random.Next(0, 1440)).ToString("yyyy-MM-dd HH:mm:ss");  // Letzte Aktivität in den letzten 24 Stunden
-            float logoutPositionX = (float)random.NextDouble() * 100;  // Zufällige Position X
-            float logoutPositionY = (float)random.NextDouble() * 100;  // Zufällige Position Y
-            string logoutScene = "Scene" + random.Next(1, 5);  // Zufällige Szene
-            int currentCharacterIndex = random.Next(0, 5);  // Zufälliger Charakter
-            int volumeLevel = random.Next(0, 101);  // Lautstärke zwischen 0 und 100
-            int credit = random.Next(0, 1001);  // Zufällige Credits
-            string pseudonym = "Pseudonym" + random.Next(1, 100);  // Zufälliges Pseudonym
+            string lastActive = DateTime.Now.AddMinutes(-random.Next(0, 1440)).ToString("yyyy-MM-dd HH:mm:ss");  
+            float logoutPositionX = (float)random.NextDouble() * 100;  
+            float logoutPositionY = (float)random.NextDouble() * 100;  
+            string logoutScene = "Scene" + random.Next(1, 5);  
+            int currentCharacterIndex = random.Next(0, 5);  
+            int volumeLevel = random.Next(0, 101);  
+            int credit = random.Next(0, 1001); 
+            string pseudonym = "Pseudonym" + random.Next(1, 100);  
 
             PlayerStatisticDTO player = new PlayerStatisticDTO(
                 id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username,
@@ -882,7 +882,7 @@ private void PlayAchievementNotificationSound(){
 
     public ShopItem[] GetDummyShopItems()
     {
-        int itemCount = 9; // Anzahl der Shop-Items
+        int itemCount = 9; 
         ShopItem[] shopItems = new ShopItem[itemCount];
         System.Random random = new System.Random();
 
@@ -905,10 +905,10 @@ private void PlayAchievementNotificationSound(){
         for (int i = 0; i < itemCount; i++)
         {
             string shopItemID = "ItemID" + (i + 1).ToString();
-            int cost = random.Next(1, 11); // Zufällige Kosten zwischen 1 und 10
+            int cost = random.Next(1, 11); 
             string imageName = imageNames[i];
-            ShopItemCategory category = categories[i]; // Verwende enum direkt
-            bool bought = random.Next(0, 2) == 1; // Zufällig ob gekauft oder nicht
+            ShopItemCategory category = categories[i]; 
+            bool bought = random.Next(0, 2) == 1; 
 
             ShopItem shopItem = new ShopItem(shopItemID, cost, imageName, category.ToString(), bought);
             shopItems[i] = shopItem;
