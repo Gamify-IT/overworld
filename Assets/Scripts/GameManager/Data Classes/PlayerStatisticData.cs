@@ -193,7 +193,6 @@ public class PlayerStatisticData
             return "Trailblazer";
         }
 
-        return "-";
 
     }
 
