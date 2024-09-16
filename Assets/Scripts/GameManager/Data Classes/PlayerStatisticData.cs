@@ -129,6 +129,7 @@ public class PlayerStatisticData
         {
             return true;
         }
+        return false;
     }
 
     /// <summary>
@@ -145,6 +146,7 @@ public class PlayerStatisticData
             pseudonym = name;
             return true;
         }
+        return false;
     }
 
     /// <summary>
@@ -164,7 +166,9 @@ public class PlayerStatisticData
         {
             this.visibility = false;
             
-        }      
+        }
+
+      
     }
 
     /// <summary>
