@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1b3524aba97c1724da3395d0e5c33ce6
+guid: f3f08411f2b190b48996c460fcc1e436
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -104,13 +104,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: schutzhelm_0
+      name: retro_brille_0
       rect:
         serializedVersion: 2
         x: 1
-        y: 241
+        y: 238
         width: 14
-        height: 8
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -118,20 +118,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 561f21a4e9409d849bd2d8c0fcc1e62b
-      internalID: -1109539251
+      spriteID: 6072e6a4786e0b34bb76f3d7edc1bbca
+      internalID: -168136856
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_1
+      name: retro_brille_1
       rect:
         serializedVersion: 2
         x: 17
-        y: 241
+        y: 238
         width: 14
-        height: 8
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -139,20 +139,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1632f9e749350164a87febf08a4b79fb
-      internalID: -1372576053
+      spriteID: a96c3abf938a62f4db3509fb08efda85
+      internalID: -2101759446
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_2
+      name: retro_brille_2
       rect:
         serializedVersion: 2
         x: 33
-        y: 241
+        y: 238
         width: 14
-        height: 8
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -160,20 +160,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8dc25c7c9d5414c4bbc30196a43f0c77
-      internalID: 804035028
+      spriteID: e5698145cce387a4c943348d94dc9c3d
+      internalID: 184380367
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_3
+      name: retro_brille_3
       rect:
         serializedVersion: 2
         x: 49
-        y: 241
+        y: 238
         width: 14
-        height: 8
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -181,20 +181,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dac72a46260892142a86bca54ebf21f6
-      internalID: 320587213
+      spriteID: d9905d645dfc4ec4fa0383439fa4e53e
+      internalID: -1844280178
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_4
+      name: retro_brille_4
       rect:
         serializedVersion: 2
-        x: 81
-        y: 240
-        width: 14
-        height: 7
+        x: 82
+        y: 237
+        width: 12
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -202,20 +202,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 109e9fb93fdb3a0459ebe7bb52bca928
-      internalID: -535273486
+      spriteID: b8de6739550008444887e0dc844ae7e6
+      internalID: -1429008682
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_5
+      name: retro_brille_5
       rect:
         serializedVersion: 2
         x: 97
-        y: 242
+        y: 239
         width: 14
-        height: 7
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -223,19 +223,124 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2fc191627a13ae4428c408408685dd10
-      internalID: -1255359897
+      spriteID: 347ffbbfaf56684489fa49b495e84f37
+      internalID: 1870995508
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_6
+      name: retro_brille_6
       rect:
         serializedVersion: 2
-        x: 114
-        y: 243
-        width: 12
+        x: 116
+        y: 239
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 963cf638e60a4c849bfed61167c29392
+      internalID: 37871096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_7
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 206
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b396622d42b27d04f9720250a7d0e02b
+      internalID: 639834362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_8
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 206
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eec348aae012548418af7b33d1f504b5
+      internalID: 1744409336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_9
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 206
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c26ce6fb162138f42906f8fc3e7bac5f
+      internalID: 1853443788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_10
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 206
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19b46e8981a2d574999b463c8f4e5623
+      internalID: -1617719104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_11
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 205
+        width: 6
         height: 6
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -244,419 +349,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6859061b0004f9d4eb178cbe7dc5821b
-      internalID: -620375809
+      spriteID: cd9c82bbd7c2ba24fb0ca774a390f579
+      internalID: 1201367680
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_7
+      name: retro_brille_12
       rect:
         serializedVersion: 2
-        x: 1
-        y: 210
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 40bc4f13df505af44aa9f8a91a2cbd5c
-      internalID: -719154692
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_8
-      rect:
-        serializedVersion: 2
-        x: 17
-        y: 210
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b9720db8df058ab41894d5951f95fc40
-      internalID: 1203724558
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_9
-      rect:
-        serializedVersion: 2
-        x: 33
-        y: 210
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: aab83d9554bd38c42b490ebe7b3e9f65
-      internalID: 193466562
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_10
-      rect:
-        serializedVersion: 2
-        x: 49
-        y: 210
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 013f554e22de2354da1a4e15f9b712f3
-      internalID: -2065191516
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_12
-      rect:
-        serializedVersion: 2
-        x: 113
-        y: 211
-        width: 14
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 48dbba15fc7ce374ba693b1f586ad412
-      internalID: 185111425
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_13
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 178
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 362e34c476b775e4193ee74bdf8eba94
-      internalID: 148528448
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_14
-      rect:
-        serializedVersion: 2
-        x: 17
-        y: 178
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 80c0c97f5cc2116478033b04e670ef2f
-      internalID: -501061608
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_15
-      rect:
-        serializedVersion: 2
-        x: 33
-        y: 178
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9ef03e8251ca58042abf1b3143700650
-      internalID: -1105981106
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_16
-      rect:
-        serializedVersion: 2
-        x: 49
-        y: 178
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dbde12eb841f1e2419bd3fc40118c94d
-      internalID: 1020371084
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_17
-      rect:
-        serializedVersion: 2
-        x: 81
-        y: 177
-        width: 14
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 67bf582b424260643acc870f4add93ba
-      internalID: 334431449
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_18
-      rect:
-        serializedVersion: 2
-        x: 97
-        y: 178
-        width: 14
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 99f4d948a3972b64c8294be030af8801
-      internalID: 969116144
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_19
-      rect:
-        serializedVersion: 2
-        x: 114
-        y: 179
-        width: 12
-        height: 6
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 443d930bc9a96424686c4b8266308a4a
-      internalID: 1539573904
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_20
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 146
-        width: 15
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2a86cf207a6303049af4dd349eca9b2b
-      internalID: -1219928711
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_21
-      rect:
-        serializedVersion: 2
-        x: 17
-        y: 146
-        width: 15
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 09c4b5621b1a51c4480f6f0eb5dd1d24
-      internalID: 305444238
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_22
-      rect:
-        serializedVersion: 2
-        x: 33
-        y: 146
-        width: 15
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a702509026fd3e24eb091d6079ca89b2
-      internalID: 1904703297
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_23
-      rect:
-        serializedVersion: 2
-        x: 49
-        y: 146
-        width: 15
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f4b441fe8bdb54f4a92207168143d56c
-      internalID: -174430151
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_24
-      rect:
-        serializedVersion: 2
-        x: 79
-        y: 143
-        width: 11
-        height: 11
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 78713a9e833e18440b16cfaa99c6b597
-      internalID: -1794911534
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_25
-      rect:
-        serializedVersion: 2
-        x: 97
-        y: 147
-        width: 15
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 53e4e6d06ca48b445a5f23d68e2af5f9
-      internalID: 1214131006
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_26
-      rect:
-        serializedVersion: 2
-        x: 114
-        y: 147
-        width: 15
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9e1c2ecb79d35f44c9ab9c567479f9c3
-      internalID: 1158704841
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_11
-      rect:
-        serializedVersion: 2
-        x: 86
+        x: 102
         y: 207
-        width: 11
-        height: 11
+        width: 8
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -664,20 +370,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d931c29ab61493f46ba661e9ba97df7e
-      internalID: 137811719
+      spriteID: 13a9f76659a80a240b6d36ea9fc9b2f5
+      internalID: -1584443807
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_27
+      name: retro_brille_13
       rect:
         serializedVersion: 2
-        x: 97
-        y: 211
-        width: 14
-        height: 7
+        x: 121
+        y: 207
+        width: 5
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -685,8 +391,155 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 524b5754b010d224a9582b4ba9debc86
-      internalID: 1206795266
+      spriteID: 04d696cfd0a1b1549b988c60009b587c
+      internalID: 39696272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_14
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 142
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5e7c1803c8c17446b8a179c2f0ce95f
+      internalID: 99023392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_15
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 142
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab5a917277666c54abf01c1e4b7d02da
+      internalID: 136605707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_16
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 142
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49cbe9da8f4fe42408ed94ae45e534e3
+      internalID: 817778952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_17
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 142
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee7419b0f4fd37947b36308b6725db18
+      internalID: 1228774524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_18
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 141
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7da0d7c194dd9f148ba1a8fb24714c9b
+      internalID: -185589672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_19
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 143
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cda26b4bbeaf8674697fe2025ae2dbfa
+      internalID: 207034508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_20
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 143
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8458ea3d7fb2bd44b160cf0172fc002
+      internalID: -1319268246
       vertices: []
       indices: 
       edges: []
@@ -694,7 +547,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 38874a8edc4811b4aa6e57ad3c591f7c
+    spriteID: c0a1093df5ba3ad499403ea456f1c4a1
     internalID: 0
     vertices: []
     indices: 
@@ -702,34 +555,27 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      schutzhelm_26: 1158704841
-      schutzhelm_27: 1206795266
-      schutzhelm_24: -1794911534
-      schutzhelm_3: 320587213
-      schutzhelm_1: -1372576053
-      schutzhelm_18: 969116144
-      schutzhelm_7: -719154692
-      schutzhelm_16: 1020371084
-      schutzhelm_23: -174430151
-      schutzhelm_14: -501061608
-      schutzhelm_5: -1255359897
-      schutzhelm_17: 334431449
-      schutzhelm_19: 1539573904
-      schutzhelm_0: -1109539251
-      schutzhelm_22: 1904703297
-      schutzhelm_20: -1219928711
-      schutzhelm_9: 193466562
-      schutzhelm_10: -2065191516
-      schutzhelm_25: 1214131006
-      schutzhelm_15: -1105981106
-      schutzhelm_4: -535273486
-      schutzhelm_6: -620375809
-      schutzhelm_2: 804035028
-      schutzhelm_13: 148528448
-      schutzhelm_21: 305444238
-      schutzhelm_8: 1203724558
-      schutzhelm_12: 185111425
-      schutzhelm_11: 137811719
+      retro_brille_7: 639834362
+      retro_brille_12: -1584443807
+      retro_brille_0: -168136856
+      retro_brille_5: 1870995508
+      retro_brille_6: 37871096
+      retro_brille_1: -2101759446
+      retro_brille_4: -1429008682
+      retro_brille_2: 184380367
+      retro_brille_19: 207034508
+      retro_brille_8: 1744409336
+      retro_brille_16: 817778952
+      retro_brille_10: -1617719104
+      retro_brille_15: 136605707
+      retro_brille_3: -1844280178
+      retro_brille_9: 1853443788
+      retro_brille_18: -185589672
+      retro_brille_11: 1201367680
+      retro_brille_13: 39696272
+      retro_brille_17: 1228774524
+      retro_brille_14: 99023392
+      retro_brille_20: -1319268246
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

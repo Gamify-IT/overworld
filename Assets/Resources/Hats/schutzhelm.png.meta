@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1b3524aba97c1724da3395d0e5c33ce6
+guid: 4eb2d839870b8cc4ca4a688492618e36
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -702,7 +702,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      schutzhelm_26: 1158704841
+      schutzhelm_11: 137811719
       schutzhelm_27: 1206795266
       schutzhelm_24: -1794911534
       schutzhelm_3: 320587213
@@ -728,8 +728,8 @@ TextureImporter:
       schutzhelm_13: 148528448
       schutzhelm_21: 305444238
       schutzhelm_8: 1203724558
+      schutzhelm_26: 1158704841
       schutzhelm_12: 185111425
-      schutzhelm_11: 137811719
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1b3524aba97c1724da3395d0e5c33ce6
+guid: 4888974818298e046b592bbca58caeb0
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -104,13 +104,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: schutzhelm_0
+      name: globus_7
       rect:
         serializedVersion: 2
-        x: 1
-        y: 241
-        width: 14
-        height: 8
+        x: 93
+        y: 57
+        width: 16
+        height: 20
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -118,20 +118,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 561f21a4e9409d849bd2d8c0fcc1e62b
-      internalID: -1109539251
+      spriteID: 5f8110fe7c59aae468be8eed6c4296ec
+      internalID: 497474590
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_1
+      name: globus_8
       rect:
         serializedVersion: 2
-        x: 17
-        y: 241
-        width: 14
-        height: 8
+        x: 110
+        y: 60
+        width: 16
+        height: 20
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -139,20 +139,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1632f9e749350164a87febf08a4b79fb
-      internalID: -1372576053
+      spriteID: eeecc1b22cff26f4b9e742fba853abde
+      internalID: -2024256295
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_2
+      name: globus_9
       rect:
         serializedVersion: 2
-        x: 33
-        y: 241
-        width: 14
-        height: 8
+        x: 127
+        y: 60
+        width: 16
+        height: 20
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -160,20 +160,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8dc25c7c9d5414c4bbc30196a43f0c77
-      internalID: 804035028
+      spriteID: 916437fa40adc4c459e4eb76965ed751
+      internalID: -502074223
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_3
+      name: globus_0
       rect:
         serializedVersion: 2
-        x: 49
-        y: 241
-        width: 14
-        height: 8
+        x: 14
+        y: 232
+        width: 16
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -181,20 +181,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dac72a46260892142a86bca54ebf21f6
-      internalID: 320587213
+      spriteID: 9f6551f017692814b84599e7f401d0a1
+      internalID: 652875084
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_4
+      name: globus_1
       rect:
         serializedVersion: 2
-        x: 81
-        y: 240
-        width: 14
-        height: 7
+        x: 30
+        y: 232
+        width: 16
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -202,20 +202,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 109e9fb93fdb3a0459ebe7bb52bca928
-      internalID: -535273486
+      spriteID: c7a0127b8d135fe4faa13bf827388226
+      internalID: -726944803
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_5
+      name: globus_2
       rect:
         serializedVersion: 2
-        x: 97
-        y: 242
-        width: 14
-        height: 7
+        x: 46
+        y: 232
+        width: 16
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -223,20 +223,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2fc191627a13ae4428c408408685dd10
-      internalID: -1255359897
+      spriteID: 03c6b40f741af9b4199060dbd1c5a538
+      internalID: 1915046671
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_6
+      name: globus_3
       rect:
         serializedVersion: 2
-        x: 114
-        y: 243
-        width: 12
-        height: 6
+        x: 62
+        y: 232
+        width: 16
+        height: 19
+      alignment: 9
+      pivot: {x: 0.48602915, y: 0.4254871}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a05dbf1dd53cfb46a1fa23f9ce1763c
+      internalID: -1930963753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: globus_4
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 231
+        width: 16
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -244,20 +265,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6859061b0004f9d4eb178cbe7dc5821b
-      internalID: -620375809
+      spriteID: ee2ad49a07ec0cf4e8fba8b27c1bd43e
+      internalID: -614020633
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_7
+      name: globus_5
       rect:
         serializedVersion: 2
-        x: 1
-        y: 210
-        width: 14
-        height: 8
+        x: 110
+        y: 233
+        width: 16
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -265,20 +286,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 40bc4f13df505af44aa9f8a91a2cbd5c
-      internalID: -719154692
+      spriteID: 6c45880ae74708d498274c74a2f04b4a
+      internalID: 1184844111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_8
+      name: globus_6
       rect:
         serializedVersion: 2
-        x: 17
-        y: 210
-        width: 14
-        height: 8
+        x: 126
+        y: 233
+        width: 16
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -286,20 +307,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b9720db8df058ab41894d5951f95fc40
-      internalID: 1203724558
+      spriteID: 577fa6ad014a50c47bccaf05fc4057aa
+      internalID: -1383758627
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_9
+      name: globus_10
       rect:
         serializedVersion: 2
-        x: 33
-        y: 210
-        width: 14
-        height: 8
+        x: 15
+        y: 176
+        width: 16
+        height: 21
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -307,20 +328,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aab83d9554bd38c42b490ebe7b3e9f65
-      internalID: 193466562
+      spriteID: 67886fe4fab58984a9b6be1f91bdadb6
+      internalID: -1379221310
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_10
+      name: globus_11
       rect:
         serializedVersion: 2
-        x: 49
-        y: 210
-        width: 14
-        height: 8
+        x: 31
+        y: 176
+        width: 16
+        height: 21
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -328,20 +349,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 013f554e22de2354da1a4e15f9b712f3
-      internalID: -2065191516
+      spriteID: c2679d6fbd87a8b4fb0dfe3a7c46c76a
+      internalID: 1722667123
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_12
+      name: globus_12
       rect:
         serializedVersion: 2
-        x: 113
-        y: 211
-        width: 14
-        height: 7
+        x: 47
+        y: 176
+        width: 16
+        height: 21
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -349,20 +370,62 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 48dbba15fc7ce374ba693b1f586ad412
-      internalID: 185111425
+      spriteID: 726f9b5a4a81d5745bb900159483a21d
+      internalID: 1834630759
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_13
+      name: globus_13
       rect:
         serializedVersion: 2
-        x: 1
+        x: 63
+        y: 176
+        width: 16
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83903f3a535250740aedefd278a5eb07
+      internalID: 220431378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: globus_14
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 176
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae7234b50d2bca74895c5b1aa271a649
+      internalID: 1240490944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: globus_15
+      rect:
+        serializedVersion: 2
+        x: 111
         y: 178
-        width: 14
-        height: 8
+        width: 16
+        height: 20
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -370,20 +433,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 362e34c476b775e4193ee74bdf8eba94
-      internalID: 148528448
+      spriteID: 3360f004891df764989b9e386a5eeb49
+      internalID: -357918876
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_14
+      name: globus_16
       rect:
         serializedVersion: 2
-        x: 17
+        x: 127
         y: 178
-        width: 14
-        height: 8
+        width: 16
+        height: 20
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -391,20 +454,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80c0c97f5cc2116478033b04e670ef2f
-      internalID: -501061608
+      spriteID: 7d5c810b208e15c47a0698fa684ef424
+      internalID: -389807028
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_15
+      name: globus_17
       rect:
         serializedVersion: 2
-        x: 33
-        y: 178
-        width: 14
-        height: 8
+        x: 15
+        y: 118
+        width: 16
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -412,20 +475,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9ef03e8251ca58042abf1b3143700650
-      internalID: -1105981106
+      spriteID: 45aef6e10a8e40f41a13c0ad6fd64e15
+      internalID: -1964883001
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_16
+      name: globus_18
       rect:
         serializedVersion: 2
-        x: 49
-        y: 178
-        width: 14
-        height: 8
+        x: 31
+        y: 118
+        width: 16
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -433,20 +496,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dbde12eb841f1e2419bd3fc40118c94d
-      internalID: 1020371084
+      spriteID: 35c58b01ae9110c48a99b85b6ac45a4f
+      internalID: 666702971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_17
+      name: globus_19
       rect:
         serializedVersion: 2
-        x: 81
-        y: 177
-        width: 14
-        height: 7
+        x: 47
+        y: 118
+        width: 16
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -454,20 +517,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 67bf582b424260643acc870f4add93ba
-      internalID: 334431449
+      spriteID: 94fbdd4781aeda641834b226f9ad3bab
+      internalID: 932404535
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_18
+      name: globus_20
       rect:
         serializedVersion: 2
-        x: 97
-        y: 178
-        width: 14
-        height: 7
+        x: 63
+        y: 118
+        width: 16
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -475,20 +538,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 99f4d948a3972b64c8294be030af8801
-      internalID: 969116144
+      spriteID: 2db65b9ba9f82f742a4aa924e0232c53
+      internalID: -1007354716
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_19
+      name: globus_21
       rect:
         serializedVersion: 2
-        x: 114
-        y: 179
-        width: 12
-        height: 6
+        x: 95
+        y: 118
+        width: 16
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -496,20 +559,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 443d930bc9a96424686c4b8266308a4a
-      internalID: 1539573904
+      spriteID: fc5e916018838c7429cbdf839902734b
+      internalID: 2083350513
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_20
+      name: globus_22
       rect:
         serializedVersion: 2
-        x: 1
-        y: 146
-        width: 15
-        height: 8
+        x: 111
+        y: 118
+        width: 16
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -517,20 +580,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2a86cf207a6303049af4dd349eca9b2b
-      internalID: -1219928711
+      spriteID: 1e33f8fb28e80434ca51bfa27fe549ae
+      internalID: 445444916
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_21
+      name: globus_23
       rect:
         serializedVersion: 2
-        x: 17
-        y: 146
-        width: 15
-        height: 8
+        x: 127
+        y: 118
+        width: 16
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -538,20 +601,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 09c4b5621b1a51c4480f6f0eb5dd1d24
-      internalID: 305444238
+      spriteID: e80a479077fc20b4695dbd81b5c30c56
+      internalID: -641441980
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_22
+      name: globus_24
       rect:
         serializedVersion: 2
-        x: 33
-        y: 146
-        width: 15
-        height: 8
+        x: 14
+        y: 59
+        width: 16
+        height: 21
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -559,20 +622,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a702509026fd3e24eb091d6079ca89b2
-      internalID: 1904703297
+      spriteID: c71dadaef78225540a0af42534d54c1e
+      internalID: 1275799176
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_23
+      name: globus_25
       rect:
         serializedVersion: 2
-        x: 49
-        y: 146
-        width: 15
-        height: 8
+        x: 30
+        y: 59
+        width: 16
+        height: 21
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -580,20 +643,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f4b441fe8bdb54f4a92207168143d56c
-      internalID: -174430151
+      spriteID: 0f6f2ca7b8f56aa46a825899d150ed74
+      internalID: -1346707176
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_24
+      name: globus_26
       rect:
         serializedVersion: 2
-        x: 79
-        y: 143
-        width: 11
-        height: 11
+        x: 46
+        y: 59
+        width: 16
+        height: 21
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -601,20 +664,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 78713a9e833e18440b16cfaa99c6b597
-      internalID: -1794911534
+      spriteID: c75de0d6ad518594595e2e86e9885eba
+      internalID: 377339537
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_25
+      name: globus_27
       rect:
         serializedVersion: 2
-        x: 97
-        y: 147
-        width: 15
-        height: 7
+        x: 62
+        y: 59
+        width: 16
+        height: 21
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -622,71 +685,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 53e4e6d06ca48b445a5f23d68e2af5f9
-      internalID: 1214131006
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_26
-      rect:
-        serializedVersion: 2
-        x: 114
-        y: 147
-        width: 15
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9e1c2ecb79d35f44c9ab9c567479f9c3
-      internalID: 1158704841
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_11
-      rect:
-        serializedVersion: 2
-        x: 86
-        y: 207
-        width: 11
-        height: 11
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d931c29ab61493f46ba661e9ba97df7e
-      internalID: 137811719
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_27
-      rect:
-        serializedVersion: 2
-        x: 97
-        y: 211
-        width: 14
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 524b5754b010d224a9582b4ba9debc86
-      internalID: 1206795266
+      spriteID: 011e9da8495caba4997bd91fa7564202
+      internalID: -1249046285
       vertices: []
       indices: 
       edges: []
@@ -694,7 +694,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 38874a8edc4811b4aa6e57ad3c591f7c
+    spriteID: 061304a633ee2d640a329c1ba3cfd75e
     internalID: 0
     vertices: []
     indices: 
@@ -702,34 +702,34 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      schutzhelm_26: 1158704841
-      schutzhelm_27: 1206795266
-      schutzhelm_24: -1794911534
-      schutzhelm_3: 320587213
-      schutzhelm_1: -1372576053
-      schutzhelm_18: 969116144
-      schutzhelm_7: -719154692
-      schutzhelm_16: 1020371084
-      schutzhelm_23: -174430151
-      schutzhelm_14: -501061608
-      schutzhelm_5: -1255359897
-      schutzhelm_17: 334431449
-      schutzhelm_19: 1539573904
-      schutzhelm_0: -1109539251
-      schutzhelm_22: 1904703297
-      schutzhelm_20: -1219928711
-      schutzhelm_9: 193466562
-      schutzhelm_10: -2065191516
-      schutzhelm_25: 1214131006
-      schutzhelm_15: -1105981106
-      schutzhelm_4: -535273486
-      schutzhelm_6: -620375809
-      schutzhelm_2: 804035028
-      schutzhelm_13: 148528448
-      schutzhelm_21: 305444238
-      schutzhelm_8: 1203724558
-      schutzhelm_12: 185111425
-      schutzhelm_11: 137811719
+      globus_18: 666702971
+      globus_27: -1249046285
+      globus_4: -614020633
+      globus_24: 1275799176
+      globus_19: 932404535
+      globus_7: 497474590
+      globus_10: -1379221310
+      globus_15: -357918876
+      globus_11: 1722667123
+      globus_26: 377339537
+      globus_13: 220431378
+      globus_0: 652875084
+      globus_6: -1383758627
+      globus_12: 1834630759
+      globus_16: -389807028
+      globus_3: -1930963753
+      globus_5: 1184844111
+      globus_1: -726944803
+      globus_9: -502074223
+      globus_23: -641441980
+      globus_14: 1240490944
+      globus_8: -2024256295
+      globus_20: -1007354716
+      globus_2: 1915046671
+      globus_25: -1346707176
+      globus_21: 2083350513
+      globus_22: 445444916
+      globus_17: -1964883001
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

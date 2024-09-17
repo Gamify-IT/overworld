@@ -7,9 +7,18 @@ using UnityEngine.U2D;
 public class CharacterSelection : MonoBehaviour
 {
     private Image characterImage;
+    private Image glassesImage;
     private Sprite character;
+    private Sprite glasses;
     private int numberOfCharacters = 3;
-    private int currentIndex = 0;
+    private int numberOfGlasses = 4;
+    private int numberOfHats = 2;
+
+    private int currentIndex = 0; 
+    private int currentGlasses = 0;
+    private int currentHat = 0;
+
+
     [SerializeField] private GameObject[] characterPrefabs;
     
 
@@ -28,8 +37,12 @@ public class CharacterSelection : MonoBehaviour
         //get the index of the currently selected character 
         currentIndex = DataManager.Instance.GetCharacterIndex();
 
+        glassesImage = GameObject.Find("Glasses Sprite").GetComponent<Image>();
+        currentGlasses = DataManager.Instance.GetGlassesIndex();
+
+
         //get AudioSource component
-        audioSource=GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
         //add AudioSource component if necessary
         if(audioSource == null)
         {
@@ -47,6 +60,10 @@ public class CharacterSelection : MonoBehaviour
     {
         character = Resources.Load<Sprite>("characters/character" + (currentIndex % numberOfCharacters));
         characterImage.sprite = character;
+
+        glasses = Resources.Load<Sprite>("glasses/brille" + (currentGlasses % numberOfGlasses));
+        glassesImage.sprite = glasses;
+
     }
 
     /// <summary>
@@ -59,6 +76,17 @@ public class CharacterSelection : MonoBehaviour
         currentIndex = Modulo(currentIndex - 1, numberOfCharacters);
     }
 
+
+    /// <summary>
+    /// This function is called by the <c>Previous Character Button</c>.
+    /// This function switches to the previous character.
+    /// </summary>
+    public void Previousglasses()
+    {
+        PlayClickSound();
+        currentGlasses = Modulo(currentGlasses - 1, numberOfGlasses);
+    }
+
     /// <summary>
     /// This function is called by the <c>Next Character Button</c>.
     /// This function switches to the next character.
@@ -67,6 +95,16 @@ public class CharacterSelection : MonoBehaviour
     {
         PlayClickSound();
         currentIndex = Modulo(currentIndex + 1, numberOfCharacters);
+    }
+
+    /// <summary>
+    /// This function is called by the <c>Next Character Button</c>.
+    /// This function switches to the next character.
+    /// </summary>
+    public void Nextglasses()
+    {
+        PlayClickSound();
+        currentGlasses = Modulo(currentGlasses + 1, numberOfGlasses);
     }
 
     /// <summary>

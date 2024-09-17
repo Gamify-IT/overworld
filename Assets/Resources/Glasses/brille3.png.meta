@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1b3524aba97c1724da3395d0e5c33ce6
+guid: 6e0f125ccfebdc84a9e6b930b4d8174b
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -104,13 +104,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: schutzhelm_0
+      name: herzbrille_0
       rect:
         serializedVersion: 2
         x: 1
-        y: 241
+        y: 238
         width: 14
-        height: 8
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -118,20 +118,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 561f21a4e9409d849bd2d8c0fcc1e62b
-      internalID: -1109539251
+      spriteID: 60e65f7643244714596a59c8422a38e7
+      internalID: 2028286175
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_1
+      name: herzbrille_1
       rect:
         serializedVersion: 2
         x: 17
-        y: 241
+        y: 238
         width: 14
-        height: 8
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -139,20 +139,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1632f9e749350164a87febf08a4b79fb
-      internalID: -1372576053
+      spriteID: db4ce858a621a3c46b792011a69802be
+      internalID: 1947087751
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_2
+      name: herzbrille_2
       rect:
         serializedVersion: 2
         x: 33
-        y: 241
+        y: 238
         width: 14
-        height: 8
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -160,20 +160,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8dc25c7c9d5414c4bbc30196a43f0c77
-      internalID: 804035028
+      spriteID: 41ed8c42ed25143489e0100851951f82
+      internalID: -1678797801
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_3
+      name: herzbrille_3
       rect:
         serializedVersion: 2
         x: 49
-        y: 241
+        y: 238
         width: 14
-        height: 8
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -181,20 +181,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dac72a46260892142a86bca54ebf21f6
-      internalID: 320587213
+      spriteID: 9b9eae48dc1700749b853bb9fd4230ff
+      internalID: 696137378
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_4
+      name: herzbrille_4
       rect:
         serializedVersion: 2
         x: 81
-        y: 240
+        y: 237
         width: 14
-        height: 7
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -202,20 +202,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 109e9fb93fdb3a0459ebe7bb52bca928
-      internalID: -535273486
+      spriteID: fe8c6ed63d40edb48a4fdffcb7915f8d
+      internalID: 1175869763
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_5
+      name: herzbrille_5
       rect:
         serializedVersion: 2
         x: 97
-        y: 242
+        y: 239
         width: 14
-        height: 7
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -223,20 +223,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2fc191627a13ae4428c408408685dd10
-      internalID: -1255359897
+      spriteID: ba8a35c3a41193845878d2f2ddc5568a
+      internalID: -2060137975
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_6
+      name: herzbrille_6
       rect:
         serializedVersion: 2
-        x: 114
-        y: 243
-        width: 12
-        height: 6
+        x: 116
+        y: 239
+        width: 8
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -244,20 +244,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6859061b0004f9d4eb178cbe7dc5821b
-      internalID: -620375809
+      spriteID: 36f01740d54f83f429ee48466172f7cf
+      internalID: -1045049962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_7
+      name: herzbrille_7
       rect:
         serializedVersion: 2
-        x: 1
-        y: 210
-        width: 14
-        height: 8
+        x: 5
+        y: 206
+        width: 9
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -265,20 +265,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 40bc4f13df505af44aa9f8a91a2cbd5c
-      internalID: -719154692
+      spriteID: 6decbc44403041945b31b90fbe817ae2
+      internalID: 665300240
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_8
+      name: herzbrille_8
       rect:
         serializedVersion: 2
-        x: 17
-        y: 210
-        width: 14
-        height: 8
+        x: 21
+        y: 206
+        width: 9
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -286,20 +286,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b9720db8df058ab41894d5951f95fc40
-      internalID: 1203724558
+      spriteID: 1c2b382ae4a40ee48b0f85f0786ca4c7
+      internalID: 853134740
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_9
+      name: herzbrille_9
       rect:
         serializedVersion: 2
-        x: 33
-        y: 210
-        width: 14
-        height: 8
+        x: 37
+        y: 206
+        width: 9
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -307,20 +307,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aab83d9554bd38c42b490ebe7b3e9f65
-      internalID: 193466562
+      spriteID: 8a570ff2826273f4ca7bbfeea5ddfec4
+      internalID: 1244187718
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_10
+      name: herzbrille_10
       rect:
         serializedVersion: 2
-        x: 49
-        y: 210
-        width: 14
-        height: 8
+        x: 53
+        y: 206
+        width: 9
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -328,335 +328,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 013f554e22de2354da1a4e15f9b712f3
-      internalID: -2065191516
+      spriteID: cc0050c8de91dfc4fa1806d6704849b6
+      internalID: 1521814445
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_12
-      rect:
-        serializedVersion: 2
-        x: 113
-        y: 211
-        width: 14
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 48dbba15fc7ce374ba693b1f586ad412
-      internalID: 185111425
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_13
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 178
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 362e34c476b775e4193ee74bdf8eba94
-      internalID: 148528448
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_14
-      rect:
-        serializedVersion: 2
-        x: 17
-        y: 178
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 80c0c97f5cc2116478033b04e670ef2f
-      internalID: -501061608
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_15
-      rect:
-        serializedVersion: 2
-        x: 33
-        y: 178
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9ef03e8251ca58042abf1b3143700650
-      internalID: -1105981106
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_16
-      rect:
-        serializedVersion: 2
-        x: 49
-        y: 178
-        width: 14
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dbde12eb841f1e2419bd3fc40118c94d
-      internalID: 1020371084
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_17
-      rect:
-        serializedVersion: 2
-        x: 81
-        y: 177
-        width: 14
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 67bf582b424260643acc870f4add93ba
-      internalID: 334431449
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_18
-      rect:
-        serializedVersion: 2
-        x: 97
-        y: 178
-        width: 14
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 99f4d948a3972b64c8294be030af8801
-      internalID: 969116144
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_19
-      rect:
-        serializedVersion: 2
-        x: 114
-        y: 179
-        width: 12
-        height: 6
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 443d930bc9a96424686c4b8266308a4a
-      internalID: 1539573904
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_20
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 146
-        width: 15
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2a86cf207a6303049af4dd349eca9b2b
-      internalID: -1219928711
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_21
-      rect:
-        serializedVersion: 2
-        x: 17
-        y: 146
-        width: 15
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 09c4b5621b1a51c4480f6f0eb5dd1d24
-      internalID: 305444238
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_22
-      rect:
-        serializedVersion: 2
-        x: 33
-        y: 146
-        width: 15
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a702509026fd3e24eb091d6079ca89b2
-      internalID: 1904703297
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_23
-      rect:
-        serializedVersion: 2
-        x: 49
-        y: 146
-        width: 15
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f4b441fe8bdb54f4a92207168143d56c
-      internalID: -174430151
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_24
-      rect:
-        serializedVersion: 2
-        x: 79
-        y: 143
-        width: 11
-        height: 11
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 78713a9e833e18440b16cfaa99c6b597
-      internalID: -1794911534
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_25
-      rect:
-        serializedVersion: 2
-        x: 97
-        y: 147
-        width: 15
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 53e4e6d06ca48b445a5f23d68e2af5f9
-      internalID: 1214131006
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_26
-      rect:
-        serializedVersion: 2
-        x: 114
-        y: 147
-        width: 15
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9e1c2ecb79d35f44c9ab9c567479f9c3
-      internalID: 1158704841
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: schutzhelm_11
+      name: herzbrille_11
       rect:
         serializedVersion: 2
         x: 86
-        y: 207
-        width: 11
-        height: 11
+        y: 206
+        width: 7
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -664,20 +349,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d931c29ab61493f46ba661e9ba97df7e
-      internalID: 137811719
+      spriteID: eccb71b10f5136049ac041067a68afff
+      internalID: 122610204
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: schutzhelm_27
+      name: herzbrille_12
       rect:
         serializedVersion: 2
-        x: 97
-        y: 211
-        width: 14
-        height: 7
+        x: 101
+        y: 207
+        width: 9
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -685,8 +370,176 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 524b5754b010d224a9582b4ba9debc86
-      internalID: 1206795266
+      spriteID: 86d2dd52bca5d0c4b952884214662f97
+      internalID: -287649843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzbrille_13
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 207
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 814593ba116ff7f489d4b9dc46daa301
+      internalID: -937620915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzbrille_14
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 142
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2988eafffeb0924fad6b593e5065759
+      internalID: -1696319168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzbrille_15
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 142
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47936ad3c635dd84992080cf24cd2215
+      internalID: -971298177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzbrille_16
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 142
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3bd63407c1c0dbe429441afafc895984
+      internalID: -479791818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzbrille_17
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 142
+        width: 9
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a04e6bab20b692c47a09e14f64c2b33f
+      internalID: 1646169661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzbrille_18
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 142
+        width: 7
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 007e57c4d1c2bf54f9908889cd415893
+      internalID: -1605963534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzbrille_19
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 143
+        width: 9
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7ef8585ea9b2694897b9f3b068f031e
+      internalID: -2120487036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzbrille_20
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 143
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5784a862cd4244f4493131868c3e2d84
+      internalID: 2047046513
       vertices: []
       indices: 
       edges: []
@@ -694,7 +547,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 38874a8edc4811b4aa6e57ad3c591f7c
+    spriteID: af6c0c7a9fe99004ea93e746ad34c446
     internalID: 0
     vertices: []
     indices: 
@@ -702,34 +555,27 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      schutzhelm_26: 1158704841
-      schutzhelm_27: 1206795266
-      schutzhelm_24: -1794911534
-      schutzhelm_3: 320587213
-      schutzhelm_1: -1372576053
-      schutzhelm_18: 969116144
-      schutzhelm_7: -719154692
-      schutzhelm_16: 1020371084
-      schutzhelm_23: -174430151
-      schutzhelm_14: -501061608
-      schutzhelm_5: -1255359897
-      schutzhelm_17: 334431449
-      schutzhelm_19: 1539573904
-      schutzhelm_0: -1109539251
-      schutzhelm_22: 1904703297
-      schutzhelm_20: -1219928711
-      schutzhelm_9: 193466562
-      schutzhelm_10: -2065191516
-      schutzhelm_25: 1214131006
-      schutzhelm_15: -1105981106
-      schutzhelm_4: -535273486
-      schutzhelm_6: -620375809
-      schutzhelm_2: 804035028
-      schutzhelm_13: 148528448
-      schutzhelm_21: 305444238
-      schutzhelm_8: 1203724558
-      schutzhelm_12: 185111425
-      schutzhelm_11: 137811719
+      herzbrille_10: 1521814445
+      herzbrille_13: -937620915
+      herzbrille_11: 122610204
+      herzbrille_18: -1605963534
+      herzbrille_7: 665300240
+      herzbrille_8: 853134740
+      herzbrille_2: -1678797801
+      herzbrille_16: -479791818
+      herzbrille_5: -2060137975
+      herzbrille_19: -2120487036
+      herzbrille_4: 1175869763
+      herzbrille_9: 1244187718
+      herzbrille_6: -1045049962
+      herzbrille_14: -1696319168
+      herzbrille_0: 2028286175
+      herzbrille_20: 2047046513
+      herzbrille_17: 1646169661
+      herzbrille_15: -971298177
+      herzbrille_12: -287649843
+      herzbrille_3: 696137378
+      herzbrille_1: 1947087751
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
