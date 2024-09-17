@@ -183,6 +183,9 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
+       
+
+
         string playerPath = overworldBackendPath + "/players/" + userId;
 
         Optional<AchievementStatistic[]> achievementStatistics =
@@ -193,9 +196,6 @@ public class GameManager : MonoBehaviour
         }
 
        
-
-
-
 
         Optional<KeybindingDTO[]> keybindings =
             await RestRequest.GetArrayRequest<KeybindingDTO>(playerPath + "/keybindings");
@@ -210,13 +210,13 @@ public class GameManager : MonoBehaviour
             }
 
             DataManager.Instance.ReadTeleporterConfig();
+            DataManager.Instance.ProcessShopItem(shopItems.Value());
             DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
             DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
             DataManager.Instance.ProcessKeybindings(keybindings.Value());             
             DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());           
-            DataManager.Instance.ProcessShopItem(shopItems.Value());
 
         }
 
