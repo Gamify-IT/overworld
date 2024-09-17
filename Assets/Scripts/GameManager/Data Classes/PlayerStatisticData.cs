@@ -168,6 +168,7 @@ public class PlayerStatisticData
             
         }
 
+        return true;
       
     }
 
