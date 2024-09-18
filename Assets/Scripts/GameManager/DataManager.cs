@@ -36,6 +36,7 @@ public class DataManager : MonoBehaviour
     // player settings 
     private int characterIndex = 0;
     private int glassesIndex = 0;
+    private int hatIndex = 0;
     [SerializeField] private Sprite[] characterFaces;
 
 
@@ -1335,5 +1336,23 @@ public class DataManager : MonoBehaviour
     public void SetGlassesIndex(int index)
     {
         glassesIndex = index;
+    }
+
+    /// <summary>
+    /// Gets the character outfit index of the currently selected character outfit by the player
+    /// </summary>
+    /// <returns>index of the character outfit position in the array</returns>
+    public int GetHatIndex()
+    {
+        return hatIndex;
+    }
+
+    /// <summary>
+    /// Updates the character outfit index if the character is changed by the player
+    /// </summary>
+    /// <param name="index">index of the newly, selected character outfit</param>
+    public void SetHatIndex(int index)
+    {
+       hatIndex = index;
     }
 }

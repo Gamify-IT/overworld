@@ -8,19 +8,31 @@ public class CharacterSelection : MonoBehaviour
 {
     private Image characterImage;
     private Image glassesImage;
+    private Image hatImage;
     private Sprite character;
     private Sprite glasses;
-    private int numberOfCharacters = 3;
+    private Sprite hat;
+    private int numberOfCharacters = 9;
     private int numberOfGlasses = 4;
-    private int numberOfHats = 2;
+    private int numberOfHats = 3;
 
-    private int currentIndex = 0; 
+    private int currentIndex = 0;
     private int currentGlasses = 0;
     private int currentHat = 0;
 
+    public enum AccessoryType
+    {
+        Glasses,
+        Hat
+    }
+
+    private AccessoryType currentAccessoryType = AccessoryType.Glasses; // Start with Glasses
 
     [SerializeField] private GameObject[] characterPrefabs;
-    
+
+    // Add references to the buttons
+    public Button glassesButton;
+    public Button hatButton;
 
     public AudioClip clickSound;
     private AudioSource audioSource;
@@ -32,24 +44,27 @@ public class CharacterSelection : MonoBehaviour
     void Start()
     {
         GameManager.Instance.isPaused = true;
-        //get image component
+        // get image component
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
-        //get the index of the currently selected character 
         currentIndex = DataManager.Instance.GetCharacterIndex();
 
         glassesImage = GameObject.Find("Glasses Sprite").GetComponent<Image>();
         currentGlasses = DataManager.Instance.GetGlassesIndex();
 
+        hatImage = GameObject.Find("Hat Sprite").GetComponent<Image>();
+        currentHat = DataManager.Instance.GetHatIndex();
 
-        //get AudioSource component
+        // get AudioSource component
         audioSource = GetComponent<AudioSource>();
-        //add AudioSource component if necessary
-        if(audioSource == null)
+        if (audioSource == null)
         {
-            audioSource=gameObject.AddComponent<AudioSource>();
+            audioSource = gameObject.AddComponent<AudioSource>();
         }
-        //set audio clip
-        audioSource.clip=clickSound;
+        // set audio clip
+        audioSource.clip = clickSound;
+
+        // Initialize the button colors based on the starting accessory
+        UpdateButtonVisuals();
     }
 
     /// <summary>
@@ -58,17 +73,105 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     void Update()
     {
+        // Load and set character sprite
         character = Resources.Load<Sprite>("characters/character" + (currentIndex % numberOfCharacters));
         characterImage.sprite = character;
 
-        glasses = Resources.Load<Sprite>("glasses/brille" + (currentGlasses % numberOfGlasses));
-        glassesImage.sprite = glasses;
+        // Only show the accessory that is currently selected
+        if (currentAccessoryType == AccessoryType.Glasses)
+        {
+            glasses = Resources.Load<Sprite>("glasses/brille" + (currentGlasses % numberOfGlasses));
+            glassesImage.sprite = glasses;
+            glassesImage.color = Color.white; // Make glasses visible
 
+            hatImage.sprite = null; // Make hat invisible
+            hatImage.color = new Color(1, 1, 1, 0); // Transparent hat
+        }
+        else if (currentAccessoryType == AccessoryType.Hat)
+        {
+            hat = Resources.Load<Sprite>("hats/hat" + (currentHat % numberOfHats));
+            hatImage.sprite = hat;
+            hatImage.color = Color.white; // Make hat visible
+
+            glassesImage.sprite = null; // Make glasses invisible
+            glassesImage.color = new Color(1, 1, 1, 0); // Transparent glasses
+        }
     }
 
     /// <summary>
-    /// This function is called by the <c>Previous Character Button</c>.
-    /// This function switches to the previous character.
+    /// Switch to the previous accessory (glasses or hat depending on the current mode).
+    /// </summary>
+    public void PreviousAccessory()
+    {
+        if (currentAccessoryType == AccessoryType.Glasses)
+        {
+            Previousglasses();
+        }
+        else if (currentAccessoryType == AccessoryType.Hat)
+        {
+            PreviousHats();
+        }
+    }
+
+    /// <summary>
+    /// Switch to the next accessory (glasses or hat depending on the current mode).
+    /// </summary>
+    public void NextAccessory()
+    {
+        if (currentAccessoryType == AccessoryType.Glasses)
+        {
+            Nextglasses();
+        }
+        else if (currentAccessoryType == AccessoryType.Hat)
+        {
+            NextHats();
+        }
+    }
+
+    /// <summary>
+    /// Set the accessory mode to hats.
+    /// </summary>
+    public void SetAccessoryToHat()
+    {
+        currentAccessoryType = AccessoryType.Hat;
+        Update(); // Update immediately after switching
+        UpdateButtonVisuals(); // Update button visuals
+    }
+
+    /// <summary>
+    /// Set the accessory mode to glasses.
+    /// </summary>
+    public void SetAccessoryToGlasses()
+    {
+        currentAccessoryType = AccessoryType.Glasses;
+        Update(); // Update immediately after switching
+        UpdateButtonVisuals(); // Update button visuals
+    }
+
+    /// <summary>
+    /// Update the visuals of the buttons to indicate which accessory is active.
+    /// </summary>
+    private void UpdateButtonVisuals()
+    {
+        // Define a lighter color for the selected button and a darker color for the unselected button
+        Color selectedColor = new Color(1, 1, 1, 1); // Full opacity, white
+        Color unselectedColor = new Color(1, 1, 1, 0.5f); // 50% opacity, white
+
+        // Update button colors based on the current accessory type
+        if (currentAccessoryType == AccessoryType.Glasses)
+        {
+            glassesButton.image.color = selectedColor;
+            hatButton.image.color = unselectedColor;
+        }
+        else if (currentAccessoryType == AccessoryType.Hat)
+        {
+            hatButton.image.color = selectedColor;
+            glassesButton.image.color = unselectedColor;
+        }
+    }
+
+    /// <summary>
+    /// Switch to the previous character (left arrow).
     /// </summary>
     public void PreviousCharacter()
     {
@@ -76,20 +179,8 @@ public class CharacterSelection : MonoBehaviour
         currentIndex = Modulo(currentIndex - 1, numberOfCharacters);
     }
 
-
     /// <summary>
-    /// This function is called by the <c>Previous Character Button</c>.
-    /// This function switches to the previous character.
-    /// </summary>
-    public void Previousglasses()
-    {
-        PlayClickSound();
-        currentGlasses = Modulo(currentGlasses - 1, numberOfGlasses);
-    }
-
-    /// <summary>
-    /// This function is called by the <c>Next Character Button</c>.
-    /// This function switches to the next character.
+    /// Switch to the next character (right arrow).
     /// </summary>
     public void NextCharacter()
     {
@@ -98,8 +189,16 @@ public class CharacterSelection : MonoBehaviour
     }
 
     /// <summary>
-    /// This function is called by the <c>Next Character Button</c>.
-    /// This function switches to the next character.
+    /// Switch to the previous glasses.
+    /// </summary>
+    public void Previousglasses()
+    {
+        PlayClickSound();
+        currentGlasses = Modulo(currentGlasses - 1, numberOfGlasses);
+    }
+
+    /// <summary>
+    /// Switch to the next glasses.
     /// </summary>
     public void Nextglasses()
     {
@@ -108,8 +207,25 @@ public class CharacterSelection : MonoBehaviour
     }
 
     /// <summary>
-    /// This function is called by the <c>Select Character Button</c>.
-    /// This function switches to the selected character.
+    /// Switch to the previous hat.
+    /// </summary>
+    public void PreviousHats()
+    {
+        PlayClickSound();
+        currentHat = Modulo(currentHat - 1, numberOfHats);
+    }
+
+    /// <summary>
+    /// Switch to the next hat.
+    /// </summary>
+    public void NextHats()
+    {
+        PlayClickSound();
+        currentHat = Modulo(currentHat + 1, numberOfHats);
+    }
+
+    /// <summary>
+    /// Confirm the selected character and accessories.
     /// </summary>
     public void ConfirmButton()
     {
@@ -139,17 +255,15 @@ public class CharacterSelection : MonoBehaviour
         // adjust main camera
         PixelPerfectCamera newPixelCam = newPlayer.GetComponentInChildren<PixelPerfectCamera>();
         ZoomScript.Instance.ChangePixelCam(newPixelCam);
-        newPixelCam.refResolutionX = pixelCam.refResolutionX; 
+        newPixelCam.refResolutionX = pixelCam.refResolutionX;
         newPixelCam.refResolutionY = pixelCam.refResolutionY;
 
         GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1);
         PlayClickSound();
     }
 
-
     /// <summary>
-    /// This function is called by the <c>Navigation Buttons</c>.
-    /// This function plays the click sound.
+    /// Play the click sound.
     /// </summary>
     private void PlayClickSound()
     {
@@ -158,18 +272,13 @@ public class CharacterSelection : MonoBehaviour
             audioSource.PlayOneShot(clickSound);
         }
     }
-        
 
     /// <summary>
-    ///     This method realizes the modulo operator from modular arithmetic.
+    /// Realize the modulo operator for positive remainders.
     /// </summary>
-    /// <param name="a">arbitrary number</param>
-    /// <param name="b">modulus</param>
-    /// <returns>positive remainder</returns>
     private int Modulo(int a, int b)
     {
         int r = a % b;
         return r < 0 ? r + b : r;
     }
-
 }
