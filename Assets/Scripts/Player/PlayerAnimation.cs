@@ -237,6 +237,12 @@ public class PlayerAnimation : MonoBehaviour
                 targetSpeed = targetSpeed - superSpeed;
                 playerAnimator.speed = 1;
             }
+
+            /*if (Input.GetKeyDown("x"))
+            {
+                accessoireAnimator.runtimeAnimatorController = Resources.Load("AnimatorControllers/retro_brille") as RuntimeAnimatorController;
+                playerAnimator.runtimeAnimatorController = Resources.Load("AnimatorControllers/character_ironman") as RuntimeAnimatorController;
+            }*/
             // dev keybindings
 
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * 50);
@@ -261,6 +267,47 @@ public class PlayerAnimation : MonoBehaviour
         }
         timeInGameDuration = Time.time - timeInGameStart;
         UpdateAchievementForTimeInGame();
+    }
+
+    /// <summary>
+    ///     this function changes the animation of the character based on the outfit selected in the 
+    ///     character selection
+    /// </summary>
+    public void SetOutfitAnimator(String body, String head)
+    {
+        if (!validOutfits.Contains(body) || !validOutfits.Contains(head))
+        {
+            throw ArgumentException;
+        }
+
+        String bodyPath = "AnimatorControllers/" + body;
+        String headPath = "AnimatorControllers/" + head;
+        accessoireAnimator.runtimeAnimatorController = Resources.Load(headPath) as RuntimeAnimatorController;
+        playerAnimator.runtimeAnimatorController = Resources.Load(bodyPath) as RuntimeAnimatorController;
+
+        // TODO adjust offset from list
+        offset = offsets[head];
+        
+        
+    }
+
+    ArrayList<String> validOutfits = {"3D_brille", "blonde_haare", "character_anzug", "character_black_and_white", "character_blue_and_purple", "character_default", "character_ironman", 
+        "character_jeans_karo", "character_lange_haare", "character_santa", "character_trainingsanzug", "coole_brille", "flammen_haare", "globus_hut", "herzbrille", "retro_brille", "schutzhelm"};
+
+    IDictionary<String, Offset> offsets = {} // TODO fill with outfit offset pairs of the head accesoires
+
+    struct Coordinates
+    {
+        int x;
+        int y;
+        int z;
+    }
+
+    struct Offset
+    {
+        Coordinates position;
+        Coordinates Rotation;
+        Coordinates Scale;
     }
 
     /// <summary>
