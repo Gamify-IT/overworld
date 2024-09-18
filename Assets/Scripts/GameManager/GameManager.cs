@@ -882,40 +882,49 @@ private void PlayAchievementNotificationSound(){
 
     public ShopItem[] GetDummyShopItems()
     {
-        int itemCount = 9; 
+        int itemCount = 14; // Anzahl der Items
         ShopItem[] shopItems = new ShopItem[itemCount];
         System.Random random = new System.Random();
 
-        List<string> itemNames = new List<string> {
-        "Flame Hat", "Heart Glasses", "Globe Hat", "Suit", "Santa Costume",
-        "Cool Glasses", "Retro Glasses", "Safety Helmet", "Cinema Glasses"
+        // Die Werte für jedes Item
+        List<string> titles = new List<string> {
+        "FLAME_HAT", "HEART_GLASSES", "GLOBE_HAT", "SUIT", "SANTA_COSTUME",
+        "COOL_GLASSES", "RETRO_GLASSES", "SAFETY_HELMET", "CINEMA_GLASSES",
+        "IRONMAN", "SPORTS", "LONGHAIR", "BLUE_SHIRT", "BLONDE"
+    };
+
+        List<int> costs = new List<int> {
+        10, 2, 2, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1
     };
 
         List<string> imageNames = new List<string> {
-        "hat0", "glasses2", "hat1", "anzug", "santa",
-        "glasses1", "glasses3", "hat2", "glasses0"
+        "hat0", "glasses2", "hat1", "character4", "character9",
+        "glasses1", "glasses3", "hat2", "glasses0", "character6",
+        "character8", "character7", "character5", "character3"
     };
 
-        List<ShopItemCategory> categories = new List<ShopItemCategory> {
-        ShopItemCategory.ACCESSORIES, ShopItemCategory.ACCESSORIES, ShopItemCategory.ACCESSORIES,
-        ShopItemCategory.OUTFIT, ShopItemCategory.OUTFIT, ShopItemCategory.ACCESSORIES,
-        ShopItemCategory.ACCESSORIES, ShopItemCategory.ACCESSORIES, ShopItemCategory.ACCESSORIES
+        List<string> categories = new List<string> {
+        "ACCESSORIES", "ACCESSORIES", "ACCESSORIES", "OUTFIT", "OUTFIT",
+        "ACCESSORIES", "ACCESSORIES", "ACCESSORIES", "ACCESSORIES",
+        "ACCESSORIES", "OUTFIT", "OUTFIT", "OUTFIT", "OUTFIT"
     };
 
         for (int i = 0; i < itemCount; i++)
         {
-            string shopItemID = "ItemID" + (i + 1).ToString();
-            int cost = random.Next(1, 11); 
+            string title = titles[i];
+            int cost = costs[i];
             string imageName = imageNames[i];
-            ShopItemCategory category = categories[i]; 
-            bool bought = false; 
+            string category = categories[i];
+            bool bought = (i % 2 == 0); // Jedes zweite Item als gekauft markieren
 
-            ShopItem shopItem = new ShopItem(shopItemID, cost, imageName, category.ToString(), bought);
+            ShopItem shopItem = new ShopItem(title, cost, imageName, category, bought);
             shopItems[i] = shopItem;
         }
 
         return shopItems;
     }
+
+
 
 
 }

@@ -1,11 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using TMPro;
-using System;
-using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine.U2D;
-
+using System.Collections.Generic;
 
 public class CharacterSelection : MonoBehaviour
 {
@@ -21,7 +19,9 @@ public class CharacterSelection : MonoBehaviour
     private List<ShopItemData> shopItemData;
 
     [SerializeField] private TMP_Text descriptionAccessory;
-    [SerializeField] private GameObject lockImage; 
+    [SerializeField] private TMP_Text characterDescriptionText;
+    [SerializeField] private GameObject lockImageOutfit;
+    [SerializeField] private GameObject lockImage;
     [SerializeField] private GameObject[] characterPrefabs;
 
     public Button glassesButton;
@@ -52,13 +52,8 @@ public class CharacterSelection : MonoBehaviour
         shopItemData = DataManager.Instance.GetShopItems();
         GameManager.Instance.isPaused = true;
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
-        currentIndex = DataManager.Instance.GetCharacterIndex();
-
         glassesImage = GameObject.Find("Glasses Sprite").GetComponent<Image>();
-        currentGlasses = DataManager.Instance.GetGlassesIndex();
-
         hatImage = GameObject.Find("Hat Sprite").GetComponent<Image>();
-        currentHat = DataManager.Instance.GetHatIndex();
 
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
@@ -69,6 +64,9 @@ public class CharacterSelection : MonoBehaviour
 
         UpdateButtonVisuals();
         UpdateWarnings();
+        UpdateCharacterDisplay();  
+        CheckCharacterStatus();    
+        UpdateAccessoryDescriptions(); 
     }
 
     void Update()
@@ -76,6 +74,13 @@ public class CharacterSelection : MonoBehaviour
         character = Resources.Load<Sprite>("characters/character" + (currentIndex % numberOfCharacters));
         characterImage.sprite = character;
 
+        UpdateVisualsAndStatus();
+        UpdateAccessoryDescriptions();
+        UpdateWarnings();
+    }
+
+    private void UpdateVisualsAndStatus()
+    {
         if (currentAccessoryType == AccessoryType.Glasses)
         {
             glasses = Resources.Load<Sprite>("Glasses/glasses" + (currentGlasses % numberOfGlasses));
@@ -94,12 +99,14 @@ public class CharacterSelection : MonoBehaviour
             glassesImage.color = new Color(1, 1, 1, 0);
             CheckAccessoryStatus(hatImage.sprite.name);
         }
-        UpdateWarnings();
+
+        CheckCharacterStatus(); 
+        UpdateCharacterDisplay(); 
     }
 
     private void CheckAccessoryStatus(string currentImageName)
     {
-        bool isLocked = true; 
+        bool isLocked = true;
         foreach (var item in shopItemData)
         {
             if (item.GetImageName() == currentImageName)
@@ -112,6 +119,25 @@ public class CharacterSelection : MonoBehaviour
             }
         }
         lockImage.SetActive(isLocked);
+    }
+
+    private void CheckCharacterStatus()
+    {
+        string characterImageName = "character" + (currentIndex % numberOfCharacters);
+        bool isLocked = true;
+
+        foreach (var item in shopItemData)
+        {
+            if (item.GetImageName() == characterImageName)
+            {
+                if (item.IsBought())
+                {
+                    isLocked = false;
+                }
+                break;
+            }
+        }
+        lockImageOutfit.SetActive(isLocked);
     }
 
     private void UpdateWarnings()
@@ -132,17 +158,6 @@ public class CharacterSelection : MonoBehaviour
             warningText.text = "";
             glassesButton.interactable = true;
             hatButton.interactable = true;
-
-            if (currentAccessoryType == AccessoryType.Glasses)
-            {
-                glassesImage.sprite = Resources.Load<Sprite>("Glasses/glasses" + (currentGlasses % numberOfGlasses));
-                glassesImage.color = Color.white;
-            }
-            else if (currentAccessoryType == AccessoryType.Hat)
-            {
-                hatImage.sprite = Resources.Load<Sprite>("Hats/hat" + (currentHat % numberOfHats));
-                hatImage.color = Color.white;
-            }
         }
     }
 
@@ -156,6 +171,7 @@ public class CharacterSelection : MonoBehaviour
         {
             PreviousHats();
         }
+        UpdateVisualsAndStatus(); 
     }
 
     public void NextAccessory()
@@ -168,19 +184,20 @@ public class CharacterSelection : MonoBehaviour
         {
             NextHats();
         }
+        UpdateVisualsAndStatus(); 
     }
 
     public void SetAccessoryToHat()
     {
         currentAccessoryType = AccessoryType.Hat;
-        Update();
+        UpdateVisualsAndStatus(); 
         UpdateButtonVisuals();
     }
 
     public void SetAccessoryToGlasses()
     {
         currentAccessoryType = AccessoryType.Glasses;
-        Update();
+        UpdateVisualsAndStatus(); 
         UpdateButtonVisuals();
     }
 
@@ -196,23 +213,20 @@ public class CharacterSelection : MonoBehaviour
             hatButton.image.color = selectedColor;
             glassesButton.image.color = unselectedColor;
         }
-        else
-        {
-            glassesButton.image.color = mainColor;
-            hatButton.image.color = mainColor;
-        }
     }
 
     public void PreviousCharacter()
     {
         PlayClickSound();
         currentIndex = Modulo(currentIndex - 1, numberOfCharacters);
+        UpdateVisualsAndStatus(); 
     }
 
     public void NextCharacter()
     {
         PlayClickSound();
         currentIndex = Modulo(currentIndex + 1, numberOfCharacters);
+        UpdateVisualsAndStatus(); 
     }
 
     public void Previousglasses()
@@ -241,32 +255,6 @@ public class CharacterSelection : MonoBehaviour
 
     public void ConfirmButton()
     {
-        GameObject currentPlayer = GameObject.FindGameObjectWithTag("Player");
-        Vector3 position = currentPlayer.transform.position;
-        Quaternion rotation = currentPlayer.transform.rotation;
-        GameObject miniMapCamera = GameObject.Find("Minimap Camera");
-        Image playerFace = GameObject.Find("Player Face").GetComponent<Image>();
-        PixelPerfectCamera pixelCam = currentPlayer.GetComponentInChildren<PixelPerfectCamera>();
-
-        Destroy(currentPlayer);
-        PlayerAnimation.Instance.ResetInstance();
-        playerFace.sprite = DataManager.Instance.GetCharacterFaces()[currentIndex];
-
-        GameObject newPlayer = Instantiate(characterPrefabs[currentIndex], position, rotation);
-        SceneManager.MoveGameObjectToScene(newPlayer, SceneManager.GetSceneByName("Player"));
-        DataManager.Instance.SetCharacterIndex(currentIndex);
-
-        miniMapCamera.transform.parent = newPlayer.transform;
-        miniMapCamera.GetComponent<Camera>().enabled = true;
-        miniMapCamera.GetComponent<ZoomScript>().enabled = true;
-
-        PixelPerfectCamera newPixelCam = newPlayer.GetComponentInChildren<PixelPerfectCamera>();
-        ZoomScript.Instance.ChangePixelCam(newPixelCam);
-        newPixelCam.refResolutionX = pixelCam.refResolutionX;
-        newPixelCam.refResolutionY = pixelCam.refResolutionY;
-
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1);
-        PlayClickSound();
     }
 
     private void PlayClickSound()
@@ -281,5 +269,79 @@ public class CharacterSelection : MonoBehaviour
     {
         int r = a % b;
         return r < 0 ? r + b : r;
+    }
+
+    private void UpdateCharacterDisplay()
+    {
+        string characterImageName = "character" + (currentIndex % numberOfCharacters);
+
+        bool isFreeSkin = characterImageName == "character0" || characterImageName == "character1" || characterImageName == "character2";
+
+        bool isLocked = !isFreeSkin; 
+
+        if (!isFreeSkin)
+        {
+            foreach (var item in shopItemData)
+            {
+                if (item.GetImageName() == characterImageName)
+                {
+                    if (item.IsBought())
+                    {
+                        isLocked = false; 
+                    }
+                    break;
+                }
+            }
+        }
+
+        lockImageOutfit.SetActive(isLocked); 
+
+        string descriptionText = "";
+        foreach (var item in shopItemData)
+        {
+            if (item.GetImageName() == characterImageName)
+            {
+                descriptionText = $"Character: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
+
+                if (isFreeSkin)
+                {
+                    descriptionText += "\nFREE SKIN";
+                }
+
+                break;
+            }
+        }
+
+        characterDescriptionText.text = descriptionText;
+    }
+
+    private void UpdateAccessoryDescriptions()
+    {
+        string descriptionText = "";
+
+        if (currentAccessoryType == AccessoryType.Glasses)
+        {
+            foreach (var item in shopItemData)
+            {
+                if (item.GetImageName() == glassesImage.sprite.name)
+                {
+                    descriptionText = $"Accessory: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
+                    break;
+                }
+            }
+        }
+        else if (currentAccessoryType == AccessoryType.Hat)
+        {
+            foreach (var item in shopItemData)
+            {
+                if (item.GetImageName() == hatImage.sprite.name)
+                {
+                    descriptionText = $"Accessory: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
+                    break;
+                }
+            }
+        }
+
+        descriptionAccessory.text = descriptionText;
     }
 }
