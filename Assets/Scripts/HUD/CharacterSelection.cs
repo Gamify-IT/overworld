@@ -26,11 +26,10 @@ public class CharacterSelection : MonoBehaviour
         Hat
     }
 
-    private AccessoryType currentAccessoryType = AccessoryType.Glasses; // Start with Glasses
+    private AccessoryType currentAccessoryType = AccessoryType.Glasses; 
 
     [SerializeField] private GameObject[] characterPrefabs;
 
-    // Add references to the buttons
     public Button glassesButton;
     public Button hatButton;
 
@@ -44,7 +43,6 @@ public class CharacterSelection : MonoBehaviour
     void Start()
     {
         GameManager.Instance.isPaused = true;
-        // get image component
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
         currentIndex = DataManager.Instance.GetCharacterIndex();
 
@@ -54,16 +52,13 @@ public class CharacterSelection : MonoBehaviour
         hatImage = GameObject.Find("Hat Sprite").GetComponent<Image>();
         currentHat = DataManager.Instance.GetHatIndex();
 
-        // get AudioSource component
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
-        // set audio clip
         audioSource.clip = clickSound;
 
-        // Initialize the button colors based on the starting accessory
         UpdateButtonVisuals();
     }
 
@@ -82,19 +77,19 @@ public class CharacterSelection : MonoBehaviour
         {
             glasses = Resources.Load<Sprite>("glasses/brille" + (currentGlasses % numberOfGlasses));
             glassesImage.sprite = glasses;
-            glassesImage.color = Color.white; // Make glasses visible
+            glassesImage.color = Color.white; 
 
-            hatImage.sprite = null; // Make hat invisible
-            hatImage.color = new Color(1, 1, 1, 0); // Transparent hat
+            hatImage.sprite = null; 
+            hatImage.color = new Color(1, 1, 1, 0); 
         }
         else if (currentAccessoryType == AccessoryType.Hat)
         {
             hat = Resources.Load<Sprite>("hats/hat" + (currentHat % numberOfHats));
             hatImage.sprite = hat;
-            hatImage.color = Color.white; // Make hat visible
+            hatImage.color = Color.white; 
 
-            glassesImage.sprite = null; // Make glasses invisible
-            glassesImage.color = new Color(1, 1, 1, 0); // Transparent glasses
+            glassesImage.sprite = null; 
+            glassesImage.color = new Color(1, 1, 1, 0); 
         }
     }
 
@@ -134,8 +129,8 @@ public class CharacterSelection : MonoBehaviour
     public void SetAccessoryToHat()
     {
         currentAccessoryType = AccessoryType.Hat;
-        Update(); // Update immediately after switching
-        UpdateButtonVisuals(); // Update button visuals
+        Update(); 
+        UpdateButtonVisuals(); 
     }
 
     /// <summary>
@@ -144,8 +139,8 @@ public class CharacterSelection : MonoBehaviour
     public void SetAccessoryToGlasses()
     {
         currentAccessoryType = AccessoryType.Glasses;
-        Update(); // Update immediately after switching
-        UpdateButtonVisuals(); // Update button visuals
+        Update(); 
+        UpdateButtonVisuals(); 
     }
 
     /// <summary>
@@ -154,8 +149,8 @@ public class CharacterSelection : MonoBehaviour
     private void UpdateButtonVisuals()
     {
         // Define a lighter color for the selected button and a darker color for the unselected button
-        Color selectedColor = new Color(1, 1, 1, 1); // Full opacity, white
-        Color unselectedColor = new Color(1, 1, 1, 0.5f); // 50% opacity, white
+        Color selectedColor = new Color(1, 1, 1, 1); 
+        Color unselectedColor = new Color(1, 1, 1, 0.5f); 
 
         // Update button colors based on the current accessory type
         if (currentAccessoryType == AccessoryType.Glasses)
