@@ -92,7 +92,7 @@ public class CharacterSelection : MonoBehaviour
     {
         if (currentIndex == 6) 
         {
-            warningText.text = "You can't mix and match this outfit with hats or glasses";
+            warningText.text = "Looks like Iron Man's suit prefers to go solo, no hats or glasses with this one!";
             glassesButton.interactable = false;
             hatButton.interactable = false;
 
