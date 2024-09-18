@@ -892,8 +892,8 @@ private void PlayAchievementNotificationSound(){
     };
 
         List<string> imageNames = new List<string> {
-        "flames", "herzbrille", "globus", "anzug", "santa",
-        "coole_brille", "retro_brille", "schutzhelm", "3D_brille"
+        "hat0", "glasses2", "hat1", "anzug", "santa",
+        "glasses1", "glasses3", "hat2", "glasses0"
     };
 
         List<ShopItemCategory> categories = new List<ShopItemCategory> {
@@ -908,7 +908,7 @@ private void PlayAchievementNotificationSound(){
             int cost = random.Next(1, 11); 
             string imageName = imageNames[i];
             ShopItemCategory category = categories[i]; 
-            bool bought = random.Next(0, 2) == 1; 
+            bool bought = false; 
 
             ShopItem shopItem = new ShopItem(shopItemID, cost, imageName, category.ToString(), bought);
             shopItems[i] = shopItem;

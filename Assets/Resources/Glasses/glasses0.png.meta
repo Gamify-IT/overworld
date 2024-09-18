@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6e0f125ccfebdc84a9e6b930b4d8174b
+guid: 6819a4cb1c174e548989e78ec792431c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -42,12 +42,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -69,7 +69,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,11 +100,23 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: herzbrille_0
+      name: 3D_brille_0
       rect:
         serializedVersion: 2
         x: 1
@@ -118,14 +130,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 60e65f7643244714596a59c8422a38e7
-      internalID: 2028286175
+      spriteID: bb3738cb78a6e454ba985d86586eb2d5
+      internalID: -308529134
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: herzbrille_1
+      name: 3D_brille_1
       rect:
         serializedVersion: 2
         x: 17
@@ -139,14 +151,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: db4ce858a621a3c46b792011a69802be
-      internalID: 1947087751
+      spriteID: 2bccc793115a6ac42a0feb96e7f2175f
+      internalID: -1866666841
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: herzbrille_2
+      name: 3D_brille_2
       rect:
         serializedVersion: 2
         x: 33
@@ -160,14 +172,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 41ed8c42ed25143489e0100851951f82
-      internalID: -1678797801
+      spriteID: 903b1dba5d70b6f42b86d619a404958c
+      internalID: -821941344
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: herzbrille_3
+      name: 3D_brille_3
       rect:
         serializedVersion: 2
         x: 49
@@ -181,18 +193,312 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9b9eae48dc1700749b853bb9fd4230ff
-      internalID: 696137378
+      spriteID: e1426876f7234964fb9cbda0d288ec4e
+      internalID: 322758143
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: herzbrille_4
+      name: 3D_brille_4
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 206
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb8075047fa698d4997fa68eea604024
+      internalID: 911589799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_5
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 206
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c574e899b0977e42a0e0085255e690a
+      internalID: -1299844963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_6
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 206
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea9792dcda1301d468f620cb2b444446
+      internalID: 351018711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_7
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 206
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79587f4a4bbbfb0479178e525e45367b
+      internalID: -1756822063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_8
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 142
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49447c004e128d949a37a0acf6ebdc4b
+      internalID: 624097882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_9
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 142
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4329da5ebfb4044c8537fe06763ec16
+      internalID: -2021638323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_10
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 142
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e938c0ee5e20c364f88629e569ca11ce
+      internalID: 1893442686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_11
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 142
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94c38d1aa8062174c840178e61b4c315
+      internalID: -919682523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_12
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 141
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe319a336e3a36e4d9038475ec5c7ba6
+      internalID: 608907042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_13
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 143
+        width: 10
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a514a6f8ab4c4b45b0223bdb698bc8c
+      internalID: 590488914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_14
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 143
+        width: 10
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82b263eb3912a89469e8c4a4c3bf652b
+      internalID: 903080585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_15
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 205
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 977b96784fbc0c6448a1400ba768c13e
+      internalID: 1344959679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_16
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 207
+        width: 10
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69c53cecf64c79e4882ba782f5d2403b
+      internalID: 1554100334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_17
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 207
+        width: 10
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f28c59a2561ebbb41a116c0e53f311da
+      internalID: 1711667734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3D_brille_18
       rect:
         serializedVersion: 2
         x: 81
-        y: 237
+        y: 238
         width: 14
         height: 4
       alignment: 0
@@ -202,14 +508,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fe8c6ed63d40edb48a4fdffcb7915f8d
-      internalID: 1175869763
+      spriteID: 1d406f42426b0fd48a4bf30d09a10ce0
+      internalID: 641824121
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: herzbrille_5
+      name: 3D_brille_19
       rect:
         serializedVersion: 2
         x: 97
@@ -223,14 +529,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ba8a35c3a41193845878d2f2ddc5568a
-      internalID: -2060137975
+      spriteID: cd5f6d15f26052a41957fd9b9a8a23af
+      internalID: 1314453527
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: herzbrille_6
+      name: 3D_brille_20
       rect:
         serializedVersion: 2
         x: 116
@@ -244,302 +550,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 36f01740d54f83f429ee48466172f7cf
-      internalID: -1045049962
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_7
-      rect:
-        serializedVersion: 2
-        x: 5
-        y: 206
-        width: 9
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6decbc44403041945b31b90fbe817ae2
-      internalID: 665300240
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_8
-      rect:
-        serializedVersion: 2
-        x: 21
-        y: 206
-        width: 9
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1c2b382ae4a40ee48b0f85f0786ca4c7
-      internalID: 853134740
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_9
-      rect:
-        serializedVersion: 2
-        x: 37
-        y: 206
-        width: 9
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8a570ff2826273f4ca7bbfeea5ddfec4
-      internalID: 1244187718
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_10
-      rect:
-        serializedVersion: 2
-        x: 53
-        y: 206
-        width: 9
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cc0050c8de91dfc4fa1806d6704849b6
-      internalID: 1521814445
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_11
-      rect:
-        serializedVersion: 2
-        x: 86
-        y: 206
-        width: 7
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: eccb71b10f5136049ac041067a68afff
-      internalID: 122610204
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_12
-      rect:
-        serializedVersion: 2
-        x: 101
-        y: 207
-        width: 9
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 86d2dd52bca5d0c4b952884214662f97
-      internalID: -287649843
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_13
-      rect:
-        serializedVersion: 2
-        x: 121
-        y: 207
-        width: 5
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 814593ba116ff7f489d4b9dc46daa301
-      internalID: -937620915
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_14
-      rect:
-        serializedVersion: 2
-        x: 2
-        y: 142
-        width: 9
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a2988eafffeb0924fad6b593e5065759
-      internalID: -1696319168
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_15
-      rect:
-        serializedVersion: 2
-        x: 18
-        y: 142
-        width: 9
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 47936ad3c635dd84992080cf24cd2215
-      internalID: -971298177
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_16
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 142
-        width: 9
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3bd63407c1c0dbe429441afafc895984
-      internalID: -479791818
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_17
-      rect:
-        serializedVersion: 2
-        x: 50
-        y: 142
-        width: 9
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a04e6bab20b692c47a09e14f64c2b33f
-      internalID: 1646169661
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_18
-      rect:
-        serializedVersion: 2
-        x: 83
-        y: 142
-        width: 7
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 007e57c4d1c2bf54f9908889cd415893
-      internalID: -1605963534
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_19
-      rect:
-        serializedVersion: 2
-        x: 98
-        y: 143
-        width: 9
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a7ef8585ea9b2694897b9f3b068f031e
-      internalID: -2120487036
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herzbrille_20
-      rect:
-        serializedVersion: 2
-        x: 115
-        y: 143
-        width: 8
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5784a862cd4244f4493131868c3e2d84
-      internalID: 2047046513
+      spriteID: 74207598e5902e04b8a4e4c7ebb8d940
+      internalID: -739382340
       vertices: []
       indices: 
       edges: []
@@ -547,7 +559,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: af6c0c7a9fe99004ea93e746ad34c446
+    spriteID: b899f2a1c6993bb45b802a506cdd806d
     internalID: 0
     vertices: []
     indices: 
@@ -555,27 +567,28 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      herzbrille_10: 1521814445
-      herzbrille_13: -937620915
-      herzbrille_11: 122610204
-      herzbrille_18: -1605963534
-      herzbrille_7: 665300240
-      herzbrille_8: 853134740
-      herzbrille_2: -1678797801
-      herzbrille_16: -479791818
-      herzbrille_5: -2060137975
-      herzbrille_19: -2120487036
-      herzbrille_4: 1175869763
-      herzbrille_9: 1244187718
-      herzbrille_6: -1045049962
-      herzbrille_14: -1696319168
-      herzbrille_0: 2028286175
-      herzbrille_20: 2047046513
-      herzbrille_17: 1646169661
-      herzbrille_15: -971298177
-      herzbrille_12: -287649843
-      herzbrille_3: 696137378
-      herzbrille_1: 1947087751
+      3D_brille_10: 1893442686
+      3D_brille_4: 911589799
+      3D_brille_16: 1554100334
+      3D_brille_18: 641824121
+      3D_brille_13: 590488914
+      3D_brille_14: 903080585
+      3D_brille_7: -1756822063
+      3D_brille_21: 2143693153
+      3D_brille_5: -1299844963
+      3D_brille_12: 608907042
+      3D_brille_17: 1711667734
+      3D_brille_2: -821941344
+      3D_brille_19: 1314453527
+      3D_brille_8: 624097882
+      3D_brille_6: 351018711
+      3D_brille_9: -2021638323
+      3D_brille_0: -308529134
+      3D_brille_1: -1866666841
+      3D_brille_20: -739382340
+      3D_brille_3: 322758143
+      3D_brille_11: -919682523
+      3D_brille_15: 1344959679
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

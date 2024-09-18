@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6819a4cb1c174e548989e78ec792431c
+guid: f3f08411f2b190b48996c460fcc1e436
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -42,12 +42,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -69,7 +69,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,11 +100,23 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 3D_brille_0
+      name: retro_brille_0
       rect:
         serializedVersion: 2
         x: 1
@@ -118,14 +130,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bb3738cb78a6e454ba985d86586eb2d5
-      internalID: -308529134
+      spriteID: 6072e6a4786e0b34bb76f3d7edc1bbca
+      internalID: -168136856
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 3D_brille_1
+      name: retro_brille_1
       rect:
         serializedVersion: 2
         x: 17
@@ -139,14 +151,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2bccc793115a6ac42a0feb96e7f2175f
-      internalID: -1866666841
+      spriteID: a96c3abf938a62f4db3509fb08efda85
+      internalID: -2101759446
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 3D_brille_2
+      name: retro_brille_2
       rect:
         serializedVersion: 2
         x: 33
@@ -160,14 +172,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 903b1dba5d70b6f42b86d619a404958c
-      internalID: -821941344
+      spriteID: e5698145cce387a4c943348d94dc9c3d
+      internalID: 184380367
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 3D_brille_3
+      name: retro_brille_3
       rect:
         serializedVersion: 2
         x: 49
@@ -181,208 +193,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e1426876f7234964fb9cbda0d288ec4e
-      internalID: 322758143
+      spriteID: d9905d645dfc4ec4fa0383439fa4e53e
+      internalID: -1844280178
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 3D_brille_4
+      name: retro_brille_4
       rect:
         serializedVersion: 2
-        x: 4
-        y: 206
-        width: 10
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fb8075047fa698d4997fa68eea604024
-      internalID: 911589799
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_5
-      rect:
-        serializedVersion: 2
-        x: 20
-        y: 206
-        width: 10
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4c574e899b0977e42a0e0085255e690a
-      internalID: -1299844963
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_6
-      rect:
-        serializedVersion: 2
-        x: 36
-        y: 206
-        width: 10
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ea9792dcda1301d468f620cb2b444446
-      internalID: 351018711
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_7
-      rect:
-        serializedVersion: 2
-        x: 52
-        y: 206
-        width: 10
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 79587f4a4bbbfb0479178e525e45367b
-      internalID: -1756822063
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_8
-      rect:
-        serializedVersion: 2
-        x: 2
-        y: 142
-        width: 10
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 49447c004e128d949a37a0acf6ebdc4b
-      internalID: 624097882
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_9
-      rect:
-        serializedVersion: 2
-        x: 18
-        y: 142
-        width: 10
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d4329da5ebfb4044c8537fe06763ec16
-      internalID: -2021638323
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_10
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 142
-        width: 10
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e938c0ee5e20c364f88629e569ca11ce
-      internalID: 1893442686
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_11
-      rect:
-        serializedVersion: 2
-        x: 50
-        y: 142
-        width: 10
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 94c38d1aa8062174c840178e61b4c315
-      internalID: -919682523
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_12
-      rect:
-        serializedVersion: 2
-        x: 83
-        y: 141
-        width: 9
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fe319a336e3a36e4d9038475ec5c7ba6
-      internalID: 608907042
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_13
-      rect:
-        serializedVersion: 2
-        x: 98
-        y: 143
-        width: 10
+        x: 82
+        y: 237
+        width: 12
         height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -391,119 +214,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0a514a6f8ab4c4b45b0223bdb698bc8c
-      internalID: 590488914
+      spriteID: b8de6739550008444887e0dc844ae7e6
+      internalID: -1429008682
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 3D_brille_14
-      rect:
-        serializedVersion: 2
-        x: 115
-        y: 143
-        width: 10
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 82b263eb3912a89469e8c4a4c3bf652b
-      internalID: 903080585
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_15
-      rect:
-        serializedVersion: 2
-        x: 84
-        y: 205
-        width: 9
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 977b96784fbc0c6448a1400ba768c13e
-      internalID: 1344959679
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_16
-      rect:
-        serializedVersion: 2
-        x: 100
-        y: 207
-        width: 10
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 69c53cecf64c79e4882ba782f5d2403b
-      internalID: 1554100334
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_17
-      rect:
-        serializedVersion: 2
-        x: 116
-        y: 207
-        width: 10
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f28c59a2561ebbb41a116c0e53f311da
-      internalID: 1711667734
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_18
-      rect:
-        serializedVersion: 2
-        x: 81
-        y: 238
-        width: 14
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1d406f42426b0fd48a4bf30d09a10ce0
-      internalID: 641824121
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 3D_brille_19
+      name: retro_brille_5
       rect:
         serializedVersion: 2
         x: 97
@@ -517,14 +235,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cd5f6d15f26052a41957fd9b9a8a23af
-      internalID: 1314453527
+      spriteID: 347ffbbfaf56684489fa49b495e84f37
+      internalID: 1870995508
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 3D_brille_20
+      name: retro_brille_6
       rect:
         serializedVersion: 2
         x: 116
@@ -538,8 +256,302 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 74207598e5902e04b8a4e4c7ebb8d940
-      internalID: -739382340
+      spriteID: 963cf638e60a4c849bfed61167c29392
+      internalID: 37871096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_7
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 206
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b396622d42b27d04f9720250a7d0e02b
+      internalID: 639834362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_8
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 206
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eec348aae012548418af7b33d1f504b5
+      internalID: 1744409336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_9
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 206
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c26ce6fb162138f42906f8fc3e7bac5f
+      internalID: 1853443788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_10
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 206
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19b46e8981a2d574999b463c8f4e5623
+      internalID: -1617719104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_11
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 205
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd9c82bbd7c2ba24fb0ca774a390f579
+      internalID: 1201367680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_12
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 207
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13a9f76659a80a240b6d36ea9fc9b2f5
+      internalID: -1584443807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_13
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 207
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04d696cfd0a1b1549b988c60009b587c
+      internalID: 39696272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_14
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 142
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5e7c1803c8c17446b8a179c2f0ce95f
+      internalID: 99023392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_15
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 142
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab5a917277666c54abf01c1e4b7d02da
+      internalID: 136605707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_16
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 142
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49cbe9da8f4fe42408ed94ae45e534e3
+      internalID: 817778952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_17
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 142
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee7419b0f4fd37947b36308b6725db18
+      internalID: 1228774524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_18
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 141
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7da0d7c194dd9f148ba1a8fb24714c9b
+      internalID: -185589672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_19
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 143
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cda26b4bbeaf8674697fe2025ae2dbfa
+      internalID: 207034508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: retro_brille_20
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 143
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8458ea3d7fb2bd44b160cf0172fc002
+      internalID: -1319268246
       vertices: []
       indices: 
       edges: []
@@ -547,7 +559,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: b899f2a1c6993bb45b802a506cdd806d
+    spriteID: c0a1093df5ba3ad499403ea456f1c4a1
     internalID: 0
     vertices: []
     indices: 
@@ -555,28 +567,27 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      3D_brille_10: 1893442686
-      3D_brille_4: 911589799
-      3D_brille_16: 1554100334
-      3D_brille_18: 641824121
-      3D_brille_13: 590488914
-      3D_brille_14: 903080585
-      3D_brille_7: -1756822063
-      3D_brille_21: 2143693153
-      3D_brille_5: -1299844963
-      3D_brille_12: 608907042
-      3D_brille_17: 1711667734
-      3D_brille_2: -821941344
-      3D_brille_19: 1314453527
-      3D_brille_8: 624097882
-      3D_brille_6: 351018711
-      3D_brille_9: -2021638323
-      3D_brille_0: -308529134
-      3D_brille_1: -1866666841
-      3D_brille_20: -739382340
-      3D_brille_3: 322758143
-      3D_brille_11: -919682523
-      3D_brille_15: 1344959679
+      retro_brille_7: 639834362
+      retro_brille_12: -1584443807
+      retro_brille_0: -168136856
+      retro_brille_5: 1870995508
+      retro_brille_6: 37871096
+      retro_brille_1: -2101759446
+      retro_brille_4: -1429008682
+      retro_brille_2: 184380367
+      retro_brille_19: 207034508
+      retro_brille_8: 1744409336
+      retro_brille_16: 817778952
+      retro_brille_10: -1617719104
+      retro_brille_15: 136605707
+      retro_brille_3: -1844280178
+      retro_brille_9: 1853443788
+      retro_brille_18: -185589672
+      retro_brille_11: 1201367680
+      retro_brille_13: 39696272
+      retro_brille_17: 1228774524
+      retro_brille_14: 99023392
+      retro_brille_20: -1319268246
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

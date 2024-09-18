@@ -1,9 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using TMPro; 
+using TMPro;
 using System;
+using System.Collections.Generic;
 using UnityEngine.U2D;
+
 
 public class CharacterSelection : MonoBehaviour
 {
@@ -16,10 +18,26 @@ public class CharacterSelection : MonoBehaviour
     private int numberOfCharacters = 9;
     private int numberOfGlasses = 4;
     private int numberOfHats = 3;
+    private List<ShopItemData> shopItemData;
+
+    [SerializeField] private TMP_Text descriptionAccessory;
+    [SerializeField] private GameObject lockImage; 
+    [SerializeField] private GameObject[] characterPrefabs;
+
+    public Button glassesButton;
+    public Button hatButton;
+    public TextMeshProUGUI warningText;
+
+    public AudioClip clickSound;
+    private AudioSource audioSource;
 
     private int currentIndex = 0;
     private int currentGlasses = 0;
     private int currentHat = 0;
+
+    private Color mainColor = new Color(0.82f, 0.69f, 0.56f);
+    private Color selectedColor = new Color(0.9f, 0.76f, 0.62f);
+    private Color unselectedColor = new Color(0.82f, 0.69f, 0.56f, 0.5f);
 
     public enum AccessoryType
     {
@@ -29,17 +47,9 @@ public class CharacterSelection : MonoBehaviour
 
     private AccessoryType currentAccessoryType = AccessoryType.Glasses;
 
-    [SerializeField] private GameObject[] characterPrefabs;
-
-    public Button glassesButton;
-    public Button hatButton;
-    public TextMeshProUGUI warningText; 
-
-    public AudioClip clickSound;
-    private AudioSource audioSource;
-
     void Start()
     {
+        shopItemData = DataManager.Instance.GetShopItems();
         GameManager.Instance.isPaused = true;
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
         currentIndex = DataManager.Instance.GetCharacterIndex();
@@ -58,7 +68,7 @@ public class CharacterSelection : MonoBehaviour
         audioSource.clip = clickSound;
 
         UpdateButtonVisuals();
-        UpdateWarnings(); 
+        UpdateWarnings();
     }
 
     void Update()
@@ -68,29 +78,45 @@ public class CharacterSelection : MonoBehaviour
 
         if (currentAccessoryType == AccessoryType.Glasses)
         {
-            glasses = Resources.Load<Sprite>("glasses/brille" + (currentGlasses % numberOfGlasses));
+            glasses = Resources.Load<Sprite>("Glasses/glasses" + (currentGlasses % numberOfGlasses));
             glassesImage.sprite = glasses;
             glassesImage.color = Color.white;
-
             hatImage.sprite = null;
             hatImage.color = new Color(1, 1, 1, 0);
+            CheckAccessoryStatus(glassesImage.sprite.name);
         }
         else if (currentAccessoryType == AccessoryType.Hat)
         {
-            hat = Resources.Load<Sprite>("hats/hat" + (currentHat % numberOfHats));
+            hat = Resources.Load<Sprite>("Hats/hat" + (currentHat % numberOfHats));
             hatImage.sprite = hat;
             hatImage.color = Color.white;
-
             glassesImage.sprite = null;
             glassesImage.color = new Color(1, 1, 1, 0);
+            CheckAccessoryStatus(hatImage.sprite.name);
         }
+        UpdateWarnings();
+    }
 
-        UpdateWarnings(); 
+    private void CheckAccessoryStatus(string currentImageName)
+    {
+        bool isLocked = true; 
+        foreach (var item in shopItemData)
+        {
+            if (item.GetImageName() == currentImageName)
+            {
+                if (item.IsBought())
+                {
+                    isLocked = false;
+                }
+                break;
+            }
+        }
+        lockImage.SetActive(isLocked);
     }
 
     private void UpdateWarnings()
     {
-        if (currentIndex == 6) 
+        if (currentIndex == 6)
         {
             warningText.text = "Looks like Iron Man's suit prefers to go solo, no hats or glasses with this one!";
             glassesButton.interactable = false;
@@ -98,8 +124,8 @@ public class CharacterSelection : MonoBehaviour
 
             glassesImage.sprite = null;
             hatImage.sprite = null;
-            glassesImage.color = new Color(1, 1, 1, 0); 
-            hatImage.color = new Color(1, 1, 1, 0); 
+            glassesImage.color = new Color(1, 1, 1, 0);
+            hatImage.color = new Color(1, 1, 1, 0);
         }
         else
         {
@@ -109,12 +135,12 @@ public class CharacterSelection : MonoBehaviour
 
             if (currentAccessoryType == AccessoryType.Glasses)
             {
-                glassesImage.sprite = Resources.Load<Sprite>("glasses/brille" + (currentGlasses % numberOfGlasses));
+                glassesImage.sprite = Resources.Load<Sprite>("Glasses/glasses" + (currentGlasses % numberOfGlasses));
                 glassesImage.color = Color.white;
             }
             else if (currentAccessoryType == AccessoryType.Hat)
             {
-                hatImage.sprite = Resources.Load<Sprite>("hats/hat" + (currentHat % numberOfHats));
+                hatImage.sprite = Resources.Load<Sprite>("Hats/hat" + (currentHat % numberOfHats));
                 hatImage.color = Color.white;
             }
         }
@@ -160,9 +186,6 @@ public class CharacterSelection : MonoBehaviour
 
     private void UpdateButtonVisuals()
     {
-        Color selectedColor = new Color(1, 1, 1, 1);
-        Color unselectedColor = new Color(1, 1, 1, 0.5f);
-
         if (currentAccessoryType == AccessoryType.Glasses)
         {
             glassesButton.image.color = selectedColor;
@@ -172,6 +195,11 @@ public class CharacterSelection : MonoBehaviour
         {
             hatButton.image.color = selectedColor;
             glassesButton.image.color = unselectedColor;
+        }
+        else
+        {
+            glassesButton.image.color = mainColor;
+            hatButton.image.color = mainColor;
         }
     }
 
