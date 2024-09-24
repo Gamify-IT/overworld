@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 ///     This class manages the movement and the animations of the player.
@@ -277,7 +278,7 @@ public class PlayerAnimation : MonoBehaviour
     {
         if (!validOutfits.Contains(body) || !validOutfits.Contains(head))
         {
-            throw ArgumentException;
+            throw new ArgumentException();
         }
 
         String bodyPath = "AnimatorControllers/" + body;
@@ -286,15 +287,15 @@ public class PlayerAnimation : MonoBehaviour
         playerAnimator.runtimeAnimatorController = Resources.Load(bodyPath) as RuntimeAnimatorController;
 
         // TODO adjust offset from list
-        offset = offsets[head];
+        // offset = offsets[head];
         
         
     }
 
-    ArrayList<String> validOutfits = {"3D_brille", "blonde_haare", "character_anzug", "character_black_and_white", "character_blue_and_purple", "character_default", "character_ironman", 
+    List<string> validOutfits = new List<string> {"3D_brille", "blonde_haare", "character_anzug", "character_black_and_white", "character_blue_and_purple", "character_default", "character_ironman", "none",
         "character_jeans_karo", "character_lange_haare", "character_santa", "character_trainingsanzug", "coole_brille", "flammen_haare", "globus_hut", "herzbrille", "retro_brille", "schutzhelm"};
 
-    IDictionary<String, Offset> offsets = {} // TODO fill with outfit offset pairs of the head accesoires
+    Dictionary<string, Offset> offsets = new Dictionary<string, Offset>{ }; // TODO fill with outfit offset pairs of the head accesoires
 
     struct Coordinates
     {
