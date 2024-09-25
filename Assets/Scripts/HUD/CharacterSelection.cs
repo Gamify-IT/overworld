@@ -64,9 +64,9 @@ public class CharacterSelection : MonoBehaviour
 
         UpdateButtonVisuals();
         UpdateWarnings();
-        UpdateCharacterDisplay();  
-        CheckCharacterStatus();    
-        UpdateAccessoryDescriptions(); 
+        UpdateCharacterDisplay();
+        CheckCharacterStatus();
+        UpdateAccessoryDescriptions();
     }
 
     void Update()
@@ -100,8 +100,8 @@ public class CharacterSelection : MonoBehaviour
             CheckAccessoryStatus(hatImage.sprite.name);
         }
 
-        CheckCharacterStatus(); 
-        UpdateCharacterDisplay(); 
+        CheckCharacterStatus();
+        UpdateCharacterDisplay();
     }
 
     private void CheckAccessoryStatus(string currentImageName)
@@ -137,27 +137,98 @@ public class CharacterSelection : MonoBehaviour
                 break;
             }
         }
+
         lockImageOutfit.SetActive(isLocked);
+
+        // Check if the current character is Titanium Knight (character6)
+        if (currentIndex == 6)  // Assuming character6 is Titanium Knight
+        {
+            DisableNextPreviousButtons(); // Custom method to disable buttons
+        }
+    }
+
+
+    private void DisableNextPreviousButtons()
+    {
+        var previousButton = GameObject.Find("PreviousButton");
+        var nextButton = GameObject.Find("NextButton");
+
+        if (previousButton != null && nextButton != null)
+        {
+            previousButton.GetComponent<Button>().interactable = false;
+            nextButton.GetComponent<Button>().interactable = false;
+        }
     }
 
     private void UpdateWarnings()
     {
-        if (currentIndex == 6)
+        if (currentIndex == 6) // Titanium Knight
         {
-            warningText.text = "Looks like Iron Man's suit prefers to go solo, no hats or glasses with this one!";
-            glassesButton.interactable = false;
-            hatButton.interactable = false;
+            // Display the warning message and disable accessory buttons
+            warningText.text = "Looks like Titanium Knight's suit prefers to go solo, no hats or glasses with this one!";
 
-            glassesImage.sprite = null;
-            hatImage.sprite = null;
-            glassesImage.color = new Color(1, 1, 1, 0);
-            hatImage.color = new Color(1, 1, 1, 0);
+            // Clear accessory descriptions
+            descriptionAccessory.text = "";
+
+            // Disable glasses and hat buttons
+            DisableAccessoryButtons();
+            HideAccessories();
+
+            // Ensure lock image is hidden for accessories
+            lockImage.SetActive(false);
+
+            // Disable navigation buttons
+            DisableNextPreviousButtons();
         }
         else
         {
+            // Clear the warning and re-enable buttons
             warningText.text = "";
-            glassesButton.interactable = true;
-            hatButton.interactable = true;
+            EnableAccessoryButtons();
+            UpdateVisualsAndStatus();
+
+            // Re-enable navigation buttons
+            EnableNextPreviousButtons();
+        }
+    }
+
+
+    private void DisableAccessoryButtons()
+    {
+        glassesButton.interactable = false;
+        glassesButton.image.color = Color.gray;
+
+        hatButton.interactable = false;
+        hatButton.image.color = Color.gray;
+    }
+
+    private void EnableAccessoryButtons()
+    {
+        glassesButton.interactable = true;
+        glassesButton.image.color = selectedColor;
+
+        hatButton.interactable = true;
+        hatButton.image.color = unselectedColor;
+    }
+
+    private void HideAccessories()
+    {
+        glassesImage.sprite = null;
+        glassesImage.color = new Color(1, 1, 1, 0);
+
+        hatImage.sprite = null;
+        hatImage.color = new Color(1, 1, 1, 0);
+    }
+
+    private void EnableNextPreviousButtons()
+    {
+        var previousButton = GameObject.Find("PreviousButton");
+        var nextButton = GameObject.Find("NextButton");
+
+        if (previousButton != null && nextButton != null)
+        {
+            previousButton.GetComponent<Button>().interactable = true;
+            nextButton.GetComponent<Button>().interactable = true;
         }
     }
 
@@ -171,7 +242,7 @@ public class CharacterSelection : MonoBehaviour
         {
             PreviousHats();
         }
-        UpdateVisualsAndStatus(); 
+        UpdateVisualsAndStatus();
     }
 
     public void NextAccessory()
@@ -184,20 +255,20 @@ public class CharacterSelection : MonoBehaviour
         {
             NextHats();
         }
-        UpdateVisualsAndStatus(); 
+        UpdateVisualsAndStatus();
     }
 
     public void SetAccessoryToHat()
     {
         currentAccessoryType = AccessoryType.Hat;
-        UpdateVisualsAndStatus(); 
+        UpdateVisualsAndStatus();
         UpdateButtonVisuals();
     }
 
     public void SetAccessoryToGlasses()
     {
         currentAccessoryType = AccessoryType.Glasses;
-        UpdateVisualsAndStatus(); 
+        UpdateVisualsAndStatus();
         UpdateButtonVisuals();
     }
 
@@ -219,14 +290,14 @@ public class CharacterSelection : MonoBehaviour
     {
         PlayClickSound();
         currentIndex = Modulo(currentIndex - 1, numberOfCharacters);
-        UpdateVisualsAndStatus(); 
+        UpdateVisualsAndStatus();
     }
 
     public void NextCharacter()
     {
         PlayClickSound();
         currentIndex = Modulo(currentIndex + 1, numberOfCharacters);
-        UpdateVisualsAndStatus(); 
+        UpdateVisualsAndStatus();
     }
 
     public void Previousglasses()
@@ -274,10 +345,8 @@ public class CharacterSelection : MonoBehaviour
     private void UpdateCharacterDisplay()
     {
         string characterImageName = "character" + (currentIndex % numberOfCharacters);
-
         bool isFreeSkin = characterImageName == "character0" || characterImageName == "character1" || characterImageName == "character2";
-
-        bool isLocked = !isFreeSkin; 
+        bool isLocked = !isFreeSkin;
 
         if (!isFreeSkin)
         {
@@ -287,14 +356,14 @@ public class CharacterSelection : MonoBehaviour
                 {
                     if (item.IsBought())
                     {
-                        isLocked = false; 
+                        isLocked = false;
                     }
                     break;
                 }
             }
         }
 
-        lockImageOutfit.SetActive(isLocked); 
+        lockImageOutfit.SetActive(isLocked);
 
         string descriptionText = "";
         foreach (var item in shopItemData)
@@ -302,6 +371,12 @@ public class CharacterSelection : MonoBehaviour
             if (item.GetImageName() == characterImageName)
             {
                 descriptionText = $"Character: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
+
+                // Füge den Preis hinzu, wenn nicht gekauft
+                if (!item.IsBought())
+                {
+                    descriptionText += $"\nPrice: {item.GetCost()}";
+                }
 
                 if (isFreeSkin)
                 {
@@ -315,6 +390,7 @@ public class CharacterSelection : MonoBehaviour
         characterDescriptionText.text = descriptionText;
     }
 
+
     private void UpdateAccessoryDescriptions()
     {
         string descriptionText = "";
@@ -326,6 +402,12 @@ public class CharacterSelection : MonoBehaviour
                 if (item.GetImageName() == glassesImage.sprite.name)
                 {
                     descriptionText = $"Accessory: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
+
+                    // Füge den Preis hinzu, wenn nicht gekauft
+                    if (!item.IsBought())
+                    {
+                        descriptionText += $"\nPrice: {item.GetCost()}";
+                    }
                     break;
                 }
             }
@@ -337,6 +419,12 @@ public class CharacterSelection : MonoBehaviour
                 if (item.GetImageName() == hatImage.sprite.name)
                 {
                     descriptionText = $"Accessory: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
+
+                    // Füge den Preis hinzu, wenn nicht gekauft
+                    if (!item.IsBought())
+                    {
+                        descriptionText += $"\nPrice: {item.GetCost()}";
+                    }
                     break;
                 }
             }
@@ -344,4 +432,5 @@ public class CharacterSelection : MonoBehaviour
 
         descriptionAccessory.text = descriptionText;
     }
+
 }

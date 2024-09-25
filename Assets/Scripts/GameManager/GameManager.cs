@@ -890,7 +890,7 @@ private void PlayAchievementNotificationSound(){
         List<string> titles = new List<string> {
         "FLAME_HAT", "HEART_GLASSES", "GLOBE_HAT", "SUIT", "SANTA_COSTUME",
         "COOL_GLASSES", "RETRO_GLASSES", "SAFETY_HELMET", "CINEMA_GLASSES",
-        "IRONMAN", "SPORTS", "LONGHAIR", "BLUE_SHIRT", "BLONDE"
+        "TITANIUM_KNIGHT", "SPORTS", "LONGHAIR", "BLUE_SHIRT", "BLONDE"
     };
 
         List<int> costs = new List<int> {
