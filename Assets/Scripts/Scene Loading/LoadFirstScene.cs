@@ -14,7 +14,8 @@ public class LoadFirstScene : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        Gamemode gamemode = GetGamemode();
+        //Gamemode gamemode = GetGamemode();
+        Gamemode gamemode = Gamemode.TUTORIAL;
 
         switch(gamemode)
         {
@@ -34,6 +35,11 @@ public class LoadFirstScene : MonoBehaviour
                 Debug.Log("Starting in Inspect Mode");
                 GameSettings.SetGamemode(Gamemode.INSPECTOR);
                 StartGenerator();
+                break;
+            case Gamemode.TUTORIAL:
+                Debug.Log("Starting Tutorial");
+                GameSettings.SetGamemode(Gamemode.TUTORIAL);
+                StartTutorial();
                 break;
         }
     }
@@ -114,7 +120,9 @@ public class LoadFirstScene : MonoBehaviour
         Debug.Log("Finish validating courseId");
 
         Debug.Log("Start retrieving playerId");
+
         bool validPlayerId = await GameManager.Instance.GetUserData();
+
         if (!validPlayerId)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
@@ -140,4 +148,51 @@ public class LoadFirstScene : MonoBehaviour
         await GameSettings.FetchValues();
         await SceneManager.LoadSceneAsync("AreaGeneratorManager");
     }
+
+    /// <summary>
+    ///     This function starts the tutorial world for players
+    /// </summary>
+    /// <returns></returns>
+    private async UniTask StartTutorial()
+    {
+        Debug.Log("Start loading Player");
+
+        await SceneManager.LoadSceneAsync("Player");
+
+        Debug.Log("Finish loading Player");
+
+        Debug.Log("Start loading HUD");
+
+        SceneManager.LoadScene("Player HUD", LoadSceneMode.Additive);
+
+        Debug.Log("Finish loading HUD");
+
+        Debug.Log("Start loading LoadingScreen");
+
+        await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+
+        Debug.Log("Finish loading LoadingScreen");
+
+        Debug.Log("Start retrieving playerId");
+
+#if !UNITY_EDITOR
+        bool validPlayerId = await GameManager.Instance.GetUserData();
+
+        if (!validPlayerId)
+        {
+            await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+            OfflineMode.Instance.DisplayInfo("INVALID PLAYER ID");
+            OfflineMode.Instance.HideOfflineButton();
+            return;
+        }
+
+        Debug.Log("Finish retrieving playerId");
+#endif
+        Debug.Log("Start loading Tutorial");
+
+        await LoadingManager.Instance.LoadTutorialData();
+
+        Debug.Log("Finish loading Tutorial");
+    }
+
 }

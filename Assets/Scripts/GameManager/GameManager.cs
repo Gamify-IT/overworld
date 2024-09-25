@@ -449,16 +449,19 @@ public class GameManager : MonoBehaviour
     /// <returns>True if the acheivement is now completed, false otherwise</returns>
     public async void IncreaseAchievementProgress(AchievementTitle title, int increment, List<(int, int, int)> interactedObjects)
     {
-        bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment, interactedObjects);
-        if (unlocked)
+        if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
         {
-            AchievementData achievement = DataManager.Instance.GetAchievement(title);
-            if (achievement == null)
+            bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment, interactedObjects);
+            if (unlocked)
             {
-                return;
-            }
+                AchievementData achievement = DataManager.Instance.GetAchievement(title);
+                if (achievement == null)
+                {
+                    return;
+                }
 
-            EarnAchievement(achievement);
+                EarnAchievement(achievement);
+            }
         }
     }
 

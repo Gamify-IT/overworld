@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 /// <summary>
 ///     This class provides the 'startOfflineMode()' function which loads the offline mode screen.
@@ -8,7 +9,6 @@ using TMPro;
 public class OfflineMode : MonoBehaviour
 {
     #region Singleton
-
     public static OfflineMode Instance { get; private set; }
 
     /// <summary>
@@ -34,10 +34,10 @@ public class OfflineMode : MonoBehaviour
     {
         Instance = null;
     }
-
     #endregion
 
     [SerializeField] private TextMeshProUGUI infoText;
+    [SerializeField] private GameObject offlineButton;
 
     /// <summary>
     ///     This function loads the offline mode screen.
@@ -59,5 +59,13 @@ public class OfflineMode : MonoBehaviour
     public void DisplayInfo(string text)
     {
         infoText.text = text;
+    }
+
+    /// <summary>
+    ///     Hides the offline mode button when starting the tutorial world
+    /// </summary>
+    public void HideOfflineButton()
+    {
+        offlineButton.SetActive(false);
     }
 }

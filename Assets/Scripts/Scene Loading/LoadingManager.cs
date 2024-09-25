@@ -298,6 +298,72 @@ public class LoadingManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     Loads necessary player data, scene und player position for the tutorial world
+    /// </summary>
+    public async UniTask LoadTutorialData()
+    {
+        slider.value = 0;
+        progressText.text = "0%";
+        loadingText.text = "LOADING DATA...";
+
+        if (GameManager.Instance == null)
+        {
+            Debug.Log("Game Manager not online.");
+            return;
+        }
+
+        if (DataManager.Instance == null)
+        {
+            Debug.Log("Data Manager not online.");
+            return;
+        }
+
+        // set keybindings 
+        GameManager.Instance.ResetKeybindings();
+
+        slider.value = 0.25f;
+        progressText.text = "25%";
+        loadingText.text = "LOADING WORLD...";
+
+        Debug.Log("Start loading scene");
+
+        await SceneManager.LoadSceneAsync("Tutorial", LoadSceneMode.Additive);
+
+        Debug.Log("Finish loading scene");
+
+        slider.value = 0.5f;
+        progressText.text = "50%";
+        loadingText.text = "PREPARING GAME START...";
+
+        Debug.Log("Start unloading other scenes");
+
+        UnloadUnneededScenesExcept("Tutorial");
+
+        Debug.Log("Finish unloading other scenes");
+
+        slider.value = 0.75f;
+        progressText.text = "75%";
+        loadingText.text = "SETTING UP PLAYER...";
+
+        Debug.Log("Set player position");
+
+        GameObject.FindGameObjectWithTag("Player").transform.position = new Vector2(21.5f, 2.5f);
+
+        slider.value = 1;
+        progressText.text = "100%";
+        loadingText.text = "DONE...";
+
+        Debug.Log("Loading manager done");
+
+        Debug.Log("Start unloading loading Manager");
+
+        await SceneManager.UnloadSceneAsync("LoadingScreen");
+
+        Debug.Log("Finish unloading loading Manager");
+
+    }
+
+    /// <summary>
     ///     This function checks, if a new area has been unlocked since the last reload
     /// </summary>
     /// <param name="unlockedAreasOld">Set of unlocked areas before the reload</param>
