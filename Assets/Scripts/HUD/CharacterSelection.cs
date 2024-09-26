@@ -26,6 +26,7 @@ public class CharacterSelection : MonoBehaviour
 
     public Button glassesButton;
     public Button hatButton;
+    public Button resetAccessoriesButton;
     public TextMeshProUGUI warningText;
 
     public AudioClip clickSound;
@@ -67,17 +68,12 @@ public class CharacterSelection : MonoBehaviour
         UpdateCharacterDisplay();
         CheckCharacterStatus();
         UpdateAccessoryDescriptions();
+
+        resetAccessoriesButton.onClick.AddListener(ResetAccessories);
+
     }
 
-    void Update()
-    {
-        character = Resources.Load<Sprite>("characters/character" + (currentIndex % numberOfCharacters));
-        characterImage.sprite = character;
 
-        UpdateVisualsAndStatus();
-        UpdateAccessoryDescriptions();
-        UpdateWarnings();
-    }
 
     private void UpdateVisualsAndStatus()
     {
@@ -140,10 +136,9 @@ public class CharacterSelection : MonoBehaviour
 
         lockImageOutfit.SetActive(isLocked);
 
-        // Check if the current character is Titanium Knight (character6)
-        if (currentIndex == 6)  // Assuming character6 is Titanium Knight
+        if (currentIndex == 6)  
         {
-            DisableNextPreviousButtons(); // Custom method to disable buttons
+            DisableNextPreviousButtons(); 
         }
     }
 
@@ -162,32 +157,26 @@ public class CharacterSelection : MonoBehaviour
 
     private void UpdateWarnings()
     {
-        if (currentIndex == 6) // Titanium Knight
+        if (currentIndex == 6) 
         {
-            // Display the warning message and disable accessory buttons
             warningText.text = "Looks like Titanium Knight's suit prefers to go solo, no hats or glasses with this one!";
 
-            // Clear accessory descriptions
             descriptionAccessory.text = "";
 
-            // Disable glasses and hat buttons
             DisableAccessoryButtons();
             HideAccessories();
 
-            // Ensure lock image is hidden for accessories
             lockImage.SetActive(false);
 
-            // Disable navigation buttons
             DisableNextPreviousButtons();
         }
         else
         {
-            // Clear the warning and re-enable buttons
+           
             warningText.text = "";
             EnableAccessoryButtons();
             UpdateVisualsAndStatus();
 
-            // Re-enable navigation buttons
             EnableNextPreviousButtons();
         }
     }
@@ -281,8 +270,9 @@ public class CharacterSelection : MonoBehaviour
         }
         else if (currentAccessoryType == AccessoryType.Hat)
         {
-            hatButton.image.color = selectedColor;
             glassesButton.image.color = unselectedColor;
+            hatButton.image.color = selectedColor;
+            
         }
     }
 
@@ -372,7 +362,6 @@ public class CharacterSelection : MonoBehaviour
             {
                 descriptionText = $"Character: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
 
-                // Füge den Preis hinzu, wenn nicht gekauft
                 if (!item.IsBought())
                 {
                     descriptionText += $"\nPrice: {item.GetCost()}";
@@ -403,7 +392,6 @@ public class CharacterSelection : MonoBehaviour
                 {
                     descriptionText = $"Accessory: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
 
-                    // Füge den Preis hinzu, wenn nicht gekauft
                     if (!item.IsBought())
                     {
                         descriptionText += $"\nPrice: {item.GetCost()}";
@@ -420,7 +408,6 @@ public class CharacterSelection : MonoBehaviour
                 {
                     descriptionText = $"Accessory: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
 
-                    // Füge den Preis hinzu, wenn nicht gekauft
                     if (!item.IsBought())
                     {
                         descriptionText += $"\nPrice: {item.GetCost()}";
@@ -431,6 +418,21 @@ public class CharacterSelection : MonoBehaviour
         }
 
         descriptionAccessory.text = descriptionText;
+    }
+
+    public void ResetAccessories()
+    {
+        hatImage.sprite = null;
+        hatImage.color = new Color(1, 1, 1, 0);  
+        glassesImage.sprite = null;
+        glassesImage.color = new Color(1, 1, 1, 0);  
+
+        descriptionAccessory.text = "";
+
+        lockImage.SetActive(false);
+
+        glassesButton.image.color = unselectedColor;
+        hatButton.image.color = unselectedColor;
     }
 
 }
