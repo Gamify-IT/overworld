@@ -55,7 +55,7 @@ public class AchievementData
         int amountRequired = statistic.achievement.amountRequired;
         int progress = statistic.progress;
         bool completed = statistic.completed;
-        List<(int, int, int)> interactedObjects = AchievementStatistic.ConvertFromListIntTuple(statistic.interactedObjects);
+        List<(int, int, int)> interactedObjects = AchievementStatistic.ConvertFromIntTuple(statistic.interactedObjects);
 
         AchievementData data = new AchievementData(id, title, description, categories, imageName, amountRequired, progress, completed, interactedObjects);
         return data;
@@ -78,7 +78,7 @@ public class AchievementData
         int progress = achievementData.GetProgress();
         bool completed = achievementData.IsCompleted();
 
-        List<IntTuple> interactedObjects = AchievementStatistic.ConvertToListIntTuple(achievementData.GetInteractedObjects());
+        List<IntTuple> interactedObjects = AchievementStatistic.ConvertToIntTuple(achievementData.GetInteractedObjects());
 
         Achievement achievement = new Achievement(title, description, categories, imageName, amountRequired);
 
