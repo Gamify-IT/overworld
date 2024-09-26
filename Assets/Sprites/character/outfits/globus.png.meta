@@ -104,90 +104,6 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: globus_7
-      rect:
-        serializedVersion: 2
-        x: 93
-        y: 57
-        width: 16
-        height: 20
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5f8110fe7c59aae468be8eed6c4296ec
-      internalID: 497474590
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: globus_8
-      rect:
-        serializedVersion: 2
-        x: 110
-        y: 60
-        width: 16
-        height: 20
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: eeecc1b22cff26f4b9e742fba853abde
-      internalID: -2024256295
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: globus_9
-      rect:
-        serializedVersion: 2
-        x: 127
-        y: 60
-        width: 16
-        height: 20
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 916437fa40adc4c459e4eb76965ed751
-      internalID: -502074223
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: globus_0
-      rect:
-        serializedVersion: 2
-        x: 14
-        y: 232
-        width: 16
-        height: 19
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9f6551f017692814b84599e7f401d0a1
-      internalID: 652875084
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: globus_1
       rect:
         serializedVersion: 2
@@ -237,8 +153,8 @@ TextureImporter:
         y: 232
         width: 16
         height: 19
-      alignment: 9
-      pivot: {x: 0.48602915, y: 0.4254871}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -251,13 +167,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: globus_4
+      name: globus_0
       rect:
         serializedVersion: 2
-        x: 94
-        y: 231
+        x: 14
+        y: 232
         width: 16
-        height: 18
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -265,50 +181,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ee2ad49a07ec0cf4e8fba8b27c1bd43e
-      internalID: -614020633
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: globus_5
-      rect:
-        serializedVersion: 2
-        x: 110
-        y: 233
-        width: 16
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6c45880ae74708d498274c74a2f04b4a
-      internalID: 1184844111
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: globus_6
-      rect:
-        serializedVersion: 2
-        x: 126
-        y: 233
-        width: 16
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 577fa6ad014a50c47bccaf05fc4057aa
-      internalID: -1383758627
+      spriteID: 98d2886687c04c14fa85d3b2825e0275
+      internalID: 652875084
       vertices: []
       indices: 
       edges: []
@@ -317,7 +191,7 @@ TextureImporter:
       name: globus_10
       rect:
         serializedVersion: 2
-        x: 15
+        x: 14
         y: 176
         width: 16
         height: 21
@@ -328,7 +202,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 67886fe4fab58984a9b6be1f91bdadb6
+      spriteID: c5364bd6175dda548bd8b9ac6bd66135
       internalID: -1379221310
       vertices: []
       indices: 
@@ -338,7 +212,7 @@ TextureImporter:
       name: globus_11
       rect:
         serializedVersion: 2
-        x: 31
+        x: 30
         y: 176
         width: 16
         height: 21
@@ -349,7 +223,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c2679d6fbd87a8b4fb0dfe3a7c46c76a
+      spriteID: 1c8266ae863149f4983cea5e9d6c3c3b
       internalID: 1722667123
       vertices: []
       indices: 
@@ -359,7 +233,7 @@ TextureImporter:
       name: globus_12
       rect:
         serializedVersion: 2
-        x: 47
+        x: 46
         y: 176
         width: 16
         height: 21
@@ -370,7 +244,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 726f9b5a4a81d5745bb900159483a21d
+      spriteID: c78c1ffe0ad273845a202578cb34056c
       internalID: 1834630759
       vertices: []
       indices: 
@@ -380,7 +254,7 @@ TextureImporter:
       name: globus_13
       rect:
         serializedVersion: 2
-        x: 63
+        x: 62
         y: 176
         width: 16
         height: 21
@@ -391,80 +265,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 83903f3a535250740aedefd278a5eb07
+      spriteID: 38da184cadd493346a72cde3f24a8927
       internalID: 220431378
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: globus_14
+      name: globus_25
       rect:
         serializedVersion: 2
-        x: 95
-        y: 176
-        width: 16
-        height: 20
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ae7234b50d2bca74895c5b1aa271a649
-      internalID: 1240490944
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: globus_15
-      rect:
-        serializedVersion: 2
-        x: 111
-        y: 178
-        width: 16
-        height: 20
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3360f004891df764989b9e386a5eeb49
-      internalID: -357918876
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: globus_16
-      rect:
-        serializedVersion: 2
-        x: 127
-        y: 178
-        width: 16
-        height: 20
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7d5c810b208e15c47a0698fa684ef424
-      internalID: -389807028
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: globus_17
-      rect:
-        serializedVersion: 2
-        x: 15
+        x: 14
         y: 118
         width: 16
         height: 19
@@ -475,17 +286,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 45aef6e10a8e40f41a13c0ad6fd64e15
-      internalID: -1964883001
+      spriteID: 4e58ea73a7bd1524e92e7f40cebea1da
+      internalID: -1346707176
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: globus_18
+      name: globus_26
       rect:
         serializedVersion: 2
-        x: 31
+        x: 30
         y: 118
         width: 16
         height: 19
@@ -496,17 +307,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 35c58b01ae9110c48a99b85b6ac45a4f
-      internalID: 666702971
+      spriteID: 5bf1ba0d5a385b742bce230a5eeeab65
+      internalID: 377339537
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: globus_19
+      name: globus_27
       rect:
         serializedVersion: 2
-        x: 47
+        x: 46
         y: 118
         width: 16
         height: 19
@@ -517,17 +328,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 94fbdd4781aeda641834b226f9ad3bab
-      internalID: 932404535
+      spriteID: a4134902e871d934da7d8e887b9932af
+      internalID: -1249046285
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: globus_20
+      name: globus_28
       rect:
         serializedVersion: 2
-        x: 63
+        x: 62
         y: 118
         width: 16
         height: 19
@@ -538,77 +349,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2db65b9ba9f82f742a4aa924e0232c53
-      internalID: -1007354716
+      spriteID: 3be959dbd5399e14b841a33f35517a8c
+      internalID: -801563917
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: globus_21
-      rect:
-        serializedVersion: 2
-        x: 95
-        y: 118
-        width: 16
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fc5e916018838c7429cbdf839902734b
-      internalID: 2083350513
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: globus_22
-      rect:
-        serializedVersion: 2
-        x: 111
-        y: 118
-        width: 16
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1e33f8fb28e80434ca51bfa27fe549ae
-      internalID: 445444916
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: globus_23
-      rect:
-        serializedVersion: 2
-        x: 127
-        y: 118
-        width: 16
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e80a479077fc20b4695dbd81b5c30c56
-      internalID: -641441980
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: globus_24
+      name: globus_40
       rect:
         serializedVersion: 2
         x: 14
@@ -622,14 +370,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c71dadaef78225540a0af42534d54c1e
-      internalID: 1275799176
+      spriteID: 63549ca86d9f3dd45bbe4cc9e487afaa
+      internalID: 1585736983
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: globus_25
+      name: globus_41
       rect:
         serializedVersion: 2
         x: 30
@@ -643,14 +391,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0f6f2ca7b8f56aa46a825899d150ed74
-      internalID: -1346707176
+      spriteID: 4891d5ea0e39f1148b366b322ae4493d
+      internalID: 56145774
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: globus_26
+      name: globus_42
       rect:
         serializedVersion: 2
         x: 46
@@ -664,14 +412,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c75de0d6ad518594595e2e86e9885eba
-      internalID: 377339537
+      spriteID: 482ac54d800e9ce4aafd04cfc41d50c1
+      internalID: 1115300258
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: globus_27
+      name: globus_43
       rect:
         serializedVersion: 2
         x: 62
@@ -685,8 +433,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 011e9da8495caba4997bd91fa7564202
-      internalID: -1249046285
+      spriteID: 835182b13ad53a44d900fdb4fceb57c2
+      internalID: 1712855669
       vertices: []
       indices: 
       edges: []
@@ -702,34 +450,64 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      globus_18: 666702971
-      globus_27: -1249046285
+      globus_34: -443661113
+      globus_45: -73327204
+      globus_17: 2094155666
       globus_4: -614020633
-      globus_24: 1275799176
-      globus_19: 932404535
+      globus_40: 1585736983
+      globus_52: 446732129
+      globus_24: -972729083
+      globus_30: 1203176681
       globus_7: 497474590
-      globus_10: -1379221310
-      globus_15: -357918876
+      globus_50: 1507749030
+      globus_15: 995955910
       globus_11: 1722667123
       globus_26: 377339537
+      globus_42: 1115300258
+      globus_33: 2084460223
+      globus_53: 1866717018
+      globus_38: -181772256
+      globus_20: -1134947671
+      globus_6: -1383758627
+      globus_16: 1065153469
+      globus_9: -502074223
+      globus_14: 1715784157
+      globus_51: 2104472927
+      globus_35: 1285244770
+      globus_29: 1117870679
+      globus_25: -1346707176
+      globus_43: 1712855669
+      globus_18: 1633121171
+      globus_27: -1249046285
+      globus_32: 898979288
+      globus_49: -1618908052
+      globus_44: -1434972651
+      globus_55: 1484952098
+      globus_19: 1911402114
+      globus_57: 1984888676
+      globus_10: -1379221310
+      globus_47: 526791390
+      globus_41: 56145774
+      globus_31: 704873093
       globus_13: 220431378
       globus_0: 652875084
-      globus_6: -1383758627
+      globus_48: 639512518
       globus_12: 1834630759
-      globus_16: -389807028
+      globus_28: -801563917
       globus_3: -1930963753
       globus_5: 1184844111
       globus_1: -726944803
-      globus_9: -502074223
-      globus_23: -641441980
-      globus_14: 1240490944
+      globus_36: -1097958188
+      globus_23: 326410487
+      globus_21: -2142212136
       globus_8: -2024256295
-      globus_20: -1007354716
       globus_2: 1915046671
-      globus_25: -1346707176
-      globus_21: 2083350513
-      globus_22: 445444916
-      globus_17: -1964883001
+      globus_37: 948166939
+      globus_46: -1079819586
+      globus_54: -1655334634
+      globus_56: 1578091619
+      globus_22: -734801555
+      globus_39: 1715015619
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

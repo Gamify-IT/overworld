@@ -56,14 +56,14 @@ public class PlayerAnimation : MonoBehaviour
     {
         accessoireAnimator = this.gameObject.transform.GetChild(2).GetComponent<Animator>();
         accessoireTransform = this.gameObject.transform.GetChild(2).GetComponent<Transform>();
-        positions.Add("3D_brille", new Vector3());
-        positions.Add("blonde_haare", new Vector3());
-        positions.Add("coole_brille", new Vector3());
-        positions.Add("flammen_haare", new Vector3());
-        positions.Add("globus_hut", new Vector3());
-        positions.Add("herzbrille", new Vector3());
-        positions.Add("retro_brille", new Vector3());
-        positions.Add("schutzhelm", new Vector3());
+        positions.Add("3D_brille", new Vector3(0, 0.3f, 0));
+        positions.Add("blonde_haare", new Vector3(0, 0.3f, 0));
+        positions.Add("coole_brille", new Vector3(0, 0.3f, 0));
+        positions.Add("flammen_haare", new Vector3(0, 0.3f, 0));
+        positions.Add("globus_hut", new Vector3(0, 0.76f, 0));
+        positions.Add("herzbrille", new Vector3(0, 0.3f, 0));
+        positions.Add("retro_brille", new Vector3(0, 0.3f, 0));
+        positions.Add("schutzhelm", new Vector3(0, 0.31f, 0));a
 
         string lastPlayDateStr = PlayerPrefs.GetString("LastPlayDate", "");
         int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
@@ -215,6 +215,7 @@ public class PlayerAnimation : MonoBehaviour
             {
                 targetSpeed = movementSpeed + sprintingSpeed;
                 playerAnimator.speed = 2;
+                accessoireAnimator.speed = 2;
                 sprintStartTime = Time.time;
             }
             
@@ -236,6 +237,7 @@ public class PlayerAnimation : MonoBehaviour
             {
                 targetSpeed = movementSpeed;
                 playerAnimator.speed = 1;
+                accessoireAnimator.speed = 1;
                 sprintDuration = 0f; 
                 audioSource.pitch = 1f;
             }
@@ -245,12 +247,14 @@ public class PlayerAnimation : MonoBehaviour
             {
                 targetSpeed = targetSpeed + superSpeed;
                 playerAnimator.speed = 20;
+                accessoireAnimator.speed = 20;
             }
 
             if (Input.GetKeyUp("l") && targetSpeed == movementSpeed + superSpeed)
             {
                 targetSpeed = targetSpeed - superSpeed;
                 playerAnimator.speed = 1;
+                accessoireAnimator.speed = 1;
             }
             // dev keybindings
 
@@ -300,6 +304,13 @@ public class PlayerAnimation : MonoBehaviour
         // works as expected to move the position
         // accessoireTransform.localPosition = new Vector3(1, 1, 1);
         accessoireTransform.localPosition = positions[head];
+        if (head == "schutzhelm")
+        {
+            accessoireTransform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+        } else
+        {
+            accessoireTransform.localScale = new Vector3(1, 1, 1);
+        }
     }
 
     List<string> validOutfits = new List<string> {"3D_brille", "blonde_haare", "character_anzug", "character_black_and_white", "character_blue_and_purple", "character_default", "character_ironman", "none",
