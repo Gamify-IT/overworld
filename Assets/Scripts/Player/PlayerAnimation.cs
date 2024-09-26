@@ -15,6 +15,7 @@ public class PlayerAnimation : MonoBehaviour
     public Rigidbody2D playerRigidBody;
     public Animator playerAnimator;
     public Animator accessoireAnimator;
+    public Transform accessoireTransform;
     private bool busy;
     private bool canMove;
     private float currentSpeed;
@@ -44,6 +45,9 @@ public class PlayerAnimation : MonoBehaviour
     private int daysPlayed;
     private DateTime lastPlayDate;
     private bool checkIfChanged=false;
+
+    Dictionary<string, Vector3> positions = new Dictionary<string, Vector3>(); 
+
     /// <summary>
     ///     This method is called before the first frame update.
     ///     It is used to initialize variables.
@@ -51,6 +55,16 @@ public class PlayerAnimation : MonoBehaviour
     private void Start()
     {
         accessoireAnimator = this.gameObject.transform.GetChild(2).GetComponent<Animator>();
+        accessoireTransform = this.gameObject.transform.GetChild(2).GetComponent<Transform>();
+        positions.Add("3D_brille", new Vector3());
+        positions.Add("blonde_haare", new Vector3());
+        positions.Add("coole_brille", new Vector3());
+        positions.Add("flammen_haare", new Vector3());
+        positions.Add("globus_hut", new Vector3());
+        positions.Add("herzbrille", new Vector3());
+        positions.Add("retro_brille", new Vector3());
+        positions.Add("schutzhelm", new Vector3());
+
         string lastPlayDateStr = PlayerPrefs.GetString("LastPlayDate", "");
         int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
 
@@ -238,12 +252,6 @@ public class PlayerAnimation : MonoBehaviour
                 targetSpeed = targetSpeed - superSpeed;
                 playerAnimator.speed = 1;
             }
-
-            /*if (Input.GetKeyDown("x"))
-            {
-                accessoireAnimator.runtimeAnimatorController = Resources.Load("AnimatorControllers/retro_brille") as RuntimeAnimatorController;
-                playerAnimator.runtimeAnimatorController = Resources.Load("AnimatorControllers/character_ironman") as RuntimeAnimatorController;
-            }*/
             // dev keybindings
 
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * 50);
@@ -255,7 +263,8 @@ public class PlayerAnimation : MonoBehaviour
             {
                 GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =
                     !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
-            }
+            } 
+
             // dev keybindings
             if (isMoving && !GameManager.Instance.isPaused)
             {
@@ -274,42 +283,27 @@ public class PlayerAnimation : MonoBehaviour
     ///     this function changes the animation of the character based on the outfit selected in the 
     ///     character selection
     /// </summary>
-    public void SetOutfitAnimator(String body, String head)
+    public void SetOutfitAnimator(string body, string head)
     {
         if (!validOutfits.Contains(body) || !validOutfits.Contains(head))
         {
             throw new ArgumentException();
         }
 
-        String bodyPath = "AnimatorControllers/" + body;
-        String headPath = "AnimatorControllers/" + head;
+        string bodyPath = "AnimatorControllers/" + body;
+        string headPath = "AnimatorControllers/" + head;
         accessoireAnimator.runtimeAnimatorController = Resources.Load(headPath) as RuntimeAnimatorController;
         playerAnimator.runtimeAnimatorController = Resources.Load(bodyPath) as RuntimeAnimatorController;
 
-        // TODO adjust offset from list
-        // offset = offsets[head];
-        
-        
+        // works as expected to scale the accessoire
+        // accessoireTransform.localScale = new Vector3(2, 1, 1);
+        // works as expected to move the position
+        // accessoireTransform.localPosition = new Vector3(1, 1, 1);
+        accessoireTransform.localPosition = positions[head];
     }
 
     List<string> validOutfits = new List<string> {"3D_brille", "blonde_haare", "character_anzug", "character_black_and_white", "character_blue_and_purple", "character_default", "character_ironman", "none",
         "character_jeans_karo", "character_lange_haare", "character_santa", "character_trainingsanzug", "coole_brille", "flammen_haare", "globus_hut", "herzbrille", "retro_brille", "schutzhelm"};
-
-    Dictionary<string, Offset> offsets = new Dictionary<string, Offset>{ }; // TODO fill with outfit offset pairs of the head accesoires
-
-    struct Coordinates
-    {
-        int x;
-        int y;
-        int z;
-    }
-
-    struct Offset
-    {
-        Coordinates position;
-        Coordinates Rotation;
-        Coordinates Scale;
-    }
 
     /// <summary>
     ///     this function updates time achievement each 60 seconds when the player is playing
