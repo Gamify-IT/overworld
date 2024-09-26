@@ -17,6 +17,7 @@ public class CharacterSelection : MonoBehaviour
     private int numberOfGlasses = 4;
     private int numberOfHats = 3;
     private List<ShopItemData> shopItemData;
+    private PlayerAnimation animationScript;
 
     [SerializeField] private TMP_Text descriptionAccessory;
     [SerializeField] private TMP_Text characterDescriptionText;
@@ -319,6 +320,9 @@ public class CharacterSelection : MonoBehaviour
 
     public void ConfirmButton()
     {
+        // TODO right place ??
+        PlayClickSound();
+        animationScript.SetOutfitAnimator("body", "head");
     }
 
     private void PlayClickSound()
