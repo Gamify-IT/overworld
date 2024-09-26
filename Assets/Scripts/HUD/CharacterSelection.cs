@@ -26,7 +26,6 @@ public class CharacterSelection : MonoBehaviour
 
     public Button glassesButton;
     public Button hatButton;
-    public Button resetAccessoriesButton;
     public TextMeshProUGUI warningText;
 
     public AudioClip clickSound;
@@ -68,12 +67,17 @@ public class CharacterSelection : MonoBehaviour
         UpdateCharacterDisplay();
         CheckCharacterStatus();
         UpdateAccessoryDescriptions();
-
-        resetAccessoriesButton.onClick.AddListener(ResetAccessories);
-
     }
 
+    void Update()
+    {
+        character = Resources.Load<Sprite>("characters/character" + (currentIndex % numberOfCharacters));
+        characterImage.sprite = character;
 
+        UpdateVisualsAndStatus();
+        UpdateAccessoryDescriptions();
+        UpdateWarnings();
+    }
 
     private void UpdateVisualsAndStatus()
     {
@@ -172,7 +176,6 @@ public class CharacterSelection : MonoBehaviour
         }
         else
         {
-           
             warningText.text = "";
             EnableAccessoryButtons();
             UpdateVisualsAndStatus();
@@ -272,7 +275,7 @@ public class CharacterSelection : MonoBehaviour
         {
             glassesButton.image.color = unselectedColor;
             hatButton.image.color = selectedColor;
-            
+
         }
     }
 
@@ -362,6 +365,7 @@ public class CharacterSelection : MonoBehaviour
             {
                 descriptionText = $"Character: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
 
+
                 if (!item.IsBought())
                 {
                     descriptionText += $"\nPrice: {item.GetCost()}";
@@ -418,21 +422,6 @@ public class CharacterSelection : MonoBehaviour
         }
 
         descriptionAccessory.text = descriptionText;
-    }
-
-    public void ResetAccessories()
-    {
-        hatImage.sprite = null;
-        hatImage.color = new Color(1, 1, 1, 0);  
-        glassesImage.sprite = null;
-        glassesImage.color = new Color(1, 1, 1, 0);  
-
-        descriptionAccessory.text = "";
-
-        lockImage.SetActive(false);
-
-        glassesButton.image.color = unselectedColor;
-        hatButton.image.color = unselectedColor;
     }
 
 }
