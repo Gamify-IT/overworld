@@ -66,6 +66,7 @@ public class PlayerAnimation : MonoBehaviour
         positions.Add("herzbrille", new Vector3(0, 0.3f, 0));
         positions.Add("retro_brille", new Vector3(0, 0.3f, 0));
         positions.Add("schutzhelm", new Vector3(0, 0.31f, 0));
+        positions.Add("none", new Vector3(0, 0, 0));
 
         string lastPlayDateStr = PlayerPrefs.GetString("LastPlayDate", "");
         int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
@@ -305,14 +306,28 @@ public class PlayerAnimation : MonoBehaviour
         // accessoireTransform.localScale = new Vector3(2, 1, 1);
         // works as expected to move the position
         // accessoireTransform.localPosition = new Vector3(1, 1, 1);
-        accessoireTransform.localPosition = positions[head];
         if (head == "schutzhelm")
         {
-            accessoireTransform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            accessoireTransform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
         } else
         {
             accessoireTransform.localScale = new Vector3(1, 1, 1);
         }
+
+        if (body == "character_default")
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().offset = new Vector2(0, 0.05f);
+            accessoireTransform.localPosition = positions[head];
+
+        }
+        else
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.25f);
+            accessoireTransform.localPosition = positions[head] - new Vector3(0, 0.3f, 0);
+        }
+
+
+
     }
 
     List<string> validOutfits = new List<string> {"3D_brille", "blonde_haare", "character_anzug", "character_black_and_white", "character_blue_and_purple", "character_default", "character_ironman", "none",
