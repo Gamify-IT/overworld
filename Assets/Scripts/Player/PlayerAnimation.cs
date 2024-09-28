@@ -48,6 +48,8 @@ public class PlayerAnimation : MonoBehaviour
 
     Dictionary<string, Vector3> positions = new Dictionary<string, Vector3>(); 
 
+
+
     /// <summary>
     ///     This method is called before the first frame update.
     ///     It is used to initialize variables.
