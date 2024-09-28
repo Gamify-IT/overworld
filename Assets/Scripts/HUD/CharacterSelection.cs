@@ -15,7 +15,7 @@ public class CharacterSelection : MonoBehaviour
     private Sprite hat;
     private int numberOfCharacters = 9;
     private int numberOfGlasses = 5;
-    private int numberOfHats = 4;
+    private int numberOfHats = 5;
     private List<ShopItemData> shopItemData;
     private PlayerAnimation animationScript;
 
@@ -39,6 +39,12 @@ public class CharacterSelection : MonoBehaviour
     private Color mainColor = new Color(0.82f, 0.69f, 0.56f);
     private Color selectedColor = new Color(0.9f, 0.76f, 0.62f);
     private Color unselectedColor = new Color(0.82f, 0.69f, 0.56f, 0.5f);
+
+    private string selectedBody;
+    private string selectedHead;
+
+  
+
 
     public enum AccessoryType
     {
@@ -172,9 +178,9 @@ public class CharacterSelection : MonoBehaviour
 
     private void UpdateWarnings()
     {
-        if (currentIndex == 6) 
+        if (currentIndex == 7 || currentIndex == 8) 
         {
-            warningText.text = "Looks like Titanium Knight's suit prefers to go solo, no hats or glasses with this one!";
+            warningText.text = "Looks like this suit prefers to go solo, no hats or glasses with this one!";
 
             descriptionAccessory.text = "";
 
@@ -337,7 +343,7 @@ public class CharacterSelection : MonoBehaviour
     {
         // TODO right place ??
         PlayClickSound();
-        animationScript.SetOutfitAnimator("body", "head");
+        animationScript.SetOutfitAnimator(selectedBody, selectedHead);
     }
 
     private void PlayClickSound()
