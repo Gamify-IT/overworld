@@ -143,7 +143,7 @@ public class CharacterSelection : MonoBehaviour
     {
         bool isLocked = true;
 
-        if (currentImageName == "glasses4" || currentImageName == "hat3")
+        if (currentImageName == "glasses4" || currentImageName == "hat4")
         {
             isLocked = false;
         }
