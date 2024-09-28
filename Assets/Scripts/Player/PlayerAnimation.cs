@@ -12,10 +12,8 @@ public class PlayerAnimation : MonoBehaviour
     public float sprintingSpeed = 6f;
     public float superSpeed = 20f;
     public Vector2 movement;
-    public SpriteRenderer playerSprite;
     public Rigidbody2D playerRigidBody;
     public Animator playerAnimator;
-    public SpriteRenderer accessoireSprite;
     public Animator accessoireAnimator;
     public Transform accessoireTransform;
     private bool busy;
@@ -58,8 +56,6 @@ public class PlayerAnimation : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        playerSprite = this.gameObject.GetComponent<SpriteRenderer>();
-        accessoireSprite = this.gameObject.transform.GetChild(2).GetComponent<SpriteRenderer>();
         accessoireAnimator = this.gameObject.transform.GetChild(2).GetComponent<Animator>();
         accessoireTransform = this.gameObject.transform.GetChild(2).GetComponent<Transform>();
         positions.Add("3D_brille", new Vector3(0, 0.3f, 0));
@@ -305,8 +301,6 @@ public class PlayerAnimation : MonoBehaviour
         string headPath = "AnimatorControllers/" + head;
         accessoireAnimator.runtimeAnimatorController = Resources.Load(headPath) as RuntimeAnimatorController;
         playerAnimator.runtimeAnimatorController = Resources.Load(bodyPath) as RuntimeAnimatorController;
-        playerSprite.sprite = Resources.Load("Sprites/" + body) as Sprite;
-        accessoireSprite.sprite = Resources.Load("Sprites/" + head) as Sprite;
         // works as expected to scale the accessoire
         // accessoireTransform.localScale = new Vector3(2, 1, 1);
         // works as expected to move the position
