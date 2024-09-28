@@ -24,6 +24,9 @@ public class CharacterSelection : MonoBehaviour
     [SerializeField] private GameObject lockImageOutfit;
     [SerializeField] private GameObject lockImage;
     [SerializeField] private GameObject[] characterPrefabs;
+    [SerializeField] private GameObject warningPanel;
+    
+
 
     public Button glassesButton;
     public Button hatButton;
@@ -376,10 +379,27 @@ public class CharacterSelection : MonoBehaviour
 
     public void ConfirmButton()
     {
-        // TODO right place ??
         PlayClickSound();
-        animationScript.SetOutfitAnimator(selectedBody, selectedHead);
+
+        bool outfitLocked = lockImageOutfit.activeSelf; 
+        bool glassesLocked = lockImage.activeSelf; 
+        bool hatLocked = lockImage.activeSelf; 
+
+        if (outfitLocked || glassesLocked || hatLocked)
+        {
+            warningPanel.SetActive(true);
+        }
+        else
+        {
+            animationScript.SetOutfitAnimator(selectedBody, selectedHead);
+        }
     }
+
+    public void CloseWarningPanel()
+    {
+        warningPanel.SetActive(false);
+    }
+
 
     private void PlayClickSound()
     {
@@ -479,4 +499,5 @@ public class CharacterSelection : MonoBehaviour
         descriptionAccessory.text = descriptionText;
     }
 
+   
 }
