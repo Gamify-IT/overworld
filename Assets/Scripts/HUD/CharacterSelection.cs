@@ -14,8 +14,8 @@ public class CharacterSelection : MonoBehaviour
     private Sprite glasses;
     private Sprite hat;
     private int numberOfCharacters = 9;
-    private int numberOfGlasses = 4;
-    private int numberOfHats = 3;
+    private int numberOfGlasses = 5;
+    private int numberOfHats = 4;
     private List<ShopItemData> shopItemData;
     private PlayerAnimation animationScript;
 
@@ -108,19 +108,29 @@ public class CharacterSelection : MonoBehaviour
     private void CheckAccessoryStatus(string currentImageName)
     {
         bool isLocked = true;
-        foreach (var item in shopItemData)
+
+        if (currentImageName == "glasses4" || currentImageName == "hat3")
         {
-            if (item.GetImageName() == currentImageName)
+            isLocked = false;
+        }
+        else
+        {
+            foreach (var item in shopItemData)
             {
-                if (item.IsBought())
+                if (item.GetImageName() == currentImageName)
                 {
-                    isLocked = false;
+                    if (item.IsBought())
+                    {
+                        isLocked = false;
+                    }
+                    break;
                 }
-                break;
             }
         }
+
         lockImage.SetActive(isLocked);
     }
+
 
     private void CheckCharacterStatus()
     {
@@ -182,6 +192,11 @@ public class CharacterSelection : MonoBehaviour
             UpdateVisualsAndStatus();
 
             EnableNextPreviousButtons();
+        }
+
+        if(currentIndex == 0 || currentIndex == 1 || currentIndex == 2)
+        {
+            warningText.text = "These outfits are for free!";
         }
     }
 
@@ -373,11 +388,6 @@ public class CharacterSelection : MonoBehaviour
                 if (!item.IsBought())
                 {
                     descriptionText += $"\nPrice: {item.GetCost()}";
-                }
-
-                if (isFreeSkin)
-                {
-                    descriptionText += "\nFREE SKIN";
                 }
 
                 break;

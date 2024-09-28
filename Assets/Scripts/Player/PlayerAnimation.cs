@@ -63,7 +63,7 @@ public class PlayerAnimation : MonoBehaviour
         positions.Add("globus_hut", new Vector3(0, 0.76f, 0));
         positions.Add("herzbrille", new Vector3(0, 0.3f, 0));
         positions.Add("retro_brille", new Vector3(0, 0.3f, 0));
-        positions.Add("schutzhelm", new Vector3(0, 0.31f, 0));a
+        positions.Add("schutzhelm", new Vector3(0, 0.31f, 0));
 
         string lastPlayDateStr = PlayerPrefs.GetString("LastPlayDate", "");
         int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
