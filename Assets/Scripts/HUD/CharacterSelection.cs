@@ -173,6 +173,9 @@ public class CharacterSelection : MonoBehaviour
     private void CheckCharacterStatus()
     {
         string characterImageName = "character" + (currentIndex % numberOfCharacters);
+
+        selectedBody = imagenameToAnimationString[characterImageName];
+
         bool isLocked = true;
 
         foreach (var item in shopItemData)
@@ -375,7 +378,7 @@ public class CharacterSelection : MonoBehaviour
     {
         // TODO right place ??
         PlayClickSound();
-        animationScript.SetOutfitAnimator("character_default", selectedHead);
+        animationScript.SetOutfitAnimator(selectedBody, selectedHead);
     }
 
     private void PlayClickSound()
