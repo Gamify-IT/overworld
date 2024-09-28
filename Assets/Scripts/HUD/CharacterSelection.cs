@@ -43,8 +43,9 @@ public class CharacterSelection : MonoBehaviour
     private string selectedBody;
     private string selectedHead;
 
-  
 
+    Dictionary<string, string> imagenameToAnimationString = new Dictionary<string, string>();
+    
 
     public enum AccessoryType
     {
@@ -56,6 +57,26 @@ public class CharacterSelection : MonoBehaviour
 
     void Start()
     {
+        imagenameToAnimationString.Add("hat0", "flammen_haare");
+        imagenameToAnimationString.Add("hat1", "globus_hut");
+        imagenameToAnimationString.Add("hat2", "schutzhelm");
+        imagenameToAnimationString.Add("hat3", "blonde_haare");
+        imagenameToAnimationString.Add("hat4", "none");
+        imagenameToAnimationString.Add("glasses0", "3D_brille");
+        imagenameToAnimationString.Add("glasses1", "coole_brille");
+        imagenameToAnimationString.Add("glasses2", "herzbrille");
+        imagenameToAnimationString.Add("glasses3", "retro_brille");
+        imagenameToAnimationString.Add("glasses4", "none");
+        imagenameToAnimationString.Add("character0", "character_default");
+        imagenameToAnimationString.Add("character1", "character_blue_and_purple");
+        imagenameToAnimationString.Add("character2", "character_black_and_white");
+        imagenameToAnimationString.Add("character3", "character_trainingsanzug");
+        imagenameToAnimationString.Add("character4", "character_anzug");
+        imagenameToAnimationString.Add("character5", "character_jeans_karo");
+        imagenameToAnimationString.Add("character6", "character_lange_haare");
+        imagenameToAnimationString.Add("character7", "character_ironman");
+        imagenameToAnimationString.Add("character8", "character_santa");
+
         shopItemData = DataManager.Instance.GetShopItems();
         GameManager.Instance.isPaused = true;
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
@@ -95,6 +116,9 @@ public class CharacterSelection : MonoBehaviour
             glassesImage.color = Color.white;
             hatImage.sprite = null;
             hatImage.color = new Color(1, 1, 1, 0);
+
+            selectedHead = imagenameToAnimationString[glassesImage.sprite.name];
+
             CheckAccessoryStatus(glassesImage.sprite.name);
         }
         else if (currentAccessoryType == AccessoryType.Hat)
@@ -104,12 +128,16 @@ public class CharacterSelection : MonoBehaviour
             hatImage.color = Color.white;
             glassesImage.sprite = null;
             glassesImage.color = new Color(1, 1, 1, 0);
+            
+            selectedHead = imagenameToAnimationString[hatImage.sprite.name];           
+
             CheckAccessoryStatus(hatImage.sprite.name);
         }
 
         CheckCharacterStatus();
         UpdateCharacterDisplay();
     }
+
 
     private void CheckAccessoryStatus(string currentImageName)
     {
@@ -133,6 +161,8 @@ public class CharacterSelection : MonoBehaviour
                 }
             }
         }
+
+
 
         lockImage.SetActive(isLocked);
     }
@@ -343,7 +373,7 @@ public class CharacterSelection : MonoBehaviour
     {
         // TODO right place ??
         PlayClickSound();
-        animationScript.SetOutfitAnimator(selectedBody, selectedHead);
+        animationScript.SetOutfitAnimator("character_default", selectedHead);
     }
 
     private void PlayClickSound()
