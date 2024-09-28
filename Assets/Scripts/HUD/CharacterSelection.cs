@@ -77,6 +77,8 @@ public class CharacterSelection : MonoBehaviour
         imagenameToAnimationString.Add("character7", "character_ironman");
         imagenameToAnimationString.Add("character8", "character_santa");
 
+        animationScript = GameObject.FindObjectOfType<PlayerAnimation>();
+
         shopItemData = DataManager.Instance.GetShopItems();
         GameManager.Instance.isPaused = true;
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
