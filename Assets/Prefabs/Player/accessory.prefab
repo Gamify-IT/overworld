@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3403153738846539166}
   - component: {fileID: 3032303025227410919}
   m_Layer: 0
-  m_Name: 3D_brille
+  m_Name: accessory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
