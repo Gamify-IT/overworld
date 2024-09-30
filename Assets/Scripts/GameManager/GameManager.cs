@@ -915,7 +915,7 @@ private void PlayAchievementNotificationSound(){
             int cost = costs[i];
             string imageName = imageNames[i];
             string category = categories[i];
-            bool bought = (i % 2 == 0); // Jedes zweite Item als gekauft markieren
+            bool bought = true;
 
             ShopItem shopItem = new ShopItem(title, cost, imageName, category, bought);
             shopItems[i] = shopItem;

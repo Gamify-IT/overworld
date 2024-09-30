@@ -25,7 +25,9 @@ public class CharacterSelection : MonoBehaviour
     [SerializeField] private GameObject lockImage;
     [SerializeField] private GameObject[] characterPrefabs;
     [SerializeField] private GameObject warningPanel;
-    
+    [SerializeField] private Button previousButton;
+    [SerializeField] private Button nextButton;
+
 
 
     public Button glassesButton;
@@ -48,7 +50,7 @@ public class CharacterSelection : MonoBehaviour
 
 
     Dictionary<string, string> imagenameToAnimationString = new Dictionary<string, string>();
-    
+
 
     public enum AccessoryType
     {
@@ -114,6 +116,22 @@ public class CharacterSelection : MonoBehaviour
 
     private void UpdateVisualsAndStatus()
     {
+        if (currentIndex == 7 || currentIndex == 8)
+        {
+            glassesImage.sprite = Resources.Load<Sprite>("Glasses/glasses4");
+            glassesImage.color = new Color(1, 1, 1, 0);
+
+            hatImage.sprite = Resources.Load<Sprite>("Hats/hat4");
+            hatImage.color = new Color(1, 1, 1, 0);
+
+            selectedHead = "none";
+            selectedBody = imagenameToAnimationString["character" + currentIndex];
+
+            lockImage.SetActive(false);
+            return;
+        }
+       
+
         if (currentAccessoryType == AccessoryType.Glasses)
         {
             glasses = Resources.Load<Sprite>("Glasses/glasses" + (currentGlasses % numberOfGlasses));
@@ -123,7 +141,6 @@ public class CharacterSelection : MonoBehaviour
             hatImage.color = new Color(1, 1, 1, 0);
 
             selectedHead = imagenameToAnimationString[glassesImage.sprite.name];
-
             CheckAccessoryStatus(glassesImage.sprite.name);
         }
         else if (currentAccessoryType == AccessoryType.Hat)
@@ -133,15 +150,15 @@ public class CharacterSelection : MonoBehaviour
             hatImage.color = Color.white;
             glassesImage.sprite = null;
             glassesImage.color = new Color(1, 1, 1, 0);
-            
-            selectedHead = imagenameToAnimationString[hatImage.sprite.name];           
 
+            selectedHead = imagenameToAnimationString[hatImage.sprite.name];
             CheckAccessoryStatus(hatImage.sprite.name);
         }
 
         CheckCharacterStatus();
         UpdateCharacterDisplay();
     }
+
 
 
     private void CheckAccessoryStatus(string currentImageName)
@@ -195,39 +212,34 @@ public class CharacterSelection : MonoBehaviour
 
         lockImageOutfit.SetActive(isLocked);
 
-        if (currentIndex == 6)  
+        if (currentIndex == 6)
         {
-            DisableNextPreviousButtons(); 
+            DisableNextPreviousButtons();
         }
     }
 
 
     private void DisableNextPreviousButtons()
     {
-        var previousButton = GameObject.Find("PreviousButton");
-        var nextButton = GameObject.Find("NextButton");
-
         if (previousButton != null && nextButton != null)
         {
-            previousButton.GetComponent<Button>().interactable = false;
-            nextButton.GetComponent<Button>().interactable = false;
+            previousButton.interactable = false;
+            nextButton.interactable = false;
         }
     }
 
+
     private void UpdateWarnings()
     {
-        if (currentIndex == 7 || currentIndex == 8) 
+        if (currentIndex == 7 )
         {
-            warningText.text = "Looks like this suit prefers to go solo, no hats or glasses with this one!";
-
-            descriptionAccessory.text = "";
-
             DisableAccessoryButtons();
-            HideAccessories();
-
-            lockImage.SetActive(false);
-
-            DisableNextPreviousButtons();
+            warningText.text = "Titanium Knight fights alone. No accessories allowed on this mission!";
+        }
+        else if (currentIndex == 8)
+        {
+            DisableAccessoryButtons();
+            warningText.text = "Santa’s fashion rule: ‘No hats or glasses, just festive cheer!’";
         }
         else
         {
@@ -238,11 +250,13 @@ public class CharacterSelection : MonoBehaviour
             EnableNextPreviousButtons();
         }
 
-        if(currentIndex == 0 || currentIndex == 1 || currentIndex == 2)
+        if (currentIndex == 0 || currentIndex == 1 || currentIndex == 2)
         {
             warningText.text = "These outfits are for free!";
         }
     }
+
+
 
 
     private void DisableAccessoryButtons()
@@ -274,15 +288,13 @@ public class CharacterSelection : MonoBehaviour
 
     private void EnableNextPreviousButtons()
     {
-        var previousButton = GameObject.Find("PreviousButton");
-        var nextButton = GameObject.Find("NextButton");
-
         if (previousButton != null && nextButton != null)
         {
-            previousButton.GetComponent<Button>().interactable = true;
-            nextButton.GetComponent<Button>().interactable = true;
+            previousButton.interactable = true;
+            nextButton.interactable = true;
         }
     }
+
 
     public void PreviousAccessory()
     {
@@ -381,9 +393,9 @@ public class CharacterSelection : MonoBehaviour
     {
         PlayClickSound();
 
-        bool outfitLocked = lockImageOutfit.activeSelf; 
-        bool glassesLocked = lockImage.activeSelf; 
-        bool hatLocked = lockImage.activeSelf; 
+        bool outfitLocked = lockImageOutfit.activeSelf;
+        bool glassesLocked = lockImage.activeSelf;
+        bool hatLocked = lockImage.activeSelf;
 
         if (outfitLocked || glassesLocked || hatLocked)
         {
@@ -499,5 +511,30 @@ public class CharacterSelection : MonoBehaviour
         descriptionAccessory.text = descriptionText;
     }
 
-   
+    private void DisableAccessoryNavigationButtons()
+    {
+        if (nextButton != null)
+        {
+            nextButton.interactable = false;
+        }
+
+        if (previousButton != null)
+        {
+            previousButton.interactable = false;
+        }
+    }
+
+    private void EnableAccessoryNavigationButtons()
+    {
+        if (nextButton != null)
+        {
+            nextButton.interactable = true;
+        }
+
+        if (previousButton != null)
+        {
+            previousButton.interactable = true;
+        }
+    }
+
 }
