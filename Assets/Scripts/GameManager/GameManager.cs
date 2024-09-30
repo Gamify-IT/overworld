@@ -882,11 +882,10 @@ private void PlayAchievementNotificationSound(){
 
     public ShopItem[] GetDummyShopItems()
     {
-        int itemCount = 14; // Anzahl der Items
+        int itemCount = 14; 
         ShopItem[] shopItems = new ShopItem[itemCount];
         System.Random random = new System.Random();
 
-        // Die Werte für jedes Item
         List<string> titles = new List<string> {
         "FLAME_HAT", "HEART_GLASSES", "GLOBE_HAT", "SUIT", "SANTA_COSTUME",
         "COOL_GLASSES", "RETRO_GLASSES", "SAFETY_HELMET", "CINEMA_GLASSES",
