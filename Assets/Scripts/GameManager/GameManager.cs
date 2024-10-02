@@ -481,7 +481,7 @@ public class GameManager : MonoBehaviour
         bool unlocked = DataManager.Instance.UpdatePlayerCredit(price, credit);
         if (unlocked)
         {
-           PlayerStatisticData playerData = DataManager.Instance.GetOwnPlayerData();
+           PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
             if (playerData == null)
             {
                 return;
@@ -499,7 +499,7 @@ public class GameManager : MonoBehaviour
         bool unlocked = DataManager.Instance.UpdatePseudonym(name);
         if (unlocked)
         {
-            PlayerStatisticData playerData = DataManager.Instance.GetOwnPlayerData();
+            PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
             if (playerData == null)
             {
                 return;
@@ -517,7 +517,7 @@ public class GameManager : MonoBehaviour
         bool unlocked = DataManager.Instance.UpdateVisibility(visibility);
         if (unlocked)
         {
-            PlayerStatisticData playerData = DataManager.Instance.GetOwnPlayerData();
+            PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
             if (playerData == null)
             {
                 return;
@@ -589,13 +589,13 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public async UniTask<bool> SavePlayerStatisticData()
     {
-        PlayerStatisticData playerStatisticData = DataManager.Instance.GetOwnPlayerData();
+        PlayerStatisticData playerStatisticData = DataManager.Instance.GetPlayerData();
         string basePath = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/";
         bool savingSuccessful = true;
 
         if (playerStatisticData.creditIsUpdated() || playerStatisticData.PseudonymIsUpdated() || playerStatisticData.VisibilityIsUpdated())
         {
-            PlayerStatisticDTO playerstatistic = PlayerStatisticDTO.ConvertToPlayerStatisticDTO(playerStatisticData);
+            PlayerStatisticDTO playerstatistic = PlayerStatisticDTO.ConvertDataToDTO(playerStatisticData);
             string path = basePath + userId;
             string json = JsonUtility.ToJson(playerstatistic, true);
             Debug.Log(playerstatistic.id + userId);

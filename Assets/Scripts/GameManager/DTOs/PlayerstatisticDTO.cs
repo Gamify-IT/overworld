@@ -22,7 +22,6 @@ public class PlayerStatisticDTO
     public int currentCharacterIndex;
     public int volumeLevel;
     public int knowledge;
-    public int volumeLevel;
     public int rewards;
     public bool visibility;
     public int credit;

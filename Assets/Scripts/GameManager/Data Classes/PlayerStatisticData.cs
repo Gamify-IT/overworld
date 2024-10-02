@@ -70,6 +70,7 @@ public class PlayerStatisticData
     public static PlayerStatisticData ConvertDtoToData(PlayerStatisticDTO statistic)
     {
         AreaLocationDTO currentArea = statistic.currentArea;
+
         string userId = statistic.userId;
         string username = statistic.username;
         string lastActive = statistic.lastActive;
@@ -87,22 +88,22 @@ public class PlayerStatisticData
         int credit = statistic.credit;
         string pseudonym = statistic.pseudonym;
 
-        for (int i = 0; i < dto.unlockedAreas.Length; i++)
+        for (int i = 0; i < statistic.unlockedAreas.Length; i++)
         {
-            unlockedAreas[i] = dto.unlockedAreas[i];
+            unlockedAreas[i] = statistic.unlockedAreas[i];
         }
 
-        for (int i = 0; i < dto.unlockedDungeons.Length; i++)
+        for (int i = 0; i < statistic.unlockedDungeons.Length; i++)
         {
-            unlockedDungeons[i] = dto.unlockedDungeons[i];
+            unlockedDungeons[i] = statistic.unlockedDungeons[i];
         }
 
-        for (int i = 0; i < dto.unlockedTeleporters.Length; i++)
+        for (int i = 0; i < statistic.unlockedTeleporters.Length; i++)
         {
-            unlockedTeleporters[i] = dto.unlockedTeleporters[i];
+            unlockedTeleporters[i] = statistic.unlockedTeleporters[i];
         }
      
-    PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, completedDungeons,unlockedTeleporters,currentArea,userId,username, lastActive,
+    PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, unlockedDungeons,unlockedTeleporters,currentArea,userId,username, lastActive,
             logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym);
         return data;
     }
@@ -423,10 +424,6 @@ public class PlayerStatisticData
     }
 
 
-    public int GetVolumeLevel()
-    {
-        return volumeLevel;
-    }
-
+    
     #endregion
 }

@@ -36,10 +36,7 @@ public class CharacterSelection : MonoBehaviour
     public Button hatButton;
     public TextMeshProUGUI warningText;
 
-    private int numberOfCharacters;
-    private int currentIndex;
-    private Image characterImage;
-    private AudioSource audioSource
+    private AudioSource audioSource;
     private int currentIndex = 0;
     private int currentGlasses = 0;
     private int currentHat = 0;
@@ -88,7 +85,7 @@ public class CharacterSelection : MonoBehaviour
         animationScript = GameObject.FindObjectOfType<PlayerAnimation>();
 
         shopItemData = DataManager.Instance.GetShopItems();
-        GameManager.Instance.isPaused = true;
+        GameManager.Instance.SetIsPaused(true);
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
         glassesImage = GameObject.Find("Glasses Sprite").GetComponent<Image>();
         hatImage = GameObject.Find("Hat Sprite").GetComponent<Image>();

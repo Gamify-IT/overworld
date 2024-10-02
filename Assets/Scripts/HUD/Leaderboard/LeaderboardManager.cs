@@ -59,7 +59,7 @@ public class LeaderboardManager : MonoBehaviour
     /// </summary>
     private void InitializeData()
     {
-        ownData = DataManager.Instance.GetOwnPlayerData();
+        ownData = DataManager.Instance.GetPlayerData();
         ranking = DataManager.Instance.GetAllPlayerStatistics();
     }
 
