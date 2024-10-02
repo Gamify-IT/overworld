@@ -168,7 +168,9 @@ public class ShopItemManager : MonoBehaviour
         {
             Destroy(shopItemObject);
         }
-    }
+
+    
+        }
 
     /// <summary>
     /// Opens a confirmation panel to ask the player if they want to purchase a specific item.
@@ -214,7 +216,7 @@ public class ShopItemManager : MonoBehaviour
             GameManager.Instance.SaveShopItem();
 
             GameManager.Instance.UpdatePlayerCredit(price, ownData.GetCredit());
-            GameManager.Instance.SavePlayerData();
+            GameManager.Instance.SavePlayerStatisticData();
 
             
 
