@@ -403,8 +403,11 @@ public class CharacterSelection : MonoBehaviour
         else
         {
             animationScript.SetOutfitAnimator(selectedBody, selectedHead);
-            ownData.SetCurrentCharacter(selectedBody); // save selection to characterStatistic
-            ownData.SetCurrentAccessory(selectedHead);
+            GameManager.Instance.UpdateCharacterIndex(selectedBody);
+            GameManager.Instance.UpdateAccessoryIndex(selectedHead);
+
+            GameManager.Instance.SavePlayerStatisticData();
+
         }
     }
 

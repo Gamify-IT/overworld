@@ -677,6 +677,17 @@ public class DataManager : MonoBehaviour
         return false;
     }
 
+    
+    public bool UpdateCharacterIndex(string characterIndex)
+    {
+        return playerData.updateCharacter(characterIndex);
+    }
+
+    public bool UpdateAccessoryIndex(string accessoryIndex)
+    {
+        return playerData.updateAccessory(accessoryIndex);
+    }
+
     /// <summary>
     ///     This function updates the pseudonym of the own player
     /// </summary>

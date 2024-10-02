@@ -31,6 +31,8 @@ public class PlayerStatisticData
     private bool updatedCredit = false;
     private bool updatedPseudonym= false;
     private bool updatedVisibility = false;
+    private bool updatedCharacterIndex = false;
+    private bool updatedAccessoryIndex = false;
     private string currentCharacter;
     private string currentAccessory;
     #endregion
@@ -117,7 +119,19 @@ public class PlayerStatisticData
     }
 
 
+    public bool updateCharacter(string currentCharacterIndex)
+    {
+        updatedCharacterIndex = true;
+        currentCharacter = currentCharacterIndex;
+        return true;
+    }
 
+    public bool updateAccessory(string currentAccessoryIndex)
+    {
+        updatedAccessoryIndex = true;
+        currentAccessory = currentAccessoryIndex;
+        return true;
+    }
     /// <summary>
     ///     Updates the player's credit.
     /// </summary>
@@ -225,6 +239,16 @@ public class PlayerStatisticData
     public bool VisibilityIsUpdated()
     {
         return updatedVisibility;
+    }
+
+    public bool CharacterIsUpdated()
+    {
+        return updatedCharacterIndex;
+    }
+    
+    public bool AccessoryIsUpdated()
+    {
+        return updatedAccessoryIndex;
     }
 
     #region Getter and Setter

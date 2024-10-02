@@ -490,6 +490,32 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public async void UpdateCharacterIndex(string index)
+    {
+        bool unlocked = DataManager.Instance.UpdateCharacterIndex(index);
+        if (unlocked)
+        {
+            PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
+            if (playerData == null)
+            {
+                return;
+            }
+        }
+    }
+
+    public async void UpdateAccessoryIndex(string index)
+    {
+        bool unlocked = DataManager.Instance.UpdateAccessoryIndex(index);
+        if (unlocked)
+        {
+            PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
+            if (playerData == null)
+            {
+                return;
+            }
+        }
+    }
+
     /// <summary>
     ///     This function updates the pseudonym of the player
     /// </summary>
@@ -593,7 +619,7 @@ public class GameManager : MonoBehaviour
         string basePath = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/";
         bool savingSuccessful = true;
 
-        if (playerStatisticData.creditIsUpdated() || playerStatisticData.PseudonymIsUpdated() || playerStatisticData.VisibilityIsUpdated())
+        if (playerStatisticData.creditIsUpdated() || playerStatisticData.PseudonymIsUpdated() || playerStatisticData.VisibilityIsUpdated() || playerStatisticData.CharacterIsUpdated() ||  playerStatisticData.AccessoryIsUpdated())
         {
             PlayerStatisticDTO playerstatistic = PlayerStatisticDTO.ConvertDataToDTO(playerStatisticData);
             string path = basePath + userId;
