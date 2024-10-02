@@ -35,7 +35,6 @@ public class CharacterSelection : MonoBehaviour
     public Button glassesButton;
     public Button hatButton;
     public TextMeshProUGUI warningText;
-
     private AudioSource audioSource;
     private int currentIndex = 0;
     private int currentGlasses = 0;

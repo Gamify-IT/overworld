@@ -8,7 +8,7 @@ using System;
 /// </summary>
 public class PlayerStatisticData 
 {
-    #region attributes
+    #region Attributes
     private readonly string id;
     public AreaLocationDTO[] unlockedAreas;
     public AreaLocationDTO[] unlockedDungeons;
@@ -42,7 +42,7 @@ public class PlayerStatisticData
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
-        this.unlockedDungeons = unlockedDungeons;
+        this.unlockedDungeons = completedDungeons;
         this.unlockedTeleporters = unlockedTeleporters;
         this.currentArea = currentArea;
         this.userId = userId;
@@ -74,19 +74,20 @@ public class PlayerStatisticData
         string userId = statistic.userId;
         string username = statistic.username;
         string lastActive = statistic.lastActive;
-
         float logoutPositionX = statistic.logoutPositionX;
         float logoutPositionY = statistic.logoutPositionY;
         string logoutScene = statistic.logoutScene;
         int currentCharacterIndex = statistic.currentCharacterIndex;
         int volumeLevel = statistic.volumeLevel;
-
         int knowledge = statistic.knowledge;
         int rewards = statistic.rewards;
         string id = statistic.id;
         bool visibility = statistic.visibility;
         int credit = statistic.credit;
         string pseudonym = statistic.pseudonym;
+        AreaLocationDTO[] unlockedAreas = new AreaLocationDTO[statistic.unlockedAreas.Length];
+        AreaLocationDTO[] unlockedDungeons = new AreaLocationDTO[statistic.unlockedDungeons.Length];
+        TeleporterDTO[] unlockedTeleporters = new TeleporterDTO[statistic.unlockedTeleporters.Length];
 
         for (int i = 0; i < statistic.unlockedAreas.Length; i++)
         {
@@ -103,7 +104,7 @@ public class PlayerStatisticData
             unlockedTeleporters[i] = statistic.unlockedTeleporters[i];
         }
      
-    PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, unlockedDungeons,unlockedTeleporters,currentArea,userId,username, lastActive,
+        PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive,
             logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym);
         return data;
     }
@@ -423,7 +424,5 @@ public class PlayerStatisticData
         this.credit = credit;
     }
 
-
-    
     #endregion
 }
