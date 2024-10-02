@@ -352,7 +352,8 @@ public class DataManager : MonoBehaviour
     /// <param name="currentIndex">selected character index</param>
     public void SetupCharacter(int currentIndex)
     {
-        // get player components
+        // TODO
+        /* get player components
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         SpriteRenderer currentSprite = player.GetComponent<SpriteRenderer>();
         Animator currentAnimator = player.GetComponent<Animator>();
@@ -364,7 +365,7 @@ public class DataManager : MonoBehaviour
         characterHead.sprite = GetCharacterHeads()[currentIndex];
 
         // save selected character
-        playerData.SetCurrentCharacterIndex(currentIndex);
+        playerData.SetCurrentCharacterIndex(currentIndex);*/
     }
 
     /// <summary>

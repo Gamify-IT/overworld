@@ -233,7 +233,7 @@ public class CharacterSelection : MonoBehaviour
         else if (currentIndex == 8)
         {
             DisableAccessoryButtons();
-            warningText.text = "Santa�s fashion rule: �No hats or glasses, just festive cheer!�";
+            warningText.text = "Santa\'s fashion rule: \"No hats or glasses, just festive cheer!\"";
         }
         else
         {
