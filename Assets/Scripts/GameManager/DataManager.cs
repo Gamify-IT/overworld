@@ -43,7 +43,7 @@ public class DataManager : MonoBehaviour
     [SerializeField] private List<Sprite> characterHeads;
     private PlayerAnimation animationScript;
 
-    void start()
+    void Start()
     {
         animationScript = GameObject.FindObjectOfType<PlayerAnimation>();
     }

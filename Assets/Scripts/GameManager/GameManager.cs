@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     #region save player data
     /// <summary>
-    ///     This function saves all important player data when the plaer is logging out
+    ///     This function saves all important player data when the player is logging out
     /// </summary>
     /// <returns></returns>
     public async UniTask<bool> SavePlayerData()
