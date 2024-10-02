@@ -46,7 +46,7 @@ public class CharacterSelection : MonoBehaviour
 
     private string selectedBody;
     private string selectedHead;
-
+    private PlayerStatisticData ownData;
 
     Dictionary<string, string> imagenameToAnimationString = new Dictionary<string, string>();
 
@@ -61,6 +61,7 @@ public class CharacterSelection : MonoBehaviour
 
     void Start()
     {
+        ownData = DataManager.Instance.GetPlayerData();
         imagenameToAnimationString.Add("hat0", "flammen_haare");
         imagenameToAnimationString.Add("hat1", "globus_hut");
         imagenameToAnimationString.Add("hat2", "schutzhelm");
@@ -387,7 +388,7 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     public void ConfirmButton()
     {
-        DataManager.Instance.SetupCharacter(currentIndex);
+        DataManager.Instance.SetupCharacter();
         GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
         PlayClickSound();
 
@@ -402,6 +403,8 @@ public class CharacterSelection : MonoBehaviour
         else
         {
             animationScript.SetOutfitAnimator(selectedBody, selectedHead);
+            ownData.SetCurrentCharacter(selectedBody); // save selection to characterStatistic
+            ownData.SetCurrentAccessory(selectedHead);
         }
     }
 

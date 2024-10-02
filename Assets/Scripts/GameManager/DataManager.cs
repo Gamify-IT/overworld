@@ -41,6 +41,12 @@ public class DataManager : MonoBehaviour
     [SerializeField] private List<Sprite> characterSprites;
     [SerializeField] private List<RuntimeAnimatorController> characterAnimators;
     [SerializeField] private List<Sprite> characterHeads;
+    private PlayerAnimation animationScript;
+
+    void start()
+    {
+        animationScript = GameObject.FindObjectOfType<PlayerAnimation>();
+    }
 
     /// <summary>
     ///     This function sets given data for the specified world
@@ -318,7 +324,7 @@ public class DataManager : MonoBehaviour
             GetWorldData(worldIndex).UnlockTeleporter(dungeonIndex, number);
         }
 
-        SetupCharacter(playerData.GetCurrentCharacterIndex());
+        SetupCharacter();
 
 #if !UNITY_EDITOR
         CheckForLastLogin();
@@ -349,23 +355,11 @@ public class DataManager : MonoBehaviour
     /// <summary>
     ///      Setups the character with the saved or selected values.
     /// </summary>
-    /// <param name="currentIndex">selected character index</param>
-    public void SetupCharacter(int currentIndex)
+    public void SetupCharacter()
     {
-        // TODO
-        /* get player components
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        SpriteRenderer currentSprite = player.GetComponent<SpriteRenderer>();
-        Animator currentAnimator = player.GetComponent<Animator>();
-        Image characterHead = GameObject.Find("Head Minimap").GetComponent<Image>();
-
-        // initialize the saved player sprite, animations and head on the minimap
-        currentSprite.sprite = GetCharacterSprites()[currentIndex];
-        currentAnimator.runtimeAnimatorController = GetCharacterAnimators()[currentIndex];
-        characterHead.sprite = GetCharacterHeads()[currentIndex];
-
-        // save selected character
-        playerData.SetCurrentCharacterIndex(currentIndex);*/
+        string selectedBody = playerData.GetCurrentCharacter();
+        string selectedHead = playerData.GetCurrentAccessory();
+        animationScript.SetOutfitAnimator(selectedBody, selectedHead);
     }
 
     /// <summary>

@@ -924,7 +924,7 @@ public class GameManager : MonoBehaviour
             PlayerStatisticDTO player = new PlayerStatisticDTO(
                 id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username,
                 lastActive, logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel,
-                knowledge, rewards, showRewards, credit, pseudonym
+                knowledge, rewards, showRewards, credit, pseudonym, "character_default", "none"
             );
             allStatistics[i] = player;
         }
@@ -938,7 +938,7 @@ public class GameManager : MonoBehaviour
         TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
         PlayerStatisticDTO player31 = new PlayerStatisticDTO(
             "Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco",
-            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 25.5f, 12.3f, "Scene3", 2, 50, 200, 170, true, 500, "TheoPro"
+            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 25.5f, 12.3f, "Scene3", 2, 50, 200, 170, true, 500, "TheoPro", "character_default", "none"
         );
         allStatistics[30] = player31;
         PlayerStatisticDTO ownPlayer = GetOwnDummyData();
@@ -959,7 +959,7 @@ public class GameManager : MonoBehaviour
 
         PlayerStatisticDTO ownPlayerData = new PlayerStatisticDTO(
             "31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki",
-            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 20.0f, 15.0f, "World 1", 1, 75, 200, 170, false, 100, "PSEProfi"
+            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 20.0f, 15.0f, "World 1", 1, 75, 200, 170, false, 100, "PSEProfi", "character_default", "none"
         );
 
         return ownPlayerData;

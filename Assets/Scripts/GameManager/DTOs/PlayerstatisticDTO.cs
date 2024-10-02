@@ -26,13 +26,15 @@ public class PlayerStatisticDTO
     public bool visibility;
     public int credit;
     public string pseudonym;
+    public string currentCharacter;
+    public string currentAccessory;
     #endregion
 
     #region Constructors
 
     public PlayerStatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
          AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
-         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool visibility, int credit, string pseudonym)
+         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool visibility, int credit, string pseudonym, string currentCharacter, string currentAccessory)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -52,6 +54,8 @@ public class PlayerStatisticDTO
         this.visibility = visibility;
         this.credit = credit;
         this.pseudonym = pseudonym;
+        this.currentCharacter = currentCharacter;
+        this.currentAccessory = currentAccessory;
     }
 
     public PlayerStatisticDTO()
@@ -78,6 +82,8 @@ public class PlayerStatisticDTO
         visibility = false;
         credit = 0;
         pseudonym = "";
+        currentCharacter = "character_default";
+        currentAccessory = "none";
     }
     #endregion
 
@@ -98,18 +104,20 @@ public class PlayerStatisticDTO
         int currentCharacterIndex = playerStatisticData.GetCurrentCharacterIndex();
         int knowledge = playerStatisticData.GetKnowledge();
         int volumeLevel = playerStatisticData.GetVolumeLevel();
-
         int rewards = playerStatisticData.GetRewards();
         bool visibility = playerStatisticData.GetVisibility();
         int credit = playerStatisticData.GetCredit();
         string pseudonym = playerStatisticData.GetPseudonym();
+        string currentCharacter = playerStatisticData.GetCurrentCharacter();
+        string currentAccessory = playerStatisticData.GetCurrentAccessory();
+
         AreaLocationDTO currentArea = playerStatisticData.GetCurrentArea();
         AreaLocationDTO[] unlockedAreas = playerStatisticData.GetUnlockedAreas();
         AreaLocationDTO[] unlockedDungeons = playerStatisticData.GetUnlockedDungeons();
         TeleporterDTO[] unlockedTeleporters = playerStatisticData.GetUnlockedTeleporters();
 
-        PlayerStatisticDTO playerStatistic = new PlayerStatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea,
-        userId, username, lastActive, logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym);
+        PlayerStatisticDTO playerStatistic = new PlayerStatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive, 
+            logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym, currentCharacter, currentAccessory);
 
         return playerStatistic;
     }

@@ -31,6 +31,8 @@ public class PlayerStatisticData
     private bool updatedCredit = false;
     private bool updatedPseudonym= false;
     private bool updatedVisibility = false;
+    private string currentCharacter;
+    private string currentAccessory;
     #endregion
 
     #region Constructor
@@ -38,7 +40,7 @@ public class PlayerStatisticData
     ///     Constructor for the PlayerStatisticData class, initializing all attributes.
     /// </summary>
     public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
-         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool visibility,int credit, string pseudonym)
+         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool visibility,int credit, string pseudonym, string currentCharacter, string currentAccessory)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -59,6 +61,8 @@ public class PlayerStatisticData
         this.visibility = visibility;
         this.credit = credit;
         this.pseudonym = pseudonym;
+        this.currentCharacter = currentCharacter;
+        this.currentAccessory = currentAccessory;
     }
     #endregion
 
@@ -85,7 +89,10 @@ public class PlayerStatisticData
         bool visibility = statistic.visibility;
         int credit = statistic.credit;
         string pseudonym = statistic.pseudonym;
-        AreaLocationDTO[] unlockedAreas = new AreaLocationDTO[statistic.unlockedAreas.Length];
+        string currentCharacter = statistic.currentCharacter;
+        string currentAccessory = statistic.currentAccessory;
+
+    AreaLocationDTO[] unlockedAreas = new AreaLocationDTO[statistic.unlockedAreas.Length];
         AreaLocationDTO[] unlockedDungeons = new AreaLocationDTO[statistic.unlockedDungeons.Length];
         TeleporterDTO[] unlockedTeleporters = new TeleporterDTO[statistic.unlockedTeleporters.Length];
 
@@ -105,7 +112,7 @@ public class PlayerStatisticData
         }
      
         PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive,
-            logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym);
+            logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym, currentCharacter, currentAccessory);
         return data;
     }
 
@@ -424,5 +431,24 @@ public class PlayerStatisticData
         this.credit = credit;
     }
 
+    public string GetCurrentCharacter()
+    {
+        return currentCharacter;
+    }
+
+    public void SetCurrentCharacter(string newCharacter)
+    {
+        this.currentCharacter = newCharacter;
+    }
+
+    public string GetCurrentAccessory()
+    {
+        return currentAccessory;
+    }
+
+    public void SetCurrentAccessory(string newAccessory)
+    {
+        this.currentAccessory = newAccessory;
+    }
     #endregion
 }
