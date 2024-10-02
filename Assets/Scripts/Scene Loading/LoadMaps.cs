@@ -7,9 +7,9 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class LoadMaps : MonoBehaviour
 {
-    public string sceneOrigin;
-    public string sceneDestination;
-    public int sceneDestinationIndex;
+    [SerializeField] private string sceneOrigin;
+    [SerializeField] private string sceneDestination;
+    [SerializeField] private int sceneDestinationIndex;
 
     /// <summary>
     ///     This function is called when the player enters hitbox on the way to the next world.
@@ -32,6 +32,7 @@ public class LoadMaps : MonoBehaviour
     {
         if (SceneManager.GetSceneByName(sceneDestination).isLoaded)
         {
+            DataManager.Instance.SetPlayerPosition(int.Parse(sceneOrigin.Split(' ')[1]), 0);
             return;
         }
 

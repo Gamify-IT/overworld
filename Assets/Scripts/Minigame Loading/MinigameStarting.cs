@@ -87,12 +87,12 @@ public class MinigameStarting : MonoBehaviour
     /// <summary>
     ///     This function starts the minigame.
     /// </summary>
-    public void StartButtonPressed()
+    public async void StartButtonPressed()
     {
-        GameManager.Instance.SaveAchievements();
+        await GameManager.Instance.SavePlayerData();
         LoadMinigameInIframe(game, configurationId);
         PlayClickSound();
-        Invoke("QuitMinigame", 0.3f);
+        Invoke("QuitMinigame", 0.3f); 
     }
 
     /// <summary>
@@ -101,6 +101,7 @@ public class MinigameStarting : MonoBehaviour
     public void QuitButtonPressed()
     {
         PlayClickSound();
+        PlayerAnimation.Instance.EnableMovement();
         Invoke("QuitMinigame", 0.3f);
     }
 
@@ -112,7 +113,6 @@ public class MinigameStarting : MonoBehaviour
         Reset();
         PlayerAnimation.Instance.playerAnimator.enabled = true;
         PlayerAnimation.Instance.SetBusy(false);
-        PlayerAnimation.Instance.EnableMovement();
         SceneManager.UnloadSceneAsync("MinigameStarting Overlay");
     }
 
@@ -128,7 +128,7 @@ public class MinigameStarting : MonoBehaviour
         }
     }
     /// <summary>
-    ///     This function plays click sound when the button is clicked.
+    ///     This function plays click sound 
     /// </summary>
     private void PlayClickSound()
     {

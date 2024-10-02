@@ -8,7 +8,6 @@ using UnityEngine;
 public class PlayerStatisticDTOArray
 {
     #region Attributes
-
     public PlayerStatisticDTO[] playerStatisticDTOs;
 
     #endregion

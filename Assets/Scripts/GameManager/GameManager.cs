@@ -42,7 +42,91 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject achievementNotificationManagerPrefab;
 
     //Game status
-    public bool isPaused = false;
+    private bool isPaused = false;
+
+    private bool justLoaded = true;
+
+
+    #region save player data
+    /// <summary>
+    ///     This function saves all important player data when the plaer is logging out
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask<bool> SavePlayerData()
+    {
+        return await SavePlayerStatistic() && await SaveAchievements();
+    }
+
+    /// <summary>
+    ///     This function saves the last known position of the player in the backend when the player logs out 
+    /// </summary>
+    /// <returns></returns>
+    private async UniTask<bool> SavePlayerStatistic()
+    {
+        Debug.Log("Start saving player statistic");
+
+        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
+        Debug.Log("path: " + path);
+
+        PlayerStatisticData playerStatistic = DataManager.Instance.GetPlayerData();
+
+        playerStatistic.SetLastActive(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        playerStatistic.SetLogoutPositionX(GameObject.FindGameObjectWithTag("Player").transform.position.x);
+        playerStatistic.SetLogoutPositionY(GameObject.FindGameObjectWithTag("Player").transform.position.y);
+
+        PlayerStatisticDTO playerStatisticDTO = PlayerStatisticDTO.ConvertDataToDTO(playerStatistic);
+
+        string json = JsonUtility.ToJson(playerStatisticDTO, true);
+
+        bool succesful = await RestRequest.PutRequest(path, json);
+
+        if (succesful)
+        {
+            Debug.Log("Updated player statistic successfully");
+            return true;
+        }
+        else
+        {
+            Debug.Log("Could not update player statistic");
+            return false;
+        }
+
+    }
+
+    /// <summary>
+    ///     This function saves all achievements, which made progress in the current session
+    /// </summary>
+    public async UniTask<bool> SaveAchievements()
+    {
+        List<AchievementData> achievements = DataManager.Instance.GetAchievements();
+        string basePath = overworldBackendPath + "/players/" + userId + "/achievements/";
+
+        bool savingSuccessful = true;
+        foreach (AchievementData achievementData in achievements)
+        {
+            if (achievementData.isUpdated())
+            {
+                AchievementStatistic achievementStatistic = AchievementData.ConvertToAchievmentStatistic(achievementData);
+
+                string path = basePath + achievementData.GetTitle();
+                string json = JsonUtility.ToJson(achievementStatistic, true);
+                bool successful = await RestRequest.PutRequest(path, json);
+
+                if (successful)
+                {
+                    Debug.Log("Updated achievement progress for " + achievementStatistic.achievement.achievementTitle + " in the overworld backend");
+                }
+                else
+                {
+                    savingSuccessful = false;
+                    Debug.Log("Could not update the achievement progress for " + achievementStatistic.achievement.achievementTitle + " in the overworld backend");
+                }
+            }
+        }
+
+        return savingSuccessful;
+    }
+    #endregion
 
     /// <summary>
     ///     This function checks whether or not a valid courseId was passed or not.
@@ -120,7 +204,7 @@ public class GameManager : MonoBehaviour
         bool validUserId = await ValidateUserId();
         return validUserId;
     }
-
+    
     /// <summary>
     ///     This function loads all needed data from the backend an converts the data into usable formats.
     ///     If an error accours while loading, the <c>loadingError</c> flag is set.
@@ -153,8 +237,8 @@ public class GameManager : MonoBehaviour
         }
 
         Optional<PlayerStatisticDTO[]> allPlayerStatistics =
-           await RestRequest.GetArrayRequest<PlayerStatisticDTO>(path +
-                                                                     "/playerstatistics/allPlayerStatistics");
+           await RestRequest.GetArrayRequest<PlayerStatisticDTO>(path + "/playerstatistics/allPlayerStatistics");
+
         if (!allPlayerStatistics.IsPresent())
         {
             loadingError = true;
@@ -211,13 +295,12 @@ public class GameManager : MonoBehaviour
 
             DataManager.Instance.ReadTeleporterConfig();
             DataManager.Instance.ProcessShopItem(shopItems.Value());
-            DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
             DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
             DataManager.Instance.ProcessKeybindings(keybindings.Value());             
-            DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());           
-
+            DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());
+            DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
         }
 
         Debug.Log("Everything set up");
@@ -264,6 +347,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Start minigame respawn at: " + minigameRespawnPosition.x + ", " + minigameRespawnPosition.y);
         Reload();
+        PlayerAnimation.Instance.EnableMovement(); 
     }
 
     /// <summary>
@@ -273,7 +357,7 @@ public class GameManager : MonoBehaviour
     {
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
         LoadingManager.Instance.UnloadUnneededScenesExcept("no exceptions in this case ;)");
-        LoadingManager.Instance.setup(sceneName, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
+        LoadingManager.Instance.Setup(sceneName, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
         await LoadingManager.Instance.LoadScene();
     }
 
@@ -284,6 +368,7 @@ public class GameManager : MonoBehaviour
     /// <param name="dungeonIndex">The index of the dungeon (0 if world)</param>
     public void SetData(int worldIndex, int dungeonIndex)
     {
+        Debug.Log("SetData: " + worldIndex + "-" + dungeonIndex);
         //DataManager.Instance.ReadTeleporterConfig();
         if (dungeonIndex != 0)
         {
@@ -349,9 +434,12 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="newProgress">The new progress of the achievement</param>
-    public async void UpdateAchievement(AchievementTitle title, int newProgress)
+    /// <param name="interactedObjects">Updated list with interacted objects regarding achievement for which this method is called</param>
+    /// <returns>True if the acheivement is now completed, false otherwise</returns>
+    public async void UpdateAchievement(AchievementTitle title, int newProgress, List<(int, int, int)> interactedObjects)
     {
-        bool unlocked = DataManager.Instance.UpdateAchievement(title, newProgress);
+    #if !UNITY_EDITOR
+        bool unlocked = DataManager.Instance.UpdateAchievement(title, newProgress, interactedObjects);
         if (unlocked)
         {
             AchievementData achievement = DataManager.Instance.GetAchievement(title);
@@ -361,6 +449,7 @@ public class GameManager : MonoBehaviour
             }
 
         }
+    #endif
     }
 
     /// <summary>
@@ -442,10 +531,11 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="title">The title of the achievement</param>
     /// <param name="increment">The amount to increase the progress</param>
+    /// <param name="interactedObjects">Updated list with interacted objects regarding achievement for which this method is called</param>
     /// <returns>True if the acheivement is now completed, false otherwise</returns>
-    public async void IncreaseAchievementProgress(AchievementTitle title, int increment)
+    public async void IncreaseAchievementProgress(AchievementTitle title, int increment, List<(int, int, int)> interactedObjects)
     {
-        bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment);
+        bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment, interactedObjects);
         if (unlocked)
         {
             AchievementData achievement = DataManager.Instance.GetAchievement(title);
@@ -457,41 +547,6 @@ public class GameManager : MonoBehaviour
             EarnAchievement(achievement);
         }
     }
-
-    /// <summary>
-    ///     This function saves all achievements, which made progress in the current session
-    /// </summary>
-    public async UniTask<bool> SaveAchievements()
-    {
-        List<AchievementData> achievements = DataManager.Instance.GetAchievements();
-        string basePath = overworldBackendPath + "/players/" + userId + "/achievements/";
-
-        bool savingSuccessful = true;
-
-        foreach (AchievementData achievementData in achievements)
-        {
-            if(achievementData.isUpdated())
-            {
-                AchievementStatistic achievementStatistic = AchievementData.ConvertToAchievmentStatistic(achievementData);
-
-                string path = basePath + achievementData.GetTitle();
-                string json = JsonUtility.ToJson(achievementStatistic, true);
-                bool successful = await RestRequest.PutRequest(path, json);
-                if (successful)
-                {
-                    Debug.Log("Updated achievement progress for " + achievementStatistic.achievement.achievementTitle + " in the overworld backend");
-                }
-                else
-                {
-                    savingSuccessful = false;
-                    Debug.Log("Could not update the achievement progress for " + achievementStatistic.achievement.achievementTitle + " in the overworld backend");
-                }
-            }
-        }
-
-        return savingSuccessful;
-    }
-
 
     /// <summary>
     ///     This function saves all shop items, which made progress in the current session
@@ -532,7 +587,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     ///     This function saves the changed player data in the current session
     /// </summary>
-    public async UniTask<bool> SavePlayerData()
+    public async UniTask<bool> SavePlayerStatisticData()
     {
         PlayerStatisticData playerStatisticData = DataManager.Instance.GetOwnPlayerData();
         string basePath = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/";
@@ -559,9 +614,6 @@ public class GameManager : MonoBehaviour
         return savingSuccessful;
 
     }
-
-
-
 
     /// <summary>
     ///     This functions returns an information text about the barrier.
@@ -595,6 +647,12 @@ public class GameManager : MonoBehaviour
         {
             string binding = keybinding.GetBinding().ToString();
             string key = keybinding.GetKey().ToString();
+
+            if (keybinding.GetBinding() == Binding.VOLUME_LEVEL)
+            {
+                key = DataManager.Instance.ConvertKeyCodeToInt(keybinding.GetKey()).ToString();
+            }
+
             KeybindingDTO keybindingDTO = new KeybindingDTO(userId, binding, key);
 
             string json = JsonUtility.ToJson(keybindingDTO, true);
@@ -659,6 +717,30 @@ public class GameManager : MonoBehaviour
 
         Keybinding gameZoomOut = new Keybinding(Binding.GAME_ZOOM_OUT, KeyCode.Alpha9);
         ChangeKeybind(gameZoomOut);
+    }
+
+    /// <summary>
+    ///     This function updates the volume level and applies the changes to all audio in the game
+    /// </summary>
+    public void UpdateVolume(int volumeLevel)
+    {
+        float volume = 0f;
+        switch (volumeLevel)
+        {
+            case 0:
+                volume = 0f;
+                break;
+            case 1:
+                volume = 0.5f;
+                break;
+            case 2:
+                volume = 1f;
+                break;
+            case 3:
+                volume = 2f;
+                break;
+        }
+        AudioListener.volume = volume;
     }
 
     /// <summary>
@@ -749,12 +831,17 @@ public class GameManager : MonoBehaviour
         PlayAchievementNotificationSound();
     }
 
-
-private void PlayAchievementNotificationSound(){
-    if(achievementNotificationSound!=null){
-        audioSource.PlayOneShot(achievementNotificationSound);
+    /// <summary>
+    ///     This function plays the achievement notification sound.
+    /// </summary>
+    private void PlayAchievementNotificationSound()
+    {
+        if(achievementNotificationSound != null)
+        {
+            audioSource.PlayOneShot(achievementNotificationSound);
+        }
     }
-}
+
     /// <summary>
     ///     This function sets up everything with dummy data for the offline mode
     /// </summary>
@@ -778,7 +865,6 @@ private void PlayAchievementNotificationSound(){
 
         ShopItem[] allItems = GetDummyShopItems();
         DataManager.Instance.ProcessShopItem(allItems);
-     
 
         ResetKeybindings();
     }
@@ -789,10 +875,10 @@ private void PlayAchievementNotificationSound(){
         string[] categories1 = { "Exploring" };
         Achievement achievement1 =
             new Achievement("GO_FOR_A_WALK", "Walk 10 tiles", categories1, "achievement2", 10);
-        AchievementStatistic achievementStatistic1 = new AchievementStatistic(username, achievement1, 0, false);
+        AchievementStatistic achievementStatistic1 = new AchievementStatistic(username, achievement1, 0, false, new List<IntTuple>());
         Achievement achievement2 =
             new Achievement("GO_FOR_A_LONGER_WALK", "Walk 1000 tiles", categories1, "achievement2", 1000);
-        AchievementStatistic achievementStatistic2 = new AchievementStatistic(username, achievement2, 0, false);
+        AchievementStatistic achievementStatistic2 = new AchievementStatistic(username, achievement2, 0, false, new List<IntTuple>());
         statistcs[0] = achievementStatistic1;
         statistcs[1] = achievementStatistic2;
         return statistcs;
@@ -855,7 +941,6 @@ private void PlayAchievementNotificationSound(){
             DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 25.5f, 12.3f, "Scene3", 2, 50, 200, 170, true, 500, "TheoPro"
         );
         allStatistics[30] = player31;
-
         PlayerStatisticDTO ownPlayer = GetOwnDummyData();
         allStatistics[31] = ownPlayer;
 
@@ -923,7 +1008,39 @@ private void PlayAchievementNotificationSound(){
         return shopItems;
     }
 
+    /// <summary>
+    ///     This function sets if the game has just been loaded
+    /// </summary>
+    /// <param name="status">has the game just been loaded</param>
+    public void SetJustLoaded(bool status)
+    {
+        justLoaded = status;
+    }
 
+    /// <summary>
+    ///     This function gets the if the game juts has loaded 
+    /// </summary>
+    /// <returns>whether game just has been loaded</returns>
+    public bool GetJustLoaded()
+    {
+        return justLoaded;
+    }
 
+    /// <summary>
+    ///     This function decides if the game should be paused
+    /// </summary>
+    /// <param name="status">current game status</param>
+    public void SetIsPaused(bool status)
+    {
+        isPaused = status;
+    }
 
+    /// <summary>
+    ///     This function gets the current game status, i.e., paused or not.
+    /// </summary>
+    /// <returns>whether game is paused</returns>
+    public bool GetIsPaused()
+    {
+        return isPaused;
+    }
 }

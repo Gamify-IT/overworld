@@ -10,5 +10,6 @@ public enum Binding
     MINIMAP_ZOOM_IN,
     MINIMAP_ZOOM_OUT,
     GAME_ZOOM_IN,
-    GAME_ZOOM_OUT
+    GAME_ZOOM_OUT,
+    VOLUME_LEVEL,
 }

@@ -7,9 +7,7 @@ using UnityEngine;
 [Serializable]
 public class PlayerStatisticDTO
 {
-   
     #region Attributes
-
     public string id;
     public AreaLocationDTO[] unlockedAreas;
     public AreaLocationDTO[] unlockedDungeons;
@@ -24,11 +22,11 @@ public class PlayerStatisticDTO
     public int currentCharacterIndex;
     public int volumeLevel;
     public int knowledge;
+    public int volumeLevel;
     public int rewards;
     public bool visibility;
     public int credit;
     public string pseudonym;
-
     #endregion
 
     #region Constructors
@@ -50,14 +48,12 @@ public class PlayerStatisticDTO
         this.logoutScene = logoutScene;
         this.currentCharacterIndex = currentCharacterIndex;
         this.volumeLevel = volumeLevel;
-
         this.knowledge = knowledge;
         this.rewards = rewards;
         this.visibility = visibility;
         this.credit = credit;
         this.pseudonym = pseudonym;
     }
-    
 
     public PlayerStatisticDTO()
     {
@@ -68,7 +64,7 @@ public class PlayerStatisticDTO
         unlockedAreas = new AreaLocationDTO[1];
         unlockedAreas[0] = unlockedWorld;
         currentArea = unlockedWorld;
-        unlockedDungeons = null;
+        unlockedDungeons = new AreaLocationDTO[0];
         unlockedTeleporters = new TeleporterDTO[0];
         userId = "";
         username = "";
@@ -91,7 +87,7 @@ public class PlayerStatisticDTO
     /// </summary>
     /// <param name="PlayerStatisticData">The <c>PlayerStatisticData</c> object to convert</param>
     /// <returns>the <c>PlayerStatisticDTO</c> instance</returns>
-    public static PlayerStatisticDTO ConvertToPlayerStatisticDTO(PlayerStatisticData playerStatisticData)
+    public static PlayerStatisticDTO ConvertDataToDTO(PlayerStatisticData playerStatisticData)
     {
         string id = playerStatisticData.GetId();
         string userId = playerStatisticData.GetUserId();
@@ -113,9 +109,8 @@ public class PlayerStatisticDTO
         AreaLocationDTO[] unlockedDungeons = playerStatisticData.GetUnlockedDungeons();
         TeleporterDTO[] unlockedTeleporters = playerStatisticData.GetUnlockedTeleporters();
 
-
-        PlayerStatisticDTO playerStatistic = new PlayerStatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive, logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym);
-
+        PlayerStatisticDTO playerStatistic = new PlayerStatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea,
+        userId, username, lastActive, logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym);
 
         return playerStatistic;
     }

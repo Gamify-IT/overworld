@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.U2D;
 using System.Collections.Generic;
 
+/// <summary>
+///     This class opens the <c>character selection</c> menu and includes logic for choosing and selecting new characters.
+/// </summary>
 public class CharacterSelection : MonoBehaviour
 {
     private Image characterImage;
@@ -27,16 +30,16 @@ public class CharacterSelection : MonoBehaviour
     [SerializeField] private GameObject warningPanel;
     [SerializeField] private Button previousButton;
     [SerializeField] private Button nextButton;
-
-
+    [SerializeField] private AudioClip clickSound;
 
     public Button glassesButton;
     public Button hatButton;
     public TextMeshProUGUI warningText;
 
-    public AudioClip clickSound;
-    private AudioSource audioSource;
-
+    private int numberOfCharacters;
+    private int currentIndex;
+    private Image characterImage;
+    private AudioSource audioSource
     private int currentIndex = 0;
     private int currentGlasses = 0;
     private int currentHat = 0;
@@ -159,8 +162,6 @@ public class CharacterSelection : MonoBehaviour
         UpdateCharacterDisplay();
     }
 
-
-
     private void CheckAccessoryStatus(string currentImageName)
     {
         bool isLocked = true;
@@ -188,7 +189,6 @@ public class CharacterSelection : MonoBehaviour
 
         lockImage.SetActive(isLocked);
     }
-
 
     private void CheckCharacterStatus()
     {
@@ -218,7 +218,6 @@ public class CharacterSelection : MonoBehaviour
         }
     }
 
-
     private void DisableNextPreviousButtons()
     {
         if (previousButton != null && nextButton != null)
@@ -227,7 +226,6 @@ public class CharacterSelection : MonoBehaviour
             nextButton.interactable = false;
         }
     }
-
 
     private void UpdateWarnings()
     {
@@ -239,7 +237,7 @@ public class CharacterSelection : MonoBehaviour
         else if (currentIndex == 8)
         {
             DisableAccessoryButtons();
-            warningText.text = "Santa’s fashion rule: ‘No hats or glasses, just festive cheer!’";
+            warningText.text = "Santaï¿½s fashion rule: ï¿½No hats or glasses, just festive cheer!ï¿½";
         }
         else
         {
@@ -255,9 +253,6 @@ public class CharacterSelection : MonoBehaviour
             warningText.text = "These outfits are for free!";
         }
     }
-
-
-
 
     private void DisableAccessoryButtons()
     {
@@ -389,8 +384,15 @@ public class CharacterSelection : MonoBehaviour
         currentHat = Modulo(currentHat + 1, numberOfHats);
     }
 
+
+    /// <summary>
+    ///     This function is called by the <c>Select Character Button</c>.
+    ///     This function switches to the selected character.
+    /// </summary>
     public void ConfirmButton()
     {
+        DataManager.Instance.SetupCharacter(currentIndex);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
         PlayClickSound();
 
         bool outfitLocked = lockImageOutfit.activeSelf;
@@ -413,6 +415,10 @@ public class CharacterSelection : MonoBehaviour
     }
 
 
+    /// <summary>
+    ///     This function is called by the <c>Navigation Buttons</c>.
+    ///     This function plays the click sound.
+    /// </summary>
     private void PlayClickSound()
     {
         if (clickSound != null && audioSource != null)
@@ -421,10 +427,16 @@ public class CharacterSelection : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///     This function returns the positive remainder of the division of an integer by a modulus.
+    /// </summary>
+    /// <param name="value">An integer that can be positive, negative, or zero.</param>
+    /// <param name="modulus">The modulus, which must be a positive integer.</param>
+    /// <returns>A positive remainder, which is always between 0 (inclusive) and b (exclusive).</returns>
     private int Modulo(int a, int b)
     {
-        int r = a % b;
-        return r < 0 ? r + b : r;
+        int remainder = a % b;
+        return remainder < 0 ? remainder + b : remainder;
     }
 
     private void UpdateCharacterDisplay()

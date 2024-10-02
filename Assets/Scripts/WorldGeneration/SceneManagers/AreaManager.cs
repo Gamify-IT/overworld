@@ -31,7 +31,7 @@ public class AreaManager : MonoBehaviour
     private void Start()
     {
         //if not in play mode: do nothing
-        if(GameSettings.GetGamemode() != Gamemode.PLAY)
+        if (GameSettings.GetGamemode() != Gamemode.PLAY)
         {
             return;
         }
