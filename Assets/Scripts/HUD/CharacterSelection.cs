@@ -551,4 +551,59 @@ public class CharacterSelection : MonoBehaviour
         }
     }
 
+    public void OnButtonClick()
+    {
+        string character = ownData.GetCurrentCharacter();
+        string accessory = ownData.GetCurrentAccessory();
+
+        string characterKey = FindKeyByValue(character);
+        string accessoryKey = FindKeyByValue(accessory);
+
+        if (characterKey != null)
+        {
+            LoadAndSetSprite("characters/" + characterKey, characterImage);
+        }
+
+        if (accessoryKey != null)
+        {
+            string folder = accessoryKey.Contains("glasses") ? "Glasses/" : "Hats/";
+            Image targetImage = accessoryKey.Contains("glasses") ? glassesImage : hatImage;
+            Button targetButton = accessoryKey.Contains("glasses") ? glassesButton : hatButton;
+            Button disableButton = accessoryKey.Contains("glasses") ? hatButton : glassesButton;
+
+            LoadAndSetSprite(folder + accessoryKey, targetImage, targetButton, disableButton);
+        }
+
+        Update();
+    }
+
+    private string FindKeyByValue(string value)
+    {
+        foreach (var entry in imagenameToAnimationString)
+        {
+            if (entry.Value == value)
+            {
+                return entry.Key;
+            }
+        }
+        return null;
+    }
+
+    private void LoadAndSetSprite(string path, Image targetImage, Button targetButton = null, Button disableButton = null)
+    {
+        Sprite sprite = Resources.Load<Sprite>(path);
+
+        if (sprite != null)
+        {
+            targetImage.sprite = sprite;
+            targetImage.color = Color.white;
+
+            if (targetButton != null) targetButton.interactable = true;
+            if (disableButton != null) disableButton.interactable = false;
+        }
+    }
+
+
+
+
 }

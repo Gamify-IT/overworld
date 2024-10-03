@@ -1675,10 +1675,10 @@ MonoBehaviour:
   warningPanel: {fileID: 1205590929}
   previousButton: {fileID: 1386988746}
   nextButton: {fileID: 368541759}
+  clickSound: {fileID: 8300000, guid: 7565c07c03948d2448b7897577b7c1f0, type: 3}
   glassesButton: {fileID: 357269476}
   hatButton: {fileID: 1824969403}
   warningText: {fileID: 42670088}
-  clickSound: {fileID: 8300000, guid: 7565c07c03948d2448b7897577b7c1f0, type: 3}
 --- !u!1 &886398529
 GameObject:
   m_ObjectHideFlags: 0
@@ -2182,7 +2182,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1274701898}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 796368254}
+        m_TargetAssemblyTypeName: CharacterSelection, Assembly-CSharp
+        m_MethodName: OnButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1274701898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2806,7 +2818,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   achievementNotificationSound: {fileID: 0}
   achievementNotificationManagerPrefab: {fileID: 0}
-  isPaused: 0
 --- !u!1 &1509749538
 GameObject:
   m_ObjectHideFlags: 0

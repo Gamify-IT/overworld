@@ -21,9 +21,12 @@ public class ShopItemManager : MonoBehaviour
     [SerializeField] private TMP_Text successText;
     [SerializeField] private Button yesButton;
     [SerializeField] private Button noButton;
+    [SerializeField] private GameObject ShopPanel;
+
 
     [SerializeField] private Button insuranceCloseButton;
     [SerializeField] private Button successCloseButton;
+    [SerializeField] private Button closeButton;
 
     [SerializeField] private Button OUTFITButton;
     [SerializeField] private Button ACCESSORIESEButton;
@@ -36,6 +39,7 @@ public class ShopItemManager : MonoBehaviour
     [SerializeField] private AudioClip alertSound;
     [SerializeField] private AudioClip clickSound;
 
+    [SerializeField] private GameObject overlayPanel;
 
     [SerializeField] private TMP_Text creditText;
 
@@ -75,6 +79,8 @@ public class ShopItemManager : MonoBehaviour
         {
             audioSource.volume = 0.3f;
         }
+
+        overlayPanel.SetActive(false);
 
     }
 
@@ -150,6 +156,7 @@ public class ShopItemManager : MonoBehaviour
                 buyButton.onClick.AddListener(() => {
                     PlayAlertSound();
                     successPanel.SetActive(true);
+                    overlayPanel.SetActive(true);
                     successText.text = "You already bought this item!";
                 });
             }
@@ -181,9 +188,12 @@ public class ShopItemManager : MonoBehaviour
     private void OpenInsurancePanel(string title, int price)
     {
         insurancePanel.SetActive(true);
+        overlayPanel.SetActive(true);
         insuranceText.text = $"Are you sure you want to buy the article {title} for {price} coins?";
         currentItemTitle = title;
         currentItemPrice = price;
+        SetShopButtonsInteractable(false);
+
     }
 
     /// <summary>
@@ -209,6 +219,7 @@ public class ShopItemManager : MonoBehaviour
             PlaySuccessSound();
 
             successPanel.SetActive(true);
+            overlayPanel.SetActive(true);
             successText.text = $"Nice! You just bought the {currentItemTitle} for {currentItemPrice} coins!";
 
             
@@ -229,6 +240,7 @@ public class ShopItemManager : MonoBehaviour
 
             PlayNotEnoughCreditSound();
             successPanel.SetActive(true);
+            overlayPanel.SetActive(true);
             successText.text = "Oh no, you don't have enough credit! Let's gain some more rewards and then turn back!";
         }
 
@@ -252,7 +264,12 @@ public class ShopItemManager : MonoBehaviour
     {
         PlayClickSound();
         insurancePanel.SetActive(false);
+        overlayPanel.SetActive(false);
         successPanel.SetActive(false);
+        overlayPanel.SetActive(false); 
+        SetShopButtonsInteractable(true);
+
+
     }
 
     /// <summary>
@@ -370,6 +387,28 @@ public class ShopItemManager : MonoBehaviour
 
         List<ShopItemData> purchasedItems = shopItemData.FindAll(item => item.IsBought());
         DisplayShopItems(purchasedItems);
+    }
+
+    public void closeShop()
+    {
+        ShopPanel.SetActive(false);
+        Time.timeScale = 1f;
+        overlayPanel.SetActive(false);
+
+    }
+
+    /// <summary>
+    /// Deaktiviert alle Shop-Buttons, wenn ein anderes Panel aktiv ist.
+    /// </summary>
+    /// <param name="isActive">Gibt an, ob die Buttons aktiviert (true) oder deaktiviert (false) werden sollen.</param>
+    private void SetShopButtonsInteractable(bool isActive)
+    {
+        OUTFITButton.interactable = isActive;
+        ACCESSORIESEButton.interactable = isActive;
+        showAllButton.interactable = isActive;
+        inventoryButton.interactable = isActive;
+        closeButton.interactable = isActive;
+
     }
 
 }

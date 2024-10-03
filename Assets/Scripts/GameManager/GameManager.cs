@@ -985,7 +985,7 @@ public class GameManager : MonoBehaviour
 
         PlayerStatisticDTO ownPlayerData = new PlayerStatisticDTO(
             "31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki",
-            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 20.0f, 15.0f, "World 1", 1, 75, 200, 170, false, 100, "PSEProfi", "character_default", "none"
+            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 20.0f, 15.0f, "World 1", 1, 75, 200, 170, false, 100, "PSEProfi", "character_anzug", "herzbrille"
         );
 
         return ownPlayerData;

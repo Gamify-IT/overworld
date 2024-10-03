@@ -6,6 +6,8 @@ public class HandleShopMenu : MonoBehaviour
 {
 
     public GameObject ShopPanel;
+    [SerializeField] private GameObject overlayPanel;
+
 
     void Start()
     {
@@ -16,6 +18,8 @@ public class HandleShopMenu : MonoBehaviour
     {
         ShopPanel.SetActive(false);
         Time.timeScale = 1f;
+        overlayPanel.SetActive(false);
+
     }
 
 }
