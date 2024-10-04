@@ -59,6 +59,9 @@ public class CharacterSelection : MonoBehaviour
 
     private AccessoryType currentAccessoryType = AccessoryType.Glasses;
 
+
+
+
     void Start()
     {
         ownData = DataManager.Instance.GetPlayerData();
@@ -127,7 +130,7 @@ public class CharacterSelection : MonoBehaviour
             selectedHead = "none";
             selectedBody = imagenameToAnimationString["character" + currentIndex];
 
-            lockImage.SetActive(false);
+            lockImageOutfit.SetActive(true); 
             return;
         }
        
@@ -165,7 +168,7 @@ public class CharacterSelection : MonoBehaviour
 
         if (currentImageName == "glasses4" || currentImageName == "hat4")
         {
-            isLocked = false;
+            isLocked = true; 
         }
         else
         {
@@ -182,10 +185,9 @@ public class CharacterSelection : MonoBehaviour
             }
         }
 
-
-
         lockImage.SetActive(isLocked);
     }
+
 
     private void CheckCharacterStatus()
     {
