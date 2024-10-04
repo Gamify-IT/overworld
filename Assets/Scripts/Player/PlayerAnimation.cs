@@ -229,8 +229,8 @@ public class PlayerAnimation : MonoBehaviour
     }
 
     /// <summary>
-    ///     this function changes the animation of the character based on the outfit selected in the 
-    ///     character selection
+    ///     This function changes the animation of the character based on the outfit selected in the 
+    ///     character selection. Also adjusts the hitbox or scaling for certain outfits.
     /// </summary>
     public void SetOutfitAnimator(string body, string head)
     {
@@ -243,10 +243,7 @@ public class PlayerAnimation : MonoBehaviour
         string headPath = "AnimatorControllers/" + head;
         accessoireAnimator.runtimeAnimatorController = Resources.Load(headPath) as RuntimeAnimatorController;
         playerAnimator.runtimeAnimatorController = Resources.Load(bodyPath) as RuntimeAnimatorController;
-        // works as expected to scale the accessoire
-        // accessoireTransform.localScale = new Vector3(2, 1, 1);
-        // works as expected to move the position
-        // accessoireTransform.localPosition = new Vector3(1, 1, 1);
+
         if (head == "schutzhelm")
         {
             accessoireTransform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
@@ -255,19 +252,16 @@ public class PlayerAnimation : MonoBehaviour
             accessoireTransform.localScale = new Vector3(1, 1, 1);
         }
 
-        if (body == "character_default")
+        if (new List<string> {"character_default", "character_blue_and_purple", "character_black_and_white"}.Contains(body))
         {
             GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().offset = new Vector2(0, 0.05f);
             accessoireTransform.localPosition = positions[head];
-
         }
         else
         {
             GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.25f);
             accessoireTransform.localPosition = positions[head] - new Vector3(0, 0.3f, 0);
         }
-
-
 
     }
 
