@@ -1025,7 +1025,7 @@ public class GameManager : MonoBehaviour
             int cost = costs[i];
             string imageName = imageNames[i];
             string category = categories[i];
-            bool bought = true;
+            bool bought = false;
 
             ShopItem shopItem = new ShopItem(title, cost, imageName, category, bought);
             shopItems[i] = shopItem;

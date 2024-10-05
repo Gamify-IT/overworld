@@ -59,9 +59,6 @@ public class CharacterSelection : MonoBehaviour
 
     private AccessoryType currentAccessoryType = AccessoryType.Glasses;
 
-
-
-
     void Start()
     {
         ownData = DataManager.Instance.GetPlayerData();
@@ -130,10 +127,10 @@ public class CharacterSelection : MonoBehaviour
             selectedHead = "none";
             selectedBody = imagenameToAnimationString["character" + currentIndex];
 
-            lockImageOutfit.SetActive(true); 
+            lockImage.SetActive(false);
             return;
         }
-       
+
 
         if (currentAccessoryType == AccessoryType.Glasses)
         {
@@ -168,7 +165,7 @@ public class CharacterSelection : MonoBehaviour
 
         if (currentImageName == "glasses4" || currentImageName == "hat4")
         {
-            isLocked = true; 
+            isLocked = false;
         }
         else
         {
@@ -185,9 +182,10 @@ public class CharacterSelection : MonoBehaviour
             }
         }
 
+
+
         lockImage.SetActive(isLocked);
     }
-
 
     private void CheckCharacterStatus()
     {
@@ -228,7 +226,7 @@ public class CharacterSelection : MonoBehaviour
 
     private void UpdateWarnings()
     {
-        if (currentIndex == 7 )
+        if (currentIndex == 7)
         {
             DisableAccessoryButtons();
             warningText.text = "Titanium Knight fights alone. No accessories allowed on this mission!";
@@ -405,6 +403,8 @@ public class CharacterSelection : MonoBehaviour
         else
         {
             animationScript.SetOutfitAnimator(selectedBody, selectedHead);
+            ownData.SetCurrentCharacter(selectedBody); // save selection to characterStatistic
+            ownData.SetCurrentAccessory(selectedHead);
             GameManager.Instance.UpdateCharacterIndex(selectedBody);
             GameManager.Instance.UpdateAccessoryIndex(selectedHead);
 
@@ -552,60 +552,4 @@ public class CharacterSelection : MonoBehaviour
             previousButton.interactable = true;
         }
     }
-
-    public void OnButtonClick()
-    {
-        string character = ownData.GetCurrentCharacter();
-        string accessory = ownData.GetCurrentAccessory();
-
-        string characterKey = FindKeyByValue(character);
-        string accessoryKey = FindKeyByValue(accessory);
-
-        if (characterKey != null)
-        {
-            LoadAndSetSprite("characters/" + characterKey, characterImage);
-        }
-
-        if (accessoryKey != null)
-        {
-            string folder = accessoryKey.Contains("glasses") ? "Glasses/" : "Hats/";
-            Image targetImage = accessoryKey.Contains("glasses") ? glassesImage : hatImage;
-            Button targetButton = accessoryKey.Contains("glasses") ? glassesButton : hatButton;
-            Button disableButton = accessoryKey.Contains("glasses") ? hatButton : glassesButton;
-
-            LoadAndSetSprite(folder + accessoryKey, targetImage, targetButton, disableButton);
-        }
-
-        Update();
-    }
-
-    private string FindKeyByValue(string value)
-    {
-        foreach (var entry in imagenameToAnimationString)
-        {
-            if (entry.Value == value)
-            {
-                return entry.Key;
-            }
-        }
-        return null;
-    }
-
-    private void LoadAndSetSprite(string path, Image targetImage, Button targetButton = null, Button disableButton = null)
-    {
-        Sprite sprite = Resources.Load<Sprite>(path);
-
-        if (sprite != null)
-        {
-            targetImage.sprite = sprite;
-            targetImage.color = Color.white;
-
-            if (targetButton != null) targetButton.interactable = true;
-            if (disableButton != null) disableButton.interactable = false;
-        }
-    }
-
-
-
-
 }
