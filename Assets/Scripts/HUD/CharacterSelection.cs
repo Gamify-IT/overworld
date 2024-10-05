@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.U2D;
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 ///     This class opens the <c>character selection</c> menu and includes logic for choosing and selecting new characters.
@@ -49,7 +50,7 @@ public class CharacterSelection : MonoBehaviour
     private PlayerStatisticData ownData;
 
     Dictionary<string, string> imagenameToAnimationString = new Dictionary<string, string>();
-
+    Dictionary<string, string> animationToImage = new Dictionary<string, string>();
 
     public enum AccessoryType
     {
@@ -61,7 +62,60 @@ public class CharacterSelection : MonoBehaviour
 
     void Start()
     {
+        SetupDictionaries();
+
         ownData = DataManager.Instance.GetPlayerData();
+        animationScript = GameObject.FindObjectOfType<PlayerAnimation>();
+        shopItemData = DataManager.Instance.GetShopItems();
+        GameManager.Instance.SetIsPaused(true);
+
+        characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
+        glassesImage = GameObject.Find("Glasses Sprite").GetComponent<Image>();
+        hatImage = GameObject.Find("Hat Sprite").GetComponent<Image>();
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.clip = clickSound;
+
+        string currentCharacter = ownData.GetCurrentCharacter();
+        string currentCharacterImage = animationToImage[currentCharacter];
+        currentIndex = Convert.ToInt32(currentCharacterImage[currentCharacterImage.Length - 1] - '0');
+        string currentAccessory = ownData.GetCurrentAccessory();
+        string currentAccessoryImage = animationToImage[currentAccessory];
+
+        if (currentAccessoryImage.Contains("hat"))
+        {
+            currentHat = Convert.ToInt32(currentAccessoryImage[currentAccessoryImage.Length - 1] - '0');
+            currentAccessoryType = AccessoryType.Hat;
+        }
+        else
+        {
+            currentGlasses = Convert.ToInt32(currentAccessoryImage[currentAccessoryImage.Length - 1] - '0');
+            currentAccessoryType = AccessoryType.Glasses;
+        }
+
+        UpdateButtonVisuals();
+        UpdateWarnings();
+        UpdateCharacterDisplay();
+        CheckCharacterStatus();
+        UpdateAccessoryDescriptions();
+    }
+
+    void Update()
+    {
+        character = Resources.Load<Sprite>("characters/character" + (currentIndex % numberOfCharacters));
+        characterImage.sprite = character;
+
+        UpdateVisualsAndStatus();
+        UpdateAccessoryDescriptions();
+        UpdateWarnings();
+    }
+
+    void SetupDictionaries()
+    {
         imagenameToAnimationString.Add("hat0", "flammen_haare");
         imagenameToAnimationString.Add("hat1", "globus_hut");
         imagenameToAnimationString.Add("hat2", "schutzhelm");
@@ -82,36 +136,24 @@ public class CharacterSelection : MonoBehaviour
         imagenameToAnimationString.Add("character7", "character_ironman");
         imagenameToAnimationString.Add("character8", "character_santa");
 
-        animationScript = GameObject.FindObjectOfType<PlayerAnimation>();
-
-        shopItemData = DataManager.Instance.GetShopItems();
-        GameManager.Instance.SetIsPaused(true);
-        characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
-        glassesImage = GameObject.Find("Glasses Sprite").GetComponent<Image>();
-        hatImage = GameObject.Find("Hat Sprite").GetComponent<Image>();
-
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-        {
-            audioSource = gameObject.AddComponent<AudioSource>();
-        }
-        audioSource.clip = clickSound;
-
-        UpdateButtonVisuals();
-        UpdateWarnings();
-        UpdateCharacterDisplay();
-        CheckCharacterStatus();
-        UpdateAccessoryDescriptions();
-    }
-
-    void Update()
-    {
-        character = Resources.Load<Sprite>("characters/character" + (currentIndex % numberOfCharacters));
-        characterImage.sprite = character;
-
-        UpdateVisualsAndStatus();
-        UpdateAccessoryDescriptions();
-        UpdateWarnings();
+        animationToImage.Add("flammen_haare", "hat0");
+        animationToImage.Add("globus_hut", "hat1");
+        animationToImage.Add("schutzhelm", "hat2");
+        animationToImage.Add("blonde_haare", "hat3");
+        animationToImage.Add("none", "glasses4");
+        animationToImage.Add("3D_brille", "glasses0");
+        animationToImage.Add("coole_brille", "glasses1");
+        animationToImage.Add("herzbrille", "glasses2");
+        animationToImage.Add("retro_brille", "glasses3");
+        animationToImage.Add("character_default", "character0");
+        animationToImage.Add("character_blue_and_purple", "character1");
+        animationToImage.Add("character_black_and_white", "character2");
+        animationToImage.Add("character_trainingsanzug", "character3");
+        animationToImage.Add("character_anzug", "character4");
+        animationToImage.Add("character_jeans_karo", "character5");
+        animationToImage.Add("character_lange_haare", "character6");
+        animationToImage.Add("character_ironman", "character7");
+        animationToImage.Add("character_santa", "character8");
     }
 
     private void UpdateVisualsAndStatus()
