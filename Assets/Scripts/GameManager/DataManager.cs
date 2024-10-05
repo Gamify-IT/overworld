@@ -44,7 +44,7 @@ public class DataManager : MonoBehaviour
     /// <param name="data">The data to set</param>
     public void SetWorldData(int worldIndex, WorldData data)
     {
-        if (worldIndex <= 0 || worldIndex > maxWorld)
+        if (worldIndex < 0 || worldIndex > maxWorld)
         {
             return;
         }
@@ -59,7 +59,7 @@ public class DataManager : MonoBehaviour
     /// <param name="data">The dto to convert and set</param>
     public void SetWorldData(int worldIndex, WorldDTO data)
     {
-        if (worldIndex <= 0 || worldIndex > maxWorld)
+        if (worldIndex < 0 || worldIndex > maxWorld)
         {
             return;
         }
@@ -75,7 +75,7 @@ public class DataManager : MonoBehaviour
     /// <returns>The data of the world, if present, null otherwise</returns>
     public WorldData GetWorldData(int worldIndex)
     {
-        if (worldIndex <= 0 || worldIndex > maxWorld)
+        if (worldIndex < 0 || worldIndex > maxWorld)
         {
             return null;
         }
@@ -93,12 +93,12 @@ public class DataManager : MonoBehaviour
     /// <returns>The data of the dungeon, if present, null otherwise</returns>
     public DungeonData GetDungeonData(int worldIndex, int dungeonIndex)
     {
-        if (worldIndex <= 0 || worldIndex > maxWorld)
+        if (worldIndex < 0 || worldIndex > maxWorld)
         {
             return null;
         }
 
-        if (dungeonIndex <= 0 || dungeonIndex > maxDungeons)
+        if (dungeonIndex < 0 || dungeonIndex > maxDungeons)
         {
             return null;
         }

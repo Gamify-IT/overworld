@@ -56,7 +56,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     /// </summary>
     private void Update()
     {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
             !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
@@ -92,7 +92,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     /// </summary>
     private void OnDestroy()
     {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             //Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
             ObjectManager.Instance.RemoveGameEntity<NPC, NPCData>(world, dungeon, number);
@@ -263,7 +263,11 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         GameObject.Find("NPC_Name").GetComponent<TextMeshProUGUI>().text = nameOfNPC;
         dialogueText = GameObject.Find("Dialogue").GetComponent<TextMeshProUGUI>();
         StartCoroutine("Typing");
-        UpdateListOfNPC();
+
+        if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
+        {
+            UpdateListOfNPC();
+        }
     }
 
     /// <summary>

@@ -19,7 +19,7 @@ public class NavigationMap : MonoBehaviour
     private void Awake()
     {
         MapPanel.SetActive(false);
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {            
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
             GameEvents.current.onKeybindingChange += UpdateKeybindings;
@@ -57,7 +57,7 @@ public class NavigationMap : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
             !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
@@ -69,7 +69,7 @@ public class NavigationMap : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             GameEvents.current.onKeybindingChange -= UpdateKeybindings;
         }            

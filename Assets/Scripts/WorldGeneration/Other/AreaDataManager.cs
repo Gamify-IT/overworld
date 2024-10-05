@@ -142,7 +142,7 @@ public class AreaDataManager
 
         int amountWorlds = GameSettings.GetMaxWorlds();
 
-        for (int worldIndex = 1; worldIndex <= amountWorlds; worldIndex++)
+        for (int worldIndex = 0; worldIndex <= amountWorlds; worldIndex++)
         {
             Debug.Log("Loading local world: " + worldIndex);
             AreaInformation currentArea = new AreaInformation(worldIndex, new Optional<int>());
@@ -158,6 +158,12 @@ public class AreaDataManager
             {
                 UpdateTeleporters(currentArea, worldData.GetAreaMapData().GetTeleporterSpots());
                 amountDungeons = worldData.GetAreaMapData().GetSceneTransitionSpots().Count;
+            }
+            //tutorial has only one dungeon
+            else if (worldData.GetArea().GetWorldIndex() == 0)
+            {
+                UpdateTeleporters(currentArea);
+                amountDungeons = 1;
             }
             else
             {

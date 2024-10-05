@@ -414,12 +414,16 @@ public class GameManager : MonoBehaviour
         string json = JsonUtility.ToJson(teleporterData, true);
 
         DataManager.Instance.ActivateTeleporter(worldIndex, dungeonIndex, number);
-        bool successful = await RestRequest.PostRequest(path, json);
 
-        if (!successful)
+        if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
         {
-            Debug.LogError("Teleporter unlocking could not be transfered to Backend.");
-        }
+            bool successful = await RestRequest.PostRequest(path, json);
+
+            if (!successful)
+            {
+                Debug.LogError("Teleporter unlocking could not be transfered to Backend.");
+            }
+        }    
     }
 
     /// <summary>

@@ -42,7 +42,7 @@ public class TeleporterUI : MonoBehaviour
     {
         correspondingTeleporter = teleporter;
 
-        for (int i = 1; i < GameSettings.GetMaxWorlds(); i++)
+        for (int i = 0; i <= GameSettings.GetMaxWorlds(); i++)
         {
             int worldIndex = i;
             List<TeleporterData> dataList = DataManager.Instance.GetUnlockedTeleportersInWorld(worldIndex);

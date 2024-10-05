@@ -43,7 +43,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// </summary>
     private void Update()
     {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByName("Book").isLoaded &&
             !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
@@ -155,7 +155,10 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         GameObject.Find("Book_Name").GetComponent<TextMeshProUGUI>().text = nameOfBook;
         bookText = GameObject.Find("Book_Text").GetComponent<TextMeshProUGUI>();
         bookText.text = bookContent;
-        UpdateListOfBooks();
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            UpdateListOfBooks();
+        }
     }
 
     /// <summary>
