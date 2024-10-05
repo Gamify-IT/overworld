@@ -139,6 +139,8 @@ public class CharacterSelection : MonoBehaviour
             glassesImage.color = Color.white;
             hatImage.sprite = null;
             hatImage.color = new Color(1, 1, 1, 0);
+            glassesButton.image.color = selectedColor;
+            hatButton.image.color = unselectedColor;
 
             selectedHead = imagenameToAnimationString[glassesImage.sprite.name];
             CheckAccessoryStatus(glassesImage.sprite.name);
@@ -150,6 +152,8 @@ public class CharacterSelection : MonoBehaviour
             hatImage.color = Color.white;
             glassesImage.sprite = null;
             glassesImage.color = new Color(1, 1, 1, 0);
+            glassesButton.image.color = unselectedColor;
+            hatButton.image.color = selectedColor;
 
             selectedHead = imagenameToAnimationString[hatImage.sprite.name];
             CheckAccessoryStatus(hatImage.sprite.name);
