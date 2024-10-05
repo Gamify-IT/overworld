@@ -351,6 +351,7 @@ public class CharacterSelection : MonoBehaviour
     {
         PlayClickSound();
         currentIndex = Modulo(currentIndex - 1, numberOfCharacters);
+        CheckCharacterStatus();  
         UpdateVisualsAndStatus();
     }
 
@@ -358,6 +359,7 @@ public class CharacterSelection : MonoBehaviour
     {
         PlayClickSound();
         currentIndex = Modulo(currentIndex + 1, numberOfCharacters);
+        CheckCharacterStatus();
         UpdateVisualsAndStatus();
     }
 
