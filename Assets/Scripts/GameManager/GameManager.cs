@@ -201,8 +201,14 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("UserId from token: " + userId);
         Debug.Log("Username from token: " + username);
-        bool validUserId = await ValidateUserId();
-        return validUserId;
+
+        if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
+        {
+            bool validUserId = await ValidateUserId();
+            return validUserId;
+        }
+
+        return true;
     }
     
     /// <summary>
@@ -493,7 +499,8 @@ public class GameManager : MonoBehaviour
     public async void ChangeKeybind(Keybinding keybinding)
     {
         bool keyChanged = DataManager.Instance.ChangeKeybind(keybinding);
-        if(keyChanged)
+
+        if(keyChanged && GameSettings.GetGamemode() != Gamemode.TUTORIAL)
         {
             string binding = keybinding.GetBinding().ToString();
             string key = keybinding.GetKey().ToString();

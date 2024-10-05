@@ -792,17 +792,17 @@ public class DataManager : MonoBehaviour
     {
         Dictionary<Binding, KeyCode> keybindings = new Dictionary<Binding, KeyCode>();
 
-        keybindings.Add(Binding.MOVE_UP, KeyCode.None);
-        keybindings.Add(Binding.MOVE_LEFT, KeyCode.None);
-        keybindings.Add(Binding.MOVE_DOWN, KeyCode.None);
-        keybindings.Add(Binding.MOVE_RIGHT, KeyCode.None);
-        keybindings.Add(Binding.SPRINT, KeyCode.None);
-        keybindings.Add(Binding.INTERACT, KeyCode.None);
-        keybindings.Add(Binding.CANCEL, KeyCode.None);
-        keybindings.Add(Binding.MINIMAP_ZOOM_IN, KeyCode.None);
-        keybindings.Add(Binding.MINIMAP_ZOOM_OUT, KeyCode.None);
-        keybindings.Add(Binding.GAME_ZOOM_IN, KeyCode.None);
-        keybindings.Add(Binding.GAME_ZOOM_OUT, KeyCode.None);
+        keybindings.Add(Binding.MOVE_UP, KeyCode.W);
+        keybindings.Add(Binding.MOVE_LEFT, KeyCode.A);
+        keybindings.Add(Binding.MOVE_DOWN, KeyCode.S);
+        keybindings.Add(Binding.MOVE_RIGHT, KeyCode.D);
+        keybindings.Add(Binding.SPRINT, KeyCode.LeftShift);
+        keybindings.Add(Binding.INTERACT, KeyCode.E);
+        keybindings.Add(Binding.CANCEL, KeyCode.Escape);
+        keybindings.Add(Binding.MINIMAP_ZOOM_IN, KeyCode.P);
+        keybindings.Add(Binding.MINIMAP_ZOOM_OUT, KeyCode.O);
+        keybindings.Add(Binding.GAME_ZOOM_IN, KeyCode.Alpha0);
+        keybindings.Add(Binding.GAME_ZOOM_OUT, KeyCode.Alpha9);
         keybindings.Add(Binding.VOLUME_LEVEL, KeyCode.None);
 
         this.keybindings = keybindings;

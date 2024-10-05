@@ -132,11 +132,11 @@ public class LoadFirstScene : MonoBehaviour
 
         Debug.Log("Finish retrieving playerId");
 
-        Debug.Log("Start loading World 1");
+        Debug.Log("Start loading World");
 
         await LoadingManager.Instance.LoadData();
 
-        Debug.Log("Finish loading World 1");
+        Debug.Log("Finish loading World");
     }
 
     /// <summary>
@@ -149,6 +149,7 @@ public class LoadFirstScene : MonoBehaviour
         await SceneManager.LoadSceneAsync("AreaGeneratorManager");
     }
 
+    /*
     /// <summary>
     ///     This function starts the tutorial world for players
     /// </summary>
@@ -194,5 +195,68 @@ public class LoadFirstScene : MonoBehaviour
 
         Debug.Log("Finish loading Tutorial");
     }
+    */
+    private async void StartTutorial()
+    {
+        await GameSettings.FetchValues();
 
+        var playerPosition = new Vector2(21.5f, 2.5f);
+        var worldIndex = 1;
+        var dungeonIndex = 0;
+
+        Debug.Log("Start loading Player");
+
+        await SceneManager.LoadSceneAsync("Player");
+
+        Debug.Log("Finish loading Player");
+
+        Debug.Log("Start loading HUD");
+
+        SceneManager.LoadScene("Player HUD", LoadSceneMode.Additive);
+
+        Debug.Log("Finish loading HUD");
+
+        Debug.Log("Start loading LoadingScreen");
+
+        Debug.Log("Start retrieving courseId");
+
+        bool validCourseId = await GameManager.Instance.ValidateCourseId();
+
+        Debug.Log("Finish retrieving courseId");
+
+        await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+        LoadingManager.Instance.Setup("Tutorial", worldIndex, dungeonIndex, playerPosition);
+
+        Debug.Log("Finish loading LoadingScreen");
+
+        Debug.Log("Start validating courseId");
+
+        if (!validCourseId)
+        {
+            await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+            OfflineMode.Instance.DisplayInfo("INVALID COURSE ID");
+            return;
+        }
+
+        Debug.Log("Finish validating courseId");
+
+        Debug.Log("Start retrieving playerId");
+
+        bool validPlayerId = await GameManager.Instance.GetUserData();
+
+        if (!validPlayerId)
+        {
+            await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+            OfflineMode.Instance.DisplayInfo("INVALID PLAYER ID");
+            return;
+        }
+
+        Debug.Log("Finish retrieving playerId");
+
+        Debug.Log("Start loading Tutorial");
+
+        await LoadingManager.Instance.LoadData();
+
+        Debug.Log("Finish loading Tutorial");
+    }
 }

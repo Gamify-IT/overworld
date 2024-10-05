@@ -122,10 +122,6 @@ public class AreaDataManager
             path += "/dungeon/" + currentArea.GetDungeonIndex();
         }
 
-        //---------------------
-        // area data error when starting overworld with run config
-        //---------------------
-
         //fetch area data from backend
         Optional<AreaDTO> areaDTO = await RestRequest.GetRequest<AreaDTO>(path);
         if(areaDTO.IsPresent())
