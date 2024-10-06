@@ -217,7 +217,15 @@ public class LoadSubScene : MonoBehaviour
         string sceneToLoad;
         if(dungeonIndexToLoad == 0)
         {
-            sceneToLoad = "World " + worldIndexToLoad;
+            // check for tutorial scene
+            if (worldIndexToLoad == 0)
+            {
+                sceneToLoad = "Tutorial";
+            }
+            else
+            {
+                sceneToLoad = "World " + worldIndexToLoad;
+            }
         }
         else
         {

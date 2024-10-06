@@ -14,8 +14,8 @@ public class LoadFirstScene : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        Gamemode gamemode = GetGamemode();
-        //Gamemode gamemode = Gamemode.TUTORIAL;
+        //Gamemode gamemode = GetGamemode();
+        Gamemode gamemode = Gamemode.TUTORIAL;
 
         switch(gamemode)
         {
