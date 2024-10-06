@@ -67,15 +67,12 @@ public class LoadSubScene : MonoBehaviour
 
         if(dungeonIndex == 0)
         {
-            Debug.Log("dungeon");
             //Scene Transition in world
             if(areaExchange.IsDungeon())
             {
-                Debug.Log("yes");
                 //was previously in a dungeon
                 if (areaExchange.GetWorldIndex() == worldIndexToLoad && areaExchange.GetDungeonIndex() == dungeonIndexToLoad)
                 {
-                    Debug.Log("yes yes");
                     //was in the dungeon this scene transition points to
                     areaExchange = new AreaInformation(worldIndex, new Optional<int>());
 
@@ -111,7 +108,6 @@ public class LoadSubScene : MonoBehaviour
         }
         else
         {
-            Debug.Log("world");
             if (!GameManager.Instance.GetJustLoaded())
             {
                 //Scene Transition in dungeon

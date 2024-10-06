@@ -201,7 +201,7 @@ public class LoadFirstScene : MonoBehaviour
         await GameSettings.FetchValues();
 
         var playerPosition = new Vector2(21.5f, 2.5f);
-        var worldIndex = 1;
+        var worldIndex = 0;
         var dungeonIndex = 0;
 
         Debug.Log("Start loading Player");

@@ -63,6 +63,11 @@ public class LoadingManager : MonoBehaviour
     public void Setup(string sceneToLoad, int worldIndex, int dungeonIndex, Vector2 playerPosition)
     {
         this.sceneToLoad = sceneToLoad;
+        // check for tutorial scene
+        if (worldIndex == 0)
+        {
+            this.sceneToLoad = "Tutorial";
+        }
         this.worldIndex = worldIndex;
         this.dungeonIndex = dungeonIndex;
         this.playerPosition = playerPosition;
