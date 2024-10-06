@@ -234,12 +234,13 @@ public class LoadFirstScene : MonoBehaviour
         if (!validCourseId)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
-            OfflineMode.Instance.DisplayInfo("INVALID COURSE ID");
+            OfflineMode.Instance.DisplayInfo("Welcome to the Tutorial!");
             return;
         }
 
         Debug.Log("Finish validating courseId");
 
+        /*
         Debug.Log("Start retrieving playerId");
 
         bool validPlayerId = await GameManager.Instance.GetUserData();
@@ -252,10 +253,14 @@ public class LoadFirstScene : MonoBehaviour
         }
 
         Debug.Log("Finish retrieving playerId");
+        */
+
+        await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
+        OfflineMode.Instance.DisplayInfo("Welcome to the Tutorial!");
 
         Debug.Log("Start loading Tutorial");
 
-        await LoadingManager.Instance.LoadData();
+        //await LoadingManager.Instance.LoadData();
 
         Debug.Log("Finish loading Tutorial");
     }

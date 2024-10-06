@@ -39,6 +39,14 @@ public class OfflineMode : MonoBehaviour
     [SerializeField] private TextMeshProUGUI infoText;
     [SerializeField] private GameObject offlineButton;
 
+    private void Start()
+    {
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            offlineButton.GetComponentInChildren<TMP_Text>().text = "Start";
+        }
+    }
+
     /// <summary>
     ///     This function loads the offline mode screen.
     /// </summary>
