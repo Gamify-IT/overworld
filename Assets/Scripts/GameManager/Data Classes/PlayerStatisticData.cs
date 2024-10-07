@@ -195,15 +195,15 @@ public class PlayerStatisticData
     /// <returns>The corresponding league.</returns>
     public string calculateLeagueOfPlayer(int rewards)
     {
-        if(rewards < 100)
+        if(rewards < 450)
         {
             return "Wanderer";
         }
-        else if (rewards < 200)
+        else if (rewards < 900)
         {
             return "Explorer";
         }
-        else if (rewards < 300)
+        else if (rewards < 1350)
         {
             return "Pathfinder";
         }
