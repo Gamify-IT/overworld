@@ -21,16 +21,14 @@ public class AreaDataManager
     {
         Debug.Log("Loading area data");
 
-        int amountWorlds = GameSettings.GetMaxWorlds();
-
-        for (int worldIndex = 1; worldIndex <= amountWorlds; worldIndex++)
+        for (int worldIndex = 1; worldIndex <= GameSettings.GetMaxWorlds(); worldIndex++)
         {
             bool successfulLoading = await FetchWorldData(worldIndex);
-            if(!successfulLoading)
+            if (!successfulLoading)
             {
                 Debug.Log("Error in FetchWorldData!");
                 return true;
-            }
+            }    
         }
 
         return false;

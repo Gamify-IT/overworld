@@ -93,10 +93,12 @@ public class LoadingManager : MonoBehaviour
         Debug.Log("Start fetching data");
 
         bool errorLoadingPlayerData = await GameManager.Instance.FetchData();
+        Debug.Log("Player data loading: " + errorLoadingPlayerData);
         bool errorLoadingAreaData = await DataManager.Instance.FetchAreaData();
         Debug.Log("Area loading: " + errorLoadingAreaData);
         
         bool loadingError = errorLoadingPlayerData | errorLoadingAreaData;
+        Debug.Log("Loading error: " + loadingError);
 
         Debug.Log("Finish fetching data");
 
@@ -172,7 +174,6 @@ public class LoadingManager : MonoBehaviour
         Optional<int> dungeon = dungeonIndex == 0 ? new Optional<int>() : new Optional<int>(dungeonIndex);
         AreaData area = DataManager.Instance.GetAreaData(new AreaInformation(worldIndex, dungeon)).Value();
 
-        //AreaData world1 = DataManager.Instance.GetAreaData(new AreaInformation(1, new Optional<int>())).Value();
         if (area.IsGeneratedArea())
         {
             playerPosition = FindStartingPosition(area);
