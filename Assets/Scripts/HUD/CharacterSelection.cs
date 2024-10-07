@@ -97,10 +97,10 @@ public class CharacterSelection : MonoBehaviour
             currentAccessoryType = AccessoryType.Glasses;
         }
 
-        UpdateButtonVisuals();
-        UpdateWarnings();
+        RefreshAccessoryButtonVisuals();
+        UpdateAccessoryWarnings();
         UpdateCharacterDisplay();
-        CheckCharacterStatus();
+        ValidateCharacterUnlockStatus();
         UpdateAccessoryDescriptions();
     }
 
@@ -109,9 +109,9 @@ public class CharacterSelection : MonoBehaviour
         character = Resources.Load<Sprite>("characters/character" + (currentIndex % numberOfCharacters));
         characterImage.sprite = character;
 
-        UpdateVisualsAndStatus();
+        UpdateCharacterAndAccessoryVisuals();
         UpdateAccessoryDescriptions();
-        UpdateWarnings();
+        UpdateAccessoryWarnings();
     }
 
     void SetupDictionaries()
@@ -156,7 +156,7 @@ public class CharacterSelection : MonoBehaviour
         animationToImage.Add("character_santa", "character8");
     }
 
-    private void UpdateVisualsAndStatus()
+    private void UpdateCharacterAndAccessoryVisuals()
     {
         if (currentIndex == 7 || currentIndex == 8)
         {
@@ -185,7 +185,7 @@ public class CharacterSelection : MonoBehaviour
             hatButton.image.color = unselectedColor;
 
             selectedHead = imagenameToAnimationString[glassesImage.sprite.name];
-            CheckAccessoryStatus(glassesImage.sprite.name);
+            ValidateAccessoryStatus(glassesImage.sprite.name);
         }
         else if (currentAccessoryType == AccessoryType.Hat)
         {
@@ -198,14 +198,14 @@ public class CharacterSelection : MonoBehaviour
             hatButton.image.color = selectedColor;
 
             selectedHead = imagenameToAnimationString[hatImage.sprite.name];
-            CheckAccessoryStatus(hatImage.sprite.name);
+            ValidateAccessoryStatus(hatImage.sprite.name);
         }
 
-        CheckCharacterStatus();
+        ValidateCharacterUnlockStatus();
         UpdateCharacterDisplay();
     }
 
-    private void CheckAccessoryStatus(string currentImageName)
+    private void ValidateAccessoryStatus(string currentImageName)
     {
         bool isLocked = true;
 
@@ -233,7 +233,7 @@ public class CharacterSelection : MonoBehaviour
         lockImage.SetActive(isLocked);
     }
 
-    private void CheckCharacterStatus()
+    private void ValidateCharacterUnlockStatus()
     {
         string characterImageName = "character" + (currentIndex % numberOfCharacters);
 
@@ -270,7 +270,7 @@ public class CharacterSelection : MonoBehaviour
         }
     }
 
-    private void UpdateWarnings()
+    private void UpdateAccessoryWarnings()
     {
         if (currentIndex == 7)
         {
@@ -286,7 +286,7 @@ public class CharacterSelection : MonoBehaviour
         {
             warningText.text = "";
             EnableAccessoryButtons();
-            UpdateVisualsAndStatus();
+            UpdateCharacterAndAccessoryVisuals();
 
             EnableNextPreviousButtons();
         }
@@ -344,7 +344,7 @@ public class CharacterSelection : MonoBehaviour
         {
             PreviousHats();
         }
-        UpdateVisualsAndStatus();
+        UpdateCharacterAndAccessoryVisuals();
     }
 
     public void NextAccessory()
@@ -357,24 +357,24 @@ public class CharacterSelection : MonoBehaviour
         {
             NextHats();
         }
-        UpdateVisualsAndStatus();
+        UpdateCharacterAndAccessoryVisuals();
     }
 
     public void SetAccessoryToHat()
     {
         currentAccessoryType = AccessoryType.Hat;
-        UpdateVisualsAndStatus();
-        UpdateButtonVisuals();
+        UpdateCharacterAndAccessoryVisuals();
+        RefreshAccessoryButtonVisuals();
     }
 
     public void SetAccessoryToGlasses()
     {
         currentAccessoryType = AccessoryType.Glasses;
-        UpdateVisualsAndStatus();
-        UpdateButtonVisuals();
+        UpdateCharacterAndAccessoryVisuals();
+        RefreshAccessoryButtonVisuals();
     }
 
-    private void UpdateButtonVisuals()
+    private void RefreshAccessoryButtonVisuals()
     {
         if (currentAccessoryType == AccessoryType.Glasses)
         {
@@ -393,16 +393,16 @@ public class CharacterSelection : MonoBehaviour
     {
         PlayClickSound();
         currentIndex = Modulo(currentIndex - 1, numberOfCharacters);
-        CheckCharacterStatus();  
-        UpdateVisualsAndStatus();
+        ValidateCharacterUnlockStatus();  
+        UpdateCharacterAndAccessoryVisuals();
     }
 
     public void NextCharacter()
     {
         PlayClickSound();
         currentIndex = Modulo(currentIndex + 1, numberOfCharacters);
-        CheckCharacterStatus();
-        UpdateVisualsAndStatus();
+        ValidateCharacterUnlockStatus();
+        UpdateCharacterAndAccessoryVisuals();
     }
 
     public void Previousglasses()
@@ -437,7 +437,6 @@ public class CharacterSelection : MonoBehaviour
     public void ConfirmButton()
     {
         DataManager.Instance.SetupCharacter();
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
         PlayClickSound();
 
         bool outfitLocked = lockImageOutfit.activeSelf;
@@ -457,6 +456,7 @@ public class CharacterSelection : MonoBehaviour
             GameManager.Instance.UpdateAccessoryIndex(selectedHead);
 
             GameManager.Instance.SavePlayerStatisticData();
+            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
 
         }
     }

@@ -62,7 +62,8 @@ public class ShopItemManager : MonoBehaviour
         UpdateCreditText();
 
         yesButton.onClick.AddListener(YesButtonClicked);
-        noButton.onClick.AddListener(() => insurancePanel.SetActive(false));
+        noButton.onClick.AddListener(NoButtonClicked);
+
 
         successCloseButton.onClick.AddListener(() => ClosePanels());
 
@@ -243,6 +244,13 @@ public class ShopItemManager : MonoBehaviour
         }
 
         insurancePanel.SetActive(false);
+    }
+
+    private void NoButtonClicked()
+    {
+        insurancePanel.SetActive(false);
+        SetShopButtonsInteractable(true);
+
     }
 
     /// <summary>
