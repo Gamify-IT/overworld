@@ -24,7 +24,6 @@ public class ShopItemManager : MonoBehaviour
     [SerializeField] private GameObject ShopPanel;
 
 
-    [SerializeField] private Button insuranceCloseButton;
     [SerializeField] private Button successCloseButton;
     [SerializeField] private Button closeButton;
 
@@ -65,7 +64,6 @@ public class ShopItemManager : MonoBehaviour
         yesButton.onClick.AddListener(YesButtonClicked);
         noButton.onClick.AddListener(() => insurancePanel.SetActive(false));
 
-        insuranceCloseButton.onClick.AddListener(() => ClosePanels());
         successCloseButton.onClick.AddListener(() => ClosePanels());
 
         OUTFITButton.onClick.AddListener(OnOutfitButtonClicked);
