@@ -452,8 +452,8 @@ public class CharacterSelection : MonoBehaviour
             animationScript.SetOutfitAnimator(selectedBody, selectedHead);
             ownData.SetCurrentCharacter(selectedBody); // save selection to characterStatistic
             ownData.SetCurrentAccessory(selectedHead);
-            GameManager.Instance.UpdateCharacterIndex(selectedBody);
-            GameManager.Instance.UpdateAccessoryIndex(selectedHead);
+            DataManager.Instance.UpdateCharacterIndex(selectedBody);
+            DataManager.Instance.UpdateAccessoryIndex(selectedHead);
 
             GameManager.Instance.SavePlayerStatisticData();
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
