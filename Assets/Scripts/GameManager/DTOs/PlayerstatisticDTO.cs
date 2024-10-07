@@ -8,26 +8,26 @@ using UnityEngine;
 public class PlayerStatisticDTO
 {
     #region Attributes
-    public string id;
-    public AreaLocationDTO[] unlockedAreas;
-    public AreaLocationDTO[] unlockedDungeons;
-    public TeleporterDTO[] unlockedTeleporters;
-    public AreaLocationDTO currentArea;
-    public string userId;
-    public string username;
-    public string lastActive;
-    public float logoutPositionX;
-    public float logoutPositionY;
-    public string logoutScene;
-    public int currentCharacterIndex;
-    public int volumeLevel;
-    public int knowledge;
-    public int rewards;
-    public bool visibility;
-    public int credit;
-    public string pseudonym;
-    public string currentCharacter;
-    public string currentAccessory;
+    private readonly string id;
+    private readonly string userId;
+    private readonly string username;
+    private AreaLocationDTO[] unlockedAreas;
+    private AreaLocationDTO[] unlockedDungeons;
+    private TeleporterDTO[] unlockedTeleporters;
+    private AreaLocationDTO currentArea;
+    private string lastActive;
+    private float logoutPositionX;
+    private float logoutPositionY;
+    private string logoutScene;
+    private int currentCharacterIndex;
+    private int volumeLevel;
+    private int knowledge;
+    private int rewards;
+    private bool visibility;
+    private int credit;
+    private string pseudonym;
+    private string currentCharacter;
+    private string currentAccessory;
     #endregion
 
     #region Constructors
@@ -116,7 +116,7 @@ public class PlayerStatisticDTO
         AreaLocationDTO[] unlockedDungeons = playerStatisticData.GetUnlockedDungeons();
         TeleporterDTO[] unlockedTeleporters = playerStatisticData.GetUnlockedTeleporters();
 
-        PlayerStatisticDTO playerStatistic = new PlayerStatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive, 
+        PlayerStatisticDTO playerStatistic = new PlayerStatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive,
             logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym, currentCharacter, currentAccessory);
 
         return playerStatistic;
@@ -131,4 +131,192 @@ public class PlayerStatisticDTO
     {
         return JsonUtility.FromJson<PlayerStatisticDTO>(jsonString);
     }
+
+    #region Getter and Setter
+    public string GetId()
+    {
+        return id;
+    }
+
+    public string GetUserId()
+    {
+        return userId;
+    }
+
+    public string GetUsername()
+    {
+        return username;
+    }
+
+    public AreaLocationDTO[] GetUnlockedAreas()
+    {
+        return unlockedAreas;
+    }
+
+    public void SetUnlockedAreas(AreaLocationDTO[] value)
+    {
+        unlockedAreas = value;
+    }
+
+    public AreaLocationDTO[] GetUnlockedDungeons()
+    {
+        return unlockedDungeons;
+    }
+
+    public void SetUnlockedDungeons(AreaLocationDTO[] value)
+    {
+        unlockedDungeons = value;
+    }
+
+    public TeleporterDTO[] GetUnlockedTeleporters()
+    {
+        return unlockedTeleporters;
+    }
+
+    public void SetUnlockedTeleporters(TeleporterDTO[] value)
+    {
+        unlockedTeleporters = value;
+    }
+
+    public AreaLocationDTO GetCurrentArea()
+    {
+        return currentArea;
+    }
+
+    public void SetCurrentArea(AreaLocationDTO value)
+    {
+        currentArea = value;
+    }
+
+    public string GetLastActive()
+    {
+        return lastActive;
+    }
+
+    public void SetLastActive(string value)
+    {
+        lastActive = value;
+    }
+
+    public float GetLogoutPositionX()
+    {
+        return logoutPositionX;
+    }
+
+    public void SetLogoutPositionX(float value)
+    {
+        logoutPositionX = value;
+    }
+
+    public float GetLogoutPositionY()
+    {
+        return logoutPositionY;
+    }
+
+    public void SetLogoutPositionY(float value)
+    {
+        logoutPositionY = value;
+    }
+
+    public string GetLogoutScene()
+    {
+        return logoutScene;
+    }
+
+    public void SetLogoutScene(string value)
+    {
+        logoutScene = value;
+    }
+
+    public int GetCurrentCharacterIndex()
+    {
+        return currentCharacterIndex;
+    }
+
+    public void SetCurrentCharacterIndex(int value)
+    {
+        currentCharacterIndex = value;
+    }
+
+    public int GetKnowledge()
+    {
+        return knowledge;
+    }
+
+    public void SetKnowledge(int value)
+    {
+        knowledge = value;
+    }
+
+    public int GetVolumeLevel()
+    {
+        return volumeLevel;
+    }
+
+    public void SetVolumeLevel(int value)
+    {
+        volumeLevel = value;
+    }
+
+    public int GetRewards()
+    {
+        return rewards;
+    }
+
+    public void SetRewards(int value)
+    {
+        rewards = value;
+    }
+
+    public bool GetVisibility()
+    {
+        return visibility;
+    }
+
+    public void SetVisibility(bool value)
+    {
+        visibility = value;
+    }
+
+    public int GetCredit()
+    {
+        return credit;
+    }
+
+    public void SetCredit(int newCredit)
+    {
+        credit = newCredit;
+    }
+
+    public string GetPseudonym()
+    {
+        return pseudonym;
+    }
+
+    public void SetPseudonym(string value)
+    {
+        pseudonym = value;
+    }
+
+    public string GetCurrentCharacter()
+    {
+        return currentCharacter;
+    }
+
+    public void SetCurrentCharacter(string character)
+    {
+        currentCharacter = character;
+    }
+
+    public string GetCurrentAccessory()
+    {
+        return currentAccessory;
+    }
+
+    public void SetCurrentAccessory(string accessory)
+    {
+        currentAccessory = accessory;
+    }
+
+    #endregion
 }

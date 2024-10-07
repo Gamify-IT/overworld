@@ -524,17 +524,17 @@ public class GameManager : MonoBehaviour
             PlayerStatisticDTO playerstatistic = PlayerStatisticDTO.ConvertDataToDTO(playerStatisticData);
             string path = basePath + userId;
             string json = JsonUtility.ToJson(playerstatistic, true);
-            Debug.Log(playerstatistic.id + userId);
+            Debug.Log(playerstatistic.GetId() + userId);
             bool successful = await RestRequest.PutRequest(path, json);
             if (successful)
             {
-                Debug.Log("Updated player statistic  for " + playerstatistic.id + " in the overworld backend");
+                Debug.Log("Updated player statistic  for " + playerstatistic.GetId() + " in the overworld backend");
 
             }
             else
             {
                 savingSuccessful = false;
-                Debug.Log("Could not update the player statistic for " + playerstatistic.id + " in the overworld backend");
+                Debug.Log("Could not update the player statistic for " + playerstatistic.GetId() + " in the overworld backend");
             }
         }
         return savingSuccessful;

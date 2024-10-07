@@ -6,16 +6,16 @@ using System;
 /// <summary>
 ///     This class is used to store all information about the player and the session.
 /// </summary>
-public class PlayerStatisticData 
+public class PlayerStatisticData
 {
     #region Attributes
     private readonly string id;
+    private readonly string userId;
+    private readonly string username;
     public AreaLocationDTO[] unlockedAreas;
     public AreaLocationDTO[] unlockedDungeons;
     public TeleporterDTO[] unlockedTeleporters;
     private AreaLocationDTO currentArea;
-    private readonly string userId;
-    private string username;
     private string lastActive;
     private float logoutPositionX;
     private float logoutPositionY;
@@ -29,7 +29,7 @@ public class PlayerStatisticData
     private string pseudonym;
     private string leagueOfPlayer;
     private bool updatedCredit = false;
-    private bool updatedPseudonym= false;
+    private bool updatedPseudonym = false;
     private bool updatedVisibility = false;
     private bool updatedCharacterIndex = false;
     private bool updatedAccessoryIndex = false;
@@ -42,7 +42,7 @@ public class PlayerStatisticData
     ///     Constructor for the PlayerStatisticData class, initializing all attributes.
     /// </summary>
     public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
-         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool visibility,int credit, string pseudonym, string currentCharacter, string currentAccessory)
+         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool visibility, int credit, string pseudonym, string currentCharacter, string currentAccessory)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -75,44 +75,44 @@ public class PlayerStatisticData
     /// <returns>the <c>PlayerStatisticData</c> instance</returns>
     public static PlayerStatisticData ConvertDtoToData(PlayerStatisticDTO statistic)
     {
-        AreaLocationDTO currentArea = statistic.currentArea;
+        AreaLocationDTO currentArea = statistic.GetCurrentArea();
 
-        string userId = statistic.userId;
-        string username = statistic.username;
-        string lastActive = statistic.lastActive;
-        float logoutPositionX = statistic.logoutPositionX;
-        float logoutPositionY = statistic.logoutPositionY;
-        string logoutScene = statistic.logoutScene;
-        int currentCharacterIndex = statistic.currentCharacterIndex;
-        int volumeLevel = statistic.volumeLevel;
-        int knowledge = statistic.knowledge;
-        int rewards = statistic.rewards;
-        string id = statistic.id;
-        bool visibility = statistic.visibility;
-        int credit = statistic.credit;
-        string pseudonym = statistic.pseudonym;
-        string currentCharacter = statistic.currentCharacter;
-        string currentAccessory = statistic.currentAccessory;
+        string userId = statistic.GetId();
+        string username = statistic.GetUsername();
+        string lastActive = statistic.GetLastActive();
+        float logoutPositionX = statistic.GetLogoutPositionX();
+        float logoutPositionY = statistic.GetLogoutPositionY();
+        string logoutScene = statistic.GetLogoutScene();
+        int currentCharacterIndex = statistic.GetCurrentCharacterIndex();
+        int volumeLevel = statistic.GetVolumeLevel();
+        int knowledge = statistic.GetKnowledge();
+        int rewards = statistic.GetRewards();
+        string id = statistic.GetId();
+        bool visibility = statistic.GetVisibility();
+        int credit = statistic.GetCredit();
+        string pseudonym = statistic.GetPseudonym();
+        string currentCharacter = statistic.GetCurrentCharacter();
+        string currentAccessory = statistic.GetCurrentAccessory();
 
-    AreaLocationDTO[] unlockedAreas = new AreaLocationDTO[statistic.unlockedAreas.Length];
-        AreaLocationDTO[] unlockedDungeons = new AreaLocationDTO[statistic.unlockedDungeons.Length];
-        TeleporterDTO[] unlockedTeleporters = new TeleporterDTO[statistic.unlockedTeleporters.Length];
+        AreaLocationDTO[] unlockedAreas = new AreaLocationDTO[statistic.GetUnlockedAreas().Length];
+        AreaLocationDTO[] unlockedDungeons = new AreaLocationDTO[statistic.GetUnlockedDungeons().Length];
+        TeleporterDTO[] unlockedTeleporters = new TeleporterDTO[statistic.GetUnlockedTeleporters().Length];
 
-        for (int i = 0; i < statistic.unlockedAreas.Length; i++)
+        for (int i = 0; i < statistic.GetUnlockedAreas().Length; i++)
         {
-            unlockedAreas[i] = statistic.unlockedAreas[i];
+            unlockedAreas[i] = statistic.GetUnlockedAreas()[i];
         }
 
-        for (int i = 0; i < statistic.unlockedDungeons.Length; i++)
+        for (int i = 0; i < statistic.GetUnlockedDungeons().Length; i++)
         {
-            unlockedDungeons[i] = statistic.unlockedDungeons[i];
+            unlockedDungeons[i] = statistic.GetUnlockedDungeons()[i];
         }
 
-        for (int i = 0; i < statistic.unlockedTeleporters.Length; i++)
+        for (int i = 0; i < statistic.GetUnlockedTeleporters().Length; i++)
         {
-            unlockedTeleporters[i] = statistic.unlockedTeleporters[i];
+            unlockedTeleporters[i] = statistic.GetUnlockedTeleporters()[i];
         }
-     
+
         PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive,
             logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym, currentCharacter, currentAccessory);
         return data;
@@ -141,7 +141,7 @@ public class PlayerStatisticData
     {
         updatedCredit = true;
         credit = this.credit - price;
-        if(credit > 0)
+        if (credit > 0)
         {
             return true;
         }
@@ -156,7 +156,7 @@ public class PlayerStatisticData
     public bool updatePseudonym(string name)
     {
         updatedPseudonym = true;
-       
+
         if (name != null)
         {
             pseudonym = name;
@@ -181,11 +181,11 @@ public class PlayerStatisticData
         else
         {
             this.visibility = false;
-            
+
         }
 
         return true;
-      
+
     }
 
     /// <summary>
@@ -195,7 +195,7 @@ public class PlayerStatisticData
     /// <returns>The corresponding league.</returns>
     public string calculateLeagueOfPlayer(int rewards)
     {
-        if(rewards < 450)
+        if (rewards < 450)
         {
             return "Wanderer";
         }
@@ -245,7 +245,7 @@ public class PlayerStatisticData
     {
         return updatedCharacterIndex;
     }
-    
+
     public bool AccessoryIsUpdated()
     {
         return updatedAccessoryIndex;
