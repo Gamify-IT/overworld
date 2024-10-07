@@ -43,8 +43,13 @@ public class GameManager : MonoBehaviour
 
     //Game status
     private bool isPaused = false;
-
     private bool justLoaded = true;
+
+    // Constants
+    private const string coursePath = "/courses/";
+    private const string playerStatisticPath = "/playerstatistics/";
+    private const string dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+    private const string playersPath = "/players/";
 
 
     #region save player data
@@ -65,12 +70,12 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Start saving player statistic");
 
-        string path = GameSettings.GetOverworldBackendPath() + "/courses/" + courseId + "/playerstatistics/" + userId;
+        string path = GameSettings.GetOverworldBackendPath() + coursePath + courseId + playerStatisticPath + userId;
         Debug.Log("path: " + path);
 
         PlayerStatisticData playerStatistic = DataManager.Instance.GetPlayerData();
 
-        playerStatistic.SetLastActive(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        playerStatistic.SetLastActive(DateTime.Now.ToString(dateTimeFormat));
         playerStatistic.SetLogoutPositionX(GameObject.FindGameObjectWithTag("Player").transform.position.x);
         playerStatistic.SetLogoutPositionY(GameObject.FindGameObjectWithTag("Player").transform.position.y);
 
@@ -99,7 +104,7 @@ public class GameManager : MonoBehaviour
     public async UniTask<bool> SaveAchievements()
     {
         List<AchievementData> achievements = DataManager.Instance.GetAchievements();
-        string basePath = overworldBackendPath + "/players/" + userId + "/achievements/";
+        string basePath = overworldBackendPath + playersPath + userId + "/achievements/";
 
         bool savingSuccessful = true;
         foreach (AchievementData achievementData in achievements)
@@ -145,7 +150,7 @@ public class GameManager : MonoBehaviour
         courseId = courseId.Split("&")[^2];
         GameSettings.SetCourseID(courseId);
 
-        string uri = overworldBackendPath + "/courses/" + courseId;
+        string uri = overworldBackendPath + coursePath + courseId;
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -215,7 +220,7 @@ public class GameManager : MonoBehaviour
         bool loadingError = false;
 
         //path to get world data from
-        string path = overworldBackendPath + "/courses/" + courseId;
+        string path = overworldBackendPath + coursePath + courseId;
 
         //get data
         Optional<WorldDTO>[] worldDTOs = new Optional<WorldDTO>[maxWorld + 1];
@@ -230,7 +235,7 @@ public class GameManager : MonoBehaviour
         }
 
         Optional<PlayerStatisticDTO> playerStatistics =
-            await RestRequest.GetRequest<PlayerStatisticDTO>(path + "/playerstatistics/");
+            await RestRequest.GetRequest<PlayerStatisticDTO>(path + playerStatisticPath);
         if (!playerStatistics.IsPresent())
         {
             loadingError = true;
@@ -259,7 +264,7 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
-        string playerPath = overworldBackendPath + "/players/" + userId;
+        string playerPath = overworldBackendPath + playersPath + userId;
 
         Optional<AchievementStatistic[]> achievementStatistics =
             await RestRequest.GetArrayRequest<AchievementStatistic>(playerPath + "/achievements");
@@ -402,7 +407,7 @@ public class GameManager : MonoBehaviour
     /// <param name="uuid"></param>
     public async void ActivateTeleporter(int worldIndex, int dungeonIndex, int number)
     {
-        string path = overworldBackendPath + "/courses/" + courseId + "/teleporters";
+        string path = overworldBackendPath + coursePath + courseId + "/teleporters";
 
         TeleporterUnlockedEvent teleporterData = new TeleporterUnlockedEvent(worldIndex, dungeonIndex, number, userId);
         string json = JsonUtility.ToJson(teleporterData, true);
@@ -503,7 +508,7 @@ public class GameManager : MonoBehaviour
             KeybindingDTO keybindingDTO = new KeybindingDTO(userId, binding, key);
 
             string json = JsonUtility.ToJson(keybindingDTO, true);
-            string path = overworldBackendPath + "/players/" + userId + "/keybindings/" + binding;
+            string path = overworldBackendPath + playersPath + userId + "/keybindings/" + binding;
 
             bool successful = await RestRequest.PutRequest(path, json);
             if(successful)
@@ -613,8 +618,6 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void SetupGameManager()
     {
-        //loadingError = false;
-
         overworldBackendPath = GameSettings.GetOverworldBackendPath();
         maxWorld = GameSettings.GetMaxWorlds();
         maxMinigames = GameSettings.GetMaxMinigames();
@@ -628,7 +631,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private async UniTask<bool> ValidateUserId()
     {
-        string uri = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/" + userId;
+        string uri = overworldBackendPath + coursePath + courseId + playerStatisticPath + userId;
 
         Optional<PlayerStatisticDTO> playerStatistics = await RestRequest.GetRequest<PlayerStatisticDTO>(uri);
 
@@ -637,7 +640,7 @@ public class GameManager : MonoBehaviour
             return true;
         }
 
-        string postUri = overworldBackendPath + "/courses/" + courseId + "/playerstatistics";
+        string postUri = overworldBackendPath + coursePath + courseId + "/playerstatistics";
         UserData userData = new UserData(userId, username);
         string json = JsonUtility.ToJson(userData, true);
         bool userCreated = await RestRequest.PostRequest(postUri, json);
@@ -758,7 +761,7 @@ public class GameManager : MonoBehaviour
             TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
             TeleporterDTO[] unlockedTeleporters = { teleporter };
 
-            PlayerStatisticDTO player = new PlayerStatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+            PlayerStatisticDTO player = new PlayerStatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, DateTime.Now.ToString(dateTimeFormat),
                21.5f, 2.5f, "World 1", 0 , 1,  knowledge, rewards, showRewards, "-");
             allStatistics[i] = player;
         }
@@ -773,7 +776,7 @@ public class GameManager : MonoBehaviour
         TeleporterDTO teleporter1 = new TeleporterDTO("1", currentArea1, 1);
         TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
         PlayerStatisticDTO player31 = new PlayerStatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco",
-            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 21.5f, 2.5f, "World 1", 0, 1, 200, 170, true, "TheoPro");
+            DateTime.Now.ToString(dateTimeFormat), 21.5f, 2.5f, "World 1", 0, 1, 200, 170, true, "TheoPro");
         allStatistics[30] = player31;
         PlayerStatisticDTO ownPlayer = GetOwnDummyData();
         allStatistics[31] = ownPlayer;
@@ -792,7 +795,7 @@ public class GameManager : MonoBehaviour
         TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
         TeleporterDTO[] unlockedTeleporters = { teleporter };
         PlayerStatisticDTO ownPlayerData = new PlayerStatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki",
-            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 21.5f, 2.5f, "World 1", 0, 1, 200, 170, false, "PSEProfi");
+            DateTime.Now.ToString(dateTimeFormat), 21.5f, 2.5f, "World 1", 0, 1, 200, 170, false, "PSEProfi");
         return ownPlayerData;
     }
 

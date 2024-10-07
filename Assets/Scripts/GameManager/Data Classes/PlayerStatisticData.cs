@@ -29,7 +29,7 @@ public class PlayerStatisticData
     private string leagueOfPlayer;
     #endregion
 
-    #region constructur
+    #region constructor
     public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
          AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
          string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool showRewards, string pseudonym)

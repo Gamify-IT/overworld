@@ -119,10 +119,8 @@ public class AchievementData
         var sprite = Resources.Load<Sprite>(imageFolder + "/" + imageName);
         if(sprite == null)
         {
-            //Debug.Log("Load default image");
             sprite = Resources.Load<Sprite>(imageFolder + "/" + defaultImageName);
         }
-        //Debug.Log(sprite.ToString());
         return sprite;
     }
 
