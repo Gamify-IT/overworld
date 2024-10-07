@@ -99,9 +99,7 @@ public class CharacterSelection : MonoBehaviour
 
         RefreshAccessoryButtonVisuals();
         UpdateAccessoryWarnings();
-        UpdateCharacterDisplay();
         ValidateCharacterUnlockStatus();
-        UpdateAccessoryDescriptions();
     }
 
     void Update()
@@ -110,7 +108,6 @@ public class CharacterSelection : MonoBehaviour
         characterImage.sprite = character;
 
         UpdateCharacterAndAccessoryVisuals();
-        UpdateAccessoryDescriptions();
         UpdateAccessoryWarnings();
     }
 
@@ -202,7 +199,6 @@ public class CharacterSelection : MonoBehaviour
         }
 
         ValidateCharacterUnlockStatus();
-        UpdateCharacterDisplay();
     }
 
     private void ValidateAccessoryStatus(string currentImageName)
@@ -228,8 +224,6 @@ public class CharacterSelection : MonoBehaviour
             }
         }
 
-
-
         lockImage.SetActive(isLocked);
     }
 
@@ -240,12 +234,14 @@ public class CharacterSelection : MonoBehaviour
         selectedBody = imagenameToAnimationString[characterImageName];
 
         bool isLocked = true;
+        bool isFreeSkin = characterImageName == "character0" || characterImageName == "character1";
+        isFreeSkin = isFreeSkin || characterImageName == "character2";
 
         foreach (var item in shopItemData)
         {
             if (item.GetImageName() == characterImageName)
             {
-                if (item.IsBought())
+                if (item.IsBought() || isFreeSkin)
                 {
                     isLocked = false;
                 }
@@ -489,84 +485,6 @@ public class CharacterSelection : MonoBehaviour
     {
         int remainder = a % b;
         return remainder < 0 ? remainder + b : remainder;
-    }
-
-    private void UpdateCharacterDisplay()
-    {
-        string characterImageName = "character" + (currentIndex % numberOfCharacters);
-        bool isFreeSkin = characterImageName == "character0" || characterImageName == "character1" || characterImageName == "character2";
-        bool isLocked = !isFreeSkin;
-
-        if (!isFreeSkin)
-        {
-            foreach (var item in shopItemData)
-            {
-                if (item.GetImageName() == characterImageName && item.IsBought())
-                {
-                   isLocked = false;
-                   break;
-                }
-            }
-        }
-
-        lockImageOutfit.SetActive(isLocked);
-
-        string descriptionText = "";
-        foreach (var item in shopItemData)
-        {
-            if (item.GetImageName() == characterImageName)
-            {
-                descriptionText = $"Character: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
-                if (!item.IsBought())
-                {
-                    descriptionText += $"\nPrice: {item.GetCost()}";
-                }
-                break;
-            }
-        }
-
-        characterDescriptionText.text = descriptionText;
-    }
-
-
-    private void UpdateAccessoryDescriptions()
-    {
-        string descriptionText = "";
-
-        if (currentAccessoryType == AccessoryType.Glasses)
-        {
-            foreach (var item in shopItemData)
-            {
-                if (item.GetImageName() == glassesImage.sprite.name)
-                {
-                    descriptionText = $"Accessory: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
-
-                    if (!item.IsBought())
-                    {
-                        descriptionText += $"\nPrice: {item.GetCost()}";
-                    }
-                    break;
-                }
-            }
-        }
-        else if (currentAccessoryType == AccessoryType.Hat)
-        {
-            foreach (var item in shopItemData)
-            {
-                if (item.GetImageName() == hatImage.sprite.name)
-                {
-                    descriptionText = $"Accessory: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
-
-                    if (!item.IsBought())
-                    {
-                        descriptionText += $"\nPrice: {item.GetCost()}";
-                    }
-                    break;
-                }
-            }
-        }
-
-        descriptionAccessory.text = descriptionText;
     }
 
     private void DisableAccessoryNavigationButtons()
