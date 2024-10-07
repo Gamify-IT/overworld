@@ -77,11 +77,7 @@ public class ShopItemData
     {
         updated = true;
         bought = newProgress;
-        if (newProgress = true)
-        {
-           return true;
-        }
-        return false;
+        return newProgress;
     }
 
 

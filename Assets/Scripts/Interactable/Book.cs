@@ -65,7 +65,6 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     {
         if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
-            //Debug.Log("remove Book " + world + "-" + dungeon + "-" + number);
             ObjectManager.Instance.RemoveGameEntity<Book, BookData>(world, dungeon, number);
             GameEvents.current.onKeybindingChange -= UpdateKeybindings;
         }            
@@ -123,7 +122,6 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// </summary>
     private void RegisterToGameManager()
     {
-        //Debug.Log("register Book " + world + "-" + dungeon + "-" + number);
         ObjectManager.Instance.AddGameEntity<Book, BookData>(gameObject, world, dungeon, number);
     }
 
@@ -136,7 +134,6 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         uuid = data.GetUuid();
         bookContent = data.GetBookText();
         string text = bookContent;
-        //Debug.Log("setup book " + world + "-" + number + " with Text: " + text);
     }
 
     /// <summary>

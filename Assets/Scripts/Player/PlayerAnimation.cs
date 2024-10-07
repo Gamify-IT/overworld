@@ -45,7 +45,9 @@ public class PlayerAnimation : MonoBehaviour
     private DateTime lastPlayDate;
     private bool checkIfChanged=false;
 
-    Dictionary<string, Vector3> positions = new Dictionary<string, Vector3>(); 
+    readonly Dictionary<string, Vector3> positions = new Dictionary<string, Vector3>();
+    readonly List<string> validOutfits = new List<string> {"3D_brille", "blonde_haare", "character_anzug", "character_black_and_white", "character_blue_and_purple", "character_default", "character_ironman", "none",
+        "character_jeans_karo", "character_lange_haare", "character_santa", "character_trainingsanzug", "coole_brille", "flammen_haare", "globus_hut", "herzbrille", "retro_brille", "schutzhelm"};
 
     private PlayerStatisticData ownPlayerData;
     private int rewardsAmount;
@@ -236,7 +238,7 @@ public class PlayerAnimation : MonoBehaviour
     {
         if (!validOutfits.Contains(body) || !validOutfits.Contains(head))
         {
-            throw new ArgumentException();
+            throw new ArgumentException("Provided argument(s) are invalid, provide an existing name of a outfit.");
         }
 
         string bodyPath = "AnimatorControllers/" + body;
@@ -264,9 +266,6 @@ public class PlayerAnimation : MonoBehaviour
         }
 
     }
-
-    List<string> validOutfits = new List<string> {"3D_brille", "blonde_haare", "character_anzug", "character_black_and_white", "character_blue_and_purple", "character_default", "character_ironman", "none",
-        "character_jeans_karo", "character_lange_haare", "character_santa", "character_trainingsanzug", "coole_brille", "flammen_haare", "globus_hut", "herzbrille", "retro_brille", "schutzhelm"};
 
     /// <summary>
     ///     This function updates time achievements each 60 seconds when the player is playing

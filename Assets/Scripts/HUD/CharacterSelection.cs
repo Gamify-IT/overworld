@@ -17,9 +17,9 @@ public class CharacterSelection : MonoBehaviour
     private Sprite character;
     private Sprite glasses;
     private Sprite hat;
-    private int numberOfCharacters = 9;
-    private int numberOfGlasses = 5;
-    private int numberOfHats = 5;
+    private readonly int numberOfCharacters = 9;
+    private readonly int numberOfGlasses = 5;
+    private readonly int numberOfHats = 5;
     private List<ShopItemData> shopItemData;
     private PlayerAnimation animationScript;
 
@@ -49,8 +49,8 @@ public class CharacterSelection : MonoBehaviour
     private string selectedHead;
     private PlayerStatisticData ownData;
 
-    Dictionary<string, string> imagenameToAnimationString = new Dictionary<string, string>();
-    Dictionary<string, string> animationToImage = new Dictionary<string, string>();
+    readonly Dictionary<string, string> imagenameToAnimationString = new Dictionary<string, string>();
+    readonly Dictionary<string, string> animationToImage = new Dictionary<string, string>();
 
     public enum AccessoryType
     {
@@ -501,13 +501,10 @@ public class CharacterSelection : MonoBehaviour
         {
             foreach (var item in shopItemData)
             {
-                if (item.GetImageName() == characterImageName)
+                if (item.GetImageName() == characterImageName && item.IsBought())
                 {
-                    if (item.IsBought())
-                    {
-                        isLocked = false;
-                    }
-                    break;
+                   isLocked = false;
+                   break;
                 }
             }
         }
@@ -520,13 +517,10 @@ public class CharacterSelection : MonoBehaviour
             if (item.GetImageName() == characterImageName)
             {
                 descriptionText = $"Character: {item.GetTitle()}\nBought: {(item.IsBought() ? "Yes" : "No")}";
-
-
                 if (!item.IsBought())
                 {
                     descriptionText += $"\nPrice: {item.GetCost()}";
                 }
-
                 break;
             }
         }

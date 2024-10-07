@@ -1014,13 +1014,10 @@ public class DataManager : MonoBehaviour
         {
             foreach (Binding bindingValue in Enum.GetValues(typeof(Binding)))
             {
-                if (bindingValue != Binding.VOLUME_LEVEL)
+                if (bindingValue != Binding.VOLUME_LEVEL && !bindingContained[bindingValue])
                 {
-                    if (!bindingContained[bindingValue])
-                    {
-                        Debug.Log("No binding for: " + bindingValue);
-                        validBindings = false;
-                    }
+                    Debug.Log("No binding for: " + bindingValue);
+                    validBindings = false;
                 }
             }
         }        
