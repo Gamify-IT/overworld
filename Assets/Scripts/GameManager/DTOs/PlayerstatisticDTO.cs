@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class PlayerStatisticDTO
 {
-    #region attributes
+    #region Attributes
     public string id;
     public AreaLocationDTO[] unlockedAreas;
     public AreaLocationDTO[] unlockedDungeons;
@@ -20,17 +20,21 @@ public class PlayerStatisticDTO
     public float logoutPositionY;
     public string logoutScene;
     public int currentCharacterIndex;
-    public int knowledge;
     public int volumeLevel;
+    public int knowledge;
     public int rewards;
-    public bool showRewards;
+    public bool visibility;
+    public int credit;
     public string pseudonym;
+    public string currentCharacter;
+    public string currentAccessory;
     #endregion
 
-    #region constructors 
+    #region Constructors
+
     public PlayerStatisticDTO(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
-         AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY, 
-         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool showRewards, string pseudonym)
+         AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
+         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool visibility, int credit, string pseudonym, string currentCharacter, string currentAccessory)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -47,8 +51,11 @@ public class PlayerStatisticDTO
         this.volumeLevel = volumeLevel;
         this.knowledge = knowledge;
         this.rewards = rewards;
-        this.showRewards = showRewards;
+        this.visibility = visibility;
+        this.credit = credit;
         this.pseudonym = pseudonym;
+        this.currentCharacter = currentCharacter;
+        this.currentAccessory = currentAccessory;
     }
 
     public PlayerStatisticDTO()
@@ -72,8 +79,11 @@ public class PlayerStatisticDTO
         volumeLevel = 1;
         knowledge = 0;
         rewards = 0;
-        showRewards = true;
+        visibility = false;
+        credit = 0;
         pseudonym = "";
+        currentCharacter = "character_default";
+        currentAccessory = "none";
     }
     #endregion
 
@@ -82,38 +92,41 @@ public class PlayerStatisticDTO
     /// </summary>
     /// <param name="PlayerStatisticData">The <c>PlayerStatisticData</c> object to convert</param>
     /// <returns>the <c>PlayerStatisticDTO</c> instance</returns>
-    public static PlayerStatisticDTO ConvertDataToDTO(PlayerStatisticData data)
+    public static PlayerStatisticDTO ConvertDataToDTO(PlayerStatisticData playerStatisticData)
     {
-        string id = data.GetId();
-        AreaLocationDTO[] unlockedAreas = data.GetUnlockedAreas();
-        AreaLocationDTO[] unlockedDungeons = data.GetUnlockedDungeons();
-        TeleporterDTO[] unlockedTeleporters = data.GetUnlockedTeleporters();
-        AreaLocationDTO currentArea = data.GetCurrentArea();
-        string userId = data.GetUserId();
-        string username = data.GetUsername();
-        string lastActive = data.GetLastActive();
-        float logoutPositionX = data.GetLogoutPositionX();
-        float logoutPositionY = data.GetLogoutPositionY();
-        string logoutScene = data.GetLogoutScene();
-        int currentCharacterIndex = data.GetCurrentCharacterIndex();
-        int knowledge = data.GetKnowledge();
-        int volumeLevel = data.GetVolumeLevel();
-        int rewards = data.GetRewards();
-        bool showRewards = data.GetShowRewards();
-        string pseudonym = data.GetPseudonym();
+        string id = playerStatisticData.GetId();
+        string userId = playerStatisticData.GetUserId();
+        string username = playerStatisticData.GetUsername();
+        string lastActive = playerStatisticData.GetLastActive();
+        float logoutPositionX = playerStatisticData.GetLogoutPositionX();
+        float logoutPositionY = playerStatisticData.GetLogoutPositionY();
+        string logoutScene = playerStatisticData.GetLogoutScene();
+        int currentCharacterIndex = playerStatisticData.GetCurrentCharacterIndex();
+        int knowledge = playerStatisticData.GetKnowledge();
+        int volumeLevel = playerStatisticData.GetVolumeLevel();
+        int rewards = playerStatisticData.GetRewards();
+        bool visibility = playerStatisticData.GetVisibility();
+        int credit = playerStatisticData.GetCredit();
+        string pseudonym = playerStatisticData.GetPseudonym();
+        string currentCharacter = playerStatisticData.GetCurrentCharacter();
+        string currentAccessory = playerStatisticData.GetCurrentAccessory();
 
-        PlayerStatisticDTO playerStatistic = new PlayerStatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, 
-            currentArea, userId, username, lastActive, logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, 
-            volumeLevel, knowledge, rewards, showRewards, pseudonym);
+        AreaLocationDTO currentArea = playerStatisticData.GetCurrentArea();
+        AreaLocationDTO[] unlockedAreas = playerStatisticData.GetUnlockedAreas();
+        AreaLocationDTO[] unlockedDungeons = playerStatisticData.GetUnlockedDungeons();
+        TeleporterDTO[] unlockedTeleporters = playerStatisticData.GetUnlockedTeleporters();
+
+        PlayerStatisticDTO playerStatistic = new PlayerStatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive, 
+            logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym, currentCharacter, currentAccessory);
 
         return playerStatistic;
     }
 
     /// <summary>
-    ///     This function converts a json string to a <c>PlayerStatisticDTO</c> object.
+    ///     This function converts a json string to a <c>PlayerstatisticDTO</c> object.
     /// </summary>
     /// <param name="jsonString">The json string to convert</param>
-    /// <returns>A <c>PlayerStatisticDTO</c> object containing the data</returns>
+    /// <returns>A <c>PlayerstatisticDTO</c> object containing the data</returns>
     public static PlayerStatisticDTO CreateFromJSON(string jsonString)
     {
         return JsonUtility.FromJson<PlayerStatisticDTO>(jsonString);

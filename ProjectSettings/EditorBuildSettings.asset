@@ -122,4 +122,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Player HUD/Rewards.unity
     guid: e8554eaa82a9b444db87f397bad16138
+  - enabled: 0
+    path: Assets/Scenes/Player HUD/second.unity
+    guid: 4b78910843729f34f84914e5cbd2c073
+  - enabled: 1
+    path: Assets/Scenes/Player HUD/Shop.unity
+    guid: c76fadbe424966c48bbf3a05429cfbad
   m_configObjects: {}

@@ -24,6 +24,7 @@ public class DataManager : MonoBehaviour
     private WorldData[] worldData;
     private PlayerStatisticData playerData;
     private List<AchievementData> achievementData;
+    private List<ShopItemData> shopItemData;
     private List<PlayerStatisticData> allPlayerStatisticsData;
     private Dictionary<Binding, KeyCode> keybindings;
     private Dictionary<string, int> wanderer;
@@ -31,11 +32,21 @@ public class DataManager : MonoBehaviour
     private Dictionary<string, int> pathfinder;
     private Dictionary<string, int> trailblazer;
 
+    // player settings 
+    private int characterIndex = 0;
+    private int glassesIndex = 0;
+    private int hatIndex = 0;
+    [SerializeField] private Sprite[] characterFaces;
     [Header("Character Selection")]
     [SerializeField] private List<Sprite> characterSprites;
     [SerializeField] private List<RuntimeAnimatorController> characterAnimators;
     [SerializeField] private List<Sprite> characterHeads;
+    private PlayerAnimation animationScript;
 
+    void Start()
+    {
+        animationScript = GameObject.FindObjectOfType<PlayerAnimation>();
+    }
 
     /// <summary>
     ///     This function sets given data for the specified world
@@ -313,7 +324,7 @@ public class DataManager : MonoBehaviour
             GetWorldData(worldIndex).UnlockTeleporter(dungeonIndex, number);
         }
 
-        SetupCharacter(playerData.GetCurrentCharacterIndex());
+        SetupCharacter();
 
 #if !UNITY_EDITOR
         CheckForLastLogin();
@@ -344,22 +355,11 @@ public class DataManager : MonoBehaviour
     /// <summary>
     ///      Setups the character with the saved or selected values.
     /// </summary>
-    /// <param name="currentIndex">selected character index</param>
-    public void SetupCharacter(int currentIndex)
+    public void SetupCharacter()
     {
-        // get player components
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        SpriteRenderer currentSprite = player.GetComponent<SpriteRenderer>();
-        Animator currentAnimator = player.GetComponent<Animator>();
-        Image characterHead = GameObject.Find("Head Minimap").GetComponent<Image>();
-
-        // initialize the saved player sprite, animations and head on the minimap
-        currentSprite.sprite = GetCharacterSprites()[currentIndex];
-        currentAnimator.runtimeAnimatorController = GetCharacterAnimators()[currentIndex];
-        characterHead.sprite = GetCharacterHeads()[currentIndex];
-
-        // save selected character
-        playerData.SetCurrentCharacterIndex(currentIndex);
+        string selectedBody = playerData.GetCurrentCharacter();
+        string selectedHead = playerData.GetCurrentAccessory();
+        animationScript.SetOutfitAnimator(selectedBody, selectedHead);
     }
 
     /// <summary>
@@ -428,6 +428,35 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///     This function processes the achievement statistics data returned from the backend and stores the needed data in the
+    ///     <c>DataManager</c>
+    /// </summary>
+    /// <param name="shopItem">The achievement statistic data returned from the backend</param>
+    public void ProcessShopItem(ShopItem[] shopItems)
+    {
+        shopItemData = new List<ShopItemData>();
+        if (shopItems == null)
+        {
+            Debug.Log("status list is null");
+            return;
+        }
+        Debug.Log("Process " + shopItems.Length + " statuses of shop items");
+
+        foreach (ShopItem item in shopItems)
+        {
+            Debug.Log($"Converted ShopItem: Title={item.shopItemID}, Cost={item.cost}, Bought={item.bought}, ImageName={item.imageName}, Category={item.category}");
+
+            ShopItemData shopItem = ShopItemData.ConvertFromShopItem(item);
+
+            Debug.Log($"Converted ShopItem: Title={shopItem.GetTitle()}, Cost={shopItem.GetCost()}, Bought={shopItem.IsBought()}, ImageName={shopItem.GetImageName()}, Category={shopItem.GetCategory()}");
+
+
+            shopItemData.Add(shopItem);
+        }
+    }
+
+ 
     /// <summary>
     ///     This function checks for a given array of <c>KeycodeDTO</c>s whether they are valid or not.
     ///     If so, they are set as the bindings, otherwise the default bindings are set.
@@ -588,6 +617,17 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
+    ///     This function returns all stored shop items
+    /// </summary>
+    /// <returns>A list containing all shop items</returns>
+    public List<ShopItemData> GetShopItems()
+    {
+        Debug.Log("Data Manager, shop items " + shopItemData.Count);
+        return shopItemData;
+    }
+
+
+    /// <summary>
     ///     This function updates an achievement
     /// </summary>
     /// <param name="title">The title of the achievement</param>
@@ -602,6 +642,78 @@ public class DataManager : MonoBehaviour
             return achievement.UpdateProgress(newProgress, interactedObjects);
         }
 
+        return false;
+    }
+
+    /// <summary>
+    ///     This function updates an achievement
+    /// </summary>
+    /// <param name="title">The title of the achievement</param>
+    /// <param name="newProgress">The new progress of the achievement</param>
+    /// <returns>True if the acheivement is just now completed, false otherwise</returns>
+    public bool UpdateShopItem(string title, bool newProgress)
+    {
+        ShopItemData shopItem = GetShopItem(title);
+        if (shopItem != null)
+        {
+            return shopItem.UpdateProgress(newProgress);
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    ///     This function updates the credit of the own player
+    /// </summary>
+    /// <param name="price">the price of the shop item</param>
+    /// <param name="credit">the new credit of a player</param>
+    /// <returns>True if the players credit is updated, false otherwise</returns>
+    public bool UpdatePlayerCredit(int price, int credit)
+    {
+       if(playerData != null)
+        {
+            return playerData.updateCredit(price);
+        }
+        return false;
+    }
+
+    
+    public bool UpdateCharacterIndex(string characterIndex)
+    {
+        return playerData.updateCharacter(characterIndex);
+    }
+
+    public bool UpdateAccessoryIndex(string accessoryIndex)
+    {
+        return playerData.updateAccessory(accessoryIndex);
+    }
+
+    /// <summary>
+    ///     This function updates the pseudonym of the own player
+    /// </summary>
+    /// <param name="pseudonym">The new pseudonym of the player</param>
+    /// <returns>True if the players pseudonym is updated, false otherwise</returns>
+    public bool UpdatePseudonym(string pseudonym)
+    {
+
+        if (playerData != null)
+        {
+            return playerData.updatePseudonym(pseudonym);
+        }
+        return false;
+    }
+
+    /// <summary>
+    ///     This function updates the visibility of the own player
+    /// </summary>
+    /// <param name="visibility">The visibility state of the player</param>
+    /// <returns>True if the players visibility is updated, false otherwise</returns>
+    public bool UpdateVisibility(bool visibility)
+    {
+        if (playerData != null)
+        {
+            return playerData.updateVisibility(visibility);
+        }
         return false;
     }
 
@@ -641,6 +753,26 @@ public class DataManager : MonoBehaviour
 
         return null;
     }
+
+
+    /// <summary>
+    ///     This function returns the shop item with the given title
+    /// </summary>
+    /// <param name="title">The title of the achievement to look for</param>
+    /// <returns>The <c>ShopItemData</c> corresponding with the given title if present, null otherwise</returns>
+    public ShopItemData GetShopItem(string title)
+    {
+        foreach (ShopItemData shopItem in shopItemData)
+        {
+            if (shopItem.GetTitle().Equals(title))
+            {
+                return shopItem;
+            }
+        }
+
+        return null;
+    }
+
 
     /// <summary>
     ///     This function returns all stored keybindings
@@ -772,9 +904,7 @@ public class DataManager : MonoBehaviour
         maxNPCs = GameSettings.GetMaxNpcs();
         maxBooks = GameSettings.GetMaxBooks();
         maxDungeons = GameSettings.GetMaxDungeons();
-
         areaDataManager = new AreaDataManager();
-
         worldData = new WorldData[maxWorld + 1];
         playerData = PlayerStatisticData.ConvertDtoToData(new PlayerStatisticDTO());
         InitKeybindingsDictionary();
@@ -1337,4 +1467,39 @@ public class DataManager : MonoBehaviour
         return characterHeads;
     }
 
+    /// <summary>
+    /// Gets the character outfit index of the currently selected character outfit by the player
+    /// </summary>
+    /// <returns>index of the character outfit position in the array</returns>
+    public int GetGlassesIndex()
+    {
+        return glassesIndex;
+    }
+
+    /// <summary>
+    /// Updates the character outfit index if the character is changed by the player
+    /// </summary>
+    /// <param name="index">index of the newly, selected character outfit</param>
+    public void SetGlassesIndex(int index)
+    {
+        glassesIndex = index;
+    }
+
+    /// <summary>
+    /// Gets the character outfit index of the currently selected character outfit by the player
+    /// </summary>
+    /// <returns>index of the character outfit position in the array</returns>
+    public int GetHatIndex()
+    {
+        return hatIndex;
+    }
+
+    /// <summary>
+    /// Updates the character outfit index if the character is changed by the player
+    /// </summary>
+    /// <param name="index">index of the newly, selected character outfit</param>
+    public void SetHatIndex(int index)
+    {
+       hatIndex = index;
+    }
 }
