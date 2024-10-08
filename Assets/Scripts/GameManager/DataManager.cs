@@ -314,6 +314,7 @@ public class DataManager : MonoBehaviour
         }
 
         SetupCharacter(playerData.GetCurrentCharacterIndex());
+        LoadSubScene.Setup();
 
 #if !UNITY_EDITOR
         CheckForLastLogin();
@@ -1049,6 +1050,11 @@ public class DataManager : MonoBehaviour
     /// <returns>The generated info text</returns>
     private string GenerateWorldBarrierInfoText(int originWorldIndex, int destinationAreaIndex)
     {
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            return "Please finish the Tutorial first to unlock the Overworld";
+        }
+
         if (GetWorldData(destinationAreaIndex).isActive())
         {
             for (int i = destinationAreaIndex - 1; i > 0; i--)
@@ -1185,6 +1191,11 @@ public class DataManager : MonoBehaviour
     /// <returns>The generated info text</returns>
     private string GenerateDungeonBarrierInfoText(int originWorldIndex, int destinationAreaIndex)
     {
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            return "Follow the Tutorial steps to unlock Dungeons";
+        }
+
         if (GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex)
                 .IsActive())
         {

@@ -29,9 +29,9 @@ public class LoadSubScene : MonoBehaviour
     public FacingDirection facingDirection;
 
     /// <summary>
-    ///     Initializes the areaExchange variable with the last known position.
+    ///     Initializes the areaExchange variable with the last known position
     /// </summary>
-    static LoadSubScene()
+    public static void Setup()
     {
         if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
@@ -49,8 +49,7 @@ public class LoadSubScene : MonoBehaviour
         {
             // no position saving for tutorial mode
             areaExchange = new AreaInformation(0, new Optional<int>());
-        }
-        
+        }        
     }
 
     private void Start()
