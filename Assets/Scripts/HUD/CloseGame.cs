@@ -38,6 +38,12 @@ public class CloseGame : MonoBehaviour
         PlayClickSound();
         InitCanvas();
 
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            Debug.Log("quitting tutorial");
+            CloseOverworld();
+        }
+
         bool playerDataSaved = await GameManager.Instance.SavePlayerData();
 
         if (playerDataSaved)
