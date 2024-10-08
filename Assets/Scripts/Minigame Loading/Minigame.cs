@@ -68,7 +68,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     /// </summary>
     private void OnDestroy()
     {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             //Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
             ObjectManager.Instance.RemoveGameEntity<Minigame, MinigameData>(world, dungeon, number);
@@ -133,14 +133,19 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         audioSource.PlayOneShot(minigameSpotOpenSound);
         if (collision.CompareTag("Player"))
         {
-            //Debug.Log("Player enters minigame " + game + ", config: " + configurationID);
             StartCoroutine(LoadMinigameStarting());
-            var key = (world,dungeon,number);
-            if(!unlockedMinigames.Contains(key))
+
+            //quit if player is in tutorial 
+            if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
             {
-                unlockedMinigames.Add(key);
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_FINDER, 1, unlockedMinigames);
-                GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_MASTER, 1, unlockedMinigames);
+                var key = (world, dungeon, number);
+
+                if (!unlockedMinigames.Contains(key))
+                {
+                    unlockedMinigames.Add(key);
+                    GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_FINDER, 1, unlockedMinigames);
+                    GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_MASTER, 1, unlockedMinigames);
+                }
             }
         }
     }
