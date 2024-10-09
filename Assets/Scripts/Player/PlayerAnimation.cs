@@ -46,6 +46,7 @@ public class PlayerAnimation : MonoBehaviour
     private bool checkIfChanged=false;
 
     readonly Dictionary<string, Vector3> positions = new Dictionary<string, Vector3>();
+    // Names of the animators available
     readonly List<string> validOutfits = new List<string> {"3D_brille", "blonde_haare", "character_anzug", "character_black_and_white", "character_blue_and_purple", "character_default", "character_ironman", "none",
         "character_jeans_karo", "character_lange_haare", "character_santa", "character_trainingsanzug", "coole_brille", "flammen_haare", "globus_hut", "herzbrille", "retro_brille", "schutzhelm"};
 
@@ -234,6 +235,8 @@ public class PlayerAnimation : MonoBehaviour
     ///     This function changes the animation of the character based on the outfit selected in the 
     ///     character selection. Also adjusts the hitbox or scaling for certain outfits.
     /// </summary>
+    /// <param name="body"> A string that needs to match one from the validOutfits list. It determines which body animator to use. </param>
+    /// <param name="head"> A string that needs to match one from the validOutfits list. It determines which accessory animator to use. </param>
     public void SetOutfitAnimator(string body, string head)
     {
         if (!validOutfits.Contains(body) || !validOutfits.Contains(head))
@@ -264,7 +267,6 @@ public class PlayerAnimation : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.25f);
             accessoireTransform.localPosition = positions[head] - new Vector3(0, 0.3f, 0);
         }
-
     }
 
     /// <summary>

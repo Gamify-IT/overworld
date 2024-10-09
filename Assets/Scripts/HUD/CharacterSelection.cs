@@ -60,6 +60,10 @@ public class CharacterSelection : MonoBehaviour
 
     private AccessoryType currentAccessoryType = AccessoryType.Glasses;
 
+    /// <summary>
+    /// This function is called when the character selection is opened.
+    /// It manages the initial setup of the data and displays the players active outfit.
+    /// </summary>
     void Start()
     {
         SetupDictionaries();
@@ -111,6 +115,9 @@ public class CharacterSelection : MonoBehaviour
         UpdateAccessoryWarnings();
     }
 
+    /// <summary>
+    /// Sets up the dictionaries used to look up the animation name corresponding to the internal index.
+    /// </summary>
     void SetupDictionaries()
     {
         imagenameToAnimationString.Add("hat0", "flammen_haare");
@@ -153,6 +160,9 @@ public class CharacterSelection : MonoBehaviour
         animationToImage.Add("character_santa", "character8");
     }
 
+    /// <summary>
+    /// Updates what is displayed in the character selection.
+    /// </summary>
     private void UpdateCharacterAndAccessoryVisuals()
     {
         if (currentIndex == 7 || currentIndex == 8)
@@ -169,7 +179,6 @@ public class CharacterSelection : MonoBehaviour
             lockImage.SetActive(false);
             return;
         }
-
 
         if (currentAccessoryType == AccessoryType.Glasses)
         {
@@ -201,6 +210,10 @@ public class CharacterSelection : MonoBehaviour
         ValidateCharacterUnlockStatus();
     }
 
+    /// <summary>
+    /// Validates if a given accessoryis unlocked or not.
+    /// The unlock condition is set through the shop.
+    /// </summary>
     private void ValidateAccessoryStatus(string currentImageName)
     {
         bool isLocked = true;
@@ -227,6 +240,10 @@ public class CharacterSelection : MonoBehaviour
         lockImage.SetActive(isLocked);
     }
 
+    /// <summary>
+    /// Validates if a given character outfit is unlocked or not.
+    /// Besides the always available outfits, the unlock condition for the others is set through the shop.
+    /// </summary>
     private void ValidateCharacterUnlockStatus()
     {
         string characterImageName = "character" + (currentIndex % numberOfCharacters);
@@ -266,6 +283,10 @@ public class CharacterSelection : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the text displayed below the character depending on what is selected.
+    /// This is used to inform the player about restriction in the selection or free outfits.
+    /// </summary>
     private void UpdateAccessoryWarnings()
     {
         if (currentIndex == 7)
@@ -283,7 +304,6 @@ public class CharacterSelection : MonoBehaviour
             warningText.text = "";
             EnableAccessoryButtons();
             UpdateCharacterAndAccessoryVisuals();
-
             EnableNextPreviousButtons();
         }
 
@@ -293,6 +313,10 @@ public class CharacterSelection : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Disables the buttons to choose between hats and glasses.
+    /// This is used if a outfit does not allow accessories.
+    /// </summary>
     private void DisableAccessoryButtons()
     {
         glassesButton.interactable = false;
@@ -302,6 +326,9 @@ public class CharacterSelection : MonoBehaviour
         hatButton.image.color = Color.gray;
     }
 
+    /// <summary>
+    /// Enables the buttons to choose between hats and glasses.
+    /// </summary>
     private void EnableAccessoryButtons()
     {
         glassesButton.interactable = true;
@@ -329,7 +356,9 @@ public class CharacterSelection : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Handles the left button to scroll through the accessories.
+    /// </summary>
     public void PreviousAccessory()
     {
         if (currentAccessoryType == AccessoryType.Glasses)
@@ -343,6 +372,9 @@ public class CharacterSelection : MonoBehaviour
         UpdateCharacterAndAccessoryVisuals();
     }
 
+    /// <summary>
+    /// Handles the right button to scroll through the accessories.
+    /// </summary>
     public void NextAccessory()
     {
         if (currentAccessoryType == AccessoryType.Glasses)
@@ -356,6 +388,9 @@ public class CharacterSelection : MonoBehaviour
         UpdateCharacterAndAccessoryVisuals();
     }
 
+    /// <summary>
+    /// Handles the button to switch from glasses to hats.
+    /// </summary>
     public void SetAccessoryToHat()
     {
         currentAccessoryType = AccessoryType.Hat;
@@ -363,6 +398,9 @@ public class CharacterSelection : MonoBehaviour
         RefreshAccessoryButtonVisuals();
     }
 
+    /// <summary>
+    /// Handles the button to switch from hats to glasses.
+    /// </summary>
     public void SetAccessoryToGlasses()
     {
         currentAccessoryType = AccessoryType.Glasses;
@@ -381,10 +419,12 @@ public class CharacterSelection : MonoBehaviour
         {
             glassesButton.image.color = unselectedColor;
             hatButton.image.color = selectedColor;
-
         }
     }
 
+    /// <summary>
+    /// Handles the left button to scroll through character outfits.
+    /// </summary>
     public void PreviousCharacter()
     {
         PlayClickSound();
@@ -393,6 +433,9 @@ public class CharacterSelection : MonoBehaviour
         UpdateCharacterAndAccessoryVisuals();
     }
 
+    /// <summary>
+    /// Handles the right button to scroll through character outfits.
+    /// </summary>
     public void NextCharacter()
     {
         PlayClickSound();
@@ -401,24 +444,36 @@ public class CharacterSelection : MonoBehaviour
         UpdateCharacterAndAccessoryVisuals();
     }
 
+    /// <summary>
+    /// Handles the scrolling to the previous glasses accessory.
+    /// </summary>
     public void Previousglasses()
     {
         PlayClickSound();
         currentGlasses = Modulo(currentGlasses - 1, numberOfGlasses);
     }
 
+    /// <summary>
+    /// Handles the scrolling to the next glasses accessory.
+    /// </summary>
     public void Nextglasses()
     {
         PlayClickSound();
         currentGlasses = Modulo(currentGlasses + 1, numberOfGlasses);
     }
 
+    /// <summary>
+    /// Handles the scrolling to the previous hat accessory.
+    /// </summary>
     public void PreviousHats()
     {
         PlayClickSound();
         currentHat = Modulo(currentHat - 1, numberOfHats);
     }
 
+    /// <summary>
+    /// Handles the scrolling to the next hat accessory.
+    /// </summary>
     public void NextHats()
     {
         PlayClickSound();
@@ -453,7 +508,6 @@ public class CharacterSelection : MonoBehaviour
 
             GameManager.Instance.SavePlayerStatisticData();
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
-
         }
     }
 
@@ -461,7 +515,6 @@ public class CharacterSelection : MonoBehaviour
     {
         warningPanel.SetActive(false);
     }
-
 
     /// <summary>
     ///     This function is called by the <c>Navigation Buttons</c>.
@@ -487,6 +540,9 @@ public class CharacterSelection : MonoBehaviour
         return remainder < 0 ? remainder + b : remainder;
     }
 
+    /// <summary>
+    /// Disables the buttons to navigate through the accessories.
+    /// </summary>
     private void DisableAccessoryNavigationButtons()
     {
         if (nextButton != null)
@@ -500,6 +556,9 @@ public class CharacterSelection : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Enables the buttons to navigate through the accessories.
+    /// </summary>
     private void EnableAccessoryNavigationButtons()
     {
         if (nextButton != null)
