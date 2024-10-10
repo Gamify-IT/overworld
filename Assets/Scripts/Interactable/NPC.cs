@@ -42,9 +42,12 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         {
             speechIndicator = child;
         }
-#if !UNITY_EDITOR
-        alreadyTalkedNPC = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "COMMUNICATOR_LEVEL_3").GetInteractedObjects();
-#endif
+
+        if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
+        {
+            alreadyTalkedNPC = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "COMMUNICATOR_LEVEL_3").GetInteractedObjects();
+        }
+
         InitNewStuffSprite();
         interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;

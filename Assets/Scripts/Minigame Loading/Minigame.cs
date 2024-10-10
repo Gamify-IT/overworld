@@ -54,10 +54,13 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     private void Awake()
     {
         sprites = transform.GetComponent<SpriteRenderer>();
-    #if !UNITY_EDITOR
-        unlockedMinigames = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "MINIGAME_SPOTS_MASTER").GetInteractedObjects();
-        successfullyCompletedMinigames = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "MINIGAME_PROFESSIONAL").GetInteractedObjects();
-    #endif
+
+        if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
+        {
+            unlockedMinigames = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "MINIGAME_SPOTS_MASTER").GetInteractedObjects();
+            successfullyCompletedMinigames = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "MINIGAME_PROFESSIONAL").GetInteractedObjects();
+        }
+
         audioSource = gameObject.AddComponent<AudioSource>();
         minigameSpotOpenSound = Resources.Load<AudioClip>("Music/minigame_spot_open");
         audioSource.clip = minigameSpotOpenSound;
