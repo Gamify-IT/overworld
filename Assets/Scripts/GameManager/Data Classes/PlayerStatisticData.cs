@@ -220,7 +220,7 @@ public class PlayerStatisticData
     /// <returns>True if the credit was updated, otherwise false.</returns>
     public bool creditIsUpdated()
     {
-        return updatedCredit;
+        return this.updatedCredit;
     }
 
     /// <summary>
@@ -229,7 +229,7 @@ public class PlayerStatisticData
     /// <returns>True if the pseudonym was updated, otherwise false.</returns>
     public bool PseudonymIsUpdated()
     {
-        return updatedPseudonym;
+        return this.updatedPseudonym;
     }
 
     /// <summary>
@@ -238,43 +238,43 @@ public class PlayerStatisticData
     /// <returns>True if the visibility was updated, otherwise false.</returns>
     public bool VisibilityIsUpdated()
     {
-        return updatedVisibility;
+        return this.updatedVisibility;
     }
 
     public bool CharacterIsUpdated()
     {
-        return updatedCharacterIndex;
+        return this.updatedCharacterIndex;
     }
 
     public bool AccessoryIsUpdated()
     {
-        return updatedAccessoryIndex;
+        return this.updatedAccessoryIndex;
     }
 
     #region Getter and Setter
     public string GetId()
     {
-        return id;
+        return this.id;
     }
 
     public AreaLocationDTO[] GetUnlockedAreas()
     {
-        return unlockedAreas;
+        return this.unlockedAreas;
     }
 
     public AreaLocationDTO[] GetUnlockedDungeons()
     {
-        return unlockedDungeons;
+        return this.unlockedDungeons;
     }
 
     public TeleporterDTO[] GetUnlockedTeleporters()
     {
-        return unlockedTeleporters;
+        return this.unlockedTeleporters;
     }
 
     public AreaLocationDTO GetCurrentArea()
     {
-        return currentArea;
+        return this.currentArea;
     }
 
     /// <summary>
@@ -283,22 +283,22 @@ public class PlayerStatisticData
     /// <param name="area">current area</param>
     public void SetCurrentArea(AreaLocationDTO area)
     {
-        currentArea = area;
+        this.currentArea = area;
     }
 
     public string GetUserId()
     {
-        return userId;
+        return this.userId;
     }
 
     public string GetUsername()
     {
-        return username;
+        return this.username;
     }
 
     public string GetLastActive()
     {
-        return lastActive;
+        return this.lastActive;
     }
 
     public void SetLastActive(string lastActive)
@@ -308,22 +308,22 @@ public class PlayerStatisticData
 
     public float GetLogoutPositionX()
     {
-        return logoutPositionX;
+        return this.logoutPositionX;
     }
 
     public void SetLogoutPositionX(float xPosition)
     {
-        logoutPositionX = xPosition;
+        this.logoutPositionX = xPosition;
     }
 
     public float GetLogoutPositionY()
     {
-        return logoutPositionY;
+        return this.logoutPositionY;
     }
 
     public void SetLogoutPositionY(float YPosition)
     {
-        logoutPositionY = YPosition;
+        this.logoutPositionY = YPosition;
     }
 
     /// <summary>
@@ -332,7 +332,7 @@ public class PlayerStatisticData
     /// <returns>scene name</returns>
     public string GetLogoutScene()
     {
-        return logoutScene;
+        return this.logoutScene;
     }
 
     /// <summary>
@@ -350,7 +350,7 @@ public class PlayerStatisticData
     /// <returns>index of the character position in the list</returns>
     public int GetCurrentCharacterIndex()
     {
-        return currentCharacterIndex;
+        return this.currentCharacterIndex;
     }
 
     /// <summary>
@@ -359,12 +359,12 @@ public class PlayerStatisticData
     /// <param name="index">index of the newly, selected character</param>
     public void SetCurrentCharacterIndex(int index)
     {
-        currentCharacterIndex = index;
+        this.currentCharacterIndex = index;
     }
 
     public int GetKnowledge()
     {
-        return knowledge;
+        return this.knowledge;
     }
 
     /// <summary>
@@ -373,7 +373,7 @@ public class PlayerStatisticData
     /// <returns>volume level</returns>
     public int GetVolumeLevel()
     {
-        return volumeLevel;
+        return this.volumeLevel;
     }
 
     /// <summary>
@@ -387,7 +387,7 @@ public class PlayerStatisticData
 
     public int GetRewards()
     {
-        return rewards;
+        return this.rewards;
     }
 
     /// <summary>
@@ -396,12 +396,12 @@ public class PlayerStatisticData
     /// <returns>visibility state</returns>
     public bool GetVisibility()
     {
-        return visibility;
+        return this.visibility;
     }
 
     public string GetLeague()
     {
-        return leagueOfPlayer;
+        return this.leagueOfPlayer;
     }
 
     public string GetWorld()
@@ -429,7 +429,7 @@ public class PlayerStatisticData
     /// <returns>pseudonym of player</returns>
     public string GetPseudonym()
     {
-        return pseudonym;
+        return this.pseudonym;
     }
 
     /// <summary>
@@ -443,7 +443,7 @@ public class PlayerStatisticData
 
     public int GetCredit()
     {
-        return credit;
+        return this.credit;
     }
 
     /// <summary>
@@ -457,7 +457,7 @@ public class PlayerStatisticData
 
     public string GetCurrentCharacter()
     {
-        return currentCharacter;
+        return this.currentCharacter;
     }
 
     public void SetCurrentCharacter(string newCharacter)
@@ -467,7 +467,7 @@ public class PlayerStatisticData
 
     public string GetCurrentAccessory()
     {
-        return currentAccessory;
+        return this.currentAccessory;
     }
 
     public void SetCurrentAccessory(string newAccessory)
