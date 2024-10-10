@@ -118,7 +118,11 @@ public class PlayerStatisticData
         return data;
     }
 
-
+    /// <summary>
+    ///     Updates the player's character.
+    /// </summary>
+    /// <param name="currentCharacterIndex"></param>
+    /// <returns>True if the credit remains positive, otherwise false.</returns>
     public bool UpdateCharacter(string currentCharacterIndex)
     {
         updatedCharacterIndex = true;
@@ -126,12 +130,18 @@ public class PlayerStatisticData
         return true;
     }
 
+    /// <summary>
+    ///     Updates the player's accessory.
+    /// </summary>
+    /// <param name="currentAccessoryIndex"></param>
+    /// <returns>True if the credit remains positive, otherwise false.</returns>
     public bool UpdateAccessory(string currentAccessoryIndex)
     {
         updatedAccessoryIndex = true;
         currentAccessory = currentAccessoryIndex;
         return true;
     }
+
     /// <summary>
     ///     Updates the player's credit.
     /// </summary>
@@ -141,11 +151,7 @@ public class PlayerStatisticData
     {
         updatedCredit = true;
         credit = this.credit - price;
-        if (credit > 0)
-        {
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /// <summary>
@@ -156,13 +162,9 @@ public class PlayerStatisticData
     public bool UpdatePseudonym(string name)
     {
         updatedPseudonym = true;
+        pseudonym = name;
+        return true;
 
-        if (name != null)
-        {
-            pseudonym = name;
-            return true;
-        }
-        return false;
     }
 
     /// <summary>

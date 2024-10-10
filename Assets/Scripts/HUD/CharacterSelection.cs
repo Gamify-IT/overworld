@@ -254,6 +254,11 @@ public class CharacterSelection : MonoBehaviour
         bool isFreeSkin = characterImageName == "character0" || characterImageName == "character1";
         isFreeSkin = isFreeSkin || characterImageName == "character2";
 
+        if (isFreeSkin)
+        {
+            isLocked = false;
+        }
+
         foreach (var item in shopItemData)
         {
             if (item.GetImageName() == characterImageName)
@@ -429,7 +434,7 @@ public class CharacterSelection : MonoBehaviour
     {
         PlayClickSound();
         currentIndex = Modulo(currentIndex - 1, numberOfCharacters);
-        ValidateCharacterUnlockStatus();  
+        ValidateCharacterUnlockStatus();
         UpdateCharacterAndAccessoryVisuals();
     }
 
@@ -501,7 +506,7 @@ public class CharacterSelection : MonoBehaviour
         else
         {
             animationScript.SetOutfitAnimator(selectedBody, selectedHead);
-            ownData.SetCurrentCharacter(selectedBody); // save selection to characterStatistic
+            ownData.SetCurrentCharacter(selectedBody);
             ownData.SetCurrentAccessory(selectedHead);
             DataManager.Instance.UpdateCharacterIndex(selectedBody);
             DataManager.Instance.UpdateAccessoryIndex(selectedHead);
