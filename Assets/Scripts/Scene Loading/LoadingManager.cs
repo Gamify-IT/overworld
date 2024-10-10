@@ -67,6 +67,11 @@ public class LoadingManager : MonoBehaviour
         if (worldIndex == 0)
         {
             this.sceneToLoad = "Tutorial";
+
+            if (dungeonIndex != 0)
+            {
+                this.sceneToLoad = "Dungeon";
+            }
         }
         this.worldIndex = worldIndex;
         this.dungeonIndex = dungeonIndex;
