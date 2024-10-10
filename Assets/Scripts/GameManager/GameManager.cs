@@ -510,36 +510,7 @@ public class GameManager : MonoBehaviour
         return savingSuccessful;
     }
 
-    /// <summary>
-    ///     This function saves the changed player data in the current session
-    /// </summary>
-    public async UniTask<bool> SavePlayerStatisticData()
-    {
-        PlayerStatisticData playerStatisticData = DataManager.Instance.GetPlayerData();
-        string basePath = overworldBackendPath + coursesPath + courseId + playerStatisticsPath;
-        bool savingSuccessful = true;
-
-        if (playerStatisticData.creditIsUpdated() || playerStatisticData.PseudonymIsUpdated() || playerStatisticData.VisibilityIsUpdated() || playerStatisticData.CharacterIsUpdated() ||  playerStatisticData.AccessoryIsUpdated())
-        {
-            PlayerStatisticDTO playerstatistic = PlayerStatisticDTO.ConvertDataToDTO(playerStatisticData);
-            string path = basePath + userId;
-            string json = JsonUtility.ToJson(playerstatistic, true);
-            Debug.Log(playerstatistic.id + userId);
-            bool successful = await RestRequest.PutRequest(path, json);
-            if (successful)
-            {
-                Debug.Log("Updated player statistic  for " + playerstatistic.id + " in the overworld backend");
-
-            }
-            else
-            {
-                savingSuccessful = false;
-                Debug.Log("Could not update the player statistic for " + playerstatistic.id + " in the overworld backend");
-            }
-        }
-        return savingSuccessful;
-
-    }
+    
 
     /// <summary>
     ///     This functions returns an information text about the barrier.

@@ -223,7 +223,7 @@ public class ShopItemManager : MonoBehaviour
             GameManager.Instance.SaveShopItem();
 
             DataManager.Instance.UpdatePlayerCredit(price, ownData.GetCredit());
-            GameManager.Instance.SavePlayerStatisticData();
+            GameManager.Instance.SavePlayerData();
 
             UpdateCreditText();
             UpdateUI();

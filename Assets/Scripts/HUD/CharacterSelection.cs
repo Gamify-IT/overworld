@@ -506,7 +506,7 @@ public class CharacterSelection : MonoBehaviour
             DataManager.Instance.UpdateCharacterIndex(selectedBody);
             DataManager.Instance.UpdateAccessoryIndex(selectedHead);
 
-            GameManager.Instance.SavePlayerStatisticData();
+            GameManager.Instance.SavePlayerData();
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
         }
     }

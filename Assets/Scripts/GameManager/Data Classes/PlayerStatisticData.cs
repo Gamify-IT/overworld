@@ -59,7 +59,7 @@ public class PlayerStatisticData
         this.volumeLevel = volumeLevel;
         this.knowledge = knowledge;
         this.rewards = rewards;
-        this.leagueOfPlayer = calculateLeagueOfPlayer(rewards);
+        this.leagueOfPlayer = CalculateLeagueOfPlayer(rewards);
         this.visibility = visibility;
         this.credit = credit;
         this.pseudonym = pseudonym;
@@ -119,14 +119,14 @@ public class PlayerStatisticData
     }
 
 
-    public bool updateCharacter(string currentCharacterIndex)
+    public bool UpdateCharacter(string currentCharacterIndex)
     {
         updatedCharacterIndex = true;
         currentCharacter = currentCharacterIndex;
         return true;
     }
 
-    public bool updateAccessory(string currentAccessoryIndex)
+    public bool UpdateAccessory(string currentAccessoryIndex)
     {
         updatedAccessoryIndex = true;
         currentAccessory = currentAccessoryIndex;
@@ -137,7 +137,7 @@ public class PlayerStatisticData
     /// </summary>
     /// <param name="price">The amount to reduce the credit by.</param>
     /// <returns>True if the credit remains positive, otherwise false.</returns>
-    public bool updateCredit(int price)
+    public bool UpdateCredit(int price)
     {
         updatedCredit = true;
         credit = this.credit - price;
@@ -153,7 +153,7 @@ public class PlayerStatisticData
     /// </summary>
     /// <param name="name">The new pseudonym.</param>
     /// <returns>True if the pseudonym was updated, otherwise false.</returns>
-    public bool updatePseudonym(string name)
+    public bool UpdatePseudonym(string name)
     {
         updatedPseudonym = true;
 
@@ -170,7 +170,7 @@ public class PlayerStatisticData
     /// </summary>
     /// <param name="visibility">The new visibility state.</param>
     /// <returns>Always true.</returns>
-    public bool updateVisibility(bool visibility)
+    public bool UpdateVisibility(bool visibility)
     {
         updatedVisibility = true;
 
@@ -193,7 +193,7 @@ public class PlayerStatisticData
     /// </summary>
     /// <param name="rewards">The amount of rewards.</param>
     /// <returns>The corresponding league.</returns>
-    public string calculateLeagueOfPlayer(int rewards)
+    public string CalculateLeagueOfPlayer(int rewards)
     {
         if (rewards < 450)
         {
@@ -218,7 +218,7 @@ public class PlayerStatisticData
     ///     Checks if the credit has been updated.
     /// </summary>
     /// <returns>True if the credit was updated, otherwise false.</returns>
-    public bool creditIsUpdated()
+    public bool CreditIsUpdated()
     {
         return updatedCredit;
     }
