@@ -8,26 +8,26 @@ using UnityEngine;
 public class PlayerStatisticDTO
 {
     #region Attributes
-    private readonly string id;
-    private readonly string userId;
-    private readonly string username;
-    private AreaLocationDTO[] unlockedAreas;
-    private AreaLocationDTO[] unlockedDungeons;
-    private TeleporterDTO[] unlockedTeleporters;
-    private AreaLocationDTO currentArea;
-    private string lastActive;
-    private float logoutPositionX;
-    private float logoutPositionY;
-    private string logoutScene;
-    private int currentCharacterIndex;
-    private int volumeLevel;
-    private int knowledge;
-    private int rewards;
-    private bool visibility;
-    private int credit;
-    private string pseudonym;
-    private string currentCharacter;
-    private string currentAccessory;
+    public string id;
+    public AreaLocationDTO[] unlockedAreas;
+    public AreaLocationDTO[] unlockedDungeons;
+    public TeleporterDTO[] unlockedTeleporters;
+    public AreaLocationDTO currentArea;
+    public string userId;
+    public string username;
+    public string lastActive;
+    public float logoutPositionX;
+    public float logoutPositionY;
+    public string logoutScene;
+    public int currentCharacterIndex;
+    public int volumeLevel;
+    public int knowledge;
+    public int rewards;
+    public bool visibility;
+    public int credit;
+    public string pseudonym;
+    public string currentCharacter;
+    public string currentAccessory;
     #endregion
 
     #region Constructors
@@ -131,192 +131,4 @@ public class PlayerStatisticDTO
     {
         return JsonUtility.FromJson<PlayerStatisticDTO>(jsonString);
     }
-
-    #region Getter and Setter
-    public string GetId()
-    {
-        return this.id;
-    }
-
-    public string GetUserId()
-    {
-        return this.userId;
-    }
-
-    public string GetUsername()
-    {
-        return this.username;
-    }
-
-    public AreaLocationDTO[] GetUnlockedAreas()
-    {
-        return this.unlockedAreas;
-    }
-
-    public void SetUnlockedAreas(AreaLocationDTO[] value)
-    {
-        this.unlockedAreas = value;
-    }
-
-    public AreaLocationDTO[] GetUnlockedDungeons()
-    {
-        return this.unlockedDungeons;
-    }
-
-    public void SetUnlockedDungeons(AreaLocationDTO[] value)
-    {
-        this.unlockedDungeons = value;
-    }
-
-    public TeleporterDTO[] GetUnlockedTeleporters()
-    {
-        return this.unlockedTeleporters;
-    }
-
-    public void SetUnlockedTeleporters(TeleporterDTO[] value)
-    {
-        this.unlockedTeleporters = value;
-    }
-
-    public AreaLocationDTO GetCurrentArea()
-    {
-        return this.currentArea;
-    }
-
-    public void SetCurrentArea(AreaLocationDTO value)
-    {
-        this.currentArea = value;
-    }
-
-    public string GetLastActive()
-    {
-        return this.lastActive;
-    }
-
-    public void SetLastActive(string value)
-    {
-        this.lastActive = value;
-    }
-
-    public float GetLogoutPositionX()
-    {
-        return this.logoutPositionX;
-    }
-
-    public void SetLogoutPositionX(float value)
-    {
-        this.logoutPositionX = value;
-    }
-
-    public float GetLogoutPositionY()
-    {
-        return this.logoutPositionY;
-    }
-
-    public void SetLogoutPositionY(float value)
-    {
-        this.logoutPositionY = value;
-    }
-
-    public string GetLogoutScene()
-    {
-        return this.logoutScene;
-    }
-
-    public void SetLogoutScene(string value)
-    {
-        this.logoutScene = value;
-    }
-
-    public int GetCurrentCharacterIndex()
-    {
-        return this.currentCharacterIndex;
-    }
-
-    public void SetCurrentCharacterIndex(int value)
-    {
-        this.currentCharacterIndex = value;
-    }
-
-    public int GetKnowledge()
-    {
-        return this.knowledge;
-    }
-
-    public void SetKnowledge(int value)
-    {
-        this.knowledge = value;
-    }
-
-    public int GetVolumeLevel()
-    {
-        return this.volumeLevel;
-    }
-
-    public void SetVolumeLevel(int value)
-    {
-        this.volumeLevel = value;
-    }
-
-    public int GetRewards()
-    {
-        return this.rewards;
-    }
-
-    public void SetRewards(int value)
-    {
-        this.rewards = value;
-    }
-
-    public bool GetVisibility()
-    {
-        return this.visibility;
-    }
-
-    public void SetVisibility(bool value)
-    {
-        this.visibility = value;
-    }
-
-    public int GetCredit()
-    {
-        return this.credit;
-    }
-
-    public void SetCredit(int newCredit)
-    {
-        this.credit = newCredit;
-    }
-
-    public string GetPseudonym()
-    {
-        return this.pseudonym;
-    }
-
-    public void SetPseudonym(string value)
-    {
-        this.pseudonym = value;
-    }
-
-    public string GetCurrentCharacter()
-    {
-        return this.currentCharacter;
-    }
-
-    public void SetCurrentCharacter(string character)
-    {
-        this.currentCharacter = character;
-    }
-
-    public string GetCurrentAccessory()
-    {
-        return this.currentAccessory;
-    }
-
-    public void SetCurrentAccessory(string accessory)
-    {
-        this.currentAccessory = accessory;
-    }
-
-    #endregion
 }

@@ -7,7 +7,7 @@ using System;
 ///     This class is used to retrieve <c>ShopItem<c> data from Get Requests.
 /// </summary>
 [Serializable]
-public class ShopItem 
+public class ShopItem
 {
     public int cost;
     public string imageName;
@@ -35,5 +35,5 @@ public class ShopItem
     {
         return JsonUtility.FromJson<ShopItem>(jsonString);
     }
-    
+
 }

@@ -1035,7 +1035,6 @@ public class DataManager : MonoBehaviour
         {
             ChangeKeybind(keybinding);
 
-            // update the volume level
             if (keybinding.GetBinding() == Binding.VOLUME_LEVEL)
             {
                 int volumeLevel = ConvertKeyCodeToInt(keybinding.GetKey());

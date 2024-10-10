@@ -5,18 +5,18 @@ using UnityEngine;
 /// <summary>
 ///     This class is used to store all relevant information about shop items in the overworld frontend
 /// </summary>
-public class ShopItemData 
+public class ShopItemData
 {
     private static string imageFolder = "ShopItemImages";
     private static string defaultImageName = "defaultImage";
 
     private readonly int cost;
-    private  bool bought;
+    private bool bought;
     private readonly string imageName;
     private readonly Sprite image;
     private bool updated;
-    private  readonly string category;
-    private  readonly string shopItemID;
+    private readonly string category;
+    private readonly string shopItemID;
 
 
     public ShopItemData(string shopItemID, int cost, bool bought, string imageName, string category)
@@ -43,9 +43,9 @@ public class ShopItemData
         string imageName = item.imageName;
         bool bought = item.bought;
         string category = item.category;
-        
 
-       ShopItemData data = new ShopItemData(title, cost, bought, imageName, category);
+
+        ShopItemData data = new ShopItemData(title, cost, bought, imageName, category);
         return data;
     }
 
@@ -62,7 +62,7 @@ public class ShopItemData
         string imageName = shopItemData.GetImageName();
         string category = shopItemData.GetCategory();
 
-       ShopItem shopItem = new ShopItem(shopItemID, cost, imageName, category, bought);
+        ShopItem shopItem = new ShopItem(shopItemID, cost, imageName, category, bought);
 
 
         return shopItem;
@@ -106,7 +106,7 @@ public class ShopItemData
     {
         return image;
     }
-       
+
 
     public string GetTitle()
     {
