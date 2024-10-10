@@ -211,8 +211,6 @@ public class ShopItemManager : MonoBehaviour
 
         if (ownData.GetCredit() >= currentItemPrice)
         {
-            
-
             PlayClickSound();
 
             PlaySuccessSound();
@@ -220,15 +218,12 @@ public class ShopItemManager : MonoBehaviour
             successPanel.SetActive(true);
             overlayPanel.SetActive(true);
             successText.text = $"Nice! You just bought the {currentItemTitle} for {currentItemPrice} coins!";
-
             
-            GameManager.Instance.UpdateShopItem(currentItemTitle, true);
+            DataManager.Instance.UpdateShopItem(currentItemTitle, true);
             GameManager.Instance.SaveShopItem();
 
-            GameManager.Instance.UpdatePlayerCredit(price, ownData.GetCredit());
-            GameManager.Instance.SavePlayerStatisticData();
-
-            
+            DataManager.Instance.UpdatePlayerCredit(price, ownData.GetCredit());
+            GameManager.Instance.SavePlayerData();
 
             UpdateCreditText();
             UpdateUI();

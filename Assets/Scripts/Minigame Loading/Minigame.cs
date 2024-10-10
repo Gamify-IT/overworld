@@ -70,7 +70,6 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     {
         if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
-            //Debug.Log("remove Minigame " + world + "-" + dungeon + "-" + number);
             ObjectManager.Instance.RemoveGameEntity<Minigame, MinigameData>(world, dungeon, number);
         }
     }
@@ -98,7 +97,6 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     /// </summary>
     private void RegisterToGameManager()
     {
-        //Debug.Log("register Minigame " + world + "-" + dungeon + "-" + number);
         ObjectManager.Instance.AddGameEntity<Minigame, MinigameData>(gameObject, world, dungeon, number);
     }
 
@@ -133,7 +131,6 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         audioSource.PlayOneShot(minigameSpotOpenSound);
         if (collision.CompareTag("Player"))
         {
-            //Debug.Log("Player enters minigame " + game + ", config: " + configurationID);
             StartCoroutine(LoadMinigameStarting());
             var key = (world,dungeon,number);
             if(!unlockedMinigames.Contains(key))
@@ -172,17 +169,14 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         switch (status)
         {
             case MinigameStatus.notConfigurated:
-                //Debug.Log("Minigame " + world + "-" + dungeon + "-" + number + ": color: none");
                 sprites.color = new Color(1f, 1f, 1f, 1f);
                 gameObject.SetActive(false);
                 break;
             case MinigameStatus.active:
-                //Debug.Log("Minigame " + world + "-" + dungeon + "-" + number + ": color: red");
                 sprites.color = new Color(1f, 0f, 0f, 1f);
                 gameObject.SetActive(true);
                 break;
             case MinigameStatus.done:
-                //Debug.Log("Minigame " + world + "-" + dungeon + "-" + number + ": color: blue");
                 sprites.color = new Color(0f, 0f, 1f, 1f);
                 gameObject.SetActive(true);
                 UpdateAchievements();

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// </summary>
 public class ShopItemUIElement : MonoBehaviour
 {
-    
+
     [SerializeField] private TMP_Text title;
     [SerializeField] private Image image;
     [SerializeField] private GameObject boughtImage;
@@ -21,7 +21,7 @@ public class ShopItemUIElement : MonoBehaviour
     /// <param name="image">The image of the shop item.</param>
     /// <param name="bought">The status of the shop item for the current player.</param>
     /// <param name="showCoin">Whether to show a crown icon based on the player's rank.</param>
-    public void Setup(string title,  Sprite image, bool bought, bool showCoin)
+    public void Setup(string title, Sprite image, bool bought, bool showCoin)
     {
         this.title.text = title.Replace("_", " ");
         this.image.sprite = image;

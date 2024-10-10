@@ -309,7 +309,7 @@ public class LeaderboardManager : MonoBehaviour
         if (inputField != null && inputField.gameObject.activeSelf)
         {
             string newPseudonym = inputField.text;
-            GameManager.Instance.UpdatePseudonym(newPseudonym);
+            DataManager.Instance.UpdatePseudonym(newPseudonym);
             GameManager.Instance.SavePlayerData();
             ranking = DataManager.Instance.GetAllPlayerStatistics();
 
@@ -318,7 +318,6 @@ public class LeaderboardManager : MonoBehaviour
             inputField.Select();
             inputField.ActivateInputField();
         }
-        
     }
 
     /// <summary>
@@ -515,8 +514,7 @@ public class LeaderboardManager : MonoBehaviour
         if (toggleText != null)
         {
             toggleText.color = isPublic ? pastelGreen : pastelRed;
-        }
-       
+        }  
     }
 
     /// <summary>
@@ -528,7 +526,7 @@ public class LeaderboardManager : MonoBehaviour
     {
         UpdateToggleButtonColor(isOn);
         UpdateToggleText(isOn); 
-        GameManager.Instance.UpdateVisibility(isOn);
+        DataManager.Instance.UpdateVisibility(isOn);
         GameManager.Instance.SavePlayerData();
         SaveVisibilityState();
         UpdateVisibilityImage(isOn);

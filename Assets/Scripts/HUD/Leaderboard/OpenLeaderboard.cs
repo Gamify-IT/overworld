@@ -11,7 +11,6 @@ public class OpenLeaderboard : MonoBehaviour
 
     public static bool menuOpen = true;
     public GameObject rewardsPanel;
-    
 
     private AudioSource audioSource;
     public AudioClip clickSound;
@@ -22,7 +21,7 @@ public class OpenLeaderboard : MonoBehaviour
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        if(audioSource == null)
+        if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
@@ -69,7 +68,7 @@ public class OpenLeaderboard : MonoBehaviour
         audioSource.Play();
         Invoke("RewardsPanelSetActive", 0.15f);
         menuOpen = false;
-        Time.timeScale = 1f; 
+        Time.timeScale = 1f;
     }
 
     /// <summary>
@@ -77,11 +76,7 @@ public class OpenLeaderboard : MonoBehaviour
     /// </summary>
     private void RewardsPanelSetActive()
     {
-        rewardsPanel.SetActive(false); 
+        rewardsPanel.SetActive(false);
     }
-
-    
-
-   
 
 }
