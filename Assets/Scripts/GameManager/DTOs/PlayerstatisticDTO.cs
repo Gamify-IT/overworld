@@ -135,187 +135,187 @@ public class PlayerStatisticDTO
     #region Getter and Setter
     public string GetId()
     {
-        return id;
+        return this.id;
     }
 
     public string GetUserId()
     {
-        return userId;
+        return this.userId;
     }
 
     public string GetUsername()
     {
-        return username;
+        return this.username;
     }
 
     public AreaLocationDTO[] GetUnlockedAreas()
     {
-        return unlockedAreas;
+        return this.unlockedAreas;
     }
 
     public void SetUnlockedAreas(AreaLocationDTO[] value)
     {
-        unlockedAreas = value;
+        this.unlockedAreas = value;
     }
 
     public AreaLocationDTO[] GetUnlockedDungeons()
     {
-        return unlockedDungeons;
+        return this.unlockedDungeons;
     }
 
     public void SetUnlockedDungeons(AreaLocationDTO[] value)
     {
-        unlockedDungeons = value;
+        this.unlockedDungeons = value;
     }
 
     public TeleporterDTO[] GetUnlockedTeleporters()
     {
-        return unlockedTeleporters;
+        return this.unlockedTeleporters;
     }
 
     public void SetUnlockedTeleporters(TeleporterDTO[] value)
     {
-        unlockedTeleporters = value;
+        this.unlockedTeleporters = value;
     }
 
     public AreaLocationDTO GetCurrentArea()
     {
-        return currentArea;
+        return this.currentArea;
     }
 
     public void SetCurrentArea(AreaLocationDTO value)
     {
-        currentArea = value;
+        this.currentArea = value;
     }
 
     public string GetLastActive()
     {
-        return lastActive;
+        return this.lastActive;
     }
 
     public void SetLastActive(string value)
     {
-        lastActive = value;
+        this.lastActive = value;
     }
 
     public float GetLogoutPositionX()
     {
-        return logoutPositionX;
+        return this.logoutPositionX;
     }
 
     public void SetLogoutPositionX(float value)
     {
-        logoutPositionX = value;
+        this.logoutPositionX = value;
     }
 
     public float GetLogoutPositionY()
     {
-        return logoutPositionY;
+        return this.logoutPositionY;
     }
 
     public void SetLogoutPositionY(float value)
     {
-        logoutPositionY = value;
+        this.logoutPositionY = value;
     }
 
     public string GetLogoutScene()
     {
-        return logoutScene;
+        return this.logoutScene;
     }
 
     public void SetLogoutScene(string value)
     {
-        logoutScene = value;
+        this.logoutScene = value;
     }
 
     public int GetCurrentCharacterIndex()
     {
-        return currentCharacterIndex;
+        return this.currentCharacterIndex;
     }
 
     public void SetCurrentCharacterIndex(int value)
     {
-        currentCharacterIndex = value;
+        this.currentCharacterIndex = value;
     }
 
     public int GetKnowledge()
     {
-        return knowledge;
+        return this.knowledge;
     }
 
     public void SetKnowledge(int value)
     {
-        knowledge = value;
+        this.knowledge = value;
     }
 
     public int GetVolumeLevel()
     {
-        return volumeLevel;
+        return this.volumeLevel;
     }
 
     public void SetVolumeLevel(int value)
     {
-        volumeLevel = value;
+        this.volumeLevel = value;
     }
 
     public int GetRewards()
     {
-        return rewards;
+        return this.rewards;
     }
 
     public void SetRewards(int value)
     {
-        rewards = value;
+        this.rewards = value;
     }
 
     public bool GetVisibility()
     {
-        return visibility;
+        return this.visibility;
     }
 
     public void SetVisibility(bool value)
     {
-        visibility = value;
+        this.visibility = value;
     }
 
     public int GetCredit()
     {
-        return credit;
+        return this.credit;
     }
 
     public void SetCredit(int newCredit)
     {
-        credit = newCredit;
+        this.credit = newCredit;
     }
 
     public string GetPseudonym()
     {
-        return pseudonym;
+        return this.pseudonym;
     }
 
     public void SetPseudonym(string value)
     {
-        pseudonym = value;
+        this.pseudonym = value;
     }
 
     public string GetCurrentCharacter()
     {
-        return currentCharacter;
+        return this.currentCharacter;
     }
 
     public void SetCurrentCharacter(string character)
     {
-        currentCharacter = character;
+        this.currentCharacter = character;
     }
 
     public string GetCurrentAccessory()
     {
-        return currentAccessory;
+        return this.currentAccessory;
     }
 
     public void SetCurrentAccessory(string accessory)
     {
-        currentAccessory = accessory;
+        this.currentAccessory = accessory;
     }
 
     #endregion
