@@ -225,6 +225,11 @@ public class LoadSubScene : MonoBehaviour
         else
         {
             sceneToLoad = "Dungeon";
+
+            if (worldIndexToLoad == 0)
+            {
+                sceneToLoad = "Tutorial Dungeon";
+            }
         }
 
         AsyncOperation asyncOperationLoad = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
