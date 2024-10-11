@@ -1,0 +1,140 @@
+﻿{
+  "layout": {
+    "area": {
+      "worldIndex": 0,
+      "dungeonIndex": 0
+    },
+    "sizeX": 0,
+    "sizeY": 0,
+    "generatorType": "CELLULAR_AUTOMATA",
+    "seed": "",
+    "accessability": 0,
+    "style": "CUSTOM"
+  },
+  "minigameSpots": [
+    {
+      "area": {
+        "worldIndex": 0,
+        "dungeonIndex": 0
+      },
+      "index": 1,
+      "position": {
+        "x": -3.0,
+        "y": 4.0
+      }
+    }
+  ],
+  "npcSpots": [
+    {
+      "area": {
+        "worldIndex": 0,
+        "dungeonIndex": 0
+      },
+      "index": 1,
+      "position": {
+        "x": 5.0,
+        "y": 10.0
+      },
+      "name": "Bob",
+      "spriteName": "npc_0",
+      "iconName": "NPCHeads_0"
+    }
+  ],
+  "bookSpots": [
+    {
+      "area": {
+        "worldIndex": 0,
+        "dungeonIndex": 0
+      },
+      "index": 1,
+      "position": {
+        "x": 26.0,
+        "y": 6.0
+      },
+      "name": "Mysterious Book"
+    }
+  ],
+  "barrierSpots": [
+    {
+      "area": {
+        "worldIndex": 0,
+        "dungeonIndex": 0
+      },
+      "position": {
+        "x": -10.0,
+        "y": 13.0
+      },
+      "type": "worldBarrier",
+      "destinationAreaIndex": "1",
+      "barrierStyle": "TREE"
+    }
+  ],
+  "teleporterSpots": [
+    {
+      "area": {
+        "worldIndex": 0,
+        "dungeonIndex": 0
+      },
+      "index": 1,
+      "position": {
+        "x": 15.0,
+        "y": 3.0
+      },
+      "name": "World 0 - Market"
+    },
+    {
+      "area": {
+        "worldIndex": 0,
+        "dungeonIndex": 0
+      },
+      "index": 2,
+      "position": {
+        "x": -10.0,
+        "y": 17.0
+      },
+      "name": "World 0 - Dungeon"
+    }
+  ],
+  "sceneTransitionSpots": [
+    {
+      "area": {
+        "worldIndex": 0,
+        "dungeonIndex": 0
+      },
+      "position": {
+        "x": -27.5,
+        "y": 54.75
+      },
+      "size": {
+        "x": 1.0,
+        "y": 2.0
+      },
+      "areaToLoad": {
+        "worldIndex": 1,
+        "dungeonIndex": 1
+      },
+      "facingDirection": "SOUTH",
+      "style": "CAVE_ENTRANCE"
+    },
+    {
+      "area": {
+        "worldIndex": 1,
+        "dungeonIndex": 0
+      },
+      "position": {
+        "x": 47.0,
+        "y": 44.25
+      },
+      "size": {
+        "x": 1.5,
+        "y": 1.0
+      },
+      "areaToLoad": {
+        "worldIndex": 1,
+        "dungeonIndex": 2
+      },
+      "facingDirection": "SOUTH",
+      "style": "GATE"
+    }
+  ]
+}

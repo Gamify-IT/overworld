@@ -206,8 +206,14 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("UserId from token: " + userId);
         Debug.Log("Username from token: " + username);
-        bool validUserId = await ValidateUserId();
-        return validUserId;
+
+        if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
+        {
+            bool validUserId = await ValidateUserId();
+            return validUserId;
+        }
+
+        return true;
     }
     
     /// <summary>
@@ -426,12 +432,16 @@ public class GameManager : MonoBehaviour
         string json = JsonUtility.ToJson(teleporterData, true);
 
         DataManager.Instance.ActivateTeleporter(worldIndex, dungeonIndex, number);
-        bool successful = await RestRequest.PostRequest(path, json);
 
-        if (!successful)
+        if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
         {
-            Debug.LogError("Teleporter unlocking could not be transfered to Backend.");
-        }
+            bool successful = await RestRequest.PostRequest(path, json);
+
+            if (!successful)
+            {
+                Debug.LogError("Teleporter unlocking could not be transfered to Backend.");
+            }
+        }    
     }
 
     /// <summary>
@@ -466,16 +476,19 @@ public class GameManager : MonoBehaviour
     /// <returns>True if the acheivement is now completed, false otherwise</returns>
     public async void IncreaseAchievementProgress(AchievementTitle title, int increment, List<(int, int, int)> interactedObjects)
     {
-        bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment, interactedObjects);
-        if (unlocked)
+        if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
         {
-            AchievementData achievement = DataManager.Instance.GetAchievement(title);
-            if (achievement == null)
+            bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment, interactedObjects);
+            if (unlocked)
             {
-                return;
-            }
+                AchievementData achievement = DataManager.Instance.GetAchievement(title);
+                if (achievement == null)
+                {
+                    return;
+                }
 
-            EarnAchievement(achievement);
+                EarnAchievement(achievement);
+            }
         }
     }
 
@@ -540,7 +553,8 @@ public class GameManager : MonoBehaviour
     public async void ChangeKeybind(Keybinding keybinding)
     {
         bool keyChanged = DataManager.Instance.ChangeKeybind(keybinding);
-        if(keyChanged)
+
+        if(keyChanged && GameSettings.GetGamemode() != Gamemode.TUTORIAL)
         {
             string binding = keybinding.GetBinding().ToString();
             string key = keybinding.GetKey().ToString();

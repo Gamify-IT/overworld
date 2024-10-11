@@ -30,8 +30,8 @@ public class AreaManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        //if not in play mode: do nothing
-        if (GameSettings.GetGamemode() != Gamemode.PLAY)
+        //if not in play mode and tutorial mode: do nothing
+        if (GameSettings.GetGamemode() != Gamemode.PLAY && GameSettings.GetGamemode() != Gamemode.TUTORIAL)
         {
             return;
         }

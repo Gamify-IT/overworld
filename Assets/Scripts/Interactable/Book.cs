@@ -33,9 +33,11 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     {
         interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
-#if !UNITY_EDITOR
-        readBooks = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "READER_LEVEL_3").GetInteractedObjects();
-#endif
+
+        if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
+        {
+            readBooks = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "READER_LEVEL_3").GetInteractedObjects();
+        }
     }
 
     /// <summary>
@@ -43,7 +45,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// </summary>
     private void Update()
     {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByName("Book").isLoaded &&
             !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
@@ -152,7 +154,10 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         GameObject.Find("Book_Name").GetComponent<TextMeshProUGUI>().text = nameOfBook;
         bookText = GameObject.Find("Book_Text").GetComponent<TextMeshProUGUI>();
         bookText.text = bookContent;
-        UpdateListOfBooks();
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            UpdateListOfBooks();
+        }
     }
 
     /// <summary>

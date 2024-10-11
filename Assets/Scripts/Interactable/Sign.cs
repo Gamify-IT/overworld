@@ -23,7 +23,7 @@ public class Sign : MonoBehaviour
     {
         SignPanel.SetActive(false);
         signText.text = text;
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {            
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
             GameEvents.current.onKeybindingChange += UpdateKeybindings;
@@ -61,7 +61,7 @@ public class Sign : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
             !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
@@ -74,7 +74,7 @@ public class Sign : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             GameEvents.current.onKeybindingChange -= UpdateKeybindings;
         }            

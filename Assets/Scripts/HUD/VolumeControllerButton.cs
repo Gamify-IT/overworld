@@ -29,6 +29,10 @@ public class VolumeControllerButton : MonoBehaviour
         buttonImage = button.GetComponent<Image>();
         button.onClick.AddListener(ChangeVolume);
 
+        if(GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            volumeLevel = 2;  
+        }
         UpdateButtonImage();
     }
 

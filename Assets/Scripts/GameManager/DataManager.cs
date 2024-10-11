@@ -55,7 +55,7 @@ public class DataManager : MonoBehaviour
     /// <param name="data">The data to set</param>
     public void SetWorldData(int worldIndex, WorldData data)
     {
-        if (worldIndex <= 0 || worldIndex > maxWorld)
+        if (worldIndex < 0 || worldIndex > maxWorld)
         {
             return;
         }
@@ -70,7 +70,7 @@ public class DataManager : MonoBehaviour
     /// <param name="data">The dto to convert and set</param>
     public void SetWorldData(int worldIndex, WorldDTO data)
     {
-        if (worldIndex <= 0 || worldIndex > maxWorld)
+        if (worldIndex < 0 || worldIndex > maxWorld)
         {
             return;
         }
@@ -86,7 +86,7 @@ public class DataManager : MonoBehaviour
     /// <returns>The data of the world, if present, null otherwise</returns>
     public WorldData GetWorldData(int worldIndex)
     {
-        if (worldIndex <= 0 || worldIndex > maxWorld)
+        if (worldIndex < 0 || worldIndex > maxWorld)
         {
             return null;
         }
@@ -104,12 +104,12 @@ public class DataManager : MonoBehaviour
     /// <returns>The data of the dungeon, if present, null otherwise</returns>
     public DungeonData GetDungeonData(int worldIndex, int dungeonIndex)
     {
-        if (worldIndex <= 0 || worldIndex > maxWorld)
+        if (worldIndex < 0 || worldIndex > maxWorld)
         {
             return null;
         }
 
-        if (dungeonIndex <= 0 || dungeonIndex > maxDungeons)
+        if (dungeonIndex < 0 || dungeonIndex > maxDungeons)
         {
             return null;
         }
@@ -324,6 +324,7 @@ public class DataManager : MonoBehaviour
             GetWorldData(worldIndex).UnlockTeleporter(dungeonIndex, number);
         }
 
+        LoadSubScene.Setup();
         SetupCharacter();
 
 #if !UNITY_EDITOR
@@ -922,17 +923,17 @@ public class DataManager : MonoBehaviour
     {
         Dictionary<Binding, KeyCode> keybindings = new Dictionary<Binding, KeyCode>();
 
-        keybindings.Add(Binding.MOVE_UP, KeyCode.None);
-        keybindings.Add(Binding.MOVE_LEFT, KeyCode.None);
-        keybindings.Add(Binding.MOVE_DOWN, KeyCode.None);
-        keybindings.Add(Binding.MOVE_RIGHT, KeyCode.None);
-        keybindings.Add(Binding.SPRINT, KeyCode.None);
-        keybindings.Add(Binding.INTERACT, KeyCode.None);
-        keybindings.Add(Binding.CANCEL, KeyCode.None);
-        keybindings.Add(Binding.MINIMAP_ZOOM_IN, KeyCode.None);
-        keybindings.Add(Binding.MINIMAP_ZOOM_OUT, KeyCode.None);
-        keybindings.Add(Binding.GAME_ZOOM_IN, KeyCode.None);
-        keybindings.Add(Binding.GAME_ZOOM_OUT, KeyCode.None);
+        keybindings.Add(Binding.MOVE_UP, KeyCode.W);
+        keybindings.Add(Binding.MOVE_LEFT, KeyCode.A);
+        keybindings.Add(Binding.MOVE_DOWN, KeyCode.S);
+        keybindings.Add(Binding.MOVE_RIGHT, KeyCode.D);
+        keybindings.Add(Binding.SPRINT, KeyCode.LeftShift);
+        keybindings.Add(Binding.INTERACT, KeyCode.E);
+        keybindings.Add(Binding.CANCEL, KeyCode.Escape);
+        keybindings.Add(Binding.MINIMAP_ZOOM_IN, KeyCode.P);
+        keybindings.Add(Binding.MINIMAP_ZOOM_OUT, KeyCode.O);
+        keybindings.Add(Binding.GAME_ZOOM_IN, KeyCode.Alpha0);
+        keybindings.Add(Binding.GAME_ZOOM_OUT, KeyCode.Alpha9);
         keybindings.Add(Binding.VOLUME_LEVEL, KeyCode.None);
 
         this.keybindings = keybindings;
@@ -1175,6 +1176,11 @@ public class DataManager : MonoBehaviour
     /// <returns>The generated info text</returns>
     private string GenerateWorldBarrierInfoText(int originWorldIndex, int destinationAreaIndex)
     {
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            return "Please finish the Tutorial first to unlock the Overworld";
+        }
+
         if (GetWorldData(destinationAreaIndex).isActive())
         {
             for (int i = destinationAreaIndex - 1; i > 0; i--)
@@ -1311,6 +1317,11 @@ public class DataManager : MonoBehaviour
     /// <returns>The generated info text</returns>
     private string GenerateDungeonBarrierInfoText(int originWorldIndex, int destinationAreaIndex)
     {
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            return "Follow the Tutorial steps to unlock Dungeons";
+        }
+
         if (GetWorldData(originWorldIndex).getDungeonData(destinationAreaIndex)
                 .IsActive())
         {

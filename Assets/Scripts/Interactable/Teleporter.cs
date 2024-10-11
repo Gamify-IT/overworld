@@ -47,15 +47,19 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
 
     private void Awake()
     {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             ObjectManager.Instance.AddGameEntity<Teleporter, TeleporterData>(gameObject, worldID, dungeonID, teleporterNumber);
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
             GameEvents.current.onKeybindingChange += UpdateKeybindings;
             InitializeAudio();            
         }
+
 #if !UNITY_EDITOR
-        unlockedTeleporters = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "TELEPORTER_MASTER").GetInteractedObjects();    
+        if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
+        {
+            unlockedTeleporters = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "TELEPORTER_MASTER").GetInteractedObjects();    
+        }     
 #endif
     }
 
@@ -80,7 +84,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
 
     private void OnDestroy()
     {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             ObjectManager.Instance.RemoveGameEntity<Teleporter, TeleporterData>(worldID, dungeonID, teleporterNumber);
             GameEvents.current.onKeybindingChange -= UpdateKeybindings;
@@ -97,7 +101,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     /// </summary>
     private void Update()
     {
-        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             if (IsUfoArrivalAnimationPlaying())
             {
@@ -113,6 +117,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             if (currentTeleporterCanvas != null && currentTeleporterCanvas.activeInHierarchy &&
             Input.GetKeyDown(interact) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
             {
+                Debug.Log("Close Teleporter UI");
                 CloseTeleporterUI();
                 return;
             }
@@ -122,6 +127,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             {
                 if (Input.GetKeyDown(interact))
                 {
+                    Debug.Log("Open Teleporter UI");
                     interactable = false;
                     GameObject newCanvas = Instantiate(teleporterCanvas);
                     teleporterUI = newCanvas.transform.GetChild(0).GetComponent<TeleporterUI>();
@@ -208,7 +214,11 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
                 isUnlocked = true;
                 SetUnLockedState(isUnlocked);
                 GameManager.Instance.ActivateTeleporter(worldID, dungeonID, teleporterNumber);
-                UpdateListOfOpenedTeleporters();
+
+                if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
+                {
+                    UpdateListOfOpenedTeleporters();
+                }
             }
         }
     }
