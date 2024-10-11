@@ -64,7 +64,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             if (Input.GetKeyDown(interact) && playerIsClose && !SceneManager.GetSceneByBuildIndex(12).isLoaded &&
             !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
             {
-                if (!hasBeenTalkedTo)
+                if (!hasBeenTalkedTo && GameSettings.GetGamemode() == Gamemode.PLAY)
                 {
                     Complete();
                 }
