@@ -49,7 +49,15 @@ public class ProgressBar : MonoBehaviour
     /// <param name="worldIndex">The index of the unlocked world</param>
     public void setUnlockedArea(int worldIndex)
     {
+        // display no world index for tutorial mode
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            unlockedAreaText.text = "";
+            return;
+        }
+
         unlockedAreaText.text = worldIndex.ToString();
+
         if (worldIndex == 1)
         {
             GameManager.Instance.UpdateAchievement(AchievementTitle.LEVEL_UP, 1, null);

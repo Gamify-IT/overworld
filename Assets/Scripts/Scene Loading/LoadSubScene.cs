@@ -15,9 +15,7 @@ public enum FacingDirection
 /// </summary>
 public class LoadSubScene : MonoBehaviour
 {
-    public static AreaInformation areaExchange = DataManager.Instance.GetPlayerData().GetLogoutScene() == "Dungeon" ? 
-        new AreaInformation(DataManager.Instance.GetPlayerData().GetCurrentArea().worldIndex, new Optional<int>(DataManager.Instance.GetPlayerData().GetCurrentArea().dungeonIndex))
-        : new AreaInformation(DataManager.Instance.GetPlayerData().GetCurrentArea().worldIndex, new Optional<int>());
+    public static AreaInformation areaExchange;
     public static bool transitionBlocked = false;
     public static bool setupDone = false;
 
@@ -30,9 +28,33 @@ public class LoadSubScene : MonoBehaviour
     public float loadingTime;
     public FacingDirection facingDirection;
 
+    /// <summary>
+    ///     Initializes the areaExchange variable with the last known position
+    /// </summary>
+    public static void Setup()
+    {
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            if (DataManager.Instance.GetPlayerData().GetLogoutScene() == "Dungeon")
+            {
+                areaExchange = new AreaInformation(DataManager.Instance.GetPlayerData().GetCurrentArea().worldIndex,
+                    new Optional<int>(DataManager.Instance.GetPlayerData().GetCurrentArea().dungeonIndex));
+            }
+            else
+            {
+                areaExchange = new AreaInformation(DataManager.Instance.GetPlayerData().GetCurrentArea().worldIndex, new Optional<int>());
+            }
+        }
+        else
+        {
+            // no position saving for tutorial mode
+            areaExchange = new AreaInformation(0, new Optional<int>());
+        }        
+    }
+
     private void Start()
     {
-        if(GameSettings.GetGamemode() != Gamemode.PLAY)
+        if(GameSettings.GetGamemode() != Gamemode.PLAY && GameSettings.GetGamemode() != Gamemode.TUTORIAL)
         {
             return;
         }
@@ -48,7 +70,7 @@ public class LoadSubScene : MonoBehaviour
             if(areaExchange.IsDungeon())
             {
                 //was previously in a dungeon
-                if(areaExchange.GetWorldIndex() == worldIndexToLoad && areaExchange.GetDungeonIndex() == dungeonIndexToLoad)
+                if (areaExchange.GetWorldIndex() == worldIndexToLoad && areaExchange.GetDungeonIndex() == dungeonIndexToLoad)
                 {
                     //was in the dungeon this scene transition points to
                     areaExchange = new AreaInformation(worldIndex, new Optional<int>());
@@ -170,6 +192,7 @@ public class LoadSubScene : MonoBehaviour
                 AreaInformation areaToLoad = new AreaInformation(worldIndexToLoad, new Optional<int>(dungeonIndexToLoad));
                 areaExchange = areaToLoad;
                 setupDone = false;
+                Debug.Log("area to load: " + worldIndexToLoad + "," + dungeonIndexToLoad);
             }
             StartCoroutine(FadeCoroutine());
         }
@@ -189,7 +212,15 @@ public class LoadSubScene : MonoBehaviour
         string sceneToLoad;
         if(dungeonIndexToLoad == 0)
         {
-            sceneToLoad = "World " + worldIndexToLoad;
+            // check for tutorial scene
+            if (worldIndexToLoad == 0)
+            {
+                sceneToLoad = "Tutorial";
+            }
+            else
+            {
+                sceneToLoad = "World " + worldIndexToLoad;
+            }
         }
         else
         {
@@ -204,7 +235,7 @@ public class LoadSubScene : MonoBehaviour
         }
 
         DataManager.Instance.SetPlayerPosition(worldIndexToLoad, dungeonIndexToLoad);
-        GameManager.Instance.SetData(worldIndexToLoad, dungeonIndexToLoad);
+        GameManager.Instance.SetData(worldIndexToLoad, dungeonIndexToLoad);   
 
         for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
         {
