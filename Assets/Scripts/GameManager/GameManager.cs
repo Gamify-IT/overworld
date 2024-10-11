@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     #region save player data
     /// <summary>
-    ///     This function saves all important player data when the plaer is logging out
+    ///     This function saves all important player data when the player is logging out
     /// </summary>
     /// <returns></returns>
     public async UniTask<bool> SavePlayerData()
@@ -244,6 +244,7 @@ public class GameManager : MonoBehaviour
 
         Optional<PlayerStatisticDTO[]> allPlayerStatistics =
            await RestRequest.GetArrayRequest<PlayerStatisticDTO>(path + "/playerstatistics/allPlayerStatistics");
+
         if (!allPlayerStatistics.IsPresent())
         {
             loadingError = true;
@@ -265,6 +266,16 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
+        Optional<ShopItem[]> shopItems =
+           await RestRequest.GetArrayRequest<ShopItem>(overworldBackendPath + "/players/" + userId + "/courses/" + courseId + "/shop");
+        if (!shopItems.IsPresent())
+        {
+            loadingError = true;
+        }
+
+       
+
+
         string playerPath = overworldBackendPath + "/players/" + userId;
 
         Optional<AchievementStatistic[]> achievementStatistics =
@@ -273,6 +284,8 @@ public class GameManager : MonoBehaviour
         {
             loadingError = true;
         }
+
+       
 
         Optional<KeybindingDTO[]> keybindings =
             await RestRequest.GetArrayRequest<KeybindingDTO>(playerPath + "/keybindings");
@@ -287,13 +300,13 @@ public class GameManager : MonoBehaviour
             }
 
             DataManager.Instance.ReadTeleporterConfig();
+            DataManager.Instance.ProcessShopItem(shopItems.Value());
             DataManager.Instance.ProcessMinigameStatisitcs(minigameStatistics.Value());
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
             DataManager.Instance.ProcessKeybindings(keybindings.Value());             
-            DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());           
+            DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());
             DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
-
         }
 
         Debug.Log("Everything set up");
@@ -445,9 +458,108 @@ public class GameManager : MonoBehaviour
                 return;
             }
 
-            EarnAchievement(achievement);
         }
     #endif
+    }
+
+    /// <summary>
+    ///     This function updates the bought state of the given shop item
+    /// </summary>
+    /// <param name="title">The title of the shop item</param>
+    /// <param name="newState">The new state of the shop item</param>
+    public async void UpdateShopItem(string title, bool newState)
+    {
+        bool unlocked =  DataManager.Instance.UpdateShopItem(title, newState);
+        if (unlocked)
+        {
+            ShopItemData shopItem = DataManager.Instance.GetShopItem(title);
+            if(shopItem == null)
+            {
+                return;
+            }
+        }
+
+    }
+
+    /// <summary>
+    ///     This function updates the credit of the player 
+    /// </summary>
+    /// <param name="price">The price of a shop item</param>
+    /// <param name="credit">The new credit of the player</param>
+    public async void UpdatePlayerCredit(int price, int credit)
+    {
+        bool unlocked = DataManager.Instance.UpdatePlayerCredit(price, credit);
+        if (unlocked)
+        {
+           PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
+            if (playerData == null)
+            {
+                return;
+            }
+        }
+
+    }
+
+    public async void UpdateCharacterIndex(string index)
+    {
+        bool unlocked = DataManager.Instance.UpdateCharacterIndex(index);
+        if (unlocked)
+        {
+            PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
+            if (playerData == null)
+            {
+                return;
+            }
+        }
+    }
+
+    public async void UpdateAccessoryIndex(string index)
+    {
+        bool unlocked = DataManager.Instance.UpdateAccessoryIndex(index);
+        if (unlocked)
+        {
+            PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
+            if (playerData == null)
+            {
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    ///     This function updates the pseudonym of the player
+    /// </summary>
+    /// <param name="name">The new pseudonym of the player</param>
+    public async void UpdatePseudonym(string name)
+    {
+        bool unlocked = DataManager.Instance.UpdatePseudonym(name);
+        if (unlocked)
+        {
+            PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
+            if (playerData == null)
+            {
+                return;
+            }
+        }
+
+    }
+
+    /// <summary>
+    ///     This function updates the visibility of the player
+    /// </summary>
+    /// <param name="visibility">The new visibility of the player</param>
+    public async void UpdateVisibility(bool visibility)
+    {
+        bool unlocked = DataManager.Instance.UpdateVisibility(visibility);
+        if (unlocked)
+        {
+            PlayerStatisticData playerData = DataManager.Instance.GetPlayerData();
+            if (playerData == null)
+            {
+                return;
+            }
+        }
+
     }
 
     /// <summary>
@@ -473,6 +585,73 @@ public class GameManager : MonoBehaviour
                 EarnAchievement(achievement);
             }
         }
+    }
+
+    /// <summary>
+    ///     This function saves all shop items, which made progress in the current session
+    /// </summary>
+    public async UniTask<bool> SaveShopItem()
+    {
+        List<ShopItemData> shopItems = DataManager.Instance.GetShopItems();
+        string basePath = overworldBackendPath + "/players/" + userId + "/courses/" + courseId + "/shop/";
+
+        bool savingSuccessful = true;
+
+        foreach (ShopItemData shopItemData in shopItems)
+        {
+            if (shopItemData.isUpdated())
+            {
+                ShopItem shopItem = ShopItemData.ConvertToShopItem(shopItemData);
+
+                string path = basePath + shopItemData.GetTitle();
+                string json = JsonUtility.ToJson(shopItem, true);
+                bool successful = await RestRequest.PutRequest(path, json);
+                if (successful)
+                {
+                    Debug.Log("Updated shop item status for " + shopItem.shopItemID + " in the overworld backend");
+
+                }
+                else
+                {
+                    savingSuccessful = false;
+                    Debug.Log("Could not update the shop item status for " + shopItem.shopItemID + " in the overworld backend");
+                }
+            }
+        }
+
+        return savingSuccessful;
+
+    }
+
+    /// <summary>
+    ///     This function saves the changed player data in the current session
+    /// </summary>
+    public async UniTask<bool> SavePlayerStatisticData()
+    {
+        PlayerStatisticData playerStatisticData = DataManager.Instance.GetPlayerData();
+        string basePath = overworldBackendPath + "/courses/" + courseId + "/playerstatistics/";
+        bool savingSuccessful = true;
+
+        if (playerStatisticData.creditIsUpdated() || playerStatisticData.PseudonymIsUpdated() || playerStatisticData.VisibilityIsUpdated() || playerStatisticData.CharacterIsUpdated() ||  playerStatisticData.AccessoryIsUpdated())
+        {
+            PlayerStatisticDTO playerstatistic = PlayerStatisticDTO.ConvertDataToDTO(playerStatisticData);
+            string path = basePath + userId;
+            string json = JsonUtility.ToJson(playerstatistic, true);
+            Debug.Log(playerstatistic.id + userId);
+            bool successful = await RestRequest.PutRequest(path, json);
+            if (successful)
+            {
+                Debug.Log("Updated player statistic  for " + playerstatistic.id + " in the overworld backend");
+
+            }
+            else
+            {
+                savingSuccessful = false;
+                Debug.Log("Could not update the player statistic for " + playerstatistic.id + " in the overworld backend");
+            }
+        }
+        return savingSuccessful;
+
     }
 
     /// <summary>
@@ -715,11 +894,17 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.SetWorldData(worldIndex, new WorldData());
         }
 
+        PlayerStatisticDTO[] allPlayers = GetDummyDataRewards();
+        DataManager.Instance.ProcessAllPlayerStatistics(allPlayers);
+
+        PlayerStatisticDTO ownPlayer = GetOwnDummyData();
+        DataManager.Instance.ProcessPlayerStatistics(ownPlayer);
+
         AchievementStatistic[] achivements = GetDummyAchievements();
-        PlayerStatisticDTO[] rewards = GetDummyDataRewards();
-        DataManager.Instance.ProcessAchievementStatistics(achivements);      
-        DataManager.Instance.ProcessAllPlayerStatistics(rewards);
-        DataManager.Instance.ProcessPlayerStatistics(new PlayerStatisticDTO());
+        DataManager.Instance.ProcessAchievementStatistics(achivements);
+
+        ShopItem[] allItems = GetDummyShopItems();
+        DataManager.Instance.ProcessShopItem(allItems);
 
         ResetKeybindings();
     }
@@ -739,13 +924,11 @@ public class GameManager : MonoBehaviour
         return statistcs;
     }
 
-  
 
     public PlayerStatisticDTO[] GetDummyDataRewards()
     {
         int playerCount = 30;
         PlayerStatisticDTO[] allStatistics = new PlayerStatisticDTO[32];
-
         System.Random random = new System.Random();
         List<string> names = new List<string> {
         "John", "Alice", "Bob", "Eve", "Charlie", "Dave", "Mallory", "Trent", "Peggy", "Victor",
@@ -761,53 +944,108 @@ public class GameManager : MonoBehaviour
             int knowledge = random.Next(0, 501);
             int rewards = random.Next(0, 501);
             bool showRewards = true;
-
             int worldIndex = random.Next(1, 5);
             int dungeonIndex = random.Next(1, 5);
-
             AreaLocationDTO currentArea = new AreaLocationDTO(worldIndex, dungeonIndex);
             AreaLocationDTO[] unlockedAreas = { currentArea };
             AreaLocationDTO[] unlockedDungeons = { currentArea };
-
             TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
             TeleporterDTO[] unlockedTeleporters = { teleporter };
 
-            PlayerStatisticDTO player = new PlayerStatisticDTO(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-               21.5f, 2.5f, "World 1", 0 , 1,  knowledge, rewards, showRewards, "-");
+            string lastActive = DateTime.Now.AddMinutes(-random.Next(0, 1440)).ToString("yyyy-MM-dd HH:mm:ss");  
+            float logoutPositionX = (float)random.NextDouble() * 100;  
+            float logoutPositionY = (float)random.NextDouble() * 100;  
+            string logoutScene = "Scene" + random.Next(1, 5);  
+            int currentCharacterIndex = random.Next(0, 5);  
+            int volumeLevel = random.Next(0, 101);  
+            int credit = random.Next(0, 1001); 
+            string pseudonym = "Pseudonym" + random.Next(1, 100);  
+
+            PlayerStatisticDTO player = new PlayerStatisticDTO(
+                id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username,
+                lastActive, logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel,
+                knowledge, rewards, showRewards, credit, pseudonym, "character_default", "none"
+            );
             allStatistics[i] = player;
         }
-
 
         int worldIndex1 = 2;
         int dungeonIndex1 = 1;
         AreaLocationDTO currentArea1 = new AreaLocationDTO(worldIndex1, dungeonIndex1);
         AreaLocationDTO[] unlockedAreas1 = { currentArea1 };
         AreaLocationDTO[] unlockedDungeons1 = { currentArea1 };
-
         TeleporterDTO teleporter1 = new TeleporterDTO("1", currentArea1, 1);
         TeleporterDTO[] unlockedTeleporters1 = { teleporter1 };
-        PlayerStatisticDTO player31 = new PlayerStatisticDTO("Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco",
-            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 21.5f, 2.5f, "World 1", 0, 1, 200, 170, true, "TheoPro");
+        PlayerStatisticDTO player31 = new PlayerStatisticDTO(
+            "Id32", unlockedAreas1, unlockedDungeons1, unlockedTeleporters1, currentArea1, "Id32", "Marco",
+            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 25.5f, 12.3f, "Scene3", 2, 50, 200, 170, true, 500, "TheoPro", "character_default", "none"
+        );
         allStatistics[30] = player31;
         PlayerStatisticDTO ownPlayer = GetOwnDummyData();
         allStatistics[31] = ownPlayer;
+
         return allStatistics;
     }
 
     public PlayerStatisticDTO GetOwnDummyData()
     {
-
         int worldIndex = 2;
         int dungeonIndex = 1;
         AreaLocationDTO currentArea = new AreaLocationDTO(worldIndex, dungeonIndex);
         AreaLocationDTO[] unlockedAreas = { currentArea };
         AreaLocationDTO[] unlockedDungeons = { currentArea };
-
         TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
         TeleporterDTO[] unlockedTeleporters = { teleporter };
-        PlayerStatisticDTO ownPlayerData = new PlayerStatisticDTO("31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki",
-            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 21.5f, 2.5f, "World 1", 0, 1, 200, 170, false, "PSEProfi");
+
+        PlayerStatisticDTO ownPlayerData = new PlayerStatisticDTO(
+            "31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki",
+            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 20.0f, 15.0f, "World 1", 1, 75, 200, 170, false, 100, "PSEProfi", "character_anzug", "herzbrille"
+        );
+
         return ownPlayerData;
+    }
+
+    public ShopItem[] GetDummyShopItems()
+    {
+        int itemCount = 14; 
+        ShopItem[] shopItems = new ShopItem[itemCount];
+        System.Random random = new System.Random();
+
+        List<string> titles = new List<string> {
+        "FLAME_HAT", "HEART_GLASSES", "GLOBE_HAT", "SUIT", "SANTA_COSTUME",
+        "COOL_GLASSES", "RETRO_GLASSES", "SAFETY_HELMET", "CINEMA_GLASSES",
+        "TITANIUM_KNIGHT", "SPORTS", "LONGHAIR", "BLUE_SHIRT", "BLONDE"
+    };
+
+        List<int> costs = new List<int> {
+        10, 2, 2, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1
+    };
+
+        List<string> imageNames = new List<string> {
+        "hat0", "glasses2", "hat1", "character4", "character9",
+        "glasses1", "glasses3", "hat2", "glasses0", "character6",
+        "character8", "character7", "character5", "character3"
+    };
+
+        List<string> categories = new List<string> {
+        "ACCESSORIES", "ACCESSORIES", "ACCESSORIES", "OUTFIT", "OUTFIT",
+        "ACCESSORIES", "ACCESSORIES", "ACCESSORIES", "ACCESSORIES",
+        "ACCESSORIES", "OUTFIT", "OUTFIT", "OUTFIT", "OUTFIT"
+    };
+
+        for (int i = 0; i < itemCount; i++)
+        {
+            string title = titles[i];
+            int cost = costs[i];
+            string imageName = imageNames[i];
+            string category = categories[i];
+            bool bought = false;
+
+            ShopItem shopItem = new ShopItem(title, cost, imageName, category, bought);
+            shopItems[i] = shopItem;
+        }
+
+        return shopItems;
     }
 
     /// <summary>

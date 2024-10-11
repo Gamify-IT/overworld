@@ -8,11 +8,11 @@ using System;
 /// </summary>
 public class PlayerStatisticData 
 {
-    #region attributes
+    #region Attributes
     private readonly string id;
-    private AreaLocationDTO[] unlockedAreas;
-    private AreaLocationDTO[] unlockedDungeons;
-    private TeleporterDTO[] unlockedTeleporters;
+    public AreaLocationDTO[] unlockedAreas;
+    public AreaLocationDTO[] unlockedDungeons;
+    public TeleporterDTO[] unlockedTeleporters;
     private AreaLocationDTO currentArea;
     private readonly string userId;
     private string username;
@@ -24,19 +24,29 @@ public class PlayerStatisticData
     private int knowledge;
     private int volumeLevel;
     private int rewards;
-    private bool showRewards;
+    private bool visibility;
+    private int credit;
     private string pseudonym;
     private string leagueOfPlayer;
+    private bool updatedCredit = false;
+    private bool updatedPseudonym= false;
+    private bool updatedVisibility = false;
+    private bool updatedCharacterIndex = false;
+    private bool updatedAccessoryIndex = false;
+    private string currentCharacter;
+    private string currentAccessory;
     #endregion
 
-    #region constructur
-    public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] unlockedDungeons, TeleporterDTO[] unlockedTeleporters,
-         AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
-         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool showRewards, string pseudonym)
+    #region Constructor
+    /// <summary>
+    ///     Constructor for the PlayerStatisticData class, initializing all attributes.
+    /// </summary>
+    public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
+         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool visibility,int credit, string pseudonym, string currentCharacter, string currentAccessory)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
-        this.unlockedDungeons = unlockedDungeons;
+        this.unlockedDungeons = completedDungeons;
         this.unlockedTeleporters = unlockedTeleporters;
         this.currentArea = currentArea;
         this.userId = userId;
@@ -49,9 +59,12 @@ public class PlayerStatisticData
         this.volumeLevel = volumeLevel;
         this.knowledge = knowledge;
         this.rewards = rewards;
-        this.showRewards = showRewards;
+        this.leagueOfPlayer = calculateLeagueOfPlayer(rewards);
+        this.visibility = visibility;
+        this.credit = credit;
         this.pseudonym = pseudonym;
-        leagueOfPlayer = CalculateLeagueOfPlayer(rewards);
+        this.currentCharacter = currentCharacter;
+        this.currentAccessory = currentAccessory;
     }
     #endregion
 
@@ -60,59 +73,137 @@ public class PlayerStatisticData
     /// </summary>
     /// <param name="playerStatisticDTO">The <c>PlayerStatisticDTO</c> object to convert</param>
     /// <returns>the <c>PlayerStatisticData</c> instance</returns>
-    public static PlayerStatisticData ConvertDtoToData(PlayerStatisticDTO dto)
-    {        
-        string id = dto.id;
-        AreaLocationDTO[] unlockedAreas = new AreaLocationDTO[dto.unlockedAreas.Length];
-        AreaLocationDTO[] unlockedDungeons = new AreaLocationDTO[dto.unlockedDungeons.Length];
-        TeleporterDTO[] unlockedTeleporters = new TeleporterDTO[dto.unlockedTeleporters.Length];
-        AreaLocationDTO currentArea = dto.currentArea;
-        string userId = dto.userId;
-        string username = dto.username;
-        string lastActive = dto.lastActive;
-        float logoutPositionX = dto.logoutPositionX;
-        float logoutPositionY = dto.logoutPositionY;
-        string logoutScene = dto.logoutScene;
-        int currentCharacterIndex = dto.currentCharacterIndex;
-        int volumeLevel = dto.volumeLevel;
-        int knowledge = dto.knowledge;
-        int rewards = dto.rewards;
-        bool showRewards = dto.showRewards;
-        string pseudonym = dto.pseudonym;
+    public static PlayerStatisticData ConvertDtoToData(PlayerStatisticDTO statistic)
+    {
+        AreaLocationDTO currentArea = statistic.currentArea;
 
-        for (int i = 0; i < dto.unlockedAreas.Length; i++)
+        string userId = statistic.userId;
+        string username = statistic.username;
+        string lastActive = statistic.lastActive;
+        float logoutPositionX = statistic.logoutPositionX;
+        float logoutPositionY = statistic.logoutPositionY;
+        string logoutScene = statistic.logoutScene;
+        int currentCharacterIndex = statistic.currentCharacterIndex;
+        int volumeLevel = statistic.volumeLevel;
+        int knowledge = statistic.knowledge;
+        int rewards = statistic.rewards;
+        string id = statistic.id;
+        bool visibility = statistic.visibility;
+        int credit = statistic.credit;
+        string pseudonym = statistic.pseudonym;
+        string currentCharacter = statistic.currentCharacter;
+        string currentAccessory = statistic.currentAccessory;
+
+    AreaLocationDTO[] unlockedAreas = new AreaLocationDTO[statistic.unlockedAreas.Length];
+        AreaLocationDTO[] unlockedDungeons = new AreaLocationDTO[statistic.unlockedDungeons.Length];
+        TeleporterDTO[] unlockedTeleporters = new TeleporterDTO[statistic.unlockedTeleporters.Length];
+
+        for (int i = 0; i < statistic.unlockedAreas.Length; i++)
         {
-            unlockedAreas[i] = dto.unlockedAreas[i];
+            unlockedAreas[i] = statistic.unlockedAreas[i];
         }
 
-        for (int i = 0; i < dto.unlockedDungeons.Length; i++)
+        for (int i = 0; i < statistic.unlockedDungeons.Length; i++)
         {
-            unlockedDungeons[i] = dto.unlockedDungeons[i];
+            unlockedDungeons[i] = statistic.unlockedDungeons[i];
         }
 
-        for (int i = 0; i < dto.unlockedTeleporters.Length; i++)
+        for (int i = 0; i < statistic.unlockedTeleporters.Length; i++)
         {
-            unlockedTeleporters[i] = dto.unlockedTeleporters[i];
+            unlockedTeleporters[i] = statistic.unlockedTeleporters[i];
         }
-
-
-        PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive, 
-            logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, showRewards, pseudonym);
-
+     
+        PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive,
+            logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym, currentCharacter, currentAccessory);
         return data;
     }
 
-    public string CalculateLeagueOfPlayer(int rewards)
+
+    public bool updateCharacter(string currentCharacterIndex)
     {
-        if(rewards < 100)
+        updatedCharacterIndex = true;
+        currentCharacter = currentCharacterIndex;
+        return true;
+    }
+
+    public bool updateAccessory(string currentAccessoryIndex)
+    {
+        updatedAccessoryIndex = true;
+        currentAccessory = currentAccessoryIndex;
+        return true;
+    }
+    /// <summary>
+    ///     Updates the player's credit.
+    /// </summary>
+    /// <param name="price">The amount to reduce the credit by.</param>
+    /// <returns>True if the credit remains positive, otherwise false.</returns>
+    public bool updateCredit(int price)
+    {
+        updatedCredit = true;
+        credit = this.credit - price;
+        if(credit > 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    ///     Updates the player's pseudonym.
+    /// </summary>
+    /// <param name="name">The new pseudonym.</param>
+    /// <returns>True if the pseudonym was updated, otherwise false.</returns>
+    public bool updatePseudonym(string name)
+    {
+        updatedPseudonym = true;
+       
+        if (name != null)
+        {
+            pseudonym = name;
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    ///     Updates the player's visibility.
+    /// </summary>
+    /// <param name="visibility">The new visibility state.</param>
+    /// <returns>Always true.</returns>
+    public bool updateVisibility(bool visibility)
+    {
+        updatedVisibility = true;
+
+        if (visibility)
+        {
+            this.visibility = true;
+        }
+        else
+        {
+            this.visibility = false;
+            
+        }
+
+        return true;
+      
+    }
+
+    /// <summary>
+    ///     Calculates the player's league based on rewards.
+    /// </summary>
+    /// <param name="rewards">The amount of rewards.</param>
+    /// <returns>The corresponding league.</returns>
+    public string calculateLeagueOfPlayer(int rewards)
+    {
+        if(rewards < 450)
         {
             return "Wanderer";
         }
-        else if (rewards < 200)
+        else if (rewards < 900)
         {
             return "Explorer";
         }
-        else if (rewards < 300)
+        else if (rewards < 1350)
         {
             return "Pathfinder";
         }
@@ -120,10 +211,47 @@ public class PlayerStatisticData
         {
             return "Trailblazer";
         }
-        return "-";
     }
 
-#region Getter and Setter
+
+    /// <summary>
+    ///     Checks if the credit has been updated.
+    /// </summary>
+    /// <returns>True if the credit was updated, otherwise false.</returns>
+    public bool creditIsUpdated()
+    {
+        return updatedCredit;
+    }
+
+    /// <summary>
+    ///     Checks if the pseudonym has been updated.
+    /// </summary>
+    /// <returns>True if the pseudonym was updated, otherwise false.</returns>
+    public bool PseudonymIsUpdated()
+    {
+        return updatedPseudonym;
+    }
+
+    /// <summary>
+    ///     Checks if the visibility has been updated.
+    /// </summary>
+    /// <returns>True if the visibility was updated, otherwise false.</returns>
+    public bool VisibilityIsUpdated()
+    {
+        return updatedVisibility;
+    }
+
+    public bool CharacterIsUpdated()
+    {
+        return updatedCharacterIndex;
+    }
+    
+    public bool AccessoryIsUpdated()
+    {
+        return updatedAccessoryIndex;
+    }
+
+    #region Getter and Setter
     public string GetId()
     {
         return id;
@@ -262,9 +390,13 @@ public class PlayerStatisticData
         return rewards;
     }
 
-    public bool GetShowRewards()
+    /// <summary>
+    ///     Gets the current state of players visibility in the leaderboard
+    /// </summary>
+    /// <returns>visibility state</returns>
+    public bool GetVisibility()
     {
-        return showRewards;
+        return visibility;
     }
 
     public string GetLeague()
@@ -291,25 +423,56 @@ public class PlayerStatisticData
         }
     }
 
+    /// <summary>
+    ///     Gets the players pseudonym 
+    /// </summary>
+    /// <returns>pseudonym of player</returns>
     public string GetPseudonym()
     {
         return pseudonym;
     }
 
-    public bool GetVisibility()
-    {
-        return showRewards;
-    }
-
+    /// <summary>
+    ///     Sets the name of the players pseudonym
+    /// </summary>
+    /// <param name="newPseudonym">pseudonym</param>
     public void SetPseudonym(string newPseudonym)
     {
         this.pseudonym = newPseudonym;
     }
 
-    public void SetVisibility(bool update)
+    public int GetCredit()
     {
-        showRewards = update;
+        return credit;
     }
-#endregion
 
+    /// <summary>
+    ///     Sets the credit of the player after something was bought
+    /// </summary>
+    /// <param name="newCredit">new credit</param>
+    public void SetCredit(int newCredit)
+    {
+        this.credit = credit;
+    }
+
+    public string GetCurrentCharacter()
+    {
+        return currentCharacter;
+    }
+
+    public void SetCurrentCharacter(string newCharacter)
+    {
+        this.currentCharacter = newCharacter;
+    }
+
+    public string GetCurrentAccessory()
+    {
+        return currentAccessory;
+    }
+
+    public void SetCurrentAccessory(string newAccessory)
+    {
+        this.currentAccessory = newAccessory;
+    }
+    #endregion
 }

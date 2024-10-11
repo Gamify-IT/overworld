@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 ///     This class manages the movement and the animations of the player.
@@ -12,6 +14,8 @@ public class PlayerAnimation : MonoBehaviour
     public Vector2 movement;
     public Rigidbody2D playerRigidBody;
     public Animator playerAnimator;
+    public Animator accessoireAnimator;
+    public Transform accessoireTransform;
     private bool busy;
     private bool canMove;
     private float currentSpeed;
@@ -36,8 +40,16 @@ public class PlayerAnimation : MonoBehaviour
     private AudioSource audioSource;
     private bool isMoving;
 
+
+    private int daysPlayed;
+    private DateTime lastPlayDate;
+    private bool checkIfChanged=false;
+
+    Dictionary<string, Vector3> positions = new Dictionary<string, Vector3>(); 
+
     private PlayerStatisticData ownPlayerData;
     private int rewardsAmount;
+
 
     /// <summary>
     ///     This method is called before the first frame update.
@@ -45,6 +57,20 @@ public class PlayerAnimation : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        accessoireAnimator = this.gameObject.transform.GetChild(2).GetComponent<Animator>();
+        accessoireTransform = this.gameObject.transform.GetChild(2).GetComponent<Transform>();
+        positions.Add("3D_brille", new Vector3(0, 0.3f, 0));
+        positions.Add("blonde_haare", new Vector3(0, 0.3f, 0));
+        positions.Add("coole_brille", new Vector3(0, 0.3f, 0));
+        positions.Add("flammen_haare", new Vector3(0, 0.3f, 0));
+        positions.Add("globus_hut", new Vector3(0, 0.76f, 0));
+        positions.Add("herzbrille", new Vector3(0, 0.3f, 0));
+        positions.Add("retro_brille", new Vector3(0, 0.3f, 0));
+        positions.Add("schutzhelm", new Vector3(0, 0.31f, 0));
+        positions.Add("none", new Vector3(0, 0, 0));
+
+        string lastPlayDateStr = PlayerPrefs.GetString("LastPlayDate", "");
+        int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
         InitializeAudio();
 
         timeInGameStart = Time.time;
@@ -134,6 +160,7 @@ public class PlayerAnimation : MonoBehaviour
             {
                 targetSpeed = movementSpeed + sprintingSpeed;
                 playerAnimator.speed = 2;
+                accessoireAnimator.speed = 2;
                 sprintStartTime = Time.time;
             }
             
@@ -155,6 +182,7 @@ public class PlayerAnimation : MonoBehaviour
             {
                 targetSpeed = movementSpeed;
                 playerAnimator.speed = 1;
+                accessoireAnimator.speed = 1;
                 sprintDuration = 0f; 
                 audioSource.pitch = 1f;
             }
@@ -164,12 +192,14 @@ public class PlayerAnimation : MonoBehaviour
             {
                 targetSpeed = targetSpeed + superSpeed;
                 playerAnimator.speed = 20;
+                accessoireAnimator.speed = 20;
             }
 
             if (Input.GetKeyUp("l") && targetSpeed == movementSpeed + superSpeed)
             {
                 targetSpeed = targetSpeed - superSpeed;
                 playerAnimator.speed = 1;
+                accessoireAnimator.speed = 1;
             }
             // dev keybindings
 
@@ -182,7 +212,8 @@ public class PlayerAnimation : MonoBehaviour
             {
                 GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =
                     !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
-            }
+            } 
+
             // dev keybindings
             if (isMoving && !GameManager.Instance.GetIsPaused())
             {
@@ -196,6 +227,46 @@ public class PlayerAnimation : MonoBehaviour
         timeInGameDuration = Time.time - timeInGameStart;
         UpdateAchievementForTimeInGame();
     }
+
+    /// <summary>
+    ///     This function changes the animation of the character based on the outfit selected in the 
+    ///     character selection. Also adjusts the hitbox or scaling for certain outfits.
+    /// </summary>
+    public void SetOutfitAnimator(string body, string head)
+    {
+        if (!validOutfits.Contains(body) || !validOutfits.Contains(head))
+        {
+            throw new ArgumentException();
+        }
+
+        string bodyPath = "AnimatorControllers/" + body;
+        string headPath = "AnimatorControllers/" + head;
+        accessoireAnimator.runtimeAnimatorController = Resources.Load(headPath) as RuntimeAnimatorController;
+        playerAnimator.runtimeAnimatorController = Resources.Load(bodyPath) as RuntimeAnimatorController;
+
+        if (head == "schutzhelm")
+        {
+            accessoireTransform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
+        } else
+        {
+            accessoireTransform.localScale = new Vector3(1, 1, 1);
+        }
+
+        if (new List<string> {"character_default", "character_blue_and_purple", "character_black_and_white"}.Contains(body))
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().offset = new Vector2(0, 0.05f);
+            accessoireTransform.localPosition = positions[head];
+        }
+        else
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.25f);
+            accessoireTransform.localPosition = positions[head] - new Vector3(0, 0.3f, 0);
+        }
+
+    }
+
+    List<string> validOutfits = new List<string> {"3D_brille", "blonde_haare", "character_anzug", "character_black_and_white", "character_blue_and_purple", "character_default", "character_ironman", "none",
+        "character_jeans_karo", "character_lange_haare", "character_santa", "character_trainingsanzug", "coole_brille", "flammen_haare", "globus_hut", "herzbrille", "retro_brille", "schutzhelm"};
 
     /// <summary>
     ///     This function updates time achievements each 60 seconds when the player is playing
@@ -230,6 +301,8 @@ public class PlayerAnimation : MonoBehaviour
             {
                 playerAnimator.SetBool("LookUp", true);
                 playerAnimator.SetBool("LookRight", false);
+                accessoireAnimator.SetBool("LookUp", true);
+                accessoireAnimator.SetBool("LookRight", false);
             }
 
             if
@@ -237,12 +310,16 @@ public class PlayerAnimation : MonoBehaviour
             {
                 playerAnimator.SetBool("LookUp", false);
                 playerAnimator.SetBool("LookRight", false);
+                accessoireAnimator.SetBool("LookUp", false);
+                accessoireAnimator.SetBool("LookRight", false);
             }
 
             if (movement.x > 0.01f)
             {
                 playerAnimator.SetBool("LookRight", true);
                 playerAnimator.SetBool("LookUp", false);
+                accessoireAnimator.SetBool("LookUp", false);
+                accessoireAnimator.SetBool("LookRight", true);
             }
 
             if
@@ -250,12 +327,18 @@ public class PlayerAnimation : MonoBehaviour
             {
                 playerAnimator.SetBool("LookRight", false);
                 playerAnimator.SetBool("LookUp", false);
+                accessoireAnimator.SetBool("LookUp", false);
+                accessoireAnimator.SetBool("LookRight", false);
             }
 
             playerAnimator.SetFloat("Horizontal", movement.x);
             playerAnimator.SetFloat("Vertical", movement.y);
             playerAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
             playerAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
+            accessoireAnimator.SetFloat("Horizontal", movement.x);
+            accessoireAnimator.SetFloat("Vertical", movement.y);
+            accessoireAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
+            accessoireAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
         }
     }
 
