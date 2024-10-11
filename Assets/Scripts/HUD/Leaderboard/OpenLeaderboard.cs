@@ -33,7 +33,7 @@ public class OpenLeaderboard : MonoBehaviour
     /// <summary>
     /// Opens the rewards menu and pauses the game.
     /// </summary>
-    public void openMenue()
+    public void OpenMenue()
     {
         menuOpen = true;
         rewardsPanel.SetActive(true);
@@ -43,7 +43,7 @@ public class OpenLeaderboard : MonoBehaviour
     /// <summary>
     /// Opens the leaderboard scene and pauses the game.
     /// </summary>
-    public void openLeaderboard()
+    public void OpenBoard()
     {
         menuOpen = true;
         SceneManager.LoadScene("Rewards", LoadSceneMode.Additive);
@@ -53,7 +53,7 @@ public class OpenLeaderboard : MonoBehaviour
     /// <summary>
     /// Opens the shop scene and pauses the game.
     /// </summary>
-    public void openShop()
+    public void OpenShop()
     {
         menuOpen = true;
         SceneManager.LoadScene("Shop", LoadSceneMode.Additive);
@@ -63,7 +63,7 @@ public class OpenLeaderboard : MonoBehaviour
     /// <summary>
     /// Closes the rewards menu, plays a click sound, and resumes the game.
     /// </summary>
-    public void closeMenue()
+    public void CloseMenue()
     {
         audioSource.Play();
         Invoke("RewardsPanelSetActive", 0.15f);

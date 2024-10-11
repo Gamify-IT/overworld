@@ -28,11 +28,14 @@ public class LeaderboardManager : MonoBehaviour
     private string world;
     private List<PlayerStatisticData> ranking;
     private PlayerStatisticData ownData;
+
     private Button closeButton;
     public Button resetButton;
     public Button closeVisibilityMenuButton;
+
     private bool previousToggleState;
     private bool isLeaderboardOpen = true;
+
     private Color pastelRed = new Color(1f, 0.6f, 0.6f);  
     private Color pastelGreen = new Color(0.6f, 1f, 0.6f);
 
