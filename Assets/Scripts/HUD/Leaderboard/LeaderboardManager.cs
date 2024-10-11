@@ -28,11 +28,14 @@ public class LeaderboardManager : MonoBehaviour
     private string world;
     private List<PlayerStatisticData> ranking;
     private PlayerStatisticData ownData;
+
     private Button closeButton;
     public Button resetButton;
     public Button closeVisibilityMenuButton;
+
     private bool previousToggleState;
     private bool isLeaderboardOpen = true;
+
     private Color pastelRed = new Color(1f, 0.6f, 0.6f);  
     private Color pastelGreen = new Color(0.6f, 1f, 0.6f);
 
@@ -309,7 +312,7 @@ public class LeaderboardManager : MonoBehaviour
         if (inputField != null && inputField.gameObject.activeSelf)
         {
             string newPseudonym = inputField.text;
-            GameManager.Instance.UpdatePseudonym(newPseudonym);
+            DataManager.Instance.UpdatePseudonym(newPseudonym);
             GameManager.Instance.SavePlayerData();
             ranking = DataManager.Instance.GetAllPlayerStatistics();
 
@@ -318,7 +321,6 @@ public class LeaderboardManager : MonoBehaviour
             inputField.Select();
             inputField.ActivateInputField();
         }
-        
     }
 
     /// <summary>
@@ -515,8 +517,7 @@ public class LeaderboardManager : MonoBehaviour
         if (toggleText != null)
         {
             toggleText.color = isPublic ? pastelGreen : pastelRed;
-        }
-       
+        }  
     }
 
     /// <summary>
@@ -528,7 +529,7 @@ public class LeaderboardManager : MonoBehaviour
     {
         UpdateToggleButtonColor(isOn);
         UpdateToggleText(isOn); 
-        GameManager.Instance.UpdateVisibility(isOn);
+        DataManager.Instance.UpdateVisibility(isOn);
         GameManager.Instance.SavePlayerData();
         SaveVisibilityState();
         UpdateVisibilityImage(isOn);

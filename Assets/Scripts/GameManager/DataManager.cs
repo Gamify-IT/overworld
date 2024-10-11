@@ -673,7 +673,7 @@ public class DataManager : MonoBehaviour
     {
        if(playerData != null)
         {
-            return playerData.updateCredit(price);
+            return playerData.UpdateCredit(price);
         }
         return false;
     }
@@ -681,12 +681,12 @@ public class DataManager : MonoBehaviour
     
     public bool UpdateCharacterIndex(string characterIndex)
     {
-        return playerData.updateCharacter(characterIndex);
+        return playerData.UpdateCharacter(characterIndex);
     }
 
     public bool UpdateAccessoryIndex(string accessoryIndex)
     {
-        return playerData.updateAccessory(accessoryIndex);
+        return playerData.UpdateAccessory(accessoryIndex);
     }
 
     /// <summary>
@@ -699,7 +699,7 @@ public class DataManager : MonoBehaviour
 
         if (playerData != null)
         {
-            return playerData.updatePseudonym(pseudonym);
+            return playerData.UpdatePseudonym(pseudonym);
         }
         return false;
     }
@@ -713,7 +713,7 @@ public class DataManager : MonoBehaviour
     {
         if (playerData != null)
         {
-            return playerData.updateVisibility(visibility);
+            return playerData.UpdateVisibility(visibility);
         }
         return false;
     }
@@ -1015,13 +1015,10 @@ public class DataManager : MonoBehaviour
         {
             foreach (Binding bindingValue in Enum.GetValues(typeof(Binding)))
             {
-                if (bindingValue != Binding.VOLUME_LEVEL)
+                if (bindingValue != Binding.VOLUME_LEVEL && !bindingContained[bindingValue])
                 {
-                    if (!bindingContained[bindingValue])
-                    {
-                        Debug.Log("No binding for: " + bindingValue);
-                        validBindings = false;
-                    }
+                    Debug.Log("No binding for: " + bindingValue);
+                    validBindings = false;
                 }
             }
         }        
@@ -1039,7 +1036,6 @@ public class DataManager : MonoBehaviour
         {
             ChangeKeybind(keybinding);
 
-            // update the volume level
             if (keybinding.GetBinding() == Binding.VOLUME_LEVEL)
             {
                 int volumeLevel = ConvertKeyCodeToInt(keybinding.GetKey());
