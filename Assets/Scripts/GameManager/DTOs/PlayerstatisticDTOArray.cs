@@ -5,32 +5,31 @@ using UnityEngine;
 ///     This class is used to retrieve data from Get Requests.
 /// </summary>
 [Serializable]
-public class PlayerstatisticDTOArray
+public class PlayerStatisticDTOArray
 {
     #region Attributes
-
-    public PlayerStatisticDTO[] playerstatisticDTOs;
+    public PlayerStatisticDTO[] playerStatisticDTOs;
 
     #endregion
 
     /// <summary>
-    ///     This function converts a json string to a array of <c>PlayerstatisticDTO</c> objects.
+    ///     This function converts a json string to a array of <c>PlayerStatisticDTO</c> objects.
     /// </summary>
     /// <param name="jsonString">The json string to convert</param>
-    /// <returns>A array of <c>PlayerstatisticDTO</c> objects containing the data</returns>
-    public static PlayerstatisticDTOArray CreateFromJSON(string jsonString)
+    /// <returns>A array of <c>PlayerStatisticDTO</c> objects containing the data</returns>
+    public static PlayerStatisticDTOArray CreateFromJSON(string jsonString)
     {
-        return JsonUtility.FromJson<PlayerstatisticDTOArray>(jsonString);
+        return JsonUtility.FromJson<PlayerStatisticDTOArray>(jsonString);
     }
 
     #region Constructors
 
-    public PlayerstatisticDTOArray(PlayerStatisticDTO[] playerstatisticDTOs)
+    public PlayerStatisticDTOArray(PlayerStatisticDTO[] playerstatisticDTOs)
     {
-        this.playerstatisticDTOs = playerstatisticDTOs;
+        this.playerStatisticDTOs = playerStatisticDTOs;
     }
 
-    public PlayerstatisticDTOArray()
+    public PlayerStatisticDTOArray()
     {
     }
 

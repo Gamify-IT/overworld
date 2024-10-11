@@ -37,32 +37,35 @@ public class AchievementStatistic
     }
 
     /// <summary>
-    ///     This method converts a list of IntTuple objects into a list of tuples containing three integers.
+    ///     IntTuple is a helper class for storing the unique identifier of objects in the game.
+    ///     This method converts list that contains objects from IntTuple class into list of tuples.
+    ///     Each tuple will contain worldId, dungeonId, and numberId as the unique identifier of objects in the game.
     /// </summary>
-    /// <param name="list">The list of IntTuple objects to be converted</param>
+    /// <param name="listOfIntTupleObjects">The list of IntTuple objects to be converted.</param>
     /// <returns>A list of tuples where each tuple contains worldId, dungeonId, and numberId.</returns>
-    public static List<(int, int, int)> ConvertFromListIntTuple(List<IntTuple> list)
+    public static List<(int, int, int)> ConvertFromIntTuple(List<IntTuple> listOfIntTupleObjects)
     {
-        List<(int, int, int)> result = new List<(int, int, int)>();
-        foreach (var item in list)
+        List<(int, int, int)> listOfTuples = new List<(int, int, int)>();
+        foreach (var item in listOfIntTupleObjects)
         {
-            result.Add((item.worldId, item.dungeonId, item.numberId));
+            listOfTuples.Add((item.worldId, item.dungeonId, item.numberId));
         }
-        return result;
+        return listOfTuples;
     }
 
     /// <summary>
-    ///     This method converts a list of tuples with three integers into a list of IntTuple objects.
+    ///     This method converts a list of tuples, where each tuple contains worldId, dungeonId, and numberId as the unique identifier of objects,
+    ///     to list that contains objects from IntTuple class.
     /// </summary>
-    /// <param name="list">The list of tuples to be converted</param>
-    /// <returns>A list of IntTuple objects</returns>
-    public static List<IntTuple> ConvertToListIntTuple(List<(int, int, int)> list)
+    /// <param name="listOfTuples">The list of tuples to be converted.</param>
+    /// <returns>A list that contains objects from IntTuple class.</returns>
+    public static List<IntTuple> ConvertToIntTuple(List<(int, int, int)> listOfTuples)
     {
-        List<IntTuple> result = new List<IntTuple>();
-        foreach (var item in list)
+        List<IntTuple> listOfIntTupleObjects = new List<IntTuple>();
+        foreach (var (worldId, dungeonId, numberId) in listOfTuples)
         {
-            result.Add(new IntTuple(item.Item1, item.Item2, item.Item3));
+            listOfIntTupleObjects.Add(new IntTuple(worldId, dungeonId, numberId));
         }
-        return result;
+        return listOfIntTupleObjects;
     }
 }
