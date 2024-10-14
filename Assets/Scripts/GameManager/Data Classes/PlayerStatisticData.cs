@@ -6,7 +6,7 @@ using System;
 /// <summary>
 ///     This class is used to store all information about the player and the session.
 /// </summary>
-public class PlayerStatisticData 
+public class PlayerStatisticData
 {
     #region Attributes
     private readonly string id;
@@ -29,7 +29,7 @@ public class PlayerStatisticData
     private string pseudonym;
     private string leagueOfPlayer;
     private bool updatedCredit = false;
-    private bool updatedPseudonym= false;
+    private bool updatedPseudonym = false;
     private bool updatedVisibility = false;
     private bool updatedCharacterIndex = false;
     private bool updatedAccessoryIndex = false;
@@ -42,7 +42,7 @@ public class PlayerStatisticData
     ///     Constructor for the PlayerStatisticData class, initializing all attributes.
     /// </summary>
     public PlayerStatisticData(string id, AreaLocationDTO[] unlockedAreas, AreaLocationDTO[] completedDungeons, TeleporterDTO[] unlockedTeleporters, AreaLocationDTO currentArea, string userId, string username, string lastActive, float logoutPositionX, float logoutPositionY,
-         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool visibility,int credit, string pseudonym, string currentCharacter, string currentAccessory)
+         string logoutScene, int currentCharacterIndex, int volumeLevel, int knowledge, int rewards, bool visibility, int credit, string pseudonym, string currentCharacter, string currentAccessory)
     {
         this.id = id;
         this.unlockedAreas = unlockedAreas;
@@ -59,7 +59,7 @@ public class PlayerStatisticData
         this.volumeLevel = volumeLevel;
         this.knowledge = knowledge;
         this.rewards = rewards;
-        this.leagueOfPlayer = calculateLeagueOfPlayer(rewards);
+        this.leagueOfPlayer = CalculateLeagueOfPlayer(rewards);
         this.visibility = visibility;
         this.credit = credit;
         this.pseudonym = pseudonym;
@@ -94,7 +94,7 @@ public class PlayerStatisticData
         string currentCharacter = statistic.currentCharacter;
         string currentAccessory = statistic.currentAccessory;
 
-    AreaLocationDTO[] unlockedAreas = new AreaLocationDTO[statistic.unlockedAreas.Length];
+        AreaLocationDTO[] unlockedAreas = new AreaLocationDTO[statistic.unlockedAreas.Length];
         AreaLocationDTO[] unlockedDungeons = new AreaLocationDTO[statistic.unlockedDungeons.Length];
         TeleporterDTO[] unlockedTeleporters = new TeleporterDTO[statistic.unlockedTeleporters.Length];
 
@@ -112,40 +112,46 @@ public class PlayerStatisticData
         {
             unlockedTeleporters[i] = statistic.unlockedTeleporters[i];
         }
-     
+
         PlayerStatisticData data = new PlayerStatisticData(id, unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, userId, username, lastActive,
             logoutPositionX, logoutPositionY, logoutScene, currentCharacterIndex, volumeLevel, knowledge, rewards, visibility, credit, pseudonym, currentCharacter, currentAccessory);
         return data;
     }
 
-
-    public bool updateCharacter(string currentCharacterIndex)
+    /// <summary>
+    ///     Updates the player's character.
+    /// </summary>
+    /// <param name="currentCharacterIndex"></param>
+    /// <returns>True if the credit remains positive, otherwise false.</returns>
+    public bool UpdateCharacter(string currentCharacterIndex)
     {
         updatedCharacterIndex = true;
         currentCharacter = currentCharacterIndex;
         return true;
     }
 
-    public bool updateAccessory(string currentAccessoryIndex)
+    /// <summary>
+    ///     Updates the player's accessory.
+    /// </summary>
+    /// <param name="currentAccessoryIndex"></param>
+    /// <returns>True if the credit remains positive, otherwise false.</returns>
+    public bool UpdateAccessory(string currentAccessoryIndex)
     {
         updatedAccessoryIndex = true;
         currentAccessory = currentAccessoryIndex;
         return true;
     }
+
     /// <summary>
     ///     Updates the player's credit.
     /// </summary>
     /// <param name="price">The amount to reduce the credit by.</param>
     /// <returns>True if the credit remains positive, otherwise false.</returns>
-    public bool updateCredit(int price)
+    public bool UpdateCredit(int price)
     {
         updatedCredit = true;
         credit = this.credit - price;
-        if(credit > 0)
-        {
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /// <summary>
@@ -153,16 +159,12 @@ public class PlayerStatisticData
     /// </summary>
     /// <param name="name">The new pseudonym.</param>
     /// <returns>True if the pseudonym was updated, otherwise false.</returns>
-    public bool updatePseudonym(string name)
+    public bool UpdatePseudonym(string name)
     {
         updatedPseudonym = true;
-       
-        if (name != null)
-        {
-            pseudonym = name;
-            return true;
-        }
-        return false;
+        pseudonym = name;
+        return true;
+
     }
 
     /// <summary>
@@ -170,7 +172,7 @@ public class PlayerStatisticData
     /// </summary>
     /// <param name="visibility">The new visibility state.</param>
     /// <returns>Always true.</returns>
-    public bool updateVisibility(bool visibility)
+    public bool UpdateVisibility(bool visibility)
     {
         updatedVisibility = true;
 
@@ -181,11 +183,11 @@ public class PlayerStatisticData
         else
         {
             this.visibility = false;
-            
+
         }
 
         return true;
-      
+
     }
 
     /// <summary>
@@ -193,9 +195,9 @@ public class PlayerStatisticData
     /// </summary>
     /// <param name="rewards">The amount of rewards.</param>
     /// <returns>The corresponding league.</returns>
-    public string calculateLeagueOfPlayer(int rewards)
+    public string CalculateLeagueOfPlayer(int rewards)
     {
-        if(rewards < 450)
+        if (rewards < 450)
         {
             return "Wanderer";
         }
@@ -218,7 +220,7 @@ public class PlayerStatisticData
     ///     Checks if the credit has been updated.
     /// </summary>
     /// <returns>True if the credit was updated, otherwise false.</returns>
-    public bool creditIsUpdated()
+    public bool CreditIsUpdated()
     {
         return updatedCredit;
     }
@@ -245,7 +247,7 @@ public class PlayerStatisticData
     {
         return updatedCharacterIndex;
     }
-    
+
     public bool AccessoryIsUpdated()
     {
         return updatedAccessoryIndex;

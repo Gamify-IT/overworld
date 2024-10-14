@@ -11,7 +11,6 @@ public class OpenLeaderboard : MonoBehaviour
 
     public static bool menuOpen = true;
     public GameObject rewardsPanel;
-    
 
     private AudioSource audioSource;
     public AudioClip clickSound;
@@ -22,7 +21,7 @@ public class OpenLeaderboard : MonoBehaviour
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        if(audioSource == null)
+        if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
@@ -34,7 +33,7 @@ public class OpenLeaderboard : MonoBehaviour
     /// <summary>
     /// Opens the rewards menu and pauses the game.
     /// </summary>
-    public void openMenue()
+    public void OpenMenue()
     {
         menuOpen = true;
         rewardsPanel.SetActive(true);
@@ -44,7 +43,7 @@ public class OpenLeaderboard : MonoBehaviour
     /// <summary>
     /// Opens the leaderboard scene and pauses the game.
     /// </summary>
-    public void openLeaderboard()
+    public void OpenBoard()
     {
         menuOpen = true;
         SceneManager.LoadScene("Rewards", LoadSceneMode.Additive);
@@ -54,7 +53,7 @@ public class OpenLeaderboard : MonoBehaviour
     /// <summary>
     /// Opens the shop scene and pauses the game.
     /// </summary>
-    public void openShop()
+    public void OpenShop()
     {
         menuOpen = true;
         SceneManager.LoadScene("Shop", LoadSceneMode.Additive);
@@ -64,12 +63,12 @@ public class OpenLeaderboard : MonoBehaviour
     /// <summary>
     /// Closes the rewards menu, plays a click sound, and resumes the game.
     /// </summary>
-    public void closeMenue()
+    public void CloseMenue()
     {
         audioSource.Play();
         Invoke("RewardsPanelSetActive", 0.15f);
         menuOpen = false;
-        Time.timeScale = 1f; 
+        Time.timeScale = 1f;
     }
 
     /// <summary>
@@ -77,11 +76,7 @@ public class OpenLeaderboard : MonoBehaviour
     /// </summary>
     private void RewardsPanelSetActive()
     {
-        rewardsPanel.SetActive(false); 
+        rewardsPanel.SetActive(false);
     }
-
-    
-
-   
 
 }

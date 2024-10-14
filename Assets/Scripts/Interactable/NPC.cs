@@ -74,10 +74,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
                      typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
             {
-                //Debug.Log(dialogue.Length - 1);
-                //Debug.Log("index before next" + index);
                 NextLine();
-                //Debug.Log("index after next" + index);
             }
             else if (Input.GetKeyDown(interact) && playerIsClose && SceneManager.GetSceneByBuildIndex(12).isLoaded &&
                      !typingIsFinished && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
@@ -97,7 +94,6 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     {
         if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
-            //Debug.Log("remove NPC " + world + "-" + dungeon + "-" + number);
             ObjectManager.Instance.RemoveGameEntity<NPC, NPCData>(world, dungeon, number);
             GameEvents.current.onKeybindingChange -= UpdateKeybindings;
         }
@@ -166,7 +162,6 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     /// </summary>
     private void RegisterToGameManager()
     {
-        //Debug.Log("register NPC " + world + "-" + dungeon + "-" + number);
         ObjectManager.Instance.AddGameEntity<NPC, NPCData>(gameObject, world, dungeon, number);
     }
 
@@ -186,8 +181,6 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             text += dialogue[index];
             text += " ; ";
         }
-
-        //Debug.Log("setup npc " + world + "-" + number + " with new dialogue: " + text + ", new info: " + !hasBeenTalkedTo);
     }
 
     /// <summary>
@@ -221,7 +214,6 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     private IEnumerator Typing()
     {
         typingIsFinished = false;
-        //Debug.Log(typingIsFinished);
         foreach (char letter in dialogue[index])
         {
             dialogueText.text += letter;
@@ -229,7 +221,6 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         }
 
         typingIsFinished = true;
-        //Debug.Log(typingIsFinished);
     }
 
     /// <summary>

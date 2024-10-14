@@ -318,9 +318,6 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         }
         LoadSubScene.areaExchange = new AreaInformation(worldID, dungeonIndex);
 
-        //Debug.Log("TeleportPlayerTo start");
-        //Debug.Log("Teleport to: " + worldID + "-" + dungeonID + position.ToString());
-
         Destroy(currentTeleporterCanvas);
         finalTargetPosition = position;
         finalTargetWorld = worldID;
@@ -330,7 +327,6 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         interactable = false;
         ufoAnimation.Play("UfoDeparture");
         PlayUfoTakesSound();
-        //Debug.Log("Animation length: " + ufoAnimation.clip.length);
         Invoke("FinishTeleportation", ufoAnimation.clip.length);
         isUfoSoundPlaying = false;
     }
@@ -343,9 +339,6 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     public async void FinishTeleportation()
     {
         player.position = finalTargetPosition;
-
-        //Debug.Log("Final world:" + finalTargetWorld);
-        //Debug.Log("Final dungeon:" + finalTargetDungeon);
 
         if (finalTargetWorld != worldID || finalTargetDungeon != dungeonID)
         {
