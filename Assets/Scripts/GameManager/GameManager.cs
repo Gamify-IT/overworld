@@ -805,7 +805,7 @@ public class GameManager : MonoBehaviour
         "John", "Alice", "Bob", "Eve", "Charlie", "Dave", "Mallory", "Trent", "Peggy", "Victor",
         "Walter", "Grace", "Hank", "Ivy", "Justin", "Karen", "Leo", "Monica", "Nina", "Oscar",
         "Paula", "Quentin", "Rachel", "Steve", "Tom", "Uma", "Vince", "Wendy", "Xander", "Yara"
-    };
+        };
 
         for (int i = 0; i < playerCount; i++)
         {
@@ -860,18 +860,37 @@ public class GameManager : MonoBehaviour
 
     public PlayerStatisticDTO GetOwnDummyData()
     {
-        int worldIndex = 2;
-        int dungeonIndex = 1;
-        AreaLocationDTO currentArea = new AreaLocationDTO(worldIndex, dungeonIndex);
-        AreaLocationDTO[] unlockedAreas = { currentArea };
-        AreaLocationDTO[] unlockedDungeons = { currentArea };
-        TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
-        TeleporterDTO[] unlockedTeleporters = { teleporter };
+        PlayerStatisticDTO ownPlayerData;
 
-        PlayerStatisticDTO ownPlayerData = new PlayerStatisticDTO(
-            "31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki",
-            DateTime.Now.ToString(dateTimeFormat), 20.0f, 15.0f, "World 1", 1, 75, 200, 170, false, 100, "PSEProfi", "character_anzug", "herzbrille"
-        );
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            int worldIndex = 0;
+            int dungeonIndex = 0;
+            AreaLocationDTO currentArea = new AreaLocationDTO(worldIndex, dungeonIndex);
+            AreaLocationDTO[] unlockedAreas = { currentArea };
+            AreaLocationDTO[] unlockedDungeons = { };
+            TeleporterDTO[] unlockedTeleporters = { };
+
+            ownPlayerData = new PlayerStatisticDTO(
+                "31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki",
+                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 20.0f, 15.0f, "Tutorial", 1, 75, 200, 170, false, 100, "Beginner", "character_default", "none"
+            );
+        }
+        else
+        {
+            int worldIndex = 1;
+            int dungeonIndex = 0;
+            AreaLocationDTO currentArea = new AreaLocationDTO(worldIndex, dungeonIndex);
+            AreaLocationDTO[] unlockedAreas = { currentArea };
+            AreaLocationDTO[] unlockedDungeons = { currentArea };
+            TeleporterDTO teleporter = new TeleporterDTO("1", currentArea, 1);
+            TeleporterDTO[] unlockedTeleporters = { teleporter };
+
+            ownPlayerData = new PlayerStatisticDTO(
+                "31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki",
+                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 20.0f, 15.0f, "World 1", 1, 75, 200, 170, false, 100, "PSEProfi", "character_anzug", "herzbrille"
+            );
+        }
 
         return ownPlayerData;
     }
