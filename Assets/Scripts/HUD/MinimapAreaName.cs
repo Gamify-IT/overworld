@@ -110,9 +110,13 @@ public class MinimapAreaName : MonoBehaviour
         {
             clipToPlay = backgroundMusicWorld4;
         }
-        else
+        else if (currentAreaName.Contains("Dungeon"))
         {
             clipToPlay = backgroundMusicDungeon;
+        }
+        else
+        {
+            clipToPlay = backgroundMusicWorld1;
         }
     }
 
