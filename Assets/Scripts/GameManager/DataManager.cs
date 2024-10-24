@@ -332,6 +332,9 @@ public class DataManager : MonoBehaviour
 #endif
     }
 
+    /// <summary>
+    ///     Determines the date and time the player last was logged in.
+    /// </summary>
     private void CheckForLastLogin()
     {
         DateTime lastActive = DateTime.ParseExact(playerData.GetLastActive(), "yyyy-MM-dd HH:mm:ss", null);
