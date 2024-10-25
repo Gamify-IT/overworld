@@ -189,7 +189,7 @@ public class PlayerAnimation : MonoBehaviour
                 sprintDuration = 0f; 
                 audioSource.pitch = 1f;
             }
-
+#if UNITY_EDITOR
             // dev keybindings
             if (Input.GetKeyDown("l") && targetSpeed == movementSpeed)
             {
@@ -215,9 +215,8 @@ public class PlayerAnimation : MonoBehaviour
             {
                 GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =
                     !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
-            } 
-
-            // dev keybindings
+            }
+#endif           
             if (isMoving && !GameManager.Instance.GetIsPaused())
             {
                 PlayMoveSound();
