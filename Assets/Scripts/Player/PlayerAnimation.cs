@@ -451,6 +451,15 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // tutorial only
+        if (collision.CompareTag("Trigger"))
+        {
+            TutorialManager.Instance.ShowScreen();
+        }
+    }
+
 
     #region Singleton
 

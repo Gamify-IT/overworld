@@ -17,6 +17,9 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private TMP_Text header;
     [SerializeField] private TMP_Text content;
     [SerializeField] private TMP_Text buttonLabel;
+    [SerializeField] private TMP_Text taskDescription;
+
+    [SerializeField] private GameObject[] interactables;
 
     #region singelton
     // <summary>
@@ -75,33 +78,33 @@ public class TutorialManager : MonoBehaviour
         if (status)
         {
             Time.timeScale = 0f;
+            showScreen = false;
             UpdateScreen();
         }
         else
         {
             Time.timeScale = 1f;
             progressCounter++;
-            Debug.Log(progressCounter + ", " + data.Length);
-            Debug.Log((float) progressCounter / data.Length);
+
+            if (progressCounter == 1)
+            {
+                ActivateInfoScreen(true);
+            }
         }
     }
 
     public void UpdateScreen()
     {
-        showScreen = false;
-
         ContentScreenData screen = data[progressCounter];
 
         header.text = screen.GetHeader();
         content.text = screen.GetContent();
         buttonLabel.text = screen.GetButtonLabel();
+        taskDescription.text = screen.GetButtonLabel() + "!";
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void ShowScreen()
     {
-        if (collision.CompareTag("Player"))
-        {
-            showScreen = true;
-        }
+        showScreen = true;
     }
 }
