@@ -1,0 +1,12 @@
+[
+  {
+    "header": "Welcome to Gamify-IT",
+    "content": "In the following you will be guided through the \n basic game mechanics. \n \n This tutotial will take you approximately 999 min.",
+    "buttonLabel": "CONTINUE"
+  },
+  {
+    "header": "KEYBINDINGS",
+    "content": "Here are the default keybindings in the game. \n You can change them later in the keybindings menu. \n \n W - move forward \n A - move left \n S - move back \n D - move right \n LeftShift- sprint \n E - interaction \n Cancel - esc",
+    "buttonLabel": "START"
+  }
+]

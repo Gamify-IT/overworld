@@ -156,7 +156,10 @@ public class KeyBindingManager : MonoBehaviour
     {
         foreach (Keybinding keybinding in currentKeybindings)
         {
-            DisplayKeybinding(keybinding);
+            if (keybinding.GetBinding() != Binding.VOLUME_LEVEL)
+            {
+                DisplayKeybinding(keybinding);
+            }
         }
     }
 
