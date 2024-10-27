@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,6 +21,11 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private TMP_Text taskDescription;
 
     [SerializeField] private GameObject[] interactables;
+    [SerializeField] private GameObject trigger;
+
+    private readonly string bookText = "Congratulations, you found the book!\n If you walk away, you can continue your journey...";
+    private readonly string npcText = "Welcome to the game apprentice!\n I've urgent news but i cannot remember...";
+    private readonly string signText = "This is a sign! \n If you ever get lost, look at the map.";
 
     #region singelton
     // <summary>
@@ -44,6 +50,11 @@ public class TutorialManager : MonoBehaviour
     {
         Time.timeScale = 0f;
         Setup();
+        
+        foreach (GameObject interactable in interactables)
+        {
+            interactable.SetActive(false);
+        }
     }
 
     private void Update()
@@ -100,11 +111,49 @@ public class TutorialManager : MonoBehaviour
         header.text = screen.GetHeader();
         content.text = screen.GetContent();
         buttonLabel.text = screen.GetButtonLabel();
-        taskDescription.text = screen.GetButtonLabel() + "!";
+
+        if (screen.GetButtonLabel() != "CONTINUE" && screen.GetButtonLabel() != "START")
+        {
+            taskDescription.text = screen.GetButtonLabel() + "!";
+
+            GameObject currentInteractable = interactables[progressCounter - 2];
+            currentInteractable.SetActive(true);
+
+            ShowInteractableText(currentInteractable, progressCounter - 2);
+        }
+    }
+
+    private void ShowInteractableText(GameObject currentInteractable, int index)
+    {
+        switch (index)
+        {
+            case 0:
+                currentInteractable.GetComponent<Sign>().text = signText;
+                trigger.SetActive(false);
+                break;
+            case 1:
+                currentInteractable.GetComponent<Book>().SetText(bookText);
+                break;
+            case 2:
+                currentInteractable.GetComponent<NPC>().SetText(npcText);
+                break;
+            case 3:
+                break;
+        }
     }
 
     public void ShowScreen()
     {
         showScreen = true;
+    }
+
+    /// <summary>
+    ///     Loads the next screen in the tutorial after the player has intercated with the current object.
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator LoadNextScreen()
+    {
+        yield return new WaitForSeconds(2);
+        ActivateInfoScreen(true);
     }
 }

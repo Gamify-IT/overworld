@@ -53,6 +53,11 @@ public class Sign : MonoBehaviour
             playerIsClose = false;
             SignPanel.SetActive(false);
         }
+
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            StartCoroutine(TutorialManager.Instance.LoadNextScreen());
+        }
     }
 
     /// <summary>

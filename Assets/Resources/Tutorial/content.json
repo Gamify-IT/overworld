@@ -1,17 +1,32 @@
 [
   {
     "header": "Welcome to Gamify-IT",
-    "content": "In the following you will be guided through the \n basic game mechanics. \n \n This tutotial will take you approximately 999 min.",
+    "content": "In the following tutorial you will be guided through the \n basic game mechanics. \n \n This will take you about 10 min.",
     "buttonLabel": "CONTINUE"
   },
   {
     "header": "KEYBINDINGS",
-    "content": "Here are the default keybindings in the game. \n You can change them later in the keybindings menu. \n \n W - move forward \n A - move left \n S - move back \n D - move right \n LeftShift- sprint \n E - interaction \n Cancel - esc",
+    "content": "Here are the default keybindings for the game. \n You can change them later in the keybindings menu. \n \n W - move forward \n A - move left \n S - move back \n D - move right \n LeftShift- sprint \n E - interaction \n Esc - cancel",
     "buttonLabel": "START"
   },
   {
+    "header": "Signs",
+    "content": "Signs help you to understand the game concepts better. Let's find one!",
+    "buttonLabel": "FIND A SIGN"
+  },
+  {
     "header": "BOOKS",
-    "content": "You can find books anywhere in the overworld. \n Interact with them to learn something new...",
+    "content": "Books can be found anywhere! \n Interact with them to learn something new...",
     "buttonLabel": "FIND A BOOK"
+  },
+  {
+    "header": "NPCs",
+    "content": "NPCs are always a great opportunity to gain some additional knowledge and hints. \n Press E to talk to them!",
+    "buttonLabel": "FIND AN NPC"
+  },
+  {
+    "header": "TELEPORTERS",
+    "content": "Bored walking around all the time? \n Teleporters might help you...",
+    "buttonLabel": "FIND A TELEPORTER"
   }
 ]

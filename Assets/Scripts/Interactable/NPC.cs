@@ -144,7 +144,12 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         else if (other.CompareTag("Player") && !SceneManager.GetSceneByBuildIndex(12).isLoaded)
         {
             playerIsClose = false;
-        }   
+        }
+
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            StartCoroutine(TutorialManager.Instance.LoadNextScreen());
+        }
     }
 
     /// <summary>
@@ -321,5 +326,14 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         {
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         }
+    }
+
+    /// <summary>
+    ///     Sets the dialogue text to the given one
+    /// </summary>
+    /// <param name="text">dialogue text to be displayed</param>
+    public void SetText(string text)
+    {
+        dialogue[0] = text;
     }
 }
