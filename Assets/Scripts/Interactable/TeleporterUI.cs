@@ -42,6 +42,12 @@ public class TeleporterUI : MonoBehaviour
     {
         correspondingTeleporter = teleporter;
 
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            ShowTutorialTeleporterUi();
+            return;
+        }
+
         for (int i = 0; i <= GameSettings.GetMaxWorlds(); i++)
         {
             int worldIndex = i;
@@ -59,6 +65,32 @@ public class TeleporterUI : MonoBehaviour
             Image image = newToggle.GetComponent<Image>();
             newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => ToggleEnabledColor(b, image));
             newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => UpdateTeleporterSelections(worldIndex,dataList));
+            newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => HandleClick(newToggle));
+            newToggle.SetActive(true);
+            AddAudioSource(newToggle);
+        }
+        isMenuInitialized = true;
+    }
+
+    /// <summary>
+    /// Manages the teleporter ui for the tutorial mode.
+    /// </summary>
+    private void ShowTutorialTeleporterUi()
+    {
+        List<TeleporterData> dataList = DataManager.Instance.GetUnlockedTeleportersInWorld(0);
+
+        if (dataList.Count <= 1)
+        {
+            // only one teleporter spot unlocked => find another one
+            StartCoroutine(TutorialManager.Instance.LoadNextScreen(0));
+        }
+        else
+        {
+            GameObject newToggle = GameObject.Instantiate(prototypeToggle, worldSelectionContent);
+            newToggle.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = GetWorldName(0);
+            Image image = newToggle.GetComponent<Image>();
+            newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => ToggleEnabledColor(b, image));
+            newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => UpdateTeleporterSelections(0, dataList));
             newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => HandleClick(newToggle));
             newToggle.SetActive(true);
             AddAudioSource(newToggle);

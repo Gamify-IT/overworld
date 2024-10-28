@@ -26,6 +26,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     private bool playerIsClose;
     private bool typingIsFinished;
     private string uuid;
+    private bool tutorialDone = false;
 
     private static List<(int, int, int)> alreadyTalkedNPC;
     //KeyCodes
@@ -146,9 +147,10 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             playerIsClose = false;
         }
 
-        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && !tutorialDone)
         {
-            StartCoroutine(TutorialManager.Instance.LoadNextScreen());
+            tutorialDone = true;
+            StartCoroutine(TutorialManager.Instance.LoadNextScreen(2));
         }
     }
 

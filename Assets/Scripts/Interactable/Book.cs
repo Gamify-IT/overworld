@@ -19,6 +19,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     private TextMeshProUGUI bookText;
     private bool playerIsClose;
     private string uuid;
+    private bool tutorialDone = false;
 
     private List<(int, int, int)> readBooks;
 
@@ -118,9 +119,10 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
             playerIsClose = false;
         }
 
-        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && !tutorialDone)
         {
-            StartCoroutine(TutorialManager.Instance.LoadNextScreen());
+            tutorialDone = true;
+            StartCoroutine(TutorialManager.Instance.LoadNextScreen(2));
         }
     }
 

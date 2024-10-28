@@ -41,6 +41,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     private AudioSource audioSourceUfoReturns;
     
     private bool isUfoSoundPlaying = false;
+    private bool tutorialDone = false;
 
     //KeyCodes
     private KeyCode interact;
@@ -263,6 +264,11 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             CloseTeleporterUI();
             inTrigger = false;
         }
+
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && tutorialDone)
+        {
+            StartCoroutine(TutorialManager.Instance.LoadNextScreen(3));
+        }
     }
 
     /// <summary>
@@ -354,6 +360,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         PlayUfoReturnsSound();
         LoadSubScene.transitionBlocked = false;
         isUfoSoundPlaying = false;
+        tutorialDone = true;
     }
 
 

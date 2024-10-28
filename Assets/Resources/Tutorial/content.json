@@ -11,22 +11,32 @@
   },
   {
     "header": "Signs",
-    "content": "Signs help you to understand the game concepts better. Let's find one!",
+    "content": "Signs help explain important game concepts. \n Let's go find one!",
     "buttonLabel": "FIND A SIGN"
   },
   {
     "header": "BOOKS",
-    "content": "Books can be found anywhere! \n Interact with them to learn something new...",
+    "content": "Books can be found all around! \n Interact with them to discover something new...",
     "buttonLabel": "FIND A BOOK"
   },
   {
     "header": "NPCs",
-    "content": "NPCs are always a great opportunity to gain some additional knowledge and hints. \n Press E to talk to them!",
+    "content": "NPCs are a great source of extra knowledge and helpful hints. \n Press E to talk to them!",
     "buttonLabel": "FIND AN NPC"
   },
   {
-    "header": "TELEPORTERS",
-    "content": "Bored walking around all the time? \n Teleporters might help you...",
+    "header": "TELEPORTERS I",
+    "content": "Tired of walking everywhere? \n Try using teleporters - they'll get you there faster!",
     "buttonLabel": "FIND A TELEPORTER"
+  },
+  {
+    "header": "TELEPORTERS II",
+    "content": "Good job! \n To use it, you need to find at least on more teleporter.",
+    "buttonLabel": "FIND ANOTHER TELEPORTER"
+  },
+  {
+    "header": "MINIGAME",
+    "content": "Well done! \n Now it's time to jump into a game.",
+    "buttonLabel": "FIND A MINIGAME"
   }
 ]

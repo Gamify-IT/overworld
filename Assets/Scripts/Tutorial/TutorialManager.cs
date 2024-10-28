@@ -20,12 +20,13 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private TMP_Text buttonLabel;
     [SerializeField] private TMP_Text taskDescription;
 
+    [Header("Intercatable Elements")]
     [SerializeField] private GameObject[] interactables;
     [SerializeField] private GameObject trigger;
 
-    private readonly string bookText = "Congratulations, you found the book!\n If you walk away, you can continue your journey...";
-    private readonly string npcText = "Welcome to the game apprentice!\n I've urgent news but i cannot remember...";
-    private readonly string signText = "This is a sign! \n If you ever get lost, look at the map.";
+    private readonly string bookText = "Congratulations, you found the book! \nIf you walk away, you can continue your journey...";
+    private readonly string npcText = "Welcome to the game apprentice! \nCome to me if you want to hear some secrets...";
+    private readonly string signText = "This is a sign! \nIf you ever get lost, look at the map.";
 
     #region singelton
     // <summary>
@@ -104,6 +105,9 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void UpdateScreen()
     {
         ContentScreenData screen = data[progressCounter];
@@ -123,6 +127,11 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="currentInteractable"></param>
+    /// <param name="index"></param>
     private void ShowInteractableText(GameObject currentInteractable, int index)
     {
         switch (index)
@@ -139,6 +148,8 @@ public class TutorialManager : MonoBehaviour
                 break;
             case 3:
                 break;
+            case 4:
+                break;
         }
     }
 
@@ -150,10 +161,11 @@ public class TutorialManager : MonoBehaviour
     /// <summary>
     ///     Loads the next screen in the tutorial after the player has intercated with the current object.
     /// </summary>
-    /// <returns></returns>
-    public IEnumerator LoadNextScreen()
+    /// <param name="delay">seconds after which the next screen should load</param>
+    public IEnumerator LoadNextScreen(int delay)
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(delay);
         ActivateInfoScreen(true);
     }
+
 }
