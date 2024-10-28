@@ -189,6 +189,7 @@ public class PlayerAnimation : MonoBehaviour
                 sprintDuration = 0f; 
                 audioSource.pitch = 1f;
             }
+
 #if UNITY_EDITOR
             // dev keybindings
             if (Input.GetKeyDown("l") && targetSpeed == movementSpeed)
@@ -204,19 +205,19 @@ public class PlayerAnimation : MonoBehaviour
                 playerAnimator.speed = 1;
                 accessoireAnimator.speed = 1;
             }
-            // dev keybindings
-
+#endif
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * 50);
 
             UpdateWalkAchievement();
 
+#if UNITY_EDITOR
             // dev keybindings
             if (Input.GetKeyDown("k"))
             {
                 GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =
                     !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
             }
-#endif           
+#endif
             if (isMoving && !GameManager.Instance.GetIsPaused())
             {
                 PlayMoveSound();

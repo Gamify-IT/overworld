@@ -91,12 +91,14 @@ public class TutorialManager : MonoBehaviour
         {
             Time.timeScale = 0f;
             showScreen = false;
+            GameManager.Instance.SetIsPaused(true);
             UpdateScreen();
         }
         else
         {
             Time.timeScale = 1f;
             progressCounter++;
+            GameManager.Instance.SetIsPaused(false);
 
             if (progressCounter == 1)
             {

@@ -262,11 +262,15 @@ public class LoadingManager : MonoBehaviour
             return;
         }
 
-        AreaLocationDTO[] unlockedAreasOld = DataManager.Instance.GetPlayerData().GetUnlockedAreas();
-
         Debug.Log("Start fetching data");
 
-        bool loadingSuccesful = await GameManager.Instance.FetchData();
+        bool loadingSuccesful = false;
+
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            loadingSuccesful = await GameManager.Instance.FetchData();
+            
+        }
 
         Debug.Log("Finish fetching data");
 
@@ -281,16 +285,21 @@ public class LoadingManager : MonoBehaviour
         progressText.text = "50%";
         loadingText.text = "PROCESSING DATA...";
 
-        GameManager.Instance.SetData(worldIndex, dungeonIndex);
-        AreaLocationDTO[] unlockedAreasNew = DataManager.Instance.GetPlayerData().GetUnlockedAreas();
-        SetupProgessBar(unlockedAreasNew);
-        string infoText = CheckForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
 
-        if (infoText != "")
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
-            await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
-            string headerText = "";
-            InfoManager.Instance.DisplayInfo(headerText, infoText);
+            GameManager.Instance.SetData(worldIndex, dungeonIndex);
+            AreaLocationDTO[] unlockedAreasOld = DataManager.Instance.GetPlayerData().GetUnlockedAreas();
+            AreaLocationDTO[] unlockedAreasNew = DataManager.Instance.GetPlayerData().GetUnlockedAreas();
+            SetupProgessBar(unlockedAreasNew);
+            string infoText = CheckForNewUnlockedArea(unlockedAreasOld, unlockedAreasNew);
+
+            if (infoText != "")
+            {
+                await SceneManager.LoadSceneAsync("InfoScreen", LoadSceneMode.Additive);
+                string headerText = "";
+                InfoManager.Instance.DisplayInfo(headerText, infoText);
+            }
         }
 
         slider.value = 0.85f;

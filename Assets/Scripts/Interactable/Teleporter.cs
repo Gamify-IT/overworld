@@ -32,16 +32,20 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     private bool interactable = true;
 
     private static List<(int, int, int)> unlockedTeleporters;
-    public AudioClip teleporterOpeningSound;
-    public AudioClip ufoTakesSound;
-    public AudioClip ufoReturnsSound;
 
+    [SerializeField] private AudioClip teleporterOpeningSound;
+    [SerializeField] private AudioClip ufoTakesSound;
+    [SerializeField] private AudioClip ufoReturnsSound;
     private AudioSource audioSourceTeleport;
     private AudioSource audioSourceUfoTakes;
     private AudioSource audioSourceUfoReturns;
     
     private bool isUfoSoundPlaying = false;
-    private bool tutorialDone = false;
+
+    [Header("Tutorial states")]
+    private bool isVisited = false;
+    private static bool isTutorialDone = false;
+    private static bool teleporterScreenShown = false;
 
     //KeyCodes
     private KeyCode interact;
@@ -74,12 +78,15 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         audioSourceUfoReturns = gameObject.AddComponent<AudioSource>();
 
         teleporterOpeningSound = Resources.Load<AudioClip>("Music/teleporter_opening");
+        audioSourceTeleport.playOnAwake = false;
         audioSourceTeleport.clip = teleporterOpeningSound;
 
         ufoTakesSound = Resources.Load<AudioClip>("Music/ufo_takes_the_player");
+        audioSourceUfoTakes.playOnAwake = false;
         audioSourceUfoTakes.clip = ufoTakesSound;
 
         ufoReturnsSound = Resources.Load<AudioClip>("Music/ufo_returns_the_player");
+        audioSourceUfoReturns.playOnAwake = false;
         audioSourceUfoReturns.clip = ufoReturnsSound;
     }
 
@@ -102,6 +109,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     /// </summary>
     private void Update()
     {
+
         if (GameSettings.GetGamemode() == Gamemode.PLAY || GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             if (IsUfoArrivalAnimationPlaying())
@@ -210,6 +218,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         {
             player = collision.transform;
             inTrigger = true;
+
             if (!isUnlocked)
             {
                 isUnlocked = true;
@@ -220,6 +229,14 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
                 {
                     UpdateListOfOpenedTeleporters();
                 }
+            }
+
+            // tutorial only 
+            if (!isVisited && !teleporterScreenShown)
+            {
+                StartCoroutine(TutorialManager.Instance.LoadNextScreen(1));
+                isVisited = true;
+                teleporterScreenShown = true;
             }
         }
     }
@@ -265,9 +282,11 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             inTrigger = false;
         }
 
-        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && tutorialDone)
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && isTutorialDone && teleporterScreenShown)
         {
             StartCoroutine(TutorialManager.Instance.LoadNextScreen(3));
+            isTutorialDone = false;
+            teleporterScreenShown = false;
         }
     }
 
@@ -360,7 +379,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
         PlayUfoReturnsSound();
         LoadSubScene.transitionBlocked = false;
         isUfoSoundPlaying = false;
-        tutorialDone = true;
+        isTutorialDone = true;
     }
 
 

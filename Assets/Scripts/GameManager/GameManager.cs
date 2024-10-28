@@ -59,7 +59,12 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask<bool> SavePlayerData()
     {
-        return await SavePlayerStatistic() && await SaveAchievements();
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            return await SavePlayerStatistic() && await SaveAchievements();
+        }
+
+        return false;
     }
 
     /// <summary>

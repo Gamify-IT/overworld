@@ -31,7 +31,7 @@ public class VolumeControllerButton : MonoBehaviour
 
         if(GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
-            volumeLevel = 2;  
+            volumeLevel = 1;  
         }
         UpdateButtonImage();
     }
