@@ -18,12 +18,13 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private TMP_Text header;
     [SerializeField] private TMP_Text content;
     [SerializeField] private TMP_Text buttonLabel;
-    [SerializeField] private TMP_Text taskDescription;
+    private string taskDescription;
 
     [Header("Intercatable Elements")]
     [SerializeField] private GameObject[] interactables;
     [SerializeField] private GameObject trigger;
 
+    // tutorial info texts in interactables
     private readonly string bookText = "Congratulations, you found the book! \nIf you walk away, you can continue your journey...";
     private readonly string npcText = "Welcome to the game apprentice! \nCome to me if you want to hear some secrets...";
     private readonly string signText = "This is a sign! \nIf you ever get lost, look at the map.";
@@ -50,12 +51,14 @@ public class TutorialManager : MonoBehaviour
     private void Start()
     {
         Time.timeScale = 0f;
-        Setup();
+        SetupData();
         
         foreach (GameObject interactable in interactables)
         {
             interactable.SetActive(false);
         }
+
+        ProgressBar.Instance.SetupTutorial();
     }
 
     private void Update()
@@ -69,9 +72,9 @@ public class TutorialManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    ///     Loads the data to be displayed on the content screens
     /// </summary>
-    private void Setup()
+    private void SetupData()
     {
         TextAsset targetFile = Resources.Load<TextAsset>("Tutorial/content");
         json = targetFile.text;
@@ -108,7 +111,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    ///     Updates the content screen with the next part of the tutorial
     /// </summary>
     public void UpdateScreen()
     {
@@ -120,7 +123,7 @@ public class TutorialManager : MonoBehaviour
 
         if (screen.GetButtonLabel() != "CONTINUE" && screen.GetButtonLabel() != "START")
         {
-            taskDescription.text = screen.GetButtonLabel() + "!";
+            ProgressBar.Instance.DisplayTaskOnScreen(screen.GetButtonLabel() + "!");
 
             GameObject currentInteractable = interactables[progressCounter - 2];
             currentInteractable.SetActive(true);
@@ -130,10 +133,10 @@ public class TutorialManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    ///     Uniquely shows the instruction text for each interactable object
     /// </summary>
-    /// <param name="currentInteractable"></param>
-    /// <param name="index"></param>
+    /// <param name="currentInteractable">current interactable object</param>
+    /// <param name="index">position of the current interactable in the tutorial progress</param>
     private void ShowInteractableText(GameObject currentInteractable, int index)
     {
         switch (index)
@@ -155,6 +158,9 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///     Signal taht the (next) info screen should be shown.
+    /// </summary>
     public void ShowScreen()
     {
         showScreen = true;

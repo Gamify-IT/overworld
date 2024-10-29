@@ -142,7 +142,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
                     teleporterUI = newCanvas.transform.GetChild(0).GetComponent<TeleporterUI>();
                     SetupTeleporterUI(teleporterUI);
                     currentTeleporterCanvas = newCanvas;
-                    PlayTeleporterOpeningSound();
+                    //PlayTeleporterOpeningSound();
                 }
             }
         }         
