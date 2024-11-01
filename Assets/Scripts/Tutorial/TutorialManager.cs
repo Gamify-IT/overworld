@@ -8,21 +8,22 @@ public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager Instance { get; private set; }
 
-    [SerializeField] private GameObject infoScreen;
+    //[SerializeField] private GameObject infoScreen;
     private ContentScreenData[] data;
-    private int progressCounter = 0;
-    private bool showScreen = true;
     private string json;
+    private static int progressCounter = 0;
+    private static bool showScreen = true;
 
     [Header("Content Screen")] 
     [SerializeField] private TMP_Text header;
     [SerializeField] private TMP_Text content;
     [SerializeField] private TMP_Text buttonLabel;
-    private string taskDescription;
 
     [Header("Intercatable Elements")]
     [SerializeField] private GameObject[] interactables;
     [SerializeField] private GameObject trigger;
+    [SerializeField] private GameObject dungeonBarrier;
+    
 
     // tutorial info texts in interactables
     private readonly string bookText = "Congratulations, you found the book! \nIf you walk away, you can continue your journey...";
@@ -39,6 +40,7 @@ public class TutorialManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -47,26 +49,28 @@ public class TutorialManager : MonoBehaviour
     }
     #endregion
 
-
     private void Start()
     {
         Time.timeScale = 0f;
         SetupData();
-        
+
         foreach (GameObject interactable in interactables)
         {
             interactable.SetActive(false);
         }
 
         ProgressBar.Instance.SetupTutorial();
+        dungeonBarrier.SetActive(true);
+
     }
 
     private void Update()
     {
-        ProgressBar.Instance.setProgress((float) progressCounter /data.Length);
-
+        ProgressBar.Instance.setProgress((float) progressCounter /data.Length);   
+        
         if(showScreen)
         {
+            showScreen = false;
             ActivateInfoScreen(true);
         }
     }
@@ -86,19 +90,18 @@ public class TutorialManager : MonoBehaviour
     ///     (De)ctivates the info screen bases on the given input
     /// </summary>
     /// <param name="status">State whether the info screen is active or not</param>
-    public void ActivateInfoScreen(bool status)
+    public async void ActivateInfoScreen(bool status)
     {
-        infoScreen.SetActive(status);
-
         if (status)
         {
+            await SceneManager.LoadSceneAsync("Content Screen", LoadSceneMode.Additive);
             Time.timeScale = 0f;
-            showScreen = false;
             GameManager.Instance.SetIsPaused(true);
             UpdateScreen();
         }
         else
         {
+            await SceneManager.UnloadSceneAsync("Content Screen");
             Time.timeScale = 1f;
             progressCounter++;
             GameManager.Instance.SetIsPaused(false);
@@ -115,20 +118,20 @@ public class TutorialManager : MonoBehaviour
     /// </summary>
     public void UpdateScreen()
     {
-        ContentScreenData screen = data[progressCounter];
+        ContentScreenData content = data[progressCounter];
 
-        header.text = screen.GetHeader();
-        content.text = screen.GetContent();
-        buttonLabel.text = screen.GetButtonLabel();
+        ContentScreenManager.Instance.Setup(content);
 
-        if (screen.GetButtonLabel() != "CONTINUE" && screen.GetButtonLabel() != "START")
+        if (content.GetButtonLabel() != "CONTINUE" && content.GetButtonLabel() != "START")
         {
-            ProgressBar.Instance.DisplayTaskOnScreen(screen.GetButtonLabel() + "!");
+            ProgressBar.Instance.DisplayTaskOnScreen(content.GetButtonLabel() + "!");
 
-            GameObject currentInteractable = interactables[progressCounter - 2];
-            currentInteractable.SetActive(true);
-
-            ShowInteractableText(currentInteractable, progressCounter - 2);
+            if (progressCounter - 2 < interactables.Length)
+            {
+                GameObject currentInteractable = interactables[progressCounter - 2];
+                currentInteractable.SetActive(true);
+                ShowInteractableText(currentInteractable, progressCounter - 2);
+            }
         }
     }
 
@@ -141,19 +144,34 @@ public class TutorialManager : MonoBehaviour
     {
         switch (index)
         {
+            // sign
             case 0:
                 currentInteractable.GetComponent<Sign>().text = signText;
                 trigger.SetActive(false);
                 break;
+            // book
             case 1:
                 currentInteractable.GetComponent<Book>().SetText(bookText);
                 break;
+            // npc
             case 2:
                 currentInteractable.GetComponent<NPC>().SetText(npcText);
                 break;
+            // teleporter 1
             case 3:
                 break;
+            // teleporter 2
             case 4:
+                break;
+            // minigame
+            case 5:
+                break;
+            // dungeons
+            case 6:
+                break;
+            // dungeon entering
+            case 7:
+                
                 break;
         }
     }
@@ -164,6 +182,11 @@ public class TutorialManager : MonoBehaviour
     public void ShowScreen()
     {
         showScreen = true;
+
+        if (progressCounter == 7)
+        {
+
+        }
     }
 
     /// <summary>
@@ -174,6 +197,20 @@ public class TutorialManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         ActivateInfoScreen(true);
+    }
+
+    /// <summary>
+    ///     Activates the dungeon by removing its barrier and shows the next content screen
+    /// </summary>
+    public void SetupAfterMinigame()
+    {
+        // activate dungeon after first minigame is completed
+        if (progressCounter == 8)
+        {
+            dungeonBarrier.SetActive(false);
+        }
+
+        StartCoroutine(LoadNextScreen(3));
     }
 
 }

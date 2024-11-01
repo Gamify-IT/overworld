@@ -128,4 +128,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Worlds/Tutorial/Tutorial Dungeon.unity
     guid: 88a836982d9962146869e5e5cb2bfe34
+  - enabled: 1
+    path: Assets/Scenes/Worlds/Tutorial/Content Screen.unity
+    guid: 607011dae650f6245bb9ed3c33f3a4f2
   m_configObjects: {}

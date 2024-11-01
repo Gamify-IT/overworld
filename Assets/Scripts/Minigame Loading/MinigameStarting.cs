@@ -89,10 +89,14 @@ public class MinigameStarting : MonoBehaviour
     /// </summary>
     public async void StartButtonPressed()
     {
+#if UNITY_EDITOR
+        GameManager.Instance.MinigameDone();
+#else
         await GameManager.Instance.SavePlayerData();
         LoadMinigameInIframe(game, configurationId);
+#endif
         PlayClickSound();
-        Invoke("QuitMinigame", 0.3f); 
+        Invoke("QuitMinigame", 0.3f);
     }
 
     /// <summary>

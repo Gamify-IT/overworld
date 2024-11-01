@@ -285,7 +285,6 @@ public class LoadingManager : MonoBehaviour
         progressText.text = "50%";
         loadingText.text = "PROCESSING DATA...";
 
-
         if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
             GameManager.Instance.SetData(worldIndex, dungeonIndex);
@@ -300,6 +299,10 @@ public class LoadingManager : MonoBehaviour
                 string headerText = "";
                 InfoManager.Instance.DisplayInfo(headerText, infoText);
             }
+        }
+        else
+        {
+            TutorialManager.Instance.SetupAfterMinigame();
         }
 
         slider.value = 0.85f;

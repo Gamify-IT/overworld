@@ -11,7 +11,7 @@
   },
   {
     "header": "Signs",
-    "content": "Signs help explain important game concepts. \n Let's go find one!",
+    "content": "Signs help explain important game concepts. \n Don't miss reading them. \n Let's go find one!",
     "buttonLabel": "FIND A SIGN"
   },
   {
@@ -35,8 +35,18 @@
     "buttonLabel": "FIND ANOTHER TELEPORTER"
   },
   {
-    "header": "MINIGAME",
+    "header": "MINIGAMES",
     "content": "Well done! \n Now it's time to jump into a game.",
+    "buttonLabel": "FIND A MINIGAME"
+  },
+  {
+    "header": "DUNGEONS I",
+    "content": "Congratulations! \n You've completed your first minigame. \n \n Did you know that there are also dungeons? \n They can be unlocked by succesfully playing minigames.",
+    "buttonLabel": "FIND THE DUNGEON"
+  },
+  {
+    "header": "DUNGEONS II",
+    "content": "Welcome to the dungeon! \n Complete minigames in dungeons to unlock new worlds.",
     "buttonLabel": "FIND A MINIGAME"
   }
 ]
