@@ -71,6 +71,11 @@ public class MinimapAreaName : MonoBehaviour
             if (dungeonArea)
             {
                 areaName = "Dungeon " + LoadSubScene.areaExchange.GetWorldIndex() + "-" + LoadSubScene.areaExchange.GetDungeonIndex();
+
+                if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+                {
+                    areaName = "Dungeon";
+                }
             }
             ZoomScript.areaName = areaName;
         }
