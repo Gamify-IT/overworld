@@ -9,8 +9,10 @@ public class TutorialManager : MonoBehaviour
     // singleton
     public static TutorialManager Instance { get; private set; }
 
+    // data objects to be displayed
     private ContentScreenData[] data;
-    private string json;
+
+    // global state variables
     private static int progressCounter = 0;
     private static bool showScreen = true;
     private bool isPaused = false;
@@ -26,8 +28,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private GameObject dungeonBarrier;
     [SerializeField] private GameObject overworldBarrier;
 
-
-    // tutorial info texts in interactables
+    // text shown in the interactable objects
     private readonly string bookText = "Congratulations, you found the book! \nIf you walk away, you can continue your journey...";
     private readonly string npcText = "Welcome to the game apprentice! \nCome to me if you want to hear some secrets...";
     private readonly string signText = "This is a sign! \nHint: If you ever get lost, look at the map.";
@@ -85,7 +86,7 @@ public class TutorialManager : MonoBehaviour
     private void SetupData()
     {
         TextAsset targetFile = Resources.Load<TextAsset>("Tutorial/content");
-        json = targetFile.text;
+        string json= targetFile.text;
 
         data = JsonHelper.GetJsonArray<ContentScreenData>(json);
     }
@@ -98,7 +99,17 @@ public class TutorialManager : MonoBehaviour
     {
         if (status)
         {
-            await SceneManager.LoadSceneAsync("Content Screen", LoadSceneMode.Additive);           
+            await SceneManager.LoadSceneAsync("Content Screen", LoadSceneMode.Additive);     
+            
+            if (Time.timeScale == 0f)
+            {
+                isPaused = true;
+            }
+            else
+            {
+                isPaused = false;
+            }
+
             Time.timeScale = 0f;
             GameManager.Instance.SetIsPaused(true);
             UpdateScreen();
@@ -107,8 +118,11 @@ public class TutorialManager : MonoBehaviour
         {
             await SceneManager.UnloadSceneAsync("Content Screen");
 
-            Time.timeScale = 1f;
-            isPaused = false;
+            if (!isPaused)
+            {
+                Time.timeScale = 1f;
+            }
+            
             progressCounter++;
             GameManager.Instance.SetIsPaused(false);
 
@@ -150,36 +164,18 @@ public class TutorialManager : MonoBehaviour
     {
         switch (index)
         {
-            // sign
+            // show sign text
             case 0:
                 currentInteractable.GetComponent<Sign>().text = signText;
                 trigger.SetActive(false);
                 break;
-            // book
+            // show book text
             case 1:
                 currentInteractable.GetComponent<Book>().SetText(bookText);
                 break;
-            // npc
+            // show npc text
             case 2:
                 currentInteractable.GetComponent<NPC>().SetText(npcText);
-                break;
-            // teleporter 1
-            case 3:
-                break;
-            // teleporter 2
-            case 4:
-                break;
-            // minigame
-            case 5:
-                break;
-            // coins and rewards
-            case 6:
-                break;
-            // leaderboard and shop
-            case 7:              
-                break;
-            // dungeons 1
-            case 8:
                 break;
         }
     }

@@ -11,7 +11,7 @@
   },
   {
     "header": "KEYBINDINGS",
-    "content": "Here are the default keybindings for the game. \n You can change them later in the keybindings menu. \n \n W - move forward \n A - move left \n S - move back \n D - move right \n LeftShift- sprint \n E - interaction \n Esc - cancel",
+    "content": "Here are the default key bindings for the game. \n You can change them later in the key bindings menu. \n \n W - move forward \n A - move left \n S - move back \n D - move right \n LeftShift- sprint \n E - interaction \n Esc - cancel",
     "buttonLabel": "START"
   },
   {
@@ -36,7 +36,7 @@
   },
   {
     "header": "TELEPORTERS II",
-    "content": "Good job! \n To use it, you need to find at least on more teleporter.",
+    "content": "Good job! \n To use it, you need to find at least one more teleporter.",
     "buttonLabel": "FIND ANOTHER TELEPORTER"
   },
   {
@@ -46,12 +46,12 @@
   },
   {
     "header": "COINS AND REWARDS",
-    "content": "Congratulations! \n You've completed your first minigame. \n \n Successfully playing minigames erans you coins. \n \n To explore what coins are use for, click the current area name in the progress bar at the top left.",
+    "content": "Congratulations! \n You've completed your first minigame. \n \n Successfully playing minigames earns you coins. \n \n To explore what coins are used for, click the current area name in the progress bar at the top left.",
     "buttonLabel": "OPEN THE MENU"
   },
   {
     "header": "LEADERBOARD AND SHOP",
-    "content": "Welcome to the leaderboard and the shop! \n The more coins you collect, the higher you'll rank on the leaderboard later. \n Addtionally, you can spend coins in the shop for outfits and accessoires later.",
+    "content": "Welcome to the leaderboard and the shop! \n The more coins you collect, the higher you'll rank on the leaderboard later. \n Additionally, you can spend coins in the shop for outfits and accessories  later.",
     "buttonLabel": "GOT IT"
   },
   {
@@ -66,7 +66,7 @@
   },
   {
     "header": "OVERWORLD",
-    "content": "Well done! \n You've mastered the key concpets of Gamify-IT. \n Now, it's time to enter the overworld. \n \n Find the pit that will lead you there!",
+    "content": "Well done! \n You've mastered the key concepts of Gamify-IT. \n Now, it's time to enter the overworld. \n \n Find the pit that will lead you there!",
     "buttonLabel": "FIND THE PIT"
   }
 ]

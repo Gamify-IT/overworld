@@ -36,6 +36,9 @@ public class ContentScreenManager : MonoBehaviour
         buttonLabel.text = data.GetButtonLabel();
     }
 
+    /// <summary>
+    ///     This function is called when the content screen close button is clicked.
+    /// </summary>
     public void Close()
     {
         TutorialManager.Instance.ActivateInfoScreen(false);
