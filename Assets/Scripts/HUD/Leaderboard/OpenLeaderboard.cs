@@ -35,6 +35,8 @@ public class OpenLeaderboard : MonoBehaviour
     /// </summary>
     public void OpenMenue()
     {
+        GameManager.Instance.SetIsPaused(true);
+
         if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
             menuOpen = true;
@@ -91,6 +93,8 @@ public class OpenLeaderboard : MonoBehaviour
         {
             TutorialManager.Instance.ActivateDungeon();
         }
+
+        GameManager.Instance.SetIsPaused(false);
     }
 
     /// <summary>

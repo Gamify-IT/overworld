@@ -484,7 +484,7 @@ public class GameManager : MonoBehaviour
     /// <returns>True if the acheivement is now completed, false otherwise</returns>
     public async void IncreaseAchievementProgress(AchievementTitle title, int increment, List<(int, int, int)> interactedObjects)
     {
-        if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
             bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment, interactedObjects);
             if (unlocked)

@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -6,13 +7,13 @@ public class ContentScreenManager : MonoBehaviour
     // singleton
     public static ContentScreenManager Instance { get; private set; }
 
-    [Header("Content Screen")]
+    [Header("Content Screen UI Elements")]
     [SerializeField] private TMP_Text header;
     [SerializeField] private TMP_Text content;
     [SerializeField] private TMP_Text buttonLabel;
 
     #region singleton
-    // <summary>
+    /// <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
     ///     deletes the object otherwise
     /// </summary>
@@ -40,7 +41,7 @@ public class ContentScreenManager : MonoBehaviour
     ///     This function is called when the content screen close button is clicked.
     /// </summary>
     public void Close()
-    {
+    { 
         TutorialManager.Instance.ActivateInfoScreen(false);
     }
 } 

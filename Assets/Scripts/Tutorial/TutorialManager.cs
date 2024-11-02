@@ -28,13 +28,16 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private GameObject dungeonBarrier;
     [SerializeField] private GameObject overworldBarrier;
 
+    public AudioClip clickSound;
+    public AudioSource audioSource;
+
     // text shown in the interactable objects
     private readonly string bookText = "Congratulations, you found the book! \nIf you walk away, you can continue your journey...";
     private readonly string npcText = "Welcome to the game apprentice! \nCome to me if you want to hear some secrets...";
     private readonly string signText = "This is a sign! \nHint: If you ever get lost, look at the map.";
 
     #region singleton
-    // <summary>
+    /// <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
     ///     deletes the object otherwise
     /// </summary>
@@ -56,6 +59,8 @@ public class TutorialManager : MonoBehaviour
     {
         SetupData();
 
+        audioSource.clip = clickSound;
+
         foreach (GameObject interactable in interactables)
         {
             interactable.SetActive(false);
@@ -67,6 +72,14 @@ public class TutorialManager : MonoBehaviour
         overworldBarrier.SetActive(true);
     }
 
+    private void PlayClickSound()
+    {
+        if (clickSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
+    }
+
     private void Update()
     {
         ProgressBar.Instance.setProgress((float) progressCounter /data.Length);   
@@ -76,8 +89,6 @@ public class TutorialManager : MonoBehaviour
             showScreen = false;
             ActivateInfoScreen(true);
         }
-
-        Debug.Log(isPaused);
     }
 
     /// <summary>
@@ -116,6 +127,7 @@ public class TutorialManager : MonoBehaviour
         }
         else
         {
+            PlayClickSound();
             await SceneManager.UnloadSceneAsync("Content Screen");
 
             if (!isPaused)
@@ -181,7 +193,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     Signal that the next info screen should be shown.
+    ///     Signal that the next info screen should be shown
     /// </summary>
     public void ShowScreen()
     {
@@ -189,7 +201,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     Loads the next screen in the tutorial after the player has intercated with the current object.
+    ///     Loads the next screen in the tutorial after the player has intercated with the current object
     /// </summary>
     /// <param name="delay">seconds after which the next screen should load</param>
     public IEnumerator LoadNextScreen(int delay)
@@ -228,7 +240,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     Gets the current progress as counter.
+    ///     Gets the current progress as counter
     /// </summary>
     /// <returns>current progress</returns>
     public int GetProgress()

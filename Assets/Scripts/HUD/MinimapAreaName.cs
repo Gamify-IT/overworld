@@ -26,7 +26,7 @@ public class MinimapAreaName : MonoBehaviour
     /// This function initializes the audio sources and starts playing the background music
     /// </summary>
     private void Start()
-    {
+    {       
         audioSource1 = gameObject.AddComponent<AudioSource>();
         audioSource2 = gameObject.AddComponent<AudioSource>();
 
