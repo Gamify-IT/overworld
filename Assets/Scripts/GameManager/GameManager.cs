@@ -59,12 +59,15 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask<bool> SavePlayerData()
     {
+#if !UNITY_EDITOR
         if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
             return await SavePlayerStatistic() && await SaveAchievements();
         }
 
         return false;
+#endif
+        return true;
     }
 
     /// <summary>
