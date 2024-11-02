@@ -5,6 +5,11 @@
     "buttonLabel": "CONTINUE"
   },
   {
+    "header": "Welcome to Gamify-IT",
+    "content": "In Gamify-IT, each course contains a number of overworlds which offer various activities.",
+    "buttonLabel": "CONTINUE"
+  },
+  {
     "header": "KEYBINDINGS",
     "content": "Here are the default keybindings for the game. \n You can change them later in the keybindings menu. \n \n W - move forward \n A - move left \n S - move back \n D - move right \n LeftShift- sprint \n E - interaction \n Esc - cancel",
     "buttonLabel": "START"
@@ -48,5 +53,10 @@
     "header": "DUNGEONS II",
     "content": "Welcome to the dungeon! \n Complete minigames in dungeons to unlock new worlds.",
     "buttonLabel": "FIND A MINIGAME"
+  },
+  {
+    "header": "OVERWORLD",
+    "content": "Well done! \n You've mastered the key concpets of Gamify-IT. \n Now, it's time to enter the overworld. \n \n Find the pit that will lead you there!",
+    "buttonLabel": "FIND THE PIT"
   }
 ]

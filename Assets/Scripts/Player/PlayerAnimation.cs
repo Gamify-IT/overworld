@@ -2,12 +2,17 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using UnityEditor;
 
 /// <summary>
 ///     This class manages the movement and the animations of the player.
 /// </summary>
 public class PlayerAnimation : MonoBehaviour
 {
+    [DllImport("__Internal")]
+    private static extern void CloseOverworld();
+
     public float movementSpeed = 3f;
     public float sprintingSpeed = 6f;
     public float superSpeed = 20f;
@@ -188,6 +193,7 @@ public class PlayerAnimation : MonoBehaviour
                 accessoireAnimator.speed = 1;
                 sprintDuration = 0f; 
                 audioSource.pitch = 1f;
+                Debug.Log("sprinting");
             }
 
 #if UNITY_EDITOR
@@ -459,10 +465,20 @@ public class PlayerAnimation : MonoBehaviour
         {
             TutorialManager.Instance.ShowScreen();
         }
+
+        // return to course selection page after completing tutorial
+        if (collision.CompareTag("Tutorial"))
+        {
+#if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+#else
+            CloseOverworld();
+#endif
+        }
     }
 
 
-    #region Singleton
+#region Singleton
 
     public static PlayerAnimation Instance { get; private set; }
 
@@ -481,6 +497,6 @@ public class PlayerAnimation : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    #endregion
+#endregion
 
 }

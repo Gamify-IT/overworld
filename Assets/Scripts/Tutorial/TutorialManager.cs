@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class TutorialManager : MonoBehaviour
 {
+    // singleton
     public static TutorialManager Instance { get; private set; }
 
-    //[SerializeField] private GameObject infoScreen;
     private ContentScreenData[] data;
     private string json;
     private static int progressCounter = 0;
@@ -23,14 +23,15 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private GameObject[] interactables;
     [SerializeField] private GameObject trigger;
     [SerializeField] private GameObject dungeonBarrier;
-    
+    [SerializeField] private GameObject overworldBarrier;
+
 
     // tutorial info texts in interactables
     private readonly string bookText = "Congratulations, you found the book! \nIf you walk away, you can continue your journey...";
     private readonly string npcText = "Welcome to the game apprentice! \nCome to me if you want to hear some secrets...";
-    private readonly string signText = "This is a sign! \nIf you ever get lost, look at the map.";
+    private readonly string signText = "This is a sign! \nHint: If you ever get lost, look at the map.";
 
-    #region singelton
+    #region singleton
     // <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
     ///     deletes the object otherwise
@@ -60,8 +61,9 @@ public class TutorialManager : MonoBehaviour
         }
 
         ProgressBar.Instance.SetupTutorial();
-        dungeonBarrier.SetActive(true);
 
+        dungeonBarrier.SetActive(true);
+        overworldBarrier.SetActive(true);
     }
 
     private void Update()
@@ -106,7 +108,7 @@ public class TutorialManager : MonoBehaviour
             progressCounter++;
             GameManager.Instance.SetIsPaused(false);
 
-            if (progressCounter == 1)
+            if (progressCounter <= 2)
             {
                 ActivateInfoScreen(true);
             }
@@ -126,11 +128,11 @@ public class TutorialManager : MonoBehaviour
         {
             ProgressBar.Instance.DisplayTaskOnScreen(content.GetButtonLabel() + "!");
 
-            if (progressCounter - 2 < interactables.Length)
+            if (progressCounter - 3 < interactables.Length)
             {
-                GameObject currentInteractable = interactables[progressCounter - 2];
+                GameObject currentInteractable = interactables[progressCounter - 3];
                 currentInteractable.SetActive(true);
-                ShowInteractableText(currentInteractable, progressCounter - 2);
+                ShowInteractableText(currentInteractable, progressCounter - 3);
             }
         }
     }
@@ -177,16 +179,11 @@ public class TutorialManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     Signal taht the (next) info screen should be shown.
+    ///     Signal that the next info screen should be shown.
     /// </summary>
     public void ShowScreen()
     {
         showScreen = true;
-
-        if (progressCounter == 7)
-        {
-
-        }
     }
 
     /// <summary>
@@ -200,17 +197,29 @@ public class TutorialManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     Activates the dungeon by removing its barrier and shows the next content screen
+    ///     Shows the next content screen after completing a minigame
     /// </summary>
     public void SetupAfterMinigame()
     {
         // activate dungeon after first minigame is completed
-        if (progressCounter == 8)
+        if (progressCounter == 9)
         {
             dungeonBarrier.SetActive(false);
         }
 
         StartCoroutine(LoadNextScreen(3));
+    }
+
+    /// <summary>
+    ///     Activates the overworld after completing the dungeon minigame and returning back to the tutorial world
+    /// </summary>
+    public void ActivateOverworld()
+    {
+        // activate overworld connection after second minigame is completed
+        if (progressCounter == 11)
+        {
+            overworldBarrier.SetActive(false);
+        }
     }
 
 }

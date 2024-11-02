@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ContentScreenManager : MonoBehaviour
 {
+    // singleton
     public static ContentScreenManager Instance { get; private set; }
 
     [Header("Content Screen")]
@@ -10,7 +11,7 @@ public class ContentScreenManager : MonoBehaviour
     [SerializeField] private TMP_Text content;
     [SerializeField] private TMP_Text buttonLabel;
 
-    #region singelton
+    #region singleton
     // <summary>
     ///     This function manages the singleton instance, so it initializes the <c>instance</c> variable, if not set, or
     ///     deletes the object otherwise
