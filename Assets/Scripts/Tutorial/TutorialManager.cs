@@ -13,6 +13,7 @@ public class TutorialManager : MonoBehaviour
     private string json;
     private static int progressCounter = 0;
     private static bool showScreen = true;
+    private bool isPaused = false;
 
     [Header("Content Screen")] 
     [SerializeField] private TMP_Text header;
@@ -52,7 +53,6 @@ public class TutorialManager : MonoBehaviour
 
     private void Start()
     {
-        Time.timeScale = 0f;
         SetupData();
 
         foreach (GameObject interactable in interactables)
@@ -75,6 +75,8 @@ public class TutorialManager : MonoBehaviour
             showScreen = false;
             ActivateInfoScreen(true);
         }
+
+        Debug.Log(isPaused);
     }
 
     /// <summary>
@@ -96,7 +98,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (status)
         {
-            await SceneManager.LoadSceneAsync("Content Screen", LoadSceneMode.Additive);
+            await SceneManager.LoadSceneAsync("Content Screen", LoadSceneMode.Additive);           
             Time.timeScale = 0f;
             GameManager.Instance.SetIsPaused(true);
             UpdateScreen();
@@ -104,13 +106,15 @@ public class TutorialManager : MonoBehaviour
         else
         {
             await SceneManager.UnloadSceneAsync("Content Screen");
+
             Time.timeScale = 1f;
+            isPaused = false;
             progressCounter++;
             GameManager.Instance.SetIsPaused(false);
 
             if (progressCounter <= 2)
             {
-                ActivateInfoScreen(true);
+                StartCoroutine(LoadNextScreen(0));
             }
         }
     }
@@ -124,7 +128,7 @@ public class TutorialManager : MonoBehaviour
 
         ContentScreenManager.Instance.Setup(content);
 
-        if (content.GetButtonLabel() != "CONTINUE" && content.GetButtonLabel() != "START")
+        if (content.GetButtonLabel() != "CONTINUE" && content.GetButtonLabel() != "START" && content.GetButtonLabel() != "GOT IT")
         {
             ProgressBar.Instance.DisplayTaskOnScreen(content.GetButtonLabel() + "!");
 
@@ -168,12 +172,14 @@ public class TutorialManager : MonoBehaviour
             // minigame
             case 5:
                 break;
-            // dungeons
+            // coins and rewards
             case 6:
                 break;
-            // dungeon entering
-            case 7:
-                
+            // leaderboard and shop
+            case 7:              
+                break;
+            // dungeons 1
+            case 8:
                 break;
         }
     }
@@ -192,22 +198,25 @@ public class TutorialManager : MonoBehaviour
     /// <param name="delay">seconds after which the next screen should load</param>
     public IEnumerator LoadNextScreen(int delay)
     {
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSecondsRealtime(delay);
         ActivateInfoScreen(true);
     }
 
     /// <summary>
-    ///     Shows the next content screen after completing a minigame
+    ///    Loads the next info screen after the player returns from another scene
     /// </summary>
-    public void SetupAfterMinigame()
+    public void SetupAfterScene(int delay)
     {
-        // activate dungeon after first minigame is completed
-        if (progressCounter == 9)
-        {
-            dungeonBarrier.SetActive(false);
-        }
+        StartCoroutine(LoadNextScreen(delay));
+    }
 
-        StartCoroutine(LoadNextScreen(3));
+    /// <summary>
+    ///     Activates the dungeon after showing leaderboard and shop to the player
+    /// </summary>
+    public void ActivateDungeon()
+    {
+        dungeonBarrier.SetActive(false);
+        StartCoroutine(LoadNextScreen(1));
     }
 
     /// <summary>
@@ -216,10 +225,19 @@ public class TutorialManager : MonoBehaviour
     public void ActivateOverworld()
     {
         // activate overworld connection after second minigame is completed
-        if (progressCounter == 11)
+        if (progressCounter == 13)
         {
             overworldBarrier.SetActive(false);
         }
+    }
+
+    /// <summary>
+    ///     Gets the current progress as counter.
+    /// </summary>
+    /// <returns>current progress</returns>
+    public int GetProgress()
+    {
+        return progressCounter;
     }
 
 }

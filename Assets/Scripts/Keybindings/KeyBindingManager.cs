@@ -77,9 +77,12 @@ public class KeyBindingManager : MonoBehaviour
     /// <param name="keybinding">The <c>Keybinding</c> to change</param>
     public void ChangeKeybinding(Keybinding keybinding)
     {
-        Debug.Log("Change " + keybinding.GetBinding() + " to " + keybinding.GetKey());
-        ChangeKeybindingInList(keybinding);
-        ValidateKeybindings();
+        if (keybinding.GetBinding() != Binding.VOLUME_LEVEL)
+        {
+            Debug.Log("Change " + keybinding.GetBinding() + " to " + keybinding.GetKey());
+            ChangeKeybindingInList(keybinding);
+            ValidateKeybindings();
+        }
     }
 
     /// <summary>
@@ -112,9 +115,13 @@ public class KeyBindingManager : MonoBehaviour
         newKeybindings = currentKeybindings;
         foreach (Keybinding keybinding in currentKeybindings)
         {
-            Binding binding = keybinding.GetBinding();            
-            keybindingObjects[binding].Setup(keybinding, this);
-            GameEvents.current.KeybindingChange(binding);
+            Binding binding = keybinding.GetBinding();   
+            
+            if (binding != Binding.VOLUME_LEVEL)
+            {
+                keybindingObjects[binding].Setup(keybinding, this);
+                GameEvents.current.KeybindingChange(binding);
+            }
         }
     }
 
@@ -224,14 +231,18 @@ public class KeyBindingManager : MonoBehaviour
         {
             Binding binding = keybinding.GetBinding();
             KeyCode keyCode = keybinding.GetKey();
-            if (duplicateKeyCodes.Contains(keyCode))
+
+            if (binding != Binding.VOLUME_LEVEL)
             {
-                keybindingObjects[binding].MarkInvalid();
-            }
-            else
-            {
-                keybindingObjects[binding].MarkValid();
-            }
+                if (duplicateKeyCodes.Contains(keyCode))
+                {
+                    keybindingObjects[binding].MarkInvalid();
+                }
+                else
+                {
+                    keybindingObjects[binding].MarkValid();
+                }
+            }          
         }
         Debug.Log("Keybindings are valid: " + validBindings);
     }

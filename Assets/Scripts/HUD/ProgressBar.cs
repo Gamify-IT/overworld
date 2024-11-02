@@ -53,7 +53,8 @@ public class ProgressBar : MonoBehaviour
         // display no world index for tutorial mode
         if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
-            unlockedAreaText.text = "";
+            unlockedAreaText.text = "TUTORIAL";
+            unlockedAreaText.fontSize = 5;
             return;
         }
 

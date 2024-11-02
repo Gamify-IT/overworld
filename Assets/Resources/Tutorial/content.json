@@ -45,8 +45,18 @@
     "buttonLabel": "FIND A MINIGAME"
   },
   {
+    "header": "COINS AND REWARDS",
+    "content": "Congratulations! \n You've completed your first minigame. \n \n Successfully playing minigames erans you coins. \n \n To explore what coins are use for, click the current area name in the progress bar at the top left.",
+    "buttonLabel": "OPEN THE MENU"
+  },
+  {
+    "header": "LEADERBOARD AND SHOP",
+    "content": "Welcome to the leaderboard and the shop! \n The more coins you collect, the higher you'll rank on the leaderboard later. \n Addtionally, you can spend coins in the shop for outfits and accessoires later.",
+    "buttonLabel": "GOT IT"
+  },
+  {
     "header": "DUNGEONS I",
-    "content": "Congratulations! \n You've completed your first minigame. \n \n Did you know that there are also dungeons? \n They can be unlocked by succesfully playing minigames.",
+    "content": "Did you know that there are also dungeons? \n They can be unlocked by succesfully playing minigames.",
     "buttonLabel": "FIND THE DUNGEON"
   },
   {

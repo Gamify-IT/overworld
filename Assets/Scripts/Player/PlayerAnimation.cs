@@ -179,7 +179,6 @@ public class PlayerAnimation : MonoBehaviour
                     sprintStartTime += 1f;
                 }
                 audioSource.pitch = 1.75f;
-                Debug.Log("sprinting");
             }
 
             if (Input.GetKeyUp(sprint) || busy)

@@ -302,7 +302,7 @@ public class LoadingManager : MonoBehaviour
         }
         else
         {
-            TutorialManager.Instance.SetupAfterMinigame();
+            TutorialManager.Instance.SetupAfterScene(2);
         }
 
         slider.value = 0.85f;

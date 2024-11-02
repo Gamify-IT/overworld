@@ -35,9 +35,20 @@ public class OpenLeaderboard : MonoBehaviour
     /// </summary>
     public void OpenMenue()
     {
-        menuOpen = true;
-        rewardsPanel.SetActive(true);
-        Time.timeScale = 0f;
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            menuOpen = true;
+            rewardsPanel.SetActive(true);
+            Time.timeScale = 0f;
+        }
+
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && TutorialManager.Instance.GetProgress() == 10)
+        {
+            menuOpen = true;
+            rewardsPanel.SetActive(true);
+            Time.timeScale = 0f;
+            TutorialManager.Instance.SetupAfterScene(1);
+        }   
     }
 
     /// <summary>
@@ -45,9 +56,12 @@ public class OpenLeaderboard : MonoBehaviour
     /// </summary>
     public void OpenBoard()
     {
-        menuOpen = true;
-        SceneManager.LoadScene("Rewards", LoadSceneMode.Additive);
-        Time.timeScale = 0f;
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            menuOpen = true;
+            SceneManager.LoadScene("Rewards", LoadSceneMode.Additive);
+            Time.timeScale = 0f;
+        }
     }
 
     /// <summary>
@@ -55,9 +69,12 @@ public class OpenLeaderboard : MonoBehaviour
     /// </summary>
     public void OpenShop()
     {
-        menuOpen = true;
-        SceneManager.LoadScene("Shop", LoadSceneMode.Additive);
-        Time.timeScale = 0f;
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            menuOpen = true;
+            SceneManager.LoadScene("Shop", LoadSceneMode.Additive);
+            Time.timeScale = 0f;
+        }
     }
 
     /// <summary>
@@ -69,6 +86,11 @@ public class OpenLeaderboard : MonoBehaviour
         Invoke("RewardsPanelSetActive", 0.15f);
         menuOpen = false;
         Time.timeScale = 1f;
+
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            TutorialManager.Instance.ActivateDungeon();
+        }
     }
 
     /// <summary>
