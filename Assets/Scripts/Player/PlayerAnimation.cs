@@ -45,11 +45,6 @@ public class PlayerAnimation : MonoBehaviour
     private AudioSource audioSource;
     private bool isMoving;
 
-
-    private int daysPlayed;
-    private DateTime lastPlayDate;
-    private bool checkIfChanged=false;
-
     readonly Dictionary<string, Vector3> positions = new Dictionary<string, Vector3>();
     // Names of the animators available
     readonly List<string> validOutfits = new List<string> {"3D_brille", "blonde_haare", "character_anzug", "character_black_and_white", "character_blue_and_purple", "character_default", "character_ironman", "none",
@@ -184,16 +179,16 @@ public class PlayerAnimation : MonoBehaviour
                     sprintStartTime += 1f;
                 }
                 audioSource.pitch = 1.75f;
+                Debug.Log("sprinting");
             }
 
-            if (Input.GetKeyUp(sprint))
+            if (Input.GetKeyUp(sprint) || busy)
             {
                 targetSpeed = movementSpeed;
                 playerAnimator.speed = 1;
                 accessoireAnimator.speed = 1;
                 sprintDuration = 0f; 
                 audioSource.pitch = 1f;
-                Debug.Log("sprinting");
             }
 
 #if UNITY_EDITOR
