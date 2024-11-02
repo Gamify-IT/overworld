@@ -10,7 +10,7 @@ public class TutorialManager : MonoBehaviour
     public static TutorialManager Instance { get; private set; }
 
     // data objects to be displayed
-    private ContentScreenData[] data;
+    private ContentScreenData[] tutorialContentData;
 
     // global state variables
     private static int progressCounter = 0;
@@ -28,8 +28,9 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private GameObject dungeonBarrier;
     [SerializeField] private GameObject overworldBarrier;
 
-    public AudioClip clickSound;
-    public AudioSource audioSource;
+    [Header("Intercatable Elements")]
+    [SerializeField] private AudioClip clickSound;
+    [SerializeField] private AudioSource audioSource;
 
     // text shown in the interactable objects
     private readonly string bookText = "Congratulations, you found the book! \nIf you walk away, you can continue your journey...";
@@ -82,7 +83,7 @@ public class TutorialManager : MonoBehaviour
 
     private void Update()
     {
-        ProgressBar.Instance.setProgress((float) progressCounter /data.Length);   
+        ProgressBar.Instance.setProgress((float) progressCounter /tutorialContentData.Length);   
         
         if(showScreen)
         {
@@ -99,14 +100,14 @@ public class TutorialManager : MonoBehaviour
         TextAsset targetFile = Resources.Load<TextAsset>("Tutorial/content");
         string json= targetFile.text;
 
-        data = JsonHelper.GetJsonArray<ContentScreenData>(json);
+        tutorialContentData = JsonHelper.GetJsonArray<ContentScreenData>(json);
     }
 
     /// <summary>
     ///     (De)ctivates the info screen bases on the given input
     /// </summary>
     /// <param name="status">State whether the info screen is active or not</param>
-    public async void ActivateInfoScreen(bool status)
+    public async UniTask ActivateInfoScreen(bool status)
     {
         if (status)
         {
@@ -150,13 +151,13 @@ public class TutorialManager : MonoBehaviour
     /// </summary>
     public void UpdateScreen()
     {
-        ContentScreenData content = data[progressCounter];
+        ContentScreenData contentData = tutorialContentData[progressCounter];
 
-        ContentScreenManager.Instance.Setup(content);
+        ContentScreenManager.Instance.Setup(contentData);
 
-        if (content.GetButtonLabel() != "CONTINUE" && content.GetButtonLabel() != "START" && content.GetButtonLabel() != "GOT IT")
+        if (contentData.GetButtonLabel() != "CONTINUE" && contentData.GetButtonLabel() != "START" && contentData.GetButtonLabel() != "GOT IT")
         {
-            ProgressBar.Instance.DisplayTaskOnScreen(content.GetButtonLabel() + "!");
+            ProgressBar.Instance.DisplayTaskOnScreen(contentData.GetButtonLabel() + "!");
 
             if (progressCounter - 3 < interactables.Length)
             {
