@@ -15,7 +15,6 @@ public class TutorialManager : MonoBehaviour
     // global state variables
     private static int progressCounter = 0;
     private static bool showScreen = true;
-    private bool isPaused = false;
 
     [Header("Content Screen")] 
     [SerializeField] private TMP_Text header;
@@ -111,17 +110,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (status)
         {
-            await SceneManager.LoadSceneAsync("Content Screen", LoadSceneMode.Additive);     
-            
-            if (Time.timeScale == 0f)
-            {
-                isPaused = true;
-            }
-            else
-            {
-                isPaused = false;
-            }
-
+            await SceneManager.LoadSceneAsync("Content Screen", LoadSceneMode.Additive);            
             Time.timeScale = 0f;
             GameManager.Instance.SetIsPaused(true);
             UpdateScreen();
@@ -130,12 +119,7 @@ public class TutorialManager : MonoBehaviour
         {
             PlayClickSound();
             await SceneManager.UnloadSceneAsync("Content Screen");
-
-            if (!isPaused)
-            {
-                Time.timeScale = 1f;
-            }
-            
+            Time.timeScale = 1f;           
             progressCounter++;
             GameManager.Instance.SetIsPaused(false);
 
