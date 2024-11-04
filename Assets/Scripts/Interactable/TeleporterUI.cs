@@ -42,6 +42,12 @@ public class TeleporterUI : MonoBehaviour
     {
         correspondingTeleporter = teleporter;
 
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            ShowTutorialTeleporterUi();
+            return;
+        }
+
         for (int i = 0; i <= GameSettings.GetMaxWorlds(); i++)
         {
             int worldIndex = i;
@@ -63,6 +69,28 @@ public class TeleporterUI : MonoBehaviour
             newToggle.SetActive(true);
             AddAudioSource(newToggle);
         }
+        isMenuInitialized = true;
+    }
+
+    /// <summary>
+    /// Manages the teleporter UI for the tutorial mode.
+    /// </summary>
+    private void ShowTutorialTeleporterUi()
+    {
+        List<TeleporterData> dataList = DataManager.Instance.GetUnlockedTeleportersInWorld(0);
+
+        GameObject newToggle = GameObject.Instantiate(prototypeToggle, worldSelectionContent);
+        newToggle.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = GetWorldName(0);
+
+        Image image = newToggle.GetComponent<Image>();
+
+        newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => ToggleEnabledColor(b, image));
+        newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => UpdateTeleporterSelections(0, dataList));
+        newToggle.GetComponent<Toggle>().onValueChanged.AddListener((b) => HandleClick(newToggle));
+        newToggle.SetActive(true);
+
+        AddAudioSource(newToggle);
+
         isMenuInitialized = true;
     }
 

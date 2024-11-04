@@ -19,6 +19,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     private TextMeshProUGUI bookText;
     private bool playerIsClose;
     private string uuid;
+    private bool tutorialDone = false;
 
     private List<(int, int, int)> readBooks;
 
@@ -117,6 +118,12 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         {
             playerIsClose = false;
         }
+
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && !tutorialDone)
+        {
+            tutorialDone = true;
+            StartCoroutine(TutorialManager.Instance.LoadNextScreen(2));
+        }
     }
 
     /// <summary>
@@ -154,6 +161,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         GameObject.Find("Book_Name").GetComponent<TextMeshProUGUI>().text = nameOfBook;
         bookText = GameObject.Find("Book_Text").GetComponent<TextMeshProUGUI>();
         bookText.text = bookContent;
+
         if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
             UpdateListOfBooks();
@@ -211,5 +219,14 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
         {
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         }
+    }
+
+    /// <summary>
+    ///     Sets the book text to the given one.
+    /// </summary>
+    /// <param name="text">text to be displayed in the book</param>
+    public void SetText(string text)
+    {
+        bookContent = text;
     }
 }

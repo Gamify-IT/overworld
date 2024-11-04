@@ -62,6 +62,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         }
 
         audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = audioSource.loop = false;
         minigameSpotOpenSound = Resources.Load<AudioClip>("Music/minigame_spot_open");
         audioSource.clip = minigameSpotOpenSound;
     }

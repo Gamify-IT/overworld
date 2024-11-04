@@ -2,12 +2,17 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using UnityEditor;
 
 /// <summary>
 ///     This class manages the movement and the animations of the player.
 /// </summary>
 public class PlayerAnimation : MonoBehaviour
 {
+    [DllImport("__Internal")]
+    private static extern void CloseOverworld();
+
     public float movementSpeed = 3f;
     public float sprintingSpeed = 6f;
     public float superSpeed = 20f;
@@ -39,11 +44,6 @@ public class PlayerAnimation : MonoBehaviour
     public AudioClip moveSound;
     private AudioSource audioSource;
     private bool isMoving;
-
-
-    private int daysPlayed;
-    private DateTime lastPlayDate;
-    private bool checkIfChanged=false;
 
     readonly Dictionary<string, Vector3> positions = new Dictionary<string, Vector3>();
     // Names of the animators available
@@ -181,7 +181,7 @@ public class PlayerAnimation : MonoBehaviour
                 audioSource.pitch = 1.75f;
             }
 
-            if (Input.GetKeyUp(sprint))
+            if (Input.GetKeyUp(sprint) || busy)
             {
                 targetSpeed = movementSpeed;
                 playerAnimator.speed = 1;
@@ -190,6 +190,7 @@ public class PlayerAnimation : MonoBehaviour
                 audioSource.pitch = 1f;
             }
 
+#if UNITY_EDITOR
             // dev keybindings
             if (Input.GetKeyDown("l") && targetSpeed == movementSpeed)
             {
@@ -204,20 +205,19 @@ public class PlayerAnimation : MonoBehaviour
                 playerAnimator.speed = 1;
                 accessoireAnimator.speed = 1;
             }
-            // dev keybindings
-
+#endif
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * 50);
 
             UpdateWalkAchievement();
 
+#if UNITY_EDITOR
             // dev keybindings
             if (Input.GetKeyDown("k"))
             {
                 GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger =
                     !GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().isTrigger;
-            } 
-
-            // dev keybindings
+            }
+#endif
             if (isMoving && !GameManager.Instance.GetIsPaused())
             {
                 PlayMoveSound();
@@ -452,8 +452,27 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // tutorial only
+        if (collision.CompareTag("Trigger"))
+        {
+            TutorialManager.Instance.ShowScreen();
+        }
 
-    #region Singleton
+        // return to course selection page after completing tutorial
+        if (collision.CompareTag("Tutorial"))
+        {
+#if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+#else
+            CloseOverworld();
+#endif
+        }
+    }
+
+
+#region Singleton
 
     public static PlayerAnimation Instance { get; private set; }
 
@@ -472,6 +491,6 @@ public class PlayerAnimation : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    #endregion
+#endregion
 
 }

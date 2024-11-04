@@ -11,6 +11,7 @@ public class Sign : MonoBehaviour
     public TMP_Text signText;
     private bool playerIsClose;
     public string text;
+    private static bool tutorialDone = false;
 
     //KeyCodes
     private KeyCode interact;
@@ -52,6 +53,12 @@ public class Sign : MonoBehaviour
         {
             playerIsClose = false;
             SignPanel.SetActive(false);
+        }
+
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && !tutorialDone)
+        {
+            tutorialDone = true;
+            StartCoroutine(TutorialManager.Instance.LoadNextScreen(2));
         }
     }
 

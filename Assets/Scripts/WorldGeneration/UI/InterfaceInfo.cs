@@ -18,7 +18,7 @@ public class InterfaceInfo : MonoBehaviour
     [SerializeField] private Button infoCloseAndViewButton;
 
     /// <summary>
-    /// Sets up the singelton instance 
+    /// Sets up the singleton instance 
     /// </summary>
     private void Awake()
     {

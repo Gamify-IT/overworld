@@ -102,6 +102,11 @@ public class LoadSubScene : MonoBehaviour
                         Vector2 playerPosition = this.transform.position + new Vector3(-2, 0, 0);
                         GameObject.FindGameObjectWithTag("Player").transform.position = playerPosition;
                     }
+
+                    if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+                    {
+                        TutorialManager.Instance.ActivateOverworld();
+                    }
                 }
             }
         }

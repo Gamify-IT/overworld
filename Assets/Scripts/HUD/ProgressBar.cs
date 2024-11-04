@@ -7,6 +7,7 @@ public class ProgressBar : MonoBehaviour
     #region Attributes
     [SerializeField] private Image slider;
     [SerializeField] private TextMeshProUGUI unlockedAreaText;
+    [SerializeField] private GameObject taskScreen;
     #endregion
 
     #region Singleton
@@ -52,7 +53,8 @@ public class ProgressBar : MonoBehaviour
         // display no world index for tutorial mode
         if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
-            unlockedAreaText.text = "";
+            unlockedAreaText.text = "TUTORIAL";
+            unlockedAreaText.fontSize = 5;
             return;
         }
 
@@ -102,4 +104,23 @@ public class ProgressBar : MonoBehaviour
             GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_4, dungeonIndex, null);
         }
     }
+
+    #region tutorial
+    /// <summary>
+    ///     Makes the task screen below the minimap in tutorial mode visible
+    /// </summary>
+    public void SetupTutorial()
+    {
+        taskScreen.SetActive(true);
+    }
+
+    /// <summary>
+    ///     Displays the given text on the task screen
+    /// </summary>
+    /// <param name="text">description of the task</param>
+    public void DisplayTaskOnScreen(string text)
+    {
+        taskScreen.transform.GetChild(1).GetComponent<TMP_Text>().text = text;
+    }
+    #endregion
 }

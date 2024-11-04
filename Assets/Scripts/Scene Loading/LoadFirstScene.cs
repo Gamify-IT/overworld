@@ -14,9 +14,10 @@ public class LoadFirstScene : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        Gamemode gamemode = GetGamemode();
+        //Gamemode gamemode = GetGamemode();
+        Gamemode gamemode = Gamemode.TUTORIAL;
 
-        switch(gamemode)
+        switch (gamemode)
         {
             case Gamemode.PLAY:
                 Debug.Log("Starting in Play Mode");
@@ -157,7 +158,7 @@ public class LoadFirstScene : MonoBehaviour
 
         await GameSettings.FetchValues();
 
-        var playerPosition = new Vector2(21.5f, 2.5f);
+        var playerPosition = new Vector2(23f, -6f);
         var worldIndex = 0;
         var dungeonIndex = 0;
 

@@ -59,7 +59,15 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     public async UniTask<bool> SavePlayerData()
     {
-        return await SavePlayerStatistic() && await SaveAchievements();
+#if !UNITY_EDITOR
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
+        {
+            return await SavePlayerStatistic() && await SaveAchievements();
+        }
+
+        return false;
+#endif
+        return true;
     }
 
     /// <summary>
@@ -476,7 +484,7 @@ public class GameManager : MonoBehaviour
     /// <returns>True if the acheivement is now completed, false otherwise</returns>
     public async void IncreaseAchievementProgress(AchievementTitle title, int increment, List<(int, int, int)> interactedObjects)
     {
-        if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
+        if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
             bool unlocked = DataManager.Instance.IncreaseAchievementProgress(title, increment, interactedObjects);
             if (unlocked)

@@ -1490,7 +1490,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -182.19077, y: 141.78499}
+  m_AnchoredPosition: {x: -182.19077, y: 141.78505}
   m_SizeDelta: {x: 364.38, y: 779.2315}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &446573719
@@ -3806,7 +3806,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1816036571}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.36390984
+  m_Size: 0.18195489
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4350,7 +4350,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1976588164}
         m_TargetAssemblyTypeName: ShopItemManager, Assembly-CSharp
-        m_MethodName: closeShop
+        m_MethodName: CloseShop
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

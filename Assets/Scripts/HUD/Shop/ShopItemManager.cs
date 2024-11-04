@@ -245,7 +245,6 @@ public class ShopItemManager : MonoBehaviour
     {
         insurancePanel.SetActive(false);
         SetShopButtonsInteractable(true);
-
     }
 
     /// <summary>
@@ -253,7 +252,6 @@ public class ShopItemManager : MonoBehaviour
     /// </summary>
     private void UpdateCreditText()
     {
-
         int credit = ownData.GetCredit();
         creditText.text = $"{credit}";
     }
@@ -269,8 +267,6 @@ public class ShopItemManager : MonoBehaviour
         successPanel.SetActive(false);
         overlayPanel.SetActive(false); 
         SetShopButtonsInteractable(true);
-
-
     }
 
     /// <summary>
@@ -282,9 +278,7 @@ public class ShopItemManager : MonoBehaviour
         {
             audioSource.time = 1.0f;
             audioSource.PlayOneShot(successSound);
-        }
-
-        
+        }      
     }
 
     /// <summary>
@@ -296,8 +290,6 @@ public class ShopItemManager : MonoBehaviour
         {
             audioSource.PlayOneShot(notEnoughCreditSound);
         }
-
-
     }
 
     /// <summary>
@@ -309,8 +301,6 @@ public class ShopItemManager : MonoBehaviour
         {
             audioSource.PlayOneShot(alertSound);
         }
-
-
     }
 
     /// <summary>
@@ -322,8 +312,6 @@ public class ShopItemManager : MonoBehaviour
         {
             audioSource.PlayOneShot(clickSound);
         }
-
-
     }
 
     /// <summary>
@@ -390,18 +378,17 @@ public class ShopItemManager : MonoBehaviour
         DisplayShopItems(purchasedItems);
     }
 
-    public void closeShop()
+    public void CloseShop()
     {
         ShopPanel.SetActive(false);
-        Time.timeScale = 1f;
+        Time.timeScale = 0f;
         overlayPanel.SetActive(false);
-
     }
 
     /// <summary>
-    /// Deaktiviert alle Shop-Buttons, wenn ein anderes Panel aktiv ist.
+    /// Deactivates all shop buttons if anither panel is active
     /// </summary>
-    /// <param name="isActive">Gibt an, ob die Buttons aktiviert (true) oder deaktiviert (false) werden sollen.</param>
+    /// <param name="isActive">status whether the butotns should be active or not</param>
     private void SetShopButtonsInteractable(bool isActive)
     {
         OUTFITButton.interactable = isActive;
@@ -409,7 +396,6 @@ public class ShopItemManager : MonoBehaviour
         showAllButton.interactable = isActive;
         inventoryButton.interactable = isActive;
         closeButton.interactable = isActive;
-
     }
 
 }

@@ -42,8 +42,7 @@ public class PauseMenu : MonoBehaviour
         if (Input.GetKeyDown(cancel) && !PlayerAnimation.Instance.IsBusy())
         {
             PauseOrResume();
-        }
-        
+        }      
     }
 
     private void OnDestroy()

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 /// </summary>
 public class AreaGeneratorManager : MonoBehaviour
 {
-    // Singelton Instance
+    // Singleton Instance
     public static AreaGeneratorManager Instance { get; private set; }
     /// <summary>
     ///     Import of the overworld close methode

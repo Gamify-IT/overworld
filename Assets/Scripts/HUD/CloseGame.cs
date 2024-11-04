@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Runtime.InteropServices;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor;
 
 public class CloseGame : MonoBehaviour
 {
@@ -41,7 +42,10 @@ public class CloseGame : MonoBehaviour
         if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
             Debug.Log("quitting tutorial");
-            CloseOverworld();
+            savingText.text = "ARE YOU SURE YOU WANT TO QUIT THE TUTORIAL?";
+            confirmButton.gameObject.SetActive(true);
+            cancelButton.gameObject.SetActive(true);
+            return;
         }
 
         bool playerDataSaved = await GameManager.Instance.SavePlayerData();
@@ -76,7 +80,11 @@ public class CloseGame : MonoBehaviour
     /// </summary>
     public void ConfirmButtonPressed()
     {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
         CloseOverworld();
+#endif
     }
 
     /// <summary>

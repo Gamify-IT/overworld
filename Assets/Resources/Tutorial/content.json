@@ -1,0 +1,72 @@
+[
+  {
+    "header": "Welcome to Gamify-IT",
+    "content": "In the following tutorial you will be guided through the \n basic game mechanics. \n \n This will take you about 10 min.",
+    "buttonLabel": "CONTINUE"
+  },
+  {
+    "header": "Welcome to Gamify-IT",
+    "content": "In Gamify-IT, each course contains a number of overworlds which offer various activities.",
+    "buttonLabel": "CONTINUE"
+  },
+  {
+    "header": "KEYBINDINGS",
+    "content": "Here are the default key bindings for the game. \n You can change them later in the key bindings menu. \n \n W - move forward \n A - move left \n S - move back \n D - move right \n LeftShift- sprint \n E - interaction \n Esc - cancel",
+    "buttonLabel": "START"
+  },
+  {
+    "header": "Signs",
+    "content": "Signs help explain important game concepts. \n Don't miss reading them. \n Let's go find one!",
+    "buttonLabel": "FIND A SIGN"
+  },
+  {
+    "header": "BOOKS",
+    "content": "Books can be found all around! \n Interact with them to discover something new...",
+    "buttonLabel": "FIND A BOOK"
+  },
+  {
+    "header": "NPCs",
+    "content": "NPCs are a great source of extra knowledge and helpful hints. \n Press E to talk to them!",
+    "buttonLabel": "FIND AN NPC"
+  },
+  {
+    "header": "TELEPORTERS I",
+    "content": "Tired of walking everywhere? \n Try using teleporters - they'll get you there faster!",
+    "buttonLabel": "FIND A TELEPORTER"
+  },
+  {
+    "header": "TELEPORTERS II",
+    "content": "Good job! \n To use it, you need to find at least one more teleporter.",
+    "buttonLabel": "FIND ANOTHER TELEPORTER"
+  },
+  {
+    "header": "MINIGAMES",
+    "content": "Well done! \n Now it's time to jump into a game.",
+    "buttonLabel": "FIND A MINIGAME"
+  },
+  {
+    "header": "COINS AND REWARDS",
+    "content": "Congratulations! \n You've completed your first minigame. \n \n Successfully playing minigames earns you coins. \n \n To explore what coins are used for, click the current area name in the progress bar at the top left.",
+    "buttonLabel": "OPEN THE MENU"
+  },
+  {
+    "header": "LEADERBOARD AND SHOP",
+    "content": "Welcome to the leaderboard and the shop! \n The more coins you collect, the higher you'll rank on the leaderboard later. \n Additionally, you can spend coins in the shop for outfits and accessories  later.",
+    "buttonLabel": "GOT IT"
+  },
+  {
+    "header": "DUNGEONS I",
+    "content": "Did you know that there are also dungeons? \n They can be unlocked by succesfully playing minigames.",
+    "buttonLabel": "FIND THE DUNGEON"
+  },
+  {
+    "header": "DUNGEONS II",
+    "content": "Welcome to the dungeon! \n Complete minigames in dungeons to unlock new worlds.",
+    "buttonLabel": "FIND A MINIGAME"
+  },
+  {
+    "header": "OVERWORLD",
+    "content": "Well done! \n You've mastered the key concepts of Gamify-IT. \n Now, it's time to enter the overworld. \n \n Find the pit that will lead you there!",
+    "buttonLabel": "FIND THE PIT"
+  }
+]

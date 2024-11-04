@@ -26,6 +26,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     private bool playerIsClose;
     private bool typingIsFinished;
     private string uuid;
+    private bool tutorialDone = false;
 
     private static List<(int, int, int)> alreadyTalkedNPC;
     //KeyCodes
@@ -144,7 +145,13 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         else if (other.CompareTag("Player") && !SceneManager.GetSceneByBuildIndex(12).isLoaded)
         {
             playerIsClose = false;
-        }   
+        }
+
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && !tutorialDone)
+        {
+            tutorialDone = true;
+            StartCoroutine(TutorialManager.Instance.LoadNextScreen(2));
+        }
     }
 
     /// <summary>
@@ -321,5 +328,14 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
         {
             interact = GameManager.Instance.GetKeyCode(Binding.INTERACT);
         }
+    }
+
+    /// <summary>
+    ///     Sets the dialogue text to the given one
+    /// </summary>
+    /// <param name="text">dialogue text to be displayed</param>
+    public void SetText(string text)
+    {
+        dialogue[0] = text;
     }
 }
