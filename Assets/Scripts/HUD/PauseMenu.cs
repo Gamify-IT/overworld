@@ -16,6 +16,8 @@ public class PauseMenu : MonoBehaviour
     public AudioClip clickSound;
     private AudioSource audioSource;
 
+    [SerializeField] private GameObject taskMenu;
+
     //KeyCodes
     private KeyCode cancel;
     

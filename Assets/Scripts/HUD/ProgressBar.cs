@@ -32,6 +32,14 @@ public class ProgressBar : MonoBehaviour
 
     #endregion
 
+    private void Start()
+    {
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+        {
+            taskScreen.SetActive(true);
+        }
+    }
+
     /// <summary>
     /// This function sets the progress bar at the given value.
     /// </summary>
