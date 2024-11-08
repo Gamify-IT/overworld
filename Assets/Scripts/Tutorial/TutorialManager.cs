@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections;
-using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,19 +10,15 @@ public class TutorialManager : MonoBehaviour
     public static TutorialManager Instance { get; private set; }
 
     // data objects to be displayed
-    private ContentScreenData[] tutorialContentData;
+    private List<ContentScreenData> tutorialContentData;
 
     // global state variables
     private static int progressCounter = 0;
+    private IEnumerator<ContentScreenData> contentDataIterator;
     private static bool showScreen = true;
 
-    [Header("Content Screen")] 
-    [SerializeField] private TMP_Text header;
-    [SerializeField] private TMP_Text content;
-    [SerializeField] private TMP_Text buttonLabel;
-
     [Header("Intercatable Elements")]
-    [SerializeField] private GameObject[] interactables;
+    [SerializeField] private List<GameObject> interactables;
     [SerializeField] private GameObject trigger;
     [SerializeField] private GameObject dungeonBarrier;
     [SerializeField] private GameObject overworldBarrier;
@@ -55,9 +51,9 @@ public class TutorialManager : MonoBehaviour
     }
     #endregion
 
-    private void Start()
+    private async void Start()
     {
-        SetupData();
+        await SetupData();
 
         audioSource.clip = clickSound;
 
@@ -70,6 +66,9 @@ public class TutorialManager : MonoBehaviour
 
         dungeonBarrier.SetActive(true);
         overworldBarrier.SetActive(true);
+
+        contentDataIterator = tutorialContentData.GetEnumerator();
+        contentDataIterator.MoveNext();
     }
 
     private void PlayClickSound()
@@ -82,7 +81,7 @@ public class TutorialManager : MonoBehaviour
 
     private void Update()
     {
-        ProgressBar.Instance.setProgress((float) progressCounter /tutorialContentData.Length);   
+        ProgressBar.Instance.setProgress((float) progressCounter / tutorialContentData.Count);   
         
         if(showScreen)
         {
@@ -94,12 +93,14 @@ public class TutorialManager : MonoBehaviour
     /// <summary>
     ///     Loads the data to be displayed on the content screens
     /// </summary>
-    private void SetupData()
+    private UniTask<bool> SetupData()
     {
         TextAsset targetFile = Resources.Load<TextAsset>("Tutorial/content");
         string json= targetFile.text;
 
-        tutorialContentData = JsonHelper.GetJsonArray<ContentScreenData>(json);
+        tutorialContentData = JsonHelper.GetJsonList<ContentScreenData>(json);
+
+        return new UniTask<bool>(true);
     }
 
     /// <summary>
@@ -110,17 +111,28 @@ public class TutorialManager : MonoBehaviour
     {
         if (status)
         {
-            await SceneManager.LoadSceneAsync("Content Screen", LoadSceneMode.Additive);            
+            var sceneLoaded = SceneManager.LoadSceneAsync("Content Screen", LoadSceneMode.Additive);
+            await sceneLoaded;
             Time.timeScale = 0f;
             GameManager.Instance.SetIsPaused(true);
-            UpdateScreen();
+
+            if (SceneManager.GetSceneByName("Content Screen").isLoaded)
+            {
+                UpdateScreen();
+            }
         }
         else
         {
             PlayClickSound();
-            await SceneManager.UnloadSceneAsync("Content Screen");
-            Time.timeScale = 1f;           
-            progressCounter++;
+            var sceneUnloaded = SceneManager.UnloadSceneAsync("Content Screen");
+            await sceneUnloaded;
+            Time.timeScale = 1f;
+
+            if (contentDataIterator.MoveNext())
+            {
+                progressCounter++;
+            }
+
             GameManager.Instance.SetIsPaused(false);
 
             if (progressCounter <= 2)
@@ -135,21 +147,24 @@ public class TutorialManager : MonoBehaviour
     /// </summary>
     public void UpdateScreen()
     {
-        ContentScreenData contentData = tutorialContentData[progressCounter];
-
-        ContentScreenManager.Instance.Setup(contentData);
-
-        if (contentData.GetButtonLabel() != "CONTINUE" && contentData.GetButtonLabel() != "START" && contentData.GetButtonLabel() != "GOT IT")
+        if (contentDataIterator.Current != null)
         {
-            ProgressBar.Instance.DisplayTaskOnScreen(contentData.GetButtonLabel() + "!");
+            ContentScreenData contentData = contentDataIterator.Current;
+            ContentScreenManager.Instance.Setup(contentData);
 
-            if (progressCounter - 3 < interactables.Length)
+            if (contentData.GetButtonLabel() != "CONTINUE" && contentData.GetButtonLabel() != "START" && contentData.GetButtonLabel() != "GOT IT")
             {
-                GameObject currentInteractable = interactables[progressCounter - 3];
-                currentInteractable.SetActive(true);
-                ShowInteractableText(currentInteractable, progressCounter - 3);
+                ProgressBar.Instance.DisplayTaskOnScreen(contentData.GetButtonLabel() + "!");
+
+                if (progressCounter - 3 < interactables.Count)
+                {
+                    GameObject currentInteractable = interactables[progressCounter - 3];
+                    currentInteractable.SetActive(true);
+                    ShowInteractableText(currentInteractable, progressCounter - 3);
+                }
             }
-        }
+
+        }      
     }
 
     /// <summary>
