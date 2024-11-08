@@ -232,7 +232,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             }
 
             // tutorial only 
-            if (!isVisited && !teleporterScreenShown)
+            if (!isVisited && !teleporterScreenShown && GameSettings.GetGamemode() == Gamemode.TUTORIAL)
             {
                 StartCoroutine(TutorialManager.Instance.LoadNextScreen(1));
                 isVisited = true;
