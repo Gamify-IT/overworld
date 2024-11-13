@@ -52,6 +52,11 @@ public class Barrier : MonoBehaviour
         this.originWorldIndex = originWorldIndex;
         this.destinationAreaIndex = destinationAreaIndex;
         this.type = type;
+
+        if (type == BarrierType.worldBarrier && ((originWorldIndex == 1 && destinationAreaIndex == 2) || (originWorldIndex == 2 && destinationAreaIndex == 3)))
+        {
+            this.GetComponent<BoxCollider2D>().size = new Vector2(2, 3);
+        }
         spriteRenderer.sprite = sprite;
         RegisterToGameManager();
     }
