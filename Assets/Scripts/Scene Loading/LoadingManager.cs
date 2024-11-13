@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -269,12 +270,12 @@ public class LoadingManager : MonoBehaviour
         if (GameSettings.GetGamemode() == Gamemode.PLAY)
         {
             loadingSuccesful = await GameManager.Instance.FetchData();
-            
         }
 
         Debug.Log("Finish fetching data");
 
         Debug.Log("Validate data");
+
         if (loadingSuccesful)
         {
             await SceneManager.LoadSceneAsync("OfflineMode", LoadSceneMode.Additive);
@@ -300,9 +301,17 @@ public class LoadingManager : MonoBehaviour
                 InfoManager.Instance.DisplayInfo(headerText, infoText);
             }
         }
-        else
+
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
-            TutorialManager.Instance.SetupAfterScene(2);
+            if (dungeonIndex == 0)
+            {
+                TutorialManager.Instance.SetupAfterMinigame(2);
+            }
+            else
+            {
+                TutorialManager.Instance.SetupAfterDungeonMinigame(2);
+            }
         }
 
         slider.value = 0.85f;
@@ -315,7 +324,15 @@ public class LoadingManager : MonoBehaviour
         progressText.text = "100%";
         loadingText.text = "DONE...";
 
-        await SceneManager.UnloadSceneAsync("LoadingScreen");
+        /*try
+        {
+            await SceneManager.UnloadSceneAsync("LoadingScreen");
+        }
+        catch (ArgumentNullException)
+        {
+
+        }*/
+        SceneManager.UnloadScene("LoadingScreen");
     }
 
     /// <summary>

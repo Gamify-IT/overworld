@@ -119,7 +119,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
             playerIsClose = false;
         }
 
-        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && !tutorialDone)
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && !tutorialDone && !TutorialManager.Instance.IsWorldTutorialDone())
         {
             tutorialDone = true;
             StartCoroutine(TutorialManager.Instance.LoadNextScreen(2));

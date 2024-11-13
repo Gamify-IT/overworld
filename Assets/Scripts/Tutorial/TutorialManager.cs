@@ -16,6 +16,10 @@ public class TutorialManager : MonoBehaviour
     private static int progressCounter = 0;
     private IEnumerator<ContentScreenData> contentDataIterator;
     private static bool showScreen = true;
+    private static bool minigamePlayed = false;
+    private static bool leaderboardChecked = false;
+    private static bool dungeonMinigamePlayed = false;
+    private static bool worldTutorialDone = false;
 
     [Header("Intercatable Elements")]
     [SerializeField] private List<GameObject> interactables;
@@ -155,13 +159,14 @@ public class TutorialManager : MonoBehaviour
             if (contentData.GetButtonLabel() != "CONTINUE" && contentData.GetButtonLabel() != "START" && contentData.GetButtonLabel() != "GOT IT")
             {
                 ProgressBar.Instance.DisplayTaskOnScreen(contentData.GetButtonLabel() + "!");
+                ActivateDungeon();
 
                 if (progressCounter - 3 < interactables.Count)
                 {
                     GameObject currentInteractable = interactables[progressCounter - 3];
                     currentInteractable.SetActive(true);
                     ShowInteractableText(currentInteractable, progressCounter - 3);
-                }
+                }               
             }
 
         }      
@@ -211,11 +216,40 @@ public class TutorialManager : MonoBehaviour
     }
 
     /// <summary>
-    ///    Loads the next info screen after the player returns from another scene
+    ///    Loads the next info screen after the player returns from a minigame for the first time
     /// </summary>
-    public void SetupAfterScene(int delay)
+    public void SetupAfterMinigame(int delay)
     {
-        StartCoroutine(LoadNextScreen(delay));
+        if (!minigamePlayed)
+        {
+            minigamePlayed = true;
+            StartCoroutine(LoadNextScreen(delay));
+            return;
+        }
+    }
+
+    /// <summary>
+    ///    Loads the next info screen after the player returns from the leaderboard menu for the first time
+    /// </summary>
+    public void SetupAfterLeaderboard(int delay)
+    {
+        if (!leaderboardChecked)
+        {
+            leaderboardChecked = true;
+            StartCoroutine(LoadNextScreen(delay));
+        }
+    }
+
+    /// <summary>
+    ///    Loads the next info screen after the player returns from the dungeon minigame for the first time
+    /// </summary>
+    public void SetupAfterDungeonMinigame(int delay)
+    {
+        if (!dungeonMinigamePlayed)
+        {
+            dungeonMinigamePlayed = true;
+            StartCoroutine(LoadNextScreen(delay));
+        }
     }
 
     /// <summary>
@@ -223,8 +257,12 @@ public class TutorialManager : MonoBehaviour
     /// </summary>
     public void ActivateDungeon()
     {
-        dungeonBarrier.SetActive(false);
-        StartCoroutine(LoadNextScreen(1));
+        // activate dungeon entrance after leaderboard menu was inspected 
+        if (progressCounter == 11)
+        {
+            dungeonBarrier.SetActive(false);
+            worldTutorialDone = true;
+        }
     }
 
     /// <summary>
@@ -233,7 +271,7 @@ public class TutorialManager : MonoBehaviour
     public void ActivateOverworld()
     {
         // activate overworld connection after second minigame is completed
-        if (progressCounter == 13)
+        if (progressCounter == 13 && overworldBarrier != null)
         {
             overworldBarrier.SetActive(false);
         }
@@ -246,6 +284,15 @@ public class TutorialManager : MonoBehaviour
     public int GetProgress()
     {
         return progressCounter;
+    }
+
+    /// <summary>
+    ///     Checks if the tutorial in the world is done, i.e. all interactables are explored
+    /// </summary>
+    /// <returns>state whether world tutorial is done</returns>
+    public bool IsWorldTutorialDone()
+    {
+        return worldTutorialDone;
     }
 
 }

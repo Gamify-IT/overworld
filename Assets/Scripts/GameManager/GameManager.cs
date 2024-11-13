@@ -722,8 +722,7 @@ public class GameManager : MonoBehaviour
     private async void Reload()
     {
         await SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
-        await LoadingManager.Instance.ReloadData(sceneName, minigameWorldIndex, minigameDungeonIndex,
-            minigameRespawnPosition);
+        await LoadingManager.Instance.ReloadData(sceneName, minigameWorldIndex, minigameDungeonIndex, minigameRespawnPosition);
     }
 
     /// <summary>

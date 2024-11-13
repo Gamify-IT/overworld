@@ -147,7 +147,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
             playerIsClose = false;
         }
 
-        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && !tutorialDone)
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && !tutorialDone && !TutorialManager.Instance.IsWorldTutorialDone())
         {
             tutorialDone = true;
             StartCoroutine(TutorialManager.Instance.LoadNextScreen(2));

@@ -106,6 +106,7 @@ public class LoadSubScene : MonoBehaviour
                     if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
                     {
                         TutorialManager.Instance.ActivateOverworld();
+                        ZoomScript.areaName = "Tutorial";
                     }
                 }
             }
