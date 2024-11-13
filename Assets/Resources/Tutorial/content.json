@@ -37,7 +37,7 @@
   {
     "header": "TELEPORTERS II",
     "content": "Good job! \n To use it, you need to find at least one more teleporter.",
-    "buttonLabel": "FIND ANOTHER TELEPORTER"
+    "buttonLabel": "FIND ANOTHER TELEPORTER AND USE IT"
   },
   {
     "header": "MINIGAMES",
@@ -51,7 +51,7 @@
   },
   {
     "header": "LEADERBOARD AND SHOP",
-    "content": "Welcome to the leaderboard and the shop! \n The more coins you collect, the higher you'll rank on the leaderboard later. \n Additionally, you can spend coins in the shop for outfits and accessories  later.",
+    "content": "Welcome to the leaderboard and the shop! \n The more coins you collect, the higher you'll rank on the leaderboard. \n Additionally, you can spend coins in the shop for outfits and accessories. \n Note that these features will only be usable in the overworld.",
     "buttonLabel": "GOT IT"
   },
   {

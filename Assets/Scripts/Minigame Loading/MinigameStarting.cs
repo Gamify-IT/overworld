@@ -118,6 +118,8 @@ public class MinigameStarting : MonoBehaviour
         PlayerAnimation.Instance.playerAnimator.enabled = true;
         PlayerAnimation.Instance.SetBusy(false);
         SceneManager.UnloadSceneAsync("MinigameStarting Overlay");
+        PlayerAnimation.Instance.EnableMovement();
+        Time.timeScale = 1f;
     }
 
     /// <summary>

@@ -55,7 +55,7 @@ public class Sign : MonoBehaviour
             SignPanel.SetActive(false);
         }
 
-        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && !tutorialDone)
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && !tutorialDone && !TutorialManager.Instance.IsWorldTutorialDone())
         {
             tutorialDone = true;
             StartCoroutine(TutorialManager.Instance.LoadNextScreen(2));

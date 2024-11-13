@@ -42,10 +42,11 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     
     private bool isUfoSoundPlaying = false;
 
-    [Header("Tutorial states")]
+    // tutorial states
     private bool isVisited = false;
     private static bool isTutorialDone = false;
-    private static bool teleporterScreenShown = false;
+    private static bool firstTeleporterCompleted = false;
+    private static bool secondTeleporterCompleted = false;
 
     //KeyCodes
     private KeyCode interact;
@@ -142,7 +143,6 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
                     teleporterUI = newCanvas.transform.GetChild(0).GetComponent<TeleporterUI>();
                     SetupTeleporterUI(teleporterUI);
                     currentTeleporterCanvas = newCanvas;
-                    PlayTeleporterOpeningSound();
                 }
             }
         }         
@@ -232,11 +232,11 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             }
 
             // tutorial only 
-            if (!isVisited && !teleporterScreenShown && GameSettings.GetGamemode() == Gamemode.TUTORIAL)
+            if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && !TutorialManager.Instance.IsWorldTutorialDone() && !isVisited && !firstTeleporterCompleted)
             {
-                StartCoroutine(TutorialManager.Instance.LoadNextScreen(1));
                 isVisited = true;
-                teleporterScreenShown = true;
+                firstTeleporterCompleted = true;
+                StartCoroutine(TutorialManager.Instance.LoadNextScreen(1));
             }
         }
     }
@@ -282,11 +282,14 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             inTrigger = false;
         }
 
-        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && isTutorialDone && teleporterScreenShown)
+        // tutorial only
+        if (GameSettings.GetGamemode() == Gamemode.TUTORIAL && !TutorialManager.Instance.IsWorldTutorialDone())
         {
-            StartCoroutine(TutorialManager.Instance.LoadNextScreen(3));
-            isTutorialDone = false;
-            teleporterScreenShown = false;
+            if (isTutorialDone && !secondTeleporterCompleted)
+            {
+                secondTeleporterCompleted = true;
+                StartCoroutine(TutorialManager.Instance.LoadNextScreen(3));
+            }
         }
     }
 
@@ -375,6 +378,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
             player.position = finalTargetPosition;
         }
         Animation animation = player.GetComponent<Animation>();
+        player.GetComponent<PlayerAnimation>().EnableMovement();
         animation.Play("UfoArrival");
         PlayUfoReturnsSound();
         LoadSubScene.transitionBlocked = false;

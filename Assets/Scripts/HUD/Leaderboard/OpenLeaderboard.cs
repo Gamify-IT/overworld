@@ -49,7 +49,7 @@ public class OpenLeaderboard : MonoBehaviour
             menuOpen = true;
             rewardsPanel.SetActive(true);
             Time.timeScale = 0f;
-            TutorialManager.Instance.SetupAfterScene(1);
+            TutorialManager.Instance.SetupAfterLeaderboard(1);
         }   
     }
 
@@ -91,7 +91,7 @@ public class OpenLeaderboard : MonoBehaviour
 
         if (GameSettings.GetGamemode() == Gamemode.TUTORIAL)
         {
-            TutorialManager.Instance.ActivateDungeon();
+            StartCoroutine(TutorialManager.Instance.LoadNextScreen(1));
         }
 
         GameManager.Instance.SetIsPaused(false);
