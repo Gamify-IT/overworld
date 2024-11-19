@@ -48,7 +48,7 @@ public class DataManager : MonoBehaviour
     {
         animationScript = GameObject.FindObjectOfType<PlayerAnimation>();
         minimapHead = GameObject.FindGameObjectsWithTag("MinimapFace")[0].GetComponent<Image>();
-        switch(currentIndex)
+        switch(characterIndex)
         {
             case 1:
                 minimapHead.sprite = Resources.Load<Sprite>("Minimap/character1_face");
