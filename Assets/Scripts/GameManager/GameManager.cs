@@ -263,7 +263,6 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
-
         Optional<PlayerTaskStatisticDTO[]> minigameStatistics =
             await RestRequest.GetArrayRequest<PlayerTaskStatisticDTO>(path +
                                                                       "/playerstatistics/player-task-statistics");
@@ -286,9 +285,6 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
-       
-
-
         string playerPath = overworldBackendPath + playersPath + userId;
 
         Optional<AchievementStatistic[]> achievementStatistics =
@@ -297,8 +293,6 @@ public class GameManager : MonoBehaviour
         {
             loadingError = true;
         }
-
-       
 
         Optional<KeybindingDTO[]> keybindings =
             await RestRequest.GetArrayRequest<KeybindingDTO>(playerPath + "/keybindings");
@@ -323,6 +317,7 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log("Everything set up");
+        DataManager.Instance.SetupMinimap();
 
         return loadingError;
     }
@@ -349,8 +344,6 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
-        
-
         Debug.Log("Got all data.");
 
         if (!loadingError)
@@ -363,7 +356,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("Everything set up");
 
         return loadingError;
-
     }
 
     /// <summary>
