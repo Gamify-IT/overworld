@@ -24,6 +24,8 @@ public class LeaderboardManager : MonoBehaviour
     [SerializeField] private Image toggleBackground;
     [SerializeField] private Image visibilityImage; 
     [SerializeField] private TextMeshProUGUI toggleText;
+    [SerializeField] private Button confirmButton; 
+
 
 
     private string league;
@@ -102,6 +104,7 @@ public class LeaderboardManager : MonoBehaviour
         visibilityButton?.onClick.AddListener(OpenVisibilityMenu);
         resetButton?.onClick.AddListener(ResetFilter);
         inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {ownData.GetPseudonym()}\nChange current pseudonym";
+        confirmButton?.onClick.AddListener(ConfirmPseudonym);
         closeVisibilityMenuButton?.onClick.AddListener(CloseVisibilityMenu);
         visibilityToggle?.onValueChanged.AddListener(OnToggleChanged);
         LoadVisibilityState();
@@ -322,20 +325,30 @@ public class LeaderboardManager : MonoBehaviour
 
     /// <summary>
     /// Updates the player’s pseudonym and refreshes the ranking data.
+    /// Only saves if the new pseudonym is valid (non-empty).
     /// </summary>
     public void SetPseudonym()
     {
         if (inputField != null && inputField.gameObject.activeSelf)
         {
-            string newPseudonym = inputField.text;
+            string newPseudonym = inputField.text.Trim();
+
+            if (string.IsNullOrEmpty(newPseudonym))
+            {
+                Debug.LogWarning("Pseudonym cannot be empty. Please enter a valid pseudonym.");
+                return;
+            }
+
             DataManager.Instance.UpdatePseudonym(newPseudonym);
             GameManager.Instance.SavePlayerData();
+
             inputField.text = string.Empty;
-            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {newPseudonym}\nChange current pseudonym";
-            inputField.Select();
-            inputField.ActivateInputField();
+            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {newPseudonym}\nClick here to change your pseudonym";
+
+            Debug.Log($"Pseudonym successfully updated to: {newPseudonym}");
         }
     }
+
 
     /// <summary>
     /// Displays a list of rewards, grouping them by their reward value and sorting them in descending order.
@@ -478,9 +491,9 @@ public class LeaderboardManager : MonoBehaviour
             CloseLeaderboardScene();
         }
 
-        if (Input.GetKeyDown(KeyCode.Return) && inputField.gameObject.activeSelf)
+        if (inputField != null && confirmButton != null)
         {
-            SetPseudonym();
+            confirmButton.interactable = !string.IsNullOrWhiteSpace(inputField.text);
         }
 
         if (visibilityToggle != null)
@@ -509,7 +522,7 @@ public class LeaderboardManager : MonoBehaviour
             if (isOpen)
             {
                 inputField.text = string.Empty;
-                inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {ownData.GetPseudonym()}\nChange current pseudonym";
+                inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {ownData.GetPseudonym()}\nClick here to change your current pseudonym";
                 inputField.Select();
                 inputField.ActivateInputField();
             }
@@ -578,5 +591,29 @@ public class LeaderboardManager : MonoBehaviour
         }
         
     }
+
+    private void ConfirmPseudonym()
+    {
+        if (inputField != null && inputField.gameObject.activeSelf)
+        {
+            string newPseudonym = inputField.text.Trim();
+
+            if (!string.IsNullOrEmpty(newPseudonym))
+            {
+                DataManager.Instance.UpdatePseudonym(newPseudonym);
+                GameManager.Instance.SavePlayerData();
+
+                inputField.text = string.Empty;
+                inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {newPseudonym}\nClick here to change your pseudonym";
+
+                Debug.Log($"Pseudonym successfully updated to: {newPseudonym}");
+            }
+            else
+            {
+                Debug.LogWarning("Pseudonym cannot be empty!");
+            }
+        }
+    }
+
 
 }
