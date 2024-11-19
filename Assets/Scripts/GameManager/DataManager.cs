@@ -42,12 +42,12 @@ public class DataManager : MonoBehaviour
     [SerializeField] private List<RuntimeAnimatorController> characterAnimators;
     [SerializeField] private List<Sprite> characterHeads;
     private PlayerAnimation animationScript;
-    private Image minimapHead;
+    //private Image minimapHead;
 
     void Start()
     {
         animationScript = GameObject.FindObjectOfType<PlayerAnimation>();
-        minimapHead = GameObject.FindGameObjectsWithTag("MinimapFace")[0].GetComponent<Image>();
+        //minimapHead = GameObject.FindGameObjectsWithTag("MinimapFace")[0].GetComponent<Image>();
     }
 
     /// <summary>
@@ -366,7 +366,7 @@ public class DataManager : MonoBehaviour
         string selectedBody = playerData.GetCurrentCharacter();
         string selectedHead = playerData.GetCurrentAccessory();
         animationScript.SetOutfitAnimator(selectedBody, selectedHead);
-        switch (selectedBody)
+        /*switch (selectedBody)
         {
             case "character_blue_and_purple":
                 minimapHead.sprite = Resources.Load<Sprite>("Minimap/character1_face");
@@ -386,7 +386,7 @@ public class DataManager : MonoBehaviour
             default:
                 minimapHead.sprite = Resources.Load<Sprite>("Minimap/character0345_face");
                 break;
-        }
+        }*/
     }
 
     /// <summary>
