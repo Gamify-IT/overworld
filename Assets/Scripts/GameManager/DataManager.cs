@@ -42,10 +42,33 @@ public class DataManager : MonoBehaviour
     [SerializeField] private List<RuntimeAnimatorController> characterAnimators;
     [SerializeField] private List<Sprite> characterHeads;
     private PlayerAnimation animationScript;
+    private Image minimapHead;
 
     void Start()
     {
         animationScript = GameObject.FindObjectOfType<PlayerAnimation>();
+        minimapHead = GameObject.FindGameObjectsWithTag("MinimapFace")[0].GetComponent<Image>();
+        switch(currentIndex)
+        {
+            case 1:
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character1_face");
+                break;
+            case 2:
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character2_face");
+                break;
+            case 6:
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character6_face");
+                break;
+            case 7:
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character7_face");
+                break;
+            case 8:
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character8_face");
+                break;
+            default:
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character0345_face");
+                break;
+        }
     }
 
     /// <summary>

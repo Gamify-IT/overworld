@@ -59,6 +59,7 @@ public class CharacterSelection : MonoBehaviour
     }
 
     private AccessoryType currentAccessoryType = AccessoryType.Glasses;
+    private Image minimapHead;
 
     /// <summary>
     /// This function is called when the character selection is opened.
@@ -76,6 +77,8 @@ public class CharacterSelection : MonoBehaviour
         characterImage = GameObject.Find("Character Sprite").GetComponent<Image>();
         glassesImage = GameObject.Find("Glasses Sprite").GetComponent<Image>();
         hatImage = GameObject.Find("Hat Sprite").GetComponent<Image>();
+
+        minimapHead = GameObject.FindGameObjectsWithTag("MinimapFace")[0].GetComponent<Image>();
 
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
@@ -505,6 +508,29 @@ public class CharacterSelection : MonoBehaviour
         }
         else
         {
+            switch(currentIndex)
+            {
+                case 1:
+                    minimapHead.sprite = Resources.Load<Sprite>("Minimap/character1_face");
+                    break;
+                case 2:
+                    minimapHead.sprite = Resources.Load<Sprite>("Minimap/character2_face");
+                    break;
+                case 6:
+                    minimapHead.sprite = Resources.Load<Sprite>("Minimap/character6_face");
+                    break;
+                case 7:
+                    minimapHead.sprite = Resources.Load<Sprite>("Minimap/character7_face");
+                    break;
+                case 8:
+                    minimapHead.sprite = Resources.Load<Sprite>("Minimap/character8_face");
+                    break;
+                default:
+                    minimapHead.sprite = Resources.Load<Sprite>("Minimap/character0345_face");
+                    break;
+            }
+
+
             animationScript.SetOutfitAnimator(selectedBody, selectedHead);
             ownData.SetCurrentCharacter(selectedBody);
             ownData.SetCurrentAccessory(selectedHead);
