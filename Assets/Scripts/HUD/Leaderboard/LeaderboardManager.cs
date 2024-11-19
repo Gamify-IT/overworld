@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Threading.Tasks;
+
 
 /// <summary>
 ///     This class manages the leaderboard such as placements, visibility, filter
@@ -50,11 +52,25 @@ public class LeaderboardManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        FetchAndInitializePlayerData();
         InitializeData();
         InitializeAudioSource();
         SetupUIListeners();
         Setup();
         UpdateUI();
+    }
+
+    private async Task FetchAndInitializePlayerData()
+    {
+        bool errorLoadingPlayerData = await GameManager.Instance.FetchUserData();
+        if (errorLoadingPlayerData)
+        {
+            Debug.LogError("Error loading player data.");
+        }
+        else
+        {
+            InitializeData();
+        }
     }
 
     /// <summary>

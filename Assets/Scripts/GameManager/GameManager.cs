@@ -327,6 +327,45 @@ public class GameManager : MonoBehaviour
         return loadingError;
     }
 
+    public async UniTask<bool> FetchUserData()
+    {
+        bool loadingError = false;
+
+        //path to get world data from
+        string path = overworldBackendPath + coursesPath + courseId;
+
+        Optional<PlayerStatisticDTO> playerStatistics =
+            await RestRequest.GetRequest<PlayerStatisticDTO>(path + playerStatisticsPath);
+        if (!playerStatistics.IsPresent())
+        {
+            loadingError = true;
+        }
+
+        Optional<PlayerStatisticDTO[]> allPlayerStatistics =
+           await RestRequest.GetArrayRequest<PlayerStatisticDTO>(path + "/playerstatistics/allPlayerStatistics");
+
+        if (!allPlayerStatistics.IsPresent())
+        {
+            loadingError = true;
+        }
+
+        
+
+        Debug.Log("Got all data.");
+
+        if (!loadingError)
+        {            
+
+            DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());
+            DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
+        }
+
+        Debug.Log("Everything set up");
+
+        return loadingError;
+
+    }
+
     /// <summary>
     ///     This function stores the data needed after a reload.
     /// </summary>
