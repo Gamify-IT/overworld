@@ -11,6 +11,7 @@ TagManager:
   - AreaManager
   - GeneratorUI
   - Tutorial
+  - MinimapFace
   layers:
   - Default
   - TransparentFX
