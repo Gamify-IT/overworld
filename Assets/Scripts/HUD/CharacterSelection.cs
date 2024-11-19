@@ -32,6 +32,7 @@ public class CharacterSelection : MonoBehaviour
     [SerializeField] private Button previousButton;
     [SerializeField] private Button nextButton;
     [SerializeField] private AudioClip clickSound;
+    [SerializeField] private TextMeshProUGUI confirmText;
 
     public Button glassesButton;
     public Button hatButton;
@@ -508,6 +509,8 @@ public class CharacterSelection : MonoBehaviour
         }
         else
         {
+            confirmText.enabled = true;
+            Invoke("DisableConfirmMessage", 10);
             ChangeMinimapFace();
 
             animationScript.SetOutfitAnimator(selectedBody, selectedHead);
@@ -519,6 +522,11 @@ public class CharacterSelection : MonoBehaviour
             GameManager.Instance.SavePlayerData();
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
         }
+    }
+
+    private void DisableConfirmMessage()
+    {
+        confirmText.enabled = false;
     }
 
     public void ChangeMinimapFace() {
