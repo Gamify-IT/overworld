@@ -512,6 +512,7 @@ public class CharacterSelection : MonoBehaviour
         {
             confirmText.gameObject.SetActive(true);
             confirmText.enabled = true;
+            StartCoroutine(DisableConfirmMessage());
             ChangeMinimapFace();
 
             animationScript.SetOutfitAnimator(selectedBody, selectedHead);
@@ -525,8 +526,10 @@ public class CharacterSelection : MonoBehaviour
         }
     }
 
-    private void DisableConfirmMessage()
+    private IEnumerator DisableConfirmMessage()
     {
+        yield return new WaitForSecondsRealtime(3f);
+        Debug.Log("Disable Text");
         confirmText.enabled = false;
         confirmText.gameObject.SetActive(false); 
     }
