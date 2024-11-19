@@ -263,7 +263,6 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
-
         Optional<PlayerTaskStatisticDTO[]> minigameStatistics =
             await RestRequest.GetArrayRequest<PlayerTaskStatisticDTO>(path +
                                                                       "/playerstatistics/player-task-statistics");
@@ -286,9 +285,6 @@ public class GameManager : MonoBehaviour
             loadingError = true;
         }
 
-       
-
-
         string playerPath = overworldBackendPath + playersPath + userId;
 
         Optional<AchievementStatistic[]> achievementStatistics =
@@ -297,8 +293,6 @@ public class GameManager : MonoBehaviour
         {
             loadingError = true;
         }
-
-       
 
         Optional<KeybindingDTO[]> keybindings =
             await RestRequest.GetArrayRequest<KeybindingDTO>(playerPath + "/keybindings");
@@ -318,6 +312,43 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.ProcessNpcStatistics(npcStatistics.Value());
             DataManager.Instance.ProcessAchievementStatistics(achievementStatistics.Value());
             DataManager.Instance.ProcessKeybindings(keybindings.Value());             
+            DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());
+            DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
+        }
+
+        Debug.Log("Everything set up");
+        DataManager.Instance.SetupMinimap();
+
+        return loadingError;
+    }
+
+    public async UniTask<bool> FetchUserData()
+    {
+        bool loadingError = false;
+
+        //path to get world data from
+        string path = overworldBackendPath + coursesPath + courseId;
+
+        Optional<PlayerStatisticDTO> playerStatistics =
+            await RestRequest.GetRequest<PlayerStatisticDTO>(path + playerStatisticsPath);
+        if (!playerStatistics.IsPresent())
+        {
+            loadingError = true;
+        }
+
+        Optional<PlayerStatisticDTO[]> allPlayerStatistics =
+           await RestRequest.GetArrayRequest<PlayerStatisticDTO>(path + "/playerstatistics/allPlayerStatistics");
+
+        if (!allPlayerStatistics.IsPresent())
+        {
+            loadingError = true;
+        }
+
+        Debug.Log("Got all data.");
+
+        if (!loadingError)
+        {            
+
             DataManager.Instance.ProcessAllPlayerStatistics(allPlayerStatistics.Value());
             DataManager.Instance.ProcessPlayerStatistics(playerStatistics.Value());
         }

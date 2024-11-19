@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Threading.Tasks;
+
 
 /// <summary>
 ///     This class manages the leaderboard such as placements, visibility, filter
@@ -22,6 +24,8 @@ public class LeaderboardManager : MonoBehaviour
     [SerializeField] private Image toggleBackground;
     [SerializeField] private Image visibilityImage; 
     [SerializeField] private TextMeshProUGUI toggleText;
+    [SerializeField] private Button confirmButton; 
+
 
 
     private string league;
@@ -50,7 +54,23 @@ public class LeaderboardManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        FetchAndInitializePlayerData();
+      
+    }
+
+    private async Task FetchAndInitializePlayerData()
+    {
+        bool errorLoadingPlayerData = await GameManager.Instance.FetchUserData();
+        if (errorLoadingPlayerData)
+        {
+            Debug.LogError("Error loading player data.");
+            return;
+        }
+
         InitializeData();
+
+        UpdateUI();
+
         InitializeAudioSource();
         SetupUIListeners();
         Setup();
@@ -86,6 +106,7 @@ public class LeaderboardManager : MonoBehaviour
         visibilityButton?.onClick.AddListener(OpenVisibilityMenu);
         resetButton?.onClick.AddListener(ResetFilter);
         inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {ownData.GetPseudonym()}\nChange current pseudonym";
+        confirmButton?.onClick.AddListener(SetPseudonym);
         closeVisibilityMenuButton?.onClick.AddListener(CloseVisibilityMenu);
         visibilityToggle?.onValueChanged.AddListener(OnToggleChanged);
         LoadVisibilityState();
@@ -158,7 +179,7 @@ public class LeaderboardManager : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("VisibilityState"))
         {
-            bool isPublic = PlayerPrefs.GetInt("VisibilityState") == 1;
+            bool isPublic = ownData.GetVisibility(); 
             visibilityToggle.isOn = isPublic;
             UpdateToggleButtonColor(isPublic);
             UpdateToggleText(isPublic);
@@ -300,28 +321,43 @@ public class LeaderboardManager : MonoBehaviour
             inputField.Select();
             inputField.ActivateInputField();
             SetPseudonym();
+            UpdateUI();
+
         }
-       
+
     }
 
     /// <summary>
     /// Updates the player’s pseudonym and refreshes the ranking data.
+    /// Only saves if the new pseudonym is valid (non-empty).
     /// </summary>
-    public void SetPseudonym()
+    private async void SetPseudonym()
     {
         if (inputField != null && inputField.gameObject.activeSelf)
         {
-            string newPseudonym = inputField.text;
+            string newPseudonym = inputField.text.Trim();
+
+            if (string.IsNullOrEmpty(newPseudonym))
+            {
+                Debug.LogWarning("Pseudonym cannot be empty. Please enter a valid pseudonym.");
+                return;
+            }
+
+
             DataManager.Instance.UpdatePseudonym(newPseudonym);
-            GameManager.Instance.SavePlayerData();
-            ranking = DataManager.Instance.GetAllPlayerStatistics();
+            await GameManager.Instance.SavePlayerData();
+            await FetchAndInitializePlayerData();
+            UpdateUI();
 
             inputField.text = string.Empty;
-            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {newPseudonym}\nChange current pseudonym";
-            inputField.Select();
-            inputField.ActivateInputField();
+            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {newPseudonym}\nClick here to change your pseudonym";
+
+            Debug.Log($"Pseudonym successfully updated to: {newPseudonym}");
         }
     }
+
+    
+
 
     /// <summary>
     /// Displays a list of rewards, grouping them by their reward value and sorting them in descending order.
@@ -464,9 +500,9 @@ public class LeaderboardManager : MonoBehaviour
             CloseLeaderboardScene();
         }
 
-        if (Input.GetKeyDown(KeyCode.Return) && inputField.gameObject.activeSelf)
+        if (inputField != null && confirmButton != null)
         {
-            SetPseudonym();
+            confirmButton.interactable = !string.IsNullOrWhiteSpace(inputField.text);
         }
 
         if (visibilityToggle != null)
@@ -495,7 +531,7 @@ public class LeaderboardManager : MonoBehaviour
             if (isOpen)
             {
                 inputField.text = string.Empty;
-                inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {ownData.GetPseudonym()}\nChange current pseudonym";
+                inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {ownData.GetPseudonym()}\nClick here to change your current pseudonym";
                 inputField.Select();
                 inputField.ActivateInputField();
             }
@@ -525,16 +561,16 @@ public class LeaderboardManager : MonoBehaviour
     /// Updates the button color, text, and visibility image, and refreshes player data and UI.
     /// </summary>
     /// <param name="isOn">The new state of the toggle (true for public, false for private).</param>
-    private void OnToggleChanged(bool isOn)
+    private async void OnToggleChanged(bool isOn)
     {
         UpdateToggleButtonColor(isOn);
         UpdateToggleText(isOn); 
         DataManager.Instance.UpdateVisibility(isOn);
-        GameManager.Instance.SavePlayerData();
-        SaveVisibilityState();
+        await GameManager.Instance.SavePlayerData();
+        await FetchAndInitializePlayerData();
+        UpdateUI(); SaveVisibilityState();
         UpdateVisibilityImage(isOn);
-        ranking = DataManager.Instance.GetAllPlayerStatistics();
-        UpdateUI();
+        
     }
 
     /// <summary>
@@ -564,5 +600,7 @@ public class LeaderboardManager : MonoBehaviour
         }
         
     }
+
+
 
 }

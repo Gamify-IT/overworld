@@ -42,6 +42,7 @@ public class DataManager : MonoBehaviour
     [SerializeField] private List<RuntimeAnimatorController> characterAnimators;
     [SerializeField] private List<Sprite> characterHeads;
     private PlayerAnimation animationScript;
+    private Image minimapHead;
 
     void Start()
     {
@@ -364,6 +365,36 @@ public class DataManager : MonoBehaviour
         string selectedBody = playerData.GetCurrentCharacter();
         string selectedHead = playerData.GetCurrentAccessory();
         animationScript.SetOutfitAnimator(selectedBody, selectedHead);
+    }
+
+
+    /// <summary>
+    ///      Setups the minimap with the head of the current character.
+    /// </summary>
+    public void SetupMinimap()
+    {
+        minimapHead = GameObject.FindGameObjectsWithTag("MinimapFace")[0].GetComponent<Image>();
+        switch (playerData.GetCurrentCharacter())
+        {
+            case "character_blue_and_purple":
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character1_face");
+                break;
+            case "character_black_and_white":
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character2_face");
+                break;
+            case "character_lange_haare":
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character6_face");
+                break;
+            case "character_ironman":
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character7_face");
+                break;
+            case "character_santa":
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character8_face");
+                break;
+            default:
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character0345_face");
+                break;
+        }
     }
 
     /// <summary>

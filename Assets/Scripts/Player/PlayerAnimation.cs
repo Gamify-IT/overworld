@@ -207,7 +207,6 @@ public class PlayerAnimation : MonoBehaviour
             }
 #endif
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * 50);
-
             UpdateWalkAchievement();
 
 #if UNITY_EDITOR

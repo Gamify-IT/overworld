@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class OpenLeaderboard : MonoBehaviour
 {
-
     public static bool menuOpen = true;
     public GameObject rewardsPanel;
 

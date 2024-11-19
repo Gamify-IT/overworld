@@ -76,25 +76,25 @@ public class ZoomScript : MonoBehaviour
     private void Update()
     {
         //zoom in
-        if (Input.GetKeyDown(minimapZoomIn) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
+        if (Input.GetKeyDown(minimapZoomIn) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen && !OpenLeaderboard.menuOpen)
         {
             MinimapZoomIn();
         }
 
         //zoom out
-        if (Input.GetKeyDown(minimapZoomOut) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
+        if (Input.GetKeyDown(minimapZoomOut) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen && !OpenLeaderboard.menuOpen)
         {
             MinimapZoomOut();
         }
 
         //zoom game in
-        if (Input.GetKeyDown(gameZoomIn) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
+        if (Input.GetKeyDown(gameZoomIn) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen && !OpenLeaderboard.menuOpen)
         {
             GameZoomIn(); 
         }
 
         //zoom game out
-        if (Input.GetKeyDown(gameZoomOut) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen)
+        if (Input.GetKeyDown(gameZoomOut) && !PauseMenu.menuOpen && !PauseMenu.subMenuOpen && !OpenLeaderboard.menuOpen)
         {
             GameZoomOut();
         }
