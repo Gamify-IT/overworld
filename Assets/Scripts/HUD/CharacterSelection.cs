@@ -508,28 +508,7 @@ public class CharacterSelection : MonoBehaviour
         }
         else
         {
-            switch(currentIndex)
-            {
-                case 1:
-                    minimapHead.sprite = Resources.Load<Sprite>("Minimap/character1_face");
-                    break;
-                case 2:
-                    minimapHead.sprite = Resources.Load<Sprite>("Minimap/character2_face");
-                    break;
-                case 6:
-                    minimapHead.sprite = Resources.Load<Sprite>("Minimap/character6_face");
-                    break;
-                case 7:
-                    minimapHead.sprite = Resources.Load<Sprite>("Minimap/character7_face");
-                    break;
-                case 8:
-                    minimapHead.sprite = Resources.Load<Sprite>("Minimap/character8_face");
-                    break;
-                default:
-                    minimapHead.sprite = Resources.Load<Sprite>("Minimap/character0345_face");
-                    break;
-            }
-
+            ChangeMinimapFace();
 
             animationScript.SetOutfitAnimator(selectedBody, selectedHead);
             ownData.SetCurrentCharacter(selectedBody);
@@ -539,6 +518,30 @@ public class CharacterSelection : MonoBehaviour
 
             GameManager.Instance.SavePlayerData();
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
+        }
+    }
+
+    public void ChangeMinimapFace() {
+        switch (currentIndex)
+        {
+            case 1:
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character1_face");
+                break;
+            case 2:
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character2_face");
+                break;
+            case 6:
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character6_face");
+                break;
+            case 7:
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character7_face");
+                break;
+            case 8:
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character8_face");
+                break;
+            default:
+                minimapHead.sprite = Resources.Load<Sprite>("Minimap/character0345_face");
+                break;
         }
     }
 
