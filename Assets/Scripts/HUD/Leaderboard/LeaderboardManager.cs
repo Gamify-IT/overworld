@@ -561,16 +561,16 @@ public class LeaderboardManager : MonoBehaviour
     /// Updates the button color, text, and visibility image, and refreshes player data and UI.
     /// </summary>
     /// <param name="isOn">The new state of the toggle (true for public, false for private).</param>
-    private void OnToggleChanged(bool isOn)
+    private async void OnToggleChanged(bool isOn)
     {
         UpdateToggleButtonColor(isOn);
         UpdateToggleText(isOn); 
         DataManager.Instance.UpdateVisibility(isOn);
-        GameManager.Instance.SavePlayerData();
-        SaveVisibilityState();
+        await GameManager.Instance.SavePlayerData();
+        await FetchAndInitializePlayerData();
+        UpdateUI(); SaveVisibilityState();
         UpdateVisibilityImage(isOn);
-        ranking = DataManager.Instance.GetAllPlayerStatistics();
-        UpdateUI();
+        
     }
 
     /// <summary>
