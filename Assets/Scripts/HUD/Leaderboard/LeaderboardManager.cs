@@ -52,13 +52,10 @@ public class LeaderboardManager : MonoBehaviour
     /// This method is called when the script is first run.
     /// Sets up data, audio, UI listeners, and the initial state of the UI.
     /// </summary>
-    private async void Start()
+    private void Start()
     {
         FetchAndInitializePlayerData();
-        InitializeAudioSource();
-        SetupUIListeners();
-        Setup();
-        UpdateUI();
+      
     }
 
     private async Task FetchAndInitializePlayerData()
@@ -72,6 +69,11 @@ public class LeaderboardManager : MonoBehaviour
 
         InitializeData();
 
+        UpdateUI();
+
+        InitializeAudioSource();
+        SetupUIListeners();
+        Setup();
         UpdateUI();
     }
 
