@@ -47,7 +47,6 @@ public class DataManager : MonoBehaviour
     void Start()
     {
         animationScript = GameObject.FindObjectOfType<PlayerAnimation>();
-        characterSelectionScript = GameObject.FindObjectOfType<CharacterSelection>();
     }
 
     /// <summary>
@@ -366,7 +365,7 @@ public class DataManager : MonoBehaviour
         string selectedBody = playerData.GetCurrentCharacter();
         string selectedHead = playerData.GetCurrentAccessory();
         animationScript.SetOutfitAnimator(selectedBody, selectedHead);
-
+        characterSelectionScript = GameObject.FindObjectOfType<CharacterSelection>();
         characterSelectionScript.ChangeMinimapFace();
     }
 
