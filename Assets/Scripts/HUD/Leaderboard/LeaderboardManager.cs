@@ -106,7 +106,7 @@ public class LeaderboardManager : MonoBehaviour
         visibilityButton?.onClick.AddListener(OpenVisibilityMenu);
         resetButton?.onClick.AddListener(ResetFilter);
         inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {ownData.GetPseudonym()}\nChange current pseudonym";
-        confirmButton?.onClick.AddListener(ConfirmPseudonym);
+        confirmButton?.onClick.AddListener(SetPseudonym);
         closeVisibilityMenuButton?.onClick.AddListener(CloseVisibilityMenu);
         visibilityToggle?.onValueChanged.AddListener(OnToggleChanged);
         LoadVisibilityState();
@@ -179,7 +179,7 @@ public class LeaderboardManager : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("VisibilityState"))
         {
-            bool isPublic = PlayerPrefs.GetInt("VisibilityState") == 1;
+            bool isPublic = ownData.GetVisibility(); 
             visibilityToggle.isOn = isPublic;
             UpdateToggleButtonColor(isPublic);
             UpdateToggleText(isPublic);
@@ -321,15 +321,17 @@ public class LeaderboardManager : MonoBehaviour
             inputField.Select();
             inputField.ActivateInputField();
             SetPseudonym();
+            UpdateUI();
+
         }
-       
+
     }
 
     /// <summary>
     /// Updates the player’s pseudonym and refreshes the ranking data.
     /// Only saves if the new pseudonym is valid (non-empty).
     /// </summary>
-    public void SetPseudonym()
+    private async void SetPseudonym()
     {
         if (inputField != null && inputField.gameObject.activeSelf)
         {
@@ -341,8 +343,11 @@ public class LeaderboardManager : MonoBehaviour
                 return;
             }
 
+
             DataManager.Instance.UpdatePseudonym(newPseudonym);
-            GameManager.Instance.SavePlayerData();
+            await GameManager.Instance.SavePlayerData();
+            await FetchAndInitializePlayerData();
+            UpdateUI();
 
             inputField.text = string.Empty;
             inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {newPseudonym}\nClick here to change your pseudonym";
@@ -350,6 +355,8 @@ public class LeaderboardManager : MonoBehaviour
             Debug.Log($"Pseudonym successfully updated to: {newPseudonym}");
         }
     }
+
+    
 
 
     /// <summary>
@@ -594,28 +601,6 @@ public class LeaderboardManager : MonoBehaviour
         
     }
 
-    private void ConfirmPseudonym()
-    {
-        if (inputField != null && inputField.gameObject.activeSelf)
-        {
-            string newPseudonym = inputField.text.Trim();
-
-            if (!string.IsNullOrEmpty(newPseudonym))
-            {
-                DataManager.Instance.UpdatePseudonym(newPseudonym);
-                GameManager.Instance.SavePlayerData();
-
-                inputField.text = string.Empty;
-                inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {newPseudonym}\nClick here to change your pseudonym";
-
-                Debug.Log($"Pseudonym successfully updated to: {newPseudonym}");
-            }
-            else
-            {
-                Debug.LogWarning("Pseudonym cannot be empty!");
-            }
-        }
-    }
 
 
 }
