@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.U2D;
 using System.Collections.Generic;
+using System.Collections;
 using System;
 
 /// <summary>
@@ -509,8 +510,8 @@ public class CharacterSelection : MonoBehaviour
         }
         else
         {
+            confirmText.gameObject.SetActive(true);
             confirmText.enabled = true;
-            Invoke("DisableConfirmMessage", 10);
             ChangeMinimapFace();
 
             animationScript.SetOutfitAnimator(selectedBody, selectedHead);
@@ -527,6 +528,7 @@ public class CharacterSelection : MonoBehaviour
     private void DisableConfirmMessage()
     {
         confirmText.enabled = false;
+        confirmText.gameObject.SetActive(false); 
     }
 
     public void ChangeMinimapFace() {
