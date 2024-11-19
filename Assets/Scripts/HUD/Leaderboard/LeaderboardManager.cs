@@ -50,10 +50,9 @@ public class LeaderboardManager : MonoBehaviour
     /// This method is called when the script is first run.
     /// Sets up data, audio, UI listeners, and the initial state of the UI.
     /// </summary>
-    private void Start()
+    private async void Start()
     {
         FetchAndInitializePlayerData();
-        InitializeData();
         InitializeAudioSource();
         SetupUIListeners();
         Setup();
@@ -66,11 +65,12 @@ public class LeaderboardManager : MonoBehaviour
         if (errorLoadingPlayerData)
         {
             Debug.LogError("Error loading player data.");
+            return;
         }
-        else
-        {
-            InitializeData();
-        }
+
+        InitializeData();
+
+        UpdateUI();
     }
 
     /// <summary>
