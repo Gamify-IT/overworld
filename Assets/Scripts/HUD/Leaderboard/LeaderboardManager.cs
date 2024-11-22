@@ -153,11 +153,13 @@ public class LeaderboardManager : MonoBehaviour
     /// <summary>
     /// Closes the visibility menu and plays a click sound.
     /// </summary>
-    private void CloseVisibilityMenu()
+    private async void CloseVisibilityMenu()
     {
         if (VisibilityMenu != null)
         {
             audioSource.Play();
+            await FetchAndInitializePlayerData();
+            UpdateUI();
             VisibilityMenu.SetActive(false);
         }
         
@@ -346,8 +348,7 @@ public class LeaderboardManager : MonoBehaviour
 
             DataManager.Instance.UpdatePseudonym(newPseudonym);
             await GameManager.Instance.SavePlayerData();
-            await FetchAndInitializePlayerData();
-            UpdateUI();
+            
 
             inputField.text = string.Empty;
             inputField.placeholder.GetComponent<TextMeshProUGUI>().text = $"Current pseudonym: {newPseudonym}\nClick here to change your pseudonym";
@@ -567,8 +568,7 @@ public class LeaderboardManager : MonoBehaviour
         UpdateToggleText(isOn); 
         DataManager.Instance.UpdateVisibility(isOn);
         await GameManager.Instance.SavePlayerData();
-        await FetchAndInitializePlayerData();
-        UpdateUI(); SaveVisibilityState();
+        SaveVisibilityState();
         UpdateVisibilityImage(isOn);
         
     }
