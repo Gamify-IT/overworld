@@ -125,42 +125,42 @@ public class CharacterSelection : MonoBehaviour
     /// </summary>
     void SetupDictionaries()
     {
-        imagenameToAnimationString.Add("hat0", "flammen_haare");
-        imagenameToAnimationString.Add("hat1", "globus_hut");
-        imagenameToAnimationString.Add("hat2", "schutzhelm");
-        imagenameToAnimationString.Add("hat3", "blonde_haare");
+        imagenameToAnimationString.Add("hat0", "flaming_hair");
+        imagenameToAnimationString.Add("hat1", "globe_hat");
+        imagenameToAnimationString.Add("hat2", "safety_helmet");
+        imagenameToAnimationString.Add("hat3", "blonde_hair");
         imagenameToAnimationString.Add("hat4", "none");
-        imagenameToAnimationString.Add("glasses0", "3D_brille");
-        imagenameToAnimationString.Add("glasses1", "coole_brille");
-        imagenameToAnimationString.Add("glasses2", "herzbrille");
-        imagenameToAnimationString.Add("glasses3", "retro_brille");
+        imagenameToAnimationString.Add("glasses0", "3D_glasses");
+        imagenameToAnimationString.Add("glasses1", "cool_glasses");
+        imagenameToAnimationString.Add("glasses2", "heart_glasses");
+        imagenameToAnimationString.Add("glasses3", "retro_glasses");
         imagenameToAnimationString.Add("glasses4", "none");
         imagenameToAnimationString.Add("character0", "character_default");
         imagenameToAnimationString.Add("character1", "character_blue_and_purple");
         imagenameToAnimationString.Add("character2", "character_black_and_white");
-        imagenameToAnimationString.Add("character3", "character_trainingsanzug");
-        imagenameToAnimationString.Add("character4", "character_anzug");
-        imagenameToAnimationString.Add("character5", "character_jeans_karo");
-        imagenameToAnimationString.Add("character6", "character_lange_haare");
+        imagenameToAnimationString.Add("character3", "character_tracksuit");
+        imagenameToAnimationString.Add("character4", "character_suit");
+        imagenameToAnimationString.Add("character5", "character_jeans_checkshirt");
+        imagenameToAnimationString.Add("character6", "character_long_hair");
         imagenameToAnimationString.Add("character7", "character_ironman");
         imagenameToAnimationString.Add("character8", "character_santa");
 
-        animationToImage.Add("flammen_haare", "hat0");
-        animationToImage.Add("globus_hut", "hat1");
+        animationToImage.Add("flaming_hair", "hat0");
+        animationToImage.Add("globe_hat", "hat1");
         animationToImage.Add("schutzhelm", "hat2");
-        animationToImage.Add("blonde_haare", "hat3");
+        animationToImage.Add("safety_helmet", "hat3");
         animationToImage.Add("none", "glasses4");
-        animationToImage.Add("3D_brille", "glasses0");
-        animationToImage.Add("coole_brille", "glasses1");
-        animationToImage.Add("herzbrille", "glasses2");
-        animationToImage.Add("retro_brille", "glasses3");
+        animationToImage.Add("3D_glasses", "glasses0");
+        animationToImage.Add("cool_glasses", "glasses1");
+        animationToImage.Add("heart_glasses", "glasses2");
+        animationToImage.Add("retro_glasses", "glasses3");
         animationToImage.Add("character_default", "character0");
         animationToImage.Add("character_blue_and_purple", "character1");
         animationToImage.Add("character_black_and_white", "character2");
-        animationToImage.Add("character_trainingsanzug", "character3");
-        animationToImage.Add("character_anzug", "character4");
-        animationToImage.Add("character_jeans_karo", "character5");
-        animationToImage.Add("character_lange_haare", "character6");
+        animationToImage.Add("character_tracksuit", "character3");
+        animationToImage.Add("character_suit", "character4");
+        animationToImage.Add("character_jeans_checkshirt", "character5");
+        animationToImage.Add("character_long_hair", "character6");
         animationToImage.Add("character_ironman", "character7");
         animationToImage.Add("character_santa", "character8");
     }
