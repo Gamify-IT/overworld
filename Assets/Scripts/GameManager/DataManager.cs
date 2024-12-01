@@ -676,6 +676,10 @@ public class DataManager : MonoBehaviour
         {
             return achievement.UpdateProgress(newProgress, interactedObjects);
         }
+        if (achievement.IsCompleted())
+        {
+            return false;
+        }
 
         return false;
     }

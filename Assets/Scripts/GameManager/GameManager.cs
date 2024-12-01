@@ -483,6 +483,7 @@ public class GameManager : MonoBehaviour
         }    
     }
 
+public HashSet<AchievementData> unlockedAchievements = new HashSet<AchievementData>();
     /// <summary>
     ///     This function updates the progress of an achievement
     /// </summary>
@@ -501,7 +502,11 @@ public class GameManager : MonoBehaviour
             {
                 return;
             }
-
+            if (!unlockedAchievements.Any(achievementInListUnlockedAchievements => achievementInListUnlockedAchievements.GetTitle() == achievement.GetTitle()))
+            {
+                EarnAchievement(achievement);
+                unlockedAchievements.Add(achievement);
+            }
         }
     #endif
     }
