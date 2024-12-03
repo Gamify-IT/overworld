@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
 
     //Achievements
     [SerializeField] private GameObject achievementNotificationManagerPrefab;
+    
+    private HashSet<AchievementData> unlockedAchievements = new HashSet<AchievementData>();
 
     //Game status
     private bool isPaused = false;
@@ -483,7 +485,6 @@ public class GameManager : MonoBehaviour
         }    
     }
 
-public HashSet<AchievementData> unlockedAchievements = new HashSet<AchievementData>();
     /// <summary>
     ///     This function updates the progress of an achievement
     /// </summary>
