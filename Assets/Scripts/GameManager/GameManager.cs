@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
 
     //Achievements
     [SerializeField] private GameObject achievementNotificationManagerPrefab;
+    private HashSet<AchievementData> unlockedAchievements = new HashSet<AchievementData>();
 
     //Game status
     private bool isPaused = false;
@@ -500,6 +501,11 @@ public class GameManager : MonoBehaviour
             if (achievement == null)
             {
                 return;
+            }
+            if (!unlockedAchievements.Any(achievementInListUnlockedAchievements => achievementInListUnlockedAchievements.GetTitle() == achievement.GetTitle()))
+            {
+                EarnAchievement(achievement);
+                unlockedAchievements.Add(achievement);
             }
 
         }
