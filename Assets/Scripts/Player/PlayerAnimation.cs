@@ -47,8 +47,9 @@ public class PlayerAnimation : MonoBehaviour
 
     readonly Dictionary<string, Vector3> positions = new Dictionary<string, Vector3>();
     // Names of the animators available
-    readonly List<string> validOutfits = new List<string> {"3D_brille", "blonde_haare", "character_anzug", "character_black_and_white", "character_blue_and_purple", "character_default", "character_ironman", "none",
-        "character_jeans_karo", "character_lange_haare", "character_santa", "character_trainingsanzug", "coole_brille", "flammen_haare", "globus_hut", "herzbrille", "retro_brille", "schutzhelm"};
+    readonly List<string> validOutfits = new List<string> {"3D_glasses", "blonde_hair", "character_suit", "character_black_and_white", 
+        "character_blue_and_purple", "character_default", "character_ironman", "none", "character_jeans_checkshirt", "character_long_hair", 
+        "character_santa", "character_tracksuit", "cool_glasses", "flaming_hair", "globe_hat", "heart_glasses", "retro_glasses", "safety_helmet"};
 
     private PlayerStatisticData ownPlayerData;
     private int rewardsAmount;
@@ -62,14 +63,14 @@ public class PlayerAnimation : MonoBehaviour
     {
         accessoireAnimator = this.gameObject.transform.GetChild(2).GetComponent<Animator>();
         accessoireTransform = this.gameObject.transform.GetChild(2).GetComponent<Transform>();
-        positions.Add("3D_brille", new Vector3(0, 0.3f, 0));
-        positions.Add("blonde_haare", new Vector3(0, 0.3f, 0));
-        positions.Add("coole_brille", new Vector3(0, 0.3f, 0));
-        positions.Add("flammen_haare", new Vector3(0, 0.3f, 0));
-        positions.Add("globus_hut", new Vector3(0, 0.76f, 0));
-        positions.Add("herzbrille", new Vector3(0, 0.3f, 0));
-        positions.Add("retro_brille", new Vector3(0, 0.3f, 0));
-        positions.Add("schutzhelm", new Vector3(0, 0.31f, 0));
+        positions.Add("3D_glasses", new Vector3(0, 0.3f, 0));
+        positions.Add("blonde_hair", new Vector3(0, 0.3f, 0));
+        positions.Add("cool_glasses", new Vector3(0, 0.3f, 0));
+        positions.Add("flaming_hair", new Vector3(0, 0.3f, 0));
+        positions.Add("globe_hat", new Vector3(0, 0.76f, 0));
+        positions.Add("heart_glasses", new Vector3(0, 0.3f, 0));
+        positions.Add("retro_glasses", new Vector3(0, 0.3f, 0));
+        positions.Add("safety_helmet", new Vector3(0, 0.31f, 0));
         positions.Add("none", new Vector3(0, 0, 0));
 
         string lastPlayDateStr = PlayerPrefs.GetString("LastPlayDate", "");
@@ -248,7 +249,7 @@ public class PlayerAnimation : MonoBehaviour
         accessoireAnimator.runtimeAnimatorController = Resources.Load(headPath) as RuntimeAnimatorController;
         playerAnimator.runtimeAnimatorController = Resources.Load(bodyPath) as RuntimeAnimatorController;
 
-        if (head == "schutzhelm")
+        if (head == "safety_helmet")
         {
             accessoireTransform.localScale = new Vector3(1.15f, 1.15f, 1.15f);
         } else

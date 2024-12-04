@@ -382,7 +382,7 @@ public class DataManager : MonoBehaviour
             case "character_black_and_white":
                 minimapHead.sprite = Resources.Load<Sprite>("Minimap/character2_face");
                 break;
-            case "character_lange_haare":
+            case "character_long_hair":
                 minimapHead.sprite = Resources.Load<Sprite>("Minimap/character6_face");
                 break;
             case "character_ironman":
