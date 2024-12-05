@@ -199,6 +199,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     /// </summary>
     private void UpdateAchievements()
     {
+        successfullyCompletedMinigames = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "MINIGAME_PROFESSIONAL").GetInteractedObjects();
         var key = (world,dungeon,number);
         if(!successfullyCompletedMinigames.Contains(key))
         {

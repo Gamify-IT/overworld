@@ -532,7 +532,11 @@ public class GameManager : MonoBehaviour
                     return;
                 }
 
-                EarnAchievement(achievement);
+                if (!unlockedAchievements.Any(achievementInListUnlockedAchievements => achievementInListUnlockedAchievements.GetTitle() == achievement.GetTitle()))
+                {
+                    EarnAchievement(achievement);
+                    unlockedAchievements.Add(achievement);
+                }
             }
         }
     }
