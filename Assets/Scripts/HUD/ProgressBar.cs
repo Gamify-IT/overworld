@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class ProgressBar : MonoBehaviour
 {
@@ -68,22 +69,13 @@ public class ProgressBar : MonoBehaviour
 
         unlockedAreaText.text = worldIndex.ToString();
 
-        if (worldIndex == 1)
+        if (worldIndex == 1 || worldIndex == 2)
         {
-            GameManager.Instance.UpdateAchievement(AchievementTitle.LEVEL_UP, 1, null);
+            GameManager.Instance.UpdateAchievement(AchievementTitle.LEVEL_UP, worldIndex, null);
         }
-        if (worldIndex == 2)
+        if (worldIndex != 1)
         {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.OPENER_WORLD_2, 1, null);
-            GameManager.Instance.UpdateAchievement(AchievementTitle.LEVEL_UP, 2, null);
-        }
-        if (worldIndex == 3)
-        {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.OPENER_WORLD_3, 1, null);
-        }
-        if (worldIndex == 4)
-        {
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.OPENER_WORLD_4, 1, null);
+            GameManager.Instance.UpdateAchievement((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"OPENER_WORLD_{worldIndex}"), 1, null);
         }
     }
 
@@ -95,22 +87,7 @@ public class ProgressBar : MonoBehaviour
     public void setUnlockedArea(int worldIndex, int dungeonIndex)
     {
         unlockedAreaText.text = worldIndex + "-" + dungeonIndex;
-        if (worldIndex == 1)
-        {
-            GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_1, dungeonIndex, null);
-        }
-        if (worldIndex == 2)
-        {
-            GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_2, dungeonIndex, null);
-        }
-        if (worldIndex == 3)
-        {
-            GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_3, dungeonIndex, null);
-        }
-        if (worldIndex == 4)
-        {
-            GameManager.Instance.UpdateAchievement(AchievementTitle.MINER_WORLD_4, dungeonIndex, null);
-        }
+        GameManager.Instance.UpdateAchievement((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"MINER_WORLD_{worldIndex}"), 1, null);
     }
 
     #region tutorial

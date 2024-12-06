@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class OpenLeaderboard : MonoBehaviour
 {
-    public static bool menuOpen = true;
+    public static bool menuOpen = false;
     public GameObject rewardsPanel;
 
     private AudioSource audioSource;
