@@ -334,23 +334,23 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     Determines the date and time the player last was logged in.
+    ///     Determines the last date and time the player was logged in and updates the achievements 
     /// </summary>
     private void CheckForLastLogin()
     {
-        DateTime lastActive = DateTime.ParseExact(playerData.GetLastActive(), "yyyy-MM-dd HH:mm:ss", null);
-
-        Debug.Log("Progress before: " + GetAchievement(AchievementTitle.PROFESSIONAL_GAMER).GetProgress());
+        if (!DateTime.TryParseExact(playerData.GetLastActive(), "yyyy-MM-dd HH:mm:ss", null, System.Globalization.DateTimeStyles.None, out DateTime lastActive))
+        {
+            Debug.LogError("Invalid date format for last active time.");
+            return;
+        }
 
         if (lastActive.Date == DateTime.Now.Date.AddDays(-1))
         {
-            Debug.Log("Streak yes");
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1, null);
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1, null);
         }
         else if (lastActive.Date < DateTime.Now.Date.AddDays(-1))
         {
-            Debug.Log("Streak no");
             GameManager.Instance.UpdateAchievement(AchievementTitle.GAMER, 1, null);
             GameManager.Instance.UpdateAchievement(AchievementTitle.PROFESSIONAL_GAMER, 1, null);
         }
