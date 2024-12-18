@@ -92,9 +92,9 @@ public class GameManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(playerStatisticDTO, true);
 
-        bool succesful = await RestRequest.PutRequest(path, json);
+        bool successful = await RestRequest.PutRequest(path, json);
 
-        if (succesful)
+        if (successful)
         {
             Debug.Log("Updated player statistic successfully");
             return true;
