@@ -92,9 +92,9 @@ public class GameManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(playerStatisticDTO, true);
 
-        bool succesful = await RestRequest.PutRequest(path, json);
+        bool successful = await RestRequest.PutRequest(path, json);
 
-        if (succesful)
+        if (successful)
         {
             Debug.Log("Updated player statistic successfully");
             return true;
@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
     public async UniTask<bool> SaveAchievements()
     {
         List<AchievementData> achievements = DataManager.Instance.GetAchievements();
-        string basePath = overworldBackendPath + playersPath + userId + "/achievements/";
+        string basePath = overworldBackendPath + playersPath + userId + coursesPath + courseId + "/achievements/";
 
         bool savingSuccessful = true;
         foreach (AchievementData achievementData in achievements)
@@ -289,7 +289,7 @@ public class GameManager : MonoBehaviour
         string playerPath = overworldBackendPath + playersPath + userId;
 
         Optional<AchievementStatistic[]> achievementStatistics =
-            await RestRequest.GetArrayRequest<AchievementStatistic>(playerPath + "/achievements");
+            await RestRequest.GetArrayRequest<AchievementStatistic>(playerPath + coursesPath + courseId + "/achievements");
         if(!achievementStatistics.IsPresent())
         {
             loadingError = true;
