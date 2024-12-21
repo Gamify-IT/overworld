@@ -348,7 +348,7 @@ public class DataManager : MonoBehaviour
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.GAMER, 1, null);
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.PROFESSIONAL_GAMER, 1, null);
         }
-        else
+        else if (lastActive.Date < DateTime.Now.Date.AddDays(-1))
         {
             Debug.Log("Streak no");
             GameManager.Instance.UpdateAchievement(AchievementTitle.GAMER, 1, null);
