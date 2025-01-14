@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 using System;
+using System.Net.WebSockets;
 
 /// <summary>
 ///     This script manages the pause menu.
@@ -170,5 +171,9 @@ public class PauseMenu : MonoBehaviour
         {
             audioSource.PlayOneShot(clickSound);
         }
+    }
+    public void StartMultiplayer()
+    {
+        MultiplayerManager.Instance.InitializeAsync();
     }
 }
