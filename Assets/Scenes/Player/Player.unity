@@ -216,6 +216,7 @@ GameObject:
   - component: {fileID: 1749240692}
   - component: {fileID: 1749240691}
   - component: {fileID: 1749240695}
+  - component: {fileID: 1749240696}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -251,6 +252,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 20da17b2d591d5e4f9588db4dade1fb5, type: 3}
   - {fileID: 21300000, guid: d88b348644437044bb4c16ec3dbe1414, type: 3}
   - {fileID: 21300000, guid: ef1cd0ff1a75afc4da71435d08b93f06, type: 3}
+  characterSprites: []
+  characterAnimators: []
+  characterHeads: []
 --- !u!114 &1749240693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,7 +269,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   achievementNotificationSound: {fileID: 8300000, guid: 4874f70b96dafa844a60e90eb1b8111d, type: 3}
   achievementNotificationManagerPrefab: {fileID: 3353499656544615801, guid: 84d1d0654029bb2418bc58e6a9bedbb4, type: 3}
-  isPaused: 0
 --- !u!4 &1749240694
 Transform:
   m_ObjectHideFlags: 0
@@ -291,6 +294,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 293c0ca0a5d324366811e1f164d2298c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1749240696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749240690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dcdb3f1f4f19cf409dd30723e310222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &2052422322

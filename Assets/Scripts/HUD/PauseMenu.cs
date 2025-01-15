@@ -174,6 +174,6 @@ public class PauseMenu : MonoBehaviour
     }
     public void StartMultiplayer()
     {
-        MultiplayerManager.Instance.InitializeAsync();
+        MultiplayerManager.Instance.Initialize();
     }
 }

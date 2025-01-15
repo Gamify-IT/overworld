@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 public class MultiplayerManager : MonoBehaviour
 {
     private WebSocket websocket;
+    private bool connected = false; 
 
     #region singelton
     public static MultiplayerManager Instance { get; private set; }
@@ -30,15 +31,19 @@ public class MultiplayerManager : MonoBehaviour
     }
     #endregion
 
-    private void Update()
+    void Update()
     {
-        Debug.Log(websocket.State);
-        if (websocket.State == WebSocketState.Open) SendWebSocketMessage();
+        if (connected)
+        {
+#if !UNITY_WEBGL || UNITY_EDITOR
+            websocket.DispatchMessageQueue();
+#endif
+        }
     }
 
-    public async Task InitializeAsync()
+    public async Task Initialize()
     {
-        Debug.Log("start multiplayer");
+        connected = true;
         websocket = new WebSocket("ws://localhost:3000");
 
         websocket.OnOpen += () =>
@@ -58,13 +63,10 @@ public class MultiplayerManager : MonoBehaviour
 
         websocket.OnMessage += (bytes) =>
         {
-            Debug.Log("OnMessage!");
-            Debug.Log(bytes);
-
+            Debug.Log("Message!");
             // getting the message as a string
             var message = System.Text.Encoding.UTF8.GetString(bytes);
-            Debug.Log("OnMessage! " + message);
-
+            Debug.Log("message: " + message);
         };
 
         // Keep sending messages at every 0.3s
@@ -76,17 +78,16 @@ public class MultiplayerManager : MonoBehaviour
 
     async void SendWebSocketMessage()
     {
-        Debug.Log(websocket.State);
         if (websocket.State == WebSocketState.Open)
         {
             // Sending plain text
-            Debug.Log("sending message...");
             await websocket.SendText("hello world!");
         }
     }
 
     private async void OnApplicationQuit()
     {
+        connected = false;
         await websocket.Close();
     }
 }
