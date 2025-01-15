@@ -5,11 +5,16 @@ using UnityEngine.SceneManagement;
 using System;
 using NativeWebSocket;
 using System.Threading.Tasks;
+using UnityEngine.UIElements;
 
 public class MultiplayerManager : MonoBehaviour
 {
     private WebSocket websocket;
     private bool connected = false; 
+    private AreaLocationDTO areaLocationDTO;
+    [SerializeField] private GameObject prefab;
+    GameObject player;
+    private bool first = true;
 
     #region singelton
     public static MultiplayerManager Instance { get; private set; }
@@ -30,6 +35,11 @@ public class MultiplayerManager : MonoBehaviour
         }
     }
     #endregion
+
+    private void Start()
+    {
+        areaLocationDTO = new AreaLocationDTO(1,1);
+    }
 
     void Update()
     {
@@ -63,14 +73,23 @@ public class MultiplayerManager : MonoBehaviour
 
         websocket.OnMessage += (bytes) =>
         {
-            Debug.Log("Message!");
             // getting the message as a string
-            var message = System.Text.Encoding.UTF8.GetString(bytes);
-            Debug.Log("message: " + message);
+            MultiplayerDTO data =  MultiplayerDTO.CreateFromJSON(System.Text.Encoding.UTF8.GetString(bytes));
+            if (first)
+            {
+                first = false;
+                player = Instantiate(prefab, new Vector3(data.position.x, data.position.y - 1, 0), Quaternion.identity);
+            }
+            else
+            {
+                player.transform.position = new Vector3(data.position.x, data.position.y - 1, 0);
+            }
+
+            Debug.Log("message: " + System.Text.Encoding.UTF8.GetString(bytes));
         };
 
-        // Keep sending messages at every 0.3s
-        InvokeRepeating(nameof(SendWebSocketMessage), 0.0f, 1.0f);
+        // Keep sending messages at every
+        InvokeRepeating(nameof(SendWebSocketMessage), 1.0f, 0.03f);
 
         // waiting for messages
         await websocket.Connect();
@@ -81,7 +100,8 @@ public class MultiplayerManager : MonoBehaviour
         if (websocket.State == WebSocketState.Open)
         {
             // Sending plain text
-            await websocket.SendText("hello world!");
+            Debug.Log(transform.position.ToString());
+            await websocket.SendText(JsonUtility.ToJson(new MultiplayerDTO(transform.position, areaLocationDTO, 1)));
         }
     }
 
