@@ -1,9 +1,8 @@
-using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEditor;
+using UnityEngine;
 
 /// <summary>
 ///     This class manages the movement and the animations of the player.
@@ -54,6 +53,8 @@ public class PlayerAnimation : MonoBehaviour
     private PlayerStatisticData ownPlayerData;
     private int rewardsAmount;
 
+    // Multiplayer
+    private const float positionThreshold = 0.01f;
 
     /// <summary>
     ///     This method is called before the first frame update.
@@ -295,7 +296,14 @@ public class PlayerAnimation : MonoBehaviour
             float horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
             float verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
 
-            playerRigidBody.MovePosition(playerRigidBody.position + movement * currentSpeed * Time.fixedDeltaTime);
+            Vector2 newPosition = playerRigidBody.position + movement * currentSpeed * Time.fixedDeltaTime;
+
+            playerRigidBody.MovePosition(newPosition);
+
+            if (Vector2.Distance(playerRigidBody.position, newPosition) > positionThreshold)
+            {
+                EventManager.Instance.TriggerPositionChanged(newPosition);
+            }
 
             // the following 4 if statements set the looking direction of the player, which we need for the animation
             if (movement.y > 0.01f)

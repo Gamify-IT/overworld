@@ -1021,4 +1021,9 @@ public class GameManager : MonoBehaviour
     {
         return isPaused;
     }
+
+    public string GetUserId()
+    {
+        return userId;
+    }
 }
