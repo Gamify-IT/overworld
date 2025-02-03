@@ -523,6 +523,12 @@ public class CharacterSelection : MonoBehaviour
 
             GameManager.Instance.SavePlayerData();
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
+#if UNITY_EDITOR
+            // use mock id for development
+            EventManager.Instance.TriggerDataChanged<CharacterMessage>(new("c858aea9-a744-4709-a169-9df329fe4d96", selectedHead, selectedBody));
+#else
+            EventManager.Instance.TriggerDataChanged<CharacterMessage>(new(ownData.GetId(), selectedHead, selectedBody));            
+#endif
         }
     }
 

@@ -14,12 +14,12 @@ public class MultiplayerManager : MonoBehaviour
 {
     [DllImport("__Internal")]
     private static extern string GetToken(string tokenName);
+
     private WebSocket websocket;
-    private bool connected = false;
     [SerializeField] private GameObject prefab;
     [SerializeField] private GameObject remotePlayerParent;
     private Dictionary<string, GameObject> connectedRemotePlayers;
-    private string playerId;
+    private bool connected = false;
 
     #region singelton
     public static MultiplayerManager Instance { get; private set; }
@@ -40,43 +40,6 @@ public class MultiplayerManager : MonoBehaviour
     }
     #endregion
 
-    #region event methods
-    /// <summary>
-    ///     Subscribes to events used as triggers for communication.
-    /// </summary>
-    private void EnableEvents()
-    {
-        EventManager.Instance.OnPositionChanged += SendData;
-    }
-
-    /// <summary>
-    ///     Unsubscribes events when multiplayer is quit.
-    /// </summary>
-    private void DisableEvents()
-    {
-        EventManager.Instance.OnPositionChanged -= SendData;
-    }
-    #endregion
-
-    private void Start()
-    {
-        // get player id
-        try
-        {
-            playerId = GetToken("userId");
-            Debug.Log("player id:" +  playerId);
-        }
-        catch (EntryPointNotFoundException e)
-        {
-            Debug.LogError("Function not found: " + e);
-
-            // use mock id for development
-#if UNITY_EDITOR
-            playerId = "c858aea9-a744-4709-a169-9df329fe4d96";
-#endif
-        }
-    }
-
     private void Update()
     {
         if (connected)
@@ -88,18 +51,18 @@ public class MultiplayerManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     Creates a websocket for communicating with the multiplayer server
+    ///     Creates a websocket for communicating with the multiplayer server. 
     /// </summary>
     public async Task Initialize()
     {
-        connected = true;
         websocket = new WebSocket("ws://127.0.0.1:3000");
+        connected = true;
 
         websocket.OnOpen += () =>
         {
             Debug.Log("Connection open!");
             connectedRemotePlayers = new();
-            EnableEvents();
+            EventManager.Instance.OnDataChanged += SendData;
         };
 
         websocket.OnError += (e) =>
@@ -110,14 +73,16 @@ public class MultiplayerManager : MonoBehaviour
         websocket.OnClose += (e) =>
         {
             Debug.Log("Connection closed!");
-            DisableEvents();
+            connected = false;
+            EventManager.Instance.OnDataChanged -= SendData;
+
         };
 
         websocket.OnMessage += (bytes) =>
         {
             try
             {
-                UpdateRemotePlayer(DeserializePlayerData(bytes));
+                UpdateRemotePlayer(NetworkMessage.Deserialize(ref bytes));
             }
             catch (Exception e)
             {
@@ -125,113 +90,83 @@ public class MultiplayerManager : MonoBehaviour
             }
         };
 
-        // Keep sending messages at every
-        //InvokeRepeating(nameof(SendWebSocketMessage), 1.0f, 0.03f);
-
-        // wait for connection
         await websocket.Connect();
     }
 
     /// <summary>
-    ///     Sends the player's data to the server if one of the players events is triggered.
+    ///     Sends the player's data to the server if one of the event trigger was activated.
     /// </summary>
-    /// <param name="data">triggering event</param>
-    private async void SendData(object sender, PositionChangedEventArgs data)
+    /// <param name="trigger">triggering event</param>
+    private async void SendData(object sender, EventArgs trigger)
     {
         if (websocket.State == WebSocketState.Open)
         {
-            await websocket.Send(SerializePlayerData(playerId, 1, data.GetPosition(), data.GetMovement()));
+            switch (trigger)
+            {
+                case EventArgsWrapper<PositionMessage> positionTrigger:
+                    await websocket.Send(positionTrigger.GetMessage().Serialize());
+                    break;
+                case EventArgsWrapper<CharacterMessage> characterTrigger:
+                    await websocket.Send(characterTrigger.GetMessage().Serialize());
+                    break;
+                default:
+                    Debug.LogError("Unknown trigger event!");
+                    break;
+            }
         }
     }
 
     /// <summary>
     ///     Updates the remote player using received data.
     /// </summary>
-    /// <param name="data">new data of hte remote player</param>
-    private void UpdateRemotePlayer(RemotePlayerData data)
+    /// <param name="message">received message to update the player</param>
+    private void UpdateRemotePlayer(NetworkMessage message)
     {
-        GameObject remotePlayerPrefab;
+        GameObject remotePlayerPrefab = null;
+        GetOrCreateRemotePlayer(message, ref remotePlayerPrefab);
+        RemotePlayerAnimation remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
 
-        if (!connectedRemotePlayers.ContainsKey(data.GetId()))
+        switch (message)
         {
-            remotePlayerPrefab = Instantiate(prefab, data.GetPosition(), Quaternion.identity, remotePlayerParent.transform);
-            connectedRemotePlayers.Add(data.GetId(), remotePlayerPrefab);
+            case PositionMessage positionMessage:
+                remotePlayer.UpdatePosition(positionMessage.GetPosition(), positionMessage.GetMovement());
+                break;
+            case CharacterMessage characterMessage:
+                remotePlayer.UpdateCharacterOutfit(characterMessage.GetHead(), characterMessage.GetBody());
+                break;
+            default:
+                throw new Exception("Unknown message type!");
         }
-
-        remotePlayerPrefab = connectedRemotePlayers[data.GetId()];
-
-        RemotePlayerAnimation remotePlayerAnimation = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
-        remotePlayerAnimation.UpdatePosition(data.GetPosition(), data.GetMovement());
-
-        // TODO: add clipping mechanics
-
-        //Rigidbody2D rb  = playerPrefab.GetComponent<Rigidbody2D>();
-
-        //rb.MovePosition(playerData.GetPosition());
-    }
-
-    #region (de)serializing
-    /// <summary>
-    ///     Serializes data to be send with a custom communication protocol.
-    /// </summary>
-    /// <param name="playerId">unique id of the player</param>
-    /// <param name="character">unique character representation</param>
-    /// <param name="position">player position</param>
-    /// <param name="movement">normalized player movement vector</param>
-    /// <returns></returns>
-    private byte[] SerializePlayerData(string playerId, byte character, Vector2 position, Vector2 movement)
-    {
-        byte[] data = new byte[33];
-
-        // player id (16 Bytes)
-        Guid uuid = Guid.Parse(playerId);
-        Buffer.BlockCopy(uuid.ToByteArray(), 0, data, 0, 16);
-
-        // character index (1 Byte)
-        data[16] = character;
-
-        // position (2 * 4 Bytes)
-        Buffer.BlockCopy(BitConverter.GetBytes(position.x), 0, data, 17, 4);
-        Buffer.BlockCopy(BitConverter.GetBytes(position.y), 0, data, 21, 4);
-
-        // movement (2 * 4 Byte)
-        Buffer.BlockCopy(BitConverter.GetBytes(movement.x), 0, data, 25, 4);
-        Buffer.BlockCopy(BitConverter.GetBytes(movement.y), 0, data, 29, 4);
-
-        // area id (2 Bytes)
-        //Buffer.BlockCopy(BitConverter.GetBytes(areaId.GetWorldIndex()), 0, data, 13, 1);
-        //Buffer.BlockCopy(BitConverter.GetBytes(areaId.GetDungeonIndex()), 0, data, 14, 1);
-
-        return data;
     }
 
     /// <summary>
-    ///     Deserializes received data and converts it to an RemotePlayerData object.
+    ///     Handles the creation of a new remote player if it does not exist or gets the existing one.
     /// </summary>
-    /// <param name="data">received message</param>
-    /// <returns>data of the remote player</returns>
-    private RemotePlayerData DeserializePlayerData(byte[] data)
+    /// <param name="message">received network message</param>
+    /// <param name="remotePlayerPrefab">reference to the remote player GameObject</param>
+    private void GetOrCreateRemotePlayer(NetworkMessage message, ref GameObject remotePlayerPrefab)
     {
-        // TODO: discard message if wrong protocol 
-
-        // extract uuid from message
-#if !UNITY_EDITOR
-        byte[] playerIdBytes = new byte[16];
-        Buffer.BlockCopy(data, 0, playerIdBytes, 0, 16);
-        Guid playerId = new(playerIdBytes);
-#endif
-        return new RemotePlayerData(
-            playerId.ToString(), 
-            new Vector2(BitConverter.ToSingle(data, 17), BitConverter.ToSingle(data, 21)),
-            new Vector2(BitConverter.ToSingle(data, 25), BitConverter.ToSingle(data, 29))
-            );
+        if (!connectedRemotePlayers.TryGetValue(message.playerId, out remotePlayerPrefab))
+        {
+            if (message is PositionMessage positionMessage)
+            {
+                remotePlayerPrefab = Instantiate(prefab, positionMessage.GetPosition(), Quaternion.identity, remotePlayerParent.transform);
+                connectedRemotePlayers.Add(message.playerId, remotePlayerPrefab);
+            }
+            else
+            {
+                throw new Exception("First message must be a position message!");
+            }
+        }
     }
-    #endregion
 
+    /// <summary>
+    ///     Closes the websocjet connection and event trigger subscription.
+    /// </summary>
     private async void OnApplicationQuit()
     {
+        EventManager.Instance.OnDataChanged -= SendData;
         connected = false;
-        DisableEvents();
         await websocket.Close();
     }
 }

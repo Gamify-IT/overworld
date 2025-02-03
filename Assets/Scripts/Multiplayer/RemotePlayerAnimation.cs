@@ -9,7 +9,7 @@ public class RemotePlayerAnimation : MonoBehaviour
 {
     // movement
     private Vector2 movement = Vector2.zero;
-    private Vector2 newPosition = Vector2.zero;
+    private Vector2 position = Vector2.zero;
     private Rigidbody2D playerRigidBody;
 
     // animation
@@ -22,7 +22,11 @@ public class RemotePlayerAnimation : MonoBehaviour
     private readonly float timeoutDuration = 0.2f;
 
     // outfits
-    readonly Dictionary<string, Vector3> positions = new();
+    private Dictionary<string, Vector3> positions = new();
+
+    // clipping
+    private readonly float tolerance = 42f;
+    private bool isActive = true;
 
     /// <summary>
     ///     Initializes the remote players components and outfits.
@@ -37,10 +41,42 @@ public class RemotePlayerAnimation : MonoBehaviour
         accessoireTransform = gameObject.transform.GetChild(0).GetComponent<Transform>();
 
         InitializeOutfitPositions();
+    }
 
-        // TODO: reconstruct outfit with character index from received message
+    /// <summary>
+    ///     Updates the remote players position and animation based on the received messages.
+    /// </summary>
+    private void FixedUpdate()
+    {
+        if (Time.unscaledTime - lastMessageTime > timeoutDuration)
+        {
+            movement = Vector2.zero;
+        }
 
-        SetOutfitAnimator("character_default", "none");
+        if (IsPlayerInView())
+        {
+            if (!isActive) ActivateComponents();
+
+            float horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
+            float verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
+
+            playerRigidBody.MovePosition(position);
+
+            SetLookingDirection();
+
+            playerAnimator.SetFloat("Horizontal", movement.x);
+            playerAnimator.SetFloat("Vertical", movement.y);
+            playerAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
+            playerAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
+            accessoireAnimator.SetFloat("Horizontal", movement.x);
+            accessoireAnimator.SetFloat("Vertical", movement.y);
+            accessoireAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
+            accessoireAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
+        }
+        else
+        {
+            DeactivateComponents();
+        }
     }
 
     #region outfit animator
@@ -66,7 +102,7 @@ public class RemotePlayerAnimation : MonoBehaviour
     /// </summary>
     /// <param name="body"> A string that needs to match one from the validOutfits list. It determines which body animator to use. </param>
     /// <param name="head"> A string that needs to match one from the validOutfits list. It determines which accessory animator to use. </param>
-    public void SetOutfitAnimator(string body, string head)
+    public void SetOutfitAnimator(string head, string body)
     {
         if (!PlayerAnimation.validOutfits.Contains(body) || !PlayerAnimation.validOutfits.Contains(head))
         {
@@ -97,36 +133,6 @@ public class RemotePlayerAnimation : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.25f);
             accessoireTransform.localPosition = positions[head] - new Vector3(0, 0.3f, 0);
         }
-    }
-    #endregion
-
-    /// <summary>
-    ///     Updates the remote players position and animation based on the received messages.
-    /// </summary>
-    private void FixedUpdate()
-    {
-        if (Time.unscaledTime - lastMessageTime > timeoutDuration)
-        {
-            movement = Vector2.zero;
-        }
-
-        // TODO: add clipping mechanics
-
-        float horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
-        float verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
-
-        playerRigidBody.MovePosition(newPosition);
-
-        SetLookingDirection();
-
-        playerAnimator.SetFloat("Horizontal", movement.x);
-        playerAnimator.SetFloat("Vertical", movement.y);
-        playerAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
-        playerAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
-        accessoireAnimator.SetFloat("Horizontal", movement.x);
-        accessoireAnimator.SetFloat("Vertical", movement.y);
-        accessoireAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
-        accessoireAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
     }
 
     /// <summary>
@@ -166,16 +172,60 @@ public class RemotePlayerAnimation : MonoBehaviour
             accessoireAnimator.SetBool("LookRight", false);
         }
     }
+    #endregion
+
+    /// <summary>
+    ///     Checks whether a remote player is in the players view frustum. 
+    /// </summary>
+    /// <returns>true if the player is visible</returns>
+    private bool IsPlayerInView()
+    {
+        Vector3 screenPosition = Camera.main.WorldToScreenPoint(new Vector3(position.x, position.y, 0));
+        return  screenPosition.x >= -tolerance && screenPosition.x <= Screen.width + tolerance && 
+                screenPosition.y >= -tolerance && screenPosition.y <= Screen.height + tolerance;
+    }
+
+    /// <summary>
+    ///     Deactivates the remote players components.
+    /// </summary>
+    private void DeactivateComponents()
+    {
+        isActive = false;
+        playerAnimator.enabled = false;
+        accessoireAnimator.enabled = false;
+        playerRigidBody.isKinematic = true;
+    }
+
+    /// <summary>
+    ///     Activates the remote players components.
+    /// </summary>
+    private void ActivateComponents()
+    {
+        isActive = true;
+        playerAnimator.enabled = true;
+        accessoireAnimator.enabled = true;
+        playerRigidBody.isKinematic = false;
+    }
 
     /// <summary>
     ///     Updates position and movement of the player.
     /// </summary>
-    /// <param name="position">players new position</param>
-    /// <param name="movement">players normalized movement vector</param>
+    /// <param name="position">player's new position</param>
+    /// <param name="movement">player's normalized movement vector</param>
     public void UpdatePosition(Vector2 position, Vector2 movement)
     {
         lastMessageTime = Time.unscaledTime;
-        newPosition = position;
+        this.position = position;
         this.movement = movement;
+    }
+
+    /// <summary>
+    ///     Updates head and body of the player.
+    /// </summary>
+    /// <param name="head">player's head</param>
+    /// <param name="body">player's body</param>
+    public void UpdateCharacterOutfit(string head, string body)
+    {   
+        SetOutfitAnimator(head, body);
     }
 }

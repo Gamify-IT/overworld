@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 /// <summary>
-///     This class manages movement events by the player, trigger multiplayer communication.
+///     This class offers event trigger for multiplayer communication.
 /// </summary>
 public class EventManager : MonoBehaviour
 {
@@ -25,36 +25,26 @@ public class EventManager : MonoBehaviour
     }
     #endregion
 
-    //public delegate void DataChangedEventHandler(object sender, object data);
-    public event EventHandler<PositionChangedEventArgs> OnPositionChanged;
+    public event EventHandler<EventArgs> OnDataChanged;
 
-    /// <summary>
-    ///     Trigger that sends the players position and movement vector.
-    /// </summary>
-    /// <param name="newPosition">players new position</param>
-    /// <param name="movement">players normalized movement vector</param>
-    public void TriggerPositionChanged(Vector2 newPosition, Vector2 movement)
+    public void TriggerDataChanged<T>(T message)
     {
-        OnPositionChanged?.Invoke(this, new(newPosition, movement));
+        OnDataChanged?.Invoke(this, new EventArgsWrapper<T>(message));
     }
 }
 
-#region custom event argument
 /// <summary>
-///     Custom event for player movement und position.
+///     Wrapper class for the message type the event trigger is used for.
 /// </summary>
-public class PositionChangedEventArgs : EventArgs
+/// <typeparam name="T">message type of the event trigger</typeparam>
+public class EventArgsWrapper<T> : EventArgs
 {
-    private Vector2 newPosition;
-    private Vector2 movement;
+    private readonly T message;
 
-    public PositionChangedEventArgs(Vector2 newPosition, Vector2 movement)
+    public EventArgsWrapper(T message)
     {
-        this.newPosition = newPosition;
-        this.movement = movement;
+        this.message = message;
     }
 
-    public Vector2 GetPosition() { return newPosition; }
-    public Vector2 GetMovement() { return movement; }
+    public T GetMessage() {  return message; }
 }
-#endregion
