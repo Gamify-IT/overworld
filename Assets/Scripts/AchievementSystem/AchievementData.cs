@@ -106,6 +106,7 @@ public class AchievementData
             completed = true;
             return true;
         }
+
         return false;
     }
 
@@ -183,4 +184,14 @@ public class AchievementData
         return interactedObjects;
     }
     #endregion
+
+    public void SetCompleted(bool isCompleted)
+    {
+        completed = isCompleted;
+    }
+
+    public void SetProgress(int newProgress)
+    {
+        progress = newProgress;
+    }
 }

@@ -64,7 +64,7 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
 #if !UNITY_EDITOR
         if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
         {
-            unlockedTeleporters = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "TELEPORTER_MASTER").GetInteractedObjects();    
+            unlockedTeleporters = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "TELEPORTER_PROFESSIONAL").GetInteractedObjects();    
         }     
 #endif
     }
@@ -263,11 +263,6 @@ public class Teleporter : MonoBehaviour, IGameEntity<TeleporterData>
     {
         GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_BEGINNER, 1, unlockedTeleporters);
         GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_PROFESSIONAL, 1, unlockedTeleporters);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.TELEPORTER_MASTER, 1, unlockedTeleporters);
-
-        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"TELEPORTER_BEGINNER_WORLD_{worldNumber}"), 1, unlockedTeleporters);
-        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"TELEPORTER_PROFESSIONAL_WORLD_{worldNumber}"), 1, unlockedTeleporters);
-        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"TELEPORTER_MASTER_WORLD_{worldNumber}"), 1, unlockedTeleporters);
     }
 
 

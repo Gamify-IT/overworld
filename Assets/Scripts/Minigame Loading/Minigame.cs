@@ -57,8 +57,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
 
         if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
         {
-            unlockedMinigames = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "MINIGAME_SPOTS_MASTER").GetInteractedObjects();
-            successfullyCompletedMinigames = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "MINIGAME_PROFESSIONAL").GetInteractedObjects();
+            unlockedMinigames = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "MINIGAME_SPOTS_FINDER").GetInteractedObjects();
         }
 
         audioSource = gameObject.AddComponent<AudioSource>();
@@ -146,7 +145,6 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
                 {
                     unlockedMinigames.Add(key);
                     GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_FINDER, 1, unlockedMinigames);
-                    GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_SPOTS_MASTER, 1, unlockedMinigames);
                 }
             }
         }
@@ -199,13 +197,12 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     /// </summary>
     private void UpdateAchievements()
     {
-        successfullyCompletedMinigames = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "MINIGAME_PROFESSIONAL").GetInteractedObjects();
+        successfullyCompletedMinigames = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "MINIGAME_ACHIEVER").GetInteractedObjects();
         var key = (world,dungeon,number);
         if(!successfullyCompletedMinigames.Contains(key))
         {
             successfullyCompletedMinigames.Add(key);
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_ACHIEVER, 1, successfullyCompletedMinigames);
-            GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.MINIGAME_PROFESSIONAL, 1, successfullyCompletedMinigames);
             
             GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"{game}_MASTER"), 1, successfullyCompletedMinigames);
         }
