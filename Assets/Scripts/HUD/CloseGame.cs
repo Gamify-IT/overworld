@@ -48,6 +48,11 @@ public class CloseGame : MonoBehaviour
             return;
         }
 
+        await MultiplayerManager.Instance.QuitMultiplayer();
+
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
         bool playerDataSaved = await GameManager.Instance.SavePlayerData();
 
         if (playerDataSaved)
@@ -62,6 +67,8 @@ public class CloseGame : MonoBehaviour
             confirmButton.gameObject.SetActive(true);
             cancelButton.gameObject.SetActive(true);
         }
+#endif
+
     }
 
     /// <summary>

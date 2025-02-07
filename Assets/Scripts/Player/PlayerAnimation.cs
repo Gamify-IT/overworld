@@ -314,7 +314,7 @@ public class PlayerAnimation : MonoBehaviour
                 // use mock id for development
                 EventManager.Instance.TriggerDataChanged<PositionMessage>(new("c858aea9-a744-4709-a169-9df329fe4d96", newPosition, movement));
 #else
-                EventManager.Instance.TriggerDataChanged<PositionMessage>(new(ownPlayerData.GetId(), newPosition, movement));
+                EventManager.Instance.TriggerDataChanged<PositionMessage>(new(GameManager.Instance.GetUserId(), newPosition, movement));
 #endif
             }
 

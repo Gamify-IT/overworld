@@ -37,4 +37,19 @@ public class AreaLocationDTO
     }
 
     #endregion
+
+    public override bool Equals(object obj)
+    {
+        if (obj is AreaLocationDTO other)
+        {
+            return this.worldIndex == other.worldIndex && this.dungeonIndex == other.dungeonIndex;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(worldIndex, dungeonIndex);
+    }
+
 }

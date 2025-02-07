@@ -10,9 +10,8 @@ public class PositionMessage : NetworkMessage
     private readonly Vector2 position;
     private readonly Vector2 movement;
 
-    public PositionMessage(string playerId, Vector2 position, Vector2 movement)
+    public PositionMessage(string playerId, Vector2 position, Vector2 movement) : base(playerId)
     {
-        this.playerId = playerId;
         this.position = position;  
         this.movement = movement;
     }
@@ -44,6 +43,11 @@ public class PositionMessage : NetworkMessage
         return data;
     }
 
+    /// <summary>
+    ///     Deserializes the recived data and converts it to a position message object.
+    /// </summary>
+    /// <param name="data">received network data</param>
+    /// <returns>position message</returns>
     public static new PositionMessage Deserialize(ref byte[] data)
     {
         // skip message type (1 Byte)

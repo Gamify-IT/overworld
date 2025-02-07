@@ -420,7 +420,7 @@ public class GameManager : MonoBehaviour
     public void SetData(int worldIndex, int dungeonIndex)
     {
         Debug.Log("SetData: " + worldIndex + "-" + dungeonIndex);
-        //DataManager.Instance.ReadTeleporterConfig();
+        
         if (dungeonIndex != 0)
         {
             Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);

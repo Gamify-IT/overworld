@@ -1,5 +1,8 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -15,7 +18,7 @@ public class RemotePlayerAnimation : MonoBehaviour
     // animation
     private Animator playerAnimator;
     private Animator accessoireAnimator;
-    public Transform accessoireTransform;
+    private Transform accessoireTransform;
 
     // timeout 
     private float lastMessageTime;
@@ -25,17 +28,18 @@ public class RemotePlayerAnimation : MonoBehaviour
     private Dictionary<string, Vector3> positions = new();
 
     // clipping
+    private AreaLocationDTO areaInformation;
     private readonly float tolerance = 42f;
     private bool isActive = true;
 
     /// <summary>
     ///     Initializes the remote players components and outfits.
     /// </summary>
-    private void Start()
+    public void Initialize()
     {
+        Debug.Log("Initializing new player");
         playerRigidBody = GetComponent<Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
-
 
         accessoireAnimator = gameObject.transform.GetChild(0).GetComponent<Animator>();
         accessoireTransform = gameObject.transform.GetChild(0).GetComponent<Transform>();
@@ -181,8 +185,9 @@ public class RemotePlayerAnimation : MonoBehaviour
     private bool IsPlayerInView()
     {
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(new Vector3(position.x, position.y, 0));
-        return  screenPosition.x >= -tolerance && screenPosition.x <= Screen.width + tolerance && 
-                screenPosition.y >= -tolerance && screenPosition.y <= Screen.height + tolerance;
+        return screenPosition.x >= -tolerance && screenPosition.x <= Screen.width + tolerance &&
+                screenPosition.y >= -tolerance && screenPosition.y <= Screen.height + tolerance &&
+                DataManager.Instance.GetPlayerData().GetCurrentArea().Equals(areaInformation);
     }
 
     /// <summary>
@@ -225,7 +230,17 @@ public class RemotePlayerAnimation : MonoBehaviour
     /// <param name="head">player's head</param>
     /// <param name="body">player's body</param>
     public void UpdateCharacterOutfit(string head, string body)
-    {   
+    {
+        Debug.Log("Updating character outfit");
         SetOutfitAnimator(head, body);
+    }
+
+    /// <summary>
+    ///     Updates the current area information of the player.
+    /// </summary>
+    public void UpdateAreaInformation(byte worldIndex, byte dungeonIndex)
+    {
+        Debug.Log("Updating area information");
+        areaInformation = new(worldIndex, dungeonIndex);
     }
 }

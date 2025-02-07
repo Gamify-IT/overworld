@@ -12,6 +12,7 @@ TagManager:
   - GeneratorUI
   - Tutorial
   - MinimapFace
+  - RemotePlayer
   layers:
   - Default
   - TransparentFX

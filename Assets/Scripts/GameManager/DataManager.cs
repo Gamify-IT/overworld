@@ -155,6 +155,13 @@ public class DataManager : MonoBehaviour
             Debug.Log("Setting data for world " + worldIndex);
             playerData.SetLogoutScene("World " + worldIndex);
         }
+
+#if UNITY_EDITOR
+        // use mock id for development
+        EventManager.Instance.TriggerDataChanged<AreaMessage>(new("c858aea9-a744-4709-a169-9df329fe4d96", (byte)worldIndex, (byte)dungeonIndex));
+#else
+        EventManager.Instance.TriggerDataChanged<AreaMessage>(new(playerData.GetId() , (byte)worldIndex, (byte)dungeonIndex));
+#endif
     }
 
     /// <summary>

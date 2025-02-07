@@ -10,9 +10,8 @@ public class CharacterMessage : NetworkMessage
     private readonly string head;
     private readonly string body;
 
-    public CharacterMessage(string playerId, string head, string body)
+    public CharacterMessage(string playerId, string head, string body) : base(playerId)
     {
-        this.playerId = playerId;
         this.head = head;
         this.body = body;
     }
@@ -48,6 +47,11 @@ public class CharacterMessage : NetworkMessage
         return data;
     }
 
+    /// <summary>
+    ///     Deserializes the recived data and converts it to a character message object.
+    /// </summary>
+    /// <param name="data">received network data</param>
+    /// <returns>character message</returns>
     public static new CharacterMessage Deserialize(ref byte[] data)
     {
         // skip message type (1 Byte)
