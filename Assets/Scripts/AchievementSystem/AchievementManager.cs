@@ -39,11 +39,12 @@ public class AchievementManager : MonoBehaviour
         if (progress >= currentAmountRequired && !completed)
         {
             completed = true;
-        }
-        else if (completed && progress < currentAmountRequired)
-        {
-            completed = false;
         } 
+
+        if (completed) {
+            completed = true;
+            achievementData.SetAmountRequired(progress);
+        }
 
         achievementData.SetCompleted(completed); 
     }
