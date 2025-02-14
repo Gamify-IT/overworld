@@ -127,16 +127,7 @@ public class RemotePlayerAnimation : MonoBehaviour
             accessoireTransform.localScale = new Vector3(1, 1, 1);
         }
 
-        if (new List<string> { "character_default", "character_blue_and_purple", "character_black_and_white" }.Contains(body))
-        {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().offset = new Vector2(0, 0.05f);
-            accessoireTransform.localPosition = positions[head];
-        }
-        else
-        {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.25f);
-            accessoireTransform.localPosition = positions[head] - new Vector3(0, 0.3f, 0);
-        }
+        accessoireTransform.localPosition = positions[head];
     }
 
     /// <summary>
