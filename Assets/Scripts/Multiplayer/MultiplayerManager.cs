@@ -134,7 +134,7 @@ public class MultiplayerManager : MonoBehaviour
             playerId, startPosition,
             (byte) currentArea.worldIndex, (byte) currentArea.dungeonIndex,
             head, body);
-
+        Debug.Log("Sending inital data:" + connectionMessage.GetStartPosition().ToString() + ", " + connectionMessage.GetBody() + ", " + connectionMessage.GetHead());
         await websocket.Send(connectionMessage.Serialize());
     }
 
@@ -143,7 +143,6 @@ public class MultiplayerManager : MonoBehaviour
     /// </summary>
     private async void SendAcknowledgeData()
     {
-        Debug.Log("Sending ack message");
         // use mock id for development
 #if UNITY_EDITOR
         string playerId = "c858aea9-a744-4709-a169-9df329fe4d96";
@@ -158,7 +157,7 @@ public class MultiplayerManager : MonoBehaviour
             playerId, startPosition,
             (byte)currentArea.worldIndex, (byte)currentArea.dungeonIndex,
             head, body);
-
+       
         await websocket.Send(ackMessage.Serialize());
     }
     #endregion
@@ -173,15 +172,12 @@ public class MultiplayerManager : MonoBehaviour
         GetOrCreateRemotePlayer(message, ref remotePlayerPrefab);
         RemotePlayerAnimation remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
 
-        Debug.Log("received message: " + message.GetMessageType().ToString());
-
         switch (message)
         {
             case ConnectionMessage:
                 SendAcknowledgeData();
                 break;
             case DisconnectionMessage disconnectMessage:
-                Debug.Log("Processing disconnect message");
                 RemoveRemotePlayer(disconnectMessage);
                 break;
             case AcknowledgeMessage:
@@ -209,28 +205,23 @@ public class MultiplayerManager : MonoBehaviour
     {
         if (!connectedRemotePlayers.TryGetValue(message.GetPlayerId(), out remotePlayerPrefab))
         {
-            Debug.Log("Player not found - creating new one at position");
             if (message is ConnectionMessage connectionMessage)
             {
-                Debug.Log("start position: " + connectionMessage.GetStartPosition().ToString());
                 remotePlayerPrefab = Instantiate(prefab, connectionMessage.GetStartPosition(), Quaternion.identity, remotePlayerParent.transform);
                 connectedRemotePlayers.Add(message.GetPlayerId(), remotePlayerPrefab);
                 RemotePlayerAnimation remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
                 remotePlayer.Initialize();
                 remotePlayer.UpdateCharacterOutfit(connectionMessage.GetHead(), connectionMessage.GetBody());
                 remotePlayer.UpdateAreaInformation(connectionMessage.GetWorldIndex(), connectionMessage.GetDungeonIndex());
-                Debug.Log("Created new player");
             }
             else if (message is AcknowledgeMessage ackMessage)
             {
-                Debug.Log("start position: " + ackMessage.GetStartPosition().ToString());
                 remotePlayerPrefab = Instantiate(prefab, ackMessage.GetStartPosition(), Quaternion.identity, remotePlayerParent.transform);
                 connectedRemotePlayers.Add(message.GetPlayerId(), remotePlayerPrefab);
                 RemotePlayerAnimation remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
                 remotePlayer.Initialize();
                 remotePlayer.UpdateCharacterOutfit(ackMessage.GetHead(), ackMessage.GetBody());
                 remotePlayer.UpdateAreaInformation(ackMessage.GetWorldIndex(), ackMessage.GetDungeonIndex());
-                Debug.Log("Created new player");
             }
             else
             {
@@ -244,7 +235,6 @@ public class MultiplayerManager : MonoBehaviour
     /// </summary>
     public async UniTask<bool> QuitMultiplayer()
     {
-        Debug.Log("Sending disconnect message");
         EventManager.Instance.OnDataChanged -= SendData;
 #if UNITY_EDITOR
         DisconnectionMessage disconnectMessage = new("c858aea9-a744-4709-a169-9df329fe4d96");
@@ -252,7 +242,6 @@ public class MultiplayerManager : MonoBehaviour
         DisconnectionMessage disconnectMessage = new(GameManager.Instance.GetUserId());
 #endif
         await websocket.Send(disconnectMessage.Serialize());
-        Debug.Log("disconnect message has been send");
         await websocket.Close();
         connected = false;
 
@@ -269,7 +258,6 @@ public class MultiplayerManager : MonoBehaviour
         {
             Destroy(remotePlayerPrefab);
             connectedRemotePlayers.Remove(disconnectMessage.GetPlayerId());
-            Debug.Log("Removed remote player");
         }
         else
         {

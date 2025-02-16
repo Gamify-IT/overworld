@@ -1,8 +1,5 @@
-using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -11,8 +8,8 @@ using UnityEngine;
 public class RemotePlayerAnimation : MonoBehaviour
 {
     // movement
-    private Vector2 movement = Vector2.zero;
-    private Vector2 position = Vector2.zero;
+    private Vector2 movement;
+    private Vector2 position;
     private Rigidbody2D playerRigidBody;
 
     // animation
@@ -27,6 +24,7 @@ public class RemotePlayerAnimation : MonoBehaviour
     // outfits
     private Dictionary<string, Vector3> positions = new();
 
+
     // clipping
     private AreaLocationDTO areaInformation;
     private readonly float tolerance = 42f;
@@ -37,7 +35,9 @@ public class RemotePlayerAnimation : MonoBehaviour
     /// </summary>
     public void Initialize()
     {
-        Debug.Log("Initializing new player");
+        position = transform.position;
+        movement = Vector2.zero;
+
         playerRigidBody = GetComponent<Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
 
@@ -222,7 +222,6 @@ public class RemotePlayerAnimation : MonoBehaviour
     /// <param name="body">player's body</param>
     public void UpdateCharacterOutfit(string head, string body)
     {
-        Debug.Log("Updating character outfit");
         SetOutfitAnimator(head, body);
     }
 
@@ -231,7 +230,6 @@ public class RemotePlayerAnimation : MonoBehaviour
     /// </summary>
     public void UpdateAreaInformation(byte worldIndex, byte dungeonIndex)
     {
-        Debug.Log("Updating area information");
         areaInformation = new(worldIndex, dungeonIndex);
     }
 }
