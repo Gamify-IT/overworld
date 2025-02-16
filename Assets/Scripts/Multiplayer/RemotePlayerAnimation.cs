@@ -22,12 +22,11 @@ public class RemotePlayerAnimation : MonoBehaviour
     private readonly float timeoutDuration = 0.2f;
 
     // outfits
-    private Dictionary<string, Vector3> positions = new();
-
+    private readonly Dictionary<string, Vector3> positions = new();
 
     // clipping
-    private AreaLocationDTO areaInformation;
-    private readonly float tolerance = 42f;
+    private AreaLocationDTO areaInformation = new();
+    private readonly float tolerance = 222f;
     private bool isActive = true;
 
     /// <summary>
@@ -59,7 +58,7 @@ public class RemotePlayerAnimation : MonoBehaviour
 
         if (IsPlayerInView())
         {
-            if (!isActive) ActivateComponents();
+            if (!isActive) ShowComponents(true);
 
             float horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
             float verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
@@ -79,7 +78,7 @@ public class RemotePlayerAnimation : MonoBehaviour
         }
         else
         {
-            DeactivateComponents();
+            ShowComponents(false);
         }
     }
 
@@ -182,25 +181,16 @@ public class RemotePlayerAnimation : MonoBehaviour
     }
 
     /// <summary>
-    ///     Deactivates the remote players components.
+    ///     (De)activates the remote players components and makes it invisible.
     /// </summary>
-    private void DeactivateComponents()
+    /// <param name="status">should the remote players components should be shown?</param>
+    private void ShowComponents(bool status)
     {
-        isActive = false;
-        playerAnimator.enabled = false;
-        accessoireAnimator.enabled = false;
-        playerRigidBody.isKinematic = true;
-    }
-
-    /// <summary>
-    ///     Activates the remote players components.
-    /// </summary>
-    private void ActivateComponents()
-    {
-        isActive = true;
-        playerAnimator.enabled = true;
-        accessoireAnimator.enabled = true;
-        playerRigidBody.isKinematic = false;
+        isActive = status;
+        playerAnimator.enabled = status;
+        accessoireAnimator.enabled = status;
+        playerRigidBody.isKinematic = !status;
+        gameObject.GetComponent<Renderer>().enabled = status;
     }
 
     /// <summary>
@@ -230,6 +220,7 @@ public class RemotePlayerAnimation : MonoBehaviour
     /// </summary>
     public void UpdateAreaInformation(byte worldIndex, byte dungeonIndex)
     {
-        areaInformation = new(worldIndex, dungeonIndex);
+        areaInformation.worldIndex = worldIndex;
+        areaInformation.dungeonIndex = dungeonIndex;
     }
 }
