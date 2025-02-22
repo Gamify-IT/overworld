@@ -1026,4 +1026,9 @@ public class GameManager : MonoBehaviour
     {
         return userId;
     }
+
+    public string GetCourseId()
+    {
+        return courseId;
+    }
 }

@@ -10,7 +10,7 @@ public class PositionMessage : NetworkMessage
     private readonly Vector2 position;
     private readonly Vector2 movement;
 
-    public PositionMessage(string playerId, Vector2 position, Vector2 movement) : base(playerId)
+    public PositionMessage(byte playerId, Vector2 position, Vector2 movement) : base(playerId)
     {
         this.position = position;  
         this.movement = movement;
@@ -25,9 +25,9 @@ public class PositionMessage : NetworkMessage
         data[index] = (byte) Type;
         index++;
 
-        // playerId (GUID, 16 Bytes)
-        Buffer.BlockCopy(Guid.Parse(playerId).ToByteArray(), 0, data, index, 16);
-        index += 16;
+        // playerId (1 Bytes)
+        data[index] = playerId;
+        index ++;
 
         // position (2 * 4 Bytes)
         Buffer.BlockCopy(BitConverter.GetBytes(position.x), 0, data, index, 4);
@@ -53,8 +53,9 @@ public class PositionMessage : NetworkMessage
         // skip message type (1 Byte)
         int index = 1;
 
-        // playerId (GUID, 16 Byte)
-        string playerId = DeserializePlayerId(data, ref index);
+        // playerId (1 Byte)
+        byte playerId = data[index];
+        index++;
 
         // position (2 * 4 Byte)
         float posX = BitConverter.ToSingle(data, index);

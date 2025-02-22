@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 
 /// <summary>
@@ -10,7 +9,7 @@ public class CharacterMessage : NetworkMessage
     private readonly string head;
     private readonly string body;
 
-    public CharacterMessage(string playerId, string head, string body) : base(playerId)
+    public CharacterMessage(byte playerId, string head, string body) : base(playerId)
     {
         this.head = head;
         this.body = body;
@@ -23,15 +22,15 @@ public class CharacterMessage : NetworkMessage
         // compute array size
         int headLength = Encoding.UTF8.GetByteCount(head);
         int bodyLength = Encoding.UTF8.GetByteCount(body);
-        byte[] data = new byte[1 + 16 + 1 + headLength + 1 + bodyLength];
+        byte[] data = new byte[1 + 1 + 1 + headLength + 1 + bodyLength];
 
         // message type (1 Byte)
         data[index] = (byte)Type;
         index++;
 
-        // playerId (GUID, 16 Byte)
-        Buffer.BlockCopy(Guid.Parse(playerId).ToByteArray(), 0, data, index, 16);
-        index += 16;
+        // playerId (1 Byte)
+        data[index] = playerId;
+        index++;
 
         // head (1 Byte length + string)
         data[index] = (byte)headLength;
@@ -57,8 +56,9 @@ public class CharacterMessage : NetworkMessage
         // skip message type (1 Byte)
         int index = 1;
 
-        // playerId (GUID, 16 Byte)
-        string playerId = DeserializePlayerId(data, ref index);
+        // playerId (1 Byte)
+        byte playerId = data[index];
+        index++;
 
         // head (1 Byte length + string)
         int headLength = data[index];

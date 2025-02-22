@@ -8,19 +8,19 @@ public class DisconnectionMessage : NetworkMessage
 {
     protected override MessageType Type => MessageType.Disconnect;
 
-    public DisconnectionMessage(string playerId) : base(playerId) { }
+    public DisconnectionMessage(byte playerId) : base(playerId) { }
 
     public override byte[] Serialize()
     {
         int index = 0;
-        byte [] data = new byte[1 + 16];
+        byte [] data = new byte[1 + 1];
 
         // message type (1 Byte)
         data[index] = (byte)Type;
         index++;
 
-        // playerId (GUID, 16 Byte)
-        Buffer.BlockCopy(Guid.Parse(playerId).ToByteArray(), 0, data, index, 16);
+        // playerId (1 Byte)
+        data[index] = playerId;
 
         return data;
     }
@@ -35,8 +35,8 @@ public class DisconnectionMessage : NetworkMessage
         // skip message type (1 Byte)
         int index = 1;
 
-        // playerId (GUID, 16 Byte)
-        string playerId = DeserializePlayerId(data, ref index);
+        // playerId (1 Byte)
+        byte playerId = data[index];
 
         return new DisconnectionMessage(playerId);
     }

@@ -131,4 +131,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Player HUD/Content Screen.unity
     guid: 607011dae650f6245bb9ed3c33f3a4f2
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/Player HUD/Multiplayer.unity
+    guid: dc5b98dbedcb80845910e7cdc2a765e5
   m_configObjects: {}

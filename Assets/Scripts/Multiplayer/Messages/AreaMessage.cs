@@ -9,7 +9,7 @@ public class AreaMessage : NetworkMessage
     private readonly byte worldIndex;
     private readonly byte dungeonIndex;
 
-    public AreaMessage(string playerId, byte worldIndex, byte dungeonIndex) : base(playerId)
+    public AreaMessage(byte playerId, byte worldIndex, byte dungeonIndex) : base(playerId)
     {
         this.worldIndex = worldIndex;
         this.dungeonIndex = dungeonIndex;
@@ -18,15 +18,15 @@ public class AreaMessage : NetworkMessage
     public override byte[] Serialize()
     {
         int index = 0;
-        byte [] data = new byte[1 + 16 + 2];
+        byte [] data = new byte[1 + 1 + 2];
 
         // message type
         data[0] = (byte)Type;
         index++;
 
-        // playerId (GUID, 16 Bytes)
-        Buffer.BlockCopy(Guid.Parse(playerId).ToByteArray(), 0, data, index, 16);
-        index += 16;
+        // playerId (1 Bytes)
+        data[index] = playerId;
+        index++;
 
         // world and dungeon index (2 * 1 Byte)
         data[index] = worldIndex;
@@ -46,12 +46,14 @@ public class AreaMessage : NetworkMessage
         // skip message type (1 Byte)
         int index = 1;
 
-        // playerId (GUID, 16 Byte)
-        string playerId = DeserializePlayerId(data, ref index);
+        // playerId (1 Byte)
+        byte playerId = data[index];
+        index++;
 
         // world and dungeon index (2 * 1 Byte)
         byte worldIndex = data[index];
-        byte dungenIndex = data[index + 1];
+        index++;
+        byte dungenIndex = data[index];
 
         return new AreaMessage(playerId, worldIndex, dungenIndex);
     }

@@ -15,7 +15,7 @@ public class ConnectionMessage : NetworkMessage
     private readonly string head;
     private readonly string body;
 
-    public ConnectionMessage(string playerId, Vector2 startPosition, byte worldIndex, byte dungeonIndex, string head, string body) : base(playerId)
+    public ConnectionMessage(byte playerId, Vector2 startPosition, byte worldIndex, byte dungeonIndex, string head, string body) : base(playerId)
     {
         this.startPosition = startPosition;
         this.worldIndex = worldIndex;
@@ -31,15 +31,15 @@ public class ConnectionMessage : NetworkMessage
         // compute array size
         int headLength = Encoding.UTF8.GetByteCount(head);
         int bodyLength = Encoding.UTF8.GetByteCount(body);
-        byte[] data = new byte[1 + 16 + 8 + 2 + 1 + headLength + 1 + bodyLength];
+        byte[] data = new byte[1 + 1 + 8 + 2 + 1 + headLength + 1 + bodyLength];
 
         // message type (1 Byte)
         data[index] = (byte)Type;
         index++;
 
-        // playerId (GUID, 16 Byte)
-        Buffer.BlockCopy(Guid.Parse(playerId).ToByteArray(), 0, data, index, 16);
-        index += 16;
+        // playerId (1 Byte)
+        data[index] = playerId;
+        index++;
 
         // start position (2 * 4 Bytes)
         Buffer.BlockCopy(BitConverter.GetBytes(startPosition.x), 0, data, index, 4);
@@ -77,8 +77,9 @@ public class ConnectionMessage : NetworkMessage
         // skip message type (1 Byte)
         int index = 1;
 
-        // playerId (GUID, 16 Byte)
-        string playerId = DeserializePlayerId(data, ref index);
+        // playerId (1 Byte)
+        byte playerId = data[index];
+        index++;
 
         // start position (2 * 4 Byte)
         float posX = BitConverter.ToSingle(data, index);

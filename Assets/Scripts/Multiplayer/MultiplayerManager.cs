@@ -17,8 +17,10 @@ public class MultiplayerManager : MonoBehaviour
     private WebSocket websocket;
     [SerializeField] private GameObject prefab;
     [SerializeField] private GameObject remotePlayerParent;
-    private Dictionary<string, GameObject> connectedRemotePlayers;
+    private Dictionary<byte, GameObject> connectedRemotePlayers;
     private bool connected = false;
+
+    private byte playerId;
 
     #region singelton
     public static MultiplayerManager Instance { get; private set; }
@@ -54,7 +56,11 @@ public class MultiplayerManager : MonoBehaviour
     /// </summary>
     public async Task Initialize()
     {
-        websocket = new WebSocket("ws://127.0.0.1:3000");
+        Debug.Log("player id: " + playerId);
+        //websocket = new WebSocket("ws://127.0.0.1:3000");
+        //Application.absoluteURL.Split("/")[^1];
+        string host = new Uri(Application.absoluteURL).Host;
+        websocket = new WebSocket("ws://" + host + "/multiplayer/ws");
         connected = true;
 
         websocket.OnOpen += () =>
@@ -77,6 +83,7 @@ public class MultiplayerManager : MonoBehaviour
 
         websocket.OnMessage += (bytes) =>
         {
+            Debug.Log("received message");
             try
             {
                 UpdateRemotePlayer(NetworkMessage.Deserialize(ref bytes));
@@ -120,12 +127,6 @@ public class MultiplayerManager : MonoBehaviour
     private async void SendInitialData()
     {
         Debug.Log("Sending intial data");
-        // use mock id for development
-#if UNITY_EDITOR
-        string playerId = "c858aea9-a744-4709-a169-9df329fe4d96";
-#else
-        string playerId = GameManager.Instance.GetUserId();
-#endif
         Vector2 startPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
         AreaLocationDTO currentArea = DataManager.Instance.GetPlayerData().GetCurrentArea();
         string head = DataManager.Instance.GetPlayerData().GetCurrentAccessory();
@@ -143,12 +144,6 @@ public class MultiplayerManager : MonoBehaviour
     /// </summary>
     private async void SendAcknowledgeData()
     {
-        // use mock id for development
-#if UNITY_EDITOR
-        string playerId = "c858aea9-a744-4709-a169-9df329fe4d96";
-#else
-        string playerId = GameManager.Instance.GetUserId();
-#endif
         Vector2 startPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
         AreaLocationDTO currentArea = DataManager.Instance.GetPlayerData().GetCurrentArea();
         string head = DataManager.Instance.GetPlayerData().GetCurrentAccessory();
@@ -235,17 +230,18 @@ public class MultiplayerManager : MonoBehaviour
     /// </summary>
     public async UniTask<bool> QuitMultiplayer()
     {
-        EventManager.Instance.OnDataChanged -= SendData;
-#if UNITY_EDITOR
-        DisconnectionMessage disconnectMessage = new("c858aea9-a744-4709-a169-9df329fe4d96");
-#else
-        DisconnectionMessage disconnectMessage = new(GameManager.Instance.GetUserId());
-#endif
-        await websocket.Send(disconnectMessage.Serialize());
-        await websocket.Close();
-        connected = false;
+        if (connected)
+        {
+            EventManager.Instance.OnDataChanged -= SendData;
+            DisconnectionMessage disconnectMessage = new(playerId);
+            await websocket.Send(disconnectMessage.Serialize());
+            await websocket.Close();
+            connected = false;
 
-        return true;
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -263,5 +259,18 @@ public class MultiplayerManager : MonoBehaviour
         {
             Debug.LogError("Remote player not found");
         }
+    }
+
+    public bool IsConnected()
+    {
+        return connected;
+    }
+    public void SetPlayerId(byte id)
+    {
+       playerId = id;
+    }
+    public byte GetPayerId()
+    {
+        return playerId;
     }
 }

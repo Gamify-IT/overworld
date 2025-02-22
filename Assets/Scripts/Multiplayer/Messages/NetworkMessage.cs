@@ -6,9 +6,9 @@ using System;
 public abstract class NetworkMessage
 {
     protected abstract MessageType Type { get; }
-    protected readonly string playerId;
+    protected readonly byte playerId;
 
-    public NetworkMessage(string playerId)
+    public NetworkMessage(byte playerId)
     {
         this.playerId = playerId;
     }
@@ -18,20 +18,6 @@ public abstract class NetworkMessage
     /// </summary>
     /// <returns>byte array of the message</returns>
     public abstract byte[] Serialize();
-
-    /// <summary>
-    ///     Deserializes the player id of a message.
-    /// </summary>
-    /// <param name="data">received data</param>
-    /// <param name="index">current pointer in the byte array</param>
-    /// <returns>id of the player</returns>
-    protected static string DeserializePlayerId(byte[] data, ref int index)
-    {
-        byte[] playerIdBytes = new byte[16];
-        Buffer.BlockCopy(data, index, playerIdBytes, 0, 16);
-        index += 16;
-        return new Guid(playerIdBytes).ToString();
-    }
 
     /// <summary>
     ///     Deserializes a received byte array to a message.
@@ -55,6 +41,6 @@ public abstract class NetworkMessage
         };
     }
 
-    public string GetPlayerId() { return playerId; }
+    public byte GetPlayerId() { return playerId; }
     public MessageType GetMessageType() {  return Type; }  
 }
