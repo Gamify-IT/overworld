@@ -19,7 +19,6 @@ public class MultiplayerManager : MonoBehaviour
     [SerializeField] private GameObject remotePlayerParent;
     private Dictionary<byte, GameObject> connectedRemotePlayers;
     private bool connected = false;
-
     private byte playerId;
 
     #region singelton
@@ -52,16 +51,23 @@ public class MultiplayerManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     Creates a websocket for communicating with the multiplayer server. 
+    ///     Creates a websocket for communicating with the multiplayer server and handles it.
     /// </summary>
     public async Task Initialize()
     {
-        Debug.Log("player id: " + playerId);
-        //websocket = new WebSocket("ws://127.0.0.1:3000");
-        //Application.absoluteURL.Split("/")[^1];
         string host = new Uri(Application.absoluteURL).Host;
-        websocket = new WebSocket("ws://" + host + "/multiplayer/ws");
-        connected = true;
+        string protocol = Application.absoluteURL.StartsWith("https://") ? "wss://" : "ws://";
+        try
+        {
+            websocket = new WebSocket(protocol + host + "/multiplayer/ws");
+            connected = true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Error on opening websocket connection: " + e);
+            GameObject.Find("Multiplayer Canvas").GetComponent<MultiplayerUI>().ShowFeedbackWindow(FeedbackType.Error);
+        }
+
 
         websocket.OnOpen += () =>
         {
@@ -83,7 +89,6 @@ public class MultiplayerManager : MonoBehaviour
 
         websocket.OnMessage += (bytes) =>
         {
-            Debug.Log("received message");
             try
             {
                 UpdateRemotePlayer(NetworkMessage.Deserialize(ref bytes));
@@ -237,7 +242,7 @@ public class MultiplayerManager : MonoBehaviour
             await websocket.Send(disconnectMessage.Serialize());
             await websocket.Close();
             connected = false;
-
+            Debug.Log("Quitted multiplayer");
             return true;
         }
 
@@ -272,5 +277,9 @@ public class MultiplayerManager : MonoBehaviour
     public byte GetPayerId()
     {
         return playerId;
+    }
+    public int GetNumberOfConnectedPlayers()
+    {
+        return remotePlayerParent.transform.childCount;
     }
 }

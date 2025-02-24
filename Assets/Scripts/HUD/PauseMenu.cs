@@ -168,8 +168,4 @@ public class PauseMenu : MonoBehaviour
             audioSource.PlayOneShot(clickSound);
         }
     }
-    public void StartMultiplayer()
-    {
-        MultiplayerManager.Instance.Initialize();
-    }
 }
