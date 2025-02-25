@@ -47,7 +47,7 @@ public class CharacterMessage : NetworkMessage
     }
 
     /// <summary>
-    ///     Deserializes the recived data and converts it to a character message object.
+    ///     Deserializes the received data and converts it to a character message object.
     /// </summary>
     /// <param name="data">received network data</param>
     /// <returns>character message</returns>

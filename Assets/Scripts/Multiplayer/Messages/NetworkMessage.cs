@@ -31,12 +31,13 @@ public abstract class NetworkMessage
 
         return type switch
         {
-            MessageType.Connect => ConnectionMessage.Deserialize(ref data),
-            MessageType.Disconnect => DisconnectionMessage.Deserialize(ref data),
+            MessageType.Connection => ConnectionMessage.Deserialize(ref data),
+            MessageType.Disconnection => DisconnectionMessage.Deserialize(ref data),
             MessageType.Acknowledge => AcknowledgeMessage.Deserialize(ref data),
             MessageType.Position => PositionMessage.Deserialize(ref data),
             MessageType.Character => CharacterMessage.Deserialize(ref data),
-            MessageType.AreaInformation => AreaMessage.Deserialize(ref data),
+            MessageType.Area => AreaMessage.Deserialize(ref data),
+            MessageType.PingPong => PingPongMessage.Deserialize(ref data),
             _ => throw new Exception("Unknown message type!"),
         };
     }

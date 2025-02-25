@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class ConnectionMessage : NetworkMessage
 {
-    protected override MessageType Type => MessageType.Connect;
+    protected override MessageType Type => MessageType.Connection;
     private readonly Vector2 startPosition;
     private readonly byte worldIndex;
     private readonly byte dungeonIndex;
@@ -68,7 +68,7 @@ public class ConnectionMessage : NetworkMessage
     }
 
     /// <summary>
-    ///     Deserializes the recived data and converts it to a connection message object.
+    ///     Deserializes the received data and converts it to a connection message object.
     /// </summary>
     /// <param name="data">received network data</param>
     /// <returns>message with required inital data</returns>

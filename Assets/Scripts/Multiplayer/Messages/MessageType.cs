@@ -3,10 +3,11 @@
 /// </summary>
 public enum MessageType : byte
 {
-    Connect = 0,
-    Disconnect = 1,
+    Connection = 0,
+    Disconnection = 1,
     Acknowledge = 2,
     Position = 3,
     Character = 4,
-    AreaInformation = 5
+    Area = 5,
+    PingPong = 6
 }

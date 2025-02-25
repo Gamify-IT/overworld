@@ -1,12 +1,9 @@
-using System;
-using UnityEngine;
-
 /// <summary>
 ///     Message type for disconnecting from the multiplayer.
 /// </summary>
 public class DisconnectionMessage : NetworkMessage
 {
-    protected override MessageType Type => MessageType.Disconnect;
+    protected override MessageType Type => MessageType.Disconnection;
 
     public DisconnectionMessage(byte playerId) : base(playerId) { }
 
@@ -26,7 +23,7 @@ public class DisconnectionMessage : NetworkMessage
     }
 
     /// <summary>
-    ///     Deserializes the recived data and converts it to a disconnection message object.
+    ///     Deserializes the received data and converts it to a disconnection message object.
     /// </summary>
     /// <param name="data">received network data</param>
     /// <returns>disconnect message</returns>

@@ -13,16 +13,19 @@ public class MultiplayerUI : MonoBehaviour
     [Header("Action Toggle")]
     [SerializeField] private Button toggle;
     [SerializeField] private TextMeshProUGUI buttonText;
+
     [Header("Connection Status Panel")]
     [SerializeField] private TextMeshProUGUI playerNumber;
     [SerializeField] private GameObject connectionPanel;
     [SerializeField] private GameObject disconnectionPanel;
+
     [Header("Feedback Window")]
     [SerializeField] private GameObject feedbackWindow;
     [SerializeField] private TextMeshProUGUI feedbackText;
     [SerializeField] private GameObject errorButton;
     [SerializeField] private GameObject confirmButton;
 
+    // constant strigs
     private const string multiplayerBackendPath = "/multiplayer/api/v1";
     private const string errorText = "Cannot contact the server.\r\nPlease try again later.";
     private const string confirmationText = "Are your sure you want to quit the multiplayer?";
@@ -89,7 +92,7 @@ public class MultiplayerUI : MonoBehaviour
     {
         feedbackWindow.SetActive(false);
     }
-    #endregion
+#endregion
 
     /// <summary>
     ///     Contacts the multiplayer server to establish a new connection.

@@ -1,11 +1,9 @@
-using System;
-
 /// <summary>
 ///     Network message for the area information of the player, i.e. world and dungeon index.
 /// </summary>
 public class AreaMessage : NetworkMessage
 {
-    protected override MessageType Type => MessageType.AreaInformation;
+    protected override MessageType Type => MessageType.Area;
     private readonly byte worldIndex;
     private readonly byte dungeonIndex;
 
@@ -37,7 +35,7 @@ public class AreaMessage : NetworkMessage
     }
 
     /// <summary>
-    ///     Deserializes the recived data and converts it to a area message object.
+    ///     Deserializes the received data and converts it to a area message object.
     /// </summary>
     /// <param name="data">received network data</param>
     /// <returns>area information message</returns>
