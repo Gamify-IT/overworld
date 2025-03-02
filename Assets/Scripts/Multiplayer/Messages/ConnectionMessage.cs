@@ -15,7 +15,7 @@ public class ConnectionMessage : NetworkMessage
     private readonly string head;
     private readonly string body;
 
-    public ConnectionMessage(byte playerId, Vector2 startPosition, byte worldIndex, byte dungeonIndex, string head, string body) : base(playerId)
+    public ConnectionMessage(ushort clientId, Vector2 startPosition, byte worldIndex, byte dungeonIndex, string head, string body) : base(clientId)
     {
         this.startPosition = startPosition;
         this.worldIndex = worldIndex;
@@ -31,15 +31,16 @@ public class ConnectionMessage : NetworkMessage
         // compute array size
         int headLength = Encoding.UTF8.GetByteCount(head);
         int bodyLength = Encoding.UTF8.GetByteCount(body);
-        byte[] data = new byte[1 + 1 + 8 + 2 + 1 + headLength + 1 + bodyLength];
+        byte[] data = new byte[15 + headLength + bodyLength]; // 1 + 2 + 8 + 2 + 1 + headLength + 1 + bodyLength
 
         // message type (1 Byte)
         data[index] = (byte)Type;
         index++;
 
-        // playerId (1 Byte)
-        data[index] = playerId;
-        index++;
+        // clientId (2 Byte)
+        data[index] = (byte) (clientId &  0xFF);
+        data[index + 1] = (byte)((clientId >> 8) & 0xFF);
+        index += 2;
 
         // start position (2 * 4 Bytes)
         Buffer.BlockCopy(BitConverter.GetBytes(startPosition.x), 0, data, index, 4);
@@ -53,13 +54,13 @@ public class ConnectionMessage : NetworkMessage
         data[index] = dungeonIndex;
         index++;
 
-        // head (1 Byte length + string length)
+        // head (1 Byte + string length)
         data[index] = (byte)headLength;
         index++;
         Encoding.UTF8.GetBytes(head).CopyTo(data, index);
         index += headLength;
 
-        // body (1 Byte length + string length)
+        // body (1 Byte + string length)
         data[index] = (byte)bodyLength;
         index++;
         Encoding.UTF8.GetBytes(body).CopyTo(data, index);
@@ -77,9 +78,9 @@ public class ConnectionMessage : NetworkMessage
         // skip message type (1 Byte)
         int index = 1;
 
-        // playerId (1 Byte)
-        byte playerId = data[index];
-        index++;
+        // clientId (2 Byte)
+        ushort clientId = (ushort)(data[index] | (data[index + 1] << 8));
+        index += 2;
 
         // start position (2 * 4 Byte)
         float posX = BitConverter.ToSingle(data, index);
@@ -93,18 +94,18 @@ public class ConnectionMessage : NetworkMessage
         byte dungenIndex = data[index];
         index++;
 
-        // head (1 Byte length + string length)
+        // head (1 Byte + string length)
         int headLength = data[index];
         index++;
         string head = Encoding.UTF8.GetString(data, index, headLength);
         index += headLength;
 
-        // body (1 Byte length + string length)
+        // body (1 Byte + string length)
         int bodyLength = data[index];
         index++;
         string body = Encoding.UTF8.GetString(data, index, bodyLength);
 
-        return new ConnectionMessage(playerId, new Vector2(posX, posY), worldIndex, dungenIndex ,head, body);
+        return new ConnectionMessage(clientId, new Vector2(posX, posY), worldIndex, dungenIndex ,head, body);
     }
 
     public Vector2 GetStartPosition() { return startPosition; }

@@ -9,5 +9,5 @@ public enum MessageType : byte
     Position = 3,
     Character = 4,
     Area = 5,
-    PingPong = 6
+    Timeout = 6
 }

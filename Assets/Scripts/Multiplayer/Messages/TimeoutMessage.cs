@@ -1,16 +1,16 @@
 /// <summary>
-///     Message type for disconnecting from the multiplayer.
+///     Message type for signaling the clients inactivity.
 /// </summary>
-public class DisconnectionMessage : NetworkMessage
+public class TimeoutMessage : NetworkMessage
 {
-    protected override MessageType Type => MessageType.Disconnection;
+    protected override MessageType Type => MessageType.Timeout;
 
-    public DisconnectionMessage(ushort clientId) : base(clientId) { }
+    public TimeoutMessage(ushort playerId) : base(playerId) { }
 
     public override byte[] Serialize()
     {
         int index = 0;
-        byte [] data = new byte[3]; // 1 + 2 = 3
+        byte[] data = new byte[3]; // 1 + 2 = 3
 
         // message type (1 Byte)
         data[index] = (byte)Type;
@@ -24,11 +24,11 @@ public class DisconnectionMessage : NetworkMessage
     }
 
     /// <summary>
-    ///     Deserializes the received data and converts it to a disconnection message object.
+    ///     Deserializes the received data and converts it to a timeout message object.
     /// </summary>
     /// <param name="data">received network data</param>
-    /// <returns>disconnect message</returns>
-    public static new DisconnectionMessage Deserialize(ref byte[] data)
+    /// <returns>ping pong message</returns>
+    public static new TimeoutMessage Deserialize(ref byte[] data)
     {
         // skip message type (1 Byte)
         int index = 1;
@@ -36,6 +36,6 @@ public class DisconnectionMessage : NetworkMessage
         // clientId (2 Byte)
         ushort clientId = (ushort)(data[index] | (data[index + 1] << 8));
 
-        return new DisconnectionMessage(clientId);
+        return new TimeoutMessage(clientId);
     }
 }

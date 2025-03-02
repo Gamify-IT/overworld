@@ -7,7 +7,7 @@ public class AreaMessage : NetworkMessage
     private readonly byte worldIndex;
     private readonly byte dungeonIndex;
 
-    public AreaMessage(byte playerId, byte worldIndex, byte dungeonIndex) : base(playerId)
+    public AreaMessage(ushort clientId, byte worldIndex, byte dungeonIndex) : base(clientId)
     {
         this.worldIndex = worldIndex;
         this.dungeonIndex = dungeonIndex;
@@ -16,15 +16,16 @@ public class AreaMessage : NetworkMessage
     public override byte[] Serialize()
     {
         int index = 0;
-        byte [] data = new byte[1 + 1 + 2];
+        byte [] data = new byte[5]; // 1 + 2 + 2 = 5
 
         // message type
         data[0] = (byte)Type;
         index++;
 
-        // playerId (1 Bytes)
-        data[index] = playerId;
-        index++;
+        // clientId (2 Byte)
+        data[index] = (byte)(clientId & 0xFF);
+        data[index + 1] = (byte)((clientId >> 8) & 0xFF);
+        index += 2;
 
         // world and dungeon index (2 * 1 Byte)
         data[index] = worldIndex;
@@ -44,16 +45,16 @@ public class AreaMessage : NetworkMessage
         // skip message type (1 Byte)
         int index = 1;
 
-        // playerId (1 Byte)
-        byte playerId = data[index];
-        index++;
+        // clientId (2 Byte)
+        ushort clientId = (ushort)(data[index] | (data[index + 1] << 8));
+        index += 2;
 
         // world and dungeon index (2 * 1 Byte)
         byte worldIndex = data[index];
         index++;
         byte dungenIndex = data[index];
 
-        return new AreaMessage(playerId, worldIndex, dungenIndex);
+        return new AreaMessage(clientId, worldIndex, dungenIndex);
     }
 
     public byte GetWorldIndex() {  return worldIndex; }

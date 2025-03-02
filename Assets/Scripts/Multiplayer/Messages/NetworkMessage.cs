@@ -6,11 +6,11 @@ using System;
 public abstract class NetworkMessage
 {
     protected abstract MessageType Type { get; }
-    protected readonly byte playerId;
+    protected readonly ushort clientId;
 
-    public NetworkMessage(byte playerId)
+    public NetworkMessage(ushort clientId)
     {
-        this.playerId = playerId;
+        this.clientId = clientId;
     }
 
     /// <summary>
@@ -37,11 +37,11 @@ public abstract class NetworkMessage
             MessageType.Position => PositionMessage.Deserialize(ref data),
             MessageType.Character => CharacterMessage.Deserialize(ref data),
             MessageType.Area => AreaMessage.Deserialize(ref data),
-            MessageType.PingPong => PingPongMessage.Deserialize(ref data),
+            MessageType.Timeout => TimeoutMessage.Deserialize(ref data),
             _ => throw new Exception("Unknown message type!"),
         };
     }
 
-    public byte GetPlayerId() { return playerId; }
+    public ushort GetClientId() { return clientId; }
     public MessageType GetMessageType() {  return Type; }  
 }

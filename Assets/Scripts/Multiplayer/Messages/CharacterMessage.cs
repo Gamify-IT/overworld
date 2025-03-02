@@ -9,7 +9,7 @@ public class CharacterMessage : NetworkMessage
     private readonly string head;
     private readonly string body;
 
-    public CharacterMessage(byte playerId, string head, string body) : base(playerId)
+    public CharacterMessage(ushort clientId, string head, string body) : base(clientId)
     {
         this.head = head;
         this.body = body;
@@ -22,15 +22,16 @@ public class CharacterMessage : NetworkMessage
         // compute array size
         int headLength = Encoding.UTF8.GetByteCount(head);
         int bodyLength = Encoding.UTF8.GetByteCount(body);
-        byte[] data = new byte[1 + 1 + 1 + headLength + 1 + bodyLength];
+        byte[] data = new byte[5 + headLength + bodyLength]; // 1 + 2 + 1 + headLength + 1 + bodyLength
 
         // message type (1 Byte)
         data[index] = (byte)Type;
         index++;
 
-        // playerId (1 Byte)
-        data[index] = playerId;
-        index++;
+        // clientId (2 Byte)
+        data[index] = (byte)(clientId & 0xFF);
+        data[index + 1] = (byte)((clientId >> 8) & 0xFF);
+        index += 2;
 
         // head (1 Byte length + string)
         data[index] = (byte)headLength;
@@ -56,9 +57,9 @@ public class CharacterMessage : NetworkMessage
         // skip message type (1 Byte)
         int index = 1;
 
-        // playerId (1 Byte)
-        byte playerId = data[index];
-        index++;
+        // clientId (2 Byte)
+        ushort clientId = (ushort)(data[index] | (data[index + 1] << 8));
+        index += 2;
 
         // head (1 Byte length + string)
         int headLength = data[index];
@@ -71,7 +72,7 @@ public class CharacterMessage : NetworkMessage
         index++;
         string body = Encoding.UTF8.GetString(data, index, bodyLength);
 
-        return new CharacterMessage(playerId, head, body);
+        return new CharacterMessage(clientId, head, body);
     }
 
     public string GetHead() {  return head; }

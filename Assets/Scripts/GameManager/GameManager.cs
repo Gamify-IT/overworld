@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
     public async UniTask<bool> SaveAchievements()
     {
         List<AchievementData> achievements = DataManager.Instance.GetAchievements();
-        string basePath = overworldBackendPath + playersPath + userId + coursesPath + courseId + "/achievements/";
+        string basePath = overworldBackendPath + playersPath + userId + "/achievements/";
 
         bool savingSuccessful = true;
         foreach (AchievementData achievementData in achievements)
@@ -280,7 +280,7 @@ public class GameManager : MonoBehaviour
         }
 
         Optional<ShopItem[]> shopItems =
-           await RestRequest.GetArrayRequest<ShopItem>(overworldBackendPath + playersPath + userId + coursesPath + courseId + "/shop");
+            await RestRequest.GetArrayRequest<ShopItem>(overworldBackendPath + playersPath + userId + coursesPath + courseId + "/shop");
         if (!shopItems.IsPresent())
         {
             loadingError = true;
@@ -289,8 +289,8 @@ public class GameManager : MonoBehaviour
         string playerPath = overworldBackendPath + playersPath + userId;
 
         Optional<AchievementStatistic[]> achievementStatistics =
-            await RestRequest.GetArrayRequest<AchievementStatistic>(playerPath + coursesPath + courseId + "/achievements");
-        if(!achievementStatistics.IsPresent())
+            await RestRequest.GetArrayRequest<AchievementStatistic>(playerPath + "/achievements");
+        if (!achievementStatistics.IsPresent())
         {
             loadingError = true;
         }

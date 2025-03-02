@@ -10,7 +10,7 @@ public class PositionMessage : NetworkMessage
     private readonly Vector2 position;
     private readonly Vector2 movement;
 
-    public PositionMessage(byte playerId, Vector2 position, Vector2 movement) : base(playerId)
+    public PositionMessage(ushort clientId, Vector2 position, Vector2 movement) : base(clientId)
     {
         this.position = position;  
         this.movement = movement;
@@ -19,15 +19,16 @@ public class PositionMessage : NetworkMessage
     public override byte[] Serialize()
     {
         int index = 0;
-        byte[] data = new byte[33];
+        byte[] data = new byte[19]; // 1 + 2 + 8 + 8 = 19
 
         // message type (1 Byte)
         data[index] = (byte) Type;
         index++;
 
-        // playerId (1 Bytes)
-        data[index] = playerId;
-        index ++;
+        // clientId (2 Byte)
+        data[index] = (byte)(clientId & 0xFF);
+        data[index + 1] = (byte)((clientId >> 8) & 0xFF);
+        index += 2;
 
         // position (2 * 4 Bytes)
         Buffer.BlockCopy(BitConverter.GetBytes(position.x), 0, data, index, 4);
@@ -53,9 +54,9 @@ public class PositionMessage : NetworkMessage
         // skip message type (1 Byte)
         int index = 1;
 
-        // playerId (1 Byte)
-        byte playerId = data[index];
-        index++;
+        // clientId (2 Byte)
+        ushort clientId = (ushort)(data[index] | (data[index + 1] << 8));
+        index += 2;
 
         // position (2 * 4 Byte)
         float posX = BitConverter.ToSingle(data, index);
@@ -68,7 +69,7 @@ public class PositionMessage : NetworkMessage
         index += 4;
         float moveY = BitConverter.ToSingle(data, index);
 
-        return new PositionMessage(playerId, new Vector2(posX, posY), new Vector2(moveX, moveY));
+        return new PositionMessage(clientId, new Vector2(posX, posY), new Vector2(moveX, moveY));
     }
 
     public Vector2 GetPosition() { return position; }

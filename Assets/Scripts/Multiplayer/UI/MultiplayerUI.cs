@@ -26,7 +26,6 @@ public class MultiplayerUI : MonoBehaviour
     [SerializeField] private GameObject confirmButton;
 
     // constant strigs
-    private const string multiplayerBackendPath = "/multiplayer/api/v1";
     private const string errorText = "Cannot contact the server.\r\nPlease try again later.";
     private const string confirmationText = "Are your sure you want to quit the multiplayer?";
 
@@ -52,7 +51,7 @@ public class MultiplayerUI : MonoBehaviour
 
             try
             {
-                successful = await InitConnection();
+                successful = await MultiplayerManager.Instance.InitConnection();
             }
             catch (Exception e)
             {
@@ -62,7 +61,7 @@ public class MultiplayerUI : MonoBehaviour
 
             if (successful)
             {
-                MultiplayerManager.Instance.Initialize();
+                MultiplayerManager.Instance.InitializeWebsocket();
                 UpdateToggle();
             }
             else
@@ -93,29 +92,6 @@ public class MultiplayerUI : MonoBehaviour
         feedbackWindow.SetActive(false);
     }
 #endregion
-
-    /// <summary>
-    ///     Contacts the multiplayer server to establish a new connection.
-    /// </summary>
-    /// <returns>was the connection successful?</returns>
-    private async UniTask<bool> InitConnection()
-    {
-        ConnectionDTO connectionDTO = new(GameManager.Instance.GetUserId(), GameManager.Instance.GetCourseId());
-        string basePath = multiplayerBackendPath + "/join";
-        string json = JsonUtility.ToJson(connectionDTO, true);
-
-        Optional<ResponseDTO> data = await RestRequest.PostRequest<ResponseDTO>(basePath, json);
-
-        if (data.IsPresent())
-        {
-            MultiplayerManager.Instance.SetPlayerId(data.Value().playerId);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
 
     /// <summary>
     ///     Updates the multiplayer toggle button.

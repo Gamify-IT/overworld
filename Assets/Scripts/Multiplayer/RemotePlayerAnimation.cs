@@ -27,7 +27,7 @@ public class RemotePlayerAnimation : MonoBehaviour
     // clipping
     private AreaLocationDTO areaInformation = new();
     private readonly float tolerance = 222f;
-    private bool isActive = true;
+    private bool isVisible = true;
 
     /// <summary>
     ///     Initializes the remote players components and outfits.
@@ -58,7 +58,7 @@ public class RemotePlayerAnimation : MonoBehaviour
 
         if (IsPlayerInView())
         {
-            if (!isActive) ShowComponents(true);
+            if (!isVisible) ShowComponents(true);
 
             float horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
             float verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
@@ -184,9 +184,9 @@ public class RemotePlayerAnimation : MonoBehaviour
     ///     (De)activates the remote players components and makes it invisible.
     /// </summary>
     /// <param name="status">should the remote players components should be shown?</param>
-    private void ShowComponents(bool status)
+    public void ShowComponents(bool status)
     {
-        isActive = status;
+        isVisible = status;
         playerAnimator.enabled = status;
         accessoireAnimator.enabled = status;
         playerRigidBody.isKinematic = !status;

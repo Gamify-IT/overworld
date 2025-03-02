@@ -93,6 +93,7 @@ public class MinigameStarting : MonoBehaviour
         GameManager.Instance.MinigameDone();
 #else
         await GameManager.Instance.SavePlayerData();
+        await MultiplayerManager.Instance.PauseMultiplayer();
         LoadMinigameInIframe(game, configurationId);
 #endif
         PlayClickSound();

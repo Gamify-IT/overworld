@@ -20,6 +20,7 @@ public class ConnectionDTO
     #region Attributes
 
     public string playerId;
+    public string clientId;
     public string courseId;
 
 
@@ -27,9 +28,10 @@ public class ConnectionDTO
 
     #region Constructors
 
-    public ConnectionDTO(string playerId, string courseId)
+    public ConnectionDTO(string playerId, string clientId, string courseId)
     {
         this.playerId = playerId;
+        this.clientId = clientId;
         this.courseId = courseId;
     }
 

@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using NativeWebSocket;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -16,19 +17,20 @@ public class MultiplayerManager : MonoBehaviour
 
     // websocket connection
     private WebSocket websocket;
-    private bool connected = false;
-    private byte playerId;
+    private bool isConnected = false;
+    private ushort clientId = 0;
+    private const string multiplayerApiPath = "/multiplayer-server/api/v1";
+    private const string multiplayerSocketPath = "/multiplayer-server/ws";
 
-    // remote player
+    // remote player data
     [SerializeField] private GameObject prefab;
     [SerializeField] private GameObject remotePlayerParent;
-    private Dictionary<byte, GameObject> connectedRemotePlayers;
+    private readonly Dictionary<ushort, GameObject> connectedRemotePlayers = new();
+    private readonly Dictionary<ushort, GameObject> inactiveRemotePlayers = new();
 
-    // ping pong routine
-    private bool pongReceived = true;
-    private float lastPingTime = 0f;
-    private float lastPongTime = 0f;
-
+    // timeout routine
+    private bool isInactive = false;
+    private float lastDataChangedTime = 0f;
 
     #region singelton
     public static MultiplayerManager Instance { get; private set; }
@@ -51,46 +53,79 @@ public class MultiplayerManager : MonoBehaviour
 
     private void Update()
     {
-        if (connected)
+        if (isConnected)
         {
 #if !UNITY_WEBGL || UNITY_EDITOR
             websocket.DispatchMessageQueue();
 #endif
-            PingPongRoutine();
         }
+        CheckForTimeout();
     }
 
+    #region time based routines
     /// <summary>
-    ///     Sends a ping to the server and checks if there is a pong response.
-    ///     If not, the websocket connection is closed.
+    ///     Checks if the player is inactive and pauses the multiplayer.
+    ///     If the player is active again, the multiplayer is activated.
     /// </summary>
-    private async void PingPongRoutine()
+    private async void CheckForTimeout()
     {
-        if (Time.realtimeSinceStartup - lastPingTime > 30f)
+        if (Time.realtimeSinceStartup - lastDataChangedTime > 50f)
         {
-            SendPing();
+            if (isConnected && !isInactive)
+            {
+                isInactive = true;
+                await PauseMultiplayer();
+            }
         }
-
-        if (!pongReceived && Time.unscaledDeltaTime - lastPongTime > 10f)
+        else
         {
-            Debug.LogError("No pong received. Connection might be lost.");
-            // TODO: add UI feedback
-            await QuitMultiplayer();
+            if (!isConnected && isInactive)
+            {
+                isInactive = false;
+                await ResumeMultiplayer();
+            }
+        }
+    }
+    #endregion
+
+    #region websocket connection
+    /// <summary>
+    ///     Contacts the multiplayer server to establish a new connection.
+    /// </summary>
+    /// <returns>was the connection successful?</returns>
+    public async UniTask<bool> InitConnection()
+    {
+        string id = clientId != 0 ? clientId.ToString() : string.Empty;
+        ConnectionDTO connectionDTO = new(GameManager.Instance.GetUserId(), id, GameManager.Instance.GetCourseId());
+        string basePath = multiplayerApiPath + "/join";
+        string json = JsonUtility.ToJson(connectionDTO, true);
+
+        Optional<ResponseDTO> data = await RestRequest.PostRequest<ResponseDTO>(basePath, json);
+
+        if (data.IsPresent())
+        {
+            clientId = data.Value().clientId;
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
     /// <summary>
     ///     Creates a websocket for communicating with the multiplayer server and handles it throughout a session.
     /// </summary>
-    public async Task Initialize()
+    public async Task InitializeWebsocket()
     {
         OpenWebSocket();
+        StartCoroutine(InitializeDictionarys());
 
         websocket.OnOpen += () =>
         {
             Debug.Log("Connection open");
-            connectedRemotePlayers = new();
             SendInitialData();
+            lastDataChangedTime = Time.realtimeSinceStartup;
             EventManager.Instance.OnDataChanged += SendData;
         };
 
@@ -128,8 +163,8 @@ public class MultiplayerManager : MonoBehaviour
         string protocol = Application.absoluteURL.StartsWith("https://") ? "wss://" : "ws://";
         try
         {
-            websocket = new WebSocket(protocol + host + "/multiplayer/ws");
-            connected = true;
+            websocket = new WebSocket(protocol + host + multiplayerSocketPath);
+            isConnected = true;
         }
         catch (Exception e)
         {
@@ -137,27 +172,33 @@ public class MultiplayerManager : MonoBehaviour
             GameObject.Find("Multiplayer Canvas").GetComponent<MultiplayerUI>().ShowFeedbackWindow(FeedbackType.Error);
         }
     }
+    #endregion
 
-    #region messages send events
+    #region message sending
     /// <summary>
     ///     Sends the player's data to the server if one of the event trigger was activated.
     /// </summary>
     /// <param name="trigger">triggering event</param>
     private async void SendData(object sender, EventArgs trigger)
     {
-        if (websocket.State == WebSocketState.Open)
+        lastDataChangedTime = Time.realtimeSinceStartup;
+
+        if (isConnected)
         {
-            switch (trigger)
+            if (websocket.State == WebSocketState.Open)
             {
-                case EventArgsWrapper<PositionMessage> positionTrigger:
-                    await websocket.Send(positionTrigger.GetMessage().Serialize());
-                    break;
-                case EventArgsWrapper<CharacterMessage> characterTrigger:
-                    await websocket.Send(characterTrigger.GetMessage().Serialize());
-                    break;
-                default:
-                    Debug.LogError("Unknown trigger event");
-                    break;
+                switch (trigger)
+                {
+                    case EventArgsWrapper<PositionMessage> positionTrigger:
+                        await websocket.Send(positionTrigger.GetMessage().Serialize());
+                        break;
+                    case EventArgsWrapper<CharacterMessage> characterTrigger:
+                        await websocket.Send(characterTrigger.GetMessage().Serialize());
+                        break;
+                    default:
+                        Debug.LogError("Unknown trigger event");
+                        break;
+                }
             }
         }
     }
@@ -172,9 +213,11 @@ public class MultiplayerManager : MonoBehaviour
         string head = DataManager.Instance.GetPlayerData().GetCurrentAccessory();
         string body = DataManager.Instance.GetPlayerData().GetCurrentCharacter();
         ConnectionMessage connectionMessage = new(
-            playerId, startPosition,
-            (byte) currentArea.worldIndex, (byte) currentArea.dungeonIndex,
-            head, body);
+            clientId,
+            startPosition,
+            (byte)currentArea.worldIndex, (byte)currentArea.dungeonIndex,
+            head, body
+        );
 
         await websocket.Send(connectionMessage.Serialize());
     }
@@ -189,26 +232,17 @@ public class MultiplayerManager : MonoBehaviour
         string head = DataManager.Instance.GetPlayerData().GetCurrentAccessory();
         string body = DataManager.Instance.GetPlayerData().GetCurrentCharacter();
         AcknowledgeMessage ackMessage = new(
-            playerId, startPosition,
+            clientId, 
+            startPosition,
             (byte)currentArea.worldIndex, (byte)currentArea.dungeonIndex,
-            head, body);
-       
-        await websocket.Send(ackMessage.Serialize());
-    }
+            head, body
+        );
 
-    /// <summary>
-    ///     Sends a ping message to the server.
-    /// </summary>
-    private async void SendPing()
-    {
-        pongReceived = false;
-        lastPingTime = Time.realtimeSinceStartup;
-        PingPongMessage ping = new(playerId);
-        await websocket.Send(ping.Serialize());
-        Debug.Log("sending ping");
+        await websocket.Send(ackMessage.Serialize());
     }
     #endregion
 
+    #region message processing
     /// <summary>
     ///     Updates the remote player depending on the received message type.
     /// </summary>
@@ -220,88 +254,76 @@ public class MultiplayerManager : MonoBehaviour
 
         switch (message)
         {
-            case ConnectionMessage:
-                GetOrCreateRemotePlayer(message, ref remotePlayerPrefab);
-                SendAcknowledgeData();
-                break;
+            case ConnectionMessage connectionMessage:
+                if (GetOrCreateRemotePlayer(connectionMessage, ref remotePlayerPrefab))
+                {
+                    remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
+                    remotePlayer.ShowComponents(true);
+                    SendAcknowledgeData();
+                }
+                return;
             case DisconnectionMessage disconnectMessage:
                 RemoveRemotePlayer(disconnectMessage);
-                break;
-            case AcknowledgeMessage:
-                GetOrCreateRemotePlayer(message, ref remotePlayerPrefab);
-                break;
+                return;
+            case AcknowledgeMessage acknowledgeMessage:
+                if (GetOrCreateRemotePlayer(acknowledgeMessage, ref remotePlayerPrefab))
+                {
+                    remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
+                    remotePlayer.ShowComponents(true);
+                }
+                return;
             case PositionMessage positionMessage:
-                GetOrCreateRemotePlayer(message, ref remotePlayerPrefab);
-                remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
-                remotePlayer.UpdatePosition(positionMessage.GetPosition(), positionMessage.GetMovement());
-                break;
+                if (connectedRemotePlayers.TryGetValue(message.GetClientId(), out remotePlayerPrefab))
+                {
+                    remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
+                    remotePlayer.UpdatePosition(positionMessage.GetPosition(), positionMessage.GetMovement());
+                }
+                return;
             case CharacterMessage characterMessage:
-                GetOrCreateRemotePlayer(message, ref remotePlayerPrefab);
-                remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
-                remotePlayer.UpdateCharacterOutfit(characterMessage.GetHead(), characterMessage.GetBody());
-                break;
+                if (connectedRemotePlayers.TryGetValue(message.GetClientId(), out remotePlayerPrefab))
+                {
+                    remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
+                    remotePlayer.UpdateCharacterOutfit(characterMessage.GetHead(), characterMessage.GetBody());
+                }
+                return;
             case AreaMessage areaMessage:
-                GetOrCreateRemotePlayer(message, ref remotePlayerPrefab);
-                remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
-                remotePlayer.UpdateAreaInformation(areaMessage.GetWorldIndex(), areaMessage.GetDungeonIndex());
-                break;
-            case PingPongMessage:
-                Debug.Log("received pong");
-                pongReceived = true;
-                lastPongTime = Time.realtimeSinceStartup;
-                break;
+                if (connectedRemotePlayers.TryGetValue(message.GetClientId(), out remotePlayerPrefab))
+                {
+                    remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
+                    remotePlayer.UpdateAreaInformation(areaMessage.GetWorldIndex(), areaMessage.GetDungeonIndex());
+                }
+                return;
+            case TimeoutMessage:
+                if(connectedRemotePlayers.TryGetValue(message.GetClientId(), out remotePlayerPrefab))
+                {
+                    connectedRemotePlayers.Remove(message.GetClientId());
+                    inactiveRemotePlayers.Add(message.GetClientId(), remotePlayerPrefab);
+                    remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
+                    remotePlayer.ShowComponents(false);
+                }
+                return;
             default:
                 throw new Exception("Unknown message type");
         }
     }
+    #endregion
 
+    #region multiplayer connection handling
     /// <summary>
-    ///     Handles the creation of a new remote player, if non-existent, or gets the existing one.
-    /// </summary>
-    /// <param name="message">received network message</param>
-    /// <param name="remotePlayerPrefab">reference to the remote player GameObject</param>
-    private void GetOrCreateRemotePlayer(NetworkMessage message, ref GameObject remotePlayerPrefab)
-    {
-        if (!connectedRemotePlayers.TryGetValue(message.GetPlayerId(), out remotePlayerPrefab))
-        {
-            if (message is ConnectionMessage connectionMessage)
-            {
-                remotePlayerPrefab = Instantiate(prefab, connectionMessage.GetStartPosition(), Quaternion.identity, remotePlayerParent.transform);
-                connectedRemotePlayers.Add(message.GetPlayerId(), remotePlayerPrefab);
-                RemotePlayerAnimation remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
-                remotePlayer.Initialize();
-                remotePlayer.UpdateCharacterOutfit(connectionMessage.GetHead(), connectionMessage.GetBody());
-                remotePlayer.UpdateAreaInformation(connectionMessage.GetWorldIndex(), connectionMessage.GetDungeonIndex());
-            }
-            else if (message is AcknowledgeMessage ackMessage)
-            {
-                remotePlayerPrefab = Instantiate(prefab, ackMessage.GetStartPosition(), Quaternion.identity, remotePlayerParent.transform);
-                connectedRemotePlayers.Add(message.GetPlayerId(), remotePlayerPrefab);
-                RemotePlayerAnimation remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
-                remotePlayer.Initialize();
-                remotePlayer.UpdateCharacterOutfit(ackMessage.GetHead(), ackMessage.GetBody());
-                remotePlayer.UpdateAreaInformation(ackMessage.GetWorldIndex(), ackMessage.GetDungeonIndex());
-            }
-            else
-            {
-                Debug.Log("Waiting for connection or acknowledge message to create new player");
-            }
-        }
-    }
-
-    /// <summary>
-    ///     Sends a disconnection message to the server, closes the websocket connection and unsubscribes from event triggers.
+    ///     Terminates the multiplayer connection completely.
+    ///     Includes sending a disconnection message to the server, closing the websocket connection and 
+    ///     unsubscribing from event triggers.
     /// </summary>
     public async UniTask<bool> QuitMultiplayer()
     {
-        if (connected)
+        if (isConnected)
         {
             EventManager.Instance.OnDataChanged -= SendData;
-            DisconnectionMessage disconnectMessage = new(playerId);
+            DisconnectionMessage disconnectMessage = new(clientId);
             await websocket.Send(disconnectMessage.Serialize());
             await websocket.Close();
             RemoveAllRemotePlayers();
-            connected = false;
+            isConnected = false;
             Debug.Log("Quitted multiplayer");
             return true;
         }
@@ -309,21 +331,166 @@ public class MultiplayerManager : MonoBehaviour
         return false;
     }
 
-    public async UniTask<bool> TimeoutMultiplayer()
+    /// <summary>
+    ///     Terminates the multiplayer connection with the option to reconnect.
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask<bool> PauseMultiplayer()
     {
-        return true;
+        if (isConnected)
+        {
+            TimeoutMessage timeoutMessage = new(clientId);
+            await websocket.Send(timeoutMessage.Serialize());
+            await websocket.Close();
+            isConnected = false;
+            Debug.Log("Paused multiplayer");
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
-    ///     Removes the player from the connected players dictionary and destroys its prefab.
+    ///     Resumes the multiplayer if the player was inactive and is now active again.
+    /// </summary>
+    /// <returns></returns>
+    private async UniTask ResumeMultiplayer()
+    {
+        bool successful = await InitConnection();
+
+        if (successful)
+        {
+            Debug.Log("Reconnecting to multiplayer");
+            InitializeWebsocket();
+        }
+        else
+        {
+            Debug.LogError("Reconnection to server failed");
+            // TODO: add UI feedback
+        }
+    }
+    #endregion
+
+    #region remote player handling
+    /// <summary>
+    ///     Deletes all exisiting remote players and removes them from the connected players and inactive players dictionarys. 
+    /// </summary>
+    private IEnumerator InitializeDictionarys()
+    {
+        yield return new WaitForEndOfFrame();
+
+        // delete existing prefabs
+        foreach (var remotePlayer in connectedRemotePlayers)
+        {
+            Destroy(remotePlayer.Value);
+        }
+
+        foreach (var inactivePlayer in inactiveRemotePlayers)
+        {
+            Destroy(inactivePlayer.Value);
+        }
+
+        // clear dictionarys
+        connectedRemotePlayers.Clear();
+        inactiveRemotePlayers.Clear();
+    }
+
+    /// <summary>
+    ///     Handles the creation of a new remote player, if non-existent, or gets the existing one.
+    /// </summary>
+    /// <param name="message">received network message</param>
+    /// <param name="remotePlayerPrefab">reference to the remote player GameObject</param>
+    private bool GetOrCreateRemotePlayer(NetworkMessage message, ref GameObject remotePlayerPrefab)
+    {
+        // check if remote player is connected
+        if (!connectedRemotePlayers.TryGetValue(message.GetClientId(), out remotePlayerPrefab))
+        {
+            // test if remote player was inactive
+            if (inactiveRemotePlayers.TryGetValue(message.GetClientId(), out remotePlayerPrefab))
+            {
+                inactiveRemotePlayers.Remove(message.GetClientId());
+                connectedRemotePlayers.Add(message.GetClientId(), remotePlayerPrefab);
+                RemotePlayerAnimation remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
+                switch(message)
+                {
+                    case ConnectionMessage connectionMessage:
+                        remotePlayer.UpdatePosition(connectionMessage.GetStartPosition(), Vector2.zero); 
+                        break;
+                    case AcknowledgeMessage acknowledgeMessage:
+                        remotePlayer.UpdatePosition(acknowledgeMessage.GetStartPosition(), Vector2.zero);
+                        break;
+                    default:
+                        Debug.Log("Waiting for connection or acknowledge message to reconnect a player");
+                        return false;
+                }                           
+                return true;
+            }
+            else if (message is ConnectionMessage connectionMessage)
+            {
+                CreateRemotePlayer(connectionMessage, out remotePlayerPrefab);
+                return true;
+            }
+            else if (message is AcknowledgeMessage acknowledgeMessage)
+            {
+                CreateRemotePlayer(acknowledgeMessage, out remotePlayerPrefab);
+                return true;
+            }
+            else
+            {
+                Debug.Log("Waiting for connection or acknowledge message to create new player");
+                return false;
+            }
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    /// <summary>
+    ///     Creates a new prefab for a remote player based on the connection or acknowledge message.
+    /// </summary>
+    /// <param name="message">received connection or acknowledge message</param>
+    /// <param name="remotePlayerPrefab">remote player prefab object</param>
+    private void CreateRemotePlayer(NetworkMessage message, out GameObject remotePlayerPrefab)
+    {
+        RemotePlayerAnimation remotePlayer;
+        switch (message)
+        {
+            case ConnectionMessage connectionMessage:
+                remotePlayerPrefab = Instantiate(prefab, connectionMessage.GetStartPosition(), Quaternion.identity, remotePlayerParent.transform);
+                connectedRemotePlayers.Add(message.GetClientId(), remotePlayerPrefab);
+                remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
+                remotePlayer.Initialize();
+                remotePlayer.UpdateCharacterOutfit(connectionMessage.GetHead(), connectionMessage.GetBody());
+                remotePlayer.UpdateAreaInformation(connectionMessage.GetWorldIndex(), connectionMessage.GetDungeonIndex());
+                return;
+            case AcknowledgeMessage acknowledgeMessage:
+                remotePlayerPrefab = Instantiate(prefab, acknowledgeMessage.GetStartPosition(), Quaternion.identity, remotePlayerParent.transform);
+                connectedRemotePlayers.Add(message.GetClientId(), remotePlayerPrefab);
+                remotePlayer = remotePlayerPrefab.GetComponent<RemotePlayerAnimation>();
+                remotePlayer.Initialize();
+                remotePlayer.UpdateCharacterOutfit(acknowledgeMessage.GetHead(), acknowledgeMessage.GetBody());
+                remotePlayer.UpdateAreaInformation(acknowledgeMessage.GetWorldIndex(), acknowledgeMessage.GetDungeonIndex());
+                return;
+            default:
+                Debug.Log("Waiting for connection or acknowledge message to reconnect a player");
+                remotePlayerPrefab = null;
+                return;
+        }
+    }
+
+    /// <summary>
+    ///     Removes the player from the isConnected players dictionary and destroys its prefab.
     /// </summary>
     /// <param name="disconnectMessage">received network message</param>
     private void RemoveRemotePlayer(DisconnectionMessage disconnectMessage)
     {
-        if (connectedRemotePlayers.TryGetValue(disconnectMessage.GetPlayerId(), out GameObject remotePlayerPrefab))
+        if (connectedRemotePlayers.TryGetValue(disconnectMessage.GetClientId(), out GameObject remotePlayerPrefab))
         {
             Destroy(remotePlayerPrefab);
-            connectedRemotePlayers.Remove(disconnectMessage.GetPlayerId());
+            connectedRemotePlayers.Remove(disconnectMessage.GetClientId());
+            inactiveRemotePlayers.Remove(disconnectMessage.GetClientId());
         }
         else
         {
@@ -332,7 +499,7 @@ public class MultiplayerManager : MonoBehaviour
     }
 
     /// <summary>
-    ///     Removes all players from connected players dictionary and destroys their prefab.
+    ///     Removes all players from isConnected players dictionary and destroys their prefab.
     /// </summary>
     private void RemoveAllRemotePlayers()
     {
@@ -342,21 +509,20 @@ public class MultiplayerManager : MonoBehaviour
         }
         connectedRemotePlayers.Clear();
     }
+    #endregion
 
+    #region getter
     public bool IsConnected()
     {
-        return connected;
+        return isConnected;
     }
-    public void SetPlayerId(byte id)
+    public ushort GetPayerId()
     {
-       playerId = id;
-    }
-    public byte GetPayerId()
-    {
-        return playerId;
+        return clientId;
     }
     public int GetNumberOfConnectedPlayers()
     {
         return remotePlayerParent.transform.childCount;
     }
+    #endregion
 }

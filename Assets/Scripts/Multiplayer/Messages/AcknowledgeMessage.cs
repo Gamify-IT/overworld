@@ -15,7 +15,7 @@ public class AcknowledgeMessage : NetworkMessage
     private readonly string head;
     private readonly string body;
 
-    public AcknowledgeMessage(byte playerId, Vector2 startPosition, byte worldIndex, byte dungeonIndex, string head, string body) : base(playerId)
+    public AcknowledgeMessage(ushort clientId, Vector2 startPosition, byte worldIndex, byte dungeonIndex, string head, string body) : base(clientId)
     {
         this.startPosition = startPosition;
         this.worldIndex = worldIndex;
@@ -31,15 +31,16 @@ public class AcknowledgeMessage : NetworkMessage
         // compute array size
         int headLength = Encoding.UTF8.GetByteCount(head);
         int bodyLength = Encoding.UTF8.GetByteCount(body);
-        byte[] data = new byte[1 + 1 + 8 + 2 + 1 + headLength + 1 + bodyLength];
+        byte[] data = new byte[15 + headLength + bodyLength]; // 1 + 2 + 8 + 2 + 1 + headLength + 1 + bodyLength
 
         // message type (1 Byte)
         data[index] = (byte)Type;
         index++;
 
-        // playerId (1 Byte)
-        data[index] = playerId;
-        index++;
+        // clientId (2 Byte)
+        data[index] = (byte)(clientId & 0xFF);
+        data[index + 1] = (byte)((clientId >> 8) & 0xFF);
+        index += 2;
 
         // start position (2 * 4 Bytes)
         Buffer.BlockCopy(BitConverter.GetBytes(startPosition.x), 0, data, index, 4);
@@ -77,9 +78,9 @@ public class AcknowledgeMessage : NetworkMessage
         // skip message type (1 Byte)
         int index = 1;
 
-        // playerId (1 Byte)
-        byte playerId = data[index];
-        index++;
+        // clientId (2 Byte)
+        ushort clientId = (ushort)(data[index] | (data[index + 1] << 8));
+        index += 2;
 
         // start position (2 * 4 Byte)
         float posX = BitConverter.ToSingle(data, index);
@@ -104,7 +105,7 @@ public class AcknowledgeMessage : NetworkMessage
         index++;
         string body = Encoding.UTF8.GetString(data, index, bodyLength);
 
-        return new AcknowledgeMessage(playerId, new Vector2(posX, posY), worldIndex, dungenIndex, head, body);
+        return new AcknowledgeMessage(clientId, new Vector2(posX, posY), worldIndex, dungenIndex, head, body);
     }
 
     public Vector2 GetStartPosition() { return startPosition; }

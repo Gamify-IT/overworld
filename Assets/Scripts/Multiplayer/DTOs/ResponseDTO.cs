@@ -19,16 +19,15 @@ public class ResponseDTO
 
     #region Attributes
 
-    public byte playerId;
-
+    public ushort clientId;
 
     #endregion
 
     #region Constructors
 
-    public ResponseDTO(byte playerId)
+    public ResponseDTO(ushort clientId)
     {
-        this.playerId = playerId;
+        this.clientId = clientId;
     }
 
     public ResponseDTO()
