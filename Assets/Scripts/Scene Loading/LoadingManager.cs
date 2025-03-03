@@ -324,14 +324,6 @@ public class LoadingManager : MonoBehaviour
         progressText.text = "100%";
         loadingText.text = "DONE...";
 
-        /*try
-        {
-            await SceneManager.UnloadSceneAsync("LoadingScreen");
-        }
-        catch (ArgumentNullException)
-        {
-
-        }*/
         SceneManager.UnloadScene("LoadingScreen");
     }
 

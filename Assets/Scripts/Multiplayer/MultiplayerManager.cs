@@ -67,22 +67,20 @@ public class MultiplayerManager : MonoBehaviour
     ///     Checks if the player is inactive and pauses the multiplayer.
     ///     If the player is active again, the multiplayer is activated.
     /// </summary>
-    private async void CheckForTimeout()
+    private void CheckForTimeout()
     {
         if (Time.realtimeSinceStartup - lastDataChangedTime > 50f)
         {
             if (isConnected && !isInactive)
             {
-                isInactive = true;
-                await PauseMultiplayer();
+                _ = PauseMultiplayer();
             }
         }
         else
         {
             if (!isConnected && isInactive)
             {
-                isInactive = false;
-                await ResumeMultiplayer();
+                _ = ResumeMultiplayer();
             }
         }
     }
@@ -124,6 +122,7 @@ public class MultiplayerManager : MonoBehaviour
         websocket.OnOpen += () =>
         {
             Debug.Log("Connection open");
+            isConnected = true;
             SendInitialData();
             lastDataChangedTime = Time.realtimeSinceStartup;
             EventManager.Instance.OnDataChanged += SendData;
@@ -136,6 +135,7 @@ public class MultiplayerManager : MonoBehaviour
 
         websocket.OnClose += (e) =>
         {
+            isConnected = false;
             Debug.Log("Connection closed");
         };
 
@@ -164,7 +164,6 @@ public class MultiplayerManager : MonoBehaviour
         try
         {
             websocket = new WebSocket(protocol + host + multiplayerSocketPath);
-            isConnected = true;
         }
         catch (Exception e)
         {
@@ -185,20 +184,20 @@ public class MultiplayerManager : MonoBehaviour
 
         if (isConnected)
         {
-            if (websocket.State == WebSocketState.Open)
+            switch (trigger)
             {
-                switch (trigger)
-                {
-                    case EventArgsWrapper<PositionMessage> positionTrigger:
-                        await websocket.Send(positionTrigger.GetMessage().Serialize());
-                        break;
-                    case EventArgsWrapper<CharacterMessage> characterTrigger:
-                        await websocket.Send(characterTrigger.GetMessage().Serialize());
-                        break;
-                    default:
-                        Debug.LogError("Unknown trigger event");
-                        break;
-                }
+                case EventArgsWrapper<PositionMessage> positionTrigger:
+                    await websocket.Send(positionTrigger.GetMessage().Serialize());
+                    return;
+                case EventArgsWrapper<CharacterMessage> characterTrigger:
+                    await websocket.Send(characterTrigger.GetMessage().Serialize());
+                    return;
+                case EventArgsWrapper<AreaMessage> areaTrigger:
+                    await websocket.Send(areaTrigger.GetMessage().Serialize());
+                    return;
+                default:
+                    Debug.LogError("Unknown message trigger event");
+                    return;
             }
         }
     }
@@ -208,6 +207,7 @@ public class MultiplayerManager : MonoBehaviour
     /// </summary>
     private async void SendInitialData()
     {
+        lastDataChangedTime = Time.realtimeSinceStartup;
         Vector2 startPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
         AreaLocationDTO currentArea = DataManager.Instance.GetPlayerData().GetCurrentArea();
         string head = DataManager.Instance.GetPlayerData().GetCurrentAccessory();
@@ -227,6 +227,7 @@ public class MultiplayerManager : MonoBehaviour
     /// </summary>
     private async void SendAcknowledgeData()
     {
+        lastDataChangedTime = Time.realtimeSinceStartup;
         Vector2 startPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
         AreaLocationDTO currentArea = DataManager.Instance.GetPlayerData().GetCurrentArea();
         string head = DataManager.Instance.GetPlayerData().GetCurrentAccessory();
@@ -316,19 +317,22 @@ public class MultiplayerManager : MonoBehaviour
     /// </summary>
     public async UniTask<bool> QuitMultiplayer()
     {
+        EventManager.Instance.OnDataChanged -= SendData;
+
         if (isConnected)
         {
-            EventManager.Instance.OnDataChanged -= SendData;
             DisconnectionMessage disconnectMessage = new(clientId);
             await websocket.Send(disconnectMessage.Serialize());
             await websocket.Close();
-            RemoveAllRemotePlayers();
-            isConnected = false;
-            Debug.Log("Quitted multiplayer");
-            return true;
         }
 
-        return false;
+        RemoveAllRemotePlayers();
+        isConnected = false;
+        isInactive = false;
+
+        Debug.Log("Quitted multiplayer");
+
+        return true;
     }
 
     /// <summary>
@@ -339,10 +343,11 @@ public class MultiplayerManager : MonoBehaviour
     {
         if (isConnected)
         {
+            isInactive = true;
+            isConnected = false;
             TimeoutMessage timeoutMessage = new(clientId);
             await websocket.Send(timeoutMessage.Serialize());
             await websocket.Close();
-            isConnected = false;
             Debug.Log("Paused multiplayer");
             return true;
         }
@@ -353,9 +358,9 @@ public class MultiplayerManager : MonoBehaviour
     /// <summary>
     ///     Resumes the multiplayer if the player was inactive and is now active again.
     /// </summary>
-    /// <returns></returns>
     private async UniTask ResumeMultiplayer()
     {
+        isInactive = false;
         bool successful = await InitConnection();
 
         if (successful)
@@ -366,7 +371,7 @@ public class MultiplayerManager : MonoBehaviour
         else
         {
             Debug.LogError("Reconnection to server failed");
-            // TODO: add UI feedback
+            // TODO: add UI feedback on multiplayer HUD
         }
     }
     #endregion
@@ -508,18 +513,42 @@ public class MultiplayerManager : MonoBehaviour
             Destroy(child.gameObject);
         }
         connectedRemotePlayers.Clear();
+        inactiveRemotePlayers.Clear();
     }
     #endregion
 
-    #region getter
+    #region getter and setter
+    /// <summary>
+    ///     Gets the connection state of the client, i.e. whether the player is currently connected with the multiplayer or not.
+    /// </summary>
+    /// <returns>is the player connected?</returns>
     public bool IsConnected()
     {
         return isConnected;
     }
-    public ushort GetPayerId()
+
+    /// <summary>
+    ///     Gets the inactivity state of the client, i.e. whether the player is inactive or not.
+    /// </summary>
+    /// <returns>is the player inactive?</returns>
+    public bool IsInactive()
+    {
+        return isInactive;
+    }
+
+    /// <summary>
+    ///     Gets the id of the client.
+    /// </summary>
+    /// <returns>client id</returns>
+    public ushort GetClientId()
     {
         return clientId;
     }
+
+    /// <summary>
+    ///     Gets the number of currently palyers connected with the multiplayer.
+    /// </summary>
+    /// <returns>number of online players</returns>
     public int GetNumberOfConnectedPlayers()
     {
         return remotePlayerParent.transform.childCount;

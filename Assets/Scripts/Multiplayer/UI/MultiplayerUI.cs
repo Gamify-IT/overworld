@@ -37,6 +37,8 @@ public class MultiplayerUI : MonoBehaviour
     private void Update()
     {
         playerNumber.text = MultiplayerManager.Instance.GetNumberOfConnectedPlayers().ToString();
+        // TODO: replace with timeout UI
+        SetConnectionStatus(MultiplayerManager.Instance.IsConnected());
     }
 
     #region button functions

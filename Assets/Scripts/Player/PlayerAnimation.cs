@@ -301,7 +301,7 @@ public class PlayerAnimation : MonoBehaviour
 
             if (Vector2.Distance(playerRigidBody.position, newPosition) > positionThreshold)
             {
-                EventManager.Instance.TriggerDataChanged<PositionMessage>(new(MultiplayerManager.Instance.GetPayerId(), newPosition, movement));
+                EventManager.Instance.TriggerDataChanged<PositionMessage>(new(MultiplayerManager.Instance.GetClientId(), newPosition, movement));
             }
 
             SetLookingDirection();

@@ -156,7 +156,7 @@ public class DataManager : MonoBehaviour
             Debug.Log("Setting data for world " + worldIndex);
             playerData.SetLogoutScene("World " + worldIndex);
         }
-        EventManager.Instance.TriggerDataChanged<AreaMessage>(new(MultiplayerManager.Instance.GetPayerId(), (byte)worldIndex, (byte)dungeonIndex));
+        EventManager.Instance.TriggerDataChanged<AreaMessage>(new(MultiplayerManager.Instance.GetClientId(), (byte)worldIndex, (byte)dungeonIndex));
     }
 
     /// <summary>

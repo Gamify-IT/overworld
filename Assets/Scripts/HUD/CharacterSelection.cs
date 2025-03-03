@@ -524,7 +524,7 @@ public class CharacterSelection : MonoBehaviour
             GameManager.Instance.SavePlayerData();
             GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.SELECT_CHARACTER, 1, null);
 
-            EventManager.Instance.TriggerDataChanged<CharacterMessage>(new(MultiplayerManager.Instance.GetPayerId(), selectedHead, selectedBody));            
+            EventManager.Instance.TriggerDataChanged<CharacterMessage>(new(MultiplayerManager.Instance.GetClientId(), selectedHead, selectedBody));            
         }
     }
 
