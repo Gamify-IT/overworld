@@ -123,6 +123,7 @@ public class MultiplayerManager : MonoBehaviour
         {
             Debug.Log("Connection open");
             isConnected = true;
+            MultiplayerHUD.Instance.SetState(FeedbackType.Connected);
             SendInitialData();
             lastDataChangedTime = Time.realtimeSinceStartup;
             EventManager.Instance.OnDataChanged += SendData;
@@ -137,6 +138,12 @@ public class MultiplayerManager : MonoBehaviour
         {
             isConnected = false;
             Debug.Log("Connection closed");
+            
+            // check for unexpected disconnection
+            if (!isInactive)
+            {
+                QuitMultiplayer();
+            }
         };
 
         websocket.OnMessage += (bytes) =>
@@ -168,7 +175,7 @@ public class MultiplayerManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError("Error on opening websocket connection: " + e);
-            GameObject.Find("Multiplayer Canvas").GetComponent<MultiplayerUI>().ShowFeedbackWindow(FeedbackType.Error);
+            GameObject.Find("Multiplayer Canvas").GetComponent<MultiplayerMenu>().ShowFeedbackWindow(FeedbackType.Error);
         }
     }
     #endregion
@@ -309,7 +316,7 @@ public class MultiplayerManager : MonoBehaviour
     }
     #endregion
 
-    #region multiplayer connection handling
+    #region multiplayer session handling
     /// <summary>
     ///     Terminates the multiplayer connection completely.
     ///     Includes sending a disconnection message to the server, closing the websocket connection and 
@@ -329,7 +336,7 @@ public class MultiplayerManager : MonoBehaviour
         RemoveAllRemotePlayers();
         isConnected = false;
         isInactive = false;
-
+        MultiplayerHUD.Instance.SetState(FeedbackType.Disconnected);
         Debug.Log("Quitted multiplayer");
 
         return true;
@@ -348,6 +355,7 @@ public class MultiplayerManager : MonoBehaviour
             TimeoutMessage timeoutMessage = new(clientId);
             await websocket.Send(timeoutMessage.Serialize());
             await websocket.Close();
+            MultiplayerHUD.Instance.SetState(FeedbackType.Inactive);
             Debug.Log("Paused multiplayer");
             return true;
         }
@@ -371,7 +379,7 @@ public class MultiplayerManager : MonoBehaviour
         else
         {
             Debug.LogError("Reconnection to server failed");
-            // TODO: add UI feedback on multiplayer HUD
+            GameObject.Find("Multiplayer Canvas").GetComponent<MultiplayerMenu>().ShowFeedbackWindow(FeedbackType.FailedReconnection);
         }
     }
     #endregion
@@ -517,7 +525,7 @@ public class MultiplayerManager : MonoBehaviour
     }
     #endregion
 
-    #region getter and setter
+    #region getter
     /// <summary>
     ///     Gets the connection state of the client, i.e. whether the player is currently connected with the multiplayer or not.
     /// </summary>

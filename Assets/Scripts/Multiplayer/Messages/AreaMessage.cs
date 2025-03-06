@@ -1,9 +1,12 @@
+using System.IO;
+
 /// <summary>
 ///     Network message for the area information of the player, i.e. world and dungeon index.
 /// </summary>
 public class AreaMessage : NetworkMessage
 {
     protected override MessageType Type => MessageType.Area;
+    private static readonly byte size = 5; // 1 + 2 + 2 = 5 Byte
     private readonly byte worldIndex;
     private readonly byte dungeonIndex;
 
@@ -16,7 +19,7 @@ public class AreaMessage : NetworkMessage
     public override byte[] Serialize()
     {
         int index = 0;
-        byte [] data = new byte[5]; // 1 + 2 + 2 = 5
+        byte [] data = new byte[size];
 
         // message type
         data[0] = (byte)Type;
@@ -42,6 +45,11 @@ public class AreaMessage : NetworkMessage
     /// <returns>area information message</returns>
     public static new AreaMessage Deserialize(ref byte[] data)
     {
+        if (data.Length != size)
+        {
+            throw new InvalidDataException("Wrong message size");
+        }
+
         // skip message type (1 Byte)
         int index = 1;
 

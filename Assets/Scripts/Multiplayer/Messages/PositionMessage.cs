@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using UnityEngine;
 
 /// <summary>
@@ -7,6 +8,7 @@ using UnityEngine;
 public class PositionMessage : NetworkMessage
 {
     protected override MessageType Type => MessageType.Position;
+    private static readonly byte size = 19; // 1 + 2 + 8 + 8 = 19 Byte
     private readonly Vector2 position;
     private readonly Vector2 movement;
 
@@ -19,7 +21,7 @@ public class PositionMessage : NetworkMessage
     public override byte[] Serialize()
     {
         int index = 0;
-        byte[] data = new byte[19]; // 1 + 2 + 8 + 8 = 19
+        byte[] data = new byte[size];
 
         // message type (1 Byte)
         data[index] = (byte) Type;
@@ -51,6 +53,11 @@ public class PositionMessage : NetworkMessage
     /// <returns>position message</returns>
     public static new PositionMessage Deserialize(ref byte[] data)
     {
+        if (data.Length != size)
+        {
+            throw new InvalidDataException("Wrong message size");
+        }
+
         // skip message type (1 Byte)
         int index = 1;
 

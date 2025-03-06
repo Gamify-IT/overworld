@@ -1,5 +1,9 @@
 public enum FeedbackType
 {
 	Error,
-	Confirmation
+	Confirmation,
+	Connected,
+	Disconnected,
+	Inactive,
+	FailedReconnection,
 }

@@ -27,19 +27,31 @@ public abstract class NetworkMessage
     /// <exception cref="Exception">if message type is unknown</exception>
     public static NetworkMessage Deserialize(ref byte[] data)
     {
-        MessageType type = (MessageType)data[0];
-
-        return type switch
+        try
         {
-            MessageType.Connection => ConnectionMessage.Deserialize(ref data),
-            MessageType.Disconnection => DisconnectionMessage.Deserialize(ref data),
-            MessageType.Acknowledge => AcknowledgeMessage.Deserialize(ref data),
-            MessageType.Position => PositionMessage.Deserialize(ref data),
-            MessageType.Character => CharacterMessage.Deserialize(ref data),
-            MessageType.Area => AreaMessage.Deserialize(ref data),
-            MessageType.Timeout => TimeoutMessage.Deserialize(ref data),
-            _ => throw new Exception("Unknown message type!"),
-        };
+            if (data == null || data.Length == 0)
+            {
+                throw new ArgumentException("Network message null or empty");
+            }
+
+            MessageType type = (MessageType)data[0];
+
+            return type switch
+            {
+                MessageType.Connection => ConnectionMessage.Deserialize(ref data),
+                MessageType.Disconnection => DisconnectionMessage.Deserialize(ref data),
+                MessageType.Acknowledge => AcknowledgeMessage.Deserialize(ref data),
+                MessageType.Position => PositionMessage.Deserialize(ref data),
+                MessageType.Character => CharacterMessage.Deserialize(ref data),
+                MessageType.Area => AreaMessage.Deserialize(ref data),
+                MessageType.Timeout => TimeoutMessage.Deserialize(ref data),
+                _ => throw new Exception("Unknown message type!"),
+            };
+        }
+        catch (Exception e)
+        {
+            throw new Exception($"Error on deserializing network message: {e.Message}");
+        }
     }
 
     public ushort GetClientId() { return clientId; }
