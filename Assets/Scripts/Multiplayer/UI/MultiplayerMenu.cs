@@ -25,6 +25,12 @@ public class MultiplayerMenu : MonoBehaviour
     [SerializeField] private GameObject errorButton;
     [SerializeField] private GameObject confirmButton;
 
+    [Header("Sound Effects")]
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip clickSound;
+    [SerializeField] private AudioClip errorSound;
+    [SerializeField] private AudioClip connectionSound;
+
     // constant strigs
     private const string errorText = "Cannot contact the server.\r\nPlease try again later.";
     private const string failedReconnectionText = "Reconnection failed.\r\nPlease try again later.";
@@ -34,6 +40,12 @@ public class MultiplayerMenu : MonoBehaviour
     private void Start()
     {
         UpdateConnectionState();
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
     }
 
     private void Update()
@@ -42,12 +54,14 @@ public class MultiplayerMenu : MonoBehaviour
         UpdateConnectionState();
     }
 
-    #region button functions
+    #region button functionality
     /// <summary>
     ///     Starts or quits the multiplayer, depending of the current connection state.
     /// </summary>
     public async void ToggleMultiplayer()
     {
+        PlaySound(clickSound);
+
         if (!MultiplayerManager.Instance.IsConnected())
         {
             bool successful = false;
@@ -66,11 +80,13 @@ public class MultiplayerMenu : MonoBehaviour
             {
                 MultiplayerManager.Instance.InitializeWebsocket();
                 ShowConnectionState(FeedbackType.Connected);
+                PlaySound(connectionSound);
             }
             else
             {
                 Debug.LogError("Unable to connect to server");
                 ShowFeedbackWindow(FeedbackType.Error);
+                PlaySound(errorSound);
             }
         }
         else
@@ -86,6 +102,7 @@ public class MultiplayerMenu : MonoBehaviour
     {
         CloseFeedbackWindow();
         MultiplayerManager.Instance.QuitMultiplayer();
+        PlaySound(errorSound);
     }
 
     /// <summary>
@@ -94,10 +111,11 @@ public class MultiplayerMenu : MonoBehaviour
     public void CloseFeedbackWindow()
     {
         feedbackWindow.SetActive(false);
+        PlaySound(clickSound);
     }
     #endregion
 
-    #region windows and panels handling
+    #region window and panel handling
 
     /// <summary>
     ///     Shows the current connection state of the multiplayer connection.
@@ -201,6 +219,21 @@ public class MultiplayerMenu : MonoBehaviour
                 return;
             default:
                 return;
+        }
+    }
+    #endregion
+
+    #region sound effects
+    /// <summary>
+    ///     Plays the sound effect once.
+    /// </summary>
+    /// <param name="sound">sound effect to be played</param>
+    private void PlaySound(AudioClip sound)
+    {
+        if (sound != null && audioSource != null)
+        {
+            audioSource.clip = sound;
+            audioSource.PlayOneShot(sound);
         }
     }
     #endregion
