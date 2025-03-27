@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
+using System.Collections;
+using System.Runtime.InteropServices;
 
 /// <summary>
 ///     Handles logic for a single replay menu item.
@@ -10,6 +14,9 @@ public class ReplayItemManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI gameNameText;
     [SerializeField] private TextMeshProUGUI highscoreText;
     [SerializeField] private Button replayButton;
+
+    [DllImport("__Internal")]
+    private static extern string LoadMinigameInIframe(string minigameName, string minigameConfiguration);
 
     private MinigameData minigameData;
 
@@ -39,16 +46,28 @@ public class ReplayItemManager : MonoBehaviour
    
     public void ReplayButtonPressed()
     {
+        Debug.Log("Replay Button Pressed.");
+
+        LoadMinigame();
+        // Trigger the actual start process
+        // MinigameStarting.Instance.StartButtonPressed();
+        LoadMinigameInIframe(minigameData.GetGame() , minigameData.GetConfigurationID());
+        Vector2 respawnPosition = new Vector2(1.185f, 14.185f);
+        GameManager.Instance.SetReloadLocation(respawnPosition, 1, 0);
+        FindObjectOfType<ReplayMenu>().ToggleReplayMenu(false);
+    }
+
+    private IEnumerator LoadMinigame()
+    {
+        var asyncLoadScene = SceneManager.LoadSceneAsync("MinigameStarting Overlay", LoadSceneMode.Additive);
+        while (!asyncLoadScene.isDone)
+        {
+            yield return null;
+        }
         MinigameStarting.Instance.SetupMinigame(
             minigameData.GetGame(),
             minigameData.GetConfigurationID(),
             minigameData.GetHighscore()
         );
-
-        // Trigger the actual start process
-        MinigameStarting.Instance.StartButtonPressed();
-
-        FindObjectOfType<ReplayMenu>().ToggleReplayMenu(false);
     }
-
 }

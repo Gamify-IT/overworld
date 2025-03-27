@@ -59,6 +59,7 @@ public class ReplayMenu : MonoBehaviour
 
         foreach (Minigame minigame in allMinigames)
         {
+            Debug.Log("Adding Minigame");
             if (minigame.GetStatus() == MinigameStatus.done)
             {
                 MinigameData data = new MinigameData(
