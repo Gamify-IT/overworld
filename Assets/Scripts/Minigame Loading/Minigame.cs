@@ -104,9 +104,27 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         ObjectManager.Instance.AddGameEntity<Minigame, MinigameData>(gameObject, world, dungeon, number);
     }
 
-#endregion
+    #endregion
 
-#region Functionality
+    #region Getters
+
+    public int GetWorld() => world;
+
+    public int GetDungeon() => dungeon;
+
+    public int GetNumber() => number;
+
+    public string GetGame() => game;
+
+    public string GetConfigurationID() => configurationID;
+
+    public MinigameStatus GetStatus() => status;
+
+    public int GetHighscore() => highscore;
+
+    #endregion
+
+    #region Functionality
 
     /// <summary>
     ///     This functions configurates the minigame with the given data and updates the object.
