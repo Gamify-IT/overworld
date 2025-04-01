@@ -26,13 +26,11 @@ public class ReplayMenu : MonoBehaviour
     /// </summary>
     private void PopulateReplayMenu()
     {
-        // Clear existing entries
         foreach (Transform child in replayListContainer)
         {
             Destroy(child.gameObject);
         }
 
-        // Populate menu with completed minigames
         foreach (var minigame in completedMinigames)
         {
             GameObject newItem = Instantiate(replayItemPrefab, replayListContainer);
@@ -59,7 +57,6 @@ public class ReplayMenu : MonoBehaviour
 
         foreach (Minigame minigame in allMinigames)
         {
-            Debug.Log("Adding Minigame");
             if (minigame.GetStatus() == MinigameStatus.done)
             {
                 MinigameData data = new MinigameData(

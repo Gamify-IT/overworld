@@ -35,28 +35,27 @@ public class ReplayItemManager : MonoBehaviour
             return;
         }
 
-        // Set the text fields
         gameNameText.text = minigame.GetGame();
         highscoreText.text = minigame.GetHighscore() + " %";
 
-        // Add button listener
         replayButton.onClick.RemoveAllListeners();
         replayButton.onClick.AddListener(() => onReplay?.Invoke());
     }
-   
+    /// <summary>
+    ///     Starts loading the minigame from the replaymenu when the ReplayButton is pressed.
+    /// </summary>
     public void ReplayButtonPressed()
     {
-        Debug.Log("Replay Button Pressed.");
-
         LoadMinigame();
-        // Trigger the actual start process
-        // MinigameStarting.Instance.StartButtonPressed();
         LoadMinigameInIframe(minigameData.GetGame() , minigameData.GetConfigurationID());
         Vector2 respawnPosition = new Vector2(1.185f, 14.185f);
         GameManager.Instance.SetReloadLocation(respawnPosition, 1, 0);
         FindObjectOfType<ReplayMenu>().ToggleReplayMenu(false);
     }
 
+    /// <summary>
+    ///     Method to perform the actual loading of the minigame.
+    /// </summary>
     private IEnumerator LoadMinigame()
     {
         var asyncLoadScene = SceneManager.LoadSceneAsync("MinigameStarting Overlay", LoadSceneMode.Additive);
