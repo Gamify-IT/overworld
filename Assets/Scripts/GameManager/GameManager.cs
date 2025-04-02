@@ -92,9 +92,9 @@ public class GameManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(playerStatisticDTO, true);
 
-        bool successful = await RestRequest.PutRequest(path, json);
+        bool succesful = await RestRequest.PutRequest(path, json);
 
-        if (successful)
+        if (succesful)
         {
             Debug.Log("Updated player statistic successfully");
             return true;
@@ -290,6 +290,7 @@ public class GameManager : MonoBehaviour
 
         Optional<AchievementStatistic[]> achievementStatistics =
             await RestRequest.GetArrayRequest<AchievementStatistic>(playerPath + "/achievements");
+
         if (!achievementStatistics.IsPresent())
         {
             loadingError = true;
