@@ -51,73 +51,41 @@ public class MinigameData : IGameEntityData
 
     #region GetterAndSetter
 
-    /// <summary>
-    ///     This function returns the name of the minigame.
-    /// </summary>
-    /// <returns>game</returns>
     public string GetGame()
     {
         return game;
     }
 
-    /// <summary>
-    ///     This function sets the name of the minigame.
-    /// </summary>
-    /// <param name="game">The name for the minigame</param>
     public void SetGame(string game)
     {
         this.game = game;
     }
 
-    /// <summary>
-    ///     This function returns the configuration ID of the minigame.
-    /// </summary>
-    /// <returns>configurationID</returns>
     public string GetConfigurationID()
     {
         return configurationID;
     }
 
-    /// <summary>
-    ///     This function sets the configuration ID of the minigame.
-    /// </summary>
-    /// <param name="configurationID">The configurationID for the minigame</param>
     public void SetConfigurationID(string configurationID)
     {
         this.configurationID = configurationID;
     }
 
-    /// <summary>
-    ///     This function returns the status of the minigame.
-    /// </summary>
-    /// <returns>status</returns>
     public MinigameStatus GetStatus()
     {
         return status;
     }
 
-    /// <summary>
-    ///     This function sets the status of the minigame.
-    /// </summary>
-    /// <param name="status">Status for the minigame</param>
     public void SetStatus(MinigameStatus status)
     {
         this.status = status;
     }
 
-    /// <summary>
-    ///     This function returns the highscore of the minigame.
-    /// </summary>
-    /// <returns>highscore</returns>
     public int GetHighscore()
     {
         return highscore;
     }
 
-    /// <summary>
-    ///     This function sets the highscore of the minigame by configurationId.
-    /// </summary>
-    /// <param name="highscore">The highscore of the minigame by configurationId</param>
     public void SetHighscore(int highscore)
     {
         this.highscore = highscore;
