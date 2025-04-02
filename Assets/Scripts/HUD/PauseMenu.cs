@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-using System;
-
 /// <summary>
 ///     This script manages the pause menu.
 /// </summary>
@@ -120,7 +118,6 @@ public class PauseMenu : MonoBehaviour
         buttonName = EventSystem.current.currentSelectedGameObject.name;
         //remove appendix " Button" = length 7
         buttonName = buttonName.Remove(buttonName.Length - 7);
-
     }
 
     /// <summary>

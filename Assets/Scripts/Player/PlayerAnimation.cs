@@ -1,9 +1,8 @@
-using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEditor;
+using UnityEngine;
 
 /// <summary>
 ///     This class manages the movement and the animations of the player.
@@ -47,13 +46,15 @@ public class PlayerAnimation : MonoBehaviour
 
     readonly Dictionary<string, Vector3> positions = new Dictionary<string, Vector3>();
     // Names of the animators available
-    readonly List<string> validOutfits = new List<string> {"3D_glasses", "blonde_hair", "character_suit", "character_black_and_white", 
+    public static readonly List<string> validOutfits = new List<string> {"3D_glasses", "blonde_hair", "character_suit", "character_black_and_white", 
         "character_blue_and_purple", "character_default", "character_ironman", "none", "character_jeans_checkshirt", "character_long_hair", 
         "character_santa", "character_tracksuit", "cool_glasses", "flaming_hair", "globe_hat", "heart_glasses", "retro_glasses", "safety_helmet"};
 
     private PlayerStatisticData ownPlayerData;
     private int rewardsAmount;
 
+    // Multiplayer
+    private const float positionThreshold = 0.01f;
 
     /// <summary>
     ///     This method is called before the first frame update.
@@ -63,15 +64,7 @@ public class PlayerAnimation : MonoBehaviour
     {
         accessoireAnimator = this.gameObject.transform.GetChild(2).GetComponent<Animator>();
         accessoireTransform = this.gameObject.transform.GetChild(2).GetComponent<Transform>();
-        positions.Add("3D_glasses", new Vector3(0, 0.3f, 0));
-        positions.Add("blonde_hair", new Vector3(0, 0.3f, 0));
-        positions.Add("cool_glasses", new Vector3(0, 0.3f, 0));
-        positions.Add("flaming_hair", new Vector3(0, 0.3f, 0));
-        positions.Add("globe_hat", new Vector3(0, 0.76f, 0));
-        positions.Add("heart_glasses", new Vector3(0, 0.3f, 0));
-        positions.Add("retro_glasses", new Vector3(0, 0.3f, 0));
-        positions.Add("safety_helmet", new Vector3(0, 0.31f, 0));
-        positions.Add("none", new Vector3(0, 0, 0));
+        InitializeOutfitPositions();
 
         string lastPlayDateStr = PlayerPrefs.GetString("LastPlayDate", "");
         int daysCount = PlayerPrefs.GetInt("DaysPlayed", 0);
@@ -94,6 +87,22 @@ public class PlayerAnimation : MonoBehaviour
         sprint = GameManager.Instance.GetKeyCode(Binding.SPRINT);
         GameEvents.current.onKeybindingChange += UpdateKeybindings;
         Invoke("CheckForRewardsAmount", 3.5f);
+    }
+
+    /// <summary>
+    ///     Initializes the position of each outfit.
+    /// </summary>
+    private void InitializeOutfitPositions()
+    {
+        positions.Add("3D_glasses", new Vector3(0, 0.3f, 0));
+        positions.Add("blonde_hair", new Vector3(0, 0.3f, 0));
+        positions.Add("cool_glasses", new Vector3(0, 0.3f, 0));
+        positions.Add("flaming_hair", new Vector3(0, 0.3f, 0));
+        positions.Add("globe_hat", new Vector3(0, 0.76f, 0));
+        positions.Add("heart_glasses", new Vector3(0, 0.3f, 0));
+        positions.Add("retro_glasses", new Vector3(0, 0.3f, 0));
+        positions.Add("safety_helmet", new Vector3(0, 0.31f, 0));
+        positions.Add("none", new Vector3(0, 0, 0));
     }
 
     /// <summary>
@@ -257,16 +266,7 @@ public class PlayerAnimation : MonoBehaviour
             accessoireTransform.localScale = new Vector3(1, 1, 1);
         }
 
-        if (new List<string> {"character_default", "character_blue_and_purple", "character_black_and_white"}.Contains(body))
-        {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().offset = new Vector2(0, 0.05f);
-            accessoireTransform.localPosition = positions[head];
-        }
-        else
-        {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.25f);
-            accessoireTransform.localPosition = positions[head] - new Vector3(0, 0.3f, 0);
-        }
+        accessoireTransform.localPosition = positions[head];
     }
 
     /// <summary>
@@ -295,42 +295,16 @@ public class PlayerAnimation : MonoBehaviour
             float horizontalAnimationFloat = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
             float verticalAnimationFloat = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
 
-            playerRigidBody.MovePosition(playerRigidBody.position + movement * currentSpeed * Time.fixedDeltaTime);
+            Vector2 newPosition = playerRigidBody.position + movement * currentSpeed * Time.fixedDeltaTime;
 
-            // the following 4 if statements set the looking direction of the player, which we need for the animation
-            if (movement.y > 0.01f)
+            playerRigidBody.MovePosition(newPosition);
+
+            if (Vector2.Distance(playerRigidBody.position, newPosition) > positionThreshold)
             {
-                playerAnimator.SetBool("LookUp", true);
-                playerAnimator.SetBool("LookRight", false);
-                accessoireAnimator.SetBool("LookUp", true);
-                accessoireAnimator.SetBool("LookRight", false);
+                EventManager.Instance.TriggerDataChanged<PositionMessage>(new(MultiplayerManager.Instance.GetClientId(), newPosition, movement));
             }
 
-            if
-                (movement.y < 0f)
-            {
-                playerAnimator.SetBool("LookUp", false);
-                playerAnimator.SetBool("LookRight", false);
-                accessoireAnimator.SetBool("LookUp", false);
-                accessoireAnimator.SetBool("LookRight", false);
-            }
-
-            if (movement.x > 0.01f)
-            {
-                playerAnimator.SetBool("LookRight", true);
-                playerAnimator.SetBool("LookUp", false);
-                accessoireAnimator.SetBool("LookUp", false);
-                accessoireAnimator.SetBool("LookRight", true);
-            }
-
-            if
-                (movement.x < 0f)
-            {
-                playerAnimator.SetBool("LookRight", false);
-                playerAnimator.SetBool("LookUp", false);
-                accessoireAnimator.SetBool("LookUp", false);
-                accessoireAnimator.SetBool("LookRight", false);
-            }
+            SetLookingDirection();
 
             playerAnimator.SetFloat("Horizontal", movement.x);
             playerAnimator.SetFloat("Vertical", movement.y);
@@ -340,6 +314,44 @@ public class PlayerAnimation : MonoBehaviour
             accessoireAnimator.SetFloat("Vertical", movement.y);
             accessoireAnimator.SetFloat("VerticalSpeed", verticalAnimationFloat);
             accessoireAnimator.SetFloat("HorizontalSpeed", horizontalAnimationFloat);
+        }
+    }
+
+    /// <summary>
+    ///     Sets the looking direction of the player, required for animation.
+    /// </summary>
+    private void SetLookingDirection()
+    {
+        if (movement.y > 0.01f)
+        {
+            playerAnimator.SetBool("LookUp", true);
+            playerAnimator.SetBool("LookRight", false);
+            accessoireAnimator.SetBool("LookUp", true);
+            accessoireAnimator.SetBool("LookRight", false);
+        }
+
+        if (movement.y < 0f)
+        {
+            playerAnimator.SetBool("LookUp", false);
+            playerAnimator.SetBool("LookRight", false);
+            accessoireAnimator.SetBool("LookUp", false);
+            accessoireAnimator.SetBool("LookRight", false);
+        }
+
+        if (movement.x > 0.01f)
+        {
+            playerAnimator.SetBool("LookRight", true);
+            playerAnimator.SetBool("LookUp", false);
+            accessoireAnimator.SetBool("LookUp", false);
+            accessoireAnimator.SetBool("LookRight", true);
+        }
+
+        if (movement.x < 0f)
+        {
+            playerAnimator.SetBool("LookRight", false);
+            playerAnimator.SetBool("LookUp", false);
+            accessoireAnimator.SetBool("LookUp", false);
+            accessoireAnimator.SetBool("LookRight", false);
         }
     }
 

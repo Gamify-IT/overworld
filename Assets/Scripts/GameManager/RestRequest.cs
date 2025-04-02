@@ -169,6 +169,55 @@ public static class RestRequest
         }
     }
 
+
+    /// <summary>
+    ///     This function sends a POST REQUEST to the provided <c>uri</c> with the <c>json</c> body. 
+    /// </summary>
+    /// <param name="uri">The type to cast the response to</param>
+    /// <param name="json">The body to be send</param>
+    /// <returns>true if post request was successful, false otherwise</returns>
+    public static async UniTask<Optional<T>> PostRequest<T>(string uri, string json)
+    {
+        Debug.Log("Post Request for path: " + uri + ", posting: " + json);
+
+        UnityWebRequest webRequest = new UnityWebRequest(uri, UnityWebRequest.kHttpVerbPOST);
+        byte[] bytes = new UTF8Encoding().GetBytes(json);
+        webRequest.uploadHandler = new UploadHandlerRaw(bytes);
+        webRequest.downloadHandler = new DownloadHandlerBuffer();
+        webRequest.SetRequestHeader("Content-Type", "application/json");
+
+        using (webRequest)
+        {
+            // Request and wait for the desired page.
+            var request = webRequest.SendWebRequest();
+
+            while (!request.isDone)
+            {
+                await UniTask.Yield();
+            }
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(uri + ": Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(uri + ": HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(uri + ":\nReceived: " + webRequest.downloadHandler.text);
+                    T value = JsonUtility.FromJson<T>(webRequest.downloadHandler.text);
+                    Optional<T> result = new Optional<T>(value);
+                    return result;
+            }
+            T type = default;
+            Optional<T> v = new Optional<T>(type);
+            v.Clear();
+            return v;
+        }
+    }
+
     /// <summary>
     ///     This function sends a PUT REQUEST to the provided <c>uri</c> with the <c>json</c> body. 
     /// </summary>

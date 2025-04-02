@@ -280,7 +280,7 @@ public class GameManager : MonoBehaviour
         }
 
         Optional<ShopItem[]> shopItems =
-           await RestRequest.GetArrayRequest<ShopItem>(overworldBackendPath + playersPath + userId + coursesPath + courseId + "/shop");
+            await RestRequest.GetArrayRequest<ShopItem>(overworldBackendPath + playersPath + userId + coursesPath + courseId + "/shop");
         if (!shopItems.IsPresent())
         {
             loadingError = true;
@@ -290,7 +290,8 @@ public class GameManager : MonoBehaviour
 
         Optional<AchievementStatistic[]> achievementStatistics =
             await RestRequest.GetArrayRequest<AchievementStatistic>(playerPath + "/achievements");
-        if(!achievementStatistics.IsPresent())
+
+        if (!achievementStatistics.IsPresent())
         {
             loadingError = true;
         }
@@ -420,7 +421,7 @@ public class GameManager : MonoBehaviour
     public void SetData(int worldIndex, int dungeonIndex)
     {
         Debug.Log("SetData: " + worldIndex + "-" + dungeonIndex);
-        //DataManager.Instance.ReadTeleporterConfig();
+        
         if (dungeonIndex != 0)
         {
             Debug.Log("Setting data for dungeon " + worldIndex + "-" + dungeonIndex);
@@ -936,7 +937,7 @@ public class GameManager : MonoBehaviour
 
             ownPlayerData = new PlayerStatisticDTO(
                 "31", unlockedAreas, unlockedDungeons, unlockedTeleporters, currentArea, "Id31", "Aki",
-                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 20.0f, 15.0f, "World 1", 1, 75, 200, 170, false, 100, "PSEProfi", "character_suit", "heart_glasses"
+                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 20.0f, 15.0f, "World 1", 1, 75, 200, 170, false, 100, "PSEProfi", "character_default", "none"
             );
         }
 
@@ -1020,5 +1021,15 @@ public class GameManager : MonoBehaviour
     public bool GetIsPaused()
     {
         return isPaused;
+    }
+
+    public string GetUserId()
+    {
+        return userId;
+    }
+
+    public string GetCourseId()
+    {
+        return courseId;
     }
 }

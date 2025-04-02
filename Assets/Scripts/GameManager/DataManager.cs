@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 /// <summary>
 ///     The <c>DataManager</c> stores all required data to set up the objects in the areas.
@@ -155,6 +156,7 @@ public class DataManager : MonoBehaviour
             Debug.Log("Setting data for world " + worldIndex);
             playerData.SetLogoutScene("World " + worldIndex);
         }
+        EventManager.Instance.TriggerDataChanged<AreaMessage>(new(MultiplayerManager.Instance.GetClientId(), (byte)worldIndex, (byte)dungeonIndex));
     }
 
     /// <summary>
