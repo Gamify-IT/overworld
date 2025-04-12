@@ -19,8 +19,8 @@ public class MultiplayerManager : MonoBehaviour
     private WebSocket websocket;
     private bool isConnected = false;
     private ushort clientId = 0;
-    private const string multiplayerApiPath = "/multiplayer-server/api/v1";
-    private const string multiplayerSocketPath = "/multiplayer-server/ws";
+    private const string multiplayerApiPath = "/multiplayer/api/v1";
+    private const string multiplayerSocketPath = "/multiplayer/ws";
 
     // remote player data
     [SerializeField] private GameObject prefab;
