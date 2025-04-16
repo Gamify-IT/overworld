@@ -15,7 +15,7 @@ public class AchievementData
     private readonly List<string> categories;
     private readonly string imageName;
     private readonly Sprite image;
-    private readonly int amountRequired;
+    private int amountRequired;
     private int progress;
     private bool completed;
     private bool updated;
@@ -183,4 +183,19 @@ public class AchievementData
         return interactedObjects;
     }
     #endregion
+    
+    public void SetCompleted(bool isCompleted)
+    {
+        completed = isCompleted;
+    }
+
+    public void SetProgress(int newProgress)
+    {
+        progress = newProgress;
+    }
+
+    public void SetAmountRequired(int newAmountRequired)
+    {
+        amountRequired = newAmountRequired;
+    }
 }
