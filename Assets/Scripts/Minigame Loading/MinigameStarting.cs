@@ -66,7 +66,7 @@ public class MinigameStarting : MonoBehaviour
     {
         PlayerAnimation.Instance.playerAnimator.enabled = false;
 
-        PlayerAnimation.Instance.SetBusy(true);
+        //PlayerAnimation.Instance.SetBusy(true);
         PlayerAnimation.Instance.DisableMovement();
 
         this.game = game;
@@ -95,6 +95,7 @@ public class MinigameStarting : MonoBehaviour
 #else
         await GameManager.Instance.SavePlayerData();
         await MultiplayerManager.Instance.PauseMultiplayer();
+        Application.runInBackground = false;
         LoadMinigameInIframe(game, configurationId);
 #endif
         PlayClickSound();
@@ -118,7 +119,7 @@ public class MinigameStarting : MonoBehaviour
     {
         Reset();
         PlayerAnimation.Instance.playerAnimator.enabled = true;
-        PlayerAnimation.Instance.SetBusy(false);
+        //PlayerAnimation.Instance.SetBusy(false);
         SceneManager.UnloadSceneAsync("MinigameStarting Overlay");
         PlayerAnimation.Instance.EnableMovement();
         Time.timeScale = 1f;
