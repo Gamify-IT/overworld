@@ -39,8 +39,12 @@ public void ValidateAllAchievements()
         if (progress >= currentAmountRequired && !completed)
         {
             completed = true;
+            achievementData.SetProgress(currentAmountRequired);
         } 
-
+        else if (progress < currentAmountRequired && completed)
+        {
+            completed = false;
+        }
         if (completed) {
             completed = true;
             achievementData.SetAmountRequired(progress);
