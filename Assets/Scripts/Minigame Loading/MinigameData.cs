@@ -1,14 +1,16 @@
+using Unity.VisualScripting;
 /// <summary>
 ///     This class defines all needed data for a <c>Minigame</c>.
 /// </summary>
 public class MinigameData : IGameEntityData
 {
-    public MinigameData(string game, string configurationID, MinigameStatus status, int highscore)
+    public MinigameData(string game, string configurationID, MinigameStatus status, int highscore, string description)
     {
         this.game = game;
         this.configurationID = configurationID;
         this.status = status;
         this.highscore = highscore;
+        this.description = description;
     }
 
     public MinigameData()
@@ -25,6 +27,7 @@ public class MinigameData : IGameEntityData
     private string configurationID;
     private MinigameStatus status;
     private int highscore;
+    private string description;
 
     #endregion
 
@@ -37,6 +40,7 @@ public class MinigameData : IGameEntityData
     {
         string game = dto.game;
         string configurationId = dto.configurationId;
+        string description = dto.description;
         MinigameStatus status = global::MinigameStatus.notConfigurated;
         int highscore = 0;
 
@@ -45,7 +49,7 @@ public class MinigameData : IGameEntityData
             status = global::MinigameStatus.active;
         }
 
-        MinigameData data = new MinigameData(game, configurationId, status, highscore);
+        MinigameData data = new MinigameData(game, configurationId, status, highscore, description);
         return data;
     }
 
@@ -89,6 +93,11 @@ public class MinigameData : IGameEntityData
     public void SetHighscore(int highscore)
     {
         this.highscore = highscore;
+    }
+
+    public string GetDescription()
+    {
+        return description;
     }
 
     #endregion

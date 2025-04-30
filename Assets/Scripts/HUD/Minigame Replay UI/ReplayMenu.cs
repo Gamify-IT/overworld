@@ -63,7 +63,8 @@ public class ReplayMenu : MonoBehaviour
                     minigame.GetGame(),
                     minigame.GetConfigurationID(),
                     minigame.GetStatus(),
-                    minigame.GetHighscore()
+                    minigame.GetHighscore(),
+                    minigame.GetDescription()
                 );
                 completedMinigamesData.Add(data);
             }
