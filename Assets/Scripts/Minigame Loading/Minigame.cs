@@ -33,6 +33,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
     [SerializeField] private int number;
     [SerializeField] private string game;
     [SerializeField] private string configurationID;
+    [SerializeField] private string description;
     [SerializeField] private MinigameStatus status;
     [SerializeField] private int highscore;
     public SpriteRenderer sprites;
@@ -122,6 +123,8 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
 
     public int GetHighscore() => highscore;
 
+    public string GetDescription() => description;
+
     #endregion
 
     #region Functionality
@@ -136,6 +139,7 @@ public class Minigame : MonoBehaviour, IGameEntity<MinigameData>
         game = data.GetGame();
         configurationID = data.GetConfigurationID();
         highscore = data.GetHighscore();
+        description = data.GetDescription();
 
         UpdateStatus();
     }

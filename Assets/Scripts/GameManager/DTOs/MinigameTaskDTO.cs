@@ -24,6 +24,7 @@ public class MinigameTaskDTO
     public int index;
     public string game;
     public string configurationId;
+    public string description;
 
     #endregion
 
