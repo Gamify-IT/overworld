@@ -37,7 +37,7 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
 
         if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
         {
-            readBooks = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "READER_LEVEL_3").GetInteractedObjects();
+            readBooks = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "READER").GetInteractedObjects();
         }
     }
 
@@ -187,13 +187,9 @@ public class Book : MonoBehaviour, IGameEntity<BookData>
     /// <param name="worldNumber">The number of the world in which is the interacted book</param>
     private void UpdateAchievements(int worldNumber)
     {
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_1, 1, readBooks);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_2, 1, readBooks);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER_LEVEL_3, 1, readBooks);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.READER, 1, readBooks);
 
-        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"READER_LEVEL_1_WORLD_{worldNumber}"), 1, readBooks);
-        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"READER_LEVEL_2_WORLD_{worldNumber}"), 1, readBooks);
-        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"READER_LEVEL_3_WORLD_{worldNumber}"), 1, readBooks);
+        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"READER_WORLD_{worldNumber}"), 1, readBooks);
     }
 
     /// <summary>

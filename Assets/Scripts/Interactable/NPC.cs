@@ -46,7 +46,7 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
 
         if (GameSettings.GetGamemode() != Gamemode.TUTORIAL)
         {
-            alreadyTalkedNPC = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "COMMUNICATOR_LEVEL_3").GetInteractedObjects();
+            alreadyTalkedNPC = DataManager.Instance.GetAchievements().Find(achievement => achievement.GetTitle() == "COMMUNICATOR").GetInteractedObjects();
         }
 
         InitNewStuffSprite();
@@ -291,13 +291,9 @@ public class NPC : MonoBehaviour, IGameEntity<NPCData>
     /// <param name="worldNumber">The number of the world where the NPC the player spoke to is located</param>
     private void UpdateAchievements(int worldNumber)
     {
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_1, 1, alreadyTalkedNPC);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_2, 1, alreadyTalkedNPC);
-        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR_LEVEL_3, 1, alreadyTalkedNPC);
-
-        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"COMMUNICATOR_LEVEL_1_WORLD_{worldNumber}"), 1, alreadyTalkedNPC);
-        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"COMMUNICATOR_LEVEL_2_WORLD_{worldNumber}"), 1, alreadyTalkedNPC);
-        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"COMMUNICATOR_LEVEL_3_WORLD_{worldNumber}"), 1, alreadyTalkedNPC);
+        GameManager.Instance.IncreaseAchievementProgress(AchievementTitle.COMMUNICATOR, 1, alreadyTalkedNPC);
+        
+        GameManager.Instance.IncreaseAchievementProgress((AchievementTitle)Enum.Parse(typeof(AchievementTitle), $"COMMUNICATOR_WORLD_{worldNumber}"), 1, alreadyTalkedNPC);
     }
 
     /// <summary>
