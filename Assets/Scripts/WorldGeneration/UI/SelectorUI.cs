@@ -96,10 +96,11 @@ public class SelectorUI : MonoBehaviour
     /// <returns></returns>
     public void OnContinueButtonPressed()
     {
+# if UNITY_EDITOR
         if (CheckEnteredData())
         {
             // retrieve entered data from dropdownmenus
-            string courseID = courseIDs[courseIDDropDownMenu.value - 1].ToString();
+            string courseID = courseIDDropDownMenu.value.ToString();
             int worldIndex = wordlIndexDropDownMenu.value;
             Optional<int> dungeonIndex = dungeonIndexDropDownMenu.value != 0 ? new Optional<int>(dungeonIndexDropDownMenu.value) : new Optional<int>();
 
@@ -108,7 +109,22 @@ public class SelectorUI : MonoBehaviour
         else
         {
             InterfaceInfo.Instance.DisplayErrorInfo();
-        } 
+        }
+#else
+        if (CheckEnteredData())
+        {
+            // retrieve entered data from dropdownmenus
+            string courseID = courseIDs[courseIDDropDownMenu.value - 1].ToString();
+            int worldIndex = wordlIndexDropDownMenu.value + 4;
+            Optional<int> dungeonIndex = dungeonIndexDropDownMenu.value != 0 ? new Optional<int>(dungeonIndexDropDownMenu.value) : new Optional<int>();
+
+            AreaGeneratorManager.Instance.StartGenerator(courseID, worldIndex, dungeonIndex);
+        }
+        else
+        {
+            InterfaceInfo.Instance.DisplayErrorInfo();
+        }
+# endif
     }
 
     /// <summary>
