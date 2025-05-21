@@ -16,7 +16,38 @@ public class AchievementManager : MonoBehaviour
     private string status;
     private string filterText;
     private bool filterActive;
+    bool completed;
     private List<AchievementData> achievements;
+
+public void ValidateAllAchievements()
+    {
+        foreach (var achievement in achievements)
+        {
+            ValidateCompletionStatus(achievement);
+        }
+    }
+
+    /// <summary>
+    ///     Validates the completion status of the achievement based on current progress and requirements.
+    /// </summary>
+    public void ValidateCompletionStatus(AchievementData achievementData)
+    {
+        int currentAmountRequired = achievementData.GetAmountRequired();
+        int progress = achievementData.GetProgress();
+        completed = achievementData.IsCompleted();
+
+        if (progress >= currentAmountRequired && !completed)
+        {
+            completed = true;
+            achievementData.SetProgress(currentAmountRequired);
+        } 
+        if (completed) {
+            completed = true;
+            achievementData.SetAmountRequired(progress);
+        }
+
+        achievementData.SetCompleted(completed); 
+    }
 
     /// <summary>
     ///     This function is called by the categoryDropdown and updates the selected category filter
@@ -62,6 +93,7 @@ public class AchievementManager : MonoBehaviour
     private void Start()
     {
         achievements = DataManager.Instance.GetAchievements();
+        ValidateAllAchievements();
         Setup();
         UpdateUI();
     }
